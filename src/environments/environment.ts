@@ -14,8 +14,8 @@ export const environment = {
   previewURL: 'https://staging.toolots.com/index.php/catalog/product/view/id/',
 
   //webapiURL: 'https://webapi.toolots.com/merchantportal',
-  //webapiURL: 'https://staging-webapi.toolots.com/merchantportal',
-  webapiURL: 'https://localhost:44360',
+  webapiURL: 'https://staging-webapi.toolots.com/merchantportal',
+  //webapiURL: 'https://localhost:44360',
 
   // authIssuer: 'https://login.toolots.com/identity',
   authIssuer: 'https://staging-login.toolots.com/identity',
