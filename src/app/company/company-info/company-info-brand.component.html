@@ -1,0 +1,36 @@
+<div class="tab-content">
+    <div class="tab-pane active">
+        <div class="panel-body p-w-none p-b-none">
+            <form class="form-horizontal" #companyInfoForm="ngForm">
+                <fieldset>
+                    <div class="ibox-title"><h5>{{ 'Brand Name' | translate }}</h5></div>
+                    <div class="ibox-content">
+                        <div class="form-group">
+                            <div class="col-sm-12" style="min-height: 420px;">
+                                <ng-container *ngIf="vendorBrands && vendorBrands.length > 0">
+                                    <div class="row" *ngFor="let vendorbrand of dataSource.data">
+                                        <h2 class="col-md-4 col-md-offset-1 border-bottom">{{vendorbrand.BrandName}}</h2>
+                                    </div>
+                                </ng-container>
+                                <!-- <div *ngIf="vendorBrands && vendorBrands.length > 0">
+                                    <table mat-table #table [dataSource]="dataSource" class="table table-striped" matSort>
+                                        
+                                        <ng-container matColumnDef="BrandName">
+                                            <th mat-header-cell *matHeaderCellDef style="text-align: left !important">Brand Name</th>
+                                            <td mat-cell *matCellDef="let vendorbrand" style="text-align: left">
+                                                {{vendorbrand.BrandName}}                           
+                                            </td>
+                                        </ng-container>
+
+                                        <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+                                        <tr mat-row *matRowDef="let row; let i = index; columns: displayedColumns;"></tr>
+                                    </table>
+                                </div> -->
+                            </div>
+                        </div>
+                    </div>
+                </fieldset>
+            </form>
+        </div>
+    </div>
+</div>                

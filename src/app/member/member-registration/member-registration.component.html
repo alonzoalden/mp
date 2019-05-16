@@ -1,0 +1,159 @@
+<div class="bg-signup">
+    <div class="container" style="padding-top: 50px;">
+        <div class="text-center loginscreen animated fadeInDown">
+            <h1 class="custom-header"><span class="text-orange">Toolots</span> Merchant Portal <br />Member Registration</h1>
+            <p>Create an Account to begin</p>
+        <form class="form-horizontal" [formGroup]="memberForm" *ngIf="member">
+            <div formGroupName="memberData">
+                <div class="form-group" 
+                    [ngClass]="{'has-error': (memberForm.controls['memberData'].controls['memberFirstName'].touched || 
+                        memberForm.controls['memberData'].controls['memberFirstName'].dirty) && 
+                        !member.FirstName }">
+                    <label class="col-md-2 control-label" for="memberFirstName">First Name</label>
+                    <div class="col-md-8">
+                        <input class="form-control" type="text" id="memberFirstNameID" formControlName="memberFirstName" placeholder="First Name (required)" 
+                            [(ngModel)]=member.FirstName>
+                        <span class="help-block" 
+                            *ngIf="(memberForm.controls['memberData'].controls['memberFirstName'].touched || 
+                                    memberForm.controls['memberData'].controls['memberFirstName'].dirty) && 
+                                    !member.FirstName">
+                            First Name is required
+                        </span>
+                    </div>
+                </div>
+                <div class="form-group"
+                    [ngClass]="{'has-error': (memberForm.controls['memberData'].controls['memberLastName'].touched || 
+                        memberForm.controls['memberData'].controls['memberLastName'].dirty) && 
+                        !member.LastName }">
+                    <label class="col-md-2 control-label" for="memberLastName">Last Name</label>
+                    <div class="col-md-8">
+                        <input class="form-control" type="text" id="memberLastNameID" formControlName="memberLastName" placeholder="Last Name (required)" 
+                            [(ngModel)]=member.LastName>
+                        <span class="help-block" 
+                            *ngIf="(memberForm.controls['memberData'].controls['memberLastName'].touched || 
+                                    memberForm.controls['memberData'].controls['memberLastName'].dirty) && 
+                                    !member.LastName">
+                            Last Name is required
+                        </span>
+                    </div>
+                </div>
+                <div class="form-group"
+                    [ngClass]="{'has-error': (memberForm.controls['memberData'].controls['memberPassword'].touched || 
+                        memberForm.controls['memberData'].controls['memberPassword'].dirty) && 
+                        (!member.Password || !memberForm.controls['memberData'].controls['memberPassword'].valid) }">
+                    <label class="col-md-2 control-label" for="memberPassword">Password</label>
+                    <div class="col-md-8">
+                        <input class="form-control" type="password" id="memberPasswordId" formControlName="memberPassword" placeholder="Password (required)"
+                            [(ngModel)]=member.Password />
+                        <span class="help-block" 
+                            *ngIf="(memberForm.controls['memberData'].controls['memberPassword'].touched || 
+                                    memberForm.controls['memberData'].controls['memberPassword'].dirty) && 
+                                    !member.Password">
+                            Password is required
+                        </span>
+                        <span class="help-block" *ngIf="!memberForm.controls['memberData'].controls['memberPassword'].valid">
+                            Invalid Password
+                        </span>
+                    </div>            
+                </div>
+                <div class="form-group"
+                    [ngClass]="{'has-error': (memberForm.controls['memberData'].controls['memberConfirmPassword'].touched || 
+                        memberForm.controls['memberData'].controls['memberConfirmPassword'].dirty) && 
+                        (!member.ConfirmPassword || member.Password != member.ConfirmPassword) }">
+                    <label class="col-md-2 control-label" for="memberPassword">Confirm Password</label>
+                    <div class="col-md-8">
+                        <input class="form-control" type="password" id="memberConfirmPasswordId" formControlName="memberConfirmPassword" placeholder="Confirm Password (required)"
+                            [(ngModel)]=member.ConfirmPassword />
+                        <span class="help-block" 
+                            *ngIf="(memberForm.controls['memberData'].controls['memberConfirmPassword'].touched || 
+                                    memberForm.controls['memberData'].controls['memberConfirmPassword'].dirty) && 
+                                    !member.ConfirmPassword">
+                            Confirm Password is required
+                        </span>
+                        <span class="help-block" *ngIf="member.Password != member.ConfirmPassword">
+                            Password and Confirmation Password do not match
+                        </span>
+                    </div>            
+                </div>
+                <div class="row">
+                    <div class="col-md-4 col-md-offset-4 col-xs-12 m-t-lg m-b-lg">
+                        <button type="button" 
+                            class="btn btn-default btn-home-signup full-width"
+                            [disabled]="pendingRegister"
+                            (click)="onRegisterMember()">Register</button>                
+                    </div>
+                </div>
+            </div>
+        </form>
+        </div>
+        
+    </div>
+</div>
+<!-- <form class="form-horizontal" #memberForm="ngForm" [ngClass]="{'has-error': (memberLastNameVar.touched || 
+    memberLastNameVar.dirty) && 
+    !memberLastNameVar.valid }" *ngIf="member">
+    <fieldset>
+        <div class="form-group">
+            <label class="col-md-2 control-label" for="memberLastName">Last Name</label>
+            <div class="col-md-8">
+                <input class="form-control" id="memberLastNameId" type="text" placeholder="Last Name (required)" required [(ngModel)]=member.LastName name="memberLastName" #memberLastNameVar="ngModel" />
+                <span class="help-block" *ngIf="memberLastNameVar.errors">
+                    <span *ngIf="(memberLastNameVar.touched ||
+                        memberLastNameVar.dirty) &&
+                        memberLastNameVar.errors">
+                        Last Name is required
+                    </span>
+                </span>
+            </div>            
+        </div>
+        <div class="form-group">
+            <label class="col-md-2 control-label" for="memberLastName">Last Name</label>
+            <div class="col-md-8">
+                <input class="form-control" id="memberLastNameId" type="text" placeholder="Last Name (required)" required [(ngModel)]=member.LastName name="memberLastName" #memberLastNameVar="ngModel" />
+                <span class="help-block" *ngIf="memberLastNameVar.errors">
+                    <span *ngIf="(memberLastNameVar.touched ||
+                        memberLastNameVar.dirty) &&
+                        memberLastNameVar.errors">
+                        Last Name is required
+                    </span>
+                </span>
+            </div>            
+        </div>
+        <div class="form-group">
+            <label class="col-md-2 control-label" for="memberPassword">Password</label>
+            <div class="col-md-8">
+                <input class="form-control" id="memberPasswordId" type="password" placeholder="Password (required)" required [(ngModel)]=member.Password name="memberPassword" #memberPasswordVar="ngModel" />
+                <span class="help-block" *ngIf="memberPasswordVar.errors">
+                    <span *ngIf="(memberPasswordVar.touched ||
+                        memberPasswordVar.dirty) &&
+                        memberPasswordVar.errors">
+                        Password is required
+                    </span>
+                </span>
+            </div>            
+        </div>
+        <div class="form-group">
+            <label class="col-md-2 control-label" for="memberConfirmPassword">Confirm Password</label>
+            <div class="col-md-8">
+                <input class="form-control" id="memberConfirmPasswordId" type="password" placeholder="Confirm Password (required)" required [(ngModel)]=member.ConfirmPassword name="memberConfirmPassword" #memberConfirmPasswordVar="ngModel" />
+                <span class="help-block" *ngIf="memberConfirmPasswordVar.errors">
+                    <span *ngIf="(memberConfirmPasswordVar.touched ||
+                        memberConfirmPasswordVar.dirty) &&
+                        memberConfirmPasswordVar.errors">
+                        Confirm Password is required
+                    </span>
+                </span>
+            </div>            
+        </div>
+        <div class="form-group">
+            <span *ngIf="member.Password && member.Password.length < 7">Password must be at least 6 characters <br /></span>   
+            <span *ngIf="member.Password && member.Password.includes(1)">Password must contain a number <br /></span>   
+            <span *ngIf="member.Password && member.Password !== member.ConfirmPassword">Confirm Password must match the Password</span>                   
+        </div>
+        <div class="col-md-2">        
+        </div>
+        <div class="col-md-2">
+            <button type="button" class="btn btn-primary" style="width:100%; height:100%" (click)="onInviteMember()">Register</button>                
+        </div>
+    </fieldset>
+</form> -->

@@ -1,0 +1,39 @@
+<div class="bg-signup">
+    <div class="container" style="padding-top: 50px;">
+        <div class="text-center loginscreen animated fadeInDown">
+            <h1 class="custom-header"><span class="text-orange">Toolots</span> Merchant Portal <br />Email Confirmation</h1>
+            <form class="form-horizontal" [formGroup]="memberForm" *ngIf="!emailSent">
+                <div formGroupName="memberData">                
+                    <div class="form-group" 
+                        [ngClass]="{'has-error': (memberForm.controls['memberData'].controls['memberEmail'].touched || 
+                            memberForm.controls['memberData'].controls['memberEmail'].dirty) && 
+                            (!email || !memberForm.controls['memberData'].controls['memberEmail'].valid ) }">
+                        <label class="col-md-2 control-label" for="memberEmail">{{ 'Email' | translate }}</label>
+                        <input class="col-md-8 form-control" type="text" id="memberEmailID" formControlName="memberEmail" placeholder="{{ 'Email' | translate }} ({{ 'Required' | translate }})" 
+                            [(ngModel)]="email">
+                        <span class="col-md-2 help-block" 
+                            *ngIf="(memberForm.controls['memberData'].controls['memberEmail'].touched || 
+                                    memberForm.controls['memberData'].controls['memberEmail'].dirty) && 
+                                !email">
+                            Email is required
+                        </span>
+                        <span class="col-md-2 help-block" *ngIf="!memberForm.controls['memberData'].controls['memberEmail'].valid">
+                            Invalid email
+                        </span>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-2 center-block col-xs-12 m-t-lg m-b-lg">
+                            <button type="button" class="btn btn-default btn-home-signup full-width"
+                                (click)="onSendConfirmation()">{{ 'Send Confirmation' | translate }}</button>                
+                        </div>
+                    </div>        
+                </div>
+            </form>
+            <div class="row" *ngIf="emailSent">
+                <div class="col-lg-12">
+                    <h3>Confirmation email has been sent</h3>
+                </div>
+            </div>
+        </div>        
+    </div>
+</div>

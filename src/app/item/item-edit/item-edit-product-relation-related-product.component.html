@@ -1,0 +1,126 @@
+<div class="ibox-title"><h5>{{ 'Optional Accessories' | translate }}</h5></div>
+<div class="ibox-content">  
+    <div class="form-group row">
+        <div class="col-md-12">                            
+            <div *ngIf="item.ItemRelatedProducts && item.ItemRelatedProducts.length && item.ItemRelatedProducts.length > 0">
+                <table mat-table #table [dataSource]="relatedProductDataSource">
+                    <!-- Add Button -->
+                    <ng-container matColumnDef="Add">
+                        <th mat-header-cell *matHeaderCellDef width="45px"></th>
+                        <td mat-cell *matCellDef="let itemRelatedProduct; let i = index">                                                 
+                            <div *ngIf="i === item.ItemRelatedProducts.length-1">
+                                <a (click)='onAddItemRelatedProduct(itemRelatedProduct); formDirty = false;'><span [matTooltip]="itemRelatedProduct.RelatedProductItemID ? ( 'Add' | translate ) : ( 'Required fields must be complete' | translate )" class="glyphicon glyphicon-plus fs-20" [ngClass]="itemRelatedProduct.RelatedProductItemID ? 'green' : 'gray'"></span></a>
+                            </div>
+                        </td>
+                    </ng-container>
+                    <!-- Down Column -->
+                    <ng-container matColumnDef="Down">
+                        <th mat-header-cell *matHeaderCellDef width="17px">{{ 'Position' | translate }}</th>
+                        <td mat-cell *matCellDef="let itemRelatedProduct; let i = index">
+                            <div *ngIf="i < item.ItemRelatedProducts.length-2">
+                                <a (click)='relatedProductMoveDownPosition(itemRelatedProduct)' *ngIf='i !== item.ItemRelatedProducts.length - 1'><span class="glyphicon glyphicon-arrow-down"></span></a>
+                            </div>                                            
+                        </td>
+                    </ng-container>
+                    <!-- Position Column -->
+                    <ng-container matColumnDef="Position">
+                        <th mat-header-cell *matHeaderCellDef width="15px"></th>
+                        <td mat-cell *matCellDef="let itemRelatedProduct; let i = index">
+                            <div *ngIf="i !== item.ItemRelatedProducts.length-1">
+                                {{i + 1}}
+                            </div>
+                        </td>
+                    </ng-container>
+                    <!-- Up Column -->
+                    <ng-container matColumnDef="Up">
+                        <th mat-header-cell *matHeaderCellDef width="40px"></th>
+                        <td mat-cell *matCellDef="let itemRelatedProduct; let i = index">
+                            <div class="selected-row" *ngIf="i !== item.ItemRelatedProducts.length-1">
+                                <a (click)='relatedProductMoveUpPosition(itemRelatedProduct)' *ngIf='i !== 0'><span class="selected-row glyphicon glyphicon-arrow-up"></span></a>
+                            </div>
+                        </td>
+                    </ng-container>
+                    <!-- Item Name Column -->
+                    <ng-container matColumnDef="ItemName">
+                        <th mat-header-cell *matHeaderCellDef width="300px">{{ 'Item Name' | translate }}</th>
+                        <td mat-cell *matCellDef="let itemRelatedProduct; let i = index">
+                            <div *ngIf="currentItemRelatedProductIndex !== i && i !== item.ItemRelatedProducts.length-1">
+                                {{itemRelatedProduct.RelatedItemName}}
+                            </div>
+                            <div *ngIf="currentItemRelatedProductIndex === i || i === item.ItemRelatedProducts.length-1">
+                                <ng-select  [items]="relatedProductItemlist"
+                                            [virtualScroll]="true"
+                                            bindLabel="Description"
+                                            bindValue="ItemID"
+                                            placeholder="{{ 'Search Item' | translate }}"
+                                            [(ngModel)]="itemRelatedProduct.RelatedProductItemID"
+                                            (change)="onRelatedProductItemChange(i)"
+                                            (focus)="formDirty = true;"
+                                            #selectionCategoriesRef
+                                            id="itemRelatedProductRelatedProductItemIDId"
+                                            name="itemRelatedProductItemID"
+                                            required
+                                            #itemRelatedProductRelatedProductItemIDVar="ngModel"
+                                            [loading]="!relatedProductItemlist"
+                                            loadingText="Loading...">
+                                            
+                                    <ng-template ng-option-tmp let-item="item">
+                                        <div matTooltip="{{item.Description}}" matTooltipPosition="right" matTooltipShowDelay="400">{{item.Description}}</div>
+                                    </ng-template>
+                                </ng-select>
+                                <!-- <select class="form-control" id="itemRelatedProductRelatedProductItemIDId" name="itemRelatedProductItemID" required 
+                                    [(ngModel)]="itemRelatedProduct.RelatedProductItemID" (change)="onRelatedProductItemChange(i)" #selectionCategoriesRef
+                                    #itemRelatedProductRelatedProductItemIDVar="ngModel" (ngModelChange)="i === item.ItemRelatedProducts.length-1 && canAdd = true;" (focus)="formDirty = true;">
+                                    <option [ngValue]="null" style="font-style: italic" disabled selected>--Select an item--</option>
+                                    <option [value]="rpi.ItemID" *ngFor="let rpi of relatedProductItemlist">{{rpi.Description}}</option>
+                                </select> -->
+                            </div>                                  
+                        </td>
+                    </ng-container>
+                    <!-- SKU Column -->
+                    <ng-container matColumnDef="SKU">
+                        <th mat-header-cell *matHeaderCellDef width="100px">{{ 'SKU' | translate }}</th>
+                        <td mat-cell *matCellDef="let itemRelatedProduct; let i = index">
+                            <div *ngIf="i !== item.ItemRelatedProducts.length-1">
+                                {{itemRelatedProduct.RelatedItemVendorSKU}}
+                            </div>                                         
+                        </td>                   
+                    </ng-container>  
+                    <!-- TPIN Column -->
+                    <ng-container matColumnDef="TPIN">
+                        <th mat-header-cell *matHeaderCellDef width="100px">{{ 'TPIN' | translate }}</th>
+                        <td mat-cell *matCellDef="let itemRelatedProduct; let i = index">
+                            <div *ngIf="i !== item.ItemRelatedProducts.length-1">
+                                {{itemRelatedProduct.RelatedTPIN}}
+                            </div>     
+                        </td>
+                    </ng-container>              
+                    <!-- Remove Column -->
+                    <ng-container matColumnDef="Remove">
+                        <th mat-header-cell *matHeaderCellDef width="100px">{{ 'Remove' | translate }}</th>
+                        <td mat-cell *matCellDef="let itemRelatedProduct; let i = index;">
+                            <div *ngIf="i !== item.ItemRelatedProducts.length-1">    
+                                <a (click)="onRemoveRelatedProduct(itemRelatedProduct); currentItemRelatedProductIndex = item.ItemRelatedProducts.length-1;">
+                                    <span matTooltip="{{ 'Remove' | translate }}" attr.aria-label="{{ 'Remove' | translate}}" class="glyphicon glyphicon-trash"></span>
+                                </a>
+                            </div>
+                            <div [hidden]="!formDirty && i === item.ItemRelatedProducts.length-1"> 
+                                <a matTooltip="{{ 'Clear' | translate }}" attr.aria-label="{{ 'Clear' | translate}}" (click)="clearFields(itemRelatedProduct);"><i *ngIf="i === item.ItemRelatedProducts.length-1" class="fa fa-eraser"></i></a>
+                                <!-- <button *ngIf="i === item.ItemRelatedProducts.length-1"
+                                        type="button" 
+                                        class="btn btn-remove-sm"
+                                        (click)="clearFields();">Clear</button> -->
+                            </div>
+                        </td>
+                    </ng-container>
+                                    
+                    <tr mat-header-row *matHeaderRowDef="relatedProductDisplayedColumns"></tr>
+                    <tr class="selected-row" mat-row *matRowDef="let itemRelatedProduct; let i = index; columns: relatedProductDisplayedColumns;"
+                        [ngStyle]="{'background-color': itemService.rowColorConditions(i, item.ItemRelatedProducts, currentItemRelatedProductIndex, formDirty)}"
+                        (click)="onEditItemRelatedProduct(i)">
+                    </tr>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>

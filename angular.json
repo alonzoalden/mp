@@ -20,7 +20,8 @@
             "tsConfig": "src/tsconfig.app.json",
             "assets": [
               "src/favicon.ico",
-              "src/assets"
+              "src/assets",
+			  "src/silent-refresh.html"
             ],
             "styles": [
               "src/styles.css"
@@ -50,7 +51,8 @@
         "serve": {
           "builder": "@angular-devkit/build-angular:dev-server",
           "options": {
-            "browserTarget": "merchantportal:build"
+            "browserTarget": "merchantportal:build",
+            "disableHostCheck": true
           },
           "configurations": {
             "production": {

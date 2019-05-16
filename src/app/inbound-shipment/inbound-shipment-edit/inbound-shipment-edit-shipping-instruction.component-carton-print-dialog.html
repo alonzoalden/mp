@@ -1,0 +1,14 @@
+<h1 mat-dialog-title>{{ 'Print Label' | translate }}</h1>
+<div mat-dialog-content>
+    <h3>{{ 'Inbound Shipment' | translate }}: {{data.PackingSlipNumber}}</h3>
+    <mat-form-field fxFlex>
+        <mat-select [(ngModel)]="cartonLabelPrintDialog.Border" placeholder="{{ 'Border' | translate }}">
+            <mat-option value="yes">{{ 'Yes' | translate }}</mat-option>
+            <mat-option value="no">{{ 'No' | translate }}</mat-option>
+        </mat-select>        
+    </mat-form-field> 
+</div>
+<mat-dialog-actions>
+    <button mat-button [mat-dialog-close]="cartonLabelPrintDialog" cdkFocusInitial>{{ 'Print' | translate }}</button>
+    <button mat-button (click)="onCancelClick()">{{ 'Cancel' | translate }}</button>
+</mat-dialog-actions>

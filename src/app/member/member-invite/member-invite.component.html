@@ -1,0 +1,65 @@
+
+<div class="row wrapper border-bottom white-bg page-heading">
+    <div class="col-lg-12">
+        <h2>
+            {{ 'Invite Member' | translate }}
+        </h2>
+        <ol class="breadcrumb">
+            <li>
+                <a [routerLink]="['/dashboard']" >{{ 'Home' | translate }}</a>
+            </li>
+            <li>
+                <a [routerLink]="['/member']">{{ 'Manage Members' | translate }}</a>
+            </li>
+            <li class="active">
+                <strong>{{ 'Invite Member' | translate }}</strong>
+            </li>
+        </ol>
+    </div>
+</div>
+
+<div class="wrapper wrapper-content animated fadeIn">
+    <div class="row">
+        <div class="col-lg-12">
+            <form class="form-horizontal" [formGroup]="memberForm">
+                <div formGroupName="memberData">
+                <div class="ibox-title"><h5>{{ 'Enter Details' | translate }}</h5></div>
+                    <div class="ibox-content">
+                        <div class="form-group" 
+                            [ngClass]="{'has-error': (memberForm.controls['memberData'].controls['memberEmail'].touched || 
+                                memberForm.controls['memberData'].controls['memberEmail'].dirty) && 
+                                (!member.Email || !memberForm.controls['memberData'].controls['memberEmail'].valid ) }">
+                            <label class="col-md-2 control-label" for="memberEmail">{{ 'Email' | translate }}</label>
+                            <input class="col-md-8 form-control" type="text" id="memberEmailID" formControlName="memberEmail" placeholder="{{ 'Email' | translate }} ({{ 'Required' | translate }})" 
+                                [(ngModel)]="member.Email">
+                            <span class="col-md-2 help-block" 
+                                *ngIf="(memberForm.controls['memberData'].controls['memberEmail'].touched || 
+                                        memberForm.controls['memberData'].controls['memberEmail'].dirty) && 
+                                    !member.Email">
+                                Email is required
+                            </span>
+                            <span class="col-md-2 help-block" *ngIf="!memberForm.controls['memberData'].controls['memberEmail'].valid">
+                                Invalid email
+                            </span>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-2 control-label" for="memberIsAdmin">{{ 'Admin' | translate }}</label>
+                            <div class="col-sm-8 pt7 p-w-none">
+                                <!-- <input type="checkbox" [(ngModel)]="member.IsAdmin" formControlName="memberIsAdmin" /> -->
+                                <mat-checkbox [(ngModel)]="member.IsAdmin" formControlName="memberIsAdmin"></mat-checkbox>
+                            </div>            
+                        </div>
+                        <div class="row">
+                            <div class="col-md-2 center-block col-xs-12 m-t-lg m-b-lg">
+                                <button type="button" 
+                                    class="btn btn-default btn-home-signup full-width"
+                                    [disabled]="pendingInvite"
+                                    (click)="onInviteMember()">{{ 'Invite' | translate }}</button>                
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>

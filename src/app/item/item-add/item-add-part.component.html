@@ -1,0 +1,225 @@
+
+<div class="tab-content">
+    <div class="tab-pane active">
+        <div class="panel-body p-w-none">
+            <form class="form-horizontal" #itemForm="ngForm">
+                <fieldset>
+                    <div class="ibox-title"><h5>{{ 'Item Parts' | translate }}</h5></div>                  
+                    <div class="ibox-content x-scroll">  
+                        <div class="form-group row">
+                            <div class="col-md-12">                            
+                                <div *ngIf="item.ItemParts.length && item.ItemParts.length > 0">
+                                    <table mat-table #table [dataSource]="dataSource">
+                                        <!-- Add Button -->
+                                        <ng-container matColumnDef="Add">
+                                            <th mat-header-cell *matHeaderCellDef width="45px"></th>
+                                            <td mat-cell *matCellDef="let itemPart; let i = index">                                                 
+                                                <div *ngIf="i === item.ItemParts.length-1">
+                                                    <a (click)='onAddItemPart(itemPart); formDirty = false;'><span [matTooltip]="itemPart.PartItemName && itemPart.PartItemName != '' ? ( 'Add' | translate ) : ( 'Required fields must be complete' | translate )" class="glyphicon glyphicon-plus fs-20" 
+                                                        [ngClass]="itemPart.PartItemName && itemPart.PartItemName != '' && itemPart.PartItemVendorSKU && itemPart.PartItemVendorSKU != '' && itemPart.PartFOBPrice && itemPart.PartFOBPrice != '' ? 'green' : 'gray'"></span></a>
+                                                </div>
+                                            </td>
+                                        </ng-container>
+                                        <!-- Down Column -->
+                                        <ng-container matColumnDef="Down">
+                                            <th mat-header-cell *matHeaderCellDef width="17px">{{ 'Position' | translate }}</th>
+                                            <td mat-cell *matCellDef="let itemPart; let i = index">
+                                                <div *ngIf="i < item.ItemParts.length-2">
+                                                    <a (click)='moveDownPosition(itemPart);' *ngIf='i !== item.ItemParts.length - 1'><span class="glyphicon glyphicon-arrow-down"></span></a>
+                                                </div>                                            
+                                            </td>
+                                        </ng-container>
+                                        <!-- Position Column -->
+                                        <ng-container matColumnDef="Position">
+                                            <th mat-header-cell *matHeaderCellDef width="15px"></th>
+                                            <td mat-cell *matCellDef="let itemPart; let i = index">
+                                                <div *ngIf="i !== item.ItemParts.length-1">
+                                                    {{i + 1}}
+                                                </div>
+                                            </td>
+                                        </ng-container>
+                                        
+                                        <!-- Up Column -->
+                                        <ng-container matColumnDef="Up">
+                                            <th mat-header-cell *matHeaderCellDef width="40px"></th>
+                                            <td mat-cell *matCellDef="let itemPart; let i = index">
+                                                <div class="selected-row" *ngIf="i !== item.ItemParts.length-1">
+                                                    <a (click)='moveUpPosition(itemPart)' *ngIf='i !== 0'><span class="selected-row glyphicon glyphicon-arrow-up"></span></a>
+                                                </div>
+                                            </td>
+                                        </ng-container>
+
+                                        <!-- Thumbnail Column -->
+                                        <ng-container matColumnDef="Thumbnail">
+                                            <th mat-header-cell *matHeaderCellDef width="100px">{{ 'Image' | translate }}</th>
+                                            <td mat-cell *matCellDef="let itemPart; let i = index" width="100px" height="80px" class="thumbnail-col">      
+                                                <input type="file" id="fileUpload" class="hidden"
+                                                    (change)="fileChangeEvent($event, itemPart); formDirty = true;" 
+                                                    accept="image/gif,image/jpeg,image/png,.jpeg,.jpg,.png" 
+                                                    #fileUpload>
+
+                                                <div *ngIf="(i === item.ItemParts.length-1 && !itemPart.ImageRaw && !itemPart.PartItemID && !pendingUpload)
+                                                            || (i === item.ItemParts.length-1 && i !== currentIndex && pendingUpload)">
+                                                    <button [disabled]="pendingUpload" type="button" class="btn btn-primary" (click)="fileUpload.click();"><i class="fa fa-file-image-o"></i>  {{ 'Browse' | translate }}</button>
+                                                </div>    
+                                                <!-- <div *ngIf="(itemPart.ImageRaw || itemPart.PartItemID) && ( !pendingUpload || i != currentIndex )" class="thumbnail-container">                                                         -->
+                                                <div *ngIf="(i != item.ItemParts.length-1 || itemPart.PartItemID) && ( !pendingUpload || i != currentIndex )" class="thumbnail-container flex-va-center">
+                                                    <a (click)="fileUpload.click()">
+                                                        <!-- <img src="{{itemPart.ImageRaw}}" [title]='itemPart.PartItemName'> -->
+                                                        <img src="{{imageURL + itemPart.ImageFilePath}}" [title]='itemPart.PartItemName' *ngIf="!itemPart.IsNewImage && itemPart.ImageFilePath"> 
+                                                        <img src='https://content-merchantportal.toolots.net/assets/images/no-image-icon.png' title='Product has no image' class="opaque" 
+                                                            *ngIf='(!itemPart.IsNewImage && !itemPart.ImageFilePath) || (itemPart.IsNewImage && !itemPart.ImageRaw )' >                                                                                                               
+                                                        <img src="{{itemPart.ImageRaw}}" [title]='itemPart.PartItemName' *ngIf="itemPart.IsNewImage && itemPart.ImageRaw">
+                                                    </a>
+                                                </div>  
+                                                <div *ngIf="pendingUpload && i == currentIndex" class="loading-container">
+                                                    <div class="sk-spinner sk-spinner-three-bounce">
+                                                        <div class="sk-bounce1"></div>
+                                                        <div class="sk-bounce2"></div>
+                                                        <div class="sk-bounce3"></div>
+                                                    </div>
+                                                </div>
+                                            </td>
+                                        </ng-container>
+
+                                        <!-- Item New Column -->
+                                        <ng-container matColumnDef="New">
+                                            <th mat-header-cell *matHeaderCellDef width="42px">{{ 'New' | translate }}</th>
+                                            <td mat-cell *matCellDef="let itemPart; let i = index">
+                                                <div class="flex-va-center">
+                                                    <div>
+                                                        <mat-checkbox [matTooltip]="( 'New Part' | translate )" [(ngModel)]="itemPart.isNew" [ngModelOptions]="{standalone: true}" (click)="clickIsNew(itemPart, i)"></mat-checkbox>
+                                                    </div>
+                                                </div>
+                                            </td>
+                                        </ng-container>
+                                        <!-- Item Name Column -->
+                                        <ng-container matColumnDef="Select">
+                                            <th mat-header-cell *matHeaderCellDef width="300px">{{ 'Select' | translate }}</th>
+                                            <td mat-cell *matCellDef="let itemPart; let i = index">
+                                                <div class="flex-va-center">
+                                                    <div style="width: 100%;" >
+                                                        <ng-select  [items]="itemlist"
+                                                                    [virtualScroll]="true"
+                                                                    bindLabel="Description"
+                                                                    bindValue="ItemID"
+                                                                    [placeholder]="setPlaceholderText(i, itemPart) | translate"
+                                                                    [(ngModel)]="itemPart.PartItemID"
+                                                                    (change)="onPartItemChange(i, itemPart);"
+                                                                    (focus)="formDirty = true;"
+                                                                    #selectionCategoriesRef
+                                                                    id="itemPartPartItemID"
+                                                                    name="itemPartItemID"
+                                                                    required
+                                                                    #itemPartPartItemIDVar="ngModel"
+                                                                    [loading]="!itemlist"
+                                                                    loadingText="Loading..."
+                                                                    (open)="overflowFix(true)"
+                                                                    (close)="overflowFix()"
+                                                                    [ngClass]="(currentIndex !== i && i !== item.ItemParts.length-1) ? 'opaque' : ''"
+                                                                    >
+                                                            <ng-template ng-option-tmp let-item="item">
+                                                                <div matTooltip="{{item.Description}}" matTooltipPosition="right" matTooltipShowDelay="400">{{item.Description}}</div>
+                                                            </ng-template>
+                                                        </ng-select>                                                    
+                                                    </div>
+                                                </div>
+                                            </td>
+                                        </ng-container>
+
+                                        <!-- Item Name Column -->
+                                        <ng-container matColumnDef="ItemName">
+                                            <th mat-header-cell *matHeaderCellDef width="300px">{{ 'Part Name' | translate }}</th>
+                                            <td mat-cell *matCellDef="let itemPart; let i = index">                                                
+                                                <div *ngIf="currentIndex !== i && i !== item.ItemParts.length-1">
+                                                    {{itemPart.PartItemName}}
+                                                </div>
+                                                <div *ngIf="(currentIndex === i || i === item.ItemParts.length-1)">
+                                                    <input class="form-control" id="PartItemNameId" type="text" placeholder="{{ 'Part Name' | translate }} ({{ 'Required' | translate }})" required 
+                                                        [(ngModel)]=itemPart.PartItemName name="itemPartItemName" #itemPartNameVar="ngModel" maxlength="70"/>
+                                                </div>                  
+                                            </td>
+                                        </ng-container>
+                                        <!-- SKU Column -->
+                                        <ng-container matColumnDef="SKU">
+                                            <th mat-header-cell *matHeaderCellDef width="100px">{{ 'SKU' | translate }}</th>
+                                            <td mat-cell *matCellDef="let itemPart; let i = index">
+                                                <div *ngIf="currentIndex !== i && i !== item.ItemParts.length-1">
+                                                    {{itemPart.PartItemVendorSKU}}
+                                                </div>      
+                                                <div *ngIf="currentIndex === i || i === item.ItemParts.length-1">
+                                                    <input class="form-control" id="itemPartVendorSKUId" type="text" 
+                                                        pattern="^[\w\-]*$" ng-pattern-restrict placeholder="SKU ({{ 'Required' | translate }})" required 
+                                                        [(ngModel)]=itemPart.PartItemVendorSKU name="itemPartVendorSKU" #itemPartVendorSKUVar="ngModel" maxlength="30" />
+                                                </div>                                   
+                                            </td>                   
+                                        </ng-container>  
+                                        <!-- TPIN Column -->
+                                        <ng-container matColumnDef="TPIN">
+                                            <th mat-header-cell *matHeaderCellDef width="100px">{{ 'TPIN' | translate }}</th>
+                                            <td mat-cell *matCellDef="let itemPart; let i = index">
+                                                <div>
+                                                    {{itemPart.PartTPIN}}
+                                                </div>     
+                                            </td>                    
+                                        </ng-container>       
+                                        <!-- Price Column -->
+                                        <ng-container matColumnDef="Price">
+                                            <th mat-header-cell *matHeaderCellDef [attr.width]="!isPM ? '100px' : '250px'">{{ 'Price' | translate }}</th>
+                                            <td mat-cell *matCellDef="let itemPart; let i = index">
+                                                <div *ngIf="currentIndex !== i && i !== item.ItemParts.length-1">
+                                                    <div *ngIf="isPM">
+                                                            {{itemPart.PartFOBPrice}} / {{itemPart.PartPrice}}
+                                                    </div>
+                                                    <div *ngIf="!isPM">
+                                                            {{itemPart.PartFOBPrice}}
+                                                    </div>                                                       
+                                                </div> 
+                                                <div *ngIf="currentIndex === i || i === item.ItemParts.length-1">
+                                                    <div *ngIf="isPM" class="flex">
+                                                        <input class="form-control m-r-smi" id="itemPartFOBPriceId" type="number" placeholder="{{ 'FOB Price' | translate }} ({{ 'Required' | translate }})" 
+                                                            step="0.01" (change)="onChangeFOBPrice(itemPart);" onkeydown="return event.keyCode == 69 || event.keyCode == 189 ? false : true" min="0"
+                                                            required [(ngModel)]=itemPart.PartFOBPrice name="itemPartFOBPrice" #itemPartFOBPriceVar="ngModel" />                                                        
+                                                        <input class="form-control" id="itemPartPriceId" type="number" placeholder="{{ 'Selling Price' | translate }} ({{ 'Required' | translate }})" 
+                                                            step="0.01" onchange="this.value = parseFloat(this.value).toFixed(2);" onkeydown="return event.keyCode == 69 || event.keyCode == 189 ? false : true" min="0"
+                                                            required [(ngModel)]=itemPart.PartPrice name="itemPartPrice" #itemPartPriceVar="ngModel" />
+                                                    </div> 
+                                                    <div *ngIf="!isPM">
+                                                        <input class="form-control" id="itemPartFOBPriceId" type="number" placeholder="{{ 'FOB Price' | translate }} ({{ 'Required' | translate }})" 
+                                                            step="0.01" onchange="onChangeFOBPrice(itemPart);" onkeydown="return event.keyCode == 69 || event.keyCode == 189 ? false : true" min="0"
+                                                            required [(ngModel)]=itemPart.PartFOBPrice name="itemPartFOBPrice" #itemPartFOBPriceVar="ngModel" />
+                                                    </div>
+                                                    
+                                                </div>    
+                                            </td>                                                                
+                                        </ng-container>        
+                                        <!-- Remove Column -->
+                                        <ng-container matColumnDef="Remove">
+                                            <th mat-header-cell *matHeaderCellDef width="100px">{{ 'Remove' | translate }}</th>
+                                            <td mat-cell *matCellDef="let itemPart; let i = index;">
+                                                <div *ngIf="i !== item.ItemParts.length-1">    
+                                                    <a (click)="onRemove(itemPart); currentIndex = item.ItemParts.length-1;">
+                                                        <span matTooltip="{{ 'Remove' | translate }}" attr.aria-label="{{ 'Remove' | translate}}" class="glyphicon glyphicon-trash"></span>
+                                                    </a>
+                                                </div>
+                                                <div [hidden]="!formDirty && i === item.ItemParts.length-1">
+                                                    <a matTooltip="{{ 'Clear' | translate }}" attr.aria-label="{{ 'Clear' | translate}}" (click)="clearFields(itemPart);"><i *ngIf="i === item.ItemParts.length-1" class="fa fa-eraser"></i></a>
+                                                </div>
+                                            </td>
+                                        </ng-container>
+                                                        
+                                        <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+                                        <tr class="selected-row" mat-row *matRowDef="let itemPart; let i = index; columns: displayedColumns;"
+                                            [ngStyle]="{'background-color': itemService.rowColorConditions(i, item.ItemParts, currentIndex, formDirty)}"
+                                            (click)="onEditItemPart(i)">
+                                        </tr>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </fieldset>                
+            </form>
+        </div>            
+    </div>    
+</div>

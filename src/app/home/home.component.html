@@ -1,0 +1,195 @@
+<div class="home-theme-layout" id="page-top" #home *ngIf='!isLoggedin'>
+        <div class="navbar-wrapper">
+            <nav class="navbar navbar-default navbar-fixed-top" role="navigation">
+                <div class="container">
+                    <div class="navbar-header page-scroll">
+                        <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
+                            <span class="sr-only">Toggle navigation</span>
+                            <span class="icon-bar"></span>
+                            <span class="icon-bar"></span>
+                            <span class="icon-bar"></span>
+                        </button>
+                        <a class="navbar-brand" href="index.html">
+                            <img src="https://content-merchantportal.toolots.net/assets/images/Toolots-Merchant-Service.png" class="image_full">
+                            <img src="https://content-merchantportal.toolots.net/assets/images/Toolots-Merchant-Service-Mobile.png" class="image_mobile">
+                        </a>
+                    </div>
+                    <div id="navbar" class="navbar-collapse collapse">
+                        <ul class="nav navbar-nav navbar-center">
+                            <li><a data-toggle="collapse" data-target=".navbar-collapse" class="page-scroll" (click)="scrollToElement(home, 'home-nav')" [ngClass]="{'selected-button': id === 'home-nav' }">Home</a></li>
+                            <li><a data-toggle="collapse" data-target=".navbar-collapse" class="page-scroll" (click)="scrollToElement(features, 'features-nav')" [ngClass]="{'selected-button': id === 'features-nav' }">Features</a></li>
+                            <li>
+                                <a class="page-scroll" [routerLink]="['/registration']"><strong>Sign Up</strong><i class="fa fa-sign-up"></i></a>
+                            </li>
+                        </ul>
+                        <ul class="nav navbar-nav navbar-right">
+                            <li>
+                                <a *ngIf="!isLoggedin" class="page-scroll" (click)="login()">Log in <i class="fa fa-sign-in"></i> </a>
+                                <a *ngIf="isLoggedin" (click)="logout()">Logout</a>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </nav>
+        </div> 
+    
+        <section class="main-display-container">
+            <div class="background-img">
+                <div class="main-display-content">
+                    <h1 class="main-title animated fadeInRight">
+                        Easily Manage Warehouse Inventory with Merchant Portal
+                    </h1>
+                    <button class="btn btn-default btn-home-signup animated fadeInLeft" [routerLink]="['/registration']">SIGN UP NOW</button>
+                </div>
+            </div>
+            <div #features class="features-start-point"></div>
+        </section>
+        
+        <!-- Content -->
+        <div class="landing-page">
+            <section id="features" class="container services">
+                <div class="row animated fadeIn">
+                    <div class="col-sm-4">
+                        <h2>Expand your market reach</h2>
+                        <p>Reach more buyers and get more sales. Toolots attracts visitors from around the world and we invest our resources to promote your brand.</p>
+                    </div>
+                    <div class="col-sm-4">
+                        <h2>Dedicated Product Managers</h2>
+                        <p>Our Product Management teams are available when you need them—they assist with listings, inventory, warehousing, and additional benefits and services, should you need them. </p>
+                    </div>
+                    <div class="col-sm-4">
+                        <h2>Optimized Visibility</h2>
+                        <p>We optimize your listings. We know industrial, and we know eCommerce; we’re here to help when you need us and work to get your products seen.</p>
+                    </div>
+                </div>
+            </section>
+             
+            <section class="container features" style="padding-bottom: 30px;">
+                <div class="row">
+                    <div class="col-lg-12 text-center m-b-sm animated fadeIn">
+                        <div class="navy-line"></div>
+                        <h1>Manage all aspects of your business <br/> <span class="navy">on Toolots with our Merchant Portal</span></h1>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-3 text-center wow animated" animateOnScroll animationName="fadeInLeft">
+                        <div class="m-b-lg">
+                            <i class="fa fa-list features-icon"></i>
+                            <h2><span class="block text-navy">Manage</span> product listings</h2>
+                        </div>
+                        <div class="m-t-xxl">
+                            <i class="fa fa-location-arrow features-icon"></i>
+                            <h2><span class="block text-navy">Track orders </span> from end to end</h2>
+                        </div>
+                    </div>
+                    <div class="col-md-6 text-center wow zoomIn m-b-lg">
+                        <img src="https://content-merchantportal.toolots.net/assets/images/buildings.jpg" alt="dashboard" class="img-responsive">
+                    </div>
+                    <div class="col-md-3 text-center wow fadeIn animated" animateOnScroll animationName="fadeInRight">
+                        <div class="m-b-lg">
+                            <i class="fa fa-bar-chart features-icon"></i>
+                            <h2><span class="block text-navy">Monitor</span> sales analytics</h2>
+                        </div>
+                        <div class="m-t-xxl">
+                            <i class="fa fa-lightbulb-o features-icon"></i>
+                            <h2><span class="block text-navy">Customize</span> your business</h2>
+                        </div>
+                    </div>
+                </div>
+            </section>
+            <!-- <section class="gray-section ">
+                <div class="container">
+                    <div class="col-lg-12 text-center" animateOnScroll animationName="animated fadeIn">
+                        <div class="navy-line"></div>
+                        <h1>Our goal is to make sure<br/> you have everything you need to operate<br/> <span class="navy"> your new business on <span class="text-orange">Toolots.</span></span></h1>
+                    </div>
+                </div>
+            </section> -->
+            <section class="gray-section bg-signup2 m-t-n">
+                <div class="container">
+                    <div class="col-lg-12 text-center" animateOnScroll animationName="animated fadeIn">
+                        <div class="navy-line"></div>
+                        <h1>Our goal is to make sure<br/> you have everything you need to operate<br/> <span class="navy"> your new business on <span class="text-orange">Toolots.</span></span></h1>
+                        <p animateOnScroll animationName="animated fadeInDown"> Follow these simple steps...</p>
+                        
+                        <!-- <h1> Here's how to get started...</h1>
+                        <p>Our goal is to make sure<br/> you have everything you need to operate<br/> <span class="navy"> your new business on <span class="text-orange">Toolots.</span></span></p> -->
+                    </div>
+                    <div class="col-lg-12 text-center" animateOnScroll animationName="animated fadeInDown">
+                        <div class="navy-line"></div>
+                        <!-- <h1>Here's how to get started:</h1> -->
+                    </div>
+                    <div class="col-lg-2 text-center center-block p-md animated pointer" animateOnScroll animationName="animated fadeInDown" [routerLink]="['/registration']">
+                        <h1><i class="fa fa-user-o m-l-xs"></i></h1>
+                        <p class="text-black"><strong><span class="circle-green">1</span>Sign Up</strong></p>
+                    </div>
+                    <div class="col-lg-2 text-center center-block p-md" animateOnScroll animationName="animated fadeInDown">
+                        <h1><i class="fa fa-list-ul m-l-xs"></i></h1>
+                        <p class="text-black"><span class="circle-green">2</span>List your products </p>
+                    </div>
+                    <div class="col-lg-2 text-center center-block p-md" animateOnScroll animationName="animated fadeInDown">
+                        <h1><i class="fa fa-dollar m-l-xs"></i></h1>
+                        <p class="text-black"> <span class="circle-green">3</span> Get sales </p>
+                    </div>
+                    <div class="col-lg-2 text-center center-block p-md" animateOnScroll animationName="animated fadeInDown">
+                        <h1> <i class="fa fa-truck m-l-xs"></i></h1>
+                        <p class="text-black"> <span class="circle-green">4</span> Ship your orders </p>
+                    </div>
+                    <div class="col-lg-2 text-center center-block p-md" animateOnScroll animationName="animated fadeInDown">
+                        <h1><i class="fa fa-money m-l-xs"></i></h1>
+                        <p class="text-black"><span class="circle-green">5</span> Get paid! </p>
+                    </div>
+                    <div class="col-lg-2 text-center center-block p-md" animateOnScroll animationName="animated fadeInDown">
+                        <h1><i class="fa fa-bar-chart-o m-l-xs"></i></h1>
+                        <p class="text-black">  <span class="circle-green">6</span>  Optimize listings</p>
+                    </div>
+                </div>
+            </section>
+            
+            <!-- <section id="testimonials" class="navy-section testimonials mid-page-signup">
+                <div class="container">
+                    <div class="row">
+                        <div class="col-lg-12 text-center wow zoomIn">
+                            <div class="testimonials-text">
+                                <h1>Sign up today and <i>begin profiting</i>...</h1>
+                                <button class="btn btn-home-signup1" [routerLink]="['/registration']">Start selling</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section> -->
+        </div>
+    
+        <section id="contact" class="gray-section contact m-t-lg">
+            <div class="container">
+                <div class="row m-b-lg">
+                    <div class="col-lg-12 text-center">
+                        <div class="navy-line"></div>
+                        <h1>Contact Us</h1>
+                        <p>Feel free to reach out any time!</p>
+                    </div>
+                </div>
+                    <div class="row m-b-lg">
+                    <div class="col-lg-12 text-center">
+                        <address>
+                            <strong><span class="navy">Toolots (Headquarters)</span></strong><br/>
+                            16300 Shoemaker Ave<br/>
+                            Cerritos, CA 90703<br/>
+                        </address>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-lg-12 text-center">
+                        <p>(844) 866-5687
+                            <br><a href="mailto:info@toolots.com">info@toolots.com</a>
+                        </p>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-lg-8 col-lg-offset-2 text-center m-t-lg m-b-lg">
+                        <p><strong>&copy; 2018 Toolots</strong><br/></p>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </div>

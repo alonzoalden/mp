@@ -1,0 +1,205 @@
+.glyphicon-exclamation-sign {
+    color: red;
+    margin-left: 3px;
+}
+.wizard ul {
+    display: flex;
+    width: 100%;
+    justify-content: space-between;
+}
+@media (max-width: 590px) {
+    .wizard ul {
+        flex-direction: column;
+    }
+    .wizard > .steps > ul > li {
+        margin-top: 4px;
+    }
+}
+.wizard ul li:nth-of-type(4) {
+    margin-right: 0px;
+}
+.wizard li {
+    width: 100%;
+    margin-right: 10px;
+}
+.wizard a {
+    display: inline-block;
+    margin-right: 10px;
+    width: 100%;
+    outline: none;
+    padding-left: 13px;
+    padding-top: 11px;
+    height: 40px;
+    position: relative;
+    text-decoration: none !important;
+    font-weight: 600;
+    color: #bbb;
+    white-space: nowrap;
+}
+.wizard li {
+    /* width: 220px; */
+}
+.wizard a:hover {
+    cursor: pointer;
+    text-decoration: underline;
+}
+
+
+/* Adds the cut out on the left side of the tab */
+
+.wizard a:before {
+    width: 0;
+    height: 0;
+    border-top: 20px inset transparent;
+    border-bottom: 20px inset transparent;
+    border-left: 20px solid #fff;
+    position: absolute;
+    content: "";
+    top: 0;
+    left: 0;
+}
+
+/* Adds the arrow on the right side of the tab */
+
+.wizard a:after {
+    width: 0;
+    height: 0;
+    border-top: 20px inset transparent;
+    border-bottom: 20px inset transparent;
+    position: absolute;
+    content: "";
+    top: 0;
+    
+    z-index: 2;
+}
+
+
+/* Squares the start and end of the tab bar */
+
+.wizard a:first-child:before,
+.wizard a:last-child:after {
+    border: none;
+}
+
+
+/* Rounds the corners */
+
+.wizard a:first-child {
+    -webkit-border-radius: 8px 0 0 0px;
+    -moz-border-radius: 8px 0 0 0px;
+    border-radius: 8px 0 0 0px;
+}
+
+.wizard a:last-child {
+    -webkit-border-radius: 0 8px 0px 0;
+    -moz-border-radius: 0 8px 0px 0;
+    border-radius: 0 8px 0px 0;
+}
+
+.wizard .active {
+    background: #1AB394 !important;
+    color: #fff;
+    border-radius: 5px;
+    width: 100%;
+    height: 40px;
+    margin-right: 10px;
+}
+
+
+/* Adds the right arrow after the tab */
+
+.wizard .active:after {
+    border-left-color: #007ACC;
+}
+.wizard ul {
+    padding-inline-start: 0px;
+}
+.wizard .steps ul li {
+    display: inline-block;
+}
+.steps > li.disabled > a:hover {
+    color: #A7B1C2  !important;
+}
+.steps > li.active > a > span.badge {
+    background-color: #18a689;
+    border-color: #697774;
+    color: #FFFFFF;
+}
+.wizard .complete {
+    background-color: #6FD1B6;
+    margin-right: 10px;
+}
+.wizard .complete .wiz-title,
+.wizard .complete .fa-check {
+    color: #fff;
+}
+.wizard .complete .glyphicon-exclamation-sign {
+    color: red;
+}
+
+.wizard li > a.disabled {
+    background-color: #ddd;
+}
+.wizard .disabled a {
+    color: #fff;
+}
+.wizard .active .circle {
+    border: 1px solid #fff;
+    color: #fff;
+}
+.wizard .active .glyphicon-exclamation-sign {
+    color: red;
+}
+.wizard a .circle {
+    border: 1px solid #bbb;
+    color: #bbb;
+}
+.wizard a .glyphicon-exclamation-sign {
+    color: #bbb;
+}
+.instructions {
+    padding-right: 50px;
+}
+.instructions li {
+    display: block;
+    margin-left: 20px;
+}
+.instructions li div {
+    padding: 10px 0px;
+    font-size: 14px;
+}
+.instructions-layout {
+    display: flex;
+    width: 92%;
+}
+@media (max-width: 690px) {
+    .instructions-layout {
+        flex-direction: column;
+    }
+}
+.inbound-shipment-details > div {
+    min-width: 200px;
+    display: inline-block;
+    text-align: left;
+    border-right: 2px solid #ddd;
+}
+.inbound-shipment-details > div > div {
+    width: 150px;
+    margin: 0 auto;
+}
+.inbound-shipment-details > div:nth-of-type(3) {
+    /* border-right: 0px; */
+}
+@media (max-width: 630px) {
+    .inbound-shipment-details {
+        display: flex;
+        flex-direction: column;
+    }
+    .inbound-shipment-details > div {
+        border-right: 0px;
+        margin-bottom: 15px;
+    }
+}
+.wiz-content {
+    height: 300px;
+}

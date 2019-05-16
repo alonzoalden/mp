@@ -1,0 +1,123 @@
+<div class="container">
+    <div class="row">
+        <div class="col-md-8 col-md-offset-2">
+            <div class="row">
+                <div class="col-md-8" align="middle">
+                    <img src="http://michellesread.com/files/2013/04/smile.jpg" class="img-responsive">
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-8">
+                    <table class="table">
+                        <tbody>
+                            <tr>
+                                <td class="success">Product Name: </td>
+                                <td>{{item.Name}}</td>
+                            </tr>
+                            <tr>
+                                <td class="success">SKU: </td>
+                                <td>{{item.VendorSKU}}</td>
+                            </tr>
+                            <tr>
+                                <td class="success">TPIN: </td>
+                                <td>{{item.TPIN}}</td>
+                            </tr>
+                            <tr>
+                                <td class="success">Fulfilled By: </td>
+                                <td>{{item.FulfilledBy}}</td>
+                            </tr>
+                            <tr>
+                                <td class="success">Item Type: </td>
+                                <td>{{item.ItemType}}</td>
+                            </tr>
+                            <tr>
+                                <td class="success">Price: </td>
+                                <td>{{item.Price}}</td>
+                            </tr>
+                            <tr>
+                                <td class="success">Quantity: </td>
+                                <td>{{item.Quantity}}</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-8">
+                    <table class="table">
+                        <tbody>
+                            <tr>
+                                <td class="success">Special Price: </td>
+                                <td>{{item.SpecialPrice}}</td>
+                            </tr>
+                            <tr>
+                                <td class="success">Special From: </td>
+                                <td>{{item.SpecialFrom}}</td>
+                            </tr>
+                            <tr>
+                                <td class="success">Special To: </td>
+                                <td>{{item.SpecialTo}}</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-8">
+                    <table class="table">
+                        <tbody>
+                            <tr>
+                                <td class="success">Product Width: </td>
+                                <td>{{item.Width}}</td>
+                            </tr>
+                            <tr>
+                                <td class="success">Product Height: </td>
+                                <td>{{item.Height}}</td>
+                            </tr>
+                            <tr>
+                                <td class="success">Product Length: </td>
+                                <td>{{item.Length}}</td>
+                            </tr>
+                            <tr>
+                                <td class="success">Product Weight: </td>
+                                <td>{{item.Weight}}</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-8">
+                    <table class="table">
+                        <tbody>
+                            <tr>
+                                <td class="success">Package Width: </td>
+                                <td>{{item.PackageWidth}}</td>
+                            </tr>
+                            <tr>
+                                <td class="success">Package Height: </td>
+                                <td>{{item.PackageHeight}}</td>
+                            </tr>
+                            <tr>
+                                <td class="success">Package Length: </td>
+                                <td>{{item.PackageLength}}</td>
+                            </tr>
+                            <tr>
+                                <td class="success">Package Weight: </td>
+                                <td>{{item.PackageWeight}}</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <span>
+            <a class="btn btn-danger"
+                [routerLink]="['/item']">
+                Back
+            </a>
+        </span>
+    </div>
+</div>

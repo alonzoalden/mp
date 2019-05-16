@@ -1,0 +1,72 @@
+
+<div class="row wrapper border-bottom white-bg page-heading">
+    <div class="col-lg-9">
+        <h2>
+            {{ 'Sales Order' | translate }}:<span class="xs-strong"> #{{salesorder?.IncrementID}}</span>
+        </h2>
+        <ol class="breadcrumb">
+            <li>
+                <a [routerLink]="['/dashboard']" >{{ 'Home' | translate }}</a>
+            </li>
+            <li>
+                <a *ngIf="fulfilledby =='merchant'" [routerLink]="['/sales-order',fulfilledby,'status','unshipped']">{{ 'Sales Orders (Merchant)' | translate }}</a>
+                <a *ngIf="fulfilledby !='merchant'" [routerLink]="['/sales-order',fulfilledby,'status','unshipped']">{{ 'Sales Orders (Toolots)' | translate }}</a>
+            </li>
+            <li class="active">
+                <strong>{{ 'View Order' | translate }}</strong>
+            </li>
+        </ol>
+    </div>
+</div>
+
+
+<div class="alert-container bottom-border animated fadeIn" *ngIf="salesorder">
+    <div class="alert alert-warning" *ngIf="salesorder?.MerchantStatus === 'Unshipped'">
+        <span class="glyphicon glyphicon-exclamation-sign m-r-xs"></span>
+        <span [innerHTML]="'This order is unshipped.' | translate"></span>  <span *ngIf="fulfilledby==='merchant'"><a class="m-l-xs" [routerLink]="['/','sales-order', 'view', fulfilledby, orderid,'fulfillment', 'add']">{{ 'Please add a new shipment' | translate}}</a>.</span>
+    </div>
+    <div class="alert alert-danger" *ngIf="salesorder?.MerchantStatus === 'Canceled'">
+        <span [innerHTML]="'This order is canceled.' | translate"></span>
+    </div>
+    <div class="alert alert-success" *ngIf="salesorder?.MerchantStatus === 'Shipped'">
+        <span [innerHTML]="'This order is shipped.' | translate"></span>
+    </div>
+</div>
+
+<div class="wrapper wrapper-content animated fadeIn" *ngIf="salesorder">
+    <div class="row">
+        <div class="col-lg-12">
+            <div class="m-t-xl" *ngIf="loading" >
+                <div class="sk-spinner sk-spinner-three-bounce big-spinner">
+                    <div class="sk-bounce1"></div>
+                    <div class="sk-bounce2"></div>
+                    <div class="sk-bounce3"></div>
+                </div>
+            </div>
+            <div class="tabs-container">
+                <ul class="nav nav-tabs">
+                    <li routerLinkActive="active">
+                        <a [routerLink]="['/', 'sales-order', 'view', fulfilledby, orderid, 'detail']" >
+                            {{ 'Details' | translate }}
+                        </a>
+                    </li>
+                    <li [ngClass]="{'active': this.router.url.includes('/edit') || this.router.url.includes('/fulfillment') && !this.router.url.includes('/add') }">
+                        <a [routerLink]="['/','sales-order', 'view', fulfilledby, orderid, 'fulfillment']" >
+                            <span *ngIf="isMerchant && salesorder?.MerchantStatus !== 'Canceled' ">{{ 'Manage Shipments' | translate }}</span>
+                            <span *ngIf="!isMerchant || salesorder?.MerchantStatus === 'Canceled' ">{{ 'View Shipments' | translate }}</span>
+                        </a>
+                    </li>
+                    <li routerLinkActive="active" [routerLinkActiveOptions]="{exact:true}"
+                        *ngIf="salesorder?.MerchantStatus === 'Unshipped' && fulfilledby === 'merchant' ">
+                        <a [routerLink]="['/','sales-order', 'view', fulfilledby, orderid, 'fulfillment', 'add']">
+                            <i class="fa fa-plus-circle" style="font-size: 15px;"></i>{{ 'Add New Shipment' | translate }}
+                            <!-- <span matTooltip="{{ 'Must complete to ship order' | translate}}" attr.aria-label="{{ 'Must complete to ship order' | translate}}" [ngClass]="salesorder?.MerchantStatus === 'Unshipped' ? 'glyphicon glyphicon-exclamation-sign' : ''"></span> -->
+                        </a>
+                    </li>
+                    
+                </ul>
+                <router-outlet></router-outlet>
+            </div>
+        </div>
+    </div>
+</div>

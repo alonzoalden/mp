@@ -1,0 +1,83 @@
+<div class="row wrapper border-bottom white-bg page-heading">
+        <div class="col-lg-12">
+            <h2>
+                {{ 'Inbound Shipments' | translate }}
+            </h2>
+            <ol class="breadcrumb">
+                <li>
+                    <a [routerLink]="['/dashboard']" >{{ 'Home' | translate }}</a>
+                </li>
+                <li class="active">
+                    <strong>{{ 'Manage Inbound Shipments' | translate }}</strong>
+                </li>
+            </ol>
+        </div>
+    </div>
+<div class="wrapper wrapper-content animated fadeIn">
+    <div class="row">
+        <div class="col-lg-12">
+            <div class="ibox float-e-margins">
+                <div class="ibox-title">
+                    <h5>{{ 'Manage Inbound Shipments' | translate }}</h5>
+                    <div class="ibox-tools">
+                        <a (click)="addPurchaseOrder()"><i matTooltip="{{ 'New Inbound Shipment' | translate }}" attr.aria-label="{{ 'New Inbound Shipment' | translate}}" class="fa fa-plus fa-2x"></i></a>
+                    </div>
+                </div>
+                <div class="toolbar-search-1">
+                    <i class="fa fa-search" aria-label="Icon for Filter By Input Bar"></i> 
+                    <input (keyup)="applyFilter($event.target.value)" placeholder="{{ 'Filter By' | translate }}" class="form-control">
+                </div>
+                <div class="ibox-content">
+                    <div class="table-responsive">
+                        <table mat-table #table [dataSource]="dataSource" class="table" matSort> 
+                            <!-- Menu Column -->
+                            <ng-container matColumnDef="Menu">
+                                <th mat-header-cell *matHeaderCellDef width="100px"></th>
+                                <td mat-cell *matCellDef="let purchaseorder">
+                                    <button mat-button [matMenuTriggerFor]="menu" matTooltip=""
+                                    attr.aria-label="{{ 'Menu Button' | translate}}"><i class="fa fa-bars fa-2x"></i></button>
+                                    <mat-menu #menu="matMenu">
+                                        <button mat-menu-item [routerLink]="[purchaseorder.PurchaseOrderID, 'edit']">{{ 'Edit' | translate }}</button> 
+                                        <button mat-menu-item (click)="onPrintLabel(purchaseorder)">{{ 'Print Packing Slip' | translate }}</button>                                                               
+                                        <button mat-menu-item *ngIf='purchaseorder.Status === "Pending"' (click)="onRemovePurchaseOrder(purchaseorder)" >{{ 'Delete' | translate }}</button>          
+                                    </mat-menu>
+                                </td>
+                            </ng-container>
+                            <!-- Packing Slip Number Column -->
+                            <ng-container matColumnDef="PackingSlipNumber">
+                                <th mat-header-cell *matHeaderCellDef mat-sort-header width="140px">{{ 'Packing Slip Number' | translate }}</th>
+                                <td mat-cell *matCellDef="let purchaseorder"><a [routerLink]="[purchaseorder.PurchaseOrderID, 'edit']" class="sm-strong">{{purchaseorder.PackingSlipNumber}}</a></td>
+                            </ng-container>
+                            <!--Transaction Date Column -->
+                            <ng-container matColumnDef="TransactionDate">
+                                <th mat-header-cell *matHeaderCellDef mat-sort-header width="140px">{{ 'Transaction Date' | translate }}</th>
+                                <td mat-cell *matCellDef="let purchaseorder">{{purchaseorder.TransactionDate | date}}</td>
+                            </ng-container>
+                            <!-- Shipment Date Column -->
+                            <ng-container matColumnDef="ShipmentDate">
+                                <th mat-header-cell *matHeaderCellDef mat-sort-header width="140px">{{ 'Shipment Date' | translate }}</th>
+                                <td mat-cell *matCellDef="let purchaseorder">{{purchaseorder.ShipmentDate | date}}</td>
+                            </ng-container>
+                            <!-- Status Column -->
+                            <ng-container matColumnDef="Status">
+                                <th mat-header-cell *matHeaderCellDef mat-sort-header width="100px">{{ 'Status' | translate }}</th>
+                                <td mat-cell *matCellDef="let purchaseorder"><span [ngClass]="purchaseorder.Status === 'Complete' ? 'label label-primary' : purchaseorder.Status === 'Pending' ? 'label' : 'label'"> {{ purchaseorder.Status | translate }}</span></td>
+                            </ng-container>
+                            <!-- Created On Column -->
+                            <ng-container matColumnDef="CreatedOn">
+                                <th mat-header-cell *matHeaderCellDef mat-sort-header width="140px">{{ 'Created On' | translate }}</th>
+                                <td mat-cell *matCellDef="let purchaseorder">{{purchaseorder.CreatedOn | date}}</td>
+                            </ng-container>
+
+                
+                            <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+                            <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+                        </table>
+                        <mat-paginator #paginator [pageSizeOptions]="[10, 20, 50, 100, 200]" [showFirstLastButtons]="true"></mat-paginator>
+                    </div>
+                    
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

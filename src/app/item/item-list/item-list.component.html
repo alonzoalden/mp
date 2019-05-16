@@ -1,0 +1,154 @@
+<div class="row wrapper border-bottom white-bg page-heading">
+    <div class="col-lg-12">
+        <h2>
+            {{ 'Items' | translate }}
+        </h2>
+        <ol class="breadcrumb">
+            <li>
+                <a [routerLink]="['/dashboard']" >{{ 'Home' | translate }}</a>
+            </li>
+            <li class="active">
+                <strong>{{ 'Manage Items' | translate }}</strong>
+            </li>
+        </ol>
+    </div>
+</div>
+<div class="wrapper wrapper-content animated fadeIn">
+    <div class="row">
+        <div class="col-lg-12">
+            <div class="ibox float-e-margins">
+                <div class="ibox-title">
+                    <h5>{{ 'Manage Items' | translate }}</h5>
+                    <div class="ibox-tools">
+                        <a><i (click)="openDialogImport()" class="fa fa-table fa-2x" matTooltip="{{ 'Import' | translate }}" aria-label="Icon for Import"></i></a>
+                        <a [routerLink]="['add']"><i matTooltip="{{ 'Add New Item' | translate }}" aria-label="Icon for Add New Product" class="fa fa-plus fa-2x"></i></a>
+                    </div>
+                </div>
+                <div class="toolbar-search-1">
+                    <i class="fa fa-search" aria-label="Icon for Filter By Input Bar" [ngClass]="this.dataSource?.filter ? 'selected' : ''" (click)="FilterBy.select()"></i> 
+                    <input (keyup)="applyFilter($event.target.value)" placeholder="{{ 'Filter By' | translate }}" class="form-control" #FilterBy>
+                </div>
+                <div class="ibox-content" style="min-height: 40vh;">
+                    <div *ngIf="loading" class="spinner-container">
+                        <div class="sk-spinner sk-spinner-three-bounce big-spinner">
+                            <div class="sk-bounce1"></div>
+                            <div class="sk-bounce2"></div>
+                            <div class="sk-bounce3"></div>
+                        </div>
+                    </div>
+                    <div class="table-responsive" [hidden]="loading">
+                        <table mat-table #table [dataSource]="dataSource" class="table" matSort>
+                            <!-- Menu Column -->
+                            <ng-container matColumnDef="Menu">
+                                <th mat-header-cell *matHeaderCellDef width="100px"></th>
+                                <td mat-cell *matCellDef="let item">
+                                    <button mat-button [matMenuTriggerFor]="menu"><i class="fa fa-bars fa-2x"></i></button>
+                                    <mat-menu #menu="matMenu">
+                                        <button mat-menu-item [routerLink]="[item.ItemID, 'edit']">{{ 'Edit' | translate }}</button> 
+                                        <button mat-menu-item (click)="onDuplicate(item.ItemID)">{{ 'Duplicate' | translate }}</button> 
+                                        <button mat-menu-item (click)="openDialogPrintItemLabel(item)">{{ 'Print Label' | translate }}</button> 
+                                        <button mat-menu-item (click)="onPreview(item.ItemID)">{{ 'Preview' | translate }}</button>                                                                          
+                                        <button mat-menu-item (click)="onRemove(item)">{{ 'Delete' | translate }}</button>
+                                    </mat-menu>
+                                </td>
+                            </ng-container>
+
+                            <ng-container matColumnDef="ItemID">
+                                <th mat-header-cell *matHeaderCellDef mat-sort-header width="60">{{ 'ID' | translate }}</th>
+                                <td mat-cell *matCellDef="let item">{{item.ItemID}}</td>
+                            </ng-container>
+
+                            <!-- Product Details Column -->
+                            <ng-container matColumnDef="ProductDetails">
+                                <th mat-header-cell *matHeaderCellDef width="300px">{{ 'Product Details' | translate }}</th>
+                                <td mat-cell *matCellDef="let item" height="80px" class="wrap">
+                                    <div class="flex-details">
+                                        <div class="img-detail">
+                                            <img *ngIf='!item.ImagePath' class="opaque" src='https://content-merchantportal.toolots.net/assets/images/no-image-icon.png' matTooltip='Product has no image' matTooltipShowDelay="500">
+                                            <a [routerLink]="[item.ItemID, 'edit']"><img class="row-image" *ngIf='item.ImagePath' [src]='imageURL + item.ImagePath' [matTooltip]='item.Name' [alt]='item.Name' matTooltipShowDelay="500"></a>
+                                        </div>
+                                        <div>
+                                            <div class="row">
+                                                <!-- <div class="col-xs-12 "><span class="sm-strong"><a [href]="linkURL + '/' + item.URLKey + '.html'" target="_blank">{{item.Name}}</a></span></div> -->
+                                                <div class="col-xs-12 "><span class="sm-strong"><a [routerLink]="[item.ItemID, 'edit']">{{item.Name}}</a></span></div>
+                                            </div>
+                                            <div class="row">
+                                                <div class="col-xs-12 "> <span class="sm-text m-r-xs">SKU: </span> {{item.VendorSKU}}</div> 
+                                            </div>
+                                            <div class="row">
+                                                <div class="col-xs-12 "><span class="sm-text m-r-xs">TPIN: </span> {{item.TPIN}}</div>                                         
+                                            </div>
+                                        </div>
+                                    </div>
+                                </td>
+                            </ng-container>
+
+                            <!-- Item Image Column -->
+                            <ng-container matColumnDef="ImagePath">
+                                <th mat-header-cell *matHeaderCellDef width="100px"></th>
+                                <td mat-cell *matCellDef="let item" height="100px">
+                                    <img *ngIf='!item.ImagePath' class="opaque" src='https://content-merchantportal.toolots.net/assets/images/no-image-icon.png' title='Product has no image'>
+                                    <a [href]="linkURL + '/' + item.URLKey + '.html'" target="_blank"><img *ngIf='item.ImagePath' [src]='imageURL + item.ImagePath' [title]='item.Name'></a>
+                                </td>
+                            </ng-container>
+                            <!-- SKU Column -->
+                            <ng-container matColumnDef="VendorSKU">
+                                <th mat-header-cell *matHeaderCellDef mat-sort-header width="140px">{{ 'SKU' | translate }}</th>
+                                <td mat-cell *matCellDef="let item">{{item.VendorSKU}}</td>
+                            </ng-container>
+                            <!-- Name Column -->
+                            <ng-container matColumnDef="Name">
+                                <th mat-header-cell *matHeaderCellDef mat-sort-header width="140px">{{ 'Item Name' | translate }}</th>
+                                <td mat-cell *matCellDef="let item"><a [href]="linkURL + '/' + item.URLKey + '.html'" target="_blank">{{item.Name}}</a></td>
+                            </ng-container>
+                            <!-- TPIN Column -->
+                            <ng-container matColumnDef="TPIN">
+                                <th mat-header-cell *matHeaderCellDef mat-sort-header width="140px">{{ 'TPIN' | translate }}</th>
+                                <td mat-cell *matCellDef="let item">{{item.TPIN}}</td>
+                            </ng-container>                            
+                            <!-- Fulfilled By Column -->
+                            <ng-container matColumnDef="FulfilledBy">
+                                <th mat-header-cell *matHeaderCellDef mat-sort-header width="80px">{{ 'Fulfilled By' | translate }}</th>
+                                <td mat-cell *matCellDef="let item">{{item.FulfilledBy}}</td>
+                            </ng-container>
+                            <!-- Price Column -->
+                            <ng-container matColumnDef="Price">
+                                <th mat-header-cell *matHeaderCellDef mat-sort-header width="80px">{{ 'Selling Price' | translate }}</th>
+                                <td mat-cell *matCellDef="let item">{{item.Price | currency}}</td>
+                            </ng-container>
+                            <!-- Quantity Column -->
+                            <ng-container matColumnDef="Quantity">
+                                <th mat-header-cell *matHeaderCellDef mat-sort-header width="74px">{{ 'Toolots Available' | translate }}</th>
+                                <td mat-cell *matCellDef="let item"><strong>{{item.QtyAvailable}}</strong></td>
+                            </ng-container>
+                            <!-- Merchant Quantity Column -->
+                            <ng-container matColumnDef="MerchantQuantity">
+                                <th mat-header-cell *matHeaderCellDef mat-sort-header width="74px">{{ 'Merchant Available' | translate }}</th>
+                                <td mat-cell *matCellDef="let item"><strong>{{item.MerchantQtyAvailable}}</strong></td>
+                            </ng-container>
+                            <!-- Approval Column -->
+                            <ng-container matColumnDef="Approval">
+                                <th mat-header-cell *matHeaderCellDef mat-sort-header width="80px">{{ 'Approval' | translate }}</th>
+                                <td mat-cell *matCellDef="let item">{{ item.Approval | translate }}</td>
+                            </ng-container>
+                            <!-- Visibility Column -->
+                            <ng-container matColumnDef="Visibility">
+                                <th mat-header-cell *matHeaderCellDef mat-sort-header width="80px">{{ 'Visibility' | translate }}</th>
+                                <td mat-cell *matCellDef="let item">{{ item.Visibility | translate }}</td>
+                            </ng-container>
+                            <!-- Updated On Column -->
+                            <ng-container matColumnDef="UpdatedOn">
+                                <th mat-header-cell *matHeaderCellDef mat-sort-header width="100px">{{ 'Last Updated' | translate }}</th>
+                                <td mat-cell *matCellDef="let item">{{ item.UpdatedOn | date }}</td>
+                            </ng-container>
+                            
+                            <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+                            <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+                        </table>
+                        <mat-paginator #paginator [pageSizeOptions]="[10, 20, 50, 100, 200]" [showFirstLastButtons]="true"></mat-paginator>
+                    </div>                    
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

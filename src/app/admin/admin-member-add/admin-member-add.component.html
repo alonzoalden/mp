@@ -1,0 +1,120 @@
+
+<div class="row wrapper border-bottom white-bg page-heading">
+    <div class="col-lg-12">
+        <h2>
+            {{ 'New Admin' | translate }}
+        </h2>
+        <ol class="breadcrumb">
+            <li>
+                <a [routerLink]="['/dashboard']" >{{ 'Home' | translate }}</a>
+            </li>
+            <li>
+                <a [routerLink]="['/admin']" >{{ 'Manage Admins' | translate }}</a>
+            </li>
+            <li class="active">
+                <strong>{{ 'New Admin' | translate }}</strong>
+            </li>
+        </ol>
+    </div>
+</div>
+
+<div class="wrapper wrapper-content animated fadeIn no-bg">
+    <div class="row">
+        <div class="col-lg-12">
+            <form class="form-horizontal" [formGroup]="memberForm">
+                <div formGroupName="memberData">
+                    <div class="ibox-title"><h5>{{ 'Enter Details' | translate }}</h5></div>
+                    <div class="ibox-content">
+                        <div class="form-group" 
+                            [ngClass]="{'has-error': (memberForm.controls['memberData'].controls['memberEmail'].touched || 
+                                memberForm.controls['memberData'].controls['memberEmail'].dirty) && 
+                                (!member.Email || !memberForm.controls['memberData'].controls['memberEmail'].valid ) }">
+                            <label class="col-md-2 control-label" for="memberEmail">{{ 'Email' | translate }}</label>
+                            <input class="col-md-8 form-control" type="text" id="memberEmailID" formControlName="memberEmail" placeholder="{{ 'Email' | translate }} ({{ 'Required' | translate }})" 
+                                [(ngModel)]=member.Email>
+                            <span class="col-md-2 help-block" 
+                                *ngIf="(memberForm.controls['memberData'].controls['memberEmail'].touched || 
+                                        memberForm.controls['memberData'].controls['memberEmail'].dirty) && 
+                                    !member.Email">
+                                {{ 'Email' | translate }} {{ 'is required' | translate }}
+                            </span>
+                            <span class="col-md-2 help-block" *ngIf="!memberForm.controls['memberData'].controls['memberEmail'].valid">
+                                {{ 'Invalid Email' | translate }}
+                            </span>
+                        </div>
+                        <div class="form-group" 
+                            [ngClass]="{'has-error': (memberForm.controls['memberData'].controls['memberFirstName'].touched || 
+                                memberForm.controls['memberData'].controls['memberFirstName'].dirty) && 
+                                !member.FirstName }">
+                            <label class="col-md-2 control-label" for="memberFirstName">{{ 'First Name' | translate }}</label>
+                            <input class="col-md-8 form-control" type="text" id="memberFirstNameID" formControlName="memberFirstName" placeholder="{{ 'First Name' | translate }} ({{ 'Required' | translate }})" 
+                                [(ngModel)]=member.FirstName>
+                            <span class="col-md-2 help-block" 
+                                *ngIf="(memberForm.controls['memberData'].controls['memberFirstName'].touched || 
+                                        memberForm.controls['memberData'].controls['memberFirstName'].dirty) && 
+                                        !member.FirstName">
+                                {{ 'First Name' | translate }} {{ 'is required' | translate }}
+                            </span>
+                        </div>
+                        <div class="form-group"
+                            [ngClass]="{'has-error': (memberForm.controls['memberData'].controls['memberLastName'].touched || 
+                                memberForm.controls['memberData'].controls['memberLastName'].dirty) && 
+                                !member.LastName }">
+                            <label class="col-md-2 control-label" for="memberLastName">{{ 'Last Name' | translate }}</label>
+                            <input class="col-md-8 form-control" type="text" id="memberLastNameID" formControlName="memberLastName" placeholder="{{ 'Last Name' | translate }} ({{ 'Required' | translate }})" 
+                                [(ngModel)]=member.LastName>
+                            <span class="col-md-2 help-block" 
+                                *ngIf="(memberForm.controls['memberData'].controls['memberLastName'].touched || 
+                                        memberForm.controls['memberData'].controls['memberLastName'].dirty) && 
+                                        !member.LastName">
+                                {{ 'Last Name' | translate }} {{ 'is required' | translate }}
+                            </span>
+                        </div>
+                        <div class="form-group"
+                            [ngClass]="{'has-error': (memberForm.controls['memberData'].controls['memberPassword'].touched || 
+                                memberForm.controls['memberData'].controls['memberPassword'].dirty) && 
+                                (!member.Password || !memberForm.controls['memberData'].controls['memberPassword'].valid) }">
+                            <label class="col-md-2 control-label" for="memberPassword">{{ 'Password' | translate }}</label>
+                            <input class="col-md-8 form-control" type="password" id="memberPasswordId" formControlName="memberPassword" placeholder="{{ 'Password' | translate }} ({{ 'Required' | translate }})"
+                                [(ngModel)]=member.Password />
+                            <span class="col-md-2 help-block" 
+                                *ngIf="(memberForm.controls['memberData'].controls['memberPassword'].touched || 
+                                        memberForm.controls['memberData'].controls['memberPassword'].dirty) && 
+                                        !member.Password">
+                                {{ 'Password' | translate }} {{ 'is required' | translate }}
+                            </span>
+                            <span class="col-md-2 help-block" *ngIf="!memberForm.controls['memberData'].controls['memberPassword'].valid">
+                                {{ 'Invalid Password' | translate }}
+                            </span>          
+                        </div>
+                        <div class="form-group"
+                            [ngClass]="{'has-error': (memberForm.controls['memberData'].controls['memberConfirmPassword'].touched || 
+                                memberForm.controls['memberData'].controls['memberConfirmPassword'].dirty) && 
+                                (!member.ConfirmPassword || member.Password != member.ConfirmPassword) }">
+                            <label class="col-md-2 control-label" for="memberPassword">{{ 'Confirm Password' | translate }}</label>
+                            <input class="col-md-8 form-control" type="password" id="memberConfirmPasswordId" formControlName="memberConfirmPassword" placeholder="{{ 'Confirm Password' | translate }} ({{ 'Required' | translate }})"
+                                [(ngModel)]=member.ConfirmPassword />
+                            <span class="col-md-2 help-block" 
+                                *ngIf="(memberForm.controls['memberData'].controls['memberConfirmPassword'].touched || 
+                                        memberForm.controls['memberData'].controls['memberConfirmPassword'].dirty) && 
+                                        !member.ConfirmPassword">
+                                {{ 'Confirm Password' | translate }} {{ 'is required' | translate }}
+                            </span>
+                            <span class="col-md-2 help-block" *ngIf="member.Password != member.ConfirmPassword">
+                                {{ 'Password and Confirmation Password do not match' | translate }}
+                            </span>      
+                        </div>
+                        <div class="row">
+                            <div class="col-md-2 center-block col-xs-12 m-t-lg m-b-lg">
+                                <button type="button" 
+                                    class="btn btn-default btn-home-signup full-width"
+                                    [disabled]="pendingCreate"
+                                    (click)="onAddMember()">{{ 'Create' | translate }}</button>                
+                            </div>
+                        </div>
+                    </div>
+                </div>    
+            </form>
+        </div>
+    </div>
+</div>

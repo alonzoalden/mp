@@ -1,0 +1,30 @@
+.control-label {
+    min-width: 130px;
+}
+@media (max-width:1075px) and (min-width:993px) {
+    .table-responsive {
+        width: 95%;
+    }
+}
+.center-block .sales-order-details {
+    display: inline-block;
+    width: 80%
+}
+.center-block .sales-order-details.details-max-width {
+    width: 100%;
+}
+.center-block .sales-order-actions {
+    display: inline-block;
+    vertical-align: top;
+    width: 20%;
+}
+.center-block .sales-order-actions > button {
+    width: 170px;
+    margin-bottom: 20px;
+    display: block;
+}
+@media (max-width: 767px) {
+    .center-block .sales-order-actions {
+        display: block;
+    }
+}

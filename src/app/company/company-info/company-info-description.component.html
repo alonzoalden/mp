@@ -1,0 +1,261 @@
+<div class="tab-content">
+    <div class="tab-pane active">
+        <div class="panel-body p-w-none">
+            <form class="form-horizontal" #companyInfoForm="ngForm" *ngIf="companyInfo">
+                <fieldset>
+                    <div class="ibox-title"><h5>{{ 'General' | translate }}</h5></div>
+                    <div class="ibox-content">
+                        <div class="form-group">
+                            <label class="col-md-2 control-label">{{ 'Company Name' | translate }}</label>
+                            <div class="col-md-8 m-l-sm" [ngClass]="{'grey-highlight': companyInfo.CompanyName}">
+                                {{companyInfo.CompanyName}}
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-md-2 control-label">{{ 'Phone' | translate }}</label>
+                            <div class="col-md-8 m-l-sm" [ngClass]="{'grey-highlight': companyInfo.PhoneNumber}">
+                                {{companyInfo.PhoneNumber}}                          
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-md-2 control-label">{{ 'Email' | translate }}</label>
+                            <div class="col-md-8 m-l-sm" [ngClass]="{'grey-highlight': companyInfo.Email}">
+                                {{companyInfo.Email}}                           
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-md-2 control-label">{{ 'Created On' | translate }}</label>
+                            <div class="col-md-8 m-l-sm" [ngClass]="{'grey-highlight': companyInfo.CreatedOn}">
+                                {{companyInfo.CreatedOn | date}}                           
+                            </div>
+                        </div>
+                    </div>
+                    <div class="ibox-title">
+                        <h5>{{ 'Shipping/Return Address' | translate }}</h5>
+                        <!-- <div class="ibox-tools m-t-n-sm">
+                            <button type="button" class="btn btn-primary" (click)="updateShippingAddress()">Update Shipping Address</button>
+                        </div> -->
+                    </div>
+                    <div class="ibox-content">
+                        <div class="form-group" [ngClass]="{'has-error': !shippingStoreNameVar.valid }">
+                            <label class="col-md-2 control-label">{{ 'Store Name' | translate }}</label>
+                            <div class="col-md-8 ">
+                                <input class="form-control" id="shippingStoreNameId" type="text" placeholder="{{ 'Store Name' | translate }} ({{ 'Required' | translate }})" required 
+                                    [(ngModel)]=companyInfo.ShippingStoreName name="shippingStoreName" #shippingStoreNameVar="ngModel" />
+                                    <span class="help-block" *ngIf="shippingStoreNameVar.errors">
+                                    <span *ngIf="shippingStoreNameVar.errors.required">
+                                        {{ 'Store Name' | translate }} {{ 'is required' | translate }}
+                                    </span>
+                                </span>
+                            </div>                        
+                        </div>
+                        <div class="form-group" [ngClass]="{'has-error': (shippingAddressVar.touched || 
+                                                                        shippingAddressVar.dirty) && 
+                                                                        !shippingAddressVar.valid }">
+                            <label class="col-md-2 control-label">{{ 'Address' | translate }}</label>
+                            <div class="col-md-8 ">
+                                <input class="form-control" id="shippingAddressId" type="text" placeholder="{{ 'Address' | translate }} ({{ 'Required' | translate }})" required 
+                                    [(ngModel)]=companyInfo.ShippingAddress name="shippingAddress" #shippingAddressVar="ngModel" />
+                                <span class="help-block" *ngIf="(shippingAddressVar.touched ||
+                                                                shippingAddressVar.dirty) &&
+                                                                shippingAddressVar.errors">
+                                    <span *ngIf="shippingAddressVar.errors.required">
+                                        {{ 'Address' | translate }} {{ 'is required' | translate }}
+                                    </span>
+                                </span>
+                            </div>                        
+                        </div>
+                        <div class="form-group">
+                            <label class="col-md-2 control-label">{{ 'Address 2' | translate }}</label>
+                            <div class="col-md-8 ">
+                                <input class="form-control" id="shippingAddress2Id" type="text" placeholder="{{ 'Address 2' | translate }}" [(ngModel)]=companyInfo.ShippingAddress2 name="shippingAddress2" #shippingAddress2Var="ngModel" />
+                            </div>                        
+                        </div>
+                        <div class="form-group" [ngClass]="{'has-error': (shippingCityVar.touched || 
+                                                                        shippingCityVar.dirty) && 
+                                                                        !shippingCityVar.valid }">
+                            <label class="col-md-2 control-label">{{ 'City' | translate }}</label>
+                            <div class="col-md-8 ">
+                                <input class="form-control" id="shippingCityId" type="text" placeholder="{{ 'City' | translate }} ({{ 'Required' | translate }})" required
+                                    [(ngModel)]=companyInfo.ShippingCity name="shippingCity" #shippingCityVar="ngModel" />     
+                                <span class="help-block" *ngIf="(shippingCityVar.touched ||
+                                                                shippingCityVar.dirty) &&
+                                                                shippingCityVar.errors">
+                                    <span *ngIf="shippingCityVar.errors.required">
+                                        {{ 'City' | translate }} {{ 'is required' | translate }}
+                                    </span>
+                                </span>                   
+                            </div>
+                        </div>
+                        <div class="form-group"
+                            *ngIf="companyInfo && companyInfo.ShippingCountryID != 'US' && companyInfo.ShippingCountryID != 'CA'"
+                            [ngClass]="{'has-error': (shippingStateVar.touched || 
+                                                                shippingStateVar.dirty) && 
+                                                                !shippingStateVar.valid }">
+                            <label class="col-md-2 control-label">{{ 'State/Province' | translate }}</label>
+                            <div class="col-md-8 ">
+                                <input class="form-control" id="shippingStateId" type="text" placeholder="{{ 'State/Province' | translate }} ({{ 'Required' | translate }})" required 
+                                    [(ngModel)]=companyInfo.ShippingState name="shippingState" #shippingStateVar="ngModel" />    
+                                <span class="help-block" *ngIf="(shippingStateVar.touched ||
+                                                                shippingStateVar.dirty) &&
+                                                                shippingStateVar.errors">
+                                    <span *ngIf="shippingStateVar.errors.required">
+                                        {{ 'State/Province' | translate }} {{ 'is required' | translate }}
+                                    </span>
+                                </span>                                                   
+                            </div>
+                        </div>
+                        <div class="form-group" *ngIf="companyInfo && (companyInfo.ShippingCountryID == 'US' || companyInfo.ShippingCountryID == 'CA')">
+                            <label class="col-md-2 control-label">{{ 'State/Province' | translate }}</label>
+                            <div class="col-md-8 ">
+                                <div >
+                                    <select class="form-control" id="companyInfoShippingStateId" name="companyInfoShippingState" 
+                                        [(ngModel)]=companyInfo.ShippingState  #companyInfoShippingStateVar="ngModel">                                    
+                                        <option [value]="state.StateName" *ngFor="let state of shippingAddressStates">{{state.StateName}}</option>
+                                    </select>
+                                </div>                                                     
+                            </div>
+                        </div>
+                        <div class="form-group" [ngClass]="{'has-error': (shippingZipVar.touched || 
+                                                                        shippingZipVar.dirty) && 
+                                                                        !shippingZipVar.valid }">
+                            <label class="col-md-2 control-label">{{ 'Zip/Postal Code' | translate }}</label>
+                            <div class="col-md-8 ">
+                                <input class="form-control" id="shippingZipId" type="text" placeholder="{{ 'Zip/Postal Code' | translate }} ({{ 'Required' | translate }})" required 
+                                    [(ngModel)]=companyInfo.ShippingZip name="shippingZip" #shippingZipVar="ngModel" />    
+                                <span class="help-block" *ngIf="(shippingZipVar.touched ||
+                                                                shippingZipVar.dirty) &&
+                                                                shippingZipVar.errors">
+                                    <span *ngIf="shippingZipVar.errors.required">
+                                        {{ 'Zip/Postal Code' | translate }} {{ 'is required' | translate }}
+                                    </span>
+                                </span>                      
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-md-2 control-label">{{ 'Country/Region' | translate }}</label>
+                            <div class="col-md-8" [ngClass]="{'grey-highlight': companyInfo.ShippingCountry}"> 
+                                <select class="form-control" id="companyInfoShippingCountryId" name="companyInfoShippingCountry" 
+                                    [(ngModel)]=companyInfo.ShippingCountryID  #companyInfoShippingCountryVar="ngModel" (change)="onShippingCountryChange()">                                    
+                                    <option [value]="country.CountryID" *ngFor="let country of addressCountries">{{country.CountryName}}</option>
+                                </select>                     
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-md-2 control-label"></label>
+                            <div class="col-md-8 m-t-xs">
+                                <button type="button" class="btn btn-sm btn-info" (click)="updateShippingAddress()">{{ 'Update Shipping Address' | translate }}</button>
+                            </div>
+                        </div>
+                        
+                        
+                    </div>
+                    <div class="ibox-title">
+                        <h5>{{ 'Billing Address' | translate }}</h5>
+                    </div>
+                    <div class="ibox-content">
+                        <div class="form-group" [ngClass]="{'has-error': (billingAddressVar.touched || 
+                                                                        billingAddressVar.dirty) && 
+                                                                        !billingAddressVar.valid }">
+                            <label class="col-md-2 control-label">{{ 'Address' | translate }}</label>
+                            <div class="col-md-8 ">
+                                <input class="form-control" id="billingAddressId" type="text" placeholder="{{ 'Address' | translate }} ({{ 'Required' | translate }})" required
+                                    [(ngModel)]=companyInfo.BillingAddress name="billingAddress" #billingAddressVar="ngModel" />    
+                                <span class="help-block" *ngIf="(billingAddressVar.touched ||
+                                                                    billingAddressVar.dirty) &&
+                                                                    billingAddressVar.errors">
+                                    <span *ngIf="billingAddressVar.errors.required">
+                                        {{ 'Address' | translate }} {{ 'is required' | translate }}
+                                    </span>
+                                </span>                      
+                            </div>                        
+                        </div>
+                        <div class="form-group">
+                            <label class="col-md-2 control-label">{{ 'Address 2' | translate }}</label>
+                            <div class="col-md-8 ">
+                                <input class="form-control" id="billingAddress2Id" type="text" placeholder="{{ 'Address 2' | translate }}" 
+                                    [(ngModel)]=companyInfo.BillingAddress2 name="billingAddress2" #billingAddress2Var="ngModel" />                         
+                            </div>                        
+                        </div>
+                        <div class="form-group" [ngClass]="{'has-error': (billingCityVar.touched || 
+                                                                        billingCityVar.dirty) && 
+                                                                        !billingCityVar.valid }">
+                            <label class="col-md-2 control-label">{{ 'City' | translate }}</label>
+                            <div class="col-md-8 ">
+                                <input class="form-control" id="billingCityId" type="text" placeholder="{{ 'City' | translate }} ({{ 'Required' | translate }})" required
+                                    [(ngModel)]=companyInfo.BillingCity name="billingCity" #billingCityVar="ngModel" />    
+                                <span class="help-block" *ngIf="(billingCityVar.touched ||
+                                                                    billingCityVar.dirty) &&
+                                                                    billingCityVar.errors">
+                                    <span *ngIf="billingCityVar.errors.required">
+                                        {{ 'City' | translate }} {{ 'is required' | translate }}
+                                    </span>
+                                </span>                     
+                            </div>
+                        </div>
+                        <div class="form-group"
+                            *ngIf="companyInfo && (companyInfo.BillingCountryID != 'US' && companyInfo.BillingCountryID != 'CA')"
+                            [ngClass]="{'has-error': (billingStateVar.touched || 
+                                                                        billingStateVar.dirty) && 
+                                                                        !billingStateVar.valid }">
+                            <label class="col-md-2 control-label">{{ 'State/Province' | translate }}</label>
+                            <div class="col-md-8 ">
+                                <input class="form-control" id="billingStateId" type="text" placeholder="{{ 'State/Province' | translate }} ({{ 'Required' | translate }})"
+                                    [(ngModel)]=companyInfo.BillingState name="billingState" #billingStateVar="ngModel" /> 
+                                <span class="help-block" *ngIf="(billingStateVar.touched ||
+                                                                    billingStateVar.dirty) &&
+                                                                    billingStateVar.errors">
+                                    <span *ngIf="billingStateVar.errors.required">
+                                        {{ 'State/Province' | translate }} {{ 'is required' | translate }}
+                                    </span>
+                                </span>                         
+                            </div>
+                        </div>
+                        <div class="form-group" *ngIf="companyInfo && (companyInfo.BillingCountryID == 'US' || companyInfo.BillingCountryID == 'CA')">
+                            <label class="col-md-2 control-label">{{ 'State/Province' | translate }}</label>
+                            <div class="col-md-8 ">
+                                <div >
+                                    <select class="form-control" id="companyInfoBillingStateId" name="companyInfoBillingState" 
+                                        [(ngModel)]=companyInfo.BillingState  #companyInfoBillingStateVar="ngModel">                                    
+                                        <option [value]="state.StateName" *ngFor="let state of billingAddressStates">{{state.StateName}}</option>
+                                    </select>
+                                </div>                                                     
+                            </div>
+                        </div>
+                        <div class="form-group" [ngClass]="{'has-error': (billingZipVar.touched || 
+                                                                        billingZipVar.dirty) && 
+                                                                        !billingZipVar.valid }">
+                            <label class="col-md-2 control-label">{{ 'Zip/Postal Code' | translate }}</label>
+                            <div class="col-md-8 ">
+                                <input class="form-control" id="billingZipId" type="text" placeholder="{{ 'Zip/Postal Code' | translate }} ({{ 'Required' | translate }})" required
+                                    [(ngModel)]=companyInfo.BillingZip name="billingZIp" #billingZipVar="ngModel" />   
+                                <span class="help-block" *ngIf="(billingZipVar.touched ||
+                                                                    billingZipVar.dirty) &&
+                                                                    billingZipVar.errors">
+                                    <span *ngIf="billingZipVar.errors.required">
+                                        {{ 'Zip/Postal Code' | translate }} {{ 'is required' | translate }}
+                                    </span>
+                                </span>                        
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-md-2 control-label">{{ 'Country/Region' | translate }}</label>
+                            <div class="col-md-8" [ngClass]="{'grey-highlight': companyInfo.BillingCountry}"> 
+                                <select class="form-control" id="companyInfoBillingCountryId" name="companyInfoBillingCountry" required 
+                                    [(ngModel)]=companyInfo.BillingCountryID  #companyInfoBillingCountryVar="ngModel" (change)="onBillingCountryChange()">                                    
+                                    <option [value]="country.CountryID" *ngFor="let country of addressCountries">{{country.CountryName}}</option>
+                                </select>                     
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-md-2 control-label"></label>
+                            <div class="col-md-8 m-t-xs">
+                                <button type="button" class="btn btn-sm btn-info" (click)="updateBillingAddress()">{{ 'Update Billing Address' | translate }}</button>
+                            </div>
+                        </div>
+                    </div>
+                </fieldset>
+            </form>
+        </div>
+    </div>
+</div>

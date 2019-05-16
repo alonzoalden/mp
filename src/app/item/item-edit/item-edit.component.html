@@ -1,0 +1,183 @@
+<div class="row wrapper border-bottom white-bg page-heading">
+    <div class="col-lg-12">
+        <h2>
+            {{ 'Edit Item' | translate }}: {{itemName}}
+        </h2>
+        <ol class="breadcrumb">
+            <li>
+                <a [routerLink]="['/dashboard']" >{{ 'Home' | translate }}</a>
+            </li>
+            <li>
+                <a [routerLink]="['/item']" >{{ 'Manage Items' | translate }}</a>
+            </li>
+            <li class="active">
+                <strong>{{ 'Edit Item' | translate }}</strong>
+            </li>
+        </ol>
+    </div>
+</div>
+
+<div class="alert-container animated fadeIn" *ngIf="item">
+    <!-- <div class="alert alert-danger" *ngIf="!item.Status && !item.RequestApproval">
+        <span>{{ 'This item is currently Inactive.' | translate }}</span>
+        <span *ngIf="item.RejectionReason && RejectionReason != ''"> &#60; {{ 'Reason:' | translate }} {{ item.RejectionReason }} &#62; </span>
+        <button type="button" class="btn btn-sm btn-warning m-l-md" (click)="requestActive()">{{ 'Request to Reactivate' | translate }}</button>
+    </div>
+    <div class="alert alert-warning" *ngIf="!item.Status && item.RequestApproval">
+        <span> {{ 'Request has been submitted to reactivate.' | translate }} </span>
+    </div> -->
+    <div class="alert alert-danger" *ngIf="item.Approval == 'NotSubmitted'">
+        <span>{{ 'This item has not been submitted' | translate }}</span>
+        <button type="button" class="btn btn-sm btn-warning m-l-md" (click)="submitApproval()">{{ 'Submit for Approval' | translate }}</button>
+    </div>
+    <div class="alert alert-warning" *ngIf="item.Approval == 'Pending'">
+        <span> {{ 'This item is pending approval' | translate }} </span>
+        <button type="button" class="btn btn-sm btn-success m-l-md" (click)="approveItem()" *ngIf="isPM">{{ 'Approve' | translate }}</button>
+        <button type="button" class="btn btn-sm btn-danger m-l-md" (click)="notApproveItem()" *ngIf="isPM">{{ 'Not Approve' | translate }}</button>
+    </div>
+    <div class="alert alert-danger" *ngIf="item.Approval == 'NotApproved'">
+        <span> {{ 'This item has not been approved' | translate }} </span>
+    </div>
+    <div class="alert alert-success" *ngIf="item.Approval == 'Approved'">
+        <span> {{ 'This item has approved' | translate }} </span>
+    </div>
+</div>
+
+<div class="wrapper wrapper-content animated fadeIn pt10" *ngIf='item'>
+    <div class="row">
+        <div class="col-lg-12">
+            <!-- <div *ngIf="loading" style="text-align:center">
+                <img src="../../../assets/images/loader.gif" alt="Loading" />
+            </div> -->
+            <div *ngIf="loading" class="m-t-xl">
+                <div class="sk-spinner sk-spinner-three-bounce big-spinner">
+                    <div class="sk-bounce1"></div>
+                    <div class="sk-bounce2"></div>
+                    <div class="sk-bounce3"></div>
+                </div>
+            </div>
+            <div *ngIf="!loading">
+                <div class="tabs-container">
+                    <ul class="nav nav-tabs">
+                        <li routerLinkActive="active">
+                            <a [routerLink]="['description']">
+                                {{ 'Product Description' | translate }}  
+                                <span matTooltip="{{'Required fields must be complete' | translate}}" attr.aria-label="{{ 'Required fields must be complete' | translate}}" [ngClass]="{'glyphicon glyphicon-exclamation-sign': !isValid('description') }"></span>
+                            </a>
+                        </li>                        
+                        <li routerLinkActive="active">
+                            <a [routerLink]="['bundle']" routerLinkActive="active" *ngIf="item.ItemType === 'bundle'">
+                                {{ 'Bundle' | translate }} 
+                                <span matTooltip="{{'Required fields must be complete' | translate}}" attr.aria-label="{{ 'Required fields must be complete' | translate}}" [ngClass]="{'glyphicon glyphicon-exclamation-sign': !isValid('bundle')}"></span>
+                            </a>
+                        </li>
+                        <li routerLinkActive="active">
+                            <a [routerLink]="['inventory']" routerLinkActive="active">
+                                {{ 'Inventory' | translate }} 
+                            </a>
+                        </li>
+                        <li routerLinkActive="active">
+                            <a [routerLink]="['dimension']" routerLinkActive="active" *ngIf="item.ItemType === 'simple'">
+                                {{ 'Dimension' | translate }} 
+                                <span matTooltip="{{'Required fields must be complete' | translate}}" attr.aria-label="{{ 'Required fields must be complete' | translate}}" [ngClass]="{'glyphicon glyphicon-exclamation-sign': !isValid('dimension')}"></span>
+                            </a>
+                        </li>
+                        <li routerLinkActive="active">
+                            <a [routerLink]="['price']" routerLinkActive="active">
+                                {{ 'Price' | translate }}  
+                                <span matTooltip="{{'Required fields must be complete' | translate}}" attr.aria-label="{{ 'Required fields must be complete' | translate}}" [ngClass]="{'glyphicon glyphicon-exclamation-sign': !isValid('price')}"></span>
+                            </a>
+                        </li>
+                        <li routerLinkActive="active">
+                            <a [routerLink]="['productrelation']" routerLinkActive="active">
+                                {{ 'Product Relation' | translate }} 
+                            </a>
+                        </li>
+                        <li routerLinkActive="active">
+                            <a [routerLink]="['category']" routerLinkActive="active">
+                                {{ 'Category' | translate }} 
+                                <span matTooltip="{{'Required fields must be complete' | translate}}" attr.aria-label="{{ 'Required fields must be complete' | translate}}" [ngClass]="{'glyphicon glyphicon-exclamation-sign': !isValid('category')}"></span>
+                            </a>
+                        </li>
+                        <li routerLinkActive="active">
+                            <a [routerLink]="['attachment']" routerLinkActive="active">
+                                {{ 'Attachment' | translate }}
+                            </a>
+                        </li>
+                        <li routerLinkActive="active">
+                            <a [routerLink]="['video']" routerLinkActive="active">
+                                {{ 'Video' | translate }} 
+                            </a>
+                        </li>
+                        <li routerLinkActive="active">
+                            <a [routerLink]="['image']" routerLinkActive="active">
+                                {{ 'Image' | translate }} 
+                            </a>
+                        </li>    
+                        <li routerLinkActive="active">
+                            <a [routerLink]="['part']" routerLinkActive="active">
+                                {{ 'Part' | translate }} 
+                            </a>
+                        </li>                       
+                    </ul>                
+                    <router-outlet></router-outlet>
+                </div>
+            </div>
+        </div>
+    </div>
+    <br />
+    <div *ngIf="!loading">
+        <div class="button-bottom-row">
+            <button mat-button
+                    type="button"
+                    class="btn button-cancel"
+                    (click)="cancelEdit()"><i class="fa fa-remove"></i> {{ 'Cancel' | translate }}
+            </button>
+            <mat-menu #saveMenu="matMenu" width="250px">
+                <!-- <button mat-menu-item (click)="saveItem()">{{ 'Save' | translate }}</button> -->
+                <button mat-menu-item (click)="saveItem(true)">{{ 'Save and Preview' | translate }}</button>
+            </mat-menu>
+            <div>
+                <button mat-button
+                        type="button"
+                        class="btn button-add button-add-display"
+                        [disabled]="pendingSave"
+                        (click)="saveItem()"> <i class="fa fa-plus-circle"></i> {{ 'Save' | translate }}
+                </button>
+                <button mat-button
+                        type="button"
+                        class="btn button-add button-add-options"
+                        [disabled]="pendingSave"
+                        [matMenuTriggerFor]="saveMenu"> <span class="fs-16 caret"></span>
+                </button> 
+            </div>
+        </div>
+    </div>
+    
+    <!-- <div class="row" *ngIf="!loading">
+        <div class="col-md-2">
+            <button type="button"
+                    class="btn btn-remove"
+                    (click)="cancelEdit()">{{ 'Back' | translate }}
+            </button> 
+        </div>
+        <div class="col-md-2">
+            <mat-menu #saveMenu="matMenu" width="250px">
+                <button mat-menu-item (click)="saveItem()">{{ 'Save' | translate }}</button>
+                <button mat-menu-item (click)="saveItem(true)">{{ 'Save and Preview' | translate }}</button>
+            </mat-menu>
+            <button type="button"
+                    class="btn btn-primary max"
+                    [disabled]="pendingSave"
+                    [matMenuTriggerFor]="saveMenu">{{ 'Save' | translate }} <span class="caret"></span>
+            </button> 
+        </div>        
+        <div class="col-md-2">
+        </div>
+        <div class="col-md-4">
+             
+        </div>
+        <div class="col-md-2">
+        </div>
+    </div> -->
+</div>    

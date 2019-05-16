@@ -1,0 +1,21 @@
+{
+    "Warning! You have ## late orders.":"Warning! You have <strong>{{LateOrderCount}}</strong> late orders.",
+    "This item is currently Inactive.":"This item is currently Inactive.",
+    "This order is unshipped.":"This order is <strong>Unshipped</strong>.",
+    "This order is canceled.":"This order is <strong>Canceled</strong>.",
+    "This order is shipped.":"This order is <strong>Shipped</strong>.",
+
+    "Shipping Instruction Item Label Placement Header":"When you're ready to affix item label to your products, make sure:",
+    "Shipping Instruction Item Step 1":"You put the correct barcode on each item.",
+    "Shipping Instruction Item Step 2":"You cover all other visible barcodes with the exception of any serial number barcodes.",
+    "Shipping Instruction Item Step 3":"You place the barcode on the outside of any prep materials.",
+    "Shipping Instruction Item Step 4":"You do not place the barcode on a curve or corner of the package.",
+
+    "Shipping Instruction Carton Label Placemetn Header":"Each box and pallet you ship to an Toolots fulfillment center must be properly identified with a carton ID label. Follow these guidelines for labeling your boxes:",
+    "Shipping Instruction Carton Step 1":"Print the full set of labels. Because each label is unique, don't photocopy, reuse, or modify labels for use on additional boxes.",
+    "Shipping Instruction Carton Step 2":"Don't place labels on a seam or opening on the box because they will be damaged when the box is opened.",
+    "Shipping Instruction Carton Step 3":"Both labels must remain uncovered so they are scannable and readable.",
+    "Shipping Instruction Carton Step 4":"Each box in the shipment must have its own FBA shipment ID label printed from your Shipping Queue.",
+    "Shipping Instruction Carton Step 5":"Each pallet you send needs four labels, one on the top center of each side.",
+    "Shipping Instruction Carton Step 6":"If you’re shipping multiple case packs in a master carton, apply the shipment ID label to the master carton. You don’t need to apply shipment ID labels to the case packs inside the master carton."
+}

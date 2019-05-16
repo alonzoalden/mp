@@ -1,0 +1,134 @@
+<div class="row wrapper border-bottom white-bg page-heading">
+    <div class="col-lg-3">
+        <h2>
+            {{ 'Members' | translate }}
+        </h2>
+        <ol class="breadcrumb">
+            <li>
+                <a [routerLink]="['/dashboard']" >{{ 'Home' | translate }}</a>
+            </li>
+            <li class="active">
+                <strong>{{ 'Manage Members' | translate }}</strong>
+            </li>
+        </ol>
+    </div>
+</div>
+<div class="wrapper wrapper-content animated fadeIn">
+    <div class="row">
+        <div class="col-lg-12">
+            <div class="ibox float-e-margins">
+                <div class="ibox-title">
+                    <h5>{{ 'Manage Members' | translate }}</h5>
+                    <div class="ibox-tools">
+                        <a [routerLink]="['invite']"><i matTooltip="Invite Member" aria-label="Icon for Invite Member" class="fa fa-plus fa-2x"></i></a>
+                    </div>
+                </div>
+                <div class="toolbar-search-1">
+                    <i class="fa fa-search" aria-label="Icon for Filter By Input Bar" [ngClass]="this.dataSource?.filter ? 'selected' : ''" (click)="FilterBy.select()"></i> 
+                    <input (keyup)="applyFilter($event.target.value)" placeholder="{{ 'Filter By' | translate }}" class="form-control" #FilterBy>
+                </div>
+                <div class="ibox-content">
+                    <div class="table-responsive">
+                        <table mat-table #table [dataSource]="dataSource" class="table" matSort>
+                            <!-- Menu Column -->
+                            <ng-container matColumnDef="Menu">
+                                <th mat-header-cell *matHeaderCellDef width="100px"></th>
+                                <td mat-cell *matCellDef="let member">
+                                    <button mat-button [matMenuTriggerFor]="menu" *ngIf="member.MemberID != currentMember.MemberID && !member.IsPM || currentMember.IsPM"><i class="fa fa-bars fa-2x"></i></button>
+                                    <mat-menu #menu="matMenu">
+                                        <button mat-menu-item (click)="activateMember(member)" *ngIf='!member.IsActive'>{{ 'Activate' | translate }}</button>
+                                        <button mat-menu-item (click)="inactivateMember(member)" *ngIf='member.IsActive'>{{ 'Inactivate' | translate }}</button>
+                                        <button mat-menu-item (click)="sendConfirmationMember(member)" *ngIf="!member.IsConfirmed" >{{ 'Resend Confirmation' | translate }}</button>
+                                        <button mat-menu-item (click)="deleteMember(member)">{{ 'Delete' | translate }}</button>
+                                    </mat-menu>
+                                </td>
+                            </ng-container>
+                            <!-- Email Column -->
+                            <ng-container matColumnDef="Email">
+                                <th mat-header-cell *matHeaderCellDef mat-sort-header width="200px">{{ 'Email' | translate }}</th>
+                                <td mat-cell *matCellDef="let member">{{member.Email}}</td>
+                            </ng-container>
+                            <!-- PM Column -->
+                            <ng-container matColumnDef="IsPM">
+                                <th mat-header-cell *matHeaderCellDef mat-sort-header width="100px">{{ 'PM' | translate }}</th>
+                                <td mat-cell *matCellDef="let member">
+                                    <!-- <input type="checkbox" [(ngModel)]="member.IsAdmin" disabled/> -->
+                                    <mat-checkbox [(ngModel)]="member.IsPM" disabled></mat-checkbox>
+                                </td>
+                            </ng-container>
+                            <!-- Admin Column -->
+                            <ng-container matColumnDef="IsAdmin">
+                                <th mat-header-cell *matHeaderCellDef mat-sort-header width="100px">{{ 'Admin' | translate }}</th>
+                                <td mat-cell *matCellDef="let member">
+                                    <!-- <input type="checkbox" [(ngModel)]="member.IsAdmin" disabled/> -->
+                                    <mat-checkbox [(ngModel)]="member.IsAdmin" disabled></mat-checkbox>
+                                </td>
+                            </ng-container>
+                            <!-- Confirmed Column -->
+                            <ng-container matColumnDef="IsConfirmed">
+                                <th mat-header-cell *matHeaderCellDef mat-sort-header width="100px">{{ 'Confirmed' | translate }}</th>
+                                <td mat-cell *matCellDef="let member">
+                                    <!-- <input type="checkbox" [(ngModel)]="member.IsConfirmed" disabled/> -->
+                                    <mat-checkbox [(ngModel)]="member.IsConfirmed" disabled></mat-checkbox>
+                                </td>
+                            </ng-container>
+                            <!-- Active Column -->
+                            <ng-container matColumnDef="IsActive">
+                                <th mat-header-cell *matHeaderCellDef mat-sort-header width="100px">{{ 'Active' | translate }}</th>
+                                <td mat-cell *matCellDef="let member">
+                                    <!-- <input type="checkbox" [(ngModel)]="member.IsActive" disabled/> -->
+                                    <mat-checkbox [(ngModel)]="member.IsActive" disabled></mat-checkbox>
+                                </td>
+                            </ng-container>
+                            <!-- Created On Column -->
+                            <ng-container matColumnDef="CreatedOn">
+                                <th mat-header-cell *matHeaderCellDef mat-sort-header width="100px">{{ 'Created On' | translate }}</th>
+                                <td mat-cell *matCellDef="let member">{{member.CreatedOn | date}}</td>
+                            </ng-container>      
+                            <!-- Confirmation Button -->
+                            <ng-container matColumnDef="Confirmation">
+                                <th mat-header-cell *matHeaderCellDef width="100px"></th>
+                                <td mat-cell *matCellDef="let member">
+                                    <button type="button" class="btn btn-default btn-sm"
+                                        (click)="sendConfirmationMember(member)" *ngIf="!member.IsConfirmed" >
+                                        <span class="glyphicon glyphicon-trash"></span> {{ 'Send Confirmation' | translate }}
+                                    </button>
+                                </td>
+                            </ng-container>
+                            <!-- Inactivate Button -->
+                            <ng-container matColumnDef="Inactivate">
+                                <th mat-header-cell *matHeaderCellDef width="100px"></th>
+                                <td mat-cell *matCellDef="let member">
+                                    <button type="button" class="btn btn-default btn-sm"
+                                        (click)="inactivateMember(member)" *ngIf='member.IsActive'>
+                                        <span class="glyphicon glyphicon-remove-sign"></span> {{ 'Inactivate' | translate }}
+                                    </button>
+                                    <button type="button" class="btn btn-default btn-sm"
+                                        (click)="activateMember(member)" *ngIf='!member.IsActive'>
+                                        <span class="glyphicon glyphicon-remove-sign"></span> {{ 'Activate' | translate }}
+                                    </button>
+                                </td>
+                            </ng-container>
+                            <!-- Delete Button -->
+                            <ng-container matColumnDef="Delete">
+                                <th mat-header-cell *matHeaderCellDef width="100px"></th>
+                                <td mat-cell *matCellDef="let member">
+                                    <button type="button" class="btn btn-default btn-sm"
+                                        (click)="deleteMember(member)">
+                                        <span class="glyphicon glyphicon-trash"></span> {{ 'Delete' | translate }}
+                                    </button>
+                                </td>
+                            </ng-container>
+                    
+                            <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+                            <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+                        </table>
+                    
+                        <mat-paginator #paginator [pageSizeOptions]="[10, 20, 50, 100, 200]" [showFirstLastButtons]="true">
+                        </mat-paginator>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

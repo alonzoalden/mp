@@ -1,0 +1,108 @@
+<div class="row wrapper border-bottom white-bg page-heading">
+    <div class="col-lg-12">
+        <h2>
+            {{ 'Edit Admin' | translate }}: {{ member.Email }}
+        </h2>
+        <ol class="breadcrumb">
+            <li>
+                <a [routerLink]="['/dashboard']" >{{ 'Home' | translate }}</a>
+            </li>
+            <li>
+                <a [routerLink]="['/admin']" >{{ 'Manage Admins' | translate }}</a>
+            </li>
+            <li class="active">
+                <strong>{{ 'Edit Admin' | translate }}</strong>
+            </li>
+        </ol>
+    </div>
+</div>
+<div class="wrapper wrapper-content animated fadeIn">
+    <div class="row">
+        <div class="col-lg-12">
+            <form class="form-horizontal" [formGroup]="memberForm" *ngIf='member'>
+                <div formGroupName="memberData">
+                    <fieldset>
+                        <div class="ibox-title"><h5>{{ 'Enter Details' | translate }}</h5></div>
+                        <div class="ibox-content">
+                            <div class="form-group" 
+                                [ngClass]="{'has-error': (memberForm.controls['memberData'].controls['memberFirstName'].touched || 
+                                    memberForm.controls['memberData'].controls['memberFirstName'].dirty) && 
+                                    !member.FirstName }">
+                                <label class="col-md-2 control-label" for="memberFirstName">{{ 'First Name' | translate }}</label>
+                                <div class="col-md-8">
+                                    <input class="form-control" type="text" id="memberFirstNameID" formControlName="memberFirstName" placeholder="First Name (required)" 
+                                        [(ngModel)]=member.FirstName>
+                                    <span class="help-block" 
+                                        *ngIf="(memberForm.controls['memberData'].controls['memberFirstName'].touched || 
+                                                memberForm.controls['memberData'].controls['memberFirstName'].dirty) && 
+                                                !member.FirstName">
+                                        First Name is required
+                                    </span>
+                                </div>
+                            </div>
+                            <div class="form-group"
+                                [ngClass]="{'has-error': (memberForm.controls['memberData'].controls['memberLastName'].touched || 
+                                    memberForm.controls['memberData'].controls['memberLastName'].dirty) && 
+                                    !member.LastName }">
+                                <label class="col-md-2 control-label" for="memberLastName">{{ 'Last Name' | translate }}</label>
+                                <div class="col-md-8">
+                                    <input class="form-control" type="text" id="memberLastNameID" formControlName="memberLastName" placeholder="Last Name (required)" 
+                                        [(ngModel)]=member.LastName>
+                                    <span class="help-block" 
+                                        *ngIf="(memberForm.controls['memberData'].controls['memberLastName'].touched || 
+                                                memberForm.controls['memberData'].controls['memberLastName'].dirty) && 
+                                                !member.LastName">
+                                        Last Name is required
+                                    </span>
+                                </div>
+                            </div>
+                            <div class="form-group" 
+                                [ngClass]="{'has-error': (memberForm.controls['memberData'].controls['memberVendorID'].touched || 
+                                    memberForm.controls['memberData'].controls['memberVendorID'].dirty) && 
+                                    !member.VendorID }">
+                                <label class="col-md-2 control-label" for="memberVendorID">{{ 'Vendor' | translate }}</label>
+                                <div class="col-md-8">
+                                    <ng-select  [items]="vendorList"
+                                                [virtualScroll]="true"
+                                                bindLabel="Description"
+                                                bindValue="VendorID"
+                                                placeholder="Search Vendor"
+                                                [(ngModel)]="member.VendorID"
+                                                (ngModelChange)="onVendorChanged($event)"
+                                                id="memberVendorID"
+                                                formControlName="memberVendorID"
+                                                required
+                                                [loading]="!vendorList"
+                                                loadingText="Loading..."
+                                                >
+                                        <ng-template ng-option-tmp let-item="item">
+                                            <div matTooltip="{{item.Description}}" matTooltipPosition="right" matTooltipShowDelay="500">{{item.Description}}</div>
+                                        </ng-template>
+                                    </ng-select>
+                                    <!-- <select id="memberVendorID" formControlName="memberVendorID" class="form-control" 
+                                        (ngModelChange)="onVendorChanged($event)" [(ngModel)]=member.VendorID>
+                                        <option [ngValue]="null" style="font-style: italic" disabled selected>--Select a vendor--</option>
+                                        <option [value]="vendor.VendorID" *ngFor="let vendor of vendorList">{{vendor.Description}}</option>
+                                    </select> -->
+                                    <span class="help-block" 
+                                        *ngIf="(memberForm.controls['memberData'].controls['memberVendorID'].touched || 
+                                                memberForm.controls['memberData'].controls['memberVendorID'].dirty) && 
+                                                !member.VendorID">
+                                        Vendor is required
+                                    </span>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <div class="col-md-2">        
+                                </div>
+                                <div class="col-md-2">
+                                    <button type="button" class="btn btn-primary" style="width:100%; height:100%" (click)="onEditMember()">{{ 'Save' | translate }}</button>                
+                                </div>
+                            </div>
+                        </div>
+                    </fieldset>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>

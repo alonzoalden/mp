@@ -1,0 +1,211 @@
+<div class="bg-signup">
+    <div class="navbar-wrapper">
+        <nav class="navbar navbar-default navbar-static-top" role="navigation">
+            <div class="container">
+                <div class="navbar-header page-scroll">
+                    <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
+                        <span class="sr-only">Toggle navigation</span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                    </button>
+                    <a class="navbar-brand" href="index.html">
+                        <img src="https://content-merchantportal.toolots.net/assets/images/Toolots-Merchant-Service.png" class="image_full">
+                        <img src="https://content-merchantportal.toolots.net/assets/images/Toolots-Merchant-Service-Mobile.png" class="image_mobile">
+                    </a>
+                </div>
+                <div id="navbar" class="navbar-collapse collapse">
+                    <ul class="nav navbar-nav navbar-center">
+                        <li><a data-toggle="collapse" data-target=".navbar-collapse" class="page-scroll"href="/home" [ngClass]="{'selected-button': id === 'home-nav' }">Home</a></li>
+                        <li><a data-toggle="collapse" data-target=".navbar-collapse" class="page-scroll" href="/home" [ngClass]="{'selected-button': id === 'features-nav' }">Features</a></li>
+                        <li>
+                            <a class="page-scroll" [routerLink]="['/registration']"><strong>Sign Up</strong><i class="fa fa-sign-up"></i></a>
+                        </li>
+                    </ul>
+                    <ul class="nav navbar-nav navbar-right">
+                        <li>
+                            <a *ngIf="!isLoggedin" class="page-scroll" (click)="login()">Log in <i class="fa fa-sign-in"></i> </a>
+                            <a *ngIf="isLoggedin" (click)="logout()">Logout</a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </nav>
+    </div>
+    <div class="container">
+        <div class="text-center loginscreen animated fadeInDown">
+            <h1 class="custom-header">Register To Merchant Portal</h1>
+            <p>Create an Account to begin</p>
+            <div class="row" *ngIf="!registrationCompleted">
+                <div class="col-sm-12">
+                    <form class="form-horizontal" [formGroup]="registrationForm">
+                        <div formGroupName="registrationData" class="text-left">
+                            <div class="row">
+                                <div class="col-md-12 col-xs-12 form-group" [ngClass]="{'has-error': (registrationForm.controls['registrationData'].controls['registrationCompanyName'].touched || 
+                                    registrationForm.controls['registrationData'].controls['registrationCompanyName'].dirty) && 
+                                    !vendorRegistration.CompanyName }">
+                                    <label class=" control-label">Company Name</label>
+                                    <input class="form-control" type="text" id="registrationCompanyNameID" formControlName="registrationCompanyName" 
+                                        placeholder="Company Name (required)" [(ngModel)]=vendorRegistration.CompanyName>              
+                                    <span class="help-block" 
+                                        *ngIf="(registrationForm.controls['registrationData'].controls['registrationCompanyName'].touched || 
+                                            registrationForm.controls['registrationData'].controls['registrationCompanyName'].dirty) && 
+                                            !vendorRegistration.CompanyName">
+                                        Company Name is required
+                                    </span>            
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-6 col-xs-12 form-group" [ngClass]="{'has-error': (registrationForm.controls['registrationData'].controls['registrationAddress'].touched || 
+                                    registrationForm.controls['registrationData'].controls['registrationAddress'].dirty) && 
+                                    !vendorRegistration.Address }">
+                                    <label class=" control-label">Address</label>
+                                    <input class="form-control" type="text" id="registrationAddressID" formControlName="registrationAddress"
+                                        placeholder="Address (required)" [(ngModel)]=vendorRegistration.Address>   
+                                    <span class="help-block"
+                                        *ngIf="(registrationForm.controls['registrationData'].controls['registrationAddress'].touched || 
+                                            registrationForm.controls['registrationData'].controls['registrationAddress'].dirty) && 
+                                            !vendorRegistration.Address">
+                                        Address is required
+                                    </span>
+                                </div>
+                                <div class="col-md-3 col-xs-12 form-group" [ngClass]="{'has-error': (registrationForm.controls['registrationData'].controls['registrationCity'].touched || 
+                                        registrationForm.controls['registrationData'].controls['registrationCity'].dirty) && 
+                                        !vendorRegistration.City }">
+                                    <label class=" control-label">City</label>
+                                    <input class="form-control" type="text" id="registrationCityID" formControlName="registrationCity" 
+                                    placeholder="City (required)" [(ngModel)]=vendorRegistration.City>           
+                                    <span class="help-block" 
+                                        *ngIf="(registrationForm.controls['registrationData'].controls['registrationCity'].touched || 
+                                            registrationForm.controls['registrationData'].controls['registrationCity'].dirty) && 
+                                            !vendorRegistration.City">
+                                        City is required
+                                    </span>
+                                </div>
+                                <div class="col-md-3 col-xs-12 form-group"
+                                    [ngClass]="{'has-error': (registrationForm.controls['registrationData'].controls['registrationState'].touched || 
+                                        registrationForm.controls['registrationData'].controls['registrationState'].dirty) && 
+                                        !vendorRegistration.State }">
+                                    <label class=" control-label">State/Province</label>
+                                    <input class="form-control" type="text" id="registrationStateID" formControlName="registrationState"
+                                        placeholder="State (required)" [(ngModel)]=vendorRegistration.State>          
+                                    <span class="help-block" 
+                                        *ngIf="(registrationForm.controls['registrationData'].controls['registrationState'].touched || 
+                                            registrationForm.controls['registrationData'].controls['registrationState'].dirty) && 
+                                            !vendorRegistration.State">
+                                        State is required
+                                    </span>                  
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-4 col-xs-12 form-group"
+                                    [ngClass]="{'has-error': (registrationForm.controls['registrationData'].controls['registrationZip'].touched || 
+                                        registrationForm.controls['registrationData'].controls['registrationZip'].dirty) && 
+                                        !vendorRegistration.PostalCode }">
+                                    <label class=" control-label">Zip/Postal Code</label>
+                                    <input class="form-control" type="text" id="registrationZipID" formControlName="registrationZip" 
+                                        placeholder="Zip (required)" [(ngModel)]=vendorRegistration.PostalCode>     
+                                    <span class="help-block" 
+                                        *ngIf="(registrationForm.controls['registrationData'].controls['registrationZip'].touched || 
+                                            registrationForm.controls['registrationData'].controls['registrationZip'].dirty) && 
+                                            !vendorRegistration.PostalCode">
+                                        Zip/Postal Code is required
+                                    </span>                      
+                                </div>
+                                <div class="col-md-4 col-xs-12 form-group"
+                                    [ngClass]="{'has-error': (registrationForm.controls['registrationData'].controls['registrationRegion'].touched || 
+                                        registrationForm.controls['registrationData'].controls['registrationRegion'].dirty) && 
+                                        !vendorRegistration.Region }">
+                                    <label class=" control-label">Country/Region</label>
+                                    <input class="form-control" type="text" id="registrationRegionID" formControlName="registrationRegion" 
+                                        placeholder="Region (required)" [(ngModel)]=vendorRegistration.Region>      
+                                    <span class="help-block" 
+                                        *ngIf="(registrationForm.controls['registrationData'].controls['registrationRegion'].touched || 
+                                            registrationForm.controls['registrationData'].controls['registrationRegion'].dirty) && 
+                                            !vendorRegistration.Region">
+                                        Country/Region is required
+                                    </span>                     
+                                </div>
+                                <div class="col-md-4 col-xs-12 form-group"
+                                    [ngClass]="{'has-error': (registrationForm.controls['registrationData'].controls['registrationPhone'].touched || 
+                                        registrationForm.controls['registrationData'].controls['registrationPhone'].dirty) && 
+                                        !vendorRegistration.PhoneNumber }">
+                                    <label class=" control-label">Phone</label>
+                                    <input class="form-control" type="text" id="registrationPhoneID" formControlName="registrationPhone"
+                                        placeholder="Phone (required)" [(ngModel)]=vendorRegistration.PhoneNumber>                
+                                    <span class="help-block" 
+                                        *ngIf="(registrationForm.controls['registrationData'].controls['registrationPhone'].touched || 
+                                            registrationForm.controls['registrationData'].controls['registrationPhone'].dirty) && 
+                                            !vendorRegistration.PhoneNumber">
+                                        Phone is required
+                                    </span>          
+                                </div>
+                            </div>
+                            <div class="row ">
+                                <div class="col-md-4 col-xs-12 form-group"
+                                    [ngClass]="{'has-error': (registrationForm.controls['registrationData'].controls['registrationFirstName'].touched || 
+                                        registrationForm.controls['registrationData'].controls['registrationFirstName'].dirty) && 
+                                        !vendorRegistration.FirstName }">
+                                    <label class=" control-label">First Name</label>
+                                    <input class="form-control" type="text" id="registrationFirstNameID" formControlName="registrationFirstName"
+                                        placeholder="First Name (required)" [(ngModel)]=vendorRegistration.FirstName>   
+                                    <span class="help-block" 
+                                        *ngIf="(registrationForm.controls['registrationData'].controls['registrationFirstName'].touched || 
+                                            registrationForm.controls['registrationData'].controls['registrationFirstName'].dirty) && 
+                                            !vendorRegistration.FirstName">
+                                        First Name is required
+                                    </span>                          
+                                </div>
+                                <div class="col-md-4 col-xs-12 form-group"
+                                    [ngClass]="{'has-error': (registrationForm.controls['registrationData'].controls['registrationLastName'].touched || 
+                                        registrationForm.controls['registrationData'].controls['registrationLastName'].dirty) && 
+                                        !vendorRegistration.LastName }">
+                                    <label class=" control-label">Last Name</label>
+                                    <input class="form-control" type="text" id="registrationLastNameID" formControlName="registrationLastName" 
+                                        placeholder="Last Name (required)" [(ngModel)]=vendorRegistration.LastName>      
+                                    <span class="help-block" 
+                                        *ngIf="(registrationForm.controls['registrationData'].controls['registrationLastName'].touched || 
+                                            registrationForm.controls['registrationData'].controls['registrationLastName'].dirty) && 
+                                            !vendorRegistration.LastName">
+                                        Last Name is required
+                                    </span>                     
+                                </div>
+                                <div class="col-md-4 col-xs-12 form-group"
+                                    [ngClass]="{'has-error': (registrationForm.controls['registrationData'].controls['registrationEmail'].touched || 
+                                        registrationForm.controls['registrationData'].controls['registrationEmail'].dirty) && 
+                                        (!vendorRegistration.Email || !registrationForm.controls['registrationData'].controls['registrationEmail'].valid) }">
+                                    <label class=" control-label">Email</label>
+                                    <input class="form-control" type="text" id="registrationEmailID" formControlName="registrationEmail"
+                                        placeholder="Email (required)" [(ngModel)]=vendorRegistration.Email>   
+                                    <span class="help-block"  
+                                        *ngIf="(registrationForm.controls['registrationData'].controls['registrationEmail'].touched || 
+                                            registrationForm.controls['registrationData'].controls['registrationEmail'].dirty) && 
+                                            !vendorRegistration.Email">
+                                        Email is required
+                                    </span>      
+                                    <span class="help-block" *ngIf="!registrationForm.controls['registrationData'].controls['registrationEmail'].valid">
+                                        Invalid email
+                                    </span>                  
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-4 col-md-offset-4 col-xs-12 m-t-lg m-b-lg">
+                                    <button type="button" 
+                                        class="btn btn-default btn-home-signup full-width"
+                                        [disabled]="pendingCreate"
+                                        (click)="onAddRegistration()">Register</button>                
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+            <div class="row" *ngIf="registrationCompleted">
+                <div class="col-lg-12">
+                    Registration Completed
+                </div>
+            </div>
+            <o-notification></o-notification>
+        </div>
+    </div>
+</div>

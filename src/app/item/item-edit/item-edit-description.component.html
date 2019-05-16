@@ -1,0 +1,300 @@
+<div class="tab-content">
+    <div class="tab-pane active">
+        <div class="panel-body p-w-none">
+            <form class="form-horizontal" #itemForm="ngForm">
+                <fieldset>
+                    <div class="ibox-title"><h5>{{ 'General' | translate }}</h5></div>
+                    <div class="ibox-content">
+                        <div class="form-group" [ngClass]="{'has-error': (itemNameVar.touched || 
+                                                                            itemNameVar.dirty) && 
+                                                                            !itemNameVar.valid }">
+                            <label class="col-md-2 control-label" for="itemNameId">{{ 'Item Name' | translate }}</label>
+                            <div class="col-md-8">
+                                <input class="form-control" id="itemNameId" type="text" placeholder="{{ 'Item Name' | translate }} ({{ 'Required' | translate }})" required 
+                                    [(ngModel)]=item.Name name="itemName" #itemNameVar="ngModel" maxlength="70" />
+                                <span class="help-block" *ngIf="(itemNameVar.touched ||
+                                                                    itemNameVar.dirty) &&
+                                                                    itemNameVar.errors">
+                                    <span *ngIf="itemNameVar.errors.required">
+                                        {{ 'Item Name' | translate }} {{ 'is required' | translate }}
+                                    </span>
+                                </span>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-md-2 control-label">{{ 'TPIN' | translate }}</label>
+                            <div class="col-md-8">
+                                <div class="form-control grey-highlight">
+                                    {{ item.TPIN }}
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group" [ngClass]="{'has-error': (itemVendorSKUVar.errors && !itemVendorSKUVar.errors.required)
+                                                                            || ( (itemVendorSKUVar.touched || 
+                                                                            itemVendorSKUVar.dirty) && 
+                                                                            !itemVendorSKUVar.valid) }">
+                            <label class="col-md-2 control-label" for="itemVendorSKUId">{{ 'SKU' | translate }}</label>
+                            <div class="col-md-8">
+                                <input class="form-control" id="itemVendorSKUId" type="text" 
+                                    pattern="^[\w\-]*$" ng-pattern-restrict placeholder="{{ 'SKU' | translate }} ({{ 'Required' | translate }})" required 
+                                    [(ngModel)]=item.VendorSKU name="itemVendorSKU" #itemVendorSKUVar="ngModel" maxlength="30"/>
+                                <span class="help-block" *ngIf="(itemVendorSKUVar.touched ||
+                                                                        itemVendorSKUVar.dirty) &&
+                                                                        itemVendorSKUVar.errors && itemVendorSKUVar.errors.required">
+                                    <span>
+                                        SKU {{ 'is required' | translate }}
+                                    </span>                                                                         
+                                </span>
+                                <span class="help-block" *ngIf="itemVendorSKUVar.errors && !itemVendorSKUVar.errors.required">
+                                    <span>
+                                        {{ 'Invalid SKU' | translate }}
+                                    </span> 
+                                </span>
+                            </div>
+                        </div>
+                        <div class="form-group" [ngClass]="{'has-error': (itemItemTypeVar.touched || 
+                                                    itemItemTypeVar.dirty) && 
+                                                    !itemItemTypeVar.valid }">
+                            <label class="col-md-2 control-label" for="itemItemTypeId">{{ 'Item Type' | translate }}</label>
+                            <div class="col-md-8">
+                                <select id="itemItemTypeId" name="itemItemType" class="form-control" required [(ngModel)]=item.ItemType #itemItemTypeVar="ngModel" disabled>
+                                    <option value="simple">{{ 'Simple' | translate }}</option>
+                                    <option value="bundle">{{ 'Bundle' | translate }}</option>
+                                </select>
+                                <span class="help-block" *ngIf="(itemItemTypeVar.touched ||
+                                                    itemItemTypeVar.dirty) &&
+                                                    itemItemTypeVar.errors">
+                                    <span *ngIf="itemItemTypeVar.errors.required">
+                                        {{ 'Item Type' | translate }} {{ 'is required' | translate }}
+                                    </span>
+                                </span>
+                            </div>
+                        </div>
+                        <div class="form-group" [ngClass]="{'has-error': (itemFulfilledByVar.touched || 
+                                                                            itemFulfilledByVar.dirty) && 
+                                                                            !itemFulfilledByVar.valid }">
+                            <label class="col-md-2 control-label" for="itemFulfilledById">{{ 'Fulfilled By' | translate }}</label>
+                            <div class="col-md-8 p-w-none m-t-responsive">
+                                <div class="col-md-8 min-height z-fix">
+                                    <select id="itemFulfilledById" name="itemFulfilledBy" class="form-control" required [(ngModel)]=item.FulfilledBy #itemFulfilledByVar="ngModel">
+                                        <option value="Toolots">{{ 'Toolots' | translate }}</option>
+                                        <option value="Merchant">{{ 'Merchant' | translate }}</option>
+                                    </select>
+                                    <span class="help-block" *ngIf="(itemFulfilledByVar.touched ||
+                                                                            itemFulfilledByVar.dirty) &&
+                                                                            itemFulfilledByVar.errors">
+                                        <span *ngIf="itemFulfilledByVar.errors.required">
+                                            {{ 'Fulfilled By' | translate }} {{ 'is required' | translate }}
+                                        </span>
+                                    </span>
+                                </div>
+                                <div class="col-md-4 p-w-none min-height">
+                                    <div *ngIf="item.FulfilledBy === 'Merchant'" class="form-group" [ngClass]="{'has-error': (itemMerchantQuantityVar.touched || 
+                                                                        itemMerchantQuantityVar.dirty) && 
+                                                                        !itemMerchantQuantityVar.valid }">
+                                        <label class="col-md-4 control-label m-t-responsive" for="itemMerchantQuantityId">{{ 'Quantity' | translate }}</label>
+                                        <div class="col-md-8">
+                                            <input class="form-control" id="itemMerchantQuantityId" type="number" placeholder="{{ 'Merchant Quantity' | translate }}" 
+                                                onkeydown="return event.keyCode == 69 || event.keyCode == 189 || event.keyCode == 190 ? false : true" min="0"
+                                                [(ngModel)]=item.MerchantQuantity name="itemMerchantQuantity" #itemMerchantQuantityVar="ngModel" />
+                                            <span class="help-block" *ngIf="(itemMerchantQuantityVar.touched ||
+                                                                            itemMerchantQuantityVar.dirty) &&
+                                                                            itemMerchantQuantityVar.errors">
+                                            </span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-md-2 control-label" for="itemVendorBrandId">{{ 'Brand' | translate }}</label>
+                            <div class="col-md-8">
+                                <select id="itemVendorBrandId" name="itemBrand" class="form-control" [(ngModel)]=item.VendorBrandID #itemVendorBrandVar="ngModel">
+                                    <option [ngValue]="null">{{ 'Please select value' | translate }}</option>
+                                    <option [value]="brand.VendorBrandID" *ngFor="let brand of vendorBrandList">{{brand.BrandName}}</option>
+                                </select>
+
+                                <!-- <span class="help-block" *ngIf="(itemVendorBrandVar.touched ||
+                                                                    itemVendorBrandVar.dirty) &&
+                                                                    itemVendorBrandVar.errors">
+                                    <span *ngIf="itemVendorBrandVar.errors.required">
+                                        Brand is required
+                                    </span>
+                                </span> -->
+                            </div>
+                        </div>
+                        <div class="form-group" [ngClass]="{'has-error': !itemOriginVar.valid }">
+                            <label class="col-md-2 control-label" for="itemOriginId">{{ 'Origin' | translate }}</label>
+                            <div class="col-md-8">
+                                <select id="itemOriginId" name="itemOrigin" class="form-control" [(ngModel)]=item.Origin required #itemOriginVar="ngModel">
+                                    <option value="CN">CN</option>
+                                    <option value="TW">TW</option>
+                                    <option value="USA">USA</option>
+                                </select>
+                                <span class="help-block" *ngIf="itemOriginVar.errors">
+                                    <span *ngIf="itemOriginVar.errors.required">
+                                        Origin is required
+                                    </span>
+                                </span>      
+                            </div>                            
+                        </div>
+                        <div class="form-group">
+                            <label class="col-md-2 control-label" for="itemWarrantyId">{{ 'Warranty' | translate }}</label>
+                            <div class="col-md-8">
+                                <select id="itemWarrantyId" name="itemWarranty" class="form-control" [(ngModel)]=item.Warranty #itemWarrantyVar="ngModel">
+                                    <option value="">--{{ 'No Warranty' | translate }}--</option>
+                                    <option value="_14_Days_Limited">{{ '14 Days Limited' | translate }}</option>
+                                    <option value="_6_months">{{ '6 Months' | translate }}</option>
+                                    <option value="_1_year">{{ '1 Year' | translate }}</option>
+                                    <option value="_2_years">{{ '2 Years' | translate }}</option>
+                                    <option value="_5_year">{{ '5 Years' | translate }}</option>
+                                </select>  
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-md-2 control-label" for="itemMerchantWarrantyId">{{ 'Merchant Warranty' | translate }}</label>
+                            <div class="col-md-8">
+                                <input class="form-control" id="itemMerchantWarrantyId" type="text"  
+                                    [(ngModel)]=item.MerchantWarranty name="itemMerchantWarranty" #itemMerchantWarrantyVar="ngModel" />
+                            </div>
+                        </div>
+                        <div class="form-group" *ngIf="isPM">
+                            <label class="col-md-2 control-label" for="itemAddProtectionPlan">{{ 'Add Protection Plan' | translate }}</label>
+                            <div class="col-md-8" style="padding-top:7px">
+                                <mat-checkbox [(ngModel)]="item.AddProtectionPlan" [ngModelOptions]="{standalone: true}"></mat-checkbox>
+                            </div> 
+                        </div>
+                        <div class="form-group">
+                            <label class="col-md-2 control-label" for="itemVisibilityId">{{ 'Visibility' | translate }}</label>
+                            <div class="col-md-8">
+                                <select id="itemVisibilityId" name="itemVisibility" class="form-control" [(ngModel)]=item.Visibility #itemVisibilityVar="ngModel">
+                                    <option value="NotVisibleIndivisually">{{ 'Not Visible Individually' | translate }}</option>
+                                    <option value="Catalog">{{ 'Catalog' | translate }}</option>
+                                    <option value="Search">{{ 'Search' | translate }}</option>
+                                    <option value="CatalogAndSearch">{{ 'Catalog, Search' | translate }}</option>
+                                </select>  
+                            </div>
+                        </div>
+                        <div class="form-group" *ngIf="isPM">
+                            <label class="col-md-2 control-label" for="itemApprovalId">{{ 'Approval' | translate }}</label>
+                            <div class="col-md-8">
+                                <select id="itemApprovalId" name="itemApproval" class="form-control" [(ngModel)]=item.Approval #itemApprovalVar="ngModel">
+                                    <option value="NotSubmitted">Not Submitted</option>
+                                    <option value="Pending">Pending</option>
+                                    <option value="Approved">Approved</option>
+                                    <option value="NotApproved">Not Approved</option>
+                                </select>  
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label class="col-md-2 control-label" for="itemDescriptionId">{{ 'Description' | translate }}</label>
+                            <div class="col-md-8">
+                                <textarea class="form-control summernote" id="itemDescriptionId"
+                                    [(ngModel)]=item.Description name="itemDescription" #itemDescriptionVar="ngModel"></textarea>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-md-2 control-label" for="itemShortDescriptionId">{{ 'Short Description' | translate }}</label>
+                            <div class="col-md-8">
+                                <textarea class="form-control summernote" id="itemShortDescriptionId"
+                                    [(ngModel)]=item.ShortDescription name="itemShortDescription" #itemShortDescriptionVar="ngModel"></textarea>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-md-2 control-label" for="itemTechnicalDetailId">{{ 'Technical Detail' | translate }}</label>
+                            <div class="col-md-8">
+                                <textarea class="form-control summernote" id="itemTechnicalDetailId"
+                                    [(ngModel)]=item.TechnicalDetail name="itemTechnicalDetail" #itemTechnicalDetailVar="ngModel"></textarea>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-md-2 control-label" for="itemAdditionalInformationId">{{ 'Additional Information' | translate }}</label>
+                            <div class="col-md-8">
+                                <textarea class="form-control summernote" id="itemAdditionalInformationId"
+                                    [(ngModel)]=item.AdditionalInformation name="itemAdditionalInformation" #itemAdditionalInformationVar="ngModel"></textarea>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Shipping -->
+                    <div class="ibox-title"><h5>{{ 'Shipping' | translate }}</h5></div>
+                    <div class="ibox-content">
+                        <div class="form-group">
+                            <label class="col-md-2 control-label" for="itemIsFreeShipping">{{ 'Free Shipping' | translate }}</label>
+                            <div class="col-md-8" style="padding-top:7px">
+                                <!-- <div class="i-checks"><label><input type="checkbox" class="i-checks"/><i></i></label></div> -->
+                                <mat-checkbox [(ngModel)]="item.IsFreeShipping" [ngModelOptions]="{standalone: true}"></mat-checkbox>
+                            </div> 
+                        </div>
+                        <div class="form-group" *ngIf="item.IsFreeShipping === false"
+                            [ngClass]="{'has-error': itemFulfilledByVar.value == 'Merchant' && 
+                                !itemShippingFeeVar.valid }">
+                            <label class="col-md-2 control-label" for="itemShippingFeeId">{{ 'Shipping Fee' | translate }}</label>
+                            <!-- <div class="col-md-8">
+                                <input class="form-control" id="itemShippingFeeId" type="number"
+                                    step="0.01" onchange="this.value = parseFloat(this.value).toFixed(2);" onkeydown="return event.keyCode == 69 || event.keyCode == 189 ? false : true" min="0" required
+                                    [(ngModel)]=item.ShippingFee name="itemShippingFee" #itemShippingFeeVar="ngModel" />
+                            
+                                <span class="help-block" *ngIf="itemFulfilledByVar.value == 'Merchant' && (itemShippingFeeVar.touched ||
+                                                                itemShippingFeeVar.dirty) &&
+                                                                itemShippingFeeVar.errors">
+                                    <span *ngIf="itemShippingFeeVar.errors.required">
+                                        {{ 'Shipping Fee' | translate }} {{ 'is required' | translate }}
+                                    </span>
+                                </span>
+                            </div> -->
+                            <div class="col-md-8">
+                                <input class="form-control" id="itemShippingFeeId" type="number"
+                                    step="0.01" onchange="this.value = this.value && this.value == 0 ? '' : this.value; this.value = parseFloat(this.value).toFixed(2);" onkeydown="return event.keyCode == 69 || event.keyCode == 189 ? false : true" min="0.01"
+                                    [(ngModel)]=item.ShippingFee name="itemShippingFee" #itemShippingFeeVar="ngModel" />
+                            </div>                   
+                        </div>
+                        <div class="form-group" *ngIf="item.FulfilledBy === 'Merchant'"
+                                [ngClass]="{'has-error': itemFulfilledByVar.value == 'Merchant' && 
+                                !itemShipWithinDaysVar.valid }">
+                            <label class="col-md-2 control-label" for="itemShipWithinDaysId">{{ 'Ship Within Days' | translate }}</label>
+                            <div class="col-md-8">
+                                <input class="form-control" id="itemShipWithinDaysId" type="number"
+                                    onkeydown="return event.keyCode == 69 || event.keyCode == 189 || event.keyCode == 190 ? false : true" min="0" required
+                                    [(ngModel)]=item.ShipWithinDays name="itemShipWithinDays" #itemShipWithinDaysVar="ngModel" />
+                            
+                                <span class="help-block" *ngIf="itemFulfilledByVar.value == 'Merchant' && (itemShipWithinDaysVar.touched ||
+                                                                itemShipWithinDaysVar.dirty) &&
+                                                                itemShipWithinDaysVar.errors">
+                                    <span *ngIf="itemShipWithinDaysVar.errors.required">
+                                        {{ 'Ship Within Days' | translate }} {{ 'is required' | translate }}
+                                    </span>
+                                </span>
+                            </div>                     
+                        </div>
+                    </div>
+                    <div class="ibox-title"><h5>{{ 'Meta Information' | translate }}</h5></div>
+                    <div class="ibox-content">
+                        <div class="form-group">
+                            <label class="col-md-2 control-label" for="itemMetaTitleId">{{ 'Meta Title' | translate }}</label>
+                            <div class="col-md-8">
+                                <input class="form-control" id="itemMetaTitleId" type="text"  
+                                    [(ngModel)]=item.MetaTitle name="itemMetaTitle" #itemMetaTitleVar="ngModel" />
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-md-2 control-label" for="itemMetaKeywordsId">{{ 'Meta Keywords' | translate }}</label>
+                            <div class="col-md-8">
+                                <textarea class="form-control" id="itemMetaKeywordsId"
+                                    [(ngModel)]=item.MetaKeywords name="itemMetaKeywords" #itemMetaKeywordsVar="ngModel"></textarea>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-md-2 control-label" for="itemMetaDescriptionId">{{ 'Meta Description' | translate }}</label>
+                            <div class="col-md-8">
+                                <textarea class="form-control" id="itemMetaDescriptionId"
+                                    [(ngModel)]=item.MetaDescription name="itemMetaDescription" #itemMetaDescriptionVar="ngModel"></textarea>
+                            </div>
+                        </div>
+                    </div>
+                </fieldset>
+            </form>
+        </div>
+    </div>
+</div>

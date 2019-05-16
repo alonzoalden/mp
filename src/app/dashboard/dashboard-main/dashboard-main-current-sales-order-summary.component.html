@@ -1,0 +1,78 @@
+<div class="animated fadeIn" *ngIf="dataSourceMerchant?.data.length > 0 || dataSourceToolots?.data.length > 0">
+    <div class="ibox ibox-gray float-e-margins">
+        <div class="ibox-title">
+            <h5>{{ 'Sales Orders' | translate }}</h5>
+        </div>
+        <div class="ibox-content hide-y" style="min-height: 87px">
+            <ng-container *ngIf="dataSourceMerchant?.data.length > 0">
+                <h5 class="m-l-sm">{{ 'Fulfilled By Merchant' | translate }}</h5>
+                <table mat-table #table [dataSource]="dataSourceMerchant" class="m-b-md">
+                    <ng-container matColumnDef="Status">
+                        <th mat-header-cell *matHeaderCellDef>{{ 'Status' | translate }}</th>
+                        <td mat-cell *matCellDef="let currentSalesOrderSummary" width="60%" height="20px" class="no-border">
+                            <div class="p-xxs"><a class="label-link" [routerLink]="['/sales-order','merchant','status', currentSalesOrderSummary.Status === 'Shipped' ? 'shipped' : 'unshipped']">{{ currentSalesOrderSummary.Status | translate }}</a></div>
+                            <!-- <div class="p-xxs"><a class="label-link" [routerLink]="['/sales-order','merchant','status','shipped']">Shipped</a></div> -->
+                            
+                        </td>
+                    </ng-container>
+                    
+                    <ng-container matColumnDef="Count">
+                        <th mat-header-cell *matHeaderCellDef class="text-center">{{ 'Count' | translate }}</th>
+                        <td mat-cell *matCellDef="let currentSalesOrderSummary" class="text-center no-border" height="20px">
+                            <div class="p-xxs"><strong><span class="badge badge-info">{{currentSalesOrderSummary.OrderCount}}</span></strong></div>
+                            <!-- <div class="p-xxs"><strong><span class="badge badge-info">0</span></strong></div> -->
+                        </td>
+                    </ng-container>
+                
+                    <!-- <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr> -->
+                    <tr class="animated fadeIn no-height" mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+                </table>
+            </ng-container>
+
+            <hr *ngIf="dataSourceMerchant?.data.length > 0 && dataSourceToolots?.data.length > 0">
+
+            <ng-container *ngIf="dataSourceToolots?.data.length > 0">
+                <h5 class="m-l-sm">{{ 'Fulfilled By Toolots' | translate }}</h5>
+                <table mat-table #table [dataSource]="dataSourceToolots">
+
+                    <ng-container matColumnDef="Status">
+                        <th mat-header-cell *matHeaderCellDef>{{ 'Status' | translate }}</th>
+                        <td mat-cell *matCellDef="let toolotsSalesOrderSummary" width="60%" class="no-border">
+                            <div class="p-xxs"><a class="label-link" [routerLink]="['/sales-order','toolots','status', toolotsSalesOrderSummary.Status === 'Shipped' ? 'shipped' : 'unshipped']">{{ toolotsSalesOrderSummary.Status | translate }}</a></div>
+                            <!-- <div class="p-xxs"><a class="label-link" [routerLink]="['/sales-order','toolots','status','shipped']">Shipped</a></div> -->
+                        </td>
+                    </ng-container>
+                    
+                    <ng-container matColumnDef="Count">
+                        <th mat-header-cell *matHeaderCellDef>{{ 'Count' | translate }}</th>
+                        <td mat-cell *matCellDef="let toolotsSalesOrderSummary" class="text-center no-border">
+                            <div class="p-xxs"><strong><span class="badge badge-info">{{toolotsSalesOrderSummary.OrderCount}}</span></strong></div>
+                            <!-- <div class="p-xxs"><strong><span class="badge badge-info">0</span></strong></div> -->
+                        </td>
+                        
+                    </ng-container>
+                
+                    <!-- <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr> -->
+                    <tr class="animated fadeIn no-height" mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+                </table>
+            </ng-container>
+            <!-- <ng-container *ngIf="dataSource">
+                <h5>Fulfilled By Merchant</h5>
+                <div class="col-xs-6 animated fadeIn hide-y"  *ngFor="let merchantSalesOrderSummary of dataSource.data">
+                    <h1 @smoothOpen class="no-margins animated fadeIn"><a [routerLink]="['/sales-order','merchant','status','unshipped']">{{merchantSalesOrderSummary.OrderCount}}</a></h1>
+                    <div @smoothOpen class="font-bold text-primary hide-y">{{merchantSalesOrderSummary.Status}}</div>
+                </div>
+            </ng-container>
+            <div class="row m-t-sm m-b-lg">
+                <hr />
+            </div>
+            <ng-container *ngIf="dataSource">
+                <h5>Fulfilled By Toolots</h5>
+                <div class="col-xs-6 animated fadeIn hide-y" *ngFor="let toolotsSalesOrderSummary of dataSource.data">
+                    <h1 @smoothOpen class="no-margins animated fadeIn"><a [routerLink]="['/sales-order','toolots','status','unshipped']">{{toolotsSalesOrderSummary.OrderCount}}</a></h1>
+                    <div @smoothOpen class="font-bold text-primary hide-y">{{toolotsSalesOrderSummary.Status}}</div>
+                </div>
+            </ng-container> -->
+        </div>
+    </div>
+</div>
