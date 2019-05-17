@@ -23,7 +23,9 @@ a:hover {
 .m-r-none {
     margin-right: 0 !important;
 }
-
+.p-r-sm {
+    padding-right: 16px !important;
+}
 .button-primary-sm1 {
     color: #FFF !important;
     background-color: #18a689;
@@ -65,6 +67,15 @@ a:hover {
     font-weight: 200;
     text-transform: uppercase;
     font-size: 13px;
+}
+.w165 {
+    width: 165px;
+}
+.percent-80 {
+    width: 80% !important;
+}
+.pt-5 {
+    padding-top: 5px !important;
 }
 .pt-16 {
     padding-top: 16px !important;
@@ -240,7 +251,7 @@ table {
     flex: 0 0 200px !important;
     white-space: unset !important;
 }
-
+.mat-cell input.form-control,
 .mat-cell > div > .form-control {
     width: 90%;
 }
@@ -1984,4 +1995,13 @@ th.mat-header-cell {
 }
 .mat-cell .form-control.m-r-smi {
     margin-right: 10px !important;
+}
+.part-image-upload {
+    margin-bottom: 40px;
+    margin-left: 40px;
+    min-height: 70px;
+}
+.part-image-upload .part-image-display .part-image {
+    max-width: 100%;
+    max-height: 420px;
 }
