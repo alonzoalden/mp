@@ -24,7 +24,7 @@ export class ItemEditPartComponent implements OnInit {
 
     itemlist: ItemList[];    
     //displayedColumns = ['Add', 'Down', 'Position', 'Up', 'New', 'Select', 'ItemName', 'SKU', 'TPIN', 'Price', 'Remove'];
-    displayedColumns = ['Add', 'Down', 'Position', 'Up', 'Thumbnail', 'Select', 'ItemName', 'SKU', 'TPIN', 'Price', 'Remove'];
+    displayedColumns = ['Add', 'Down', 'Position', 'Up', 'Thumbnail', 'Label', 'Select', 'ItemName', 'SKU', 'TPIN', 'Price', 'Remove'];
     dataSource: any = null;
     pendingAdd: boolean;
     currentIndex: number;
@@ -35,6 +35,10 @@ export class ItemEditPartComponent implements OnInit {
     res: Array<string>;
     pendingUpload: boolean;
     public isLoadingData: Boolean = false;
+
+    partFilesToUpload: Array<File> = [];
+    partSelectedFileNames: string[] = [];
+    partPendingUpload: boolean;
     
     @ViewChildren('selectionCategoriesRef') selectionCategoriesRef: any;
 
@@ -95,7 +99,7 @@ export class ItemEditPartComponent implements OnInit {
     }
 
     addPendingLine() {
-        const _temp = new ItemPart(0, this.itemid, null, null, null, null, null, null, null, null, null, true, this.item.ItemParts.length + 1, null, null, true, true);
+        const _temp = new ItemPart(0, this.itemid, null, null, null, null, null, null, null, null, null, null, true, this.item.ItemParts.length + 1, null, null, true, true);
         this.item.ItemParts.push(_temp);   
     }
 
@@ -388,6 +392,50 @@ export class ItemEditPartComponent implements OnInit {
         }
     }
 
+    partFileChangeEvent(fileInput: any, item: Item) {
+        // Clear Uploaded Files result message
+        this.partFilesToUpload = <Array<File>>fileInput.target.files;
+        for (let i = 0; i < this.partFilesToUpload.length; i++) {
+            this.partSelectedFileNames.push(this.partFilesToUpload[i].name);
+        }
+
+        this.partUploadFiles(item);
+    }
+    
+    partUploadFiles(item: Item) {
+        if (this.partFilesToUpload.length > 0) {
+            this.partPendingUpload = true;
+            this.isLoadingData = true;
+            const formData: FormData = new FormData();
+            for (let i = 0; i < this.partFilesToUpload.length; i++) {
+                var reader = new FileReader();
+                formData.append('partUploadedFiles', this.partFilesToUpload[i], this.partFilesToUpload[i].name);
+            }
+
+            this.itemService.uploadTempImage(this.newGuid(), formData)
+                .subscribe (
+                    (data: string) => {
+                        this.partPendingUpload = false;
+                        item.PartImageRaw = data;
+                        item.PartIsNewImage = true;                                                
+                    },
+                    err => {
+                        this.partPendingUpload = false;
+                        this.itemService.sendNotification({ type: 'error', title: 'Error', content: err });
+                        this.isLoadingData = false;
+                        this.partFilesToUpload = [];
+                        this.partSelectedFileNames = [];
+                    },
+                    () => {
+                        this.partPendingUpload = false;
+                        this.isLoadingData = false;
+                        this.partFilesToUpload = [];
+                        this.partSelectedFileNames = [];
+                    }
+                );
+        }
+    }
+
     onChangeFOBPrice(itemPart: ItemPart)
     {
 
@@ -413,6 +461,10 @@ export class ItemEditPartComponent implements OnInit {
             const r = Math.random() * 16 | 0, v = c === 'x' ? r : ( r & 0x3 | 0x8 );
             return v.toString(16);
         });
+    }
+
+    test() {
+        console.log(this.item);
     }
 }
 

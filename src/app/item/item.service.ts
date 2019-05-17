@@ -83,7 +83,7 @@ export class ItemService {
             return ItemInsert;            
         }
         else {            
-            return new ItemInsert(null, null, 'Toolots', 'simple', null, null, null, null, null, null, null, null, null, null, null, null, 'IN', null, 'LB', null, null, null, 'IN', null, 'LB', false, null, null, null, null, "CN", "", null, false, null, "CatalogAndSearch", null, null, null, null, null, "NotSubmitted", [], [], [], [], [], [], [], [], [], []);
+            return new ItemInsert(null, null, 'Toolots', 'simple', null, null, null, null, null, null, null, null, null, null, null, null, 'IN', null, 'LB', null, null, null, 'IN', null, 'LB', false, null, null, null, null, "CN", "", null, false, null, "CatalogAndSearch", null, null, null, null, null, "NotSubmitted", null, null, true, [], [], [], [], [], [], [], [], [], []);
         }
     }
 
@@ -177,7 +177,7 @@ export class ItemService {
             , item.PackageWidth, item.PackageHeight, item.PackageLength, item.PackageDimensionUOM, item.PackageWeight, item.PackageWeightUOM
             , item.IsFreeShipping, item.ShippingFee, item.MetaTitle, item.MetaKeywords, item.MetaDescription, item.Origin, item.Warranty
             , item.MerchantWarranty, item.AddProtectionPlan, item.URLKey, item.Visibility, item.Description, item.ShortDescription, item.TechnicalDetail, item.AdditionalInformation
-            , item.VendorBrandID, item.RequestApproval, item.RejectionReason, item.Status, item.Approval, item.ImagePath, item.UpdatedOn, item.CreatedOn, [], [], [], [], [], [], [], [], [], []
+            , item.VendorBrandID, item.RequestApproval, item.RejectionReason, item.Status, item.Approval, item.ImagePath, item.PartImageRaw, item.PartImageFilePath, item.PartIsNewImage, item.UpdatedOn, item.CreatedOn, [], [], [], [], [], [], [], [], [], []
             , item.QtyOnHand, item.QtyAvailable, item.QtyOnOrder, item.QtyBackOrdered, item.MerchantQtyOnHand, item.MerchantQtyAvailable, item.MerchantQtyOnOrder, false);
 
         item.ItemCategoryAssignments.forEach((itemCategoryAssignment) => {
@@ -264,7 +264,7 @@ export class ItemService {
         item.ItemParts.forEach((itemPart) => {
 
             const newItemPart = new ItemPart(itemPart.ItemPartID, itemPart.ItemID
-                , itemPart.PartItemID, itemPart.PrevPartItemID, itemPart.PartItemName
+                , itemPart.PartLabel, itemPart.PartItemID, itemPart.PrevPartItemID, itemPart.PartItemName
                 , itemPart.PartItemVendorSKU, itemPart.PartTPIN, itemPart.PartFOBPrice, itemPart.PartPrice, itemPart.ImageRaw, itemPart.ImageFilePath, itemPart.IsNewImage
                 ,  itemPart.Position, itemPart.UpdatedOn
                 , itemPart.CreatedOn, itemPart.pendingAdd, itemPart.isNew);
@@ -281,7 +281,8 @@ export class ItemService {
             , item.Width, item.Height, item.Length, item.ProductDimensionUOM, item.Weight, item.ProductWeightUOM
             , item.PackageWidth, item.PackageHeight, item.PackageLength, item.PackageDimensionUOM, item.PackageWeight, item.PackageWeightUOM
             , item.IsFreeShipping, item.ShippingFee, item.MetaTitle, item.MetaKeywords, item.MetaDescription, item.Origin, item.Warranty, item.MerchantWarranty, item.AddProtectionPlan, item.URLKey
-            , item.Visibility, item.Description, item.ShortDescription, item.TechnicalDetail, item.AdditionalInformation, item.VendorBrandID, item.Approval, [], [], [], [], [], [], [], [], [], []);
+            , item.Visibility, item.Description, item.ShortDescription, item.TechnicalDetail, item.AdditionalInformation, item.VendorBrandID, item.Approval, item.PartImageRaw, item.PartImageFilePath, item.PartIsNewImage
+            , [], [], [], [], [], [], [], [], [], []);
 
         item.ItemCategoryAssignments.forEach((itemCategoryAssignment) => {
             const newItemCategoryAssignment = new ItemCategoryAssignment(itemCategoryAssignment.ItemCategoryID);
@@ -343,7 +344,7 @@ export class ItemService {
         });
 
         item.ItemParts.forEach((itemPart) => {
-            const newItemPart = new ItemPartInsert(itemPart.ItemID, itemPart.PartItemID, itemPart.PrevPartItemID, itemPart.PartItemName
+            const newItemPart = new ItemPartInsert(itemPart.ItemID , itemPart.PartLabel, itemPart.PartItemID, itemPart.PrevPartItemID, itemPart.PartItemName
                 , itemPart.PartItemVendorSKU, itemPart.PartTPIN, itemPart.PartFOBPrice, itemPart.PartPrice
                 ,  itemPart.ImageRaw, itemPart.ImageFilePath, itemPart.IsNewImage, itemPart.Position, itemPart.isNew);
 

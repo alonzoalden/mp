@@ -64,6 +64,10 @@ export class Item {
         public Approval: string,
         
         public ImagePath: string,
+        public PartImageRaw: string,
+        public PartImageFilePath: string,
+        public PartIsNewImage: boolean,
+
         public UpdatedOn: string,
         public CreatedOn: string,
 
@@ -142,6 +146,9 @@ export class ItemInsert {
         public VendorBrandID: string,
 
         public Approval: string,
+        public PartImageRaw: string,
+        public PartImageFilePath: string,
+        public PartIsNewImage: boolean,
 
         public ItemCategoryAssignments: Array<ItemCategoryAssignment>,
         public ItemOptions: Array<ItemOptionInsert>,
@@ -209,6 +216,9 @@ export class ItemUpdate {
         public RequestApproval: string,
 
         public Approval: string,
+        public PartImageRaw: string,
+        public PartImageFilePath: string,
+        public PartIsNewImage: boolean,
         
         public ItemCategoryAssignments: Array<ItemCategoryAssignment>,
         public ItemOptions: Array<ItemOption>,
@@ -571,6 +581,7 @@ export class ItemPart {
     constructor(
         public ItemPartID: number,
         public ItemID: number,
+        public PartLabel: string,
         public PartItemID: number,
 
         public PrevPartItemID: number,
@@ -596,6 +607,7 @@ export class ItemPart {
 export class ItemPartInsert {
     constructor(
         public ItemID: number,
+        public PartLabel: string,
         public PartItemID: number,
         
         public PrevPartItemID: number,
