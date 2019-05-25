@@ -3,6 +3,7 @@ import { HomeComponent } from './home/home.component';
 import { AuthGuard } from './auth/auth.guard';
 import { DashboardComponent } from './dashboard/dashboard.component';
 import { CompanyComponent } from './company/company.component';
+import { BrowserCompatibilityComponent } from './browser-compatibility/browser-compatibility.component';
 
 const APP_ROUTES: Routes = [
     {
@@ -13,6 +14,10 @@ const APP_ROUTES: Routes = [
     {
         path: 'home',
         component: HomeComponent
+    },
+    {
+        path: 'browser-invalid',
+        component: BrowserCompatibilityComponent
     },
     {
         path: 'company', loadChildren: 'app/company/company.module#CompanyModule', canLoad: [ AuthGuard ]

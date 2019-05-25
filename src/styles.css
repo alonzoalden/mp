@@ -2005,3 +2005,46 @@ th.mat-header-cell {
     max-width: 100%;
     max-height: 420px;
 }
+.left-icon-layout {
+    display: flex;
+    justify-content: center;
+    padding: 60px 15px;
+}
+.left-icon-layout .left-icon {
+    padding: 30px 20px;
+    text-align: center;
+    font-size: 160px;
+    color: #ed5565;
+}
+.left-icon-layout .email-support {
+    text-align: right;
+}
+.left-icon-layout .left-icon-layout-content {
+    padding: 20px;
+}
+.left-icon-layout .left-icon-layout-content > h1 {
+    padding: 0 0 15px 0;
+}
+.left-icon-layout .left-icon-layout-content > div {
+    padding: 0 0 15px 0;
+}
+.left-icon-layout .left-icon-layout-content h3 {
+    line-height: 22px;
+}
+.left-icon-layout .left-icon-layout-content ul {
+    font-size: 16px;
+}
+.left-icon-layout + .email-support {
+    text-align: right;
+}
+@media (max-width: 900px) {
+    .left-icon-layout {
+        flex-direction: column;
+    }
+    .left-icon-layout ul {
+        padding-left: 20px;
+    }
+    .left-icon-layout + .email-support {
+        text-align: left;
+    }
+}

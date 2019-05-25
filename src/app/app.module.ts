@@ -70,6 +70,8 @@ import { ResponseInterceptor } from './core/response.interceptor';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { AnimateOnScrollModule } from 'ng2-animate-on-scroll';
 import { APP_BASE_HREF } from '@angular/common';
+import { DeviceDetectorModule } from 'ngx-device-detector';
+import { BrowserCompatibilityComponent } from './browser-compatibility/browser-compatibility.component';
 
 export function HttpLoaderFactory(http: HttpClient) {
     return new TranslateHttpLoader(http);
@@ -78,7 +80,8 @@ export function HttpLoaderFactory(http: HttpClient) {
 @NgModule({
     declarations: [
         AppComponent,
-        HomeComponent
+        HomeComponent,
+        BrowserCompatibilityComponent
     ],
     imports: [
         BrowserModule,
@@ -100,6 +103,7 @@ export function HttpLoaderFactory(http: HttpClient) {
         }),
         BrowserAnimationsModule,
         AnimateOnScrollModule.forRoot(),
+        DeviceDetectorModule.forRoot(),
         routing
     ],
     exports: [
