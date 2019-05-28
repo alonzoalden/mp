@@ -17,6 +17,8 @@ import { NotificationComponent } from './shared/tool/notification/notification.c
 
 import { PurchaseOrder } from './shared/class/purchase-order';
 
+import { environment } from './../environments/environment';
+
 @Component({
     selector: 'app-root',
     templateUrl: './app.component.html',
@@ -57,6 +59,16 @@ export class AppComponent implements OnInit, OnDestroy {
 
     ngOnInit() {
         
+        console.log(this.router.url);
+        console.log(window.location.href);
+
+        if(window.location.href != environment.siteURL && window.location.href != environment.siteURL + "/home") {
+            console.log('validate browser');            
+        }
+        else {
+            console.log('keep as is');  
+        }
+
         // var nav = window.navigator;
         // var screen = window.screen;
         // var guid = nav.mimeTypes.length.toString();

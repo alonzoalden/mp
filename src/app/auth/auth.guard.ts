@@ -9,7 +9,7 @@ export class AuthGuard implements CanLoad {
     constructor(private deviceService: DeviceDetectorService, private oauthService: OAuthService, private router: Router) { }
 
     canLoad() {
-        this.verifyBrowserCompatibility();
+        //this.verifyBrowserCompatibility();
         //console.log(this.oauthService.hasValidIdToken());
         if (this.oauthService.hasValidIdToken() && this.oauthService.hasValidAccessToken()) {
             // console.log("passed guard");

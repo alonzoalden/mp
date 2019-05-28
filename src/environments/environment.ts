@@ -13,6 +13,9 @@ export const environment = {
   linkURL: 'https://staging.toolots.com',
   previewURL: 'https://staging.toolots.com/index.php/catalog/product/view/id/',
 
+  //siteURL: 'https://staging-merchantportal.toolots.com',
+  siteURL: 'https://localhost:4200',
+
   //webapiURL: 'https://webapi.toolots.com/merchantportal',
   webapiURL: 'https://staging-webapi.toolots.com/merchantportal',
   //webapiURL: 'https://localhost:44360',
