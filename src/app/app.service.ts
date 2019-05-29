@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpErrorResponse, HttpHeaders } from '@angular/common/http';
+import { Router } from '@angular/router';
 
 import { Observable, Subject, of, throwError } from 'rxjs';
 import { catchError, tap } from 'rxjs/operators';
@@ -16,9 +17,14 @@ export class AppService {
     private apiURL = environment.webapiURL;
     currentMember: Member;
     wasLoggedIn: boolean;
-
+    
     public subject = new Subject<string>();
 
+    public disabledBrowsers = {
+        'IE': 1,
+        'MS-Edge': 1
+    }
+    
     constructor(private http: HttpClient,
         private oauthService: OAuthService) { }
 
@@ -144,5 +150,13 @@ export class AppService {
             errorMessage = `Response error: ${err.error.Message}`;
         }
         return throwError(errorMessage);
+    }
+
+    public verifyBrowserCompatibility(): Observable<any> {
+        return this.http.get<any>('https://json.geoiplookup.io/api')
+            .pipe(
+                tap(data => data),
+                catchError(this.handleError)
+            );
     }
 }

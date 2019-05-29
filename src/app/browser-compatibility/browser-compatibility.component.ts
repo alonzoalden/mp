@@ -16,15 +16,5 @@ export class BrowserCompatibilityComponent implements OnInit {
         if (mainNav) {
             mainNav.hidden = true;
         }
-        this.verifyBrowserCompatibility();
-    }
-
-    verifyBrowserCompatibility() {
-        const disabledBrowsers = {
-          'IE': 1,
-          'MS-Edge': 1
-        }    
-        const browser = this.deviceService.getDeviceInfo().browser;
-        if (!disabledBrowsers[browser]) this.router.navigate(['/home']);
     }
 }

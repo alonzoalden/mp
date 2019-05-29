@@ -62,6 +62,16 @@ export class AppComponent implements OnInit, OnDestroy {
     }
     
     ngOnInit() {
+        this.appService.verifyBrowserCompatibility()
+            .subscribe((data) => {
+                const browser = this.deviceService.getDeviceInfo().browser;
+                if (window.location.href !== environment.siteURL && window.location.href !== environment.siteURL + '/home') {
+                    if (this.appService.disabledBrowsers[browser] && data.country_code !== 'US') {
+                        this.router.navigate(['/browser-invalid']);
+                    }
+                }
+            });
+
         // var nav = window.navigator;
         // var screen = window.screen;
         // var guid = nav.mimeTypes.length.toString();
@@ -75,14 +85,6 @@ export class AppComponent implements OnInit, OnDestroy {
         // console.log(sessionStorage);
         // console.log(window.navigator.userAgent);
         // console.log(window.navigator.mimeTypes);
-
-        if (window.location.href !== environment.siteURL && window.location.href !== environment.siteURL + '/home') {
-            $.getJSON('https://json.geoiplookup.io/api', (data) => {
-                if (data.country_code !== 'US') {
-                    this.verifyBrowserCompatibility();
-                }
-            });
-        }
 
         this.subscription = this.appService.subject.subscribe(
             notification => this.doNotification(notification)
@@ -112,16 +114,7 @@ export class AppComponent implements OnInit, OnDestroy {
         }
 
     }
-    verifyBrowserCompatibility() {
-        const disabledBrowsers = {
-          'IE': 1,
-          'MS-Edge': 1
-        }
-        const browser = this.deviceService.getDeviceInfo().browser;
-        if (disabledBrowsers[browser]) {
-            this.router.navigate(['/browser-invalid']);
-        };
-    }
+
     changeVendor() {
         this.appService.editToFirstVendor()
             .subscribe(

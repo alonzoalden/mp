@@ -4,6 +4,7 @@ import { OAuthService } from 'angular-oauth2-oidc';
 import { authConfig } from '../auth/auth.config';
 import { AppService } from '../app.service';
 import { DeviceDetectorService } from 'ngx-device-detector';
+import { environment } from '../../environments/environment';
 
 @Component({
     templateUrl: './home.component.html',
@@ -62,9 +63,7 @@ export class HomeComponent implements OnInit {
 
         if (this.isLoggedin) {
             //console.log('To Dashboard');
-            if (this.browserIsCompatible()) {
-                this.router.navigate(['/dashboard']);
-            }
+            this.router.navigate(['/dashboard']);
             // window.location.href = window.location.href.replace('/home', '/dashboard');
             // window.location.reload();
         }
@@ -76,21 +75,7 @@ export class HomeComponent implements OnInit {
             }
         });
     }
-    browserIsCompatible() {
-        const disabledBrowsers = {
-          'IE': 1,
-          'MS-Edge': 1
-        }
-        const browser = this.deviceService.getDeviceInfo().browser;
-        if (disabledBrowsers[browser]) {
-            this.router.navigate(['/browser-invalid']);
-            return false;
-        }
-        else {
-            return true;
-        }
-    }
-
+    
     detectBrowser() {
         let isIEOrEdge = /msie\s|trident\/|edge\//i.test(window.navigator.userAgent);
         //console.log(isIEOrEdge);
@@ -124,7 +109,16 @@ export class HomeComponent implements OnInit {
     }
 
     login() {
-        this.oauthService.initImplicitFlow();
+        this.appService.verifyBrowserCompatibility()
+            .subscribe((data) => {
+                const browser = this.deviceService.getDeviceInfo().browser;
+                if (this.appService.disabledBrowsers[browser] && data.country_code !== 'US') {
+                    this.router.navigate(['/browser-invalid']);
+                } 
+                else {
+                    this.oauthService.initImplicitFlow();
+                }
+            });
     }
 
     logout() {
