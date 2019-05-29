@@ -78,7 +78,7 @@ export class AppComponent implements OnInit, OnDestroy {
 
         if (window.location.href !== environment.siteURL && window.location.href !== environment.siteURL + '/home') {
             $.getJSON('https://json.geoiplookup.io/api', (data) => {
-                if (data.country_code === 'US') {
+                if (data.country_code !== 'US') {
                     this.verifyBrowserCompatibility();
                 }
             });
