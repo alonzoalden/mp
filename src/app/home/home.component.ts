@@ -3,6 +3,7 @@ import { Router, ActivatedRoute } from '@angular/router';
 import { OAuthService } from 'angular-oauth2-oidc';
 import { authConfig } from '../auth/auth.config';
 import { AppService } from '../app.service';
+import { DeviceDetectorService } from 'ngx-device-detector';
 
 @Component({
     templateUrl: './home.component.html',
@@ -16,7 +17,8 @@ export class HomeComponent implements OnInit {
     constructor(activatedRoute: ActivatedRoute,
             private router: Router,
             private oauthService: OAuthService,
-            private appService: AppService) {
+            private appService: AppService,
+            private deviceService: DeviceDetectorService, ) {
         // this.oauthService.configure(authConfig);
         // this.oauthService.loadDiscoveryDocumentAndTryLogin();
 
@@ -60,7 +62,9 @@ export class HomeComponent implements OnInit {
 
         if (this.isLoggedin) {
             //console.log('To Dashboard');
-            this.router.navigate(['/dashboard']);
+            if (this.browserIsCompatible()) {
+                this.router.navigate(['/dashboard']);
+            }
             // window.location.href = window.location.href.replace('/home', '/dashboard');
             // window.location.reload();
         }
@@ -72,7 +76,20 @@ export class HomeComponent implements OnInit {
             }
         });
     }
-
+    browserIsCompatible() {
+        const disabledBrowsers = {
+          'IE': 1,
+          'MS-Edge': 1
+        }
+        const browser = this.deviceService.getDeviceInfo().browser;
+        if (disabledBrowsers[browser]) {
+            this.router.navigate(['/browser-invalid']);
+            return false;
+        }
+        else {
+            return true;
+        }
+    }
 
     detectBrowser() {
         let isIEOrEdge = /msie\s|trident\/|edge\//i.test(window.navigator.userAgent);
@@ -83,6 +100,7 @@ export class HomeComponent implements OnInit {
     redirectToDashboard() {
         // this.router.navigate(['/dashboard']);
         window.location.href = window.location.href.replace('/home', '/dashboard');
+        
     }
 
     get isLoggedin() {

@@ -6,20 +6,17 @@ import { DeviceDetectorService } from 'ngx-device-detector';
     templateUrl: './browser-compatibility.component.html',
 })
 
-export class BrowserCompatibilityComponent implements OnInit, OnDestroy {
+export class BrowserCompatibilityComponent implements OnInit {
 
     constructor(private deviceService: DeviceDetectorService, private router: Router) {
     }
     
     ngOnInit() {
-        (<HTMLElement>document.getElementById('main-nav')).hidden = true;
+        const mainNav = (<HTMLElement>document.getElementById('main-nav'));
+        if (mainNav) {
+            mainNav.hidden = true;
+        }
         this.verifyBrowserCompatibility();
-    }
-    ngAfterViewInit(){
-        
-    }
-    ngOnDestroy(): void {
-        
     }
 
     verifyBrowserCompatibility() {

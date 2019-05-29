@@ -18,6 +18,9 @@ import { NotificationComponent } from './shared/tool/notification/notification.c
 import { PurchaseOrder } from './shared/class/purchase-order';
 
 import { environment } from './../environments/environment';
+import { DeviceDetectorService } from 'ngx-device-detector';
+
+declare var $: any;
 
 @Component({
     selector: 'app-root',
@@ -41,7 +44,8 @@ export class AppComponent implements OnInit, OnDestroy {
                 private httpClient: HttpClient,
                 private router: Router,
                 private appService: AppService,
-                private translate: TranslateService) {
+                private translate: TranslateService,
+                private deviceService: DeviceDetectorService) {
         this.configureWithNewConfigApi();
         translate.setDefaultLang('en');
         this.currentLanguage = 'en';
@@ -56,19 +60,8 @@ export class AppComponent implements OnInit, OnDestroy {
             }
         }, 5000);
     }
-
+    
     ngOnInit() {
-        
-        console.log(this.router.url);
-        console.log(window.location.href);
-
-        if(window.location.href != environment.siteURL && window.location.href != environment.siteURL + "/home") {
-            console.log('validate browser');            
-        }
-        else {
-            console.log('keep as is');  
-        }
-
         // var nav = window.navigator;
         // var screen = window.screen;
         // var guid = nav.mimeTypes.length.toString();
@@ -82,6 +75,14 @@ export class AppComponent implements OnInit, OnDestroy {
         // console.log(sessionStorage);
         // console.log(window.navigator.userAgent);
         // console.log(window.navigator.mimeTypes);
+
+        if (window.location.href !== environment.siteURL && window.location.href !== environment.siteURL + '/home') {
+            $.getJSON('https://json.geoiplookup.io/api', (data) => {
+                if (data.country_code === 'US') {
+                    this.verifyBrowserCompatibility();
+                }
+            });
+        }
 
         this.subscription = this.appService.subject.subscribe(
             notification => this.doNotification(notification)
@@ -110,6 +111,16 @@ export class AppComponent implements OnInit, OnDestroy {
                 );
         }
 
+    }
+    verifyBrowserCompatibility() {
+        const disabledBrowsers = {
+          'IE': 1,
+          'MS-Edge': 1
+        }
+        const browser = this.deviceService.getDeviceInfo().browser;
+        if (disabledBrowsers[browser]) {
+            this.router.navigate(['/browser-invalid']);
+        };
     }
     changeVendor() {
         this.appService.editToFirstVendor()
