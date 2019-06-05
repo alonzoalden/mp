@@ -109,16 +109,18 @@ export class HomeComponent implements OnInit {
     }
 
     login() {
-        this.appService.verifyBrowserCompatibility()
-            .subscribe((data) => {
-                const browser = this.deviceService.getDeviceInfo().browser;
-                if (this.appService.disabledBrowsers[browser] && data.country_code !== 'US') {
-                    this.router.navigate(['/browser-invalid']);
-                } 
-                else {
-                    this.oauthService.initImplicitFlow();
-                }
-            });
+        // this.appService.verifyBrowserCompatibility()
+        //     .subscribe((data) => {
+        //         const browser = this.deviceService.getDeviceInfo().browser;
+        //         if (this.appService.disabledBrowsers[browser] && data.country_code !== 'US') {
+        //             this.router.navigate(['/browser-invalid']);
+        //         } 
+        //         else {
+        //             this.oauthService.initImplicitFlow();
+        //         }
+        //     });
+
+        this.oauthService.initImplicitFlow();
     }
 
     logout() {

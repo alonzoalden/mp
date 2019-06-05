@@ -216,7 +216,13 @@
                             </div>
                         </div>
                     </div>
-
+                    <div class="form-group" *ngIf="isPM">
+                        <label class="col-md-2 control-label" for="itemExcludeGoogleShopping">{{ 'Exclude From Google Shopping' | translate }}</label>
+                        <div class="col-md-8" style="padding-top:7px">
+                            <mat-checkbox [(ngModel)]="item.ExcludeGoogleShopping" [ngModelOptions]="{standalone: true}"></mat-checkbox>
+                        </div> 
+                    </div>
+                    
                     <!-- Shipping -->
                     <div class="ibox-title"><h5>{{ 'Shipping' | translate }}</h5></div>
                     <div class="ibox-content">

@@ -26,9 +26,9 @@ export class MemberService {
     }
 
     getMembers(): Observable<Member[]> {
-        if (this.members) {
-            return of(this.members);
-        }
+        // if (this.members) {
+        //     return of(this.members);
+        // }
         return this.http.get<Member[]>(this.apiURL + '/member')
                         .pipe(
                             //tap(data => console.log(JSON.stringify(data))),

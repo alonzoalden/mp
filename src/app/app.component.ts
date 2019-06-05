@@ -62,15 +62,15 @@ export class AppComponent implements OnInit, OnDestroy {
     }
     
     ngOnInit() {
-        this.appService.verifyBrowserCompatibility()
-            .subscribe((data) => {
-                const browser = this.deviceService.getDeviceInfo().browser;
-                if (window.location.href !== environment.siteURL && window.location.href !== environment.siteURL + '/home') {
-                    if (this.appService.disabledBrowsers[browser] && data.country_code !== 'US') {
-                        this.router.navigate(['/browser-invalid']);
-                    }
-                }
-            });
+        // this.appService.verifyBrowserCompatibility()
+        //     .subscribe((data) => {
+        //         const browser = this.deviceService.getDeviceInfo().browser;
+        //         if (window.location.href !== environment.siteURL && window.location.href !== environment.siteURL + '/home') {
+        //             if (this.appService.disabledBrowsers[browser] && data.country_code !== 'US') {
+        //                 this.router.navigate(['/browser-invalid']);
+        //             }
+        //         }
+        //     });
 
         // var nav = window.navigator;
         // var screen = window.screen;

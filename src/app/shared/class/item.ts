@@ -68,6 +68,8 @@ export class Item {
         public PartImageFilePath: string,
         public PartIsNewImage: boolean,
 
+        public ExcludeGoogleShopping: boolean,
+
         public UpdatedOn: string,
         public CreatedOn: string,
 
@@ -150,6 +152,8 @@ export class ItemInsert {
         public PartImageFilePath: string,
         public PartIsNewImage: boolean,
 
+        public ExcludeGoogleShopping: boolean,
+
         public ItemCategoryAssignments: Array<ItemCategoryAssignment>,
         public ItemOptions: Array<ItemOptionInsert>,
         public ItemTierPrices: Array<ItemTierPriceInsert>,
@@ -219,6 +223,8 @@ export class ItemUpdate {
         public PartImageRaw: string,
         public PartImageFilePath: string,
         public PartIsNewImage: boolean,
+        
+        public ExcludeGoogleShopping: boolean,
         
         public ItemCategoryAssignments: Array<ItemCategoryAssignment>,
         public ItemOptions: Array<ItemOption>,
