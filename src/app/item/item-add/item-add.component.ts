@@ -285,7 +285,7 @@ export class ItemAddComponent {
 
     openDialogItemVariation() {
         const dialogRef = this.printDialog.open(ItemVariationComponentDialog, {
-          width: '250px'
+          
         });
     
         dialogRef.afterClosed().subscribe(result => {

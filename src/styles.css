@@ -2048,3 +2048,91 @@ th.mat-header-cell {
         text-align: left;
     }
 }
+
+
+/* Material Tab */
+.mat-tab-list {
+    /* background-color: #eee; */
+}
+.mat-tab-labels {
+    
+    border-right: 0;
+    flex-direction: column;
+    border-radius: 2px 0 0 2px;
+}
+.mat-tab-group {
+    flex-direction: initial !important;
+}
+.mat-tab-header {
+    border-bottom: none;
+}
+.mat-ink-bar {
+    display: none;
+}
+.mat-tab-label {
+    background-color: #f3f3f4;
+    color: #A7B1C2;
+    border-color: #e7eaec;
+    /* border-right: 1px solid #e7eaec; */
+    border: 0;
+    
+    border-right: 1px solid #e7eaec;
+    transition: background-color 40ms ease-in-out, color 40ms ease-in-out;
+}
+.mat-tab-label-active {
+    opacity: 1 !important;
+    background-color: #fff !important;
+    color: #555 !important;
+    border: 1px solid #e7eaec;
+    border-right: 0;
+    border-radius: 4px 0 0 4px;
+    border-color: #e7eaec;
+    transition: background-color 40ms ease-in-out, color 40ms ease-in-out;
+
+}
+.mat-tab-group.mat-primary .mat-tab-label:not(.mat-tab-disabled):focus {
+    background-color: #fff !important;
+    color: #555;
+    border: 1px solid #e7eaec;
+    border-right: 0;
+    border-radius: 4px 0 0 4px;
+    transition: background-color 40ms ease-out, color 40ms ease-out;
+    
+    border-color: #e7eaec;
+}
+/* .mat-ripple-element {
+    transition-duration: 0 !important;
+    display: none;
+} */
+
+
+.item-variation .mat-tab-body-wrapper {
+    border: 1px solid rgb(231, 234, 236);
+    margin-left: -1px;
+}
+
+.item-variation .mat-list-text,
+.item-variation .mat-tab-label {
+    font-size: 13px;
+    font-weight: 600;
+    font-family: "open sans", "Helvetica Neue", Helvetica, Arial, sans-serif;
+}
+.item-variation .mat-list-text {
+    font-weight: 700;
+}
+.item-variation .mat-tab-label:hover .mat-tab-label-content {
+    color: #555;
+}
+.item-variation .item-variation-content {
+    background-color: #fff;
+    padding: 20px 40px;
+    min-width: 300px;
+    height: 500px;
+    overflow: scroll;
+    font-family: 'open sans',
+    'Helvetica Neue', Helvetica, Arial, sans-serif;
+}
+.item-variation-content .form-label-section {
+    width: initial;
+    margin-bottom: 10px;
+}
