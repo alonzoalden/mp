@@ -18,6 +18,12 @@
 </div>
 <div class="wrapper wrapper-content animated fadeIn">
     <div class="row">
+        <div class="col-lg-12" style="margin-bottom: 30px; text-align: right;">
+            <!-- <div class="ibox-content" >
+                <strong>Select Variation</strong>
+            </div> -->
+            <button (click)="openDialogItemVariation()" mat-button type="button" class="btn button-success-sm1" style="margin-left: 10px !important; width: 280px !important;"><i class="fa fa-check m-r-xs"></i>{{ 'Variation' | translate }}</button>
+        </div>
         <div class="col-lg-12">
             <!-- <div *ngIf="loading" style="text-align:center">
                 <img src="../../../assets/images/loader.gif" alt="Loading" />

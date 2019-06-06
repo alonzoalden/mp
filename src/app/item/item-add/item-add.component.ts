@@ -1,8 +1,8 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { ItemInsert, ItemTierPriceInsert, ItemRelatedProductInsert, ItemUpSellInsert, ItemCrossSellInsert, ItemAttachmentInsert, ItemVideoInsert } from '../../shared/class/item';
 import { VendorBrand } from '../../shared/class/vendor-brand';
-
+import { MatDialog, MatDialogRef } from '@angular/material';
 import { ItemService } from '../item.service';
 
 @Component({
@@ -23,7 +23,8 @@ export class ItemAddComponent {
     private dataIsValid: { [key: string]: boolean } = {};
 
     constructor(private router: Router,
-                private itemService: ItemService) {
+                private itemService: ItemService,
+                public printDialog: MatDialog) {
         this.item = this.itemService.defaultCurrentItemInsert();
 
         this.itemService.getVendorBrands().subscribe(
@@ -281,4 +282,36 @@ export class ItemAddComponent {
     validateCategory() {
         return true;
     }
+
+    openDialogItemVariation() {
+        const dialogRef = this.printDialog.open(ItemVariationComponentDialog, {
+          width: '250px'
+        });
+    
+        dialogRef.afterClosed().subscribe(result => {
+            if (result) {
+                
+            }
+        });
+    }
+
 }
+
+@Component({
+    selector: 'item-variation.component-dialog',
+    templateUrl: 'item-variation.component-dialog.html',
+})
+export class ItemVariationComponentDialog implements OnInit {
+    
+        constructor(
+            public dialogRef: MatDialogRef<ItemVariationComponentDialog>) {
+            
+            }
+        ngOnInit() {
+            
+        }
+    
+        onCancelClick(): void {
+            this.dialogRef.close();
+        }
+    }
