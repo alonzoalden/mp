@@ -1,0 +1,202 @@
+<h3 class="ibox-title dialog-title">Create Item Variations</h3>
+<div mat-dialog-content style="background-color: #f3f3f4;">
+    <mat-tab-group class="item-variation" [@.disabled]="true" [disableRipple]="true" [dynamicHeight]="false">
+        
+        <mat-tab *ngFor="let tab of tabsList; let index = index" [label]="tab">
+
+
+            <ng-container *ngIf="tab.name === 'Color'">
+                <ng-template mat-tab-label>
+                    <span>{{ 'Color' | translate }}</span>
+                </ng-template>
+            
+                <div class="item-variation-content">
+                    <h5 style="font-size: 14px; border-bottom: 1px solid #eaeaea; padding-bottom: 10px;">Select color variations</h5> 
+                    <mat-selection-list #colors>
+                        <mat-list-option *ngFor="let property of tab.properties">
+                            {{property}}
+                        </mat-list-option>
+                    </mat-selection-list>
+                    
+                    <div class="ibox-tools m-t-md" style="text-align: left;">
+                        <div class="flex-va-center" *ngIf="showInput">
+                            <input class="form-control" type="text" placeholder="{{ 'New Property' | translate }}" 
+                                    name="newProperty" [(ngModel)]="tempPropertyName" />
+                            <a (click)="onAddTabProperty(tab.name)"><i class="fa fa-plus-circle fs-16"></i></a>
+                            <a (click)="showInput = false;"><i class="fa fa-close fs-16"></i></a>
+                        </div>
+                        <a *ngIf="!showInput" (click)="showInput = true;"><span class="sm-strong"><i class="fa fa-plus m-r-xs"></i> Add property</span></a>
+                    </div>
+                    <p style="position: absolute; bottom: 0;">
+                        Options selected: {{colors.selectedOptions.selected.length}}
+                    </p>
+                </div>
+
+
+                
+            </ng-container>
+
+            <ng-container *ngIf="tab.name === 'Size'">
+                <ng-template mat-tab-label>
+                    <span>{{ 'Size' | translate }}</span>
+                </ng-template>
+            
+                <div class="item-variation-content">
+                    <h5 style="font-size: 14px; border-bottom: 1px solid #eaeaea; padding-bottom: 10px;">Select color variations</h5> 
+                    <mat-selection-list #sizes>
+                        <mat-list-option *ngFor="let property of tab.properties">
+                            {{property}}
+                        </mat-list-option>
+                    </mat-selection-list>
+                    <div class="ibox-tools m-t-md" style="text-align: left;">
+                        <div class="flex-va-center" *ngIf="showInput">
+                            <input class="form-control" type="text" placeholder="{{ 'New Property' | translate }}" 
+                                    name="newProperty" [(ngModel)]="tempPropertyName" />
+                            <a (click)="onAddTabProperty(tab.name)"><i class="fa fa-plus-circle fs-16"></i></a>
+                            <a (click)="showInput = false;"><i class="fa fa-close fs-16"></i></a>
+                        </div>
+                        <a *ngIf="!showInput" (click)="showInput = true;"><span class="sm-strong"><i class="fa fa-plus m-r-xs"></i> Add property</span></a>
+                    </div>
+                    <p style="position: absolute; bottom: 0;">
+                        Options selected: {{sizes.selectedOptions.selected.length}}
+                    </p>
+                </div>
+            </ng-container>
+            
+            <ng-container *ngIf="tab.name === 'dimension'">
+                <ng-template mat-tab-label>
+                    <span>{{ 'Dimensions' | translate }}</span>
+                </ng-template>
+                <div class="item-variation-content">
+                    <h5 style="font-size: 14px; border-bottom: 1px solid #eaeaea; padding-bottom: 10px;">Select Dimension variations</h5> 
+                    <div class="form-group">
+                        <label class="control-label pt25 m-b-resp" style="margin-bottom: 14px;">{{ 'Size' | translate }}</label>
+                        <div class="flex flex-column">
+                            <div class="form-label-section">
+                                <div class="form-label">
+                                    {{ 'Length' | translate }}
+                                    <span class="pull-right help-block animated fadeInLeft">
+                                        <!-- <span *ngIf="itemLengthVar.errors.required">
+                                            *{{ 'Required' | translate }}
+                                        </span> -->
+                                    </span>
+                                </div>
+                                <input class="form-control" id="itemLengthId" type="number" placeholder="{{ 'Length' | translate }} ({{ 'Required' | translate }})" 
+                                    onkeydown="return event.keyCode == 69 || event.keyCode == 189 ? false : true" min="0"
+                                    required name="itemLength"  />
+
+                            </div>
+                            <div class="form-label-section">
+                                <div class="form-label">
+                                    {{ 'Width' | translate }}
+                                    <span class="pull-right help-block animated fadeInLeft">
+                                        <!-- <span *ngIf="itemWidthVar.errors.required">
+                                            *{{ 'Required' | translate }}
+                                        </span> -->
+                                    </span>
+                                </div>
+                                <input class="form-control" id="itemWidthId" type="number" placeholder="{{ 'Width' | translate }} ({{ 'Required' | translate }})" 
+                                    onkeydown="return event.keyCode == 69 || event.keyCode == 189 ? false : true" min="0"
+                                    required name="itemWidth"  />
+                            </div>
+                            <div class="form-label-section">
+                                <div class="form-label">
+                                    {{ 'Height' | translate }}
+                                </div>
+                                <input class="form-control" id="itemHeightId" type="number" placeholder="{{ 'Height' | translate }} ({{ 'Required' | translate }})" 
+                                    onkeydown="return event.keyCode == 69 || event.keyCode == 189 ? false : true" min="0"
+                                    required name="itemHeight" />
+
+                            </div>
+                            <div class="form-label-section unit" >
+                                <div class="form-label">
+                                    {{ 'Dimension Unit' | translate }}
+                                    
+                                </div>
+                                <select id="itemProductDimensionUOMId" name="itemProductDimensionUOM" class="form-control" >
+                                    <option value="IN">IN</option>
+                                    <!-- <option value="FT">FT</option>
+                                    <option value="CM">CM</option>
+                                    <option value="M">M</option> -->
+                                </select>  
+                            </div>
+                        </div>
+                    </div>  
+                </div>
+            </ng-container>
+            
+            <ng-container *ngIf="tab.name !== 'size' && tab.name !== 'color' && tab.name !== 'dimension' ">
+                <ng-template mat-tab-label>
+                    <span>{{ tab.name | translate }}</span>
+                </ng-template>
+            
+                <div class="item-variation-content">
+                    <h5 style="font-size: 14px; border-bottom: 1px solid #eaeaea; padding-bottom: 10px;">Select {{tab.name}} Variations</h5> 
+                    <mat-selection-list #properties>
+                        <mat-list-option *ngFor="let property of tab.properties">
+                            {{property.propertyName}}
+                        </mat-list-option>
+                    </mat-selection-list>
+                    <p style="position: absolute; bottom: 0;">
+                        Options selected: {{properties.selectedOptions.selected.length}}
+                    </p>
+                </div>
+            </ng-container>
+            
+        </mat-tab>
+        <mat-tab>
+            <ng-template mat-tab-label>
+                <i class="fa fa-plus-circle m-r-xs fs-16"></i>
+                <span>{{ 'Add Tab' | translate }}</span>
+            </ng-template>
+            <div class="item-variation-content">
+                <div class="m-b-md">
+                    <h5 style="font-size: 14px; border-bottom: 1px solid #eaeaea; padding-bottom: 10px;">Create a new Tab</h5> 
+                    <!-- <input [(ngModel)]="newTab.name" class="form-control" id="itemNameId" type="text" placeholder="{{ 'Tab Name' | translate }} ({{ 'Required' | translate }})" required maxlength="70"/> -->
+                    <ng-select [items]="tabsList"
+                                bindLabel="name"
+                                
+                                placeholder="{{ 'Select Attribute' | translate }}"
+                                [(ngModel)]="newTab.name"
+                                (change)="check(newTab)"
+                                name="selectAttribute"
+                                required
+                                loadingText="Loading..."
+                                class="inbound-line">
+                    </ng-select>
+                </div>
+                <div>
+                    <h5 style="font-size: 14px; border-bottom: 1px solid #eaeaea; padding-bottom: 10px;">Add Tab Properties</h5>
+                    <!-- <div *ngFor="let properties of newTab.properties; let i = index;"  class="flex-va-center m-b-sm"> -->
+                        <!-- <input [(ngModel)]="properties.propertyName" class="form-control " type="text" [ngStyle]="{'margin-right.px': i < 2 ? '18' : '0'}" placeholder="{{ 'Property Name' | translate }} {{ i < 2 ? '('+ ('Required' | translate) +')' : ''}}" required maxlength="70"/> -->
+                    <div>
+                        <ng-select [items]="getPropertiesForTab()"
+                                    bindLabel="name"
+                                    bindValue="name"
+                                    placeholder="{{ 'Select Attribute' | translate }}"
+                                    [(ngModel)]="newTab.property"
+                                    name="selectAttribute"
+                                    required
+                                    loadingText="Loading..."
+                                    class="inbound-line">
+                        </ng-select>
+                        <i *ngIf="i > 1" (click)="newTab.properties.splice(i, 1)" class="opaque fa fa-close m-l-xs fs-16"></i>
+                    </div>
+                    <div class="ibox-tools m-t-sm" style="text-align: left;">
+                        <a style="margin-left: 0;" (click)="onAddTabProperty()"><span class="sm-strong"><i class="fa fa-plus m-r-xs"></i> Add property</span></a>
+                    </div>
+                </div>
+                <div style="text-align: center; margin-top: 40px;">
+                    <button (click)="createTab()" mat-raised-button color="primary">
+                        Create Tab
+                    </button>
+                </div>
+            </div>
+            
+        </mat-tab>
+    </mat-tab-group>
+</div>
+<mat-dialog-actions>
+    <button mat-button class="btn btn-success-xs" [mat-dialog-close]="itemLabelPrintDialog" cdkFocusInitial>{{ 'Create Item Variations' | translate }}</button>
+    <button mat-button class="btn btn-remove-xs" (click)="onCancelClick()">{{ 'Cancel' | translate }}</button>
+</mat-dialog-actions>

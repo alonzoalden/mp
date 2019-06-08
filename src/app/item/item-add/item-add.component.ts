@@ -284,9 +284,7 @@ export class ItemAddComponent {
     }
 
     openDialogItemVariation() {
-        const dialogRef = this.printDialog.open(ItemVariationComponentDialog, {
-          
-        });
+        const dialogRef = this.printDialog.open(ItemVariationComponentDialog, {});
     
         dialogRef.afterClosed().subscribe(result => {
             if (result) {
@@ -298,20 +296,87 @@ export class ItemAddComponent {
 }
 
 @Component({
-    selector: 'item-variation.component-dialog',
-    templateUrl: 'item-variation.component-dialog.html',
+    selector: 'item-add-variation.component-dialog',
+    templateUrl: 'item-add-variation.component-dialog.html',
 })
 export class ItemVariationComponentDialog implements OnInit {
-    
-        constructor(
-            public dialogRef: MatDialogRef<ItemVariationComponentDialog>) {
-            
-            }
-        ngOnInit() {
-            
+
+    tabsList: any[] = [
+        {
+            name: 'Color',
+            properties: ['White', 'Orange', 'Black'],
+        },
+        {
+            name: 'Size',
+            properties: ['Small', 'Medium', 'Large'],
         }
-    
-        onCancelClick(): void {
-            this.dialogRef.close();
+    ];
+
+    newTab: any = {
+        // name: '', 
+        // properties: [],
+    };
+
+    tabName: any[] = [];
+    tabProperties: any[] = [];
+
+    tempPropertyName: any = '';
+    showInput = false;
+
+
+    constructor(
+        public dialogRef: MatDialogRef<ItemVariationComponentDialog>) {
+        
+        }
+    ngOnInit() {
+        this.addTabProperty(null);
+        this.addTabProperty(null);
+        // this.newTab = this.tabsList[1];
+    }
+
+
+    onAddTabProperty(tabName): void {
+        this.addTabProperty(tabName);
+    }
+    addTabProperty(tabName: any) {
+        if (tabName) {
+            const tab = this.tabsList.find(x => x.name === tabName)
+            tab.properties.push(this.tempPropertyName);
+            this.tempPropertyName = '';
+            this.showInput = false;
+        } 
+        else {
+            this.newTab.properties.push({
+                propertyName: '',
+            });
         }
     }
+    createTab() {
+        console.log(this.newTab);
+        this.tabsList.push(this.newTab);
+        this.clearNewTabFields();
+        
+    }
+    clearNewTabFields() {
+        this.newTab = {
+            name: '',
+            properties: [],
+        };
+        this.addTabProperty(null);
+        this.addTabProperty(null);
+    }
+    onCancelClick(): void {
+        this.dialogRef.close();
+    }
+    check(a) {
+        console.log(a)
+    }
+    getPropertiesForTab() {
+        if (this.newTab.name) {
+            const tab = this.tabsList.find(x => x.name === this.newTab.name.name.properties)
+
+            console.log(tab, this.newTab);
+        }
+    }
+
+}

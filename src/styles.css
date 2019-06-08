@@ -2088,17 +2088,23 @@ th.mat-header-cell {
     border-radius: 4px 0 0 4px;
     border-color: #e7eaec;
     transition: background-color 40ms ease-in-out, color 40ms ease-in-out;
-
+}
+.mat-tab-label-active .mat-tab-label-content {
+    margin-left: -2px !important;
 }
 .mat-tab-group.mat-primary .mat-tab-label:not(.mat-tab-disabled):focus {
     background-color: #fff !important;
     color: #555;
     border: 1px solid #e7eaec;
     border-right: 0;
+    
     border-radius: 4px 0 0 4px;
     transition: background-color 40ms ease-out, color 40ms ease-out;
     
     border-color: #e7eaec;
+}
+.mat-tab-group.mat-primary .mat-tab-label:not(.mat-tab-disabled):focus .mat-tab-label-content {
+    margin-left: -2px !important;
 }
 /* .mat-ripple-element {
     transition-duration: 0 !important;
