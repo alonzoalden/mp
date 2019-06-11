@@ -18,11 +18,35 @@
 </div>
 <div class="wrapper wrapper-content animated fadeIn">
     <div class="row">
-        <div class="col-lg-12" style="margin-bottom: 30px; text-align: right;">
+        
+        <div class="col-lg-12" style="margin-bottom: 30px;">
             <!-- <div class="ibox-content" >
                 <strong>Select Variation</strong>
             </div> -->
-            <button (click)="openDialogItemVariation()" mat-button type="button" class="btn button-success-sm1" style="margin-left: 10px !important; width: 280px !important;"><i class="fa fa-check m-r-xs"></i>{{ 'Variation' | translate }}</button>
+
+            <div class="ibox-content" >
+                <h4>Item Variations</h4>
+                <div class="row m-t-md">
+                    <div class="col-lg-4" *ngFor="let attributes of tabsList"  style="text-align: left;">
+                        <h5> {{ attributes.name }} </h5>
+                        <ng-select  
+                                    [items]="attributes.selectedProperties"
+                                    bindLabel="name"
+                                    placeholder="{{ 'Select Attribute' | translate }}"
+                                    name="selectAttribute"
+                                    required
+                                    loadingText="Loading..."
+                                    class="inbound-line"
+                                    [(ngModel)]="attributes.selection"
+                                    (change)="updateItemData(attributes.selection)"
+                                    >
+                        </ng-select>
+                    </div>
+                </div>
+                <div class="row m-t-md">
+                    <button (click)="openDialogItemVariation()" type="button" mat-raised-button style="margin-left: 10px !important; width: 280px !important;"><i class="fa fa-plus m-r-xs"></i>{{ 'Variation' | translate }}</button>
+                </div>
+            </div> 
         </div>
         <div class="col-lg-12">
             <!-- <div *ngIf="loading" style="text-align:center">

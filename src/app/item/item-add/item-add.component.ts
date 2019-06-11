@@ -1,9 +1,10 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
 import { Router } from '@angular/router';
 import { ItemInsert, ItemTierPriceInsert, ItemRelatedProductInsert, ItemUpSellInsert, ItemCrossSellInsert, ItemAttachmentInsert, ItemVideoInsert } from '../../shared/class/item';
 import { VendorBrand } from '../../shared/class/vendor-brand';
 import { MatDialog, MatDialogRef } from '@angular/material';
 import { ItemService } from '../item.service';
+import { NotificationComponent } from '../../shared/tool/notification/notification.component';
 
 @Component({
   selector: 'o-item-add',
@@ -20,12 +21,16 @@ export class ItemAddComponent {
 
     vendorBrandList: VendorBrand[]; 
 
+    tabsList: any[] = [];
+
+
     private dataIsValid: { [key: string]: boolean } = {};
+    
 
     constructor(private router: Router,
                 private itemService: ItemService,
                 public printDialog: MatDialog) {
-        this.item = this.itemService.defaultCurrentItemInsert();
+        this.item = this.itemService.fakeCurrentItemInsert();
 
         this.itemService.getVendorBrands().subscribe(
             (vendorBrands: VendorBrand[]) => {
@@ -288,9 +293,16 @@ export class ItemAddComponent {
     
         dialogRef.afterClosed().subscribe(result => {
             if (result) {
-                
+                this.tabsList = this.tabsList.concat(result);
             }
         });
+    }
+    check(a) {
+        console.log(a);
+        console.log(this.tabsList);
+    }
+    updateItemData(a) {
+        this.item.VendorSKU = a + this.item.VendorSKU;
     }
 
 }
@@ -301,7 +313,7 @@ export class ItemAddComponent {
 })
 export class ItemVariationComponentDialog implements OnInit {
 
-    tabsList: any[] = [
+    tabsListData: any[] = [
         {
             name: 'Color',
             properties: ['White', 'Orange', 'Black'],
@@ -312,10 +324,15 @@ export class ItemVariationComponentDialog implements OnInit {
         }
     ];
 
-    newTab: any = {
-        // name: '', 
-        // properties: [],
-    };
+    
+    tabsList: any[] = [];
+
+    newTab: any;
+    selectedProperties: any = {};
+    selectedAttributes: any;
+
+    newTabVariations: any = [];
+
 
     tabName: any[] = [];
     tabProperties: any[] = [];
@@ -323,15 +340,18 @@ export class ItemVariationComponentDialog implements OnInit {
     tempPropertyName: any = '';
     showInput = false;
 
+    tabsListTest: any;
+
+    @ViewChild(NotificationComponent)
+    private  notificationComponent: NotificationComponent;
+
+
 
     constructor(
         public dialogRef: MatDialogRef<ItemVariationComponentDialog>) {
         
         }
     ngOnInit() {
-        this.addTabProperty(null);
-        this.addTabProperty(null);
-        // this.newTab = this.tabsList[1];
     }
 
 
@@ -339,44 +359,51 @@ export class ItemVariationComponentDialog implements OnInit {
         this.addTabProperty(tabName);
     }
     addTabProperty(tabName: any) {
-        if (tabName) {
-            const tab = this.tabsList.find(x => x.name === tabName)
-            tab.properties.push(this.tempPropertyName);
-            this.tempPropertyName = '';
-            this.showInput = false;
-        } 
-        else {
-            this.newTab.properties.push({
-                propertyName: '',
-            });
-        }
+        // if (tabName) {
+        //     const tab = this.tabsList.find(x => x.name === tabName)
+        //     console.log(tab);
+        //     tab.properties.push(this.tempPropertyName);
+        //     this.tempPropertyName = '';
+        //     this.showInput = false;
+        // } 
+        // else {
+            
+            this.newTabVariations.push({});
+            
+        //}
     }
     createTab() {
-        console.log(this.newTab);
-        this.tabsList.push(this.newTab);
-        this.clearNewTabFields();
         
+        const tabExists = this.tabsList.find(x => x.name === this.newTab.name);
+        if (tabExists) {
+            console.log('tab already exists)')
+            return;
+        }
+        const tab = this.tabsListData.find(x => x.name === this.newTab.name);
+        this.tabsList.push(tab);
+        this.clearNewTabFields();
     }
-    clearNewTabFields() {
-        this.newTab = {
-            name: '',
-            properties: [],
-        };
-        this.addTabProperty(null);
-        this.addTabProperty(null);
+
+    clearNewTabFields() {    
+        this.newTab = {};
     }
     onCancelClick(): void {
         this.dialogRef.close();
     }
+    addItemVariations() {
+
+        // this.selectedAttributes = Object.keys(this.selectedProperties);
+        // console.log(this.selectedAttributes);
+        // console.log(this.tabsList);
+        // setTimeout(()=> {
+        //     console.log(this.selectedAttributes)
+        // }, 1000)
+        // this.tabsListTest = this.tabsList;
+    }
     check(a) {
-        console.log(a)
+        console.log(a);
     }
-    getPropertiesForTab() {
-        if (this.newTab.name) {
-            const tab = this.tabsList.find(x => x.name === this.newTab.name.name.properties)
-
-            console.log(tab, this.newTab);
-        }
+    onNgModelChange(e) {
+        //console.log(e);
     }
-
 }
