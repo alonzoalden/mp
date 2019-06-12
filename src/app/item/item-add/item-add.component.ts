@@ -1,10 +1,9 @@
 import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
 import { Router } from '@angular/router';
-import { ItemInsert, ItemTierPriceInsert, ItemRelatedProductInsert, ItemUpSellInsert, ItemCrossSellInsert, ItemAttachmentInsert, ItemVideoInsert } from '../../shared/class/item';
+import { FakeItemInsert, ItemInsert, ItemTierPriceInsert, ItemRelatedProductInsert, ItemUpSellInsert, ItemCrossSellInsert, ItemAttachmentInsert, ItemVideoInsert } from '../../shared/class/item';
 import { VendorBrand } from '../../shared/class/vendor-brand';
 import { MatDialog, MatDialogRef } from '@angular/material';
 import { ItemService } from '../item.service';
-import { NotificationComponent } from '../../shared/tool/notification/notification.component';
 
 @Component({
   selector: 'o-item-add',
@@ -14,7 +13,7 @@ import { NotificationComponent } from '../../shared/tool/notification/notificati
 
 export class ItemAddComponent {
     errorMessage: string;
-    _item: ItemInsert;
+    _item: FakeItemInsert;
     pendingAdd: boolean;
 
     loading: boolean;
@@ -22,10 +21,9 @@ export class ItemAddComponent {
     vendorBrandList: VendorBrand[]; 
 
     tabsList: any[] = [];
-
+    variationCount: number;
 
     private dataIsValid: { [key: string]: boolean } = {};
-    
 
     constructor(private router: Router,
                 private itemService: ItemService,
@@ -289,20 +287,31 @@ export class ItemAddComponent {
     }
 
     openDialogItemVariation() {
+        
         const dialogRef = this.printDialog.open(ItemVariationComponentDialog, {});
     
         dialogRef.afterClosed().subscribe(result => {
             if (result) {
                 this.tabsList = this.tabsList.concat(result);
+                this.variationCount = this.tabsList.reduce((accum, item) => {
+                    if (item.selectedProperties) {
+                        return accum += item.selectedProperties.length;
+                    }
+                }, 0)
+                console.log(this.variationCount);
+
+
             }
         });
     }
-    check(a) {
-        console.log(a);
-        console.log(this.tabsList);
-    }
     updateItemData(a) {
-        this.item.VendorSKU = a + this.item.VendorSKU;
+        //this.itemService.sendNotification({ type: 'error', title: 'Invalid Entry', content: 'Please enter all required fields' });
+        if (this.item.VendorSKU === "123RANDOM") {
+            this.item.VendorSKU = a + this.item.VendorSKU;
+        }
+        else {
+            this.item.VendorSKU = a + "123RANDOM";
+        }
     }
 
 }
@@ -317,6 +326,7 @@ export class ItemVariationComponentDialog implements OnInit {
         {
             name: 'Color',
             properties: ['White', 'Orange', 'Black'],
+            
         },
         {
             name: 'Size',
@@ -341,12 +351,7 @@ export class ItemVariationComponentDialog implements OnInit {
     showInput = false;
 
     tabsListTest: any;
-
-    @ViewChild(NotificationComponent)
-    private  notificationComponent: NotificationComponent;
-
-
-
+    addItemVariationInvalid: any = true;
     constructor(
         public dialogRef: MatDialogRef<ItemVariationComponentDialog>) {
         
@@ -373,37 +378,43 @@ export class ItemVariationComponentDialog implements OnInit {
         //}
     }
     createTab() {
-        
-        const tabExists = this.tabsList.find(x => x.name === this.newTab.name);
-        if (tabExists) {
-            console.log('tab already exists)')
-            return;
-        }
         const tab = this.tabsListData.find(x => x.name === this.newTab.name);
         this.tabsList.push(tab);
+
+        const index = this.tabsListData.map((item) => item.name).indexOf(tab.name)
+        const updatedListData = [...this.tabsListData];
+        updatedListData.splice(index, 1)
+        this.tabsListData = updatedListData;
         this.clearNewTabFields();
+        this.validateItemVariation();
     }
 
     clearNewTabFields() {    
-        this.newTab = {};
+        this.newTab = null;
     }
+    
     onCancelClick(): void {
         this.dialogRef.close();
     }
-    addItemVariations() {
 
-        // this.selectedAttributes = Object.keys(this.selectedProperties);
-        // console.log(this.selectedAttributes);
-        // console.log(this.tabsList);
-        // setTimeout(()=> {
-        //     console.log(this.selectedAttributes)
-        // }, 1000)
-        // this.tabsListTest = this.tabsList;
+
+    onAddItemVariationClick() {
+        this.dialogRef.close(this.tabsList);
     }
-    check(a) {
-        console.log(a);
-    }
+
     onNgModelChange(e) {
         //console.log(e);
+        this.validateItemVariation();
+    }
+
+    validateItemVariation() {
+        this.addItemVariationInvalid = !!this.tabsList.find((item) => {
+            if (item && item.selectedProperties) {
+                if (item.selectedProperties.length > 1) {
+                    return false;
+                }
+            }
+            return true;
+        })
     }
 }

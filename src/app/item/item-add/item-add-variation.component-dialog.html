@@ -26,12 +26,12 @@
         </mat-tab>
         <mat-tab>
             <ng-template mat-tab-label>
-                <i class="fa fa-plus-circle m-r-xs fs-16"></i>
-                <span>{{ 'Add Tab' | translate }}</span>
+                <i class="fa fa-plus m-r-sm"></i>
+                <span>{{ 'Add Attribute' | translate }}</span>
             </ng-template>
             <div class="item-variation-content">
                 <div class="m-b-md">
-                    <h5 style="font-size: 14px; border-bottom: 1px solid #eaeaea; padding-bottom: 10px;">Create a new Tab</h5> 
+                    <h5 style="font-size: 14px;padding-bottom: 10px;">Select Item Attribute</h5> 
                     <ng-select [items]="tabsListData"
                                 bindLabel="name"
                                 placeholder="{{ 'Select Attribute' | translate }}"
@@ -39,13 +39,14 @@
                                 name="selectAttribute"
                                 required
                                 loadingText="Loading..."
-                                class="inbound-line">
+                                class="inbound-line"
+                                style="width: 100%;">
                     </ng-select>
                 </div>
 
                 <div style="text-align: center; margin-top: 40px;">
                     <button (click)="createTab()" mat-raised-button color="primary">
-                        Create Tab
+                        Add
                     </button>
                 </div>
             </div>
@@ -54,6 +55,6 @@
     </mat-tab-group>
 </div>
 <mat-dialog-actions>
-    <button [mat-dialog-close]="tabsList" mat-button class="btn btn-success-xs" cdkFocusInitial>{{ 'Create Item Variations' | translate }}</button>
-    <button mat-button class="btn btn-remove-xs" (click)="onCancelClick()">{{ 'Cancel' | translate }}</button>
+    <button [disabled]="addItemVariationInvalid" (click)="onAddItemVariationClick()" mat-button class="btn btn-success-xs" cdkFocusInitial>{{ 'Create Item Variations' | translate }}</button>
+    <button (click)="onCancelClick()" mat-button class="btn btn-remove-xs">{{ 'Cancel' | translate }}</button>
 </mat-dialog-actions>

@@ -19,34 +19,43 @@
 <div class="wrapper wrapper-content animated fadeIn">
     <div class="row">
         
-        <div class="col-lg-12" style="margin-bottom: 30px;">
+        <!-- <div class="col-lg-12" style="margin-bottom: 30px;"> -->
             <!-- <div class="ibox-content" >
                 <strong>Select Variation</strong>
             </div> -->
-
-            <div class="ibox-content" >
-                <h4>Item Variations</h4>
-                <div class="row m-t-md">
-                    <div class="col-lg-4" *ngFor="let attributes of tabsList"  style="text-align: left;">
-                        <h5> {{ attributes.name }} </h5>
-                        <ng-select  
-                                    [items]="attributes.selectedProperties"
-                                    bindLabel="name"
-                                    placeholder="{{ 'Select Attribute' | translate }}"
-                                    name="selectAttribute"
-                                    required
-                                    loadingText="Loading..."
-                                    class="inbound-line"
-                                    [(ngModel)]="attributes.selection"
-                                    (change)="updateItemData(attributes.selection)"
-                                    >
-                        </ng-select>
+            <div class="col-lg-12" style="margin-bottom: 30px;"  *ngIf="tabsList.length > 0">
+                <div class="ibox-title">
+                    <h5>Item Variations: {{ variationCount }} total</h5>
+                </div>
+                
+                <div class="ibox-content">
+                    <!-- <div class="flex-va-center">
+                        <h4>Item Variations</h4>
+                        <button (click)="openDialogItemVariation()" type="button" mat-raised-button style="margin-left: 10px !important;"><i class="fa fa-plus m-r-xs"></i>{{ 'Variation' | translate }}</button>
+                    </div> -->
+                    <div class="row ">
+                        <div class="col-lg-3" *ngFor="let attributes of tabsList"  style="text-align: left;">
+                            <h4> {{ attributes.name }} </h4>
+                            <ng-select  
+                                        [items]="attributes.selectedProperties"
+                                        bindLabel="name"
+                                        placeholder="{{ 'Select Attribute' | translate }}"
+                                        name="selectAttribute"
+                                        required
+                                        loadingText="Loading..."
+                                        class="inbound-line"
+                                        [(ngModel)]="attributes.selection"
+                                        (change)="updateItemData(attributes.selection)"
+                                        style="width: 100%;"
+                                        >
+                            </ng-select>
+                        </div>
                     </div>
-                </div>
-                <div class="row m-t-md">
-                    <button (click)="openDialogItemVariation()" type="button" mat-raised-button style="margin-left: 10px !important; width: 280px !important;"><i class="fa fa-plus m-r-xs"></i>{{ 'Variation' | translate }}</button>
-                </div>
-            </div> 
+                    <!-- <div class="row m-t-md">
+                        <button (click)="openDialogItemVariation()" type="button" mat-raised-button style="margin-left: 10px !important;"><i class="fa fa-plus m-r-xs"></i>{{ 'Variation' | translate }}</button>
+                    </div> -->
+                <!-- </div>  -->
+            </div>
         </div>
         <div class="col-lg-12">
             <!-- <div *ngIf="loading" style="text-align:center">
@@ -61,7 +70,7 @@
             </div>
             <div *ngIf="!loading">
                 <div class="tabs-container">
-                    <ul class="nav nav-tabs">
+                    <ul class="nav nav-tabs flex">
                         <li routerLinkActive="active">
                             <a [routerLink]="['description']">
                                 {{ 'Product Description' | translate }}
@@ -116,6 +125,14 @@
                             <a [routerLink]="['part']" routerLinkActive="active">
                                 {{ 'Part' | translate }} 
                             </a>
+                        </li>
+                        <li style="margin-left: auto;">
+                            <!-- <div class="ibox-tools"> -->
+                                <a class="hov-underline" (click)="openDialogItemVariation()" style="color: #555 !important;">
+                                        <i class="fa fa-plus m-r-xs"></i> {{ 'Variation' | translate }}
+                                    <!-- <button (click)="openDialogItemVariation()" type="button" mat-raised-button style="margin-left: 10px !important;"><i class="fa fa-plus m-r-xs"></i>{{ 'Variation' | translate }}</button> -->
+                                </a>
+                            <!-- </div> -->
                         </li>
                     </ul>
                     <router-outlet></router-outlet>

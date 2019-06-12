@@ -77,14 +77,7 @@ export class ItemService {
     }
     
     fakeCurrentItemInsert() {
-        if(this.duplicateItemInsert) {  
-            const ItemInsert = this.duplicateItemInsert;          
-            this.duplicateItemInsert = null;
-            return ItemInsert;            
-        }
-        else {            
-            return new ItemInsert('Black Fridge', '123RANDOM', 'Toolots', 'simple', 1, 2, 'dollars', 2, 2, 2, 2, new Date(), new Date(), 1, 2, 3, 'IN', 1, 'LB', 2, 2, 2, 'IN', 2, 'LB', true, 1, 'asdf', 'asdf', 'asdf', "CN", "", 'asdf', true, 'fa', "CatalogAndSearch", 'asdf', 'asdf', 'asdf', 'asdf', 'asdf', "NotSubmitted", 'asdf', 'asdf', true, false, [], [], [], [], [], [], [], [], [], []);
-        }
+        return new ItemInsert('Black Fridge', '123RANDOM', 'Toolots', 'simple', 1, 2, 'dollars', 2, 2, 2, 2, new Date(), new Date(), 1, 2, 3, 'IN', 1, 'LB', 2, 2, 2, 'IN', 2, 'LB', true, 1, 'asdf', 'asdf', 'asdf', "CN", "", 'asdf', true, 'fa', "CatalogAndSearch", 'asdf', 'asdf', 'asdf', 'asdf', 'asdf', "NotSubmitted", 'asdf', 'asdf', true, false, [], [], [], [], [], [], [], [], [], []);
     }
 
     defaultCurrentItemInsert() {

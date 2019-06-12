@@ -97,6 +97,77 @@ export class Item {
     ) {}
 }
 
+
+export class FakeItemInsert {
+    constructor(
+        public Name: string,
+        public VendorSKU: string,
+        public FulfilledBy: string,
+        public ItemType: string,
+        public MerchantQuantity: number,
+
+        public ShipWithinDays: number,
+        public PriceType: string,
+
+        public Price: number,
+        public FOBPrice: number,
+        public DropshipPrice: number,
+        public SpecialPrice: number,
+        public SpecialFrom: Date,
+        public SpecialTo: Date,
+        public Width: number,
+        public Height: number,
+        public Length: number,
+        public ProductDimensionUOM: string,
+        public Weight: number,
+        public ProductWeightUOM: string,
+        public PackageWidth: number,
+        public PackageHeight: number,
+        public PackageLength: number,
+        public PackageDimensionUOM: string,
+        public PackageWeight: number,
+        public PackageWeightUOM: string,
+
+        public IsFreeShipping: boolean,
+        public ShippingFee: number,
+        public MetaTitle: string,
+        public MetaKeywords: string,
+        public MetaDescription: string,
+
+        public Origin: string,
+        public Warranty: string,
+        public MerchantWarranty: string,
+        public AddProtectionPlan: boolean,
+        public URLKey: string,
+        public Visibility: string,
+
+        public Description: string,
+        public ShortDescription: string,
+        public TechnicalDetail: string,
+        public AdditionalInformation: string,
+
+        public VendorBrandID: string,
+
+        public Approval: string,
+        public PartImageRaw: string,
+        public PartImageFilePath: string,
+        public PartIsNewImage: boolean,
+
+        public ExcludeGoogleShopping: boolean,
+
+        public ItemCategoryAssignments: Array<ItemCategoryAssignment>,
+        public ItemOptions: Array<ItemOptionInsert>,
+        public ItemTierPrices: Array<ItemTierPriceInsert>,
+        public ItemRelatedProducts: Array<ItemRelatedProductInsert>,
+        public ItemUpSells: Array<ItemUpSellInsert>,
+        public ItemCrossSells: Array<ItemCrossSellInsert>,
+        public ItemAttachments: Array<ItemAttachmentInsert>,
+        public ItemVideos: Array<ItemVideoInsert>,
+        public ItemImages: Array<ItemImageInsert>,
+        public ItemParts: Array<ItemPartInsert>
+    ) {}
+}
+
 export class ItemInsert {
     constructor(
         public Name: string,
