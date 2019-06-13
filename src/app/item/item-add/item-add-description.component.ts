@@ -1,7 +1,7 @@
 import { Component, OnInit, AfterViewInit } from '@angular/core';
 import { Router } from '@angular/router';
 
-import { ItemInsert } from '../../shared/class/item';
+import { ItemInsert, FakeItemInsert } from '../../shared/class/item';
 import { VendorBrand } from '../../shared/class/vendor-brand';
 
 import { ItemService } from '../item.service';
@@ -18,14 +18,23 @@ export class ItemAddDescriptionComponent implements OnInit, AfterViewInit {
     errorMessage: string;
     isPM: boolean;
     
-    item: ItemInsert;
+    item: FakeItemInsert;
     vendorBrandList: VendorBrand[]; 
 
     constructor(private itemService: ItemService, private appService: AppService) { }
 
     ngOnInit(): void {
-        this.item = this.itemService.currentItemInsert;
-
+        //this.item = this.itemService.currentItemInsertFake;
+        
+        // this.itemService.getFakeItem().subscribe(
+        //     (data: FakeItemInsert) => {
+        //         this.item = data;
+        //     }); 
+        this.itemService.test.subscribe(
+            (data: FakeItemInsert) => {
+                        this.item = data;
+                    }); 
+        
         this.itemService.getVendorBrands().subscribe(
             (vendorBrands: VendorBrand[]) => {
                 this.vendorBrandList = vendorBrands;

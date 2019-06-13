@@ -1,10 +1,10 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpErrorResponse, HttpHeaders } from '@angular/common/http';
 
-import { Observable, Subject, of, throwError } from 'rxjs';
+import { Observable, Subject, of, throwError, BehaviorSubject } from 'rxjs';
 import { catchError, tap } from 'rxjs/operators';
 
-import { Item, ItemInsert, ItemOption, ItemOptionInsert, ItemSelection, ItemSelectionInsert, ItemTierPrice, ItemTierPriceInsert
+import { FakeItemInsert, Item, ItemInsert, ItemOption, ItemOptionInsert, ItemSelection, ItemSelectionInsert, ItemTierPrice, ItemTierPriceInsert
     , ItemCategoryAssignment, ItemRelatedProduct, ItemRelatedProductInsert, ItemUpSell, ItemUpSellInsert, ItemCrossSell, ItemCrossSellInsert
     , ItemAttachment, ItemAttachmentInsert, ItemVideo, ItemVideoInsert, ItemImage, ItemImageInsert, ItemPrintLabel, ItemBatch, ItemPart, ItemPartInsert } from '../shared/class/item';
 //import { ItemImage } from '../shared/class/item-image';
@@ -39,6 +39,10 @@ export class ItemService {
     currentItem: Item;
     currentItemInsert: ItemInsert;
     currentItemEdit: Item;
+
+    public test: BehaviorSubject<any>;
+
+    currentItemInsertFake: FakeItemInsert;
 
     duplicateItemInsert: ItemInsert;
 
@@ -75,9 +79,11 @@ export class ItemService {
     resetItems() {
         this.items = null;
     }
-    
-    fakeCurrentItemInsert() {
-        return new ItemInsert('Black Fridge', '123RANDOM', 'Toolots', 'simple', 1, 2, 'dollars', 2, 2, 2, 2, new Date(), new Date(), 1, 2, 3, 'IN', 1, 'LB', 2, 2, 2, 'IN', 2, 'LB', true, 1, 'asdf', 'asdf', 'asdf', "CN", "", 'asdf', true, 'fa', "CatalogAndSearch", 'asdf', 'asdf', 'asdf', 'asdf', 'asdf', "NotSubmitted", 'asdf', 'asdf', true, false, [], [], [], [], [], [], [], [], [], []);
+    setFakeItem(item: any) {
+        this.test = new BehaviorSubject(item);
+    }
+    fakeCurrentItemInsert(size, color) {
+        return new FakeItemInsert(size, color, '','', 'Toolots', 'simple', 1, 2, 'dollars', 2, 2, 2, 2, new Date(), new Date(), 1, 2, 3, 'IN', 1, 'LB', 2, 2, 2, 'IN', 2, 'LB', true, 1, 'asdf', 'asdf', 'asdf', "CN", "", 'asdf', true, 'fa', "CatalogAndSearch", 'asdf', 'asdf', 'asdf', 'asdf', 'asdf', "NotSubmitted", 'asdf', 'asdf', true, false, [], [], [], [], [], [], [], [], [], []);
     }
 
     defaultCurrentItemInsert() {

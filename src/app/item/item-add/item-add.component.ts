@@ -1,8 +1,8 @@
-import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
+import { Component, OnInit, ViewChild, ElementRef, Inject } from '@angular/core';
 import { Router } from '@angular/router';
 import { FakeItemInsert, ItemInsert, ItemTierPriceInsert, ItemRelatedProductInsert, ItemUpSellInsert, ItemCrossSellInsert, ItemAttachmentInsert, ItemVideoInsert } from '../../shared/class/item';
 import { VendorBrand } from '../../shared/class/vendor-brand';
-import { MatDialog, MatDialogRef } from '@angular/material';
+import { MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material';
 import { ItemService } from '../item.service';
 
 @Component({
@@ -21,14 +21,26 @@ export class ItemAddComponent {
     vendorBrandList: VendorBrand[]; 
 
     tabsList: any[] = [];
+    updatedListData: any[];
     variationCount: number;
+
+    viewVariationDisabled: boolean = true;
+
+    itemVariations = [];
+
+
+
+
 
     private dataIsValid: { [key: string]: boolean } = {};
 
     constructor(private router: Router,
                 private itemService: ItemService,
                 public printDialog: MatDialog) {
-        this.item = this.itemService.fakeCurrentItemInsert();
+        this.item = this.itemService.fakeCurrentItemInsert('','');
+        this.itemService.currentItemInsertFake = this.item;
+        
+        this.itemService.setFakeItem(this.item);
 
         this.itemService.getVendorBrands().subscribe(
             (vendorBrands: VendorBrand[]) => {
@@ -40,18 +52,18 @@ export class ItemAddComponent {
         ); 
     }
 
-    get item(): ItemInsert {
+    get item(): FakeItemInsert {
         return this._item;
     }
 
-    set item(value: ItemInsert) {
+    set item(value: FakeItemInsert) {
         this._item = value;
         this.itemService.currentItemInsert = value;
     }
 
     reset() {
         this.dataIsValid = null;
-        this.item = this.itemService.defaultCurrentItemInsert();
+        this.item = this.itemService.fakeCurrentItemInsert('','');
     }
 
     onAddItem() {
@@ -287,33 +299,145 @@ export class ItemAddComponent {
     }
 
     openDialogItemVariation() {
-        
-        const dialogRef = this.printDialog.open(ItemVariationComponentDialog, {});
+        const tabData = {
+            itemVariationData: this.tabsList,
+            updatedListData: this.updatedListData,
+        };
+
+        const dialogRef = this.printDialog.open(ItemVariationComponentDialog, {
+            //width: '750px',
+            data: tabData
+        });
     
         dialogRef.afterClosed().subscribe(result => {
             if (result) {
-                this.tabsList = this.tabsList.concat(result);
+                //this.tabsList = this.tabsList.concat(result.tabsList);
+
+
+                // this.tabsList.forEach((x) => {
+                //     x.selection = x.selectedProperties[0];
+                // })
+                this.tabsList[0].selection = this.tabsList[0].selectedProperties[0];
+                if (result.oldDefault.name) {
+                    console.log(result);
+
+                    const toCopy = this.itemVariations.find((x) => {
+                        return x.Color === this.tabsList[0].Color;
+                    })
+                    //let copiedVariation = { ...toCopy }
+                    let copiedVariation = this.itemService.fakeCurrentItemInsert('', '')
+                    copiedVariation[result.oldDefault.name] = result.oldDefault.variation;
+                    copiedVariation[this.tabsList[0].name] = this.tabsList[0].selection;
+                    copiedVariation.Name = this.itemVariations[0].Name;
+                    copiedVariation.VendorSKU = this.itemVariations[0].VendorSKU;
+                    this.itemVariations.push(copiedVariation)
+                    this.itemService.test.next(copiedVariation);
+                    
+                    
+                    this.tabsList[1].selection = result.oldDefault.variation;
+                    
+                    console.log(this.itemVariations);
+                }
+
+                this.updatedListData = result.updatedListData;
                 this.variationCount = this.tabsList.reduce((accum, item) => {
                     if (item.selectedProperties) {
-                        return accum += item.selectedProperties.length;
+                        return accum *= item.selectedProperties.length;
                     }
-                }, 0)
-                console.log(this.variationCount);
-
+                }, 1);
+                //this.createNewItemVariationsList()
+                this.viewVariationItem()
 
             }
         });
     }
-    updateItemData(a) {
-        //this.itemService.sendNotification({ type: 'error', title: 'Invalid Entry', content: 'Please enter all required fields' });
-        if (this.item.VendorSKU === "123RANDOM") {
-            this.item.VendorSKU = a + this.item.VendorSKU;
+    // createNewItemVariationsList() {
+    //     for (var i = 0; i < this.variationCount; i++) {
+    //         this.itemVariations.push(this.itemService.fakeCurrentItemInsert('',''));
+    //     }
+        
+    // }
+    // createNewItemVariation(data) {
+        
+    //     let item = this.itemVariations.find((variation) => {
+    //         return variation.Color === "" && variation.Size === "" || variation.Color === "";
+    //         // if (variation.Color === "" && variation.Size === "") {
+    //         //     return variation;
+    //         // }
+    //     })
+    //     item.Color = data.Color;
+    //     item.Size = data.Size;
+    // }
+    onUpdateItemData(a) {
+        let count = 0;
+        this.tabsList.forEach((tab)=> {
+            if (!tab.selection) {
+                count++;
+            }
+        })
+        if (!count) {
+            this.viewVariationItem();
+            this.viewVariationDisabled = false;
         }
         else {
-            this.item.VendorSKU = a + "123RANDOM";
+            this.viewVariationDisabled = true;
         }
+        
+        //this.itemService.sendNotification({ type: 'error', title: 'Invalid Entry', content: 'Please enter all required fields' });
     }
+    
+    viewVariationItem() {
+        const data = {
+            Color: '',
+            Size: '',
+        }
 
+        this.tabsList.forEach((tab)=> {
+            data[tab.name] = tab.selection;
+        })
+
+        let item = this.itemVariations.find((variation) => {
+            if (data.Color && data.Size) {
+                if (variation.Color === data.Color && variation.Size === data.Size) return variation;
+            }
+            if (data.Color && !data.Size) {
+                if (variation.Color === data.Color) return variation;
+            }
+            if (!data.Color && data.Size) {
+                if (variation.Size === data.Size) return variation;
+            }
+
+        })
+        
+        if (item) {
+            //this.itemService.currentItemInsert = item;
+            
+            this.itemService.test.next(item)
+        }
+        if (!item) {
+            //create new 
+            this.itemVariations.push(this.itemService.fakeCurrentItemInsert(data.Color, data.Size));
+            //this.itemService.currentItemInsert = this.itemVariations[this.itemVariations.length-1]
+            this.itemService.test.next(this.itemVariations[this.itemVariations.length-1])
+            
+        }
+        
+        //console.log(this.itemService.currentItemInsert)
+
+        // var a = '';
+        
+        // this.tabsList.forEach((tab)=> {
+        //     if (tab.selection) {
+        //         a += tab.selection;
+        //     }
+        // })
+        // if (this.item.VendorSKU === "123RANDOM") {
+        //     this.item.VendorSKU = a + this.item.VendorSKU;
+        // }
+        // else {
+        //     this.item.VendorSKU = a + "123RANDOM";
+        // }
+    }
 }
 
 @Component({
@@ -334,8 +458,10 @@ export class ItemVariationComponentDialog implements OnInit {
         }
     ];
 
+    oldDefault: any = {};
     
     tabsList: any[] = [];
+    updatedListData: any[];
 
     newTab: any;
     selectedProperties: any = {};
@@ -352,39 +478,71 @@ export class ItemVariationComponentDialog implements OnInit {
 
     tabsListTest: any;
     addItemVariationInvalid: any = true;
+
+    showDefaultSettingsSelection: boolean = false;
+
     constructor(
-        public dialogRef: MatDialogRef<ItemVariationComponentDialog>) {
+        public dialogRef: MatDialogRef<ItemVariationComponentDialog>,
+        @Inject(MAT_DIALOG_DATA) public data: any) {
         
         }
     ngOnInit() {
+        if (this.data && this.data.updatedListData) {
+            this.tabsListData = this.data.updatedListData;
+        }
+        // if (this.data && this.data.itemVariationData) {
+        //     this.tabsList = this.data.itemVariationData;
+        // }
+        this.tabsList = this.data.itemVariationData;
+        //this.tabsListData = this.data.updatedListData;
+    }
+    canShowDefaultOldSettingsInput(tabname) {
+        if (this.data && this.data.updatedListData) {
+            var item = this.data.updatedListData.find((x) => x.name === tabname);
+            if (item && this.data.updatedListData && this.data.updatedListData.length > 0) {
+                return true;
+            } 
+            else {
+                return false;
+            }
+        }
+        
     }
 
-
-    onAddTabProperty(tabName): void {
-        this.addTabProperty(tabName);
-    }
-    addTabProperty(tabName: any) {
-        // if (tabName) {
-        //     const tab = this.tabsList.find(x => x.name === tabName)
-        //     console.log(tab);
-        //     tab.properties.push(this.tempPropertyName);
-        //     this.tempPropertyName = '';
-        //     this.showInput = false;
-        // } 
-        // else {
+    // onAddTabProperty(tabName): void {
+    //     this.addTabProperty(tabName);
+    // }
+    // addTabProperty(tabName: any) {
+    //     // if (tabName) {
+    //     //     const tab = this.tabsList.find(x => x.name === tabName)
+    //     //     console.log(tab);
+    //     //     tab.properties.push(this.tempPropertyName);
+    //     //     this.tempPropertyName = '';
+    //     //     this.showInput = false;
+    //     // } 
+    //     // else {
             
-            this.newTabVariations.push({});
+    //         this.newTabVariations.push({});
             
-        //}
-    }
+    //     //}
+    // }
     createTab() {
+        
         const tab = this.tabsListData.find(x => x.name === this.newTab.name);
         this.tabsList.push(tab);
 
-        const index = this.tabsListData.map((item) => item.name).indexOf(tab.name)
-        const updatedListData = [...this.tabsListData];
-        updatedListData.splice(index, 1)
-        this.tabsListData = updatedListData;
+
+
+        // TO DO:
+        // LOGIC TO BRING BACK ALL THE ATTRIBUES BUT SET THE SELECTED CHECKMARKS
+        if (tab.name){
+            const index = this.tabsListData.map((item) => item.name).indexOf(tab.name)
+        
+            this.updatedListData = [...this.tabsListData];
+            this.updatedListData.splice(index, 1)
+            this.tabsListData = this.updatedListData;
+        }
+        
         this.clearNewTabFields();
         this.validateItemVariation();
     }
@@ -399,9 +557,18 @@ export class ItemVariationComponentDialog implements OnInit {
 
 
     onAddItemVariationClick() {
-        this.dialogRef.close(this.tabsList);
+        
+        const data = {
+            tabsList: this.tabsList,
+            updatedListData: this.updatedListData,
+            oldDefault: this.oldDefault
+        };
+        
+        this.dialogRef.close(data);
     }
-
+    onUpdateOldDefault(tabname) {
+        this.oldDefault.name = tabname;
+    }
     onNgModelChange(e) {
         //console.log(e);
         this.validateItemVariation();

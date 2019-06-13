@@ -11,12 +11,26 @@
                 </ng-template>
             
                 <div class="item-variation-content">
-                    <h5 style="font-size: 14px; border-bottom: 1px solid #eaeaea; padding-bottom: 10px;">Select {{tab.name}} Variations</h5> 
+                    <h5 style="font-size: 14px; padding-bottom: 10px;">Select {{tab.name}} Variations</h5> 
                     <mat-selection-list #properties [(ngModel)]="tab.selectedProperties" (ngModelChange)="onNgModelChange($event)">
                         <mat-list-option *ngFor="let property of tab.properties" [value]="property">
                             {{property}}
                         </mat-list-option>
                     </mat-selection-list>
+                    <div style="margin-top: 40px;" *ngIf="canShowDefaultOldSettingsInput(tab.name)">
+                        <h5>Default old settings to:</h5>
+                        <ng-select [items]="tab.selectedProperties"
+                                    bindLabel="name"
+                                    placeholder="{{ 'Choose Old Default Variation' | translate }}"
+                                    [(ngModel)]="oldDefault.variation"
+                                    (change)="onUpdateOldDefault(tab.name)"
+                                    name="selectAttribute"
+                                    required
+                                    loadingText="Loading..."
+                                    class="inbound-line"
+                                    style="width: 100%;">
+                        </ng-select>
+                    </div>
                     <p style="position: absolute; bottom: 0;">
                         Options selected: {{properties.selectedOptions.selected.length}}
                     </p>

@@ -100,6 +100,8 @@ export class Item {
 
 export class FakeItemInsert {
     constructor(
+        public Color: string,
+        public Size: string,
         public Name: string,
         public VendorSKU: string,
         public FulfilledBy: string,
