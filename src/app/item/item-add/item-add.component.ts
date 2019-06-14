@@ -4,6 +4,7 @@ import { FakeItemInsert, ItemInsert, ItemTierPriceInsert, ItemRelatedProductInse
 import { VendorBrand } from '../../shared/class/vendor-brand';
 import { MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material';
 import { ItemService } from '../item.service';
+import { Observable, Subscription } from 'rxjs';
 
 @Component({
   selector: 'o-item-add',
@@ -313,11 +314,13 @@ export class ItemAddComponent {
             if (result) {
                 //this.tabsList = this.tabsList.concat(result.tabsList);
 
+                if (!result.oldDefault.name) {
+                    this.tabsList.forEach((x) => {
+                        x.selection = x.selectedProperties[0];
+                    })
+                }
+                
 
-                // this.tabsList.forEach((x) => {
-                //     x.selection = x.selectedProperties[0];
-                // })
-                this.tabsList[0].selection = this.tabsList[0].selectedProperties[0];
                 if (result.oldDefault.name) {
                     console.log(result);
 
@@ -333,7 +336,7 @@ export class ItemAddComponent {
                     this.itemVariations.push(copiedVariation)
                     this.itemService.test.next(copiedVariation);
                     
-                    
+                    this.tabsList[0].selection = this.tabsList[0].selectedProperties[0];
                     this.tabsList[1].selection = result.oldDefault.variation;
                     
                     console.log(this.itemVariations);
@@ -410,8 +413,6 @@ export class ItemAddComponent {
         })
         
         if (item) {
-            //this.itemService.currentItemInsert = item;
-            
             this.itemService.test.next(item)
         }
         if (!item) {
@@ -421,22 +422,6 @@ export class ItemAddComponent {
             this.itemService.test.next(this.itemVariations[this.itemVariations.length-1])
             
         }
-        
-        //console.log(this.itemService.currentItemInsert)
-
-        // var a = '';
-        
-        // this.tabsList.forEach((tab)=> {
-        //     if (tab.selection) {
-        //         a += tab.selection;
-        //     }
-        // })
-        // if (this.item.VendorSKU === "123RANDOM") {
-        //     this.item.VendorSKU = a + this.item.VendorSKU;
-        // }
-        // else {
-        //     this.item.VendorSKU = a + "123RANDOM";
-        // }
     }
 }
 
@@ -445,18 +430,9 @@ export class ItemAddComponent {
     templateUrl: 'item-add-variation.component-dialog.html',
 })
 export class ItemVariationComponentDialog implements OnInit {
+    
+    tabsListData: any[];
 
-    tabsListData: any[] = [
-        {
-            name: 'Color',
-            properties: ['White', 'Orange', 'Black'],
-            
-        },
-        {
-            name: 'Size',
-            properties: ['Small', 'Medium', 'Large'],
-        }
-    ];
 
     oldDefault: any = {};
     
@@ -483,13 +459,22 @@ export class ItemVariationComponentDialog implements OnInit {
 
     constructor(
         public dialogRef: MatDialogRef<ItemVariationComponentDialog>,
+        private itemService: ItemService,
         @Inject(MAT_DIALOG_DATA) public data: any) {
         
         }
     ngOnInit() {
-        if (this.data && this.data.updatedListData) {
-            this.tabsListData = this.data.updatedListData;
-        }
+
+        this.itemService.getGlobalAttributesVariations()
+                        .subscribe((tabListData) => {
+                            this.tabsListData = tabListData;
+                        });
+
+
+
+        // if (this.data && this.data.updatedListData) {
+        //     this.tabsListData = this.data.updatedListData;
+        // }
         // if (this.data && this.data.itemVariationData) {
         //     this.tabsList = this.data.itemVariationData;
         // }
@@ -531,13 +516,10 @@ export class ItemVariationComponentDialog implements OnInit {
         const tab = this.tabsListData.find(x => x.name === this.newTab.name);
         this.tabsList.push(tab);
 
-
-
-        // TO DO:
-        // LOGIC TO BRING BACK ALL THE ATTRIBUES BUT SET THE SELECTED CHECKMARKS
         if (tab.name){
             const index = this.tabsListData.map((item) => item.name).indexOf(tab.name)
         
+            //THIS IS THE LOGIC TO CLEAN UP THE this.tabsListData
             this.updatedListData = [...this.tabsListData];
             this.updatedListData.splice(index, 1)
             this.tabsListData = this.updatedListData;
@@ -583,5 +565,8 @@ export class ItemVariationComponentDialog implements OnInit {
             }
             return true;
         })
+    }
+    ngOnDestroy() {
+
     }
 }

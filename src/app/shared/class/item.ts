@@ -98,10 +98,34 @@ export class Item {
 }
 
 
+export class FakeItemVariationInsert {
+    constructor(
+        public ItemCategoryAssignments: Array<FakeItemInsert>,
+        public ItemAttributesList: Array<FakeItemAttribute>,
+        public ItemVariationsList: Array<FakeItemVariation>,
+
+    ) {}
+}
+export class FakeItemAttribute {
+    constructor(
+        public Attribute: string,
+        public Variation: string,
+        public Name: string,
+    ) {}
+}
+export class FakeItemVariation {
+    constructor(
+        public Attribute: string,
+        public Variation: string,
+        public Name: string,
+
+    ) {}
+}
+
 export class FakeItemInsert {
     constructor(
-        public Color: string,
-        public Size: string,
+        public Attribute: string,
+        public Variation: string,
         public Name: string,
         public VendorSKU: string,
         public FulfilledBy: string,

@@ -79,12 +79,7 @@ export class ItemService {
     resetItems() {
         this.items = null;
     }
-    setFakeItem(item: any) {
-        this.test = new BehaviorSubject(item);
-    }
-    fakeCurrentItemInsert(size, color) {
-        return new FakeItemInsert(size, color, '','', 'Toolots', 'simple', 1, 2, 'dollars', 2, 2, 2, 2, new Date(), new Date(), 1, 2, 3, 'IN', 1, 'LB', 2, 2, 2, 'IN', 2, 'LB', true, 1, 'asdf', 'asdf', 'asdf', "CN", "", 'asdf', true, 'fa', "CatalogAndSearch", 'asdf', 'asdf', 'asdf', 'asdf', 'asdf', "NotSubmitted", 'asdf', 'asdf', true, false, [], [], [], [], [], [], [], [], [], []);
-    }
+    
 
     defaultCurrentItemInsert() {
         if(this.duplicateItemInsert) {  
@@ -931,4 +926,54 @@ export class ItemService {
         else if (currentItemIndex === i) return '#F5F5F5';
         else return '#FFFFFF';
     }
+    setFakeItem(item: any) {
+        this.test = new BehaviorSubject(item);
+    }
+    fakeCurrentItemInsert(size, color) {
+        return new FakeItemInsert(size, color, '','', 'Toolots', 'simple', 1, 2, 'dollars', 2, 2, 2, 2, new Date(), new Date(), 1, 2, 3, 'IN', 1, 'LB', 2, 2, 2, 'IN', 2, 'LB', true, 1, 'asdf', 'asdf', 'asdf', "CN", "", 'asdf', true, 'fa', "CatalogAndSearch", 'asdf', 'asdf', 'asdf', 'asdf', 'asdf', "NotSubmitted", 'asdf', 'asdf', true, false, [], [], [], [], [], [], [], [], [], []);
+    }
+    addVariationItem(item: FakeItemInsert): Observable<Item> {
+        
+        //Create array of all variations 
+        //Create array of all attributes
+        //Attach to FakeItemVariationInsert
+
+        //Send FakeItemVariationInsert
+
+
+
+        const headers = new HttpHeaders({
+            'Content-Type': 'application/json'
+        });
+        return this.http.post<Item>(this.apiURL + '/item', item, { headers: headers } )
+                        .pipe(
+                            tap(data => {
+                                //this.items.push(data);
+                                if(this.items)
+                                {
+                                    this.items.splice(0,0,data);
+                                    this.currentItem = data;
+                                }
+                            }),
+                            catchError(this.handleError)
+                        );
+    }
+
+    getGlobalAttributesVariations(): Observable<any> {
+        const item = [
+            {
+                name: 'Color',
+                properties: ['White', 'Orange', 'Black'],
+                
+            },
+            {
+                name: 'Size',
+                properties: ['Small', 'Medium', 'Large'],
+            }
+        ];
+        
+        return new BehaviorSubject(item);
+
+    }
+    
 }
