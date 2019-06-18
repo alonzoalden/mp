@@ -18,7 +18,7 @@ export class ItemAddDescriptionComponent implements OnInit, AfterViewInit {
     errorMessage: string;
     isPM: boolean;
     
-    item: FakeItemInsert;
+    item: ItemInsert;
     vendorBrandList: VendorBrand[]; 
 
     constructor(private itemService: ItemService, private appService: AppService) { }
@@ -30,8 +30,8 @@ export class ItemAddDescriptionComponent implements OnInit, AfterViewInit {
         //     (data: FakeItemInsert) => {
         //         this.item = data;
         //     }); 
-        this.itemService.test.subscribe(
-            (data: FakeItemInsert) => {
+        this.itemService.currentProductItemInsert.subscribe(
+            (data: ItemInsert) => {
                         this.item = data;
                     }); 
         

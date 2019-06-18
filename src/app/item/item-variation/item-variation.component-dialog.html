@@ -7,23 +7,30 @@
             
             <ng-container>
                 <ng-template mat-tab-label>
-                    <span>{{ tab.name | translate }}</span>
+                    <span>{{ tab.attributeName | translate }}</span>
                 </ng-template>
             
                 <div class="item-variation-content">
-                    <h5 style="font-size: 14px; padding-bottom: 10px;">Select {{tab.name}} Variations</h5> 
-                    <mat-selection-list #properties [(ngModel)]="tab.selectedProperties" (ngModelChange)="onNgModelChange($event)">
-                        <mat-list-option *ngFor="let property of tab.properties" [value]="property">
-                            {{property}}
+                    <h5 style="font-size: 14px; padding-bottom: 10px;">Select {{tab.attributeName}} Variations</h5> 
+                    <mat-selection-list #properties
+                        [(ngModel)]="tab.selectedProperties"
+                        (ngModelChange)="onNgModelChange($event)">
+                        <mat-list-option
+                            *ngFor="let property of tab.variations"
+                            bindLabel="name"
+                            [value]="id">
+                                {{property.name}}
                         </mat-list-option>
                     </mat-selection-list>
-                    <div style="margin-top: 40px;" *ngIf="canShowDefaultOldSettingsInput(tab.name)">
+
+
+                    <div style="margin-top: 40px;" *ngIf="canShowDefaultOldSettingsInput(tab.attributeName)">
                         <h5>Default old settings to:</h5>
                         <ng-select [items]="tab.selectedProperties"
-                                    bindLabel="name"
+                                    bindLabel="attributeName"
                                     placeholder="{{ 'Choose Old Default Variation' | translate }}"
                                     [(ngModel)]="oldDefault.variation"
-                                    (change)="onUpdateOldDefault(tab.name)"
+                                    (change)="onUpdateOldDefault(tab.attributeName)"
                                     name="selectAttribute"
                                     required
                                     loadingText="Loading..."
@@ -47,7 +54,7 @@
                 <div class="m-b-md">
                     <h5 style="font-size: 14px;padding-bottom: 10px;">Select Item Attribute</h5> 
                     <ng-select [items]="tabsListData"
-                                bindLabel="name"
+                                bindLabel="attributeName"
                                 placeholder="{{ 'Select Attribute' | translate }}"
                                 [(ngModel)]="newTab"
                                 name="selectAttribute"

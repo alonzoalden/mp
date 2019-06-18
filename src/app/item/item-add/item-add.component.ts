@@ -5,6 +5,8 @@ import { VendorBrand } from '../../shared/class/vendor-brand';
 import { MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material';
 import { ItemService } from '../item.service';
 import { Observable, Subscription } from 'rxjs';
+import { ItemVariationComponentDialog } from '../item-variation/item-variation.component';
+
 
 @Component({
   selector: 'o-item-add',
@@ -39,9 +41,8 @@ export class ItemAddComponent {
                 private itemService: ItemService,
                 public printDialog: MatDialog) {
         this.item = this.itemService.fakeCurrentItemInsert('','');
-        this.itemService.currentItemInsertFake = this.item;
-        
-        this.itemService.setFakeItem(this.item);
+
+        this.itemService.setProductItem(this.item);
 
         this.itemService.getVendorBrands().subscribe(
             (vendorBrands: VendorBrand[]) => {
@@ -300,47 +301,50 @@ export class ItemAddComponent {
     }
 
     openDialogItemVariation() {
-        const tabData = {
-            itemVariationData: this.tabsList,
-            updatedListData: this.updatedListData,
-        };
+        // const tabData = {
+        //     itemVariationData: this.tabsList,
+        //     updatedListData: this.updatedListData,
+        // };
 
         const dialogRef = this.printDialog.open(ItemVariationComponentDialog, {
             //width: '750px',
-            data: tabData
+            // data: data
         });
     
         dialogRef.afterClosed().subscribe(result => {
             if (result) {
                 //this.tabsList = this.tabsList.concat(result.tabsList);
 
-                if (!result.oldDefault.name) {
-                    this.tabsList.forEach((x) => {
-                        x.selection = x.selectedProperties[0];
-                    })
-                }
+
+                //this SHOULD auto select to first on list
+                // if (!result.oldDefault.name) {
+                //     this.tabsList.forEach((x) => {
+                //         x.selection = x.selectedProperties[0];
+                //     })
+                // }
                 
 
-                if (result.oldDefault.name) {
-                    console.log(result);
 
-                    const toCopy = this.itemVariations.find((x) => {
-                        return x.Color === this.tabsList[0].Color;
-                    })
-                    //let copiedVariation = { ...toCopy }
-                    let copiedVariation = this.itemService.fakeCurrentItemInsert('', '')
-                    copiedVariation[result.oldDefault.name] = result.oldDefault.variation;
-                    copiedVariation[this.tabsList[0].name] = this.tabsList[0].selection;
-                    copiedVariation.Name = this.itemVariations[0].Name;
-                    copiedVariation.VendorSKU = this.itemVariations[0].VendorSKU;
-                    this.itemVariations.push(copiedVariation)
-                    this.itemService.test.next(copiedVariation);
+                // if (result.oldDefault.name) {
+                //     console.log(result);
+
+                //     const toCopy = this.itemVariations.find((x) => {
+                //         return x.Color === this.tabsList[0].Color;
+                //     })
+                //     //let copiedVariation = { ...toCopy }
+                //     let copiedVariation = this.itemService.fakeCurrentItemInsert('', '')
+                //     copiedVariation[result.oldDefault.name] = result.oldDefault.variation;
+                //     copiedVariation[this.tabsList[0].name] = this.tabsList[0].selection;
+                //     copiedVariation.Name = this.itemVariations[0].Name;
+                //     copiedVariation.VendorSKU = this.itemVariations[0].VendorSKU;
+                //     this.itemVariations.push(copiedVariation)
+                //     this.itemService.currentProductItemInsert.next(copiedVariation);
                     
-                    this.tabsList[0].selection = this.tabsList[0].selectedProperties[0];
-                    this.tabsList[1].selection = result.oldDefault.variation;
+                //     this.tabsList[0].selection = this.tabsList[0].selectedProperties[0];
+                //     this.tabsList[1].selection = result.oldDefault.variation;
                     
-                    console.log(this.itemVariations);
-                }
+                //     console.log(this.itemVariations);
+                // }
 
                 this.updatedListData = result.updatedListData;
                 this.variationCount = this.tabsList.reduce((accum, item) => {
@@ -354,23 +358,6 @@ export class ItemAddComponent {
             }
         });
     }
-    // createNewItemVariationsList() {
-    //     for (var i = 0; i < this.variationCount; i++) {
-    //         this.itemVariations.push(this.itemService.fakeCurrentItemInsert('',''));
-    //     }
-        
-    // }
-    // createNewItemVariation(data) {
-        
-    //     let item = this.itemVariations.find((variation) => {
-    //         return variation.Color === "" && variation.Size === "" || variation.Color === "";
-    //         // if (variation.Color === "" && variation.Size === "") {
-    //         //     return variation;
-    //         // }
-    //     })
-    //     item.Color = data.Color;
-    //     item.Size = data.Size;
-    // }
     onUpdateItemData(a) {
         let count = 0;
         this.tabsList.forEach((tab)=> {
@@ -413,160 +400,13 @@ export class ItemAddComponent {
         })
         
         if (item) {
-            this.itemService.test.next(item)
+            this.itemService.currentProductItemInsert.next(item)
         }
         if (!item) {
             //create new 
             this.itemVariations.push(this.itemService.fakeCurrentItemInsert(data.Color, data.Size));
             //this.itemService.currentItemInsert = this.itemVariations[this.itemVariations.length-1]
-            this.itemService.test.next(this.itemVariations[this.itemVariations.length-1])
-            
+            this.itemService.currentProductItemInsert.next(this.itemVariations[this.itemVariations.length-1]);
         }
-    }
-}
-
-@Component({
-    selector: 'item-add-variation.component-dialog',
-    templateUrl: 'item-add-variation.component-dialog.html',
-})
-export class ItemVariationComponentDialog implements OnInit {
-    
-    tabsListData: any[];
-
-
-    oldDefault: any = {};
-    
-    tabsList: any[] = [];
-    updatedListData: any[];
-
-    newTab: any;
-    selectedProperties: any = {};
-    selectedAttributes: any;
-
-    newTabVariations: any = [];
-
-
-    tabName: any[] = [];
-    tabProperties: any[] = [];
-
-    tempPropertyName: any = '';
-    showInput = false;
-
-    tabsListTest: any;
-    addItemVariationInvalid: any = true;
-
-    showDefaultSettingsSelection: boolean = false;
-
-    constructor(
-        public dialogRef: MatDialogRef<ItemVariationComponentDialog>,
-        private itemService: ItemService,
-        @Inject(MAT_DIALOG_DATA) public data: any) {
-        
-        }
-    ngOnInit() {
-
-        this.itemService.getGlobalAttributesVariations()
-                        .subscribe((tabListData) => {
-                            this.tabsListData = tabListData;
-                        });
-
-
-
-        // if (this.data && this.data.updatedListData) {
-        //     this.tabsListData = this.data.updatedListData;
-        // }
-        // if (this.data && this.data.itemVariationData) {
-        //     this.tabsList = this.data.itemVariationData;
-        // }
-        this.tabsList = this.data.itemVariationData;
-        //this.tabsListData = this.data.updatedListData;
-    }
-    canShowDefaultOldSettingsInput(tabname) {
-        if (this.data && this.data.updatedListData) {
-            var item = this.data.updatedListData.find((x) => x.name === tabname);
-            if (item && this.data.updatedListData && this.data.updatedListData.length > 0) {
-                return true;
-            } 
-            else {
-                return false;
-            }
-        }
-        
-    }
-
-    // onAddTabProperty(tabName): void {
-    //     this.addTabProperty(tabName);
-    // }
-    // addTabProperty(tabName: any) {
-    //     // if (tabName) {
-    //     //     const tab = this.tabsList.find(x => x.name === tabName)
-    //     //     console.log(tab);
-    //     //     tab.properties.push(this.tempPropertyName);
-    //     //     this.tempPropertyName = '';
-    //     //     this.showInput = false;
-    //     // } 
-    //     // else {
-            
-    //         this.newTabVariations.push({});
-            
-    //     //}
-    // }
-    createTab() {
-        
-        const tab = this.tabsListData.find(x => x.name === this.newTab.name);
-        this.tabsList.push(tab);
-
-        if (tab.name){
-            const index = this.tabsListData.map((item) => item.name).indexOf(tab.name)
-        
-            //THIS IS THE LOGIC TO CLEAN UP THE this.tabsListData
-            this.updatedListData = [...this.tabsListData];
-            this.updatedListData.splice(index, 1)
-            this.tabsListData = this.updatedListData;
-        }
-        
-        this.clearNewTabFields();
-        this.validateItemVariation();
-    }
-
-    clearNewTabFields() {    
-        this.newTab = null;
-    }
-    
-    onCancelClick(): void {
-        this.dialogRef.close();
-    }
-
-
-    onAddItemVariationClick() {
-        
-        const data = {
-            tabsList: this.tabsList,
-            updatedListData: this.updatedListData,
-            oldDefault: this.oldDefault
-        };
-        
-        this.dialogRef.close(data);
-    }
-    onUpdateOldDefault(tabname) {
-        this.oldDefault.name = tabname;
-    }
-    onNgModelChange(e) {
-        //console.log(e);
-        this.validateItemVariation();
-    }
-
-    validateItemVariation() {
-        this.addItemVariationInvalid = !!this.tabsList.find((item) => {
-            if (item && item.selectedProperties) {
-                if (item.selectedProperties.length > 1) {
-                    return false;
-                }
-            }
-            return true;
-        })
-    }
-    ngOnDestroy() {
-
     }
 }

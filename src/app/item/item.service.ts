@@ -40,7 +40,8 @@ export class ItemService {
     currentItemInsert: ItemInsert;
     currentItemEdit: Item;
 
-    public test: BehaviorSubject<any>;
+    public currentProductItemInsert: BehaviorSubject<any>;
+    public globalProductVariationsList: BehaviorSubject<any>;
 
     currentItemInsertFake: FakeItemInsert;
 
@@ -926,8 +927,9 @@ export class ItemService {
         else if (currentItemIndex === i) return '#F5F5F5';
         else return '#FFFFFF';
     }
-    setFakeItem(item: any) {
-        this.test = new BehaviorSubject(item);
+
+    setProductItem(item: any) {
+        this.currentProductItemInsert = new BehaviorSubject(item);
     }
     fakeCurrentItemInsert(size, color) {
         return new FakeItemInsert(size, color, '','', 'Toolots', 'simple', 1, 2, 'dollars', 2, 2, 2, 2, new Date(), new Date(), 1, 2, 3, 'IN', 1, 'LB', 2, 2, 2, 'IN', 2, 'LB', true, 1, 'asdf', 'asdf', 'asdf', "CN", "", 'asdf', true, 'fa', "CatalogAndSearch", 'asdf', 'asdf', 'asdf', 'asdf', 'asdf', "NotSubmitted", 'asdf', 'asdf', true, false, [], [], [], [], [], [], [], [], [], []);
@@ -959,21 +961,68 @@ export class ItemService {
                         );
     }
 
-    getGlobalAttributesVariations(): Observable<any> {
-        const item = [
+    getGlobalAttributesVariations() {
+        const variationsList = [
             {
-                name: 'Color',
-                properties: ['White', 'Orange', 'Black'],
+                attributeID: 1,
+                attributeName: 'Color',
+                variations: [
+                    {
+                        id: 4,
+                        name: 'White'
+                    },
+                    {
+                        id: 5,
+                        name: 'Orange'
+                    },
+                    {
+                        id: 6,
+                        name: 'Black'
+                    },
+                ]
                 
             },
             {
-                name: 'Size',
-                properties: ['Small', 'Medium', 'Large'],
+                attributeID: 2,
+                attributeName: 'Size',
+                variations: [
+                    {
+                        id: 7,
+                        name: 'White',
+                    },
+                    {
+                        id: 8,
+                        name: 'Orange',
+                    },
+                    {
+                        id: 9,
+                        name: 'Black',
+                    },
+                ]
+                
             }
+            // {
+            //     name: 'Size',
+            //     properties: ['Small', 'Medium', 'Large'],
+            // }
         ];
         
-        return new BehaviorSubject(item);
+        //return new BehaviorSubject(item);
+        this.globalProductVariationsList = new BehaviorSubject(variationsList);
+    }
+    addItemVariation(item) {
+        // const headers = new HttpHeaders({
+        //     'Content-Type': 'application/json'
+        // });
+
+
+        // return this.http.get<ItemList[]>(this.apiURL + '/item/allsimpleitemlist', { headers: headers} )
+        //                     .pipe(
+        //                         //tap(data => console.log(JSON.stringify(data))),
+        //                         tap(data => this.allSimpleItemList = data),
+        //                         catchError(this.handleError)
+        //                     );
+        
 
     }
-    
 }

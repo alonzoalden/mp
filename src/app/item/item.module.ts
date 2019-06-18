@@ -17,7 +17,9 @@ import { ItemComponent } from './item.component';
 import { ItemListComponent, ItemListComponentItemPrintDialog, ItemListComponentImportDialog } from './item-list/item-list.component';
 import { ItemPrintLabelComponent, ItemPrintLabelComponentPrintDialog} from './item-print-label/item-print-label.component';
 
-import { ItemAddComponent, ItemVariationComponentDialog } from './item-add/item-add.component';
+import { ItemVariationComponentDialog } from './item-variation/item-variation.component';
+
+import { ItemAddComponent } from './item-add/item-add.component';
 import { ItemAddDescriptionComponent } from './item-add/item-add-description.component';
 import { ItemAddDimensionComponent } from './item-add/item-add-dimension.component';
 import { ItemAddPriceComponent } from './item-add/item-add-price.component';
