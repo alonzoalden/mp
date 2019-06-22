@@ -18,7 +18,7 @@ export class Product {
         public FulfilledBy: string,
         public ItemType: string,
         public MerchantQuantity: number,
-        public ProductItemInserts: Array<ProductItemInsert>,
+        public ItemInserts: Array<ProductItemInsert>,
     ) {}
 }
 

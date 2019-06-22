@@ -6,6 +6,7 @@ import { VendorBrand } from '../../shared/class/vendor-brand';
 
 import { ItemService } from '../item.service';
 import { AppService } from '../../app.service';
+import { ProductItemInsert } from 'app/shared/class/product';
 
 declare var $ :any;
 
@@ -18,23 +19,23 @@ export class ItemAddDescriptionComponent implements OnInit, AfterViewInit {
     errorMessage: string;
     isPM: boolean;
     
-    item: ItemInsert;
+    item: ProductItemInsert;
     vendorBrandList: VendorBrand[]; 
 
     constructor(private itemService: ItemService, private appService: AppService) { }
 
     ngOnInit(): void {
-        //this.item = this.itemService.currentItemInsertFake;
-        
+        //this.item = this.itemService.currentItemInsert;
+
         // this.itemService.getFakeItem().subscribe(
         //     (data: FakeItemInsert) => {
         //         this.item = data;
         //     }); 
         this.itemService.currentProductItemInsert.subscribe(
-            (data: ItemInsert) => {
-                        this.item = data;
-                    }); 
-        
+            (data) => {
+                this.item = data;
+            }); 
+
         this.itemService.getVendorBrands().subscribe(
             (vendorBrands: VendorBrand[]) => {
                 this.vendorBrandList = vendorBrands;

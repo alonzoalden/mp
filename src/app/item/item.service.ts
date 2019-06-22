@@ -10,6 +10,9 @@ import { FakeItemInsert, Item, ItemInsert, ItemOption, ItemOptionInsert, ItemSel
 //import { ItemImage } from '../shared/class/item-image';
 import { URLVideo, URLVideoItems, URLVideoItemsSnippet, URLVideoItemsSnippetThumbnails, URLVideoItemsSnippetThumbnailsStandard } from '../shared/class/item-video';
 
+
+
+import { Product, ProductItemInsert } from '../shared/class/product';
 import { ItemList } from '../shared/class/item';
 import { Category } from '../shared/class/category';
 import { Member } from '../shared/class/member';
@@ -23,6 +26,8 @@ import { AppService } from '../app.service';
 
 import { environment } from '../../environments/environment';
 import { ResponseContentType } from '@angular/http';
+import { connectableObservableDescriptor } from 'rxjs/internal/observable/ConnectableObservable';
+import { ConsoleService } from '@ng-select/ng-select/ng-select/console.service';
 
 @Injectable()
 export class ItemService {
@@ -40,10 +45,6 @@ export class ItemService {
     currentItemInsert: ItemInsert;
     currentItemEdit: Item;
 
-    public currentProductItemInsert: BehaviorSubject<any>;
-    public globalProductVariationsList: BehaviorSubject<any>;
-
-    currentItemInsertFake: FakeItemInsert;
 
     duplicateItemInsert: ItemInsert;
 
@@ -52,6 +53,18 @@ export class ItemService {
     public subject = new Subject<string>();
 
     batchUpdateItems: Item[];
+
+
+
+    public product: BehaviorSubject<any>;
+    public currentProductItemInsert: BehaviorSubject<any>;
+
+    public globalProductVariationsList: BehaviorSubject<any>;
+    public globalProductVariationsList2: any;
+
+    currentItemInsertFake: FakeItemInsert;
+
+
 
     constructor(private http: HttpClient,
                 private oauthService: OAuthService,
@@ -928,101 +941,232 @@ export class ItemService {
         else return '#FFFFFF';
     }
 
+    setProduct(item: any) {
+        this.product = new BehaviorSubject(item);
+        
+    }
     setProductItem(item: any) {
         this.currentProductItemInsert = new BehaviorSubject(item);
+        //this.currentProductItemInsert = item;
     }
-    fakeCurrentItemInsert(size, color) {
-        return new FakeItemInsert(size, color, '','', 'Toolots', 'simple', 1, 2, 'dollars', 2, 2, 2, 2, new Date(), new Date(), 1, 2, 3, 'IN', 1, 'LB', 2, 2, 2, 'IN', 2, 'LB', true, 1, 'asdf', 'asdf', 'asdf', "CN", "", 'asdf', true, 'fa', "CatalogAndSearch", 'asdf', 'asdf', 'asdf', 'asdf', 'asdf', "NotSubmitted", 'asdf', 'asdf', true, false, [], [], [], [], [], [], [], [], [], []);
-    }
-    addVariationItem(item: FakeItemInsert): Observable<Item> {
-        
-        //Create array of all variations 
-        //Create array of all attributes
-        //Attach to FakeItemVariationInsert
 
-        //Send FakeItemVariationInsert
-
-
-
-        const headers = new HttpHeaders({
-            'Content-Type': 'application/json'
-        });
-        return this.http.post<Item>(this.apiURL + '/item', item, { headers: headers } )
-                        .pipe(
-                            tap(data => {
-                                //this.items.push(data);
-                                if(this.items)
-                                {
-                                    this.items.splice(0,0,data);
-                                    this.currentItem = data;
-                                }
-                            }),
-                            catchError(this.handleError)
-                        );
+    productItemCurrentItemInsert(variations, existingItem) {
+        if (existingItem) console.log(existingItem);
+        if (variations) return new ProductItemInsert(null, null, null, null, null, null, null, null, null, null, null, 'IN', null, 'LB', null, null, null, 'IN', null, 'LB', false, null, null, null, null, "CN", "", null, false, null, "CatalogAndSearch", null, null, null, null, null, "NotSubmitted", null, null, true, false, [], [], [], [], [], [], [], [], [], [], variations);
+        if (existingItem) return new ProductItemInsert(existingItem.ShipWithinDays,
+            existingItem.PriceType, existingItem.Price, existingItem.FOBPrice,
+            existingItem.DropshipPrice, existingItem.SpecialPrice, existingItem.SpecialFrom,
+            existingItem.SpecialTo, existingItem.Width, existingItem.Height,
+            existingItem.Length, existingItem.ProductDimensionUOM, existingItem.Weight,
+            existingItem.ProductWeightUOM, existingItem.PackageWidth,
+            existingItem.PackageHeight, existingItem.PackageLength, existingItem.PackageDimensionUOM,
+            existingItem.PackageWeight, existingItem.PackageWeightUOM, existingItem.IsFreeShipping,
+            existingItem.ShippingFee, existingItem.MetaTitle, existingItem.MetaKeywords,
+            existingItem.MetaDescription, existingItem.Origin, existingItem.Warranty,
+            existingItem.MerchantWarranty, existingItem.AddProtectionPlan, existingItem.URLKey,
+            existingItem.Visibility, existingItem.Description, existingItem.ShortDescription,
+            existingItem.TechnicalDetail, existingItem.AdditionalInformation, 
+            existingItem.VendorBrandID, existingItem.Approval, existingItem.PartImageRaw,
+            existingItem.PartImageFilePath, existingItem.PartIsNewImage, existingItem.ExcludeGoogleShopping,
+            existingItem.ItemCategoryAssignments, existingItem.ItemOptions, existingItem.ItemTierPrices,
+            existingItem.ItemRelatedProducts, existingItem.ItemUpsells, existingItem.ItemCrossSells,
+            existingItem.ItemAttachments, existingItem.ItemVideos, existingItem.ItemImages,
+            existingItem.ItemParts, existingItem.Variations);
     }
 
     getGlobalAttributesVariations() {
-        const variationsList = [
+        const globalAttributeList = [
             {
-                attributeID: 1,
-                attributeName: 'Color',
-                variations: [
-                    {
-                        id: 4,
-                        name: 'White'
-                    },
-                    {
-                        id: 5,
-                        name: 'Orange'
-                    },
-                    {
-                        id: 6,
-                        name: 'Black'
-                    },
-                ]
-                
+                ID: 1,
+                name: 'Color'
             },
             {
-                attributeID: 2,
-                attributeName: 'Size',
-                variations: [
-                    {
-                        id: 7,
-                        name: 'White',
-                    },
-                    {
-                        id: 8,
-                        name: 'Orange',
-                    },
-                    {
-                        id: 9,
-                        name: 'Black',
-                    },
-                ]
-                
+                ID: 2,
+                name: 'Size'
             }
-            // {
-            //     name: 'Size',
-            //     properties: ['Small', 'Medium', 'Large'],
-            // }
-        ];
+        ]
+        const globalVariationList = [
+            {
+                ID: 3,
+                name: 'White',
+                GlobalAttributeID: 1
+            },
+            {
+                ID: 4,
+                name: 'Black',
+                GlobalAttributeID: 1
+            },
+            {
+                ID: 5,
+                name: 'Orange',
+                GlobalAttributeID: 1
+            },
+            {
+                ID: 6,
+                name: 'Small',
+                GlobalAttributeID: 2
+            },
+            {
+                ID: 7,
+                name: 'Medium',
+                GlobalAttributeID: 2
+            },
+            {
+                ID: 8,
+                name: 'Large',
+                GlobalAttributeID: 2
+            }
+        ]
+
+
+        let variationsList = globalAttributeList.map((attribute)=> {
+            let attributesList = globalVariationList.filter((item)=> {
+                if (item.GlobalAttributeID === attribute.ID) {
+                    return item;
+                }
+            });
+            return {
+                    attributeID: attribute.ID,
+                    attributeName: attribute.name,
+                    variations: attributesList
+                }
+        })
+        //THIS METHOD ABOVE TURNS THE DATA INTO THIS:
+
+        // const variationsList = [
+        //     {
+        //         attributeID: 1,
+        //         attributeName: 'Color',
+        //         variations: [
+        //             {
+        //                 id: 4,
+        //                 name: 'White'
+        //             },
+        //             {
+        //                 id: 5,
+        //                 name: 'Orange'
+        //             },
+        //             {
+        //                 id: 6,
+        //                 name: 'Black'
+        //             },
+        //         ]
+                
+        //     },
+        //     {
+        //         attributeID: 2,
+        //         attributeName: 'Size',
+        //         variations: [
+        //             {
+        //                 id: 7,
+        //                 name: 'Small',
+        //             },
+        //             {
+        //                 id: 8,
+        //                 name: 'Medium',
+        //             },
+        //             {
+        //                 id: 9,
+        //                 name: 'Large',
+        //             },
+        //         ]
+                
+        //     }
+        // ];
         
-        //return new BehaviorSubject(item);
+        
         this.globalProductVariationsList = new BehaviorSubject(variationsList);
+        return new BehaviorSubject(variationsList);
     }
-    addItemVariation(item) {
-        // const headers = new HttpHeaders({
-        //     'Content-Type': 'application/json'
-        // });
-
-
-        // return this.http.get<ItemList[]>(this.apiURL + '/item/allsimpleitemlist', { headers: headers} )
-        //                     .pipe(
-        //                         //tap(data => console.log(JSON.stringify(data))),
-        //                         tap(data => this.allSimpleItemList = data),
-        //                         catchError(this.handleError)
-        //                     );
+    addItemVariation(variations, oldDefault) {
+        let productInfo;
+        this.product.subscribe((item) => productInfo = item)
         
+        let productItems = variations.map((item) => item.variationOptions);
+        const productVariations = this.cartesian([...productItems]);
 
+        //go through each variation 
+            //if variation already exists in productInfo.ItemInserts[]
+            //push the whole item over  
+            
+        let productItemInsertList = productVariations.map((item) => {
+            if (productInfo && productInfo.ItemInserts) {
+                for (var i = 0; i < productInfo.ItemInserts.length; i++) {
+                    let existingItem = productInfo.ItemInserts[i];
+                    if (this.areEqual(item, existingItem.Variations )) {
+                        console.log('existsing')
+                        return this.productItemCurrentItemInsert(null, existingItem);
+                    }
+                    
+                }
+                console.log('new')
+                return this.productItemCurrentItemInsert(item, null);   
+            } else {
+                return this.productItemCurrentItemInsert(item, null);
+            }
+        })
+
+        let oldItemInsertList = productInfo.ItemInserts;
+        if (oldItemInsertList) {
+            oldItemInsertList.forEach((oldItem) => {
+                productItemInsertList.forEach((newItem, i) => {
+                    const oldMatch = oldItem.Variations.every((oldVariation) => newItem.Variations.indexOf(oldVariation) > -1);
+                    const defaultToMatch = newItem.Variations.indexOf(oldDefault) > -1;
+                    if (oldMatch && defaultToMatch) {
+                        console.log('replaced');
+
+                        
+                        productItemInsertList[i] = oldItem;
+                        productItemInsertList[i].Variations = newItem.Variations;
+
+                    }
+
+                })
+                
+                
+            })
+        }
+        console.log(productItemInsertList);
+        const product = new Product(null, null, null, null, null, productItemInsertList);
+        this.product.next(product);
+        //return product;
+    }
+    private areEqual = function (array1, array) {
+        // if the other array is a falsy value, return
+        if (!array)
+            return false;
+    
+        // compare lengths - can save a lot of time 
+        if (array1.length != array.length)
+            return false;
+    
+        for (var i = 0, l=array1.length; i < l; i++) {
+            // Check if we have nested arrays
+            if (array1[i] instanceof Array && array[i] instanceof Array) {
+                // recurse into the nested arrays
+                if (!array1[i].equals(array[i]))
+                    return false;       
+            }           
+            else if (array1[i] != array[i]) { 
+                // Warning - two different object instances will never be equal: {x:20} != {x:20}
+                return false;   
+            }           
+        }       
+        return true;
+    }
+    private cartesian(args) {
+        var r = [], arg = args, max = arg.length-1;
+        function helper(arr, i) {
+            for (var j=0, l=arg[i].length; j<l; j++) {
+                var a = arr.slice(0); // clone arr
+                a.push(arg[i][j]);
+                if (i==max)
+                    r.push(a);
+                else
+                    helper(a, i+1);
+            }
+        }
+        helper([], 0);
+        return r;
     }
 }

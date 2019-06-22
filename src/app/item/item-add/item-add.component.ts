@@ -16,13 +16,17 @@ import { ItemVariationComponentDialog } from '../item-variation/item-variation.c
 
 export class ItemAddComponent {
     errorMessage: string;
-    _item: FakeItemInsert;
+    _item: ItemInsert;
     pendingAdd: boolean;
 
     loading: boolean;
 
     vendorBrandList: VendorBrand[]; 
 
+
+    
+    attributesVariationsList: any[] = [];
+    
     tabsList: any[] = [];
     updatedListData: any[];
     variationCount: number;
@@ -30,8 +34,12 @@ export class ItemAddComponent {
     viewVariationDisabled: boolean = true;
 
     itemVariations = [];
+    itemVariationsList = [];
+    product: any = [];
 
+    attributesVariationsListData: any;
 
+    attributesVariationsSelections: any = {};
 
 
 
@@ -40,9 +48,20 @@ export class ItemAddComponent {
     constructor(private router: Router,
                 private itemService: ItemService,
                 public printDialog: MatDialog) {
-        this.item = this.itemService.fakeCurrentItemInsert('','');
 
+                    
+        this.item = this.itemService.defaultCurrentItemInsert();
         this.itemService.setProductItem(this.item);
+        this.itemService.setProduct(this.product);
+
+        //turn to oversvable?
+        this.itemService.product.subscribe((product) => this.product = product);
+                    
+
+        this.itemService.getGlobalAttributesVariations()
+                        .subscribe((data) => {
+                            this.attributesVariationsListData = data;
+                        });
 
         this.itemService.getVendorBrands().subscribe(
             (vendorBrands: VendorBrand[]) => {
@@ -54,18 +73,18 @@ export class ItemAddComponent {
         ); 
     }
 
-    get item(): FakeItemInsert {
+    get item(): ItemInsert {
         return this._item;
     }
 
-    set item(value: FakeItemInsert) {
+    set item(value: ItemInsert) {
         this._item = value;
         this.itemService.currentItemInsert = value;
     }
 
     reset() {
         this.dataIsValid = null;
-        this.item = this.itemService.fakeCurrentItemInsert('','');
+        this.item = this.itemService.defaultCurrentItemInsert();
     }
 
     onAddItem() {
@@ -301,112 +320,53 @@ export class ItemAddComponent {
     }
 
     openDialogItemVariation() {
-        // const tabData = {
-        //     itemVariationData: this.tabsList,
-        //     updatedListData: this.updatedListData,
-        // };
-
         const dialogRef = this.printDialog.open(ItemVariationComponentDialog, {
             //width: '750px',
-            // data: data
+            data: this.attributesVariationsList
         });
     
         dialogRef.afterClosed().subscribe(result => {
-            if (result) {
-                //this.tabsList = this.tabsList.concat(result.tabsList);
-
-
-                //this SHOULD auto select to first on list
-                // if (!result.oldDefault.name) {
-                //     this.tabsList.forEach((x) => {
-                //         x.selection = x.selectedProperties[0];
-                //     })
-                // }
-                
-
-
-                // if (result.oldDefault.name) {
-                //     console.log(result);
-
-                //     const toCopy = this.itemVariations.find((x) => {
-                //         return x.Color === this.tabsList[0].Color;
-                //     })
-                //     //let copiedVariation = { ...toCopy }
-                //     let copiedVariation = this.itemService.fakeCurrentItemInsert('', '')
-                //     copiedVariation[result.oldDefault.name] = result.oldDefault.variation;
-                //     copiedVariation[this.tabsList[0].name] = this.tabsList[0].selection;
-                //     copiedVariation.Name = this.itemVariations[0].Name;
-                //     copiedVariation.VendorSKU = this.itemVariations[0].VendorSKU;
-                //     this.itemVariations.push(copiedVariation)
-                //     this.itemService.currentProductItemInsert.next(copiedVariation);
-                    
-                //     this.tabsList[0].selection = this.tabsList[0].selectedProperties[0];
-                //     this.tabsList[1].selection = result.oldDefault.variation;
-                    
-                //     console.log(this.itemVariations);
-                // }
-
-                this.updatedListData = result.updatedListData;
-                this.variationCount = this.tabsList.reduce((accum, item) => {
-                    if (item.selectedProperties) {
-                        return accum *= item.selectedProperties.length;
-                    }
-                }, 1);
-                //this.createNewItemVariationsList()
-                this.viewVariationItem()
-
-            }
+            //this auto selects to first item in dropdown                
+            this.attributesVariationsList.forEach((item) => {
+                if (item.variationOptions && item.variationOptions.length > 0) {
+                    item.selectedVariation = item.variationOptions[0];
+                }
+            })
+            this.onUpdateItemData(this.attributesVariationsList)
+            this.variationCount = this.product.ItemInserts.length;
         });
     }
-    onUpdateItemData(a) {
-        let count = 0;
-        this.tabsList.forEach((tab)=> {
-            if (!tab.selection) {
-                count++;
-            }
-        })
-        if (!count) {
-            this.viewVariationItem();
-            this.viewVariationDisabled = false;
-        }
-        else {
-            this.viewVariationDisabled = true;
-        }
+    onUpdateItemData(list) {
         
-        //this.itemService.sendNotification({ type: 'error', title: 'Invalid Entry', content: 'Please enter all required fields' });
+        if (list && this.product.ItemInserts) {
+            const selectedVariations = list.map((i) => {
+                if (i.selectedVariation) return i.selectedVariation;
+            });
+            
+            this.product.ItemInserts.forEach((itemInsert) => {
+                
+                if (itemInsert.Variations) {
+                    let variation = itemInsert.Variations.every((variation) => selectedVariations.indexOf(variation) !== -1);
+                    if (variation) {
+                        return this.viewVariationItem(itemInsert);
+                    }
+                }
+            });
+        }
     }
     
-    viewVariationItem() {
-        const data = {
-            Color: '',
-            Size: '',
-        }
-
-        this.tabsList.forEach((tab)=> {
-            data[tab.name] = tab.selection;
-        })
-
-        let item = this.itemVariations.find((variation) => {
-            if (data.Color && data.Size) {
-                if (variation.Color === data.Color && variation.Size === data.Size) return variation;
-            }
-            if (data.Color && !data.Size) {
-                if (variation.Color === data.Color) return variation;
-            }
-            if (!data.Color && data.Size) {
-                if (variation.Size === data.Size) return variation;
-            }
-
-        })
-        
+    viewVariationItem(item) {
+        //console.log("to be put into current view", item);
         if (item) {
             this.itemService.currentProductItemInsert.next(item)
         }
-        if (!item) {
-            //create new 
-            this.itemVariations.push(this.itemService.fakeCurrentItemInsert(data.Color, data.Size));
-            //this.itemService.currentItemInsert = this.itemVariations[this.itemVariations.length-1]
-            this.itemService.currentProductItemInsert.next(this.itemVariations[this.itemVariations.length-1]);
-        }
+        // if (!item) {
+        //     //create new 
+        //     //this.itemVariations.push(this.itemService.defaultCurrentItemInsert());
+        //     this.itemService.currentProductItemInsert = this.itemVariations[this.itemVariations.length-1];
+        // }
+    }
+    createLabel(e) {
+        console.log(e.selectedValues.Variations);
     }
 }

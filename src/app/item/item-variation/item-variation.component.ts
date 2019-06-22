@@ -10,102 +10,105 @@ import { ItemService } from '../item.service';
 })
 export class ItemVariationComponentDialog implements OnInit {
     
-    tabsListData: any[];
+    attributesVariationsListData: any[];
 
+    attributesVariationsList: any[] = [];
 
     oldDefault: any = {};
     
-    tabsList: any[] = [];
-    updatedListData: any[];
+    
+    //updatedListData: any[];
 
-    newTab: any;
+    newAttribute: any;
     // selectedProperties: any = {};
     // selectedAttributes: any;
+    // selectedVariations: any = [];
 
-    newTabVariations: any = [];
+    // newTabVariations: any = [];
 
 
-    tabName: any[] = [];
-    tabProperties: any[] = [];
+    // tabName: any[] = [];
+    // tabProperties: any[] = [];
 
-    tempPropertyName: any = '';
-    showInput = false;
+    // tempPropertyName: any = '';
+    // showInput = false;
 
-    tabsListTest: any;
-    addItemVariationInvalid: any = true;
-
-    showDefaultSettingsSelection: boolean = false;
+    // tabsListTest: any;
+    addItemVariationInvalid: boolean = true;
+    originalData: any;
+    // showDefaultSettingsSelection: boolean = false;
 
     constructor(
         public dialogRef: MatDialogRef<ItemVariationComponentDialog>,
         private itemService: ItemService,
         @Inject(MAT_DIALOG_DATA) public data: any) {
-        
+            if (this.data) this.attributesVariationsList = this.data;
+            if (this.data.length > 0) {}
+            console.log(this.data);
+            this.originalData = [...this.data];
         }
     ngOnInit() {
+        
+        this.itemService.getGlobalAttributesVariations()
+            .subscribe((data) => {
+                this.attributesVariationsListData = data;
+            });            
+            
+        // This displays the attributes that are available for selection
+        if (this.data && this.data.length > 0) {
+            const updatedListData = [...this.attributesVariationsListData];
+            this.attributesVariationsList.forEach((x) => {
+                const index = this.attributesVariationsListData.findIndex((item) => item.attributeID === x.attributeID);
+                updatedListData.splice(index, 1);
+            })
+            this.attributesVariationsListData = updatedListData;
+        }
 
-        this.itemService.getGlobalAttributesVariations();
-
-        this.itemService.globalProductVariationsList
-                        .subscribe((tabListData) => {
-                            this.tabsListData = tabListData;
-                        });
-        //this.tabsList = this.data.itemVariationData;
-        //this.tabsListData = this.data.updatedListData;
     }
-
-
-
-    canShowDefaultOldSettingsInput(tabname) {
-        if (this.data && this.data.updatedListData) {
-            var item = this.data.updatedListData.find((x) => x.name === tabname);
-            if (item && this.data.updatedListData && this.data.updatedListData.length > 0) {
-                return true;
-            } 
-            else {
-                return false;
-            }
+    
+    canShowDefaultOldSettingsInput(tab) {
+        // console.log('Original Data', this.originalData)
+        // console.log('Data', this.data)
+        // console.log(tab)
+        
+        if (this.data.length > this.originalData.length && this.originalData.length  > 0 && this.originalData.indexOf(tab) < 0) {
+            return true;
+        }
+        else {
+            return false;
         }
         
+        
+        // if (this.data && this.data.length > 0) {
+        //     var item = this.data.updatedListData.find((x) => x.name === tabname);
+        //     if (item && this.data.updatedListData && this.data.updatedListData.length > 0) {
+        //         return true;
+        //     } 
+        //     else {
+        //         return false;
+        //     }
+        // }
+        
     }
 
-    // onAddTabProperty(tabName): void {
-    //     this.addTabProperty(tabName);
-    // }
-    // addTabProperty(tabName: any) {
-    //     // if (tabName) {
-    //     //     const tab = this.tabsList.find(x => x.name === tabName)
-    //     //     console.log(tab);
-    //     //     tab.properties.push(this.tempPropertyName);
-    //     //     this.tempPropertyName = '';
-    //     //     this.showInput = false;
-    //     // } 
-    //     // else {
-            
-    //         this.newTabVariations.push({});
-            
-    //     //}
-    // }
-    createTab() {
+    createAttribute() {
+        const tab = this.attributesVariationsListData.find(x => x.attributeName === this.newAttribute.attributeName);
+        this.attributesVariationsList.push(tab);
         
-        const tab = this.tabsListData.find(x => x.name === this.newTab.name);
-        this.tabsList.push(tab);
-        console.log(this.tabsList);
-        if (tab.name){
-            const index = this.tabsListData.map((item) => item.name).indexOf(tab.name)
+        const index = this.attributesVariationsListData.map((item) => item.attributeName).indexOf(tab.attributeName)
+    
+        //THIS IS THE LOGIC TO CLEAN UP THE this.tabsListData
+        const updatedListData = [...this.attributesVariationsListData];
+        updatedListData.splice(index, 1)
+        this.attributesVariationsListData = updatedListData;
         
-            //THIS IS THE LOGIC TO CLEAN UP THE this.tabsListData
-            this.updatedListData = [...this.tabsListData];
-            this.updatedListData.splice(index, 1)
-            this.tabsListData = this.updatedListData;
-        }
         
-        this.clearNewTabFields();
+        this.clearNewAttributeField();
         this.validateItemVariation();
     }
 
-    clearNewTabFields() {    
-        this.newTab = null;
+    clearNewAttributeField() {    
+        this.newAttribute = null;
     }
     
     onCancelClick(): void {
@@ -114,35 +117,22 @@ export class ItemVariationComponentDialog implements OnInit {
 
 
     onAddItemVariationClick() {
-        
-        //const data = {
-            //tabsList: this.tabsList,
-            // updatedListData: this.updatedListData,
-            // oldDefault: this.oldDefault
-        //};
-        
-        var itemVariation = {
-            
-            // VariationID:
-            // AttributeID:
-        }
-
-        this.itemService.addItemVariation(this.tabsList, )
-            
+        this.itemService.addItemVariation(this.attributesVariationsList, this.oldDefault.variation)
         this.dialogRef.close();
     }
-    onUpdateOldDefault(tabname) {
-        this.oldDefault.name = tabname;
+    onUpdateOldDefault(b) {
+        //this.oldDefault.name = tabname;
+        //console.log(tabname)
+        //console.log(b)
     }
-    onNgModelChange(e) {
-        //console.log(e);
+    onNgModelChange(tab) {
         this.validateItemVariation();
     }
 
     validateItemVariation() {
-        this.addItemVariationInvalid = !!this.tabsList.find((item) => {
-            if (item && item.selectedProperties) {
-                if (item.selectedProperties.length > 1) {
+        this.addItemVariationInvalid = !!this.attributesVariationsList.find((item) => {
+            if (item && item.variationOptions) {
+                if (item.variationOptions.length > 1) {
                     return false;
                 }
             }
