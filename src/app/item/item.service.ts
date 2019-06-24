@@ -83,7 +83,7 @@ export class ItemService {
             return ItemInsert;            
         }
         else {            
-            return new ItemInsert(null, null, 'Toolots', 'simple', null, null, null, null, null, null, null, null, null, null, null, null, 'IN', null, 'LB', null, null, null, 'IN', null, 'LB', false, null, null, null, null, "CN", "", null, false, null, "CatalogAndSearch", null, null, null, null, null, "NotSubmitted", null, null, true, false, [], [], [], [], [], [], [], [], [], []);
+            return new ItemInsert(null, null, 'Toolots', 'simple', null, null, null, null, null, null, null, null, null, null, null, null, 'IN', null, 'LB', null, null, null, 'IN', null, 'LB', false, null, null, null, null, "CN", "", null, false, null, "CatalogAndSearch", null, null, null, null, null, "NotSubmitted", false, null, null, true, false, [], [], [], [], [], [], [], [], [], []);
         }
     }
 
@@ -97,7 +97,6 @@ export class ItemService {
     }
 
     getItems(): Observable<Item[]> {
-        console.log(this.items);
         if (this.items) {
             return of(this.items);
         }
@@ -117,6 +116,14 @@ export class ItemService {
                         );
     }
 
+    getPartItems(): Observable<Item[]> {
+        return this.http.get<Item[]>(this.apiURL + '/item/partoverview')
+                        .pipe(
+                            //tap(data => this.items = data),
+                            catchError(this.handleError)
+                        );
+    }
+
     getCurrentItems() {
         return this.items;
     }
@@ -128,7 +135,7 @@ export class ItemService {
                             //tap(data => console.log(JSON.stringify(data))),
                             tap(data => {
                                 this.items = data;
-                                console.log(this.items);
+                                //console.log(this.items);
                             } ),
                             catchError(this.handleError)
                         );
@@ -177,7 +184,7 @@ export class ItemService {
             , item.PackageWidth, item.PackageHeight, item.PackageLength, item.PackageDimensionUOM, item.PackageWeight, item.PackageWeightUOM
             , item.IsFreeShipping, item.ShippingFee, item.MetaTitle, item.MetaKeywords, item.MetaDescription, item.Origin, item.Warranty
             , item.MerchantWarranty, item.AddProtectionPlan, item.URLKey, item.Visibility, item.Description, item.ShortDescription, item.TechnicalDetail, item.AdditionalInformation
-            , item.VendorBrandID, item.RequestApproval, item.RejectionReason, item.Status, item.Approval, item.ImagePath, item.PartImageRaw, item.PartImageFilePath, item.PartIsNewImage, item.ExcludeGoogleShopping, item.UpdatedOn, item.CreatedOn
+            , item.VendorBrandID, item.RequestApproval, item.RejectionReason, item.Status, item.Approval, item.ImagePath, item.IsPartItem, item.PartImageRaw, item.PartImageFilePath, item.PartIsNewImage, item.ExcludeGoogleShopping, item.UpdatedOn, item.CreatedOn
             , [], [], [], [], [], [], [], [], [], []
             , item.QtyOnHand, item.QtyAvailable, item.QtyOnOrder, item.QtyBackOrdered, item.MerchantQtyOnHand, item.MerchantQtyAvailable, item.MerchantQtyOnOrder, false);
 
@@ -283,7 +290,7 @@ export class ItemService {
             , item.PackageWidth, item.PackageHeight, item.PackageLength, item.PackageDimensionUOM, item.PackageWeight, item.PackageWeightUOM
             , item.IsFreeShipping, item.ShippingFee, item.MetaTitle, item.MetaKeywords, item.MetaDescription, item.Origin, item.Warranty, item.MerchantWarranty, item.AddProtectionPlan, item.URLKey
             , item.Visibility, item.Description, item.ShortDescription, item.TechnicalDetail, item.AdditionalInformation, item.VendorBrandID, item.Approval
-            , item.PartImageRaw, item.PartImageFilePath, item.PartIsNewImage, item.ExcludeGoogleShopping
+            , item.IsPartItem, item.PartImageRaw, item.PartImageFilePath, item.PartIsNewImage, item.ExcludeGoogleShopping
             , [], [], [], [], [], [], [], [], [], []);
 
         item.ItemCategoryAssignments.forEach((itemCategoryAssignment) => {
@@ -375,15 +382,38 @@ export class ItemService {
                             );
     }
 
+    addPartItem(item: ItemInsert): Observable<Item> {
+        const headers = new HttpHeaders({
+            'Content-Type': 'application/json'
+        });
+        return this.http.post<Item>(this.apiURL + '/item', item, { headers: headers } )
+                            .pipe(
+                                // tap(data => {
+                                //     if(this.items)
+                                //     {
+                                //         this.items.splice(0,0,data);
+                                //         this.currentItem = data;
+                                //     }
+                                // }),
+                                catchError(this.handleError)
+                            );
+    }
+
     deleteItem(id: number): Observable<Item>  {
         return this.http.delete<Item>(this.apiURL + '/item/' + id )
                             .pipe(
                                 //tap(data => console.log('Delete Item: ' + id)),
                                 tap(data => {
-                                    const foundIndex = this.items.findIndex(i => i.ItemID === id);
-                                    if (foundIndex > -1) {
-                                        this.items.splice(foundIndex, 1);
-                                        this.currentItem = null;
+                                    console.log(this.items);
+                                    if(this.items && this.items.length > 0)
+                                    {
+                                        console.log(this.items);
+                                        const foundIndex = this.items.findIndex(i => i.ItemID === id);
+                                        console.log(foundIndex);
+                                        if (foundIndex > -1) {
+                                            this.items.splice(foundIndex, 1);
+                                            this.currentItem = null;
+                                        }    
                                     }
                                 }),
                                 catchError(this.handleError)
@@ -597,7 +627,7 @@ export class ItemService {
 
     //Video
     getVideoURLDetail(id: string): Observable<URLVideo> {
-        return this.http.get<URLVideo>('https://www.googleapis.com/youtube/v3/videos?id=' + id + '&part=snippet&key=AIzaSyBcwPaOdoE9ARh6-Ps_jraOUc_s9w_LF44')
+        return this.http.get<URLVideo>('https://www.googleapis.com/youtube/v3/videos?id=' + id + '&part=snippet&key=AIzaSyDtJ4ncN9PcYj5oAsQTp4oT-djGj2MUItU')
                         .pipe(
                             //tap(data => console.log(JSON.stringify(data))),
                             catchError(this.handleError)

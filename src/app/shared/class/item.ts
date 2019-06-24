@@ -64,6 +64,8 @@ export class Item {
         public Approval: string,
         
         public ImagePath: string,
+
+        public IsPartItem: boolean,
         public PartImageRaw: string,
         public PartImageFilePath: string,
         public PartIsNewImage: boolean,
@@ -148,6 +150,8 @@ export class ItemInsert {
         public VendorBrandID: string,
 
         public Approval: string,
+
+        public IsPartItem: boolean,
         public PartImageRaw: string,
         public PartImageFilePath: string,
         public PartIsNewImage: boolean,
@@ -220,6 +224,8 @@ export class ItemUpdate {
         public RequestApproval: string,
 
         public Approval: string,
+
+        public IsPartItem: boolean,
         public PartImageRaw: string,
         public PartImageFilePath: string,
         public PartIsNewImage: boolean,

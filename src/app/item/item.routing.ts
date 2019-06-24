@@ -49,6 +49,20 @@ import { ItemBatchUpdateUpdateComponent } from './item-batch-update/item-batch-u
 import { ItemAddPartComponent } from './item-add/item-add-part.component';
 import { ItemEditPartComponent } from './item-edit/item-edit-part.component';
 
+import { ItemPartListComponent, ItemPartListComponentItemPrintDialog } from './item-part-list/item-part-list.component';
+import { ItemPartAddComponent } from './item-part-add/item-part-add.component';
+import { ItemPartAddDescriptionComponent } from './item-part-add/item-part-add-description.component';
+import { ItemPartAddDimensionComponent } from './item-part-add/item-part-add-dimension.component';
+import { ItemPartAddPriceComponent } from './item-part-add/item-part-add-price.component';
+import { ItemPartAddImageComponent } from './item-part-add/item-part-add-image.component';
+import { ItemPartEditComponent } from './item-part-edit/item-part-edit.component';
+import { ItemPartEditDescriptionComponent } from './item-part-edit/item-part-edit-description.component';
+import { ItemPartEditDimensionComponent } from './item-part-edit/item-part-edit-dimension.component';
+import { ItemPartEditPriceComponent } from './item-part-edit/item-part-edit-price.component';
+import { ItemPartEditImageComponent } from './item-part-edit/item-part-edit-image.component';
+import { ItemPartEditGuard } from './item-part-edit/item-part-edit.guard';
+import { ItemPartEditInventoryComponent } from './item-part-edit/item-part-edit-inventory.component';
+
 const ITEM_ROUTES: Routes = [
     {
         path: '',
@@ -60,6 +74,10 @@ const ITEM_ROUTES: Routes = [
             {
                 path: 'printlabel',
                 component: ItemPrintLabelComponent
+            },            
+            {
+                path: 'printlabel',
+                component: ItemPartListComponentItemPrintDialog
             },
             {
                 path: 'add',
@@ -226,7 +244,70 @@ const ITEM_ROUTES: Routes = [
                         component: ItemBatchUpdateUpdateComponent
                     },
                 ]
-            }
+            },
+            {
+                path: 'part',
+                component: ItemPartListComponent,
+            },
+            {
+                path: 'partadd',
+                component: ItemPartAddComponent,
+                children: [
+                    {
+                        path: '',
+                        redirectTo: 'partdescription',
+                        pathMatch: 'full'
+                    },
+                    {
+                        path: 'partdescription',
+                        component: ItemPartAddDescriptionComponent
+                    },
+                    {
+                        path: 'partdimension',
+                        component: ItemPartAddDimensionComponent
+                    },
+                    {
+                        path: 'partprice',
+                        component: ItemPartAddPriceComponent
+                    },
+                    {
+                        path: 'partimage',
+                        component: ItemPartAddImageComponent
+                    },
+                ]
+            },
+            {
+                path: 'part/:id/partedit',
+                component: ItemPartEditComponent,
+                canDeactivate: [ItemPartEditGuard],
+                children: [
+                    {
+                        path: '',
+                        redirectTo: 'partdescription',
+                        pathMatch: 'full'
+                    },
+                    {
+                        path: 'partdescription',
+                        component: ItemPartEditDescriptionComponent
+                    },
+                    {
+                        path: 'partinventory',
+                        component: ItemPartEditInventoryComponent
+                    },
+                    {
+                        path: 'partdimension',
+                        component: ItemPartEditDimensionComponent
+                    },
+                    {
+                        path: 'partprice',
+                        component: ItemPartEditPriceComponent
+                    },
+                    {
+                        path: 'partimage',
+                        component: ItemPartEditImageComponent
+                    },
+                ]
+            },
         ]
     },
     {
