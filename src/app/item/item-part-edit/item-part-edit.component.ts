@@ -12,11 +12,11 @@ import { environment } from '../../../environments/environment';
 
 @Component({
   selector: 'o-item-edit',
-  templateUrl: './item-edit.component.html',
-  styleUrls: ['./item-edit.component.css']
+  templateUrl: './item-part-edit.component.html',
+  styleUrls: ['./item-part-edit.component.css']
 })
 
-export class ItemEditComponent implements OnInit, OnDestroy {
+export class ItemPartEditComponent implements OnInit, OnDestroy {
     private subscription: Subscription;
     
     private originalItem: Item;
@@ -52,7 +52,6 @@ export class ItemEditComponent implements OnInit, OnDestroy {
                 this.loading = false;
             },
             error => {
-                //this.errorMessage = <any>error;
                 this.loading = false;
                 this.itemService.sendNotification({ type: 'error', title: 'Error', content: this.errorMessage });
                 this.router.navigate(['/item']);                
@@ -222,7 +221,6 @@ export class ItemEditComponent implements OnInit, OnDestroy {
                         this.pendingSave = false;
                         this.loading = false;
 
-                        this.item.FulfilledBy = updatedItem.FulfilledBy;
                         this.item.MerchantQuantity = updatedItem.MerchantQuantity;
                         this.item.Approval = updatedItem.Approval;
 
@@ -261,28 +259,6 @@ export class ItemEditComponent implements OnInit, OnDestroy {
     }
 
     onSaveComplete(message?: string): void {
-        // if(this.item.ItemImages)
-        // {
-        //     const newImagePath = this.item.ItemImages.find(img => img.IsThumbnail && !img.Exclude && !img.Remove);        
-        //     // this.itemService.getItem(this.item.ItemID).subscribe(
-        //     //     (item: Item) => {                
-        //     //         const _item = item;
-        //     //         _item.ImagePath = newImagePath ? newImagePath.Raw : null;
-        //     //         this.itemService.replaceItem(this.item.ItemID, _item);
-        //     //     },
-        //     //     (error: any) => {
-        //     //         // this.errorMessage = <any>error
-        //     //         this.itemService.sendNotification({ type: 'error', title: 'Error', content: '' });
-        //     //     }
-        //     // );
-
-        //     if(this.itemService.getCurrentItems()){
-        //         const foundItem = this.itemService.getCurrentItems().find(i => i.ItemID === this.item.ItemID);
-        //         foundItem.ImagePath = newImagePath ? newImagePath.FilePath : null;                
-        //         this.itemService.replaceItem(this.item.ItemID, foundItem);
-        //     }
-        // }
-
         if(this.itemService.getCurrentItems()){
             const foundItem = this.itemService.getCurrentItems().find(i => i.ItemID === this.item.ItemID);
 
@@ -327,7 +303,6 @@ export class ItemEditComponent implements OnInit, OnDestroy {
             
             foundItem.Name = this.item.Name;
             foundItem.VendorSKU = this.item.VendorSKU;
-            foundItem.FulfilledBy = this.item.FulfilledBy;
             
             this.itemService.replaceItem(this.item.ItemID, foundItem);
         }
@@ -396,10 +371,6 @@ export class ItemEditComponent implements OnInit, OnDestroy {
         }
     }
     isSubmitValid(): boolean {      
-        // console.log(this.originalItem.Approval);
-        // console.log(this.item.Approval);
-        // console.log(this.item.ItemImages.filter(x => !x.pendingAdd));
-
         if(this.originalItem.Approval != "Pending" && this.item.Approval == "Pending" && this.item.ItemImages.filter(x => !x.pendingAdd).length < 1) {
             this.itemService.sendNotification({ type: 'error', title: 'Invalid Entry', content: 'An image is required' });
             return false;    
@@ -437,7 +408,6 @@ export class ItemEditComponent implements OnInit, OnDestroy {
         this.dataIsValid = {};
 
         // 'description' tab
-        //if (this.item && this.validateDescription() && this.isShippingFeeValid() && this.isShipWithinDaysValid()) {
         if (this.item && this.validateDescription() && this.isShipWithinDaysValid()) {
             this.dataIsValid['description'] = true;
         } else {
@@ -503,7 +473,6 @@ export class ItemEditComponent implements OnInit, OnDestroy {
 
     validatePrice() {
         return (this.item.PriceType === 'Dynamic' || this.item.Price) && (this.item.FOBPrice || this.item.DropshipPrice);
-        //return (this.item.Price && this.item.FOBPrice);
     }
 
     validateCategory() {
@@ -519,15 +488,6 @@ export class ItemEditComponent implements OnInit, OnDestroy {
                     const fileName = this.item.TPIN;
                     window.navigator.msSaveOrOpenBlob(data, fileName + '.pdf'); // IE is the worst!!!
                 } else {
-                    // const iframe = document.createElement('iframe');
-                    // iframe.style.display = 'none';
-                    // iframe.src = blobUrl;
-                    // document.body.appendChild(iframe);
-
-                    // iframe.onload = (function() {
-                    //     iframe.contentWindow.focus();
-                    //     iframe.contentWindow.print();
-                    // });
                     const fileURL = window.URL.createObjectURL(blob);
                     const a: HTMLAnchorElement = document.createElement('a') as HTMLAnchorElement;
                     a.href = fileURL;
@@ -543,34 +503,6 @@ export class ItemEditComponent implements OnInit, OnDestroy {
         );
     }
 
-    requestActive() {
-        this.item.RequestApproval = true;
-        this.saveItem();
-    }
-
-    submitApproval() {
-        // console.log(this.item.ItemImages);
-        // console.log(this.item.ItemImages.filter(x => !x.pendingAdd));
-
-        if(this.item.ItemImages.filter(x => !x.pendingAdd).length < 1) {
-            this.itemService.sendNotification({ type: 'error', title: 'Image Required', content: 'An image is required' });
-        }
-        else
-        {
-            this.item.Approval = "Pending";
-            this.saveItem();    
-        }
-    }
-
-    approveItem() {
-        this.item.Approval = "Approved";
-        this.saveItem();
-    }
-
-    notApproveItem() {
-        this.item.Approval = "NotApproved";
-        this.saveItem();
-    }
     ngOnDestroy() {
         this.subscription.unsubscribe();
     }

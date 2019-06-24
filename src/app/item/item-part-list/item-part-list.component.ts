@@ -10,15 +10,13 @@ import { MatMenu } from '@angular/material/menu';
 import { environment } from '../../../environments/environment';
 
 @Component({
-    selector: 'o-item-list',
-    templateUrl: './item-list.component.html'
+    selector: 'o-item-part-list',
+    templateUrl: './item-part-list.component.html'
 })
 
-export class ItemListComponent implements OnInit {
+export class ItemPartListComponent implements OnInit {
     errorMessage: string;
     items: Item[];
-
-    selectedItem: Item;
 
     private imageURL = environment.imageURL;
     private linkURL = environment.linkURL;
@@ -33,8 +31,7 @@ export class ItemListComponent implements OnInit {
     duplicateItemAttachments: ItemAttachment[];
     duplicateItemVideos: ItemVideo[];
 
-    //displayedColumns = ['Menu', 'ImagePath', 'VendorSKU', 'Name', 'TPIN', 'FulfilledBy', 'Price', 'Quantity', 'MerchantQuantity'];
-    displayedColumns = ['Menu','ItemID','ProductDetails','FulfilledBy','Price','Quantity','MerchantQuantity','Approval','Visibility','UpdatedOn'];
+    displayedColumns = ['Menu','ItemID','ProductDetails','Price','UpdatedOn'];
     dataSource: any = null;
 
     @ViewChild(MatPaginator) paginator: MatPaginator;
@@ -51,11 +48,6 @@ export class ItemListComponent implements OnInit {
         }
 
     ngOnInit() {
-
-        // console.log('here init');
-        // console.log(this.appService.isMemberAdmin());
-        // console.log(this.appService.getVendorID());
-
         this.loading = true;
 
         this.appService.getCurrentMember()
@@ -73,7 +65,7 @@ export class ItemListComponent implements OnInit {
                 }
             );
 
-        this.itemService.getItems().subscribe(
+        this.itemService.getPartItems().subscribe(
             (items: Item[]) => {
                 this.items = items;
                 this.loading = false;
@@ -82,7 +74,6 @@ export class ItemListComponent implements OnInit {
             (error: any) => {
                 this.loading = false;
                 this.itemService.sendNotification({ type: 'error', title: 'Error', content: error });
-                //this.errorMessage = <any>error;
             }
         );
     }
@@ -94,7 +85,7 @@ export class ItemListComponent implements OnInit {
     }
 
     openDialogPrintItemLabel(item: Item) {
-        const dialogRef = this.itemPrintDialog.open(ItemListComponentItemPrintDialog, {
+        const dialogRef = this.itemPrintDialog.open(ItemPartListComponentItemPrintDialog, {
           width: '250px',
           data: item,
         });
@@ -111,34 +102,6 @@ export class ItemListComponent implements OnInit {
         });
     }
 
-    openDialogImport() {
-        const dialogRef = this.itemPrintDialog.open(ItemListComponentImportDialog, {
-            width: '320px'
-          });
-
-          dialogRef.afterClosed().subscribe(result => {
-
-            if(result)
-            {
-                this.loading = true;
-                this.itemService.refreshItems().subscribe(
-                
-                    (items: Item[]) => {
-                        this.items = items;
-                        this.loading = false;
-                        this.refreshDataSource(items);
-                    },
-                    (error: any) => {
-                        this.loading = false;
-                        this.itemService.sendNotification({ type: 'error', title: 'Error', content: error });
-                        //this.errorMessage = <any>error;
-                    }
-                );
-            }
-            
-          });
-    }
-
     onPrintLabel(item: Item, count: number, border: string) {
         this.itemService.downloadItemLabelCount(item.ItemID, count, border).subscribe(
             (data) => {
@@ -148,15 +111,6 @@ export class ItemListComponent implements OnInit {
                     const fileName = item.TPIN;
                     window.navigator.msSaveOrOpenBlob(data, fileName + '.pdf'); // IE is the worst!!!
                 } else {
-                    // const iframe = document.createElement('iframe');
-                    // iframe.style.display = 'none';
-                    // iframe.src = blobUrl;
-                    // document.body.appendChild(iframe);
-
-                    // iframe.onload = (function() {
-                    //     iframe.contentWindow.focus();
-                    //     iframe.contentWindow.print();
-                    // });
                     const fileURL = window.URL.createObjectURL(blob);
                     const a: HTMLAnchorElement = document.createElement('a') as HTMLAnchorElement;
                     a.href = fileURL;
@@ -181,15 +135,6 @@ export class ItemListComponent implements OnInit {
                     const fileName = item.TPIN + '_Large';
                     window.navigator.msSaveOrOpenBlob(data, fileName + '.pdf'); // IE is the worst!!!
                 } else {
-                    // const iframe = document.createElement('iframe');
-                    // iframe.style.display = 'none';
-                    // iframe.src = blobUrl;
-                    // document.body.appendChild(iframe);
-
-                    // iframe.onload = (function() {
-                    //     iframe.contentWindow.focus();
-                    //     iframe.contentWindow.print();
-                    // });
                     const fileURL = window.URL.createObjectURL(blob);
                     const a: HTMLAnchorElement = document.createElement('a') as HTMLAnchorElement;
                     a.href = fileURL;
@@ -213,84 +158,22 @@ export class ItemListComponent implements OnInit {
 
             this.itemService.deleteItem(item.ItemID).subscribe(
                 () => {
+                    this.refresh();
                     this.loading = false;
                     this.onDeleteComplete(item, `${item.Name} was deleted`);
                 },
                 (error: any) => {
-                    this.loading = false;
-                    // this.errorMessage = <any>error
                     this.refresh();
+                    this.loading = false;
+                    //this.refreshDataSource(this.items);
                     this.errorMessage = <any>error;
                     this.itemService.sendNotification({ type: 'error', title: 'Error', content: this.errorMessage });
-                    //window.location.reload();
                 }
             );
-        }
-    }
-
-    onConvertToPart(item: Item) {
-        const confirmation = confirm(`${item.ItemID}: ${item.Name} -Selected Item will be converted as a part item. Would you like to continue?`);        
-        if (confirmation) {
-            
-            this.loading = true;
-
-            this.itemService.getItem(item.ItemID).subscribe(
-                (item: Item) => {
-                    this.selectedItem = item;                        
-
-                    if(this.isValidPart(this.selectedItem))
-                    {
-                        this.selectedItem.IsPartItem = true;
-                        // this.selectedItem.FulfilledBy = 'Toolots';
-                        // this.selectedItem.ItemType = 'simple';
-                        this.selectedItem.Visibility = 'Search';
-                        this.selectedItem.Approval = 'Approved';         
-                                    
-                        this.itemService.editItem(this.selectedItem).subscribe(
-                            () => {
-                                this.refresh();                                
-                                this.loading = false;
-                                this.itemService.sendNotification({ type: 'success', title: 'Successfully Updated', content: "Converted as a part item" });
-                            },
-                            (error: any) => {
-                                this.refresh();
-                                this.loading = false;
-                                this.itemService.sendNotification({ type: 'error', title: 'Error', content: this.errorMessage });
-                            }
-                        );
-                    }    
-                    else {
-                        this.loading = false;
-                    }  
-                },
-                error => {
-                    this.refresh();
-                    this.itemService.sendNotification({ type: 'error', title: 'Error', content: this.errorMessage });
-                    this.loading = false;
-                }
-            );
-
-                  
-        }
-    }
-
-    isValidPart(item: Item) : boolean {
-        console.log(item);
-        if(item.ItemType != 'simple') {
-            this.itemService.sendNotification({ type: 'error', title: 'Error', content: "Item must be a 'Simple' item" });
-            return false;
-        }
-        else if (item.FulfilledBy != 'Toolots') {
-            this.itemService.sendNotification({ type: 'error', title: 'Error', content: "Item must be fulfilled by 'Toolots'" });
-            return false;
-        }
-        else {
-            return true;
         }
     }
 
     onDuplicate(itemid: number) {
-
         this.loading = true;
 
         this.itemService.getItemDuplicate(itemid).subscribe(
@@ -337,10 +220,9 @@ export class ItemListComponent implements OnInit {
                 this.itemService.duplicateItemInsert = this.duplicateItemInsert;
 
                 this.loading = false;
-                this.router.navigate(['/item','add']);
+                this.router.navigate(['/item','partadd']);
             },
             error => {
-                //this.errorMessage = <any>error;
                 this.loading = false;
                 this.itemService.sendNotification({ type: 'error', title: 'Error', content: this.errorMessage });
                 this.router.navigate(['/item']);
@@ -353,17 +235,27 @@ export class ItemListComponent implements OnInit {
     }
 
     onDeleteComplete(item: Item, message?: string): void {
-        this.refreshDataSource(this.items);
+        //this.refreshDataSource(this.items);
         this.itemService.sendNotification({ type: 'success', title: 'Successfully Deleted', content: message });
     }
 
     refresh() {
-        this.itemService.refreshItems().subscribe(
+        // this.itemService.refreshItems().subscribe(
+        //     (items: Item[]) => {
+        //         this.items = items;
+        //     },
+        //     (error: any) => this.errorMessage = <any>error
+        // );
+
+        this.itemService.getPartItems().subscribe(
             (items: Item[]) => {
-                this.items = items;
-                this.refreshDataSource(this.items);
+                this.items = items;                
+                this.refreshDataSource(items);
             },
-            (error: any) => this.errorMessage = <any>error
+            (error: any) => {
+                this.loading = false;
+                this.itemService.sendNotification({ type: 'error', title: 'Error', content: error });
+            }
         );
     }
 
@@ -384,16 +276,15 @@ export class ItemLabelPrintDialog {
 }
 
 @Component({
-selector: 'item-list.component-item-print-dialog',
-templateUrl: 'item-list.component-item-print-dialog.html',
+selector: 'item-part-list.component-item-print-dialog',
+templateUrl: 'item-part-list.component-item-print-dialog.html',
 })
 
-export class ItemListComponentItemPrintDialog implements OnInit {
-//quantity: number;
+export class ItemPartListComponentItemPrintDialog implements OnInit {
     itemLabelPrintDialog: ItemLabelPrintDialog;
 
     constructor(
-        public dialogRef: MatDialogRef<ItemListComponentItemPrintDialog>,
+        public dialogRef: MatDialogRef<ItemPartListComponentItemPrintDialog>,
         @Inject(MAT_DIALOG_DATA) public data: Item) {
         
         }
@@ -406,101 +297,3 @@ export class ItemListComponentItemPrintDialog implements OnInit {
     }
 }
 
-
-@Component({
-selector: 'item-list.component-import-dialog',
-templateUrl: 'item-list.component-import-dialog.html',
-})
-
-export class ItemListComponentImportDialog implements OnInit {
-    filesToUpload: Array<File> = [];
-    selectedFiles: Array<File> = [];
-    selectedFileNames: string[] = [];
-
-    loading: boolean;
-    updated: boolean;
-
-    @ViewChild('fileUpload') fileUploadVar: any;
-
-    constructor( public dialogRef: MatDialogRef<ItemListComponentImportDialog>, private itemService: ItemService ) {        
-    }
-
-    ngOnInit() {
-        this.updated = false;
-    }
-
-    onCancelClick(): void {
-        this.dialogRef.close();
-    }
-
-    fileChangeEvent(fileInput: any) {
-        this.filesToUpload = [];
-        this.selectedFileNames = [];
-
-        this.selectedFiles = <Array<File>>fileInput.target.files;
-        for (let i = 0; i < this.selectedFiles.length; i++) {
-            this.filesToUpload.push(this.selectedFiles[i])
-            this.selectedFileNames.push(this.selectedFiles[i].name);
-        }
-    }
-
-    removeFile(index: number) {
-        this.filesToUpload.splice(index, 1);
-        this.selectedFileNames.splice(index, 1);
-    }
-
-    onImportClick() {
-        const formData: FormData = new FormData(); 
-        this.loading = true;
-        formData.append('uploadedFiles', this.filesToUpload[0], this.filesToUpload[0].name);         
-        this.itemService.importItemFile(formData).subscribe (
-            (data: string) => {       
-                this.loading = false; 
-                this.updated = true;     
-                this.dialogRef.close(this.updated);   
-            },
-            (error: any) => {
-                this.loading = false;
-                this.itemService.sendNotification({ type: 'error', title: 'Error', content: error });
-                this.dialogRef.close(); 
-            });        
-    }
-
-    onTemplateClick() {
-        this.itemService.downloadItemTemplate().subscribe(
-            (data) => {
-                const blob = new Blob([data], {type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'});
-                const blobUrl = URL.createObjectURL(blob);
-                if (window.navigator.msSaveOrOpenBlob) {
-                    const fileName = 'Item_Template';
-                    window.navigator.msSaveOrOpenBlob(data, fileName + '.xlsx'); // IE is the worst!!!
-                } else {
-                    // const iframe = document.createElement('iframe');
-                    // iframe.style.display = 'none';
-                    // iframe.src = blobUrl;
-                    // document.body.appendChild(iframe);
-
-                    // iframe.onload = (function() {
-                    //     iframe.contentWindow.focus();
-                    //     iframe.contentWindow.print();
-                    // });
-                    const fileURL = window.URL.createObjectURL(blob);
-                    const a: HTMLAnchorElement = document.createElement('a') as HTMLAnchorElement;
-                    a.href = fileURL;
-                    a.download = 'Item_Template';
-                    document.body.appendChild(a);
-                    a.target = '_blank';
-                    a.click();
-
-                    document.body.removeChild(a);
-                    URL.revokeObjectURL(fileURL);
-                }
-            }
-        );
-    }
-
-    cancelUpload() {
-        this.filesToUpload = [];
-        this.selectedFileNames = [];
-    }
-}

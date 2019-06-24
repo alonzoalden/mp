@@ -16,6 +16,7 @@ import { ToolModule } from '../shared/tool/tool.module';
 import { ItemComponent } from './item.component';
 import { ItemListComponent, ItemListComponentItemPrintDialog, ItemListComponentImportDialog } from './item-list/item-list.component';
 import { ItemPrintLabelComponent, ItemPrintLabelComponentPrintDialog} from './item-print-label/item-print-label.component';
+import { ItemPartListComponent, ItemPartListComponentItemPrintDialog } from './item-part-list/item-part-list.component';
 
 import { ItemVariationComponentDialog } from './item-variation/item-variation.component';
 
@@ -74,6 +75,19 @@ import { ItemBatchUpdateComponent } from './item-batch-update/item-batch-update.
 import { ItemBatchUpdateSelectComponent } from './item-batch-update/item-batch-update-select.component';
 import { ItemBatchUpdateUpdateComponent } from './item-batch-update/item-batch-update-update.component';
 
+import { ItemPartAddComponent } from './item-part-add/item-part-add.component';
+import { ItemPartAddDescriptionComponent } from './item-part-add/item-part-add-description.component';
+import { ItemPartAddDimensionComponent } from './item-part-add/item-part-add-dimension.component';
+import { ItemPartAddPriceComponent } from './item-part-add/item-part-add-price.component';
+import { ItemPartAddImageComponent } from './item-part-add/item-part-add-image.component';
+import { ItemPartEditComponent } from './item-part-edit/item-part-edit.component';
+import { ItemPartEditDescriptionComponent } from './item-part-edit/item-part-edit-description.component';
+import { ItemPartEditInventoryComponent } from './item-part-edit/item-part-edit-inventory.component';
+import { ItemPartEditDimensionComponent } from './item-part-edit/item-part-edit-dimension.component';
+import { ItemPartEditPriceComponent } from './item-part-edit/item-part-edit-price.component';
+import { ItemPartEditImageComponent } from './item-part-edit/item-part-edit-image.component';
+import { ItemPartEditGuard } from './item-part-edit/item-part-edit.guard';
+
 
 @NgModule({
     declarations: [
@@ -121,8 +135,23 @@ import { ItemBatchUpdateUpdateComponent } from './item-batch-update/item-batch-u
         ItemBatchUpdateComponent,
         ItemBatchUpdateSelectComponent,
         ItemBatchUpdateUpdateComponent,
+
+        ItemPartListComponent,
+        ItemPartAddComponent,
+        ItemPartAddDescriptionComponent,
+        ItemPartAddDimensionComponent,
+        ItemPartAddPriceComponent,
+        ItemPartAddImageComponent,
+        ItemPartEditComponent,
+        ItemPartEditDescriptionComponent,
+        ItemPartEditInventoryComponent,
+        ItemPartEditDimensionComponent,
+        ItemPartEditPriceComponent,
+        ItemPartEditImageComponent,
+
         PageNotFoundComponent,
         ItemListComponentItemPrintDialog,
+        ItemPartListComponentItemPrintDialog,
         ItemPrintLabelComponentPrintDialog,
         ItemListComponentImportDialog,
         ItemAddImageComponentUploadDialog,
@@ -163,6 +192,7 @@ import { ItemBatchUpdateUpdateComponent } from './item-batch-update/item-batch-u
         ItemEditGuard,
         ItemEditBundleGuard,
         ItemAddBundleGuard,
+        ItemPartEditGuard,
         { provide: MAT_MOMENT_DATE_ADAPTER_OPTIONS, useValue: { useUtc: true } }
     ]
 })
