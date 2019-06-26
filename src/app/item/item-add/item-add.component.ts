@@ -1,6 +1,6 @@
 import { Component, OnInit, ViewChild, ElementRef, Inject } from '@angular/core';
 import { Router } from '@angular/router';
-import { FakeItemInsert, ItemInsert, ItemTierPriceInsert, ItemRelatedProductInsert, ItemUpSellInsert, ItemCrossSellInsert, ItemAttachmentInsert, ItemVideoInsert } from '../../shared/class/item';
+import { ItemInsert, ItemTierPriceInsert, ItemRelatedProductInsert, ItemUpSellInsert, ItemCrossSellInsert, ItemAttachmentInsert, ItemVideoInsert } from '../../shared/class/item';
 import { VendorBrand } from '../../shared/class/vendor-brand';
 import { MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material';
 import { ItemService } from '../item.service';
@@ -51,17 +51,18 @@ export class ItemAddComponent {
 
                     
         this.item = this.itemService.defaultCurrentItemInsert();
+        this.itemService.setProduct([this.item]);
         this.itemService.setProductItem(this.item);
-        this.itemService.setProduct(this.product);
-
-        //turn to oversvable?
+        
+        
+        
         this.itemService.product.subscribe((product) => this.product = product);
                     
-
-        this.itemService.getGlobalAttributesVariations()
-                        .subscribe((data) => {
-                            this.attributesVariationsListData = data;
-                        });
+        //this.itemService.getItemAttributes().subscribe((itemAttributes) => this.attributesVariationsListData = itemAttributes);
+        // this.itemService.getGlobalAttributesVariations()
+        //                 .subscribe((data) => {
+        //                     this.attributesVariationsListData = data;
+        //                 });
 
         this.itemService.getVendorBrands().subscribe(
             (vendorBrands: VendorBrand[]) => {
@@ -320,6 +321,11 @@ export class ItemAddComponent {
     }
 
     openDialogItemVariation() {
+
+        // const data = {
+        //     attributesVariationsList: this.attributesVariationsList,
+        //     attributesVariationsListData: this.attributesVariationsListData
+        // };
         const dialogRef = this.printDialog.open(ItemVariationComponentDialog, {
             //width: '750px',
             data: this.attributesVariationsList
@@ -333,30 +339,27 @@ export class ItemAddComponent {
                 }
             })
             this.onUpdateItemData(this.attributesVariationsList)
-            this.variationCount = this.product.ItemInserts.length;
+            if (this.product && this.product.length) {
+                this.variationCount = this.product.length;
+            }
         });
     }
     onUpdateItemData(list) {
-        
-        if (list && this.product.ItemInserts) {
+        if (list && this.product) {
             const selectedVariations = list.map((i) => {
                 if (i.selectedVariation) return i.selectedVariation;
             });
-            
-            this.product.ItemInserts.forEach((itemInsert) => {
-                
-                if (itemInsert.Variations) {
-                    let variation = itemInsert.Variations.every((variation) => selectedVariations.indexOf(variation) !== -1);
-                    if (variation) {
-                        return this.viewVariationItem(itemInsert);
-                    }
+            this.product.forEach((item) => {
+                if (item.ItemVariationItems) {
+                    let variation = item.ItemVariationItems.every((variation) => selectedVariations.indexOf(variation) !== -1);
+                    if (variation) return this.viewVariationItem(item);
                 }
             });
         }
+        console.log(this.product)
     }
     
     viewVariationItem(item) {
-        //console.log("to be put into current view", item);
         if (item) {
             this.itemService.currentProductItemInsert.next(item)
         }
@@ -365,8 +368,5 @@ export class ItemAddComponent {
         //     //this.itemVariations.push(this.itemService.defaultCurrentItemInsert());
         //     this.itemService.currentProductItemInsert = this.itemVariations[this.itemVariations.length-1];
         // }
-    }
-    createLabel(e) {
-        console.log(e.selectedValues.Variations);
     }
 }

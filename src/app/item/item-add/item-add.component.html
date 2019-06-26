@@ -22,7 +22,7 @@
             <!-- <div class="ibox-content" >
                 <strong>Select Variation</strong>
             </div> -->
-            <div class="col-lg-12 " style="margin-bottom: 30px;"  *ngIf="product?.ItemInserts?.length > 0">
+            <div class="col-lg-12 " style="margin-bottom: 30px;"  *ngIf="product?.length > 0 && product[0].ItemVariationItems.length">
                 <div class="ibox-title">
                     <h5>Item Variations: {{ variationCount }} total</h5>
                 </div>
@@ -56,9 +56,9 @@
                     <div class="row ">
                         <div class="col-lg-3" *ngFor="let items of attributesVariationsList"  style="text-align: left;">
                             <ng-container *ngIf="items.variationOptions && items.variationOptions?.length > 0">
-                                <h4> {{ items.attributeName }} </h4>
+                                <h4> {{ items.Name }} </h4>
                                 <ng-select  [items]="items.variationOptions"
-                                            bindLabel="name"
+                                            bindLabel="Name"
                                             [(ngModel)]="items.selectedVariation"
                                             placeholder="{{ 'Select Attribute' | translate }}"
                                             name="selectAttribute"

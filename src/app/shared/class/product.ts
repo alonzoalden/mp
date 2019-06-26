@@ -84,7 +84,8 @@ export class ProductItemInsert {
         public ItemImages: Array<ItemImageInsert>,
         public ItemParts: Array<ItemPartInsert>,
 
-        public Variations: Array<any>
+        public Variations: Array<any>,
+        public Name: string
     ) {}
 }
 

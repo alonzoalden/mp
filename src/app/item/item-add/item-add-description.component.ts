@@ -1,7 +1,7 @@
 import { Component, OnInit, AfterViewInit } from '@angular/core';
 import { Router } from '@angular/router';
 
-import { ItemInsert, FakeItemInsert } from '../../shared/class/item';
+import { ItemInsert } from '../../shared/class/item';
 import { VendorBrand } from '../../shared/class/vendor-brand';
 
 import { ItemService } from '../item.service';
@@ -19,7 +19,7 @@ export class ItemAddDescriptionComponent implements OnInit, AfterViewInit {
     errorMessage: string;
     isPM: boolean;
     
-    item: ProductItemInsert;
+    item: ItemInsert;
     vendorBrandList: VendorBrand[]; 
 
     constructor(private itemService: ItemService, private appService: AppService) { }
@@ -55,7 +55,7 @@ export class ItemAddDescriptionComponent implements OnInit, AfterViewInit {
             }
         );
     }
-
+    
     ngAfterViewInit() {
         var self = this;
 

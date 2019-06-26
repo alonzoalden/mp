@@ -1,35 +1,35 @@
 <h3 class="ibox-title dialog-title">Create Item Variations</h3>
 <div mat-dialog-content style="background-color: #f3f3f4;">
-    <mat-tab-group class="item-variation" [@.disabled]="true" [disableRipple]="true" [dynamicHeight]="false">
+    <mat-tab-group class="item-variation" [@.disabled]="true" [disableRipple]="true" [dynamicHeight]="false" (selectedTabChange)="canShowDefaultOldSettings($event.tab.textLabel)">
         
         <mat-tab *ngFor="let tab of attributesVariationsList; let i = index" [label]="tab">
 
             
             <ng-container>
                 <ng-template mat-tab-label>
-                    <span>{{ tab.attributeName | translate }}</span>
+                    <span>{{ tab.Name | translate }}</span>
                 </ng-template>
             
                 <div class="item-variation-content">
-                    <h5 style="font-size: 14px; padding-bottom: 10px;">Select {{tab.attributeName}} Variations</h5> 
+                    <h5 style="font-size: 14px; padding-bottom: 10px;">Select {{tab.Name}} Variations</h5> 
                     <mat-selection-list #properties
                         [(ngModel)]="tab.variationOptions"
-                        (ngModelChange)="onNgModelChange(tab)">
+                        (ngModelChange)="onNgModelChange()">
                         <mat-list-option
-                            *ngFor="let property of tab.variations"
+                            *ngFor="let property of tab.ItemVariations"
                             [value]="property">
-                                {{property.name}}
+                                {{property.Name}}
                         </mat-list-option>
                     </mat-selection-list>
 
-                    <div style="margin-top: 40px;" *ngIf="canShowDefaultOldSettingsInput(tab)">
+                    <div style="margin-top: 40px;" *ngIf="canShowDefaultOldSettingsInput" #oldDefaultRef>
                     <!-- <div style="margin-top: 40px;"> -->
                         <h5>Default old settings to:</h5>
                         <ng-select [items]="tab.variationOptions"
-                                    bindLabel="name"
+                                    bindLabel="Name"
                                     placeholder="{{ 'Choose Variation for new default' | translate }}"
-                                    [(ngModel)]="oldDefault.variation"
-                                    (change)="onUpdateOldDefault(oldDefault)"
+                                    [(ngModel)]="oldDefault"
+                                    (change)="onUpdateOldDefault()"
                                     name="selectAttribute"
                                     required
                                     loadingText="Loading..."
@@ -41,6 +41,7 @@
                                         </div>
                                     </ng-template>
                         </ng-select>
+                        <!-- <p class="m-t-xs" *ngIf="this.oldDefaultRef && !this.oldDefault"> * Required </p> -->
                     </div>
                     <p style="position: absolute; bottom: 0;">
                         Options selected: {{properties.selectedOptions.selected.length}}
@@ -58,11 +59,12 @@
                 <div class="m-b-md">
                     <h5 style="font-size: 14px;padding-bottom: 10px;">Select Item Attribute</h5> 
                     <ng-select [items]="attributesVariationsListData"
-                                bindLabel="attributeName"
+                                bindLabel="Name"
                                 placeholder="{{ 'Select Attribute' | translate }}"
                                 [(ngModel)]="newAttribute"
                                 name="selectAttribute"
                                 required
+                                [loading]="!attributesVariationsListData"
                                 loadingText="Loading..."
                                 class="inbound-line"
                                 style="width: 100%;">
@@ -70,8 +72,11 @@
                 </div>
 
                 <div style="text-align: left; margin-top: 40px;">
-                    <button (click)="createAttribute()" mat-raised-button color="primary">
-                        Add
+                    <button [disabled]="!newAttribute" (click)="createAttribute()" mat-raised-button color="primary">
+                        <!-- <ng-container *ngIf="addAttributeLoading">
+                            <i class="fa fa-spinner fa-spin fs-16"></i>
+                        </ng-container> -->
+                        <span>Add</span>
                     </button>
                 </div>
             </div>

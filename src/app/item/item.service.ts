@@ -4,9 +4,12 @@ import { HttpClient, HttpErrorResponse, HttpHeaders } from '@angular/common/http
 import { Observable, Subject, of, throwError, BehaviorSubject } from 'rxjs';
 import { catchError, tap } from 'rxjs/operators';
 
-import { FakeItemInsert, Item, ItemInsert, ItemOption, ItemOptionInsert, ItemSelection, ItemSelectionInsert, ItemTierPrice, ItemTierPriceInsert
+import { Item, ItemInsert, ItemOption, ItemOptionInsert, ItemSelection, ItemSelectionInsert, ItemTierPrice, ItemTierPriceInsert
     , ItemCategoryAssignment, ItemRelatedProduct, ItemRelatedProductInsert, ItemUpSell, ItemUpSellInsert, ItemCrossSell, ItemCrossSellInsert
-    , ItemAttachment, ItemAttachmentInsert, ItemVideo, ItemVideoInsert, ItemImage, ItemImageInsert, ItemPrintLabel, ItemBatch, ItemPart, ItemPartInsert } from '../shared/class/item';
+    , ItemAttachment, ItemAttachmentInsert, ItemVideo, ItemVideoInsert, ItemImage, ItemImageInsert, ItemPrintLabel, ItemBatch
+    , ItemPart, ItemPartInsert
+    , ItemGlobalAttribute, ItemGlobalVariation, ItemAttribute, ItemVariation } from '../shared/class/item';
+
 //import { ItemImage } from '../shared/class/item-image';
 import { URLVideo, URLVideoItems, URLVideoItemsSnippet, URLVideoItemsSnippetThumbnails, URLVideoItemsSnippetThumbnailsStandard } from '../shared/class/item-video';
 
@@ -26,8 +29,6 @@ import { AppService } from '../app.service';
 
 import { environment } from '../../environments/environment';
 import { ResponseContentType } from '@angular/http';
-import { connectableObservableDescriptor } from 'rxjs/internal/observable/ConnectableObservable';
-import { ConsoleService } from '@ng-select/ng-select/ng-select/console.service';
 
 @Injectable()
 export class ItemService {
@@ -54,16 +55,9 @@ export class ItemService {
 
     batchUpdateItems: Item[];
 
-
-
     public product: BehaviorSubject<any>;
     public currentProductItemInsert: BehaviorSubject<any>;
-
-    public globalProductVariationsList: BehaviorSubject<any>;
-    public globalProductVariationsList2: any;
-
-    currentItemInsertFake: FakeItemInsert;
-
+    //public globalProductVariationsList: BehaviorSubject<any>;
 
 
     constructor(private http: HttpClient,
@@ -102,7 +96,7 @@ export class ItemService {
             return ItemInsert;            
         }
         else {            
-            return new ItemInsert(null, null, 'Toolots', 'simple', null, null, null, null, null, null, null, null, null, null, null, null, 'IN', null, 'LB', null, null, null, 'IN', null, 'LB', false, null, null, null, null, "CN", "", null, false, null, "CatalogAndSearch", null, null, null, null, null, "NotSubmitted", false, null, null, true, false, [], [], [], [], [], [], [], [], [], []);
+            return new ItemInsert(null, null, 'Toolots', 'simple', null, null, null, null, null, null, null, null, null, null, null, null, 'IN', null, 'LB', null, null, null, 'IN', null, 'LB', false, null, null, null, null, "CN", "", null, false, null, "CatalogAndSearch", null, null, null, null, null, "NotSubmitted", false, null, null, true, false, [], [], [], [], [], [], [], [], [], [], []);
         }
     }
 
@@ -204,7 +198,7 @@ export class ItemService {
             , item.IsFreeShipping, item.ShippingFee, item.MetaTitle, item.MetaKeywords, item.MetaDescription, item.Origin, item.Warranty
             , item.MerchantWarranty, item.AddProtectionPlan, item.URLKey, item.Visibility, item.Description, item.ShortDescription, item.TechnicalDetail, item.AdditionalInformation
             , item.VendorBrandID, item.RequestApproval, item.RejectionReason, item.Status, item.Approval, item.ImagePath, item.IsPartItem, item.PartImageRaw, item.PartImageFilePath, item.PartIsNewImage, item.ExcludeGoogleShopping, item.UpdatedOn, item.CreatedOn
-            , [], [], [], [], [], [], [], [], [], []
+            , [], [], [], [], [], [], [], [], [], [], []
             , item.QtyOnHand, item.QtyAvailable, item.QtyOnOrder, item.QtyBackOrdered, item.MerchantQtyOnHand, item.MerchantQtyAvailable, item.MerchantQtyOnOrder, false);
 
         item.ItemCategoryAssignments.forEach((itemCategoryAssignment) => {
@@ -310,7 +304,7 @@ export class ItemService {
             , item.IsFreeShipping, item.ShippingFee, item.MetaTitle, item.MetaKeywords, item.MetaDescription, item.Origin, item.Warranty, item.MerchantWarranty, item.AddProtectionPlan, item.URLKey
             , item.Visibility, item.Description, item.ShortDescription, item.TechnicalDetail, item.AdditionalInformation, item.VendorBrandID, item.Approval
             , item.IsPartItem, item.PartImageRaw, item.PartImageFilePath, item.PartIsNewImage, item.ExcludeGoogleShopping
-            , [], [], [], [], [], [], [], [], [], []);
+            , [], [], [], [], [], [], [], [], [], [], []);
 
         item.ItemCategoryAssignments.forEach((itemCategoryAssignment) => {
             const newItemCategoryAssignment = new ItemCategoryAssignment(itemCategoryAssignment.ItemCategoryID);
@@ -971,202 +965,148 @@ export class ItemService {
         else return '#FFFFFF';
     }
 
+
+    
+    //Global Attribute/Variation
+    getItemGlobalAttributes(): Observable<ItemGlobalAttribute[]> {
+        return this.http.get<ItemGlobalAttribute[]>(this.apiURL + '/item/globalattribute')
+                        .pipe(
+                            tap(data => console.log(JSON.stringify(data))),
+                            //tap(data => this.items = data),
+                            catchError(this.handleError)
+                        );
+    }
+    getItemGlobalVariations(id: number): Observable<ItemGlobalVariation[]> {
+        return this.http.get<ItemGlobalVariation[]>(this.apiURL + '/item/globalattribute/' + id + '/globalvariation')
+                        .pipe(
+                            tap(data => console.log(JSON.stringify(data))),
+                            //tap(data => this.items = data),
+                            catchError(this.handleError)
+                        );
+    }
+
+    //Attribute/Variation
+    getItemAttributes(): Observable<ItemAttribute[]> {
+        return this.http.get<ItemAttribute[]>(this.apiURL + '/item/attribute')
+                        .pipe(
+                            tap(data => console.log(JSON.stringify(data))),
+                            //tap(data => this.items = data),
+                            catchError(this.handleError)
+                        );
+    }
+    getItemVariations(id: number): Observable<ItemVariation[]> {
+        return this.http.get<ItemVariation[]>(this.apiURL + '/item/attribute/' + id + '/variation')
+                        .pipe(
+                            tap(data => console.log(JSON.stringify(data))),
+                            //tap(data => this.items = data),
+                            catchError(this.handleError)
+                        );
+    }
+
+
     setProduct(item: any) {
         this.product = new BehaviorSubject(item);
         
     }
     setProductItem(item: any) {
         this.currentProductItemInsert = new BehaviorSubject(item);
-        //this.currentProductItemInsert = item;
+    }
+
+    defaultCurrentItemVariationInsert(variations) {
+        var x = this.defaultCurrentItemInsert();
+        x.ItemVariationItems = variations
+
     }
 
     productItemCurrentItemInsert(variations, existingItem) {
-        if (existingItem) console.log(existingItem);
-        if (variations) return new ProductItemInsert(null, null, null, null, null, null, null, null, null, null, null, 'IN', null, 'LB', null, null, null, 'IN', null, 'LB', false, null, null, null, null, "CN", "", null, false, null, "CatalogAndSearch", null, null, null, null, null, "NotSubmitted", null, null, true, false, [], [], [], [], [], [], [], [], [], [], variations);
-        if (existingItem) return new ProductItemInsert(existingItem.ShipWithinDays,
-            existingItem.PriceType, existingItem.Price, existingItem.FOBPrice,
-            existingItem.DropshipPrice, existingItem.SpecialPrice, existingItem.SpecialFrom,
-            existingItem.SpecialTo, existingItem.Width, existingItem.Height,
-            existingItem.Length, existingItem.ProductDimensionUOM, existingItem.Weight,
-            existingItem.ProductWeightUOM, existingItem.PackageWidth,
-            existingItem.PackageHeight, existingItem.PackageLength, existingItem.PackageDimensionUOM,
-            existingItem.PackageWeight, existingItem.PackageWeightUOM, existingItem.IsFreeShipping,
-            existingItem.ShippingFee, existingItem.MetaTitle, existingItem.MetaKeywords,
-            existingItem.MetaDescription, existingItem.Origin, existingItem.Warranty,
-            existingItem.MerchantWarranty, existingItem.AddProtectionPlan, existingItem.URLKey,
-            existingItem.Visibility, existingItem.Description, existingItem.ShortDescription,
-            existingItem.TechnicalDetail, existingItem.AdditionalInformation, 
-            existingItem.VendorBrandID, existingItem.Approval, existingItem.PartImageRaw,
-            existingItem.PartImageFilePath, existingItem.PartIsNewImage, existingItem.ExcludeGoogleShopping,
-            existingItem.ItemCategoryAssignments, existingItem.ItemOptions, existingItem.ItemTierPrices,
-            existingItem.ItemRelatedProducts, existingItem.ItemUpsells, existingItem.ItemCrossSells,
-            existingItem.ItemAttachments, existingItem.ItemVideos, existingItem.ItemImages,
-            existingItem.ItemParts, existingItem.Variations);
+        
+        if (variations) {
+            let item = this.defaultCurrentItemInsert();
+            item.ItemVariationItems = variations;
+            return item;
+        }
+        if (existingItem) {
+            // let item = this.copyItemInsert(existingItem);
+            // console.log(item);
+            return existingItem;
+        }
+        //if (variations) return new ProductItemInsert(null, null, null, null, null, null, null, null, null, null, null, 'IN', null, 'LB', null, null, null, 'IN', null, 'LB', false, null, null, null, null, "CN", "", null, false, null, "CatalogAndSearch", null, null, null, null, null, "NotSubmitted", null, null, true, false, [], [], [], [], [], [], [], [], [], [], variations, '');
+        // if (existingItem) return new ProductItemInsert(existingItem.ShipWithinDays,
+        //     existingItem.PriceType, existingItem.Price, existingItem.FOBPrice,
+        //     existingItem.DropshipPrice, existingItem.SpecialPrice, existingItem.SpecialFrom,
+        //     existingItem.SpecialTo, existingItem.Width, existingItem.Height,
+        //     existingItem.Length, existingItem.ProductDimensionUOM, existingItem.Weight,
+        //     existingItem.ProductWeightUOM, existingItem.PackageWidth,
+        //     existingItem.PackageHeight, existingItem.PackageLength, existingItem.PackageDimensionUOM,
+        //     existingItem.PackageWeight, existingItem.PackageWeightUOM, existingItem.IsFreeShipping,
+        //     existingItem.ShippingFee, existingItem.MetaTitle, existingItem.MetaKeywords,
+        //     existingItem.MetaDescription, existingItem.Origin, existingItem.Warranty,
+        //     existingItem.MerchantWarranty, existingItem.AddProtectionPlan, existingItem.URLKey,
+        //     existingItem.Visibility, existingItem.Description, existingItem.ShortDescription,
+        //     existingItem.TechnicalDetail, existingItem.AdditionalInformation, 
+        //     existingItem.VendorBrandID, existingItem.Approval, existingItem.PartImageRaw,
+        //     existingItem.PartImageFilePath, existingItem.PartIsNewImage, existingItem.ExcludeGoogleShopping,
+        //     existingItem.ItemCategoryAssignments, existingItem.ItemOptions, existingItem.ItemTierPrices,
+        //     existingItem.ItemRelatedProducts, existingItem.ItemUpsells, existingItem.ItemCrossSells,
+        //     existingItem.ItemAttachments, existingItem.ItemVideos, existingItem.ItemImages,
+        //     existingItem.ItemParts, existingItem.Variations, existingItem.Name);
     }
 
-    getGlobalAttributesVariations() {
-        const globalAttributeList = [
-            {
-                ID: 1,
-                name: 'Color'
-            },
-            {
-                ID: 2,
-                name: 'Size'
-            }
-        ]
-        const globalVariationList = [
-            {
-                ID: 3,
-                name: 'White',
-                GlobalAttributeID: 1
-            },
-            {
-                ID: 4,
-                name: 'Black',
-                GlobalAttributeID: 1
-            },
-            {
-                ID: 5,
-                name: 'Orange',
-                GlobalAttributeID: 1
-            },
-            {
-                ID: 6,
-                name: 'Small',
-                GlobalAttributeID: 2
-            },
-            {
-                ID: 7,
-                name: 'Medium',
-                GlobalAttributeID: 2
-            },
-            {
-                ID: 8,
-                name: 'Large',
-                GlobalAttributeID: 2
-            }
-        ]
-
-
-        let variationsList = globalAttributeList.map((attribute)=> {
-            let attributesList = globalVariationList.filter((item)=> {
-                if (item.GlobalAttributeID === attribute.ID) {
-                    return item;
-                }
-            });
-            return {
-                    attributeID: attribute.ID,
-                    attributeName: attribute.name,
-                    variations: attributesList
-                }
-        })
-        //THIS METHOD ABOVE TURNS THE DATA INTO THIS:
-
-        // const variationsList = [
-        //     {
-        //         attributeID: 1,
-        //         attributeName: 'Color',
-        //         variations: [
-        //             {
-        //                 id: 4,
-        //                 name: 'White'
-        //             },
-        //             {
-        //                 id: 5,
-        //                 name: 'Orange'
-        //             },
-        //             {
-        //                 id: 6,
-        //                 name: 'Black'
-        //             },
-        //         ]
-                
-        //     },
-        //     {
-        //         attributeID: 2,
-        //         attributeName: 'Size',
-        //         variations: [
-        //             {
-        //                 id: 7,
-        //                 name: 'Small',
-        //             },
-        //             {
-        //                 id: 8,
-        //                 name: 'Medium',
-        //             },
-        //             {
-        //                 id: 9,
-        //                 name: 'Large',
-        //             },
-        //         ]
-                
-        //     }
-        // ];
-        
-        
-        this.globalProductVariationsList = new BehaviorSubject(variationsList);
-        return new BehaviorSubject(variationsList);
-    }
     addItemVariation(variations, oldDefault) {
         let productInfo;
-        this.product.subscribe((item) => productInfo = item)
+        this.product.subscribe((item) => productInfo = item);
+        let itemInsertList = this.createProductVariations(productInfo, variations);
         
-        let productItems = variations.map((item) => item.variationOptions);
-        const productVariations = this.cartesian([...productItems]);
+        if (productInfo && oldDefault) {
+            let oldItemInsertList = productInfo;
+            this.updateWithOriginalItems(oldItemInsertList, itemInsertList, oldDefault);
+        }
+        
+        //const product = new Product(null, null, null, null, null, itemInsertList);
+        this.product.next(itemInsertList);
+        //return product;
+    }
 
-        //go through each variation 
-            //if variation already exists in productInfo.ItemInserts[]
-            //push the whole item over  
-            
-        let productItemInsertList = productVariations.map((item) => {
-            if (productInfo && productInfo.ItemInserts) {
-                for (var i = 0; i < productInfo.ItemInserts.length; i++) {
-                    let existingItem = productInfo.ItemInserts[i];
-                    if (this.areEqual(item, existingItem.Variations )) {
-                        console.log('existsing')
-                        return this.productItemCurrentItemInsert(null, existingItem);
+    createProductVariations(product, variations): any[] {
+        const items = variations.map((item) => item.variationOptions);
+        const possibleVariations = this.cartesian([...items]);
+        return possibleVariations.map((itemVariations) => {
+            if (product) {
+                for (var i = 0; i < product.length; i++) {
+                    let existingItem = product[i];
+                    if (this.areEqual(itemVariations, existingItem.ItemVariationItems )) {
+                        console.log('existing', existingItem)
+                        return existingItem;
+                        //return this.productItemCurrentItemInsert(null, existingItem);
                     }
                     
                 }
                 console.log('new')
-                return this.productItemCurrentItemInsert(item, null);   
+                return this.productItemCurrentItemInsert(itemVariations, null);   
             } else {
-                return this.productItemCurrentItemInsert(item, null);
+                return this.productItemCurrentItemInsert(itemVariations, null);
             }
         })
 
-        let oldItemInsertList = productInfo.ItemInserts;
-        if (oldItemInsertList) {
-            oldItemInsertList.forEach((oldItem) => {
-                productItemInsertList.forEach((newItem, i) => {
-                    const oldMatch = oldItem.Variations.every((oldVariation) => newItem.Variations.indexOf(oldVariation) > -1);
-                    const defaultToMatch = newItem.Variations.indexOf(oldDefault) > -1;
-                    if (oldMatch && defaultToMatch) {
-                        console.log('replaced');
+    }
+    updateWithOriginalItems(oldItemlist, newItemList, defaultTo): void {
+        oldItemlist.forEach((oldItem) => {
+            newItemList.forEach((newItem, i) => {
+                const oldMatch = oldItem.ItemVariationItems.every((oldVariation) => newItem.ItemVariationItems.indexOf(oldVariation) > -1);
+                const defaultToMatch = newItem.ItemVariationItems.indexOf(defaultTo) > -1;
+                if (oldMatch && defaultToMatch) {
+                    console.log('replaced');
+                    newItemList[i] = oldItem;
+                    newItemList[i].ItemVariationItems = newItem.ItemVariationItems;
 
-                        
-                        productItemInsertList[i] = oldItem;
-                        productItemInsertList[i].Variations = newItem.Variations;
-
-                    }
-
-                })
-                
-                
+                }
             })
-        }
-        console.log(productItemInsertList);
-        const product = new Product(null, null, null, null, null, productItemInsertList);
-        this.product.next(product);
-        //return product;
+        });
     }
     private areEqual = function (array1, array) {
-        // if the other array is a falsy value, return
         if (!array)
             return false;
-    
-        // compare lengths - can save a lot of time 
+        
         if (array1.length != array.length)
             return false;
     
@@ -1178,7 +1118,6 @@ export class ItemService {
                     return false;       
             }           
             else if (array1[i] != array[i]) { 
-                // Warning - two different object instances will never be equal: {x:20} != {x:20}
                 return false;   
             }           
         }       
@@ -1199,4 +1138,111 @@ export class ItemService {
         helper([], 0);
         return r;
     }
+
+    // getGlobalAttributesVariations() {
+    //     const globalAttributeList = [
+    //         {
+    //             ID: 1,
+    //             name: 'Color'
+    //         },
+    //         {
+    //             ID: 2,
+    //             name: 'Size'
+    //         }
+    //     ]
+    //     const globalVariationList = [
+    //         {
+    //             ID: 3,
+    //             name: 'White',
+    //             GlobalAttributeID: 1
+    //         },
+    //         {
+    //             ID: 4,
+    //             name: 'Black',
+    //             GlobalAttributeID: 1
+    //         },
+    //         {
+    //             ID: 5,
+    //             name: 'Orange',
+    //             GlobalAttributeID: 1
+    //         },
+    //         {
+    //             ID: 6,
+    //             name: 'Small',
+    //             GlobalAttributeID: 2
+    //         },
+    //         {
+    //             ID: 7,
+    //             name: 'Medium',
+    //             GlobalAttributeID: 2
+    //         },
+    //         {
+    //             ID: 8,
+    //             name: 'Large',
+    //             GlobalAttributeID: 2
+    //         }
+    //     ]
+
+
+    //     let variationsList = globalAttributeList.map((attribute)=> {
+    //         let attributesList = globalVariationList.filter((item)=> {
+    //             if (item.GlobalAttributeID === attribute.ID) {
+    //                 return item;
+    //             }
+    //         });
+    //         return {
+    //                 attributeID: attribute.ID,
+    //                 attributeName: attribute.name,
+    //                 variations: attributesList
+    //             }
+    //     })
+    //     //THIS METHOD ABOVE TURNS THE DATA INTO THIS:
+
+    //     // const variationsList = [
+    //     //     {
+    //     //         attributeID: 1,
+    //     //         attributeName: 'Color',
+    //     //         variations: [
+    //     //             {
+    //     //                 id: 4,
+    //     //                 name: 'White'
+    //     //             },
+    //     //             {
+    //     //                 id: 5,
+    //     //                 name: 'Orange'
+    //     //             },
+    //     //             {
+    //     //                 id: 6,
+    //     //                 name: 'Black'
+    //     //             },
+    //     //         ]
+                
+    //     //     },
+    //     //     {
+    //     //         attributeID: 2,
+    //     //         attributeName: 'Size',
+    //     //         variations: [
+    //     //             {
+    //     //                 id: 7,
+    //     //                 name: 'Small',
+    //     //             },
+    //     //             {
+    //     //                 id: 8,
+    //     //                 name: 'Medium',
+    //     //             },
+    //     //             {
+    //     //                 id: 9,
+    //     //                 name: 'Large',
+    //     //             },
+    //     //         ]
+                
+    //     //     }
+    //     // ];
+        
+        
+    //     //this.globalProductVariationsList = new BehaviorSubject(variationsList);
+    //     return new BehaviorSubject(variationsList);
+    // }
 }
+
+
