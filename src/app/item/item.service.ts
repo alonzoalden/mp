@@ -13,9 +13,6 @@ import { Item, ItemInsert, ItemOption, ItemOptionInsert, ItemSelection, ItemSele
 //import { ItemImage } from '../shared/class/item-image';
 import { URLVideo, URLVideoItems, URLVideoItemsSnippet, URLVideoItemsSnippetThumbnails, URLVideoItemsSnippetThumbnailsStandard } from '../shared/class/item-video';
 
-
-
-import { Product, ProductItemInsert } from '../shared/class/product';
 import { ItemList } from '../shared/class/item';
 import { Category } from '../shared/class/category';
 import { Member } from '../shared/class/member';
@@ -28,7 +25,6 @@ import { OAuthService } from 'angular-oauth2-oidc';
 import { AppService } from '../app.service';
 
 import { environment } from '../../environments/environment';
-import { ResponseContentType } from '@angular/http';
 
 @Injectable()
 export class ItemService {
@@ -1012,46 +1008,6 @@ export class ItemService {
         this.currentProductItemInsert = new BehaviorSubject(item);
     }
 
-    defaultCurrentItemVariationInsert(variations) {
-        var x = this.defaultCurrentItemInsert();
-        x.ItemVariationItems = variations
-
-    }
-
-    productItemCurrentItemInsert(variations, existingItem) {
-        
-        if (variations) {
-            let item = this.defaultCurrentItemInsert();
-            item.ItemVariationItems = variations;
-            return item;
-        }
-        if (existingItem) {
-            // let item = this.copyItemInsert(existingItem);
-            // console.log(item);
-            return existingItem;
-        }
-        //if (variations) return new ProductItemInsert(null, null, null, null, null, null, null, null, null, null, null, 'IN', null, 'LB', null, null, null, 'IN', null, 'LB', false, null, null, null, null, "CN", "", null, false, null, "CatalogAndSearch", null, null, null, null, null, "NotSubmitted", null, null, true, false, [], [], [], [], [], [], [], [], [], [], variations, '');
-        // if (existingItem) return new ProductItemInsert(existingItem.ShipWithinDays,
-        //     existingItem.PriceType, existingItem.Price, existingItem.FOBPrice,
-        //     existingItem.DropshipPrice, existingItem.SpecialPrice, existingItem.SpecialFrom,
-        //     existingItem.SpecialTo, existingItem.Width, existingItem.Height,
-        //     existingItem.Length, existingItem.ProductDimensionUOM, existingItem.Weight,
-        //     existingItem.ProductWeightUOM, existingItem.PackageWidth,
-        //     existingItem.PackageHeight, existingItem.PackageLength, existingItem.PackageDimensionUOM,
-        //     existingItem.PackageWeight, existingItem.PackageWeightUOM, existingItem.IsFreeShipping,
-        //     existingItem.ShippingFee, existingItem.MetaTitle, existingItem.MetaKeywords,
-        //     existingItem.MetaDescription, existingItem.Origin, existingItem.Warranty,
-        //     existingItem.MerchantWarranty, existingItem.AddProtectionPlan, existingItem.URLKey,
-        //     existingItem.Visibility, existingItem.Description, existingItem.ShortDescription,
-        //     existingItem.TechnicalDetail, existingItem.AdditionalInformation, 
-        //     existingItem.VendorBrandID, existingItem.Approval, existingItem.PartImageRaw,
-        //     existingItem.PartImageFilePath, existingItem.PartIsNewImage, existingItem.ExcludeGoogleShopping,
-        //     existingItem.ItemCategoryAssignments, existingItem.ItemOptions, existingItem.ItemTierPrices,
-        //     existingItem.ItemRelatedProducts, existingItem.ItemUpsells, existingItem.ItemCrossSells,
-        //     existingItem.ItemAttachments, existingItem.ItemVideos, existingItem.ItemImages,
-        //     existingItem.ItemParts, existingItem.Variations, existingItem.Name);
-    }
-
     addItemVariation(variations, oldDefault) {
         let productInfo;
         this.product.subscribe((item) => productInfo = item);
@@ -1061,41 +1017,30 @@ export class ItemService {
             let oldItemInsertList = productInfo;
             this.updateWithOriginalItems(oldItemInsertList, itemInsertList, oldDefault);
         }
-        
-        //const product = new Product(null, null, null, null, null, itemInsertList);
         this.product.next(itemInsertList);
-        //return product;
     }
 
     createProductVariations(product, variations): any[] {
         const items = variations.map((item) => item.variationOptions);
         const possibleVariations = this.cartesian([...items]);
         return possibleVariations.map((itemVariations) => {
-            if (product) {
-                for (var i = 0; i < product.length; i++) {
-                    let existingItem = product[i];
-                    if (this.areEqual(itemVariations, existingItem.ItemVariationItems )) {
-                        console.log('existing', existingItem)
-                        return existingItem;
-                        //return this.productItemCurrentItemInsert(null, existingItem);
-                    }
-                    
+            for (var i = 0; i < product.length; i++) {
+                let existingItem = product[i];
+                if (this.areEqual(itemVariations, existingItem.ItemVariationItems )) {
+                    return existingItem;
                 }
-                console.log('new')
-                return this.productItemCurrentItemInsert(itemVariations, null);   
-            } else {
-                return this.productItemCurrentItemInsert(itemVariations, null);
             }
+            return this.productItemCurrentItemInsert(itemVariations, null);   
         })
 
     }
+
     updateWithOriginalItems(oldItemlist, newItemList, defaultTo): void {
         oldItemlist.forEach((oldItem) => {
             newItemList.forEach((newItem, i) => {
                 const oldMatch = oldItem.ItemVariationItems.every((oldVariation) => newItem.ItemVariationItems.indexOf(oldVariation) > -1);
                 const defaultToMatch = newItem.ItemVariationItems.indexOf(defaultTo) > -1;
                 if (oldMatch && defaultToMatch) {
-                    console.log('replaced');
                     newItemList[i] = oldItem;
                     newItemList[i].ItemVariationItems = newItem.ItemVariationItems;
 
@@ -1103,13 +1048,23 @@ export class ItemService {
             })
         });
     }
+
+    productItemCurrentItemInsert(variations, existingItem) {
+        if (variations) {
+            let item = this.defaultCurrentItemInsert();
+            item.ItemVariationItems = variations;
+            return item;
+        }
+        if (existingItem) {
+            return existingItem;
+        }
+    }
+
     private areEqual = function (array1, array) {
         if (!array)
             return false;
-        
         if (array1.length != array.length)
             return false;
-    
         for (var i = 0, l=array1.length; i < l; i++) {
             // Check if we have nested arrays
             if (array1[i] instanceof Array && array[i] instanceof Array) {
@@ -1138,111 +1093,6 @@ export class ItemService {
         helper([], 0);
         return r;
     }
-
-    // getGlobalAttributesVariations() {
-    //     const globalAttributeList = [
-    //         {
-    //             ID: 1,
-    //             name: 'Color'
-    //         },
-    //         {
-    //             ID: 2,
-    //             name: 'Size'
-    //         }
-    //     ]
-    //     const globalVariationList = [
-    //         {
-    //             ID: 3,
-    //             name: 'White',
-    //             GlobalAttributeID: 1
-    //         },
-    //         {
-    //             ID: 4,
-    //             name: 'Black',
-    //             GlobalAttributeID: 1
-    //         },
-    //         {
-    //             ID: 5,
-    //             name: 'Orange',
-    //             GlobalAttributeID: 1
-    //         },
-    //         {
-    //             ID: 6,
-    //             name: 'Small',
-    //             GlobalAttributeID: 2
-    //         },
-    //         {
-    //             ID: 7,
-    //             name: 'Medium',
-    //             GlobalAttributeID: 2
-    //         },
-    //         {
-    //             ID: 8,
-    //             name: 'Large',
-    //             GlobalAttributeID: 2
-    //         }
-    //     ]
-
-
-    //     let variationsList = globalAttributeList.map((attribute)=> {
-    //         let attributesList = globalVariationList.filter((item)=> {
-    //             if (item.GlobalAttributeID === attribute.ID) {
-    //                 return item;
-    //             }
-    //         });
-    //         return {
-    //                 attributeID: attribute.ID,
-    //                 attributeName: attribute.name,
-    //                 variations: attributesList
-    //             }
-    //     })
-    //     //THIS METHOD ABOVE TURNS THE DATA INTO THIS:
-
-    //     // const variationsList = [
-    //     //     {
-    //     //         attributeID: 1,
-    //     //         attributeName: 'Color',
-    //     //         variations: [
-    //     //             {
-    //     //                 id: 4,
-    //     //                 name: 'White'
-    //     //             },
-    //     //             {
-    //     //                 id: 5,
-    //     //                 name: 'Orange'
-    //     //             },
-    //     //             {
-    //     //                 id: 6,
-    //     //                 name: 'Black'
-    //     //             },
-    //     //         ]
-                
-    //     //     },
-    //     //     {
-    //     //         attributeID: 2,
-    //     //         attributeName: 'Size',
-    //     //         variations: [
-    //     //             {
-    //     //                 id: 7,
-    //     //                 name: 'Small',
-    //     //             },
-    //     //             {
-    //     //                 id: 8,
-    //     //                 name: 'Medium',
-    //     //             },
-    //     //             {
-    //     //                 id: 9,
-    //     //                 name: 'Large',
-    //     //             },
-    //     //         ]
-                
-    //     //     }
-    //     // ];
-        
-        
-    //     //this.globalProductVariationsList = new BehaviorSubject(variationsList);
-    //     return new BehaviorSubject(variationsList);
-    // }
 }
 
 

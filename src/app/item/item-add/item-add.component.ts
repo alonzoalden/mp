@@ -1,11 +1,11 @@
 import { Component, OnInit, ViewChild, ElementRef, Inject } from '@angular/core';
 import { Router } from '@angular/router';
-import { ItemInsert, ItemTierPriceInsert, ItemRelatedProductInsert, ItemUpSellInsert, ItemCrossSellInsert, ItemAttachmentInsert, ItemVideoInsert } from '../../shared/class/item';
+import { ItemInsert, ItemTierPriceInsert, ItemRelatedProductInsert, ItemUpSellInsert, ItemCrossSellInsert, ItemAttachmentInsert, ItemVideoInsert, ItemAttribute } from '../../shared/class/item';
 import { VendorBrand } from '../../shared/class/vendor-brand';
 import { MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material';
 import { ItemService } from '../item.service';
 import { Observable, Subscription } from 'rxjs';
-import { ItemVariationComponentDialog } from '../item-variation/item-variation.component';
+import { ItemVariationComponentDialog } from '../item-variation/item-variation.component-dialog';
 
 
 @Component({
@@ -21,27 +21,10 @@ export class ItemAddComponent {
 
     loading: boolean;
 
-    vendorBrandList: VendorBrand[]; 
-
-
+    vendorBrandList: VendorBrand[];
     
-    attributesVariationsList: any[] = [];
-    
-    tabsList: any[] = [];
-    updatedListData: any[];
-    variationCount: number;
-
-    viewVariationDisabled: boolean = true;
-
-    itemVariations = [];
-    itemVariationsList = [];
-    product: any = [];
-
-    attributesVariationsListData: any;
-
-    attributesVariationsSelections: any = {};
-
-
+    product: ItemInsert[];
+    attributesVariationsList: ItemAttribute[] = [];
 
     private dataIsValid: { [key: string]: boolean } = {};
 
@@ -53,16 +36,9 @@ export class ItemAddComponent {
         this.item = this.itemService.defaultCurrentItemInsert();
         this.itemService.setProduct([this.item]);
         this.itemService.setProductItem(this.item);
-        
-        
-        
-        this.itemService.product.subscribe((product) => this.product = product);
-                    
+
+        //this.itemService.product.subscribe((product) => this.product = product);
         //this.itemService.getItemAttributes().subscribe((itemAttributes) => this.attributesVariationsListData = itemAttributes);
-        // this.itemService.getGlobalAttributesVariations()
-        //                 .subscribe((data) => {
-        //                     this.attributesVariationsListData = data;
-        //                 });
 
         this.itemService.getVendorBrands().subscribe(
             (vendorBrands: VendorBrand[]) => {
@@ -321,52 +297,10 @@ export class ItemAddComponent {
     }
 
     openDialogItemVariation() {
-
-        // const data = {
-        //     attributesVariationsList: this.attributesVariationsList,
-        //     attributesVariationsListData: this.attributesVariationsListData
-        // };
         const dialogRef = this.printDialog.open(ItemVariationComponentDialog, {
-            //width: '750px',
             data: this.attributesVariationsList
         });
     
-        dialogRef.afterClosed().subscribe(result => {
-            //this auto selects to first item in dropdown                
-            this.attributesVariationsList.forEach((item) => {
-                if (item.variationOptions && item.variationOptions.length > 0) {
-                    item.selectedVariation = item.variationOptions[0];
-                }
-            })
-            this.onUpdateItemData(this.attributesVariationsList)
-            if (this.product && this.product.length) {
-                this.variationCount = this.product.length;
-            }
-        });
-    }
-    onUpdateItemData(list) {
-        if (list && this.product) {
-            const selectedVariations = list.map((i) => {
-                if (i.selectedVariation) return i.selectedVariation;
-            });
-            this.product.forEach((item) => {
-                if (item.ItemVariationItems) {
-                    let variation = item.ItemVariationItems.every((variation) => selectedVariations.indexOf(variation) !== -1);
-                    if (variation) return this.viewVariationItem(item);
-                }
-            });
-        }
-        console.log(this.product)
-    }
-    
-    viewVariationItem(item) {
-        if (item) {
-            this.itemService.currentProductItemInsert.next(item)
-        }
-        // if (!item) {
-        //     //create new 
-        //     //this.itemVariations.push(this.itemService.defaultCurrentItemInsert());
-        //     this.itemService.currentProductItemInsert = this.itemVariations[this.itemVariations.length-1];
-        // }
+        dialogRef.afterClosed().subscribe(result => {});
     }
 }

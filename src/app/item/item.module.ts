@@ -18,7 +18,8 @@ import { ItemListComponent, ItemListComponentItemPrintDialog, ItemListComponentI
 import { ItemPrintLabelComponent, ItemPrintLabelComponentPrintDialog} from './item-print-label/item-print-label.component';
 import { ItemPartListComponent, ItemPartListComponentItemPrintDialog } from './item-part-list/item-part-list.component';
 
-import { ItemVariationComponentDialog } from './item-variation/item-variation.component';
+import { ItemVariationComponentDialog } from './item-variation/item-variation.component-dialog';
+import { ItemVariationComponent } from './item-variation/item-variation.component';
 
 import { ItemAddComponent } from './item-add/item-add.component';
 import { ItemAddDescriptionComponent } from './item-add/item-add-description.component';
@@ -95,6 +96,7 @@ import { ItemPartEditGuard } from './item-part-edit/item-part-edit.guard';
         ItemListComponent,
         ItemAddComponent,
         ItemVariationComponentDialog,
+        ItemVariationComponent,
         ItemAddDescriptionComponent,
         ItemAddDimensionComponent,
         ItemAddPriceComponent,

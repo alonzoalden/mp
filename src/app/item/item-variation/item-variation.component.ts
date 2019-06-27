@@ -1,107 +1,49 @@
-import { Component, OnInit, Inject, ViewChild, ElementRef } from '@angular/core';
-import { ItemInsert, ItemTierPriceInsert, ItemRelatedProductInsert, ItemUpSellInsert, ItemCrossSellInsert, ItemAttachmentInsert, ItemVideoInsert } from '../../shared/class/item';
 
-import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material';
+import { Component, OnInit, ViewContainerRef, ViewChild, Inject, ElementRef, Input} from '@angular/core';
+import { Router } from '@angular/router';
+import { ItemInsert, ItemTierPriceInsert, ItemRelatedProductInsert, ItemUpSellInsert, ItemCrossSellInsert, ItemAttachmentInsert, ItemVideoInsert } from '../../shared/class/item';
+import { VendorBrand } from '../../shared/class/vendor-brand';
+import { MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material';
 import { ItemService } from '../item.service';
+import { Observable, Subscription } from 'rxjs';
+import { ItemVariationComponentDialog } from '../item-variation/item-variation.component-dialog';
+
 
 @Component({
-    selector: 'item-variation.component-dialog',
-    templateUrl: 'item-variation.component-dialog.html',
+  selector: 'item-variation',
+  templateUrl: './item-variation.component.html',
 })
-export class ItemVariationComponentDialog implements OnInit {
-    
-    attributesVariationsListData: any[];
-    attributesVariationsList: any[] = [];
-    oldDefault: any;
-    newAttribute: any;
-    addItemVariationInvalid: boolean = true;
-    //addAttributeLoading: boolean = false;
-    originalData: any;
-    canShowDefaultOldSettingsInput: boolean = false;
-    
-    
-    @ViewChild('oldDefaultRef') oldDefaultRef: ElementRef;
 
-    constructor(
-        public dialogRef: MatDialogRef<ItemVariationComponentDialog>,
-        private itemService: ItemService,
-        @Inject(MAT_DIALOG_DATA) public data: any) {
-            if (this.data) {
-                this.attributesVariationsList = this.data;
-                this.originalData = [...this.data];
-                console.log(this.attributesVariationsList);
-                console.log(this.data);
-            }
-            
-        }
-    ngOnInit() {
-        this.itemService.getItemAttributes()
-            .subscribe((data) => {
-                this.attributesVariationsListData = data;
-                this.displayAvailableAttributes();
-                if (this.attributesVariationsListData.length) {
-                    this.newAttribute = this.attributesVariationsListData[0];
+export class ItemVariationComponent implements OnInit {
+    
+    product: ItemInsert[];
+    //attributesVariationsList: any[] = [];
+    variationCount: number;
+    
+    @Input() attributesVariationsList: any[] = [];
+
+    constructor(private router: Router,
+                private itemService: ItemService,
+                public printDialog: MatDialog) {}
+    
+    ngOnInit(): void {
+        this.itemService.product.subscribe((product) => this.product = product);
+    }
+
+    onUpdateItemData(list) {
+        if (list && this.product) {
+            const selectedVariations = list.map((i) => {
+                if (i.selectedVariation) return i.selectedVariation;
+            });
+            this.product.forEach((item) => {
+                if (item.ItemVariationItems) {
+                    let variation = item.ItemVariationItems.every((variation) => selectedVariations.indexOf(variation) !== -1);
+                    if (variation) return this.viewVariationItem(item);
                 }
             });
-    }
-
-    createAttribute() {
-        if (!this.newAttribute) return;
-        const tab = this.attributesVariationsListData.find(x => x.ItemAttributeID === this.newAttribute.ItemAttributeID);
-        this.attributesVariationsList.push(tab);
-        this.displayAvailableAttributes();
-        this.clearNewAttributeField();
-        this.validateItemVariation();
-        this.canShowDefaultOldSettings(this.newAttribute);
-    }
-    
-    displayAvailableAttributes() {
-        if (this.attributesVariationsList.length) {
-           let updatedListData = [...this.attributesVariationsListData];
-           this.attributesVariationsList.forEach((x) => {
-               const index = updatedListData.findIndex((item) => item.ItemAttributeID === x.ItemAttributeID);
-               updatedListData.splice(index, 1);
-           })
-           this.attributesVariationsListData = updatedListData;
-       }
-   }
-
-   canShowDefaultOldSettings(e) {
-        // return (this.data.length > this.originalData.length && this.originalData.length > 0 && this.originalData.indexOf(item) < 0);
-        this.canShowDefaultOldSettingsInput = (this.data.length > this.originalData.length && this.originalData.indexOf(e) < 0);
-   }
-
-    clearNewAttributeField() {    
-        this.newAttribute = null;
-    }
-    
-    onCancelClick(): void {
-        this.dialogRef.close();
-    }
-
-    onAddItemVariationClick() {
-        // console.log(this.attributesVariationsList);
-        // console.log(this.data);
-        // this.data = this.attributesVariationsList;
-        // console
-        this.itemService.addItemVariation(this.attributesVariationsList, this.oldDefault);
-        this.dialogRef.close();
-    }
-    onUpdateOldDefault() {
-        this.onNgModelChange();
-    }
-    onNgModelChange() {
-        this.validateItemVariation();
-    }
-    validateItemVariation() {
-        this.addItemVariationInvalid = this.attributesVariationsList.find((item) => {
-            return !(item && item.variationOptions && item.variationOptions.length > 1);
-        });
-        if (this.oldDefaultRef && !this.oldDefault ) {
-            this.addItemVariationInvalid = true;
         }
     }
-    ngOnDestroy() {
-
+    viewVariationItem(item) {
+        this.itemService.currentProductItemInsert.next(item);
     }
 }

@@ -27,10 +27,6 @@ export class ItemAddDescriptionComponent implements OnInit, AfterViewInit {
     ngOnInit(): void {
         //this.item = this.itemService.currentItemInsert;
 
-        // this.itemService.getFakeItem().subscribe(
-        //     (data: FakeItemInsert) => {
-        //         this.item = data;
-        //     }); 
         this.itemService.currentProductItemInsert.subscribe(
             (data) => {
                 this.item = data;
