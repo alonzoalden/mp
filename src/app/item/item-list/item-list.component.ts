@@ -3,8 +3,7 @@ import { Router } from '@angular/router';
 import { CurrencyPipe } from '@angular/common';
 import { MatMenuModule, MatPaginator, MatSort, MatTableDataSource, MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material';
 import { Item, ItemInsert, ItemCategoryAssignment, ItemOption, ItemSelection, ItemTierPrice
-    , ItemRelatedProduct, ItemUpSell, ItemCrossSell, ItemAttachment, ItemVideo 
-    , ItemGlobalAttribute, ItemGlobalVariation, ItemAttribute, ItemVariation } from '../../shared/class/item';
+    , ItemRelatedProduct, ItemUpSell, ItemCrossSell, ItemAttachment, ItemVideo } from '../../shared/class/item';
 import { ItemService } from '../item.service';
 import { AppService } from '../../app.service';
 import { MatMenu } from '@angular/material/menu';
@@ -43,9 +42,6 @@ export class ItemListComponent implements OnInit {
     @ViewChild(MatSort) sort: MatSort;
 
     loading: boolean;
-
-    itemAttributes: ItemAttribute[];
-    itemVariations: ItemVariation[];
 
     constructor(private router: Router,
         private itemService: ItemService,
@@ -89,32 +85,7 @@ export class ItemListComponent implements OnInit {
                 this.itemService.sendNotification({ type: 'error', title: 'Error', content: error });
                 //this.errorMessage = <any>error;
             }
-        );
-
-        this.itemService.getItemAttributes().subscribe(
-            (itemAttribute: ItemAttribute[]) => {
-                this.itemAttributes = itemAttribute;
-                console.log(this.itemAttributes);
-                
-
-                this.itemAttributes.forEach((value, index) => {
-                    this.itemService.getItemVariations(value.ItemAttributeID).subscribe(
-                        (itemVariations: ItemVariation[]) => {
-                            this.itemVariations = itemVariations;
-                            console.log(this.itemVariations);
-                        },
-                        (error: any) => {
-                            this.itemService.sendNotification({ type: 'error', title: 'Error', content: error });
-                            //this.errorMessage = <any>error;
-                        }
-                    );
-                });                                           
-            },
-            (error: any) => {
-                this.itemService.sendNotification({ type: 'error', title: 'Error', content: error });
-                //this.errorMessage = <any>error;
-            }
-        );        
+        );  
     }
 
     refreshDataSource(items: Item[]) {
@@ -362,7 +333,7 @@ export class ItemListComponent implements OnInit {
                     , item.Origin, item.Warranty, item.MerchantWarranty, item.AddProtectionPlan, null, item.Visibility, item.Description, item.ShortDescription, item.TechnicalDetail
                     , item.AdditionalInformation, item.VendorBrandID, item.Approval, item.IsPartItem, item.PartImageRaw, item.PartImageFilePath, item.PartIsNewImage, item.ExcludeGoogleShopping
                     , this.duplicateItemCategoryAssignments, this.duplicateItemOptions, this.duplicateItemTierPrices
-                    , this.duplicateItemRelatedProducts, this.duplicateItemUpSells, this.duplicateItemCrossSells, [], [], [], [], []);
+                    , this.duplicateItemRelatedProducts, this.duplicateItemUpSells, this.duplicateItemCrossSells, [], [], [], []);
                 
                 this.itemService.duplicateItemInsert = this.duplicateItemInsert;
 

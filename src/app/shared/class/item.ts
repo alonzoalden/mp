@@ -1,5 +1,6 @@
 // import { ItemOption } from "./item-option";
 
+
 export class Item {
     constructor(
         public ItemID: number,
@@ -85,7 +86,6 @@ export class Item {
         public ItemVideos: Array<ItemVideo>,
         public ItemImages: Array<ItemImage>,
         public ItemParts: Array<ItemPart>,
-        public ItemVariationItems: Array<ItemVariation>,
 
         public QtyOnHand: number,
         public QtyAvailable: number,
@@ -169,7 +169,6 @@ export class ItemInsert {
         public ItemVideos: Array<ItemVideoInsert>,
         public ItemImages: Array<ItemImageInsert>,
         public ItemParts: Array<ItemPartInsert>,
-        public ItemVariationItems: Array<ItemVariationItem>,
     ) {}
 }
 
@@ -243,7 +242,7 @@ export class ItemUpdate {
         public ItemAttachments: Array<ItemAttachment>,
         public ItemVideos: Array<ItemVideo>,
         public ItemImages: Array<ItemImage>,
-        public ItemVariationItems: Array<ItemVariationItem>
+        public ItemParts: Array<ItemPartInsert>,
     ) {}
 }
 
@@ -642,19 +641,22 @@ export class ItemPartInsert {
     ) {}
 }
 
+
+
+
 export class ItemGlobalAttribute {
     constructor(
         public ItemGlobalAttributeID: number,
         public Name: string,        
         public UpdatedOn: string,
         public CreatedOn: string,
-        public ItemGlobalVariations: Array<ItemGlobalVariation>
+        public ItemGlobalAttributeVariations: Array<ItemGlobalAttributeVariation>
     ) {}
 }
 
-export class ItemGlobalVariation {
+export class ItemGlobalAttributeVariation {
     constructor(
-        public ItemGlobalVariationID: number,
+        public ItemGlobalAttributeVariationID: number,
         public ItemGlobalAttributeID: number,
         public Name: string,        
         public UpdatedOn: string,
@@ -666,17 +668,16 @@ export class ItemGlobalVariation {
 export class ItemAttribute {
     constructor(
         public ItemAttributeID: number,
-        public VendorID: number,
         public Name: string,        
         public UpdatedOn: string,
         public CreatedOn: string,
-        public ItemVariations: Array<ItemVariation>
+        public ItemAttributeVariations: Array<ItemAttributeVariation>
     ) {}
 }
 
-export class ItemVariation {
+export class ItemAttributeVariation {
     constructor(
-        public ItemVariationID: number,
+        public ItemAttributeVariationID: number,
         public ItemAttributeID: number,
         public Name: string,        
         public UpdatedOn: string,
@@ -684,12 +685,52 @@ export class ItemVariation {
     ) {}
 }
 
-export class ItemVariationItem {
+export class ItemVariationListing {
     constructor(
-        public ItemVariationItemID: number,
+        public ItemVariationListingID: number,
+        public Name: string,
+        public PrimaryItemID: number,        
+
+        public ItemName: string,        
+        public ItemVendorSKU: string,        
+        public TPIN: string,        
+        public URLKey: string,        
+
+        public UpdatedOn: string,
+        public CreatedOn: string,
+
+        public ItemVariations: Array<ItemVariation>
+    ) {}
+}
+
+export class ItemVariation {
+    constructor(
         public ItemVariationID: number,
-        public ItemID: number,        
+        public ItemVariationListingID: number,
+        public ItemID: number,
+
+        public ItemName: string,        
+        public ItemVendorSKU: string,        
+        public ItemTPIN: string,        
+        public ItemURLKey: string,        
+
+        public UpdatedOn: string,
+        public CreatedOn: string,
+
+        public ItemVariationLines: Array<ItemVariationLine>
+    ) {}
+}
+
+export class ItemVariationLine {
+    constructor(
+        public ItemVariationLineID: number,
+        public ItemVariationID: number,
+        public ItemAttributeVariationID: number,
+
         public UpdatedOn: string,
         public CreatedOn: string,
     ) {}
 }
+
+
+

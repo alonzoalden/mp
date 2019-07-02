@@ -16,7 +16,7 @@
                         [(ngModel)]="tab.variationOptions"
                         (ngModelChange)="onNgModelChange()">
                         <mat-list-option
-                            *ngFor="let property of tab.ItemVariations"
+                            *ngFor="let property of tab.ItemAttributeVariations"
                             [value]="property">
                                 {{property.Name}}
                         </mat-list-option>

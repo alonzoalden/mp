@@ -7,6 +7,8 @@ import { ItemService } from '../item.service';
 import { AppService } from '../../app.service';
 import { MatMenu } from '@angular/material/menu';
 
+import { ItemGlobalAttribute, ItemGlobalAttributeVariation, ItemAttribute, ItemAttributeVariation, ItemVariationListing, ItemVariation, ItemVariationLine } from '../../shared/class/item';
+
 import { environment } from '../../../environments/environment';
 
 @Component({
@@ -215,7 +217,7 @@ export class ItemPartListComponent implements OnInit {
                     , item.Origin, item.Warranty, item.MerchantWarranty, item.AddProtectionPlan, null, item.Visibility, item.Description, item.ShortDescription, item.TechnicalDetail
                     , item.AdditionalInformation, item.VendorBrandID, item.Approval, item.IsPartItem, item.PartImageRaw, item.PartImageFilePath, item.PartIsNewImage, item.ExcludeGoogleShopping
                     , this.duplicateItemCategoryAssignments, this.duplicateItemOptions, this.duplicateItemTierPrices
-                    , this.duplicateItemRelatedProducts, this.duplicateItemUpSells, this.duplicateItemCrossSells, [], [], [], [], []);
+                    , this.duplicateItemRelatedProducts, this.duplicateItemUpSells, this.duplicateItemCrossSells, [], [], [], []);
                 
                 this.itemService.duplicateItemInsert = this.duplicateItemInsert;
 

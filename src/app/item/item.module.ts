@@ -20,6 +20,9 @@ import { ItemPartListComponent, ItemPartListComponentItemPrintDialog } from './i
 
 import { ItemVariationComponentDialog } from './item-variation/item-variation.component-dialog';
 import { ItemVariationComponent } from './item-variation/item-variation.component';
+import { ItemVariationAddComponent } from './item-variation/item-variation-add.component';
+import { ItemVariationListComponent } from './item-variation/item-variation-list.component';
+import { ItemVariationEditComponent } from './item-variation/item-variation-edit.component';
 
 import { ItemAddComponent } from './item-add/item-add.component';
 import { ItemAddDescriptionComponent } from './item-add/item-add-description.component';
@@ -69,8 +72,7 @@ import { ItemEditGuard } from './item-edit/item-edit.guard';
 import { ItemEditBundleGuard } from './item-edit/item-edit-bundle.guard';
 import { ItemAddBundleGuard } from './item-add/item-add-bundle.guard';
 
-import { PageNotFoundComponent } from './page-not-found.component';
-import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { PageNotFoundComponent } from './page-not-found.component';;
 import { ItemBatchApprovalComponent } from './item-batch-approval/item-batch-approval.component';
 import { ItemBatchUpdateComponent } from './item-batch-update/item-batch-update.component';
 import { ItemBatchUpdateSelectComponent } from './item-batch-update/item-batch-update-select.component';
@@ -97,6 +99,9 @@ import { ItemPartEditGuard } from './item-part-edit/item-part-edit.guard';
         ItemAddComponent,
         ItemVariationComponentDialog,
         ItemVariationComponent,
+        ItemVariationAddComponent,
+        ItemVariationListComponent,
+        ItemVariationEditComponent,
         ItemAddDescriptionComponent,
         ItemAddDimensionComponent,
         ItemAddPriceComponent,

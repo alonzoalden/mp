@@ -1,7 +1,7 @@
 
 import { Component, OnInit, ViewContainerRef, ViewChild, Inject, ElementRef, Input} from '@angular/core';
 import { Router } from '@angular/router';
-import { ItemInsert, ItemTierPriceInsert, ItemRelatedProductInsert, ItemUpSellInsert, ItemCrossSellInsert, ItemAttachmentInsert, ItemVideoInsert } from '../../shared/class/item';
+import { ItemInsert, ItemVariationListing, ItemTierPriceInsert, ItemRelatedProductInsert, ItemUpSellInsert, ItemCrossSellInsert, ItemAttachmentInsert, ItemVideoInsert } from '../../shared/class/item';
 import { VendorBrand } from '../../shared/class/vendor-brand';
 import { MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material';
 import { ItemService } from '../item.service';
@@ -16,7 +16,8 @@ import { ItemVariationComponentDialog } from '../item-variation/item-variation.c
 
 export class ItemVariationComponent implements OnInit {
     
-    product: ItemInsert[];
+    //product: ItemInsert[];
+    variationListing: ItemVariationListing;
     //attributesVariationsList: any[] = [];
     variationCount: number;
     
@@ -27,17 +28,18 @@ export class ItemVariationComponent implements OnInit {
                 public printDialog: MatDialog) {}
     
     ngOnInit(): void {
-        this.itemService.product.subscribe((product) => this.product = product);
+        //this.itemService.product.subscribe((product) => this.product = product);
+        this.variationListing = this.itemService.defaultVariationListingInsert();
     }
 
     onUpdateItemData(list) {
-        if (list && this.product) {
+        if (list && this.variationListing) {
             const selectedVariations = list.map((i) => {
                 if (i.selectedVariation) return i.selectedVariation;
             });
-            this.product.forEach((item) => {
-                if (item.ItemVariationItems) {
-                    let variation = item.ItemVariationItems.every((variation) => selectedVariations.indexOf(variation) !== -1);
+            this.variationListing.ItemVariations.forEach((item) => {
+                if (item.ItemVariationLines) {
+                    let variation = item.ItemVariationLines.every((variation) => selectedVariations.indexOf(variation) !== -1);
                     if (variation) return this.viewVariationItem(item);
                 }
             });

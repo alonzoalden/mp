@@ -23,7 +23,7 @@ export class ItemAddComponent {
 
     vendorBrandList: VendorBrand[];
     
-    product: ItemInsert[];
+    //product: ItemInsert[];
     attributesVariationsList: ItemAttribute[] = [];
 
     private dataIsValid: { [key: string]: boolean } = {};
@@ -34,8 +34,13 @@ export class ItemAddComponent {
 
                     
         this.item = this.itemService.defaultCurrentItemInsert();
-        this.itemService.setProduct([this.item]);
-        this.itemService.setProductItem(this.item);
+
+
+
+        //this.itemService.setProduct([this.item]);
+        //this.itemService.setProductItem(this.item);
+
+        //this.itemService.setProduct();
 
         //this.itemService.product.subscribe((product) => this.product = product);
         //this.itemService.getItemAttributes().subscribe((itemAttributes) => this.attributesVariationsListData = itemAttributes);
