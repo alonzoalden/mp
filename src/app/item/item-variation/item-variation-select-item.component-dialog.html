@@ -1,0 +1,72 @@
+<h3 class="ibox-title dialog-title">Select an Item Pairing</h3>
+<div mat-dialog-content style="background-color: #f3f3f4; padding: 40px !important; overflow: scroll; height: 410px;">
+    <div class="ibox-content" style="padding: 40px; height: 100%;">
+
+        
+
+        <h3 class="m-b-md">Variation: {{data.variationItem}}</h3>
+        
+
+        <label>Select Item</label>
+        <ng-select  [items]="data.itemList"
+                    [virtualScroll]="true"
+                    bindLabel="ItemName"
+                    placeholder="{{ 'Search Item' | translate }}"
+                    [(ngModel)]="item"
+                    (focus)="formDirty = true;"
+                    #selectionCategoriesRef
+                    id="selectItem"
+                    name="selectItem"
+                    required
+                    #selectItem="ngModel"
+                    [loading]="!data"
+                    loadingText="Loading..."
+                    style="width: 100%;">
+            <ng-template ng-notfound-tmp let-searchTerm="searchTerm">
+                <div class="ng-option disabled">
+                    {{ 'Please select an item for this variation.' | translate }}
+                </div>
+            </ng-template>
+        </ng-select>
+        <div class="m-t-md" *ngIf="item">
+            <div class="form-group flex">
+                <label class="control-label" style="flex: 1">{{ 'Description' | translate }}</label>
+                <div style="flex: 5">
+                    {{item.Description || item.ItemName }}
+                </div>
+            </div>
+            <div class="form-group flex" >
+                <label class="control-label" style="flex: 1">{{ 'TPIN' | translate }}</label>
+                <div style="flex: 5">
+                    {{item.TPIN || item.ItemTPIN }}
+                </div>
+            </div>
+            <div class="form-group flex">
+                <label class="control-label" style="flex: 1">{{ 'VendorSKU' | translate }}</label>
+                <div  style="flex: 5">
+                    {{item.VendorSKU || item.ItemVendorSKU}}
+                </div>
+            </div>
+        </div>
+        <!-- <ng-select [items]="data"
+            bindLabel="Name"
+            placeholder="{{ 'Choose Variation for new default' | translate }}"
+            [(ngModel)]="oldDefault"
+            (change)="validateItemVariation()"
+            name="selectAttribute"
+            required
+            loadingText="Loading..."
+            class="inbound-line"
+            style="width: 100%;">
+                <ng-template ng-notfound-tmp let-searchTerm="searchTerm">
+                    <div class="ng-option disabled">
+                        {{ 'Please select an item for this variation' | translate }}
+                    </div>
+                </ng-template>
+        </ng-select> -->
+    </div>
+</div>
+<mat-dialog-actions>
+    <button [disabled]="addItemVariationInvalid" (click)="onAddItemClick()" mat-button class="btn btn-success-xs" style="background-color: #1ab394;" cdkFocusInitial>{{ 'Select' | translate }}</button>
+    <button (click)="onCancelClick()" mat-button class="btn btn-remove-xs">{{ 'Cancel' | translate }}</button>
+</mat-dialog-actions>

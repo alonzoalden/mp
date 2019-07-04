@@ -4,7 +4,7 @@ import { MatMenuModule, MatPaginator, MatSort, MatTableDataSource, MatDialog, Ma
 import { MatMenu } from '@angular/material/menu';
 import { Subscription } from 'rxjs';
 
-import { VendorAttachment } from '../../shared/class/vendor-attachment';
+import { ItemVariationListing } from '../../shared/class/item';
 
 import { AppService } from '../../app.service';
 import { ItemService } from '../item.service'
@@ -21,7 +21,7 @@ export class ItemVariationListComponent implements OnInit {
     subscription: Subscription;
     errorMessage: string;
     //vendorAttachments: VendorAttachment[];
-    variationGroups: any[]; 
+    variationListings: any[]; 
     private fileURL = environment.fileURL;
 
     displayedColumns = ['Menu', 'Title', 'CreatedOn'];
@@ -52,47 +52,50 @@ export class ItemVariationListComponent implements OnInit {
                 }
             );
 
-        // this.subscription = this.itemService.getVariationGroups().subscribe(
-        //     (variationGroups: VendorAttachment[]) => {
-        //         this.variationGroups = vendorAttachments;
-        //         this.refreshDataSource(this.variationGroups);
-        //     },
-        //     (error: any) => this.errorMessage = <any>error
-        // );
+        this.subscription = this.itemService.getItemVariationListings().subscribe(
+            (variationListings: ItemVariationListing[]) => {
+                this.variationListings = variationListings;
+                this.refreshDataSource(this.variationListings);
+            },
+            (error: any) => this.errorMessage = <any>error
+        );
+
+
     }
 
-    refreshDataSource(vendorAttachments: VendorAttachment[]) {
-        this.dataSource = new MatTableDataSource<VendorAttachment>(vendorAttachments);
+    refreshDataSource(variationListings: ItemVariationListing[]) {
+        this.dataSource = new MatTableDataSource<ItemVariationListing>(variationListings);
         this.dataSource.sort = this.sort;
         this.dataSource.paginator = this.paginator;
     }
 
-    onDeleteAttachment(vendorattachment: VendorAttachment) {
-        const confirmation = confirm(`Remove ${vendorattachment.VendorAttachmentID}: ${vendorattachment.Title}?`);
-        // if (confirmation) {
-        //     this.companyService.deleteVendorAttachment(vendorattachment.VendorAttachmentID).subscribe(
-        //         () => {
-        //             this.onDeleteComplete(vendorattachment, `${vendorattachment.VendorAttachmentID} was deleted`);
 
-        //             const foundIndex = this.vendorAttachments.findIndex(i => i.VendorAttachmentID === vendorattachment.VendorAttachmentID);
-        //             if (foundIndex > -1) {
-        //                 this.vendorAttachments.splice(foundIndex, 1);
-        //             }
+    onDeleteListing(listing: ItemVariationListing) {
+        const confirmation = confirm(`Remove ${listing.ItemVariationListingID}: ${listing.Name}?`);
+        if (confirmation) {
+            this.itemService.deleteItemVariationListing(listing.ItemVariationListingID).subscribe(
+                () => {
+                    this.onDeleteComplete(listing, `${listing.ItemVariationListingID} was deleted`);
 
-        //             this.refreshDataSource(this.vendorAttachments);
-        //         },
-        //         (error: any) => {
-        //             this.refreshDataSource(this.vendorAttachments);
-        //             this.errorMessage = <any>error;
-        //             this.companyService.sendNotification({ type: 'error', title: 'Error', content: this.errorMessage });
-        //             window.location.reload();
-        //         }
-        //     );
-        // }
+                    const foundIndex = this.variationListings.findIndex(i => i.ItemVariationListingID === listing.ItemVariationListingID);
+                    if (foundIndex > -1) {
+                        this.variationListings.splice(foundIndex, 1);
+                    }
+
+                    this.refreshDataSource(this.variationListings);
+                },
+                (error: any) => {
+                    this.refreshDataSource(this.variationListings);
+                    this.errorMessage = <any>error;
+                    this.itemService.sendNotification({ type: 'error', title: 'Error', content: this.errorMessage });
+                    window.location.reload();
+                }
+            );
+        }
     }
 
-    onDeleteComplete(vendorattachment: VendorAttachment, message?: string): void {
-        this.refreshDataSource(this.variationGroups);
+    onDeleteComplete(vendorattachment: ItemVariationListing, message?: string): void {
+        this.refreshDataSource(this.variationListings);
         // this.companyService.sendNotification({ type: 'success', title: 'Successfully Deleted', content: message });
     }
 

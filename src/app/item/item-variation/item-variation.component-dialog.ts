@@ -10,7 +10,7 @@ import { ItemService } from '../item.service';
 })
 export class ItemVariationComponentDialog implements OnInit {
     
-    attributesVariationsListData: any[];
+    attributesVariationsListData: ItemAttribute[];
     attributesVariationsList: any[] = [];
     oldDefault: any;
     newAttribute: any;
@@ -41,7 +41,7 @@ export class ItemVariationComponentDialog implements OnInit {
         // if (this.attributesVariationsListData.length) {
         //     this.newAttribute = this.attributesVariationsListData[0];
         // }
-
+        console.log('HERE, ', this.attributesVariationsList)
         //USE THIS WHEN API IS WORKING
         this.itemService.getItemAttributes()
             .subscribe((data) => {
@@ -63,7 +63,8 @@ export class ItemVariationComponentDialog implements OnInit {
         this.displayAvailableAttributes();
         this.clearNewAttributeField();
         this.validateItemVariation();
-        this.canShowDefaultOldSettings(this.newAttribute);
+        console.log(this.attributesVariationsList);
+        //this.canShowDefaultOldSettings(this.newAttribute);
     }
     
     displayAvailableAttributes() {
@@ -90,17 +91,18 @@ export class ItemVariationComponentDialog implements OnInit {
     }
 
     onAddItemVariationClick() {
-        this.itemService.addItemVariation(this.attributesVariationsList, this.oldDefault);
+        const listing = this.itemService.addItemVariation(this.variationListing, this.attributesVariationsList, this.oldDefault);
         
-        this.attributesVariationsList.forEach((item) => {
-            if (item.variationOptions && item.variationOptions.length > 0) {
-                item.selectedVariation = item.variationOptions[0];
-            }
-        })
+        // this.attributesVariationsList.forEach((item) => {
+        //     if (item.variationOptions && item.variationOptions.length > 0) {
+        //         item.selectedVariation = item.variationOptions[0];
+        //     }
+        // })
         
         this.onUpdateItemData(this.attributesVariationsList);
-        this.dialogRef.close();
+        this.dialogRef.close(listing);
     }
+
     onUpdateItemData(list) {
         if (list && this.variationListing) {
             const selectedVariations = list.map((i) => {

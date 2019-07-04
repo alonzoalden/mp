@@ -18,6 +18,7 @@ import { ItemListComponent, ItemListComponentItemPrintDialog, ItemListComponentI
 import { ItemPrintLabelComponent, ItemPrintLabelComponentPrintDialog} from './item-print-label/item-print-label.component';
 import { ItemPartListComponent, ItemPartListComponentItemPrintDialog } from './item-part-list/item-part-list.component';
 
+import { ItemVariationSelectItemComponentDialog } from './item-variation/item-variation-select-item.component-dialog';
 import { ItemVariationComponentDialog } from './item-variation/item-variation.component-dialog';
 import { ItemVariationComponent } from './item-variation/item-variation.component';
 import { ItemVariationAddComponent } from './item-variation/item-variation-add.component';
@@ -97,6 +98,7 @@ import { ItemPartEditGuard } from './item-part-edit/item-part-edit.guard';
         ItemComponent,
         ItemListComponent,
         ItemAddComponent,
+        ItemVariationSelectItemComponentDialog,
         ItemVariationComponentDialog,
         ItemVariationComponent,
         ItemVariationAddComponent,
@@ -164,7 +166,7 @@ import { ItemPartEditGuard } from './item-part-edit/item-part-edit.guard';
         ItemAddImageComponentUploadDialog,
         ItemEditImageComponentUploadDialog
     ],
-    entryComponents: [ItemListComponent, ItemListComponentItemPrintDialog, ItemPrintLabelComponentPrintDialog, ItemAddImageComponentUploadDialog, ItemEditImageComponentUploadDialog, ItemListComponentImportDialog, ItemVariationComponentDialog],
+    entryComponents: [ItemListComponent, ItemListComponentItemPrintDialog, ItemPrintLabelComponentPrintDialog, ItemAddImageComponentUploadDialog, ItemEditImageComponentUploadDialog, ItemListComponentImportDialog, ItemVariationComponentDialog, ItemVariationSelectItemComponentDialog],
     imports: [
         TranslateModule,
         ReactiveFormsModule,

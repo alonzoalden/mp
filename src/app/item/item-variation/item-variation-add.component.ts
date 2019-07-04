@@ -1,6 +1,6 @@
 
 import { Component, OnInit, ViewContainerRef, ViewChild, Inject, ElementRef, Input} from '@angular/core';
-import { Router } from '@angular/router';
+import { Router, ActivatedRoute } from '@angular/router';
 import { ItemInsert, ItemVariationListing, ItemTierPriceInsert, ItemRelatedProductInsert, ItemUpSellInsert, ItemCrossSellInsert, ItemAttachmentInsert, ItemVideoInsert } from '../../shared/class/item';
 import { VendorBrand } from '../../shared/class/vendor-brand';
 import { MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material';
@@ -21,10 +21,12 @@ export class ItemVariationAddComponent implements OnInit {
     //product: ItemVariationListing;
     attributesVariationsList: any[] = [];
     variationCount: number;
-    
+    loading: boolean = false;
+    isEdit: boolean = false;
     //@Input() attributesVariationsList: any[] = [];
 
     constructor(private router: Router,
+                private route: ActivatedRoute,
                 private itemService: ItemService,
                 public printDialog: MatDialog) {}
     
@@ -32,8 +34,38 @@ export class ItemVariationAddComponent implements OnInit {
         //this.itemService.product.subscribe((product) => this.product = product);
         //this.variationListing = this.itemService.defaultVariationListingInsert();
         
-        this.itemService.setVariationListing(this.itemService.defaultVariationListingInsert());
-        this.itemService.variationListing.subscribe((listing) => this.variationListing = listing);
+        //this.itemService.setVariationListing(this.itemService.defaultVariationListingInsert());
+        //this.itemService.variationListing.subscribe((listing) => this.variationListing = listing);
+        this.variationListing = this.itemService.defaultVariationListingInsert();
+
+        const param = this.route.snapshot.params['id'];
+        if (param) {
+            this.isEdit = true;
+            this.loading = true;
+            this.itemService.getItemVariationListing(param).subscribe(
+                (listing: ItemVariationListing) => {
+                    console.log(listing);
+                    this.variationListing = listing;
+                    this.loading = false;
+
+
+                    this.itemService.getItemAttributes().subscribe(
+                        (variations) => {
+                            console.log(variations);
+                        }
+                    )
+
+
+                },
+                error => {
+                    //this.errorMessage = <any>error;
+                    this.loading = false;
+                    this.itemService.sendNotification({ type: 'error', title: 'Error', content: this.errorMessage });
+                    this.router.navigate(['/item/variation-listing']);                
+                }
+            ) 
+        }
+
     }   
 
     onUpdateItemData(list) {
@@ -59,22 +91,43 @@ export class ItemVariationAddComponent implements OnInit {
         // Navigate back to the item list
         this.itemService.sendNotification({ type: 'success', title: 'Successfully Updated', content: message });
     }
-    addListing() {
-        //if (!this.variationListing) return;
-        this.itemService.addItemVariationListing(this.variationListing)
-            .subscribe((data) => {
-                console.log(data);
-                //return to 
-            })
+    addListing(viewListing) {
+        if (!this.variationListing) return;
+        this.loading = true;
+        this.itemService.addItemVariationListing(this.variationListing).subscribe(
+            (data) => {
+                this.loading = false;
+                this.itemService.sendNotification({ type: 'success', title: 'Successfully Saved'});
+
+                if (data.ItemVariationListingID && viewListing) {
+                    this.router.navigate(['item', 'variation-listing', data.ItemVariationListingID ]);
+                }
+                else {
+                    this.router.navigate(['/item/variation-listing']);
+                }
+                
+                
+                
+            }),
+            (error: any) => {
+                
+                this.loading = false;
+                this.itemService.sendNotification({ type: 'error', title: 'Error', content: <any>error });
+            }
     }
 
 
 
     openDialogItemVariation() {
+        console.log(this.attributesVariationsList);
         const dialogRef = this.printDialog.open(ItemVariationComponentDialog, {
             data: this.attributesVariationsList
         });
     
-        dialogRef.afterClosed().subscribe(result => {});
+        dialogRef.afterClosed().subscribe(listing => {
+            if (!listing) return;
+            this.variationListing.ItemVariations = listing.ItemVariations;
+            
+        });
     }
 }

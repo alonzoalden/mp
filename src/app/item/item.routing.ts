@@ -84,6 +84,10 @@ const ITEM_ROUTES: Routes = [
                 component: ItemVariationAddComponent
             },
             {
+                path: 'variation-listing/add/:id',
+                component: ItemVariationAddComponent
+            },
+            {
                 path: 'variation-listing/:id',
                 component: ItemVariationEditComponent
             },

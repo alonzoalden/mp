@@ -726,7 +726,9 @@ export class ItemVariationLine {
         public ItemVariationLineID: number,
         public ItemVariationID: number,
         public ItemAttributeVariationID: number,
-
+        public ItemAttributeID: number,
+        public ItemAttributeName: string,
+        public ItemAttributeVariationName: string,
         public UpdatedOn: string,
         public CreatedOn: string,
     ) {}
