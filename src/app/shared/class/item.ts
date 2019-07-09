@@ -671,7 +671,8 @@ export class ItemAttribute {
         public Name: string,        
         public UpdatedOn: string,
         public CreatedOn: string,
-        public ItemAttributeVariations: Array<ItemAttributeVariation>
+        public ItemAttributeVariations: Array<ItemAttributeVariation>,
+        public variationOptions: Array<any>
     ) {}
 }
 
@@ -700,6 +701,7 @@ export class ItemVariationListing {
         public CreatedOn: string,
 
         public ItemVariations: Array<ItemVariation>
+
     ) {}
 }
 

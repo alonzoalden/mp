@@ -29,8 +29,8 @@ export class ItemVariationComponentDialog implements OnInit {
         private itemService: ItemService,
         @Inject(MAT_DIALOG_DATA) public data: any) {
             if (this.data) {
-                this.attributesVariationsList = this.data;
-                this.originalData = [...this.data];
+                this.attributesVariationsList = this.data.attributesVariationsList;
+                this.originalData = [...this.data.attributesVariationsList];
             }
         }
     ngOnInit() {
@@ -41,8 +41,11 @@ export class ItemVariationComponentDialog implements OnInit {
         // if (this.attributesVariationsListData.length) {
         //     this.newAttribute = this.attributesVariationsListData[0];
         // }
-        console.log('HERE, ', this.attributesVariationsList)
+        
         //USE THIS WHEN API IS WORKING
+
+        
+
         this.itemService.getItemAttributes()
             .subscribe((data) => {
                 console.log(data);
@@ -53,7 +56,14 @@ export class ItemVariationComponentDialog implements OnInit {
                 }
             });
         //this.itemService.product.subscribe((product) => this.product = product);
-        this.variationListing = this.itemService.defaultVariationListingInsert();
+        
+        
+        if (this.data.isEdit) {
+            this.variationListing = this.data.variationListing;
+        }
+        else {
+            this.variationListing = this.itemService.defaultVariationListingInsert();
+        }
     }
 
     createAttribute() {
@@ -63,8 +73,7 @@ export class ItemVariationComponentDialog implements OnInit {
         this.displayAvailableAttributes();
         this.clearNewAttributeField();
         this.validateItemVariation();
-        console.log(this.attributesVariationsList);
-        //this.canShowDefaultOldSettings(this.newAttribute);
+        if (this.data.isEdit) this.canShowDefaultOldSettings(this.newAttribute);
     }
     
     displayAvailableAttributes() {
@@ -79,7 +88,7 @@ export class ItemVariationComponentDialog implements OnInit {
    }
 
    canShowDefaultOldSettings(e) {
-        this.canShowDefaultOldSettingsInput = (this.data.length > this.originalData.length && this.originalData.indexOf(e) < 0);
+        this.canShowDefaultOldSettingsInput = (this.data.isEdit && this.data.attributesVariationsList.length > this.originalData.length && this.originalData.length > 0 && this.originalData.indexOf(e) < 0);
    }
 
     clearNewAttributeField() {    
@@ -116,7 +125,9 @@ export class ItemVariationComponentDialog implements OnInit {
             });
         }
     }
-    onNgModelChange() {
+    onNgModelChange(e) {
+        console.log(e);
+        this.canShowDefaultOldSettings(e);
         this.validateItemVariation();
     }
     viewVariationItem(item) {
@@ -129,5 +140,8 @@ export class ItemVariationComponentDialog implements OnInit {
         if (this.oldDefaultRef && !this.oldDefault ) {
             this.addItemVariationInvalid = true;
         }
+    }
+    test(a) {
+        console.log(a)
     }
 }

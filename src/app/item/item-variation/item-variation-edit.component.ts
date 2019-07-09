@@ -1,12 +1,14 @@
 
 import { Component, OnInit, ViewContainerRef, ViewChild, Inject, ElementRef, Input} from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
-import { ItemInsert, ItemList, ItemVariationListing, ItemTierPriceInsert, ItemRelatedProductInsert, ItemUpSellInsert, ItemCrossSellInsert, ItemAttachmentInsert, ItemVideoInsert } from '../../shared/class/item';
+import { ItemInsert, ItemList, ItemVariationListing, ItemAttribute, ItemTierPriceInsert, ItemRelatedProductInsert, ItemUpSellInsert, ItemCrossSellInsert, ItemAttachmentInsert, ItemVideoInsert } from '../../shared/class/item';
 import { VendorBrand } from '../../shared/class/vendor-brand';
 import { MatDialog, MatPaginator, MatSort, MatDialogRef, MAT_DIALOG_DATA, MatTableDataSource } from '@angular/material';
 import { ItemService } from '../item.service';
 import { Observable, Subscription } from 'rxjs';
 import { ItemVariationSelectItemComponentDialog } from '../item-variation/item-variation-select-item.component-dialog';
+import { ItemVariationComponentDialog } from '../item-variation/item-variation.component-dialog';
+
 import { utf8Encode } from '@angular/compiler/src/util';
 
 
@@ -29,9 +31,11 @@ export class ItemVariationEditComponent implements OnInit {
     @ViewChild(MatPaginator) paginator: MatPaginator;
     @ViewChild(MatSort) sort: MatSort;
 
+    isEdit: boolean = false;
     itemList: ItemList[];
     loading: boolean = false;
     pendingSave: boolean = false;
+    itemAttributes: ItemAttribute[];
     // columns = [
     //     { Name: 'Color', ItemAttributeID: 1,  cell: (row, column) => row.filter((i)=> i.ItemAttributeID === column.ItemAttributeID)[0].Name },
     //     { Name: 'Size',  ItemAttributeID: 2,  cell: (row, column) => row.filter((i)=> i.ItemAttributeID === column.ItemAttributeID)[0].Name },
@@ -46,11 +50,20 @@ export class ItemVariationEditComponent implements OnInit {
         this.loading = true;
         const param = this.route.snapshot.params['id'];
         
-        this.itemService.getItemList().subscribe(
-            (itemList: ItemList[]) => {
-                this.itemList = itemList;
-                this.subscription = this.itemService.getItemVariationListing(param).subscribe(
+        //const param = this.route.snapshot.params['id'];
+        if (param !== 'edit') {
+            this.loading = true;
+            this.isEdit = true;
+            this.itemService.getItemList().subscribe(
+                (itemList: ItemList[]) => {
+                    this.itemList = itemList;
+
+                this.itemService.getItemVariationListing(param).subscribe(
                     (listing: ItemVariationListing) => {
+                        
+
+
+
                         listing.ItemVariations.forEach((item) => {
                             if (item.ItemID && !item.ItemName) {
                                 const itemlistItem = itemList.find((itemlistItem) => item.ItemID === itemlistItem.ItemID);
@@ -59,19 +72,51 @@ export class ItemVariationEditComponent implements OnInit {
                                 item.ItemVendorSKU = itemlistItem.VendorSKU;
                             }
                         })
+
                         this.variationListing = listing;
-                        this.displayedColumns = listing.ItemVariations[0].ItemVariationLines.map((line) => line.ItemAttributeName);
-                        this.columns = listing.ItemVariations[0].ItemVariationLines.map((line) => { 
-                            return {
-                                Name: line.ItemAttributeName,
-                                ItemAttributeID: line.ItemAttributeID,
-                                cell: (row, column) => row.filter((i)=> i.ItemAttributeID === column.ItemAttributeID)[0].ItemAttributeVariationName
-                            }
-                        });
-                        this.displayedColumns.push('ItemSelection');
-                        let data = this.variationListing.ItemVariations.map((itemvariation) => itemvariation.ItemVariationLines);
-                        this.refreshDataSource(data);
+
+                        
+
+
                         this.loading = false;
+                        
+                        this.itemService.getItemAttributes().subscribe((attributes) => {
+                            this.itemAttributes = attributes;
+                            listing.ItemVariations.forEach((itemvariation) => {
+                                itemvariation.ItemVariationLines.forEach((line) => {
+                                    const attrib = attributes.find((attr) => attr.ItemAttributeID === line.ItemAttributeID)
+                                    if (!attrib.variationOptions) attrib.variationOptions = [];
+                                    const itemExists = attrib.variationOptions.find((option)=> option.ItemAttributeVariationID === line.ItemAttributeVariationID);
+
+                                    if (!itemExists) {
+                                        const itemToPush = attrib.ItemAttributeVariations.find((attr) => attr.ItemAttributeVariationID === line.ItemAttributeVariationID)
+                                        attrib.variationOptions.push(itemToPush);
+                                    }
+                                })
+                                
+                                const list = attributes.filter((item)=> {
+                                    if (item.variationOptions) {
+                                        return item;
+                                    }
+                                })
+                                
+                                this.attributesVariationsList = list;
+                            })
+
+                            this.displayedColumns = listing.ItemVariations[0].ItemVariationLines.map((line) => line.ItemAttributeName);
+                            this.columns = listing.ItemVariations[0].ItemVariationLines.map((line) => { 
+                                return {
+                                    Name: line.ItemAttributeName,
+                                    ItemAttributeID: line.ItemAttributeID,
+                                    cell: (row, column) => row.filter((i)=> i.ItemAttributeID === column.ItemAttributeID)[0].ItemAttributeVariationName
+                                }
+                            });
+                            this.displayedColumns.push('ItemSelection');
+                            let data = this.variationListing.ItemVariations.map((itemvariation) => itemvariation.ItemVariationLines);
+                            this.refreshDataSource(data);
+                        })
+
+
                     },
                     error => {
                         //this.errorMessage = <any>error;
@@ -79,12 +124,63 @@ export class ItemVariationEditComponent implements OnInit {
                         this.itemService.sendNotification({ type: 'error', title: 'Error', content: this.errorMessage });
                         this.router.navigate(['/item/variation-listing']);                
                     }
-                );
+                )
+                }
+            )
+        }
+
+        else {
+            this.itemService.getItemAttributes().subscribe((attributes) => {
+                this.itemAttributes = attributes;
+                this.variationListing = this.itemService.defaultVariationListingInsert();
+                this.loading = false;
+            })
+            this.itemService.getItemList().subscribe(
+                (itemList: ItemList[]) => {
+                    this.itemList = itemList;
+
+                    
+                })
+            // this.itemService.getItemList().subscribe(
+            //     (itemList: ItemList[]) => {
+            //         this.itemList = itemList;
+            //         this.subscription = this.itemService.getItemVariationListing(param).subscribe(
+            //             (listing: ItemVariationListing) => {
+            //                 listing.ItemVariations.forEach((item) => {
+            //                     if (item.ItemID && !item.ItemName) {
+            //                         const itemlistItem = itemList.find((itemlistItem) => item.ItemID === itemlistItem.ItemID);
+            //                         item.ItemName = itemlistItem.ItemName;
+            //                         item.ItemTPIN = itemlistItem.TPIN;
+            //                         item.ItemVendorSKU = itemlistItem.VendorSKU;
+            //                     }
+            //                 })
+            //                 this.variationListing = listing;
+            //                 this.displayedColumns = listing.ItemVariations[0].ItemVariationLines.map((line) => line.ItemAttributeName);
+            //                 this.columns = listing.ItemVariations[0].ItemVariationLines.map((line) => { 
+            //                     return {
+            //                         Name: line.ItemAttributeName,
+            //                         ItemAttributeID: line.ItemAttributeID,
+            //                         cell: (row, column) => row.filter((i)=> i.ItemAttributeID === column.ItemAttributeID)[0].ItemAttributeVariationName
+            //                     }
+            //                 });
+            //                 this.displayedColumns.push('ItemSelection');
+            //                 let data = this.variationListing.ItemVariations.map((itemvariation) => itemvariation.ItemVariationLines);
+            //                 this.refreshDataSource(data);
+            //                 this.loading = false;
+            //             },
+            //             error => {
+            //                 //this.errorMessage = <any>error;
+            //                 this.loading = false;
+            //                 this.itemService.sendNotification({ type: 'error', title: 'Error', content: this.errorMessage });
+            //                 this.router.navigate(['/item/variation-listing']);                
+            //             }
+            //         );
 
 
-            },
-            (error: any) => this.errorMessage = <any>error
-        );
+            //     },
+            //     (error: any) => this.errorMessage = <any>error
+            // );
+        }
     }
     refreshDataSource(data: any[]) {
         this.dataSource = new MatTableDataSource<any>(data);
@@ -109,7 +205,7 @@ export class ItemVariationEditComponent implements OnInit {
     }
 
     openDialogSelectItem(row, i, item) {
-        const variationItemProperties = row.map((attribute) => attribute.ItemAttributeVariationName).join(' / ');
+        const variationItemProperties = row.map((attribute) => attribute.ItemAttributeVariationName || attribute.Name).join(' / ');
         
         const data = {
             itemList: this.itemList,
@@ -137,11 +233,10 @@ export class ItemVariationEditComponent implements OnInit {
     }
     updateListing() {
         this.pendingSave = true;
-        console.log(this.variationListing);
-            this.itemService.editItemVariationListing(this.variationListing).subscribe(
+        const itemMethod = this.isEdit ? 'editItemVariationListing' : 'addItemVariationListing';
+            this.itemService[itemMethod](this.variationListing).subscribe(
                 (listing: ItemVariationListing) => {
                     this.onSaveComplete(`${this.variationListing.Name} was saved`);                                               
-                    console.log(listing);
                     // if(displayPreview) {
                     //     window.open(environment.previewURL + this.item.ItemID + "/options/portal", "_blank");
                     // }
@@ -156,6 +251,47 @@ export class ItemVariationEditComponent implements OnInit {
     onSaveComplete(message?: string) {
         this.itemService.sendNotification({ type: 'success', title: 'Successfully Saved', content: message });
         this.router.navigate(['item', 'variation-listing']);
-        
     }
+
+    openDialogItemVariation() {
+        const data = {
+            attributesVariationsList: this.attributesVariationsList,
+            variationListing: this.variationListing,
+            isEdit: true,
+        }
+
+        const dialogRef = this.printDialog.open(ItemVariationComponentDialog, {
+            data: data
+        });
+    
+        dialogRef.afterClosed().subscribe(listing => {
+            if (!listing) return;
+            this.variationListing.ItemVariations = listing.ItemVariations;
+            
+            this.displayedColumns = listing.ItemVariations[0].ItemVariationLines.map((line) => {
+                if (line.ItemAttributeName) return line.ItemAttributeName
+                else {
+                    var x = this.itemAttributes.find((item) => item.ItemAttributeID === line.ItemAttributeID);
+                    return x.Name;
+                }
+            });
+            
+            this.columns = listing.ItemVariations[0].ItemVariationLines.map((line) => { 
+                return {
+                    Name: this.itemAttributes.find((item) => item.ItemAttributeID === line.ItemAttributeID).Name,
+                    ItemAttributeID: line.ItemAttributeID,
+                    cell: (row, column) => {
+                        const item = row.filter((i)=> i.ItemAttributeID === column.ItemAttributeID)[0];
+                        return item.ItemAttributeVariationName || item.Name;
+                    }
+                }
+            });
+            console.log(this.displayedColumns);
+            console.log(this.columns);
+            this.displayedColumns.push('ItemSelection');
+            let data = this.variationListing.ItemVariations.map((itemvariation) => itemvariation.ItemVariationLines);
+            this.refreshDataSource(data);
+        });
+    }
+
 }

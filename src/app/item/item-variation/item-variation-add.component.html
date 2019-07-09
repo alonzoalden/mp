@@ -24,7 +24,7 @@
                     <h5 *ngIf="!isEdit">{{ 'Create New Variation Listing' | translate }}</h5>
                     <h5 *ngIf="isEdit">{{ 'Update Variation Listing' | translate }}</h5>
                 </div>
-                <div class="ibox-content">
+                <div class="ibox-content" style="min-height: 40vh;">
 
                     <div *ngIf="loading" class="spinner-container">
                         <div class="sk-spinner sk-spinner-three-bounce big-spinner">
@@ -62,17 +62,18 @@
                             </div>
 
                             <div class="form-group">
-                                    <label class="col-md-2 control-label" for="variationGroupItemAttributesId">{{ '' | translate }}</label>
-                                    <div class="col-md-8">
-                                        <h4>Total Variations ({{variationListing.ItemVariations?.length}})</h4>
-                                        <div *ngFor="let itemVariation of variationListing.ItemVariations">
-                                            <span *ngFor="let item of itemVariation.ItemVariationLines">
-                                            
-                                                {{item.Name || item.ItemAttributeVariationName }}
-                                            </span>
-                                        </div>
+                                <label class="col-md-2 control-label" for="variationGroupItemAttributesId">{{ '' | translate }}</label>
+                                <div class="col-md-8">
+                                    <h4>Total Variations ({{variationListing.ItemVariations?.length}})</h4>
+                                    <div *ngFor="let itemVariation of variationListing.ItemVariations">
+                                        <span class="sm-strong m-b-xs" *ngFor="let item of itemVariation.ItemVariationLines">
+                                        
+                                            {{item.Name || item.ItemAttributeVariationName }}  
+                                        </span>
+                                        <span>{{ itemVariation.ItemID ? '| ItemID: ' + itemVariation.ItemID : '' }}</span>
                                     </div>
                                 </div>
+                            </div>
 
                             <div class="form-group m-t-xl">
                                 <div class="button-bottom-row inside-ibox">

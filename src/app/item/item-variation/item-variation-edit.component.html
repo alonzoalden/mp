@@ -35,9 +35,48 @@
                         </div>
                         <form class="form-horizontal animated fadeIn" #addVariationGroupForm="ngForm" *ngIf="variationListing && !loading">
                             <fieldset>
+                                
+                                <div class="form-group" [ngClass]="{'has-error': (variationGroupNameVar.touched || 
+                                                    variationGroupNameVar.dirty) && 
+                                                    !variationGroupNameVar.valid }">
+                                    <label class="col-md-2 control-label" for="variationGroupNameId">{{ 'Name' | translate }}</label>
+                                    <div class="col-md-8">
+                                        <input class="form-control" id="variationGroupNameId" type="text" placeholder="{{ 'Name' | translate }} ({{ 'Required' | translate }})" required
+                                            [(ngModel)]=variationListing.Name name="vendorAttachmentTitle" #variationGroupNameVar="ngModel" />
+                                        <span class="help-block" *ngIf="(variationGroupNameVar.touched ||
+                                                    variationGroupNameVar.dirty) &&
+                                                    variationGroupNameVar.errors">
+                                            <span *ngIf="variationGroupNameVar.errors.required">
+                                                {{ 'Name' | translate }} {{ 'is required' | translate }}
+                                            </span>
+                                        </span>
+                                    </div>
+                                </div>
 
-                                <h3 class="m-l-md">Name: {{variationListing.Name}}</h3>
-                                <div class="table-responsive m-t-lg">
+                                <div class="form-group">
+                                    <label class="col-md-2 control-label" for="variationGroupItemAttributesId">{{ 'Variations' | translate }}</label>
+                                    <div class="col-md-2">
+                                        <button (click)="openDialogItemVariation()" [color]="variationListing?.ItemVariations?.length ? '' : ''" mat-raised-button>{{ variationListing.ItemVariations?.length ? 'Update' : 'Create'}} Variations</button>
+                                    </div>
+                                </div>
+
+                                <!-- <div class="form-group">
+                                    <label class="col-md-2 control-label" for="variationGroupItemAttributesId">{{ '' | translate }}</label>
+                                    <div class="col-md-8">
+                                        <h4>Total Variations ({{variationListing.ItemVariations?.length}})</h4>
+                                        <div *ngFor="let itemVariation of variationListing.ItemVariations">
+                                            <span class="sm-strong m-b-xs" *ngFor="let item of itemVariation.ItemVariationLines">
+                                            
+                                                {{item.Name || item.ItemAttributeVariationName }}  
+                                            </span>
+                                            <span>{{ itemVariation.ItemID ? '| ItemID: ' + itemVariation.ItemID : '' }}</span>
+                                        </div>
+                                    </div>
+                                </div> -->
+
+                                <!-- <h3 class="m-l-md">Name: {{variationListing.Name}}</h3> -->
+                                <div class="table-responsive m-t-lg" *ngIf="variationListing.ItemVariations?.length">
+                                    <h5 class="m-b-md" >Total Variations ({{variationListing.ItemVariations?.length}})</h5>
                                     <table mat-table #table [dataSource]="dataSource" matSort>
                                         <!-- Menu Column -->
                                         <ng-container *ngFor="let column of columns" [matColumnDef]="column.Name">
@@ -52,10 +91,10 @@
                                             <td mat-cell *matCellDef="let row; let i = index;">
 
                                                 <ng-container *ngIf="itemList">
-                                                    <ng-container *ngIf="!variationListing.ItemVariations[i].ItemID">
+                                                    <ng-container *ngIf="!variationListing?.ItemVariations[i]?.ItemID">
                                                         <a class="sm-strong animated fadeIn" (click)="openDialogSelectItem(row, i)">Select Item</a>
                                                     </ng-container>
-                                                    <ng-container *ngIf="variationListing.ItemVariations[i].ItemID">
+                                                    <ng-container *ngIf="variationListing?.ItemVariations[i]?.ItemID">
                                                         <div class="flex-va-center">
                                                             {{variationListing.ItemVariations[i].ItemName}}
                                                             <i (click)="openDialogSelectItem(row, i, variationListing.ItemVariations[i])" class="fa fa-edit fs-16 m-l-sm" style="cursor: pointer; color: #337ab7"></i>
@@ -86,6 +125,7 @@
                                                     style="background-color: #1ab394; width: 140px;"
                                                     class=""
                                                     type="button"
+                                                    [disabled]="!variationListing.Name || variationListing.ItemVariations.length < 1"
                                                     (click)="updateListing()">
                                                     
                                                     <ng-container *ngIf="pendingSave">

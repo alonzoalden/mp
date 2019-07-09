@@ -1,7 +1,7 @@
 
 import { Component, OnInit, ViewContainerRef, ViewChild, Inject, ElementRef, Input} from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
-import { ItemInsert, ItemVariationListing, ItemTierPriceInsert, ItemRelatedProductInsert, ItemUpSellInsert, ItemCrossSellInsert, ItemAttachmentInsert, ItemVideoInsert } from '../../shared/class/item';
+import { ItemInsert, ItemVariationListing, ItemAttributeVariation, ItemTierPriceInsert, ItemRelatedProductInsert, ItemUpSellInsert, ItemCrossSellInsert, ItemAttachmentInsert, ItemVideoInsert } from '../../shared/class/item';
 import { VendorBrand } from '../../shared/class/vendor-brand';
 import { MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material';
 import { ItemService } from '../item.service';
@@ -44,15 +44,31 @@ export class ItemVariationAddComponent implements OnInit {
             this.loading = true;
             this.itemService.getItemVariationListing(param).subscribe(
                 (listing: ItemVariationListing) => {
-                    console.log(listing);
                     this.variationListing = listing;
                     this.loading = false;
+                    
+                    this.itemService.getItemAttributes().subscribe((attributes) => {
+                        listing.ItemVariations.forEach((itemvariation) => {
+                            itemvariation.ItemVariationLines.forEach((line) => {
+                                const attrib = attributes.find((attr) => attr.ItemAttributeID === line.ItemAttributeID)
+                                if (!attrib.variationOptions) attrib.variationOptions = [];
+                                const itemExists = attrib.variationOptions.find((option)=> option.ItemAttributeVariationID === line.ItemAttributeVariationID);
 
-
-                    this.itemService.getItemAttributes().subscribe(
-                        (variations) => {
-                            console.log(variations);
-                        }
+                                if (!itemExists) {
+                                    const itemToPush = attrib.ItemAttributeVariations.find((attr) => attr.ItemAttributeVariationID === line.ItemAttributeVariationID)
+                                    attrib.variationOptions.push(itemToPush);
+                                }
+                            })
+                            console.log(attributes);
+                            const list = attributes.filter((item)=> {
+                                if (item.variationOptions) {
+                                    return item;
+                                }
+                            })
+                            console.log(list);
+                            this.attributesVariationsList = list;
+                        })
+                    }
                     )
 
 
@@ -65,8 +81,7 @@ export class ItemVariationAddComponent implements OnInit {
                 }
             ) 
         }
-
-    }   
+    }
 
     onUpdateItemData(list) {
         if (list && this.variationListing) {
@@ -94,7 +109,10 @@ export class ItemVariationAddComponent implements OnInit {
     addListing(viewListing) {
         if (!this.variationListing) return;
         this.loading = true;
-        this.itemService.addItemVariationListing(this.variationListing).subscribe(
+
+        const itemMethod = this.isEdit ? 'editItemVariationListing' : 'addItemVariationListing';
+
+        this.itemService[itemMethod](this.variationListing).subscribe(
             (data) => {
                 this.loading = false;
                 this.itemService.sendNotification({ type: 'success', title: 'Successfully Saved'});
@@ -119,9 +137,14 @@ export class ItemVariationAddComponent implements OnInit {
 
 
     openDialogItemVariation() {
-        console.log(this.attributesVariationsList);
+        const data = {
+            attributesVariationsList: this.attributesVariationsList,
+            variationListing: this.variationListing,
+            isEdit: this.isEdit
+        }
+
         const dialogRef = this.printDialog.open(ItemVariationComponentDialog, {
-            data: this.attributesVariationsList
+            data: data
         });
     
         dialogRef.afterClosed().subscribe(listing => {

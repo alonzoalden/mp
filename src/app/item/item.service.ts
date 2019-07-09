@@ -1115,7 +1115,7 @@ export class ItemService {
     setProductItem(item: any) {
         this.currentProductItemInsert = new BehaviorSubject(item);
     }
-    ItemAttributeVariationID
+    
     addItemVariation(listing, variations, oldDefault) {
         // let variationListingInfo;
         // this.variationListing.subscribe((item) => {
@@ -1125,11 +1125,15 @@ export class ItemService {
         //console.log(variationListingInfo.ItemVariations);
         let itemInsertList = this.createProductVariations(listing.ItemVariations, variations);
         
-        if (listing && oldDefault) {
-            let oldItemInsertList = listing.ItemVariations;
-            this.updateWithOriginalItems(oldItemInsertList, itemInsertList, oldDefault);
-        }
+        // if (listing && oldDefault) {
+        //     let oldItemInsertList = listing.ItemVariations;
+        //     this.updateWithOriginalItems(oldItemInsertList, itemInsertList, oldDefault);
+        // }
+        let oldItemInsertList = listing.ItemVariations;
+        this.updateWithOriginalItems(oldItemInsertList, itemInsertList, oldDefault);
         
+        console.log(itemInsertList);
+
         //console.log(variationListingInfo);
         listing.ItemVariations = itemInsertList;
         //this.variationListing.next(variationListingInfo);
@@ -1143,14 +1147,18 @@ export class ItemService {
         const possibleVariations = this.cartesian([...items]);
         console.log('HERE, ', possibleVariations);
         return possibleVariations.map((itemVariations) => {
-            for (var i = 0; i < listing.length; i++) {
-                let existingItem = listing[i];
+
+            // for (var i = 0; i < listing.length; i++) {
+            //     let existingItem = listing[i];
                 
-                if (this.areEqual(itemVariations, existingItem)) {
-                    console.log('exists', itemVariations)
-                    return existingItem;
-                }
-            }
+            //     console.log('itemVariations: ', itemVariations);
+            //     console.log('existingItem.ItemVariationLines: ', existingItem.ItemVariationLines);
+
+            //     // if (this.areEqual(itemVariations, existingItem.ItemVariationLines)) {
+            //     //     console.log('exists', itemVariations)
+            //     //     return existingItem;
+            //     // }
+            // }
             // itemVariations.forEach((variationLine) => {
             //     console.log(variationLine)
             //     //variationLine.ItemVariationID = variationLine.ItemAttributeVariationID
@@ -1166,15 +1174,24 @@ export class ItemService {
     //CHECK THIS WHY ARE WE NOT REPLACING THE PROPER DATA  
     // CONTINUE HERE
     updateWithOriginalItems(oldItemlist, newItemList, defaultTo): void {
+        
         oldItemlist.forEach((oldItem) => {
             newItemList.forEach((newItem, i) => {
-                const oldMatch = oldItem.every((oldVariation) => newItem.indexOf(oldVariation) > -1);
-                const defaultToMatch = newItem.indexOf(defaultTo) > -1;
-                if (oldMatch && defaultToMatch) {
-                    console.log('replaced', newItem)
+                const oldMatch = oldItem.ItemVariationLines.every((oldVariation) => newItem.ItemVariationLines.find((newVariation) => newVariation.ItemAttributeVariationID === oldVariation.ItemAttributeVariationID));
+                
+                // newItem.ItemVariationLines.indexOf(oldVariation) > -1);
+                
+                if (defaultTo) {
+                    const defaultToMatch = newItem.ItemVariationLines.indexOf(defaultTo) > -1;
+                    if (oldMatch && defaultToMatch) {
+                        //console.log('replaced', newItem)
+                        newItemList[i] = oldItem;
+                        newItemList[i].ItemVariationLines = newItem.ItemVariationLines;
+                    }
+                }
+                if (oldMatch && !defaultTo) {
+                    console.log(newItem, oldItem)
                     newItemList[i] = oldItem;
-                    //newItemList[i].ItemVariationItems = newItem.ItemVariationItems;
-
                 }
             })
         });

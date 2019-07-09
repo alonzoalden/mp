@@ -1,7 +1,7 @@
 <h3 class="ibox-title dialog-title">Create Item Variations</h3>
 <div mat-dialog-content style="background-color: #f3f3f4;">
-    <!-- <mat-tab-group class="item-variation" [@.disabled]="true" [disableRipple]="true" [dynamicHeight]="false" (selectedTabChange)="canShowDefaultOldSettings($event.tab.textLabel)"> -->
-    <mat-tab-group class="item-variation" [@.disabled]="true" [disableRipple]="true" [dynamicHeight]="false">
+    <mat-tab-group class="item-variation" [@.disabled]="true" [disableRipple]="true" [dynamicHeight]="false" (selectedTabChange)="canShowDefaultOldSettings($event.tab.textLabel)">
+    <!-- <mat-tab-group class="item-variation" [@.disabled]="true" [disableRipple]="true" [dynamicHeight]="false"> -->
         
         <mat-tab *ngFor="let tab of attributesVariationsList; let i = index" [label]="tab">
 

@@ -46,9 +46,9 @@
 <div class="wrapper wrapper-content animated fadeIn pt10" *ngIf='item'>
     <div class="row">
         <div class="col-lg-12">
-            <!-- <div *ngIf="loading" style="text-align:center">
-                <img src="../../../assets/images/loader.gif" alt="Loading" />
-            </div> -->
+            <div class="col-lg-12">
+                <item-variation [attributesVariationsList]="attributesVariationsList"></item-variation>
+            </div>
             <div *ngIf="loading" class="m-t-xl">
                 <div class="sk-spinner sk-spinner-three-bounce big-spinner">
                     <div class="sk-bounce1"></div>
