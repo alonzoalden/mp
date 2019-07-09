@@ -1,5 +1,5 @@
 <h3 class="ibox-title dialog-title">Select an Item Pairing</h3>
-<div mat-dialog-content style="background-color: #f3f3f4; padding: 40px !important; overflow: scroll; height: 410px;">
+<div mat-dialog-content style="background-color: #f3f3f4; padding: 40px !important; overflow: scroll; min-height: 410px;">
     <div class="ibox-content" style="padding: 40px; height: 100%;">
 
         
@@ -8,11 +8,11 @@
         
 
         <label>Select Item</label>
-        <ng-select  [items]="data.itemList"
+        <ng-select  [items]="data.itemLists"
                     [virtualScroll]="true"
                     bindLabel="ItemName"
                     placeholder="{{ 'Search Item' | translate }}"
-                    [(ngModel)]="item"
+                    [(ngModel)]="itemList"
                     (focus)="formDirty = true;"
                     #selectionCategoriesRef
                     id="selectItem"
@@ -28,25 +28,30 @@
                 </div>
             </ng-template>
         </ng-select>
-        <div class="m-t-md" *ngIf="item">
+        <div class="m-t-md" *ngIf="itemList">
+            <div style="padding: 5px 0;" *ngIf='itemList?.ImagePath || itemList?.ItemImagePath'>
+                <img class="row-image" [src]='imageURL + itemList?.ImagePath || itemList?.ItemImagePath' [matTooltip]='itemList?.ItemName' [alt]='itemList?.ItemName' matTooltipShowDelay="500">
+            </div>
+
             <div class="form-group flex">
                 <label class="control-label" style="flex: 1">{{ 'Description' | translate }}</label>
                 <div style="flex: 5">
-                    {{item.Description || item.ItemName }}
+                    {{itemList.Description || itemList.ItemName }}
                 </div>
             </div>
             <div class="form-group flex" >
                 <label class="control-label" style="flex: 1">{{ 'TPIN' | translate }}</label>
                 <div style="flex: 5">
-                    {{item.TPIN || item.ItemTPIN }}
+                    {{itemList.TPIN || itemList.ItemTPIN }}
                 </div>
             </div>
             <div class="form-group flex">
                 <label class="control-label" style="flex: 1">{{ 'VendorSKU' | translate }}</label>
                 <div  style="flex: 5">
-                    {{item.VendorSKU || item.ItemVendorSKU}}
+                    {{itemList.VendorSKU || itemList.ItemVendorSKU}}
                 </div>
             </div>
+            
         </div>
         <!-- <ng-select [items]="data"
             bindLabel="Name"

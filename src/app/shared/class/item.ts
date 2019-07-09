@@ -253,7 +253,8 @@ export class ItemList {
         public FOBPrice: number,
         public ItemName: string,
         public TPIN: string,
-        public VendorSKU: string
+        public VendorSKU: string,
+        public ImagePath: string
     ) {}
 }
 
@@ -672,7 +673,7 @@ export class ItemAttribute {
         public UpdatedOn: string,
         public CreatedOn: string,
         public ItemAttributeVariations: Array<ItemAttributeVariation>,
-        public variationOptions: Array<any>
+        public SelectedItemAttributeVariations: Array<ItemAttributeVariation>,
     ) {}
 }
 
@@ -694,14 +695,14 @@ export class ItemVariationListing {
 
         public ItemName: string,        
         public ItemVendorSKU: string,        
-        public TPIN: string,        
-        public URLKey: string,        
+        public ItemTPIN: string,        
+        public ItemURLKey: string,        
+        public ItemImagePath: string,  
 
         public UpdatedOn: string,
         public CreatedOn: string,
 
         public ItemVariations: Array<ItemVariation>
-
     ) {}
 }
 
@@ -715,10 +716,12 @@ export class ItemVariation {
         public ItemVendorSKU: string,        
         public ItemTPIN: string,        
         public ItemURLKey: string,        
+        public ItemImagePath: string,        
 
         public UpdatedOn: string,
         public CreatedOn: string,
-
+        public isPrimary: boolean,
+        
         public ItemVariationLines: Array<ItemVariationLine>
     ) {}
 }

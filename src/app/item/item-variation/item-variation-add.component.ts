@@ -51,17 +51,17 @@ export class ItemVariationAddComponent implements OnInit {
                         listing.ItemVariations.forEach((itemvariation) => {
                             itemvariation.ItemVariationLines.forEach((line) => {
                                 const attrib = attributes.find((attr) => attr.ItemAttributeID === line.ItemAttributeID)
-                                if (!attrib.variationOptions) attrib.variationOptions = [];
-                                const itemExists = attrib.variationOptions.find((option)=> option.ItemAttributeVariationID === line.ItemAttributeVariationID);
+                                if (!attrib.SelectedItemAttributeVariations) attrib.SelectedItemAttributeVariations = [];
+                                const itemExists = attrib.SelectedItemAttributeVariations.find((option)=> option.ItemAttributeVariationID === line.ItemAttributeVariationID);
 
                                 if (!itemExists) {
                                     const itemToPush = attrib.ItemAttributeVariations.find((attr) => attr.ItemAttributeVariationID === line.ItemAttributeVariationID)
-                                    attrib.variationOptions.push(itemToPush);
+                                    attrib.SelectedItemAttributeVariations.push(itemToPush);
                                 }
                             })
                             console.log(attributes);
                             const list = attributes.filter((item)=> {
-                                if (item.variationOptions) {
+                                if (item.SelectedItemAttributeVariations) {
                                     return item;
                                 }
                             })

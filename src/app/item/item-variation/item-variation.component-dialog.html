@@ -14,7 +14,7 @@
                 <div class="item-variation-content">
                     <h5 style="font-size: 14px; padding-bottom: 10px;">Select {{tab.Name}} Variations</h5> 
                     <mat-selection-list #properties
-                        [(ngModel)]="tab.variationOptions"
+                        [(ngModel)]="tab.SelectedItemAttributeVariations"
                         (ngModelChange)="onNgModelChange()">
                         <mat-list-option
                             *ngFor="let property of tab.ItemAttributeVariations"
@@ -26,7 +26,7 @@
                     <div style="margin-top: 40px;" *ngIf="canShowDefaultOldSettingsInput" #oldDefaultRef>
                     <!-- <div style="margin-top: 40px;"> -->
                         <h5>Default old settings to:</h5>
-                        <ng-select [items]="tab.variationOptions"
+                        <ng-select [items]="tab.SelectedItemAttributeVariations"
                                     bindLabel="Name"
                                     placeholder="{{ 'Choose Variation for new default' | translate }}"
                                     [(ngModel)]="oldDefault"

@@ -10,7 +10,7 @@ import { ItemVariationSelectItemComponentDialog } from '../item-variation/item-v
 import { ItemVariationComponentDialog } from '../item-variation/item-variation.component-dialog';
 
 import { utf8Encode } from '@angular/compiler/src/util';
-
+import { environment } from '../../../environments/environment';
 
 @Component({
   selector: 'item-variation-edit',
@@ -18,8 +18,9 @@ import { utf8Encode } from '@angular/compiler/src/util';
 })
 
 export class ItemVariationEditComponent implements OnInit {
+    
     private subscription: Subscription;
-
+    
     variationListing: ItemVariationListing;
     errorMessage: string;
     displayedColumns = [];
@@ -30,9 +31,10 @@ export class ItemVariationEditComponent implements OnInit {
     variationCount: number;
     @ViewChild(MatPaginator) paginator: MatPaginator;
     @ViewChild(MatSort) sort: MatSort;
-
+    
+    private imageURL = environment.imageURL;
     isEdit: boolean = false;
-    itemList: ItemList[];
+    itemLists: ItemList[];
     loading: boolean = false;
     pendingSave: boolean = false;
     itemAttributes: ItemAttribute[];
@@ -55,18 +57,20 @@ export class ItemVariationEditComponent implements OnInit {
             this.loading = true;
             this.isEdit = true;
             this.itemService.getItemList().subscribe(
-                (itemList: ItemList[]) => {
-                    this.itemList = itemList;
+                (itemLists: ItemList[]) => {
+                    this.itemLists = itemLists;
 
                 this.itemService.getItemVariationListing(param).subscribe(
                     (listing: ItemVariationListing) => {
-                        
-
-
 
                         listing.ItemVariations.forEach((item) => {
+                            
+                            if (listing.PrimaryItemID === item.ItemID) {
+                                item.isPrimary = true;
+                            }
+                            
                             if (item.ItemID && !item.ItemName) {
-                                const itemlistItem = itemList.find((itemlistItem) => item.ItemID === itemlistItem.ItemID);
+                                const itemlistItem = itemLists.find((itemlistItem) => item.ItemID === itemlistItem.ItemID);
                                 item.ItemName = itemlistItem.ItemName;
                                 item.ItemTPIN = itemlistItem.TPIN;
                                 item.ItemVendorSKU = itemlistItem.VendorSKU;
@@ -85,17 +89,17 @@ export class ItemVariationEditComponent implements OnInit {
                             listing.ItemVariations.forEach((itemvariation) => {
                                 itemvariation.ItemVariationLines.forEach((line) => {
                                     const attrib = attributes.find((attr) => attr.ItemAttributeID === line.ItemAttributeID)
-                                    if (!attrib.variationOptions) attrib.variationOptions = [];
-                                    const itemExists = attrib.variationOptions.find((option)=> option.ItemAttributeVariationID === line.ItemAttributeVariationID);
+                                    if (!attrib.SelectedItemAttributeVariations) attrib.SelectedItemAttributeVariations = [];
+                                    const itemExists = attrib.SelectedItemAttributeVariations.find((option)=> option.ItemAttributeVariationID === line.ItemAttributeVariationID);
 
                                     if (!itemExists) {
                                         const itemToPush = attrib.ItemAttributeVariations.find((attr) => attr.ItemAttributeVariationID === line.ItemAttributeVariationID)
-                                        attrib.variationOptions.push(itemToPush);
+                                        attrib.SelectedItemAttributeVariations.push(itemToPush);
                                     }
                                 })
                                 
                                 const list = attributes.filter((item)=> {
-                                    if (item.variationOptions) {
+                                    if (item.SelectedItemAttributeVariations) {
                                         return item;
                                     }
                                 })
@@ -111,6 +115,7 @@ export class ItemVariationEditComponent implements OnInit {
                                     cell: (row, column) => row.filter((i)=> i.ItemAttributeID === column.ItemAttributeID)[0].ItemAttributeVariationName
                                 }
                             });
+                            this.displayedColumns.unshift('PrimaryItem');
                             this.displayedColumns.push('ItemSelection');
                             let data = this.variationListing.ItemVariations.map((itemvariation) => itemvariation.ItemVariationLines);
                             this.refreshDataSource(data);
@@ -137,7 +142,7 @@ export class ItemVariationEditComponent implements OnInit {
             })
             this.itemService.getItemList().subscribe(
                 (itemList: ItemList[]) => {
-                    this.itemList = itemList;
+                    this.itemLists = itemList;
 
                     
                 })
@@ -208,9 +213,10 @@ export class ItemVariationEditComponent implements OnInit {
         const variationItemProperties = row.map((attribute) => attribute.ItemAttributeVariationName || attribute.Name).join(' / ');
         
         const data = {
-            itemList: this.itemList,
+            itemLists: [...this.itemLists],
             variationItem: variationItemProperties,
             item: item,
+            variationListing: this.variationListing,
         }
         const dialogRef = this.printDialog.open(ItemVariationSelectItemComponentDialog, {
             width: '700px',
@@ -219,11 +225,12 @@ export class ItemVariationEditComponent implements OnInit {
     
         dialogRef.afterClosed().subscribe(result => {
             if (result) {
+                console.log(result)
                 let item = this.variationListing.ItemVariations[i];
                 item.ItemID = result.ItemID;
                 item.ItemName = result.ItemName;
                 item.ItemTPIN = result.TPIN;
-                item.ItemURLKey = result.ItemURLKey;
+                item.ItemImagePath = result.ImagePath;
                 item.ItemVendorSKU = result.VendorSKU;
             }
         },
@@ -293,5 +300,20 @@ export class ItemVariationEditComponent implements OnInit {
             this.refreshDataSource(data);
         });
     }
+    selectPrimaryItem(row, index) {
+        console.log(row);
+        this.variationListing.ItemVariations.forEach((itemvariation, i) => {
+            if (i !== index) itemvariation.isPrimary = false;
+        })
+        const selectedVariation = this.variationListing.ItemVariations[index];
 
+
+        this.variationListing.PrimaryItemID = selectedVariation.ItemID
+        this.variationListing.ItemName = selectedVariation.ItemName
+        this.variationListing.ItemVendorSKU = selectedVariation.ItemVendorSKU
+        this.variationListing.ItemTPIN = selectedVariation.ItemTPIN
+        this.variationListing.ItemImagePath = selectedVariation.ItemImagePath
+
+        console.log(this.variationListing);
+    }
 }

@@ -170,7 +170,7 @@ export class ItemUpSellComponent implements OnInit, OnDestroy  {
         if (confirmation) {
             this.itemService.deleteItemUpSell(itemUpSell.ItemUpSellID).subscribe(
                 () => {                
-                    const itemlist = new ItemList(itemUpSell.UpSellItemID, itemUpSell.UpSellItemVendorSKU + ' - ' + itemUpSell.UpSellItemName + ' - ' + itemUpSell.UpSellTPIN, 0, null, null, null);
+                    const itemlist = new ItemList(itemUpSell.UpSellItemID, itemUpSell.UpSellItemVendorSKU + ' - ' + itemUpSell.UpSellItemName + ' - ' + itemUpSell.UpSellTPIN, 0, null, null, null, null);
                     this.itemlist.push(itemlist);
                     
                     const foundIndex = this.itemUpSells.findIndex(i => i.ItemUpSellID === itemUpSell.ItemUpSellID);

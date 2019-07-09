@@ -1123,7 +1123,7 @@ export class ItemService {
         //     variationListingInfo = item;
         // });
         //console.log(variationListingInfo.ItemVariations);
-        let itemInsertList = this.createProductVariations(listing.ItemVariations, variations);
+        let itemInsertList = this.createProductVariations(listing, variations);
         
         // if (listing && oldDefault) {
         //     let oldItemInsertList = listing.ItemVariations;
@@ -1143,10 +1143,9 @@ export class ItemService {
 
     createProductVariations(listing, variations): any[] {
         
-        const items = variations.map((item) => item.variationOptions);
+        const items = variations.map((item) => item.SelectedItemAttributeVariations);
         const possibleVariations = this.cartesian([...items]);
-        console.log('HERE, ', possibleVariations);
-        return possibleVariations.map((itemVariations) => {
+        return possibleVariations.map((itemVariationLines) => {
 
             // for (var i = 0; i < listing.length; i++) {
             //     let existingItem = listing[i];
@@ -1163,16 +1162,12 @@ export class ItemService {
             //     console.log(variationLine)
             //     //variationLine.ItemVariationID = variationLine.ItemAttributeVariationID
             // })
-            return new ItemVariation(null, null, null, null, null, null, null, null, null, itemVariations);
+            return new ItemVariation(null, listing.ItemVariationListingID, null, null, null, null, null, null, null, null, null, itemVariationLines);
             
             //this.addItemVariation(itemVariations);
         });
     }
 
-
-
-    //CHECK THIS WHY ARE WE NOT REPLACING THE PROPER DATA  
-    // CONTINUE HERE
     updateWithOriginalItems(oldItemlist, newItemList, defaultTo): void {
         
         oldItemlist.forEach((oldItem) => {
@@ -1228,7 +1223,7 @@ export class ItemService {
     }
 
     defaultVariationListingInsert() {
-        return new ItemVariationListing(null, null, null, null, null, null, null, null, null, []);
+        return new ItemVariationListing(null, null, null, null, null, null, null, null, null, null, []);
     }
 
 

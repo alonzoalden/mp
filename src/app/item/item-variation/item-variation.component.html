@@ -36,9 +36,9 @@
                         <!-- This is dropdown for each attribute -->
                         <div class="row ">
                             <div class="col-lg-3" *ngFor="let items of attributesVariationsList"  style="text-align: left;">
-                                <ng-container *ngIf="items.variationOptions && items.variationOptions?.length > 0">
+                                <ng-container *ngIf="items.SelectedItemAttributeVariations && items.SelectedItemAttributeVariations?.length > 0">
                                     <h4> {{ items.Name }} </h4>
-                                    <ng-select  [items]="items.variationOptions"
+                                    <ng-select  [items]="items.SelectedItemAttributeVariations"
                                                 bindLabel="Name"
                                                 [(ngModel)]="items.selectedVariation"
                                                 placeholder="{{ 'Select Attribute' | translate }}"

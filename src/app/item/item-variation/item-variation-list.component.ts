@@ -24,7 +24,7 @@ export class ItemVariationListComponent implements OnInit {
     variationListings: any[]; 
     private fileURL = environment.fileURL;
 
-    displayedColumns = ['Menu', 'Title', 'CreatedOn'];
+    displayedColumns = ['Menu', 'Title', 'ItemSelection', 'CreatedOn'];
     dataSource: any = null;
     attributesVariationsList: any[] = [];
     @ViewChild(MatPaginator) paginator: MatPaginator;
@@ -54,7 +54,13 @@ export class ItemVariationListComponent implements OnInit {
 
         this.subscription = this.itemService.getItemVariationListings().subscribe(
             (variationListings: ItemVariationListing[]) => {
+                console.log(variationListings);
                 this.variationListings = variationListings;
+                // this.variationListings.forEach((listing) => {
+                //     if (listing.PrimaryItemID) {
+
+                //     }
+                // })
                 this.refreshDataSource(this.variationListings);
             },
             (error: any) => this.errorMessage = <any>error

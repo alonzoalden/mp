@@ -135,7 +135,7 @@ export class ItemVariationComponentDialog implements OnInit {
     }
     validateItemVariation() {
         this.addItemVariationInvalid = this.attributesVariationsList.find((item) => {
-            return !(item && item.variationOptions && item.variationOptions.length > 1);
+            return !(item && item.SelectedItemAttributeVariations && item.SelectedItemAttributeVariations.length > 1);
         });
         if (this.oldDefaultRef && !this.oldDefault ) {
             this.addItemVariationInvalid = true;
