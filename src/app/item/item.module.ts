@@ -55,6 +55,9 @@ import { ItemEditVendorAttachmentComponent } from './item-edit/item-edit-vendor-
 import { ItemEditVideoComponent } from './item-edit/item-edit-video.component';
 import { ItemEditImageComponent, ItemEditImageComponentUploadDialog } from './item-edit/item-edit-image.component';
 import { ItemEditPartComponent } from './item-edit/item-edit-part.component';
+import { ItemEditVariationComponent } from './item-edit/item-edit-variation.component';
+
+
 
 import { ItemDetailComponent } from './item-detail/item-detail.component';
 
@@ -132,6 +135,7 @@ import { ItemPartEditGuard } from './item-part-edit/item-part-edit.guard';
         ItemEditImageComponent,
         ItemEditInventoryComponent,
         ItemEditPartComponent,
+        ItemEditVariationComponent,
         ItemDetailComponent,
         ItemImageComponent,
         ItemVideoComponent,

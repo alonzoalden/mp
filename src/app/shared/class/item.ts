@@ -720,9 +720,9 @@ export class ItemVariation {
 
         public UpdatedOn: string,
         public CreatedOn: string,
-        public isPrimary: boolean,
+        public ItemVariationLines: Array<ItemVariationLine>,
         
-        public ItemVariationLines: Array<ItemVariationLine>
+        public IsPrimary: boolean,
     ) {}
 }
 

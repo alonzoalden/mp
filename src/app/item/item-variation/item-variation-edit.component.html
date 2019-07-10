@@ -131,13 +131,13 @@
                                                     <ng-container *ngIf="variationListing?.ItemVariations[i]?.ItemID">
                                                         <div class="flex-details">
                                                             <div class="img-detail">
-                                                                <a (click)="test(variationListing.ItemVariations[i])"><img *ngIf='!variationListing.ItemVariations[i].ItemImagePath' class="opaque" src='https://content-merchantportal.toolots.net/assets/images/no-image-icon.png' matTooltip='Product has no image' matTooltipShowDelay="500"></a>
-                                                                <a (click)="test(variationListing.ItemVariations[i])"><img class="row-image" *ngIf='variationListing.ItemVariations[i].ItemImagePath' [src]='imageURL + variationListing.ItemVariations[i].ItemImagePath' [matTooltip]='variationListing.ItemVariations[i].ItemName' [alt]='variationListing.ItemVariations[i].ItemName' matTooltipShowDelay="500"></a>
+                                                                <img *ngIf='!variationListing?.ItemVariations[i].ItemImagePath' class="opaque" src='https://content-merchantportal.toolots.net/assets/images/no-image-icon.png' matTooltip='Product has no image' matTooltipShowDelay="500">
+                                                                <img class="row-image" *ngIf='variationListing?.ItemVariations[i].ItemImagePath' [src]='imageURL + variationListing?.ItemVariations[i].ItemImagePath' [matTooltip]='variationListing?.ItemVariations[i].ItemName' [alt]='variationListing?.ItemVariations[i].ItemName' matTooltipShowDelay="500">
                                                             </div>
                                                             <div>
                                                                 <div class="row">
                                                                     <!-- <div class="col-xs-12 "><span class="sm-strong"><a [href]="linkURL + '/' + item.URLKey + '.html'" target="_blank">{{item.Name}}</a></span></div> -->
-                                                                    <div class="col-xs-12 "><span class="sm-strong"><a [routerLink]="[variationListing.ItemVariations[i].ItemVariationID, 'edit']">{{variationListing.ItemVariations[i].ItemName}}</a></span></div>
+                                                                    <div class="col-xs-12 "><span class="sm-strong"><a [routerLink]="['edit']">{{variationListing.ItemVariations[i].ItemName}}</a></span></div>
                                                                 </div>
                                                                 <div class="row">
                                                                     <div class="col-xs-12 "> <span class="sm-text m-r-xs">SKU: </span> {{variationListing.ItemVariations[i].ItemVendorSKU}}</div> 
@@ -146,7 +146,7 @@
                                                                     <div class="col-xs-12 "><span class="sm-text m-r-xs">TPIN: </span> {{variationListing.ItemVariations[i].ItemTPIN}}</div>                                         
                                                                 </div>
                                                             </div>
-                                                            <div class="m-l-xl ibox-tools">
+                                                            <div class="m-l-md ibox-tools">
                                                                 <a><i (click)="openDialogSelectItem(row, i, variationListing.ItemVariations[i])" class="fa fa-edit fs-18 m-l-sm" ></i></a>
                                                             </div>
                                                         </div>

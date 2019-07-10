@@ -29,12 +29,15 @@ export class ItemVariationSelectItemComponentDialog implements OnInit {
         if (this.data.item) this.itemList = this.data.item;
 
         this.data.variationListing.ItemVariations.forEach((itemvariation) => {
-            const index = this.data.itemLists.findIndex((item) => {
-                if (this.data.item.ItemID !== itemvariation.ItemID) {
-                    return item.ItemID === itemvariation.ItemID;
-                }
-            });
-            this.data.itemLists.splice(index, 1);
+            
+            if (this.data.item) {
+                const index = this.data.itemLists.findIndex((item) => {
+                    if (this.data.item.ItemID !== itemvariation.ItemID) {
+                        return item.ItemID === itemvariation.ItemID;
+                    }
+                });
+                this.data.itemLists.splice(index, 1);
+            }
         })
     }
     onCancelClick(): void {

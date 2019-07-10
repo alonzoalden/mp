@@ -66,9 +66,9 @@ export class ItemVariationEditComponent implements OnInit {
                         listing.ItemVariations.forEach((item) => {
                             
                             if (listing.PrimaryItemID === item.ItemID) {
-                                item.isPrimary = true;
+                                item.IsPrimary = true;
                             }
-                            
+                            console.log(item);
                             if (item.ItemID && !item.ItemName) {
                                 const itemlistItem = itemLists.find((itemlistItem) => item.ItemID === itemlistItem.ItemID);
                                 item.ItemName = itemlistItem.ItemName;
@@ -214,9 +214,9 @@ export class ItemVariationEditComponent implements OnInit {
         
         const data = {
             itemLists: [...this.itemLists],
-            variationItem: variationItemProperties,
-            item: item,
+            variationTitle: variationItemProperties,
             variationListing: this.variationListing,
+            item: item,
         }
         const dialogRef = this.printDialog.open(ItemVariationSelectItemComponentDialog, {
             width: '700px',
@@ -278,8 +278,8 @@ export class ItemVariationEditComponent implements OnInit {
             this.displayedColumns = listing.ItemVariations[0].ItemVariationLines.map((line) => {
                 if (line.ItemAttributeName) return line.ItemAttributeName
                 else {
-                    var x = this.itemAttributes.find((item) => item.ItemAttributeID === line.ItemAttributeID);
-                    return x.Name;
+                    const attribute = this.itemAttributes.find((item) => item.ItemAttributeID === line.ItemAttributeID);
+                    return attribute.Name;
                 }
             });
             
@@ -295,6 +295,7 @@ export class ItemVariationEditComponent implements OnInit {
             });
             console.log(this.displayedColumns);
             console.log(this.columns);
+            this.displayedColumns.unshift('PrimaryItem');
             this.displayedColumns.push('ItemSelection');
             let data = this.variationListing.ItemVariations.map((itemvariation) => itemvariation.ItemVariationLines);
             this.refreshDataSource(data);
@@ -303,7 +304,7 @@ export class ItemVariationEditComponent implements OnInit {
     selectPrimaryItem(row, index) {
         console.log(row);
         this.variationListing.ItemVariations.forEach((itemvariation, i) => {
-            if (i !== index) itemvariation.isPrimary = false;
+            if (i !== index) itemvariation.IsPrimary = false;
         })
         const selectedVariation = this.variationListing.ItemVariations[index];
 

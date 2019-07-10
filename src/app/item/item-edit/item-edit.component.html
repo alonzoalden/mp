@@ -118,7 +118,12 @@
                             <a [routerLink]="['part']" routerLinkActive="active">
                                 {{ 'Part' | translate }} 
                             </a>
-                        </li>                       
+                        </li>
+                        <li routerLinkActive="active">
+                            <a [routerLink]="['variation']" routerLinkActive="active">
+                                {{ 'Variation' | translate }} 
+                            </a>
+                        </li>
                     </ul>                
                     <router-outlet></router-outlet>
                 </div>
