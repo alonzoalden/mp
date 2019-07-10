@@ -194,7 +194,7 @@ export class ItemService {
             , item.IsFreeShipping, item.ShippingFee, item.MetaTitle, item.MetaKeywords, item.MetaDescription, item.Origin, item.Warranty
             , item.MerchantWarranty, item.AddProtectionPlan, item.URLKey, item.Visibility, item.Description, item.ShortDescription, item.TechnicalDetail, item.AdditionalInformation
             , item.VendorBrandID, item.RequestApproval, item.RejectionReason, item.Status, item.Approval, item.ImagePath, item.IsPartItem, item.PartImageRaw, item.PartImageFilePath, item.PartIsNewImage, item.ExcludeGoogleShopping, item.UpdatedOn, item.CreatedOn
-            , [], [], [], [], [], [], [], [], [], []
+            , [], [], [], [], [], [], [], [], [], [], []
             , item.QtyOnHand, item.QtyAvailable, item.QtyOnOrder, item.QtyBackOrdered, item.MerchantQtyOnHand, item.MerchantQtyAvailable, item.MerchantQtyOnOrder, false);
 
         item.ItemCategoryAssignments.forEach((itemCategoryAssignment) => {
@@ -1162,7 +1162,7 @@ export class ItemService {
             //     console.log(variationLine)
             //     //variationLine.ItemVariationID = variationLine.ItemAttributeVariationID
             // })
-            return new ItemVariation(null, listing.ItemVariationListingID, null, null, null, null, null, null, null, null, null, itemVariationLines);
+            return new ItemVariation(null, listing.ItemVariationListingID, listing.Name, null, null, null, null, null, null, null, null, itemVariationLines, null);
             
             //this.addItemVariation(itemVariations);
         });
@@ -1185,7 +1185,6 @@ export class ItemService {
                     }
                 }
                 if (oldMatch && !defaultTo) {
-                    console.log(newItem, oldItem)
                     newItemList[i] = oldItem;
                 }
             })

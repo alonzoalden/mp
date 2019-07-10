@@ -18,24 +18,20 @@ export class ItemVariationSelectItemComponentDialog implements OnInit {
     constructor(
         public dialogRef: MatDialogRef<ItemVariationSelectItemComponentDialog>,
         private itemService: ItemService,
-        @Inject(MAT_DIALOG_DATA) public data: any) {
-            //console.log(data);
-            // if (this.data) {
-            //     this.itemList = this.data;
-            // }
-        }
+        @Inject(MAT_DIALOG_DATA) public data: any) {}
+
     ngOnInit() {
         console.log(this.data);
-        if (this.data.item) this.itemList = this.data.item;
-
+        
+        console.log(this.itemList);
+        if (this.data.item) {
+            this.itemList = new ItemList(this.data.item.ItemID, this.data.item.ItemName, null, this.data.item.ItemName, this.data.item.ItemTPIN, this.data.item.ItemVendorSKU, this.data.item.ItemImagePath)
+        }
+        //splice out existing variation items from itemLists
         this.data.variationListing.ItemVariations.forEach((itemvariation) => {
-            
-            if (this.data.item) {
-                const index = this.data.itemLists.findIndex((item) => {
-                    if (this.data.item.ItemID !== itemvariation.ItemID) {
-                        return item.ItemID === itemvariation.ItemID;
-                    }
-                });
+            if (this.data.item && this.data.item.ItemID === itemvariation.ItemID) return;
+            if (this.data.itemLists.length) {
+                const index = this.data.itemLists.findIndex((item) => item.ItemID === itemvariation.ItemID);
                 this.data.itemLists.splice(index, 1);
             }
         })
@@ -48,10 +44,10 @@ export class ItemVariationSelectItemComponentDialog implements OnInit {
         if (!this.itemList) return;
         this.dialogRef.close(this.itemList);
     }
-    validateItemSelection(id) {
 
+    //don't need because we splice out existing items on nginit
+    validateItemSelection(id) {
         const matchingID = this.data.variationListing.ItemVariations.find((variation) => variation.ItemID === id);
-        console.log(matchingID);
         if (matchingID) {
             this.formInvalid = true;
             this.itemService.sendNotification({ type: 'error', title: 'Choose Another Item', content: 'Item already selected in different variation' });

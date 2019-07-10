@@ -66,8 +66,8 @@ import { ItemPartEditGuard } from './item-part-edit/item-part-edit.guard';
 import { ItemPartEditInventoryComponent } from './item-part-edit/item-part-edit-inventory.component';
 
 import { ItemVariationListComponent } from './item-variation/item-variation-list.component';
-import { ItemVariationAddComponent } from './item-variation/item-variation-add.component';
-import { ItemVariationEditComponent } from './item-variation/item-variation-edit.component';
+
+import { ItemVariationDetailComponent } from './item-variation/item-variation-detail.component';
 
 const ITEM_ROUTES: Routes = [
     {
@@ -82,16 +82,12 @@ const ITEM_ROUTES: Routes = [
                 component: ItemVariationListComponent
             },
             {
-                path: 'variation-listing/add',
-                component: ItemVariationAddComponent
+                path: 'variation-listing/detail',
+                component: ItemVariationDetailComponent
             },
             {
-                path: 'variation-listing/add/:id',
-                component: ItemVariationAddComponent
-            },
-            {
-                path: 'variation-listing/:id',
-                component: ItemVariationEditComponent
+                path: 'variation-listing/detail/:id',
+                component: ItemVariationDetailComponent
             },
             {
                 path: 'printlabel',

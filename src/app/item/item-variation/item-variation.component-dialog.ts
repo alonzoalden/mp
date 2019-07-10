@@ -109,6 +109,7 @@ export class ItemVariationComponentDialog implements OnInit {
         // })
         
         this.onUpdateItemData(this.attributesVariationsList);
+        console.log(listing);
         this.dialogRef.close(listing);
     }
 

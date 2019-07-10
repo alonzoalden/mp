@@ -86,6 +86,7 @@ export class Item {
         public ItemVideos: Array<ItemVideo>,
         public ItemImages: Array<ItemImage>,
         public ItemParts: Array<ItemPart>,
+        public ItemVariations: Array<ItemVariation>,
 
         public QtyOnHand: number,
         public QtyAvailable: number,
@@ -710,6 +711,7 @@ export class ItemVariation {
     constructor(
         public ItemVariationID: number,
         public ItemVariationListingID: number,
+        public ItemVariationListingName: string,
         public ItemID: number,
 
         public ItemName: string,        

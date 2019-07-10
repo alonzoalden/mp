@@ -1,13 +1,8 @@
-<h3 class="ibox-title dialog-title">Select an Item Pairing</h3>
-<div mat-dialog-content style="background-color: #f3f3f4; padding: 40px !important; overflow: scroll; min-height: 410px;">
-    <div class="ibox-content" style="padding: 40px; height: 100%;">
-
-        
-
-        <h3 class="m-b-md">Variation: {{data.variationTitle}}</h3>
-        
-
-        <label>Select Item</label>
+<h3 class="ibox-title dialog-title">{{ 'Select Item for Variation' | translate }}</h3>
+<div mat-dialog-content class="dialog-content">
+    <div class="ibox-content">
+        <h3 class="m-b-md">{{ 'Variation' | translate }}: {{data.variationTitle}}</h3>
+        <label>{{ 'Select Item' | translate }}</label>
         <ng-select  [items]="data.itemLists"
                     [virtualScroll]="true"
                     bindLabel="ItemName"
@@ -28,50 +23,26 @@
                 </div>
             </ng-template>
         </ng-select>
-        <div class="m-t-md" *ngIf="itemList">
-            <div style="padding: 5px 0;" *ngIf='itemList?.ImagePath || itemList?.ItemImagePath'>
-                <img class="row-image" [src]='imageURL + itemList?.ImagePath || itemList?.ItemImagePath' [matTooltip]='itemList?.ItemName' [alt]='itemList?.ItemName' matTooltipShowDelay="500">
+        <div class="m-t-md select-item-layout" *ngIf="itemList">
+            <div class="p-v-5" *ngIf='itemList?.ImagePath || itemList?.ItemImagePath'>
+                <img class="row-image" [src]='itemList?.ImagePath ? imageURL + itemList?.ImagePath : imageURL + itemList?.ItemImagePath' [matTooltip]='itemList?.ItemName' [alt]='itemList?.ItemName' matTooltipShowDelay="500">
             </div>
-
             <div class="form-group flex">
-                <label class="control-label" style="flex: 1">{{ 'Description' | translate }}</label>
-                <div style="flex: 5">
-                    {{itemList.Description || itemList.ItemName }}
-                </div>
+                <label class="control-label">{{ 'Description' | translate }}</label>
+                <div>{{itemList.Description || itemList.ItemName }}</div>
             </div>
             <div class="form-group flex" >
-                <label class="control-label" style="flex: 1">{{ 'TPIN' | translate }}</label>
-                <div style="flex: 5">
-                    {{itemList.TPIN || itemList.ItemTPIN }}
-                </div>
+                <label class="control-label">{{ 'TPIN' | translate }}</label>
+                <div>{{itemList.TPIN || itemList.ItemTPIN }}</div>
             </div>
             <div class="form-group flex">
-                <label class="control-label" style="flex: 1">{{ 'VendorSKU' | translate }}</label>
-                <div  style="flex: 5">
-                    {{itemList.VendorSKU || itemList.ItemVendorSKU}}
-                </div>
+                <label class="control-label">{{ 'VendorSKU' | translate }}</label>
+                <div>{{itemList.VendorSKU || itemList.ItemVendorSKU}}</div>
             </div>
-            
         </div>
-        <!-- <ng-select [items]="data"
-            bindLabel="Name"
-            placeholder="{{ 'Choose Variation for new default' | translate }}"
-            [(ngModel)]="oldDefault"
-            (change)="validateItemVariation()"
-            name="selectAttribute"
-            required
-            loadingText="Loading..."
-            class="inbound-line"
-            style="width: 100%;">
-                <ng-template ng-notfound-tmp let-searchTerm="searchTerm">
-                    <div class="ng-option disabled">
-                        {{ 'Please select an item for this variation' | translate }}
-                    </div>
-                </ng-template>
-        </ng-select> -->
     </div>
 </div>
 <mat-dialog-actions>
-    <button [disabled]="addItemVariationInvalid" (click)="onAddItemClick()" mat-button class="btn btn-success-xs" style="background-color: #1ab394;" cdkFocusInitial>{{ 'Select' | translate }}</button>
+    <button [disabled]="addItemVariationInvalid" (click)="onAddItemClick()" mat-button class="btn btn-success-xs btn-main" cdkFocusInitial>{{ 'Select' | translate }}</button>
     <button (click)="onCancelClick()" mat-button class="btn btn-remove-xs">{{ 'Cancel' | translate }}</button>
 </mat-dialog-actions>

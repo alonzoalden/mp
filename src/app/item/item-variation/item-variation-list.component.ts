@@ -20,16 +20,17 @@ import { environment } from '../../../environments/environment';
 export class ItemVariationListComponent implements OnInit {
     subscription: Subscription;
     errorMessage: string;
-    //vendorAttachments: VendorAttachment[];
     variationListings: any[]; 
-    private fileURL = environment.fileURL;
 
     displayedColumns = ['Menu', 'Title', 'ItemSelection', 'CreatedOn'];
     dataSource: any = null;
     attributesVariationsList: any[] = [];
+
     @ViewChild(MatPaginator) paginator: MatPaginator;
     @ViewChild(MatSort) sort: MatSort;
-
+    private fileURL = environment.fileURL;
+    private imageURL = environment.imageURL;
+    
     constructor(private route: ActivatedRoute,
         private router: Router,
         public printDialog: MatDialog,
@@ -56,11 +57,6 @@ export class ItemVariationListComponent implements OnInit {
             (variationListings: ItemVariationListing[]) => {
                 console.log(variationListings);
                 this.variationListings = variationListings;
-                // this.variationListings.forEach((listing) => {
-                //     if (listing.PrimaryItemID) {
-
-                //     }
-                // })
                 this.refreshDataSource(this.variationListings);
             },
             (error: any) => this.errorMessage = <any>error
@@ -102,11 +98,11 @@ export class ItemVariationListComponent implements OnInit {
 
     onDeleteComplete(vendorattachment: ItemVariationListing, message?: string): void {
         this.refreshDataSource(this.variationListings);
-        // this.companyService.sendNotification({ type: 'success', title: 'Successfully Deleted', content: message });
+        this.itemService.sendNotification({ type: 'success', title: 'Successfully Deleted', content: message });
     }
 
     ngOnDestroy() {
-        //this.subscription.unsubscribe();
+        this.subscription.unsubscribe();
     }
 
     applyFilter(filterValue: string) {

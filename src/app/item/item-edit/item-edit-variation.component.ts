@@ -18,37 +18,25 @@ declare var $ :any;
 export class ItemEditVariationComponent implements OnInit {
     private imageURL = environment.imageURL;
 
+    
     errorMessage: string;
     item: Item;
     itemid: number;
-
-    displayedColumns = [];
-    dataSource: any = null;
-    pendingAdd: boolean;
-    currentIndex: number;
-
-    formDirty = false;
-
+    isLoading: boolean = false;
     
     constructor(private route: ActivatedRoute,
         private itemService: ItemService, public itemUploadDialog: MatDialog) { }
 
     ngOnInit(): void {
-    
+        this.isLoading = true;
         this.itemid = this.route.parent.snapshot.params['id'];
         this.itemService.getCurrentItemEdit(this.itemid).subscribe(
             (item: Item) => {
-                console.log(item);
                 this.itemService.currentItemEdit = item;
                 this.item = this.itemService.currentItemEdit;
-                this.initialize();
+                this.isLoading = false;
             },
             (error: any) => this.errorMessage = <any>error
         );
     }
-
-    initialize() {
-        
-    }
-    
 }
