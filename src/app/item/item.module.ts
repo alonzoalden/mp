@@ -20,7 +20,6 @@ import { ItemPartListComponent, ItemPartListComponentItemPrintDialog } from './i
 
 import { ItemVariationSelectItemComponentDialog } from './item-variation/item-variation-select-item.component-dialog';
 import { ItemVariationComponentDialog } from './item-variation/item-variation.component-dialog';
-import { ItemVariationComponent } from './item-variation/item-variation.component';
 import { ItemVariationListComponent } from './item-variation/item-variation-list.component';
 import { ItemVariationDetailComponent } from './item-variation/item-variation-detail.component';
 
@@ -102,7 +101,6 @@ import { ItemPartEditGuard } from './item-part-edit/item-part-edit.guard';
         ItemAddComponent,
         ItemVariationSelectItemComponentDialog,
         ItemVariationComponentDialog,
-        ItemVariationComponent,
         ItemVariationListComponent,
         ItemVariationDetailComponent,
         ItemAddDescriptionComponent,

@@ -8,7 +8,6 @@
                     bindLabel="ItemName"
                     placeholder="{{ 'Search Item' | translate }}"
                     [(ngModel)]="itemList"
-                    (focus)="formDirty = true;"
                     #selectionCategoriesRef
                     id="selectItem"
                     name="selectItem"
@@ -43,6 +42,6 @@
     </div>
 </div>
 <mat-dialog-actions>
-    <button [disabled]="addItemVariationInvalid" (click)="onAddItemClick()" mat-button class="btn btn-success-xs btn-main" cdkFocusInitial>{{ 'Select' | translate }}</button>
+    <button (click)="onAddItemClick()" mat-button class="btn btn-success-xs btn-main" cdkFocusInitial>{{ 'Select' | translate }}</button>
     <button (click)="onCancelClick()" mat-button class="btn btn-remove-xs">{{ 'Cancel' | translate }}</button>
 </mat-dialog-actions>
