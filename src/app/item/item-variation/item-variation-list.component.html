@@ -59,7 +59,12 @@
                             <ng-container matColumnDef="ItemSelection">
                                     <th mat-header-cell *matHeaderCellDef width="500px">{{ 'Primary Item' | translate }}</th>
                                     <td mat-cell *matCellDef="let itemVariationListing">
-                                        <ng-container *ngIf="variationListings">                                            
+                                        <ng-container *ngIf="!itemVariationListing.PrimaryItemID">
+                                            <div class="img-detail">
+                                                <span class="sm-strong">{{ 'Primary Item Not Set' | translate }}</span>
+                                            </div>
+                                        </ng-container>
+                                        <ng-container *ngIf="itemVariationListing.PrimaryItemID">                                            
                                             <div class="flex-details">
                                                 <div class="img-detail">
                                                     <img *ngIf='!itemVariationListing.ItemImagePath' class="opaque" src='https://content-merchantportal.toolots.net/assets/images/no-image-icon.png' matTooltip='Product has no image' matTooltipShowDelay="500">

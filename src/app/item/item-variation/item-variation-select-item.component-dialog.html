@@ -23,20 +23,22 @@
             </ng-template>
         </ng-select>
         <div class="m-t-md select-item-layout" *ngIf="itemList">
-            <div class="p-v-5" *ngIf='itemList?.ImagePath || itemList?.ItemImagePath'>
-                <img class="row-image" [src]='itemList?.ImagePath ? imageURL + itemList?.ImagePath : imageURL + itemList?.ItemImagePath' [matTooltip]='itemList?.ItemName' [alt]='itemList?.ItemName' matTooltipShowDelay="500">
+            <div class="p-v-5 text-center" *ngIf='itemList?.ImagePath || itemList?.ItemImagePath'>
+                <img class="row-image-lg" [src]='itemList?.ImagePath ? imageURL + itemList?.ImagePath : imageURL + itemList?.ItemImagePath' [matTooltip]='itemList?.ItemName' [alt]='itemList?.ItemName' matTooltipShowDelay="500">
             </div>
-            <div class="form-group flex">
-                <label class="control-label">{{ 'Description' | translate }}</label>
-                <div>{{itemList.Description || itemList.ItemName }}</div>
-            </div>
-            <div class="form-group flex" >
-                <label class="control-label">{{ 'TPIN' | translate }}</label>
-                <div>{{itemList.TPIN || itemList.ItemTPIN }}</div>
-            </div>
-            <div class="form-group flex">
-                <label class="control-label">{{ 'VendorSKU' | translate }}</label>
-                <div>{{itemList.VendorSKU || itemList.ItemVendorSKU}}</div>
+            <div>
+                <div class="form-group flex">
+                    <label class="control-label">{{ 'Description' | translate }}</label>
+                    <div>{{itemList.Description || itemList.ItemName }}</div>
+                </div>
+                <div class="form-group flex" >
+                    <label class="control-label">{{ 'TPIN' | translate }}</label>
+                    <div>{{itemList.TPIN || itemList.ItemTPIN }}</div>
+                </div>
+                <div class="form-group flex">
+                    <label class="control-label">{{ 'VendorSKU' | translate }}</label>
+                    <div>{{itemList.VendorSKU || itemList.ItemVendorSKU}}</div>
+                </div>
             </div>
         </div>
     </div>

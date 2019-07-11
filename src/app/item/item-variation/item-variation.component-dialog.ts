@@ -76,10 +76,12 @@ export class ItemVariationComponentDialog implements OnInit {
     displayAvailableAttributes() {
         if (this.selectedItemAttributes.length) {
            let updatedListData = [...this.attributesVariationsListData];
-           this.selectedItemAttributes.forEach((x) => {
-               const index = updatedListData.findIndex((item) => item.ItemAttributeID === x.ItemAttributeID);
-               updatedListData.splice(index, 1);
+           this.selectedItemAttributes.forEach((itemAttribute) => {
+               const index = updatedListData.findIndex((item) => item.ItemAttributeID === itemAttribute.ItemAttributeID);
+               if (index > -1) updatedListData.splice(index, 1);
            })
+           console.log(updatedListData);
+           console.log(this.attributesVariationsListData);
            this.attributesVariationsListData = updatedListData;
        }
    }

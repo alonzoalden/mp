@@ -1,7 +1,7 @@
 
 import { Component, OnInit, ViewContainerRef, ViewChild, Inject, ElementRef, Input} from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
-import { ItemInsert, ItemList, ItemVariationListing, ItemAttribute, ItemTierPriceInsert, ItemRelatedProductInsert, ItemUpSellInsert, ItemCrossSellInsert, ItemAttachmentInsert, ItemVideoInsert } from '../../shared/class/item';
+import { ItemInsert, ItemList, ItemVariationListing, ItemAttribute, ItemTierPriceInsert, ItemRelatedProductInsert, ItemUpSellInsert, ItemCrossSellInsert, ItemAttachmentInsert, ItemVideoInsert, ItemVariation } from '../../shared/class/item';
 import { VendorBrand } from '../../shared/class/vendor-brand';
 import { MatDialog, MatPaginator, MatSort, MatDialogRef, MAT_DIALOG_DATA, MatTableDataSource } from '@angular/material';
 import { ItemService } from '../item.service';
@@ -11,6 +11,7 @@ import { ItemVariationComponentDialog } from '../item-variation/item-variation.c
 
 import { utf8Encode } from '@angular/compiler/src/util';
 import { environment } from '../../../environments/environment';
+import { and } from '@angular/router/src/utils/collection';
 
 @Component({
   selector: 'item-variation-detail',
@@ -18,8 +19,6 @@ import { environment } from '../../../environments/environment';
 })
 
 export class ItemVariationDetailComponent implements OnInit {
-    
-    private subscription: Subscription;
     itemVariationListing: ItemVariationListing;
     errorMessage: string;
     displayedColumns = [];
@@ -39,6 +38,10 @@ export class ItemVariationDetailComponent implements OnInit {
     @ViewChild(MatPaginator) paginator: MatPaginator;
     @ViewChild(MatSort) sort: MatSort;
 
+    currentPage: number;
+    itemsPerPage: number;
+
+
     constructor(private router: Router,
                 private route: ActivatedRoute,
                 private itemService: ItemService,
@@ -47,8 +50,9 @@ export class ItemVariationDetailComponent implements OnInit {
     ngOnInit(): void {
         this.loading = true;
         const param = this.route.snapshot.params['id'];
-        
-        console.log(param);
+
+        console.log(this.paginator);
+
 
         if (param) {
             this.isEdit = true;
@@ -64,8 +68,8 @@ export class ItemVariationDetailComponent implements OnInit {
                             
                             this.itemService.getItemAttributes().subscribe((itemAttributes) => {
                                 this.itemAttributes = itemAttributes;
-                                this.createAttributesVariationsList(itemVariationListing, itemAttributes)
-                                this.createAttributesVariationsColumns(itemVariationListing)
+                                this.createAttributesVariationsList(itemVariationListing, itemAttributes);
+                                this.createAttributesVariationsColumns(itemVariationListing);
                             });
                         },
                         error => {
@@ -78,8 +82,8 @@ export class ItemVariationDetailComponent implements OnInit {
             )
         }
         else {
-            this.itemService.getItemAttributes().subscribe((attributes) => {
-                this.itemAttributes = attributes;
+            this.itemService.getItemAttributes().subscribe((itemattributes) => {
+                this.itemAttributes = itemattributes;
                 this.itemVariationListing = this.itemService.defaultVariationListingInsert();
                 this.loading = false;
 
@@ -97,29 +101,36 @@ export class ItemVariationDetailComponent implements OnInit {
         this.dataSource.sort = this.sort;
         this.dataSource.paginator = this.paginator;
     }
-    onUpdateItemData(list) {
-        if (list && this.itemVariationListing) {
-            const selectedVariations = list.map((i) => {
-                if (i.selectedVariation) return i.selectedVariation;
-            });
-            this.itemVariationListing.ItemVariations.forEach((item) => {
-                if (item.ItemVariationLines) {
-                    let variation = item.ItemVariationLines.every((variation) => selectedVariations.indexOf(variation) !== -1);
-                    if (variation) return this.viewVariationItem(item);
-                }
-            });
-        }
-    }
-    viewVariationItem(item) {
-        this.itemService.currentProductItemInsert.next(item);
-    }
+    // onUpdateItemData(list) {
+    //     if (list && this.itemVariationListing) {
+    //         const selectedVariations = list.map((i) => {
+    //             if (i.selectedVariation) return i.selectedVariation;
+    //         });
+    //         this.itemVariationListing.ItemVariations.forEach((item) => {
+    //             if (item.ItemVariationLines) {
+    //                 let variation = item.ItemVariationLines.every((variation) => selectedVariations.indexOf(variation) !== -1);
+    //                 if (variation) return this.viewVariationItem(item);
+    //             }
+    //         });
+    //     }
+    // }
+    // viewVariationItem(item) {
+    //     this.itemService.currentProductItemInsert.next(item);
+    // }
 
-    openDialogSelectItem(row, i, item) {
-        const variationItemProperties = row.map((attribute) => attribute.ItemAttributeVariationName || attribute.Name).join(' / ');
+    realIndex(index) {
+        if (this.currentPage > 0) {
+            index = index + this.currentPage * this.itemsPerPage;
+        }
+        return index;
+    }
+    openDialogSelectItem(row, index, item: ItemVariation) {
+        this.realIndex(index);
+        const variationTitle = row.map((attribute) => attribute.ItemAttributeVariationName || attribute.Name).join(' / ');
         
         const data = {
             itemLists: [...this.itemLists],
-            variationTitle: variationItemProperties,
+            variationTitle: variationTitle,
             variationListing: this.itemVariationListing,
             item: item,
         }
@@ -130,7 +141,7 @@ export class ItemVariationDetailComponent implements OnInit {
     
         dialogRef.afterClosed().subscribe(result => {
             if (result) {
-                let item = this.itemVariationListing.ItemVariations[i];
+                let item = this.itemVariationListing.ItemVariations[index];
                 item.ItemID = result.ItemID;
                 item.ItemName = result.ItemName;
                 item.ItemTPIN = result.TPIN;
@@ -256,5 +267,10 @@ export class ItemVariationDetailComponent implements OnInit {
                 if (listing.PrimaryItemID === itemvariation.ItemID) itemvariation.IsPrimary = true;
             })    
         }
+    }
+    handlePage($event) {
+        this.currentPage = $event.pageIndex
+        this.itemsPerPage = $event.pageSize
+        console.log($event);
     }
 }
