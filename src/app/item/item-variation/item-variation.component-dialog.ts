@@ -1,5 +1,5 @@
 import { Component, OnInit, Inject, ViewChild, ElementRef } from '@angular/core';
-import { ItemInsert, ItemAttribute, ItemVariationListing, ItemTierPriceInsert, ItemRelatedProductInsert, ItemUpSellInsert, ItemCrossSellInsert, ItemAttachmentInsert, ItemVideoInsert } from '../../shared/class/item';
+import { ItemInsert, ItemAttribute, ItemVariationListing, ItemVariation, ItemTierPriceInsert, ItemRelatedProductInsert, ItemUpSellInsert, ItemCrossSellInsert, ItemAttachmentInsert, ItemVideoInsert } from '../../shared/class/item';
 
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material';
 import { ItemService } from '../item.service';
@@ -11,16 +11,16 @@ import { ItemService } from '../item.service';
 export class ItemVariationComponentDialog implements OnInit {
     
     attributesVariationsListData: ItemAttribute[];
-    attributesVariationsList: any[] = [];
+    selectedItemAttributes: ItemAttribute[] = [];
     oldDefault: any;
     newAttribute: any;
     addItemVariationInvalid: boolean = true;
     canShowDefaultOldSettingsInput: boolean = false;
     
-    variationListing: ItemVariationListing;
+    itemVariationListing: ItemVariationListing;
     //product: ItemInsert[];
     
-    originalData: any;
+    originalData: ItemAttribute[];
     
     @ViewChild('oldDefaultRef') oldDefaultRef: ElementRef;
 
@@ -29,8 +29,8 @@ export class ItemVariationComponentDialog implements OnInit {
         private itemService: ItemService,
         @Inject(MAT_DIALOG_DATA) public data: any) {
             if (this.data) {
-                this.attributesVariationsList = this.data.attributesVariationsList;
-                this.originalData = [...this.data.attributesVariationsList];
+                this.selectedItemAttributes = this.data.selectedItemAttributes;
+                this.originalData = [...this.data.selectedItemAttributes];
             }
         }
     ngOnInit() {
@@ -44,11 +44,8 @@ export class ItemVariationComponentDialog implements OnInit {
         
         //USE THIS WHEN API IS WORKING
 
-        
-
         this.itemService.getItemAttributes()
             .subscribe((data) => {
-                console.log(data);
                 this.attributesVariationsListData = data;
                 this.displayAvailableAttributes();
                 if (this.attributesVariationsListData.length) {
@@ -59,17 +56,17 @@ export class ItemVariationComponentDialog implements OnInit {
         
         
         if (this.data.isEdit) {
-            this.variationListing = this.data.variationListing;
+            this.itemVariationListing = this.data.itemVariationListing;
         }
         else {
-            this.variationListing = this.itemService.defaultVariationListingInsert();
+            this.itemVariationListing = this.itemService.defaultVariationListingInsert();
         }
     }
 
     createAttribute() {
         if (!this.newAttribute) return;
         const tab = this.attributesVariationsListData.find(x => x.ItemAttributeID === this.newAttribute.ItemAttributeID);
-        this.attributesVariationsList.push(tab);
+        this.selectedItemAttributes.push(tab);
         this.displayAvailableAttributes();
         this.clearNewAttributeField();
         this.validateItemVariation();
@@ -77,9 +74,9 @@ export class ItemVariationComponentDialog implements OnInit {
     }
     
     displayAvailableAttributes() {
-        if (this.attributesVariationsList.length) {
+        if (this.selectedItemAttributes.length) {
            let updatedListData = [...this.attributesVariationsListData];
-           this.attributesVariationsList.forEach((x) => {
+           this.selectedItemAttributes.forEach((x) => {
                const index = updatedListData.findIndex((item) => item.ItemAttributeID === x.ItemAttributeID);
                updatedListData.splice(index, 1);
            })
@@ -88,7 +85,7 @@ export class ItemVariationComponentDialog implements OnInit {
    }
 
    canShowDefaultOldSettings(e) {
-        this.canShowDefaultOldSettingsInput = (this.data.isEdit && this.data.attributesVariationsList.length > this.originalData.length && this.originalData.length > 0 && this.originalData.indexOf(e) < 0);
+        this.canShowDefaultOldSettingsInput = (this.data.isEdit && this.data.selectedItemAttributes.length > this.originalData.length && this.originalData.length > 0 && this.originalData.indexOf(e) < 0);
    }
 
     clearNewAttributeField() {    
@@ -100,7 +97,7 @@ export class ItemVariationComponentDialog implements OnInit {
     }
 
     onAddItemVariationClick() {
-        const listing = this.itemService.addItemVariation(this.variationListing, this.attributesVariationsList, this.oldDefault);
+        const listing = this.itemService.addItemVariation(this.itemVariationListing, this.selectedItemAttributes, this.oldDefault);
         
         // this.attributesVariationsList.forEach((item) => {
         //     if (item.variationOptions && item.variationOptions.length > 0) {
@@ -108,36 +105,36 @@ export class ItemVariationComponentDialog implements OnInit {
         //     }
         // })
         
-        this.onUpdateItemData(this.attributesVariationsList);
+        //this.onUpdateItemData(this.attributesVariationsList);
         console.log(listing);
         this.dialogRef.close(listing);
     }
 
-    onUpdateItemData(list) {
-        if (list && this.variationListing) {
-            const selectedVariations = list.map((i) => {
-                if (i.selectedVariation) return i.selectedVariation;
-            });
-            this.variationListing.ItemVariations.forEach((item) => {
-                if (item.ItemVariationLines) {
-                    let variation = item.ItemVariationLines.every((variation) => selectedVariations.indexOf(variation) !== -1);
-                    if (variation) return this.viewVariationItem(item);
-                }
-            });
-        }
-    }
+    // onUpdateItemData(list) {
+    //     if (list && this.itemVariationListing) {
+    //         const selectedVariations = list.map((i) => {
+    //             if (i.selectedVariation) return i.selectedVariation;
+    //         });
+    //         this.itemVariationListing.ItemVariations.forEach((item) => {
+    //             if (item.ItemVariationLines) {
+    //                 let variation = item.ItemVariationLines.every((variation) => selectedVariations.indexOf(variation) !== -1);
+    //                 if (variation) return this.viewVariationItem(item);
+    //             }
+    //         });
+    //     }
+    // }
     onNgModelChange(e) {
-        console.log(e);
+        //console.log(e);
         this.canShowDefaultOldSettings(e);
         this.validateItemVariation();
     }
     viewVariationItem(item) {
         this.itemService.currentProductItemInsert.next(item);
     }
-    validateItemVariation() {
-        this.addItemVariationInvalid = this.attributesVariationsList.find((item) => {
-            return !(item && item.SelectedItemAttributeVariations && item.SelectedItemAttributeVariations.length > 1);
-        });
+    validateItemVariation() {     
+        this.addItemVariationInvalid = !!this.selectedItemAttributes.find((item) =>       {  
+           return !(item && item.SelectedItemAttributeVariations && item.SelectedItemAttributeVariations.length > 1)
+        } );
         if (this.oldDefaultRef && !this.oldDefault ) {
             this.addItemVariationInvalid = true;
         }

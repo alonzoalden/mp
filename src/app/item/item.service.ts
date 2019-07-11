@@ -1116,76 +1116,74 @@ export class ItemService {
         this.currentProductItemInsert = new BehaviorSubject(item);
     }
     
-    addItemVariation(listing, variations, oldDefault) {
+    addItemVariation(itemVariationListing: ItemVariationListing, itemAttributes: ItemAttribute[], oldDefault) {
         // let variationListingInfo;
         // this.variationListing.subscribe((item) => {
 
         //     variationListingInfo = item;
         // });
         //console.log(variationListingInfo.ItemVariations);
-        let itemInsertList = this.createProductVariations(listing, variations);
+
+        //console.log(itemVariationListing);
+        
+        let itemInsertList = this.createProductVariations(itemVariationListing, itemAttributes);
         
         // if (listing && oldDefault) {
         //     let oldItemInsertList = listing.ItemVariations;
         //     this.updateWithOriginalItems(oldItemInsertList, itemInsertList, oldDefault);
         // }
-        let oldItemInsertList = listing.ItemVariations;
+        let oldItemInsertList = itemVariationListing.ItemVariations;
         this.updateWithOriginalItems(oldItemInsertList, itemInsertList, oldDefault);
-        
-        console.log(itemInsertList);
 
-        //console.log(variationListingInfo);
-        listing.ItemVariations = itemInsertList;
+        // itemInsertList.forEach((itemvariation) => {
+        //     if(itemvariation.ItemVariationID && itemvariation.ItemVariationID != "" && itemvariation.ItemVariationID != 0) {
+        //         itemvariation.ItemVariationLines.forEach((line) => line.ItemVariationID = itemvariation.ItemVariationID) 
+        //     }
+        // })
+
+        itemVariationListing.ItemVariations = itemInsertList;
+
         //this.variationListing.next(variationListingInfo);
-        console.log(listing);
-        return listing;
+        return itemVariationListing;
     }
 
-    createProductVariations(listing, variations): any[] {
+    createProductVariations(itemVariationListing: ItemVariationListing, itemAttributes: ItemAttribute[]): ItemVariation[] {
         
-        const items = variations.map((item) => item.SelectedItemAttributeVariations);
+        const items = itemAttributes.map((item) => item.SelectedItemAttributeVariations);
+
         const possibleVariations = this.cartesian([...items]);
-        return possibleVariations.map((itemVariationLines) => {
 
-            // for (var i = 0; i < listing.length; i++) {
-            //     let existingItem = listing[i];
-                
-            //     console.log('itemVariations: ', itemVariations);
-            //     console.log('existingItem.ItemVariationLines: ', existingItem.ItemVariationLines);
+        return possibleVariations.map((itemVariationLines: ItemVariationLine[]) => {
+            return new ItemVariation(null, itemVariationListing.ItemVariationListingID, itemVariationListing.Name, null, null, null, null, null, null, null, null, itemVariationLines, false);
 
-            //     // if (this.areEqual(itemVariations, existingItem.ItemVariationLines)) {
-            //     //     console.log('exists', itemVariations)
-            //     //     return existingItem;
-            //     // }
-            // }
-            // itemVariations.forEach((variationLine) => {
-            //     console.log(variationLine)
-            //     //variationLine.ItemVariationID = variationLine.ItemAttributeVariationID
-            // })
-            return new ItemVariation(null, listing.ItemVariationListingID, listing.Name, null, null, null, null, null, null, null, null, itemVariationLines, null);
-            
-            //this.addItemVariation(itemVariations);
         });
     }
 
-    updateWithOriginalItems(oldItemlist, newItemList, defaultTo): void {
+    updateWithOriginalItems(oldItemlist: ItemVariation[], newItemList: ItemVariation[], defaultTo): void {
         
-        oldItemlist.forEach((oldItem) => {
-            newItemList.forEach((newItem, i) => {
-                const oldMatch = oldItem.ItemVariationLines.every((oldVariation) => newItem.ItemVariationLines.find((newVariation) => newVariation.ItemAttributeVariationID === oldVariation.ItemAttributeVariationID));
+        oldItemlist.forEach((oldItemVariation) => {
+            newItemList.forEach((newItemVariation, i) => {
+                const oldMatch = oldItemVariation.ItemVariationLines.every((oldItemVariationLine) => {
+                    return !!newItemVariation.ItemVariationLines.find((newItemVariationLine) => newItemVariationLine.ItemAttributeVariationID === oldItemVariationLine.ItemAttributeVariationID)
+                } );
                 
                 // newItem.ItemVariationLines.indexOf(oldVariation) > -1);
                 
                 if (defaultTo) {
-                    const defaultToMatch = newItem.ItemVariationLines.indexOf(defaultTo) > -1;
+                    const defaultToMatch = newItemVariation.ItemVariationLines.indexOf(defaultTo) > -1;
                     if (oldMatch && defaultToMatch) {
                         //console.log('replaced', newItem)
-                        newItemList[i] = oldItem;
-                        newItemList[i].ItemVariationLines = newItem.ItemVariationLines;
+                        newItemList[i] = oldItemVariation;
+                        newItemList[i].IsPrimary = false;
+                        newItemList[i].ItemVariationLines = newItemVariation.ItemVariationLines;
+                        newItemList[i].ItemVariationLines.forEach((itemvariationline) => {
+                            itemvariationline.ItemVariationID = oldItemVariation.ItemVariationID
+                        });
                     }
                 }
                 if (oldMatch && !defaultTo) {
-                    newItemList[i] = oldItem;
+                    newItemList[i] = oldItemVariation;
+                    newItemList[i].IsPrimary = false;                    
                 }
             })
         });
@@ -1225,27 +1223,6 @@ export class ItemService {
         return new ItemVariationListing(null, null, null, null, null, null, null, null, null, null, []);
     }
 
-
-
-    
-    private areEqual = function (array1, array) {
-        if (!array)
-            return false;
-        if (array1.length != array.length)
-            return false;
-        for (var i = 0, l=array1.length; i < l; i++) {
-            // Check if we have nested arrays
-            if (array1[i] instanceof Array && array[i] instanceof Array) {
-                // recurse into the nested arrays
-                if (!array1[i].equals(array[i]))
-                    return false;       
-            }           
-            else if (array1[i] != array[i]) { 
-                return false;   
-            }           
-        }       
-        return true;
-    }
     private cartesian(args) {
         var r = [], arg = args, max = arg.length-1;
         function helper(arr, i) {
