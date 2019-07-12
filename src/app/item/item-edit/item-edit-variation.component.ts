@@ -16,15 +16,16 @@ declare var $ :any;
 })
 
 export class ItemEditVariationComponent implements OnInit {
+    private subscription: Subscription;
     private imageURL = environment.imageURL;
 
-    
     errorMessage: string;
     item: Item;
     itemid: number;
     isLoading: boolean = false;
     
     constructor(private route: ActivatedRoute,
+        private router: Router,
         private itemService: ItemService, public itemUploadDialog: MatDialog) { }
 
     ngOnInit(): void {
@@ -37,6 +38,19 @@ export class ItemEditVariationComponent implements OnInit {
                 this.isLoading = false;
             },
             (error: any) => this.errorMessage = <any>error
+        );
+    }
+
+    test(param: number) {
+        this.subscription = this.itemService.getItem(param).subscribe(
+            (item: Item) => {
+                this.itemService.currentItemEdit = item;
+                this.router.navigate(['/item', param, 'edit']);                  
+            },
+            error => {
+                this.itemService.sendNotification({ type: 'error', title: 'Error', content: this.errorMessage });
+                this.router.navigate(['/item']);                
+            }
         );
     }
 }

@@ -99,7 +99,7 @@ export class ItemVariationDetailComponent implements OnInit {
     refreshDataSource(data: any[]) {
         this.dataSource = new MatTableDataSource<any>(data);
         this.dataSource.sort = this.sort;
-        this.dataSource.paginator = this.paginator;
+        //this.dataSource.paginator = this.paginator;
     }
     // onUpdateItemData(list) {
     //     if (list && this.itemVariationListing) {
@@ -213,7 +213,7 @@ export class ItemVariationDetailComponent implements OnInit {
             this.refreshDataSource(data);
         });
     }
-    selectPrimaryItem(row, index) {
+    selectPrimaryItem(index) {
         this.itemVariationListing.ItemVariations.forEach((itemvariation, i) => {
             if (i !== index) itemvariation.IsPrimary = false;
         })

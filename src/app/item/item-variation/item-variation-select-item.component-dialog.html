@@ -5,7 +5,7 @@
         <label>{{ 'Select Item' | translate }}</label>
         <ng-select  [items]="data.itemLists"
                     [virtualScroll]="true"
-                    bindLabel="ItemName"
+                    bindLabel="Description"
                     placeholder="{{ 'Search Item' | translate }}"
                     [(ngModel)]="itemList"
                     #selectionCategoriesRef
