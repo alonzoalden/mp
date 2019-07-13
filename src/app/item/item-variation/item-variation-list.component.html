@@ -1,15 +1,9 @@
 <div class="row wrapper border-bottom white-bg page-heading">
     <div class="col-lg-12">
-        <h2>
-            {{ 'Variation Listings' | translate }}
-        </h2>
+        <h2>{{ 'Variation Listings' | translate }}</h2>
         <ol class="breadcrumb">
-            <li>
-                <a [routerLink]="['/dashboard']" >{{ 'Home' | translate }}</a>
-            </li>
-            <li class="active">
-                <strong>{{ 'Manage Variation Listings' | translate }}</strong>
-            </li>
+            <li><a [routerLink]="['/dashboard']" >{{ 'Home' | translate }}</a></li>
+            <li class="active"><strong>{{ 'Manage Variation Listings' | translate }}</strong></li>
         </ol>
     </div>
 </div>
@@ -60,9 +54,7 @@
                                     <th mat-header-cell *matHeaderCellDef width="500px">{{ 'Primary Item' | translate }}</th>
                                     <td mat-cell *matCellDef="let itemVariationListing">
                                         <ng-container *ngIf="!itemVariationListing.PrimaryItemID">
-                                            <div class="img-detail">
-                                                <span class="sm-strong">{{ 'Primary Item Not Set' | translate }}</span>
-                                            </div>
+                                            <div class="img-detail"><span class="sm-strong">{{ 'Primary Item Not Set' | translate }}</span></div>
                                         </ng-container>
                                         <ng-container *ngIf="itemVariationListing.PrimaryItemID">                                            
                                             <div class="flex-details">
@@ -83,9 +75,7 @@
                                                 </div>
                                             </div>
                                         </ng-container>
-                                        <div class="animated fadeIn" *ngIf="!variationListings">
-                                            <i class="fa fa-spinner fa-spin fs-16"></i>
-                                        </div>
+                                        <div class="animated fadeIn" *ngIf="!variationListings"><i class="fa fa-spinner fa-spin fs-16"></i></div>
                                     </td>
                                 </ng-container>
 

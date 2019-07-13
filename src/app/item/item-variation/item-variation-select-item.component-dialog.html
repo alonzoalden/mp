@@ -15,7 +15,7 @@
                     #selectItem="ngModel"
                     [loading]="!data"
                     loadingText="Loading..."
-                    style="width: 100%;">
+                    class="max-width">
             <ng-template ng-notfound-tmp let-searchTerm="searchTerm">
                 <div class="ng-option disabled">
                     {{ 'Please select an item for this variation.' | translate }}
@@ -44,6 +44,6 @@
     </div>
 </div>
 <mat-dialog-actions>
-    <button (click)="onAddItemClick()" mat-button class="btn btn-success-xs btn-main" cdkFocusInitial>{{ 'Select' | translate }}</button>
+    <button (click)="onAddItemClick()" [disabled]="!itemList" mat-button class="btn btn-success-xs btn-main" cdkFocusInitial>{{ 'Select' | translate }}</button>
     <button (click)="onCancelClick()" mat-button class="btn btn-remove-xs">{{ 'Cancel' | translate }}</button>
 </mat-dialog-actions>

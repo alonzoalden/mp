@@ -980,61 +980,6 @@ export class ItemService {
                         );
     }
 
-    // //Attribute/Variation  
-    // getItemAttributes(): ItemAttribute[] {
-    //     var returnData: ItemAttribute[] = [];
-        
-    //         returnData.push(
-    //             new ItemAttribute(1, 'Color', null, null, [
-    //                 new ItemAttributeVariation(11, 1, 'Red', null, null),
-    //                 new ItemAttributeVariation(12, 1, 'Blue', null, null),
-    //                 new ItemAttributeVariation(13, 1, 'White', null, null),
-    //                 new ItemAttributeVariation(14, 1, 'Black', null, null)
-    //             ])
-    //         )
-    //         returnData.push(
-    //             new ItemAttribute(2, 'Size', null, null, [
-    //                 new ItemAttributeVariation(11, 1, 'Small', null, null),
-    //                 new ItemAttributeVariation(12, 1, 'Medium', null, null),
-    //                 new ItemAttributeVariation(13, 1, 'Large', null, null),
-    //             ])
-    //         )
-    //         return returnData;
-    //             // {
-    //             //     ItemAttributeID: 1,
-    //             //     Name: 'Color',        
-    //             //     ItemAttributeVariations: [
-    //             //         {
-    //             //             ItemAttributeVariationID: 11,
-    //             //             ItemAttributeID: 1,
-    //             //             Name: 'Red',
-    //             //         },
-    //             //         {
-    //             //             ItemAttributeVariationID: 11,
-    //             //             ItemAttributeID: 1,
-    //             //             Name: 'White',
-    //             //         },
-    //             //         {
-    //             //             ItemAttributeVariationID: 11,
-    //             //             ItemAttributeID: 1,
-    //             //             Name: 'Blue',
-    //             //         },
-    //             //         {
-    //             //             ItemAttributeVariationID: 11,
-    //             //             ItemAttributeID: 1,
-    //             //             Name: 'Black',
-    //             //         }
-    //             //     ]
-    //             // }
-                  
-        
-    //     // return this.http.get<ItemAttribute[]>(this.apiURL + '/variationlisting/attribute', { headers: headers })
-    //     //                 .pipe(
-    //     //                     //tap(data => console.log(JSON.stringify(data))),
-    //     //                     //tap(data => this.items = data),
-    //     //                     catchError(this.handleError)
-    //     //                 );
-    // }  
     getItemAttributes(): Observable<ItemAttribute[]> {
         const headers = new HttpHeaders({
             'Content-Type': 'application/json',
@@ -1116,24 +1061,20 @@ export class ItemService {
         this.currentProductItemInsert = new BehaviorSubject(item);
     }
     
-    addItemVariation(itemVariationListing: ItemVariationListing, itemAttributes: ItemAttribute[], oldDefault) {
-        // let variationListingInfo;
-        // this.variationListing.subscribe((item) => {
-
-        //     variationListingInfo = item;
-        // });
-        //console.log(variationListingInfo.ItemVariations);
-
-        //console.log(itemVariationListing);
-        
+    addItemVariation(itemVariationListing: ItemVariationListing, itemAttributes: ItemAttribute[]) {
+        console.log(itemAttributes);
         let itemInsertList = this.createProductVariations(itemVariationListing, itemAttributes);
+        
         
         // if (listing && oldDefault) {
         //     let oldItemInsertList = listing.ItemVariations;
         //     this.updateWithOriginalItems(oldItemInsertList, itemInsertList, oldDefault);
         // }
         let oldItemInsertList = itemVariationListing.ItemVariations;
-        this.updateWithOriginalItems(oldItemInsertList, itemInsertList, oldDefault);
+        let oldDefaults: ItemVariationLine[] = itemAttributes.filter((itemattribute) => itemattribute.OldDefault)
+                                                                  .map((item) => new ItemVariationLine(null, null, item.OldDefault.ItemAttributeVariationID, item.OldDefault.ItemAttributeID, null, item.OldDefault.Name, null, null));
+        console.log(oldDefaults);
+        this.updateWithOriginalItems(oldItemInsertList, itemInsertList, oldDefaults);
 
         // itemInsertList.forEach((itemvariation) => {
         //     if(itemvariation.ItemVariationID && itemvariation.ItemVariationID != "" && itemvariation.ItemVariationID != 0) {
@@ -1159,65 +1100,48 @@ export class ItemService {
         });
     }
 
-    updateWithOriginalItems(oldItemlist: ItemVariation[], newItemList: ItemVariation[], defaultTo): void {
+    updateWithOriginalItems(oldItemlist: ItemVariation[], newItemList: ItemVariation[], defaultTo: ItemVariationLine[]): void {
         
         oldItemlist.forEach((oldItemVariation) => {
             newItemList.forEach((newItemVariation, i) => {
-                const oldMatch = oldItemVariation.ItemVariationLines.every((oldItemVariationLine) => {
+                const variationLinesToCompare = oldItemVariation.ItemVariationLines.concat(defaultTo);
+                
+                const oldMatch = variationLinesToCompare.every((oldItemVariationLine) => {
                     return !!newItemVariation.ItemVariationLines.find((newItemVariationLine) => newItemVariationLine.ItemAttributeVariationID === oldItemVariationLine.ItemAttributeVariationID)
-                } );
+                });
                 
-                // newItem.ItemVariationLines.indexOf(oldVariation) > -1);
-                
-                if (defaultTo) {
-                    const defaultToMatch = newItemVariation.ItemVariationLines.indexOf(defaultTo) > -1;
-                    if (oldMatch && defaultToMatch) {
-                        //console.log('replaced', newItem)
+                if (defaultTo.length) {
+                    // const defaultToMatch = newItemVariation.ItemVariationLines.indexOf(defaultTo) > -1;
+                    //const defaultToMatch = false;
+                    if (oldMatch) {
                         newItemList[i] = oldItemVariation;
-                        newItemList[i].IsPrimary = false;
                         newItemList[i].ItemVariationLines = newItemVariation.ItemVariationLines;
                         newItemList[i].ItemVariationLines.forEach((itemvariationline) => {
                             itemvariationline.ItemVariationID = oldItemVariation.ItemVariationID
                         });
+                        newItemList[i].IsPrimary = false;
+                        console.log(newItemList[i]);
                     }
                 }
-                if (oldMatch && !defaultTo) {
+                if (oldMatch && !defaultTo.length) {
                     newItemList[i] = oldItemVariation;
                     newItemList[i].IsPrimary = false;                    
                 }
             })
         });
     }
-    // addItemVariation(variation) {
 
-    //     // public ItemVariationID: number,
-    //     // public ItemVariationListingID: number,
-    //     // public ItemID: number,
-
-    //     // public ItemName: string,        
-    //     // public ItemVendorSKU: string,        
-    //     // public ItemTPIN: string,        
-    //     // public ItemURLKey: string,        
-
-    //     // public UpdatedOn: string,
-    //     // public CreatedOn: string,
-
-    //     // public ItemVariationLines: Array<ItemVariationLine>
-
-    //     return new ItemVariation(variation.ItemVariationLineID,
-    //         variation.ItemVariationID, variation.ItemAttributeVariationID, variation.UpdatedOn, variation.CreatedOn)
+    // productItemCurrentItemInsert(variations, existingItem) {
+    //     if (variations) {
+    //         // let item = this.defaultCurrentItemInsert();
+    //         // item.ItemVariationItems = variations;
+    //         // return item;
+    //         return variations;
+    //     }
+    //     if (existingItem) {
+    //         return existingItem;
+    //     }
     // }
-    productItemCurrentItemInsert(variations, existingItem) {
-        if (variations) {
-            // let item = this.defaultCurrentItemInsert();
-            // item.ItemVariationItems = variations;
-            // return item;
-            return variations;
-        }
-        if (existingItem) {
-            return existingItem;
-        }
-    }
 
     defaultVariationListingInsert() {
         return new ItemVariationListing(null, null, null, null, null, null, null, null, null, null, []);

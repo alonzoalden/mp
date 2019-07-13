@@ -1,36 +1,28 @@
 <h3 class="ibox-title dialog-title">Create Item Variations</h3>
-<div mat-dialog-content style="background-color: #f3f3f4;">
+<div mat-dialog-content class="lightgray-bg">
     <mat-tab-group class="item-variation" [@.disabled]="true" [disableRipple]="true" [dynamicHeight]="false" (selectedTabChange)="canShowDefaultOldSettings($event.tab.textLabel)">        
         <mat-tab *ngFor="let tab of selectedItemAttributes; let i = index" [label]="tab">
             <ng-container>
                 <ng-template mat-tab-label>
                     <span>{{ tab.Name | translate }}</span>
                 </ng-template>
-            
                 <div class="item-variation-content">
                     <h5 class="text-left m-t-sm">Select {{tab.Name}} Variations</h5> 
-                    <mat-selection-list #properties
-                        [(ngModel)]="tab.SelectedItemAttributeVariations"
-                        (ngModelChange)="onNgModelChange()">
-                        <mat-list-option
-                            *ngFor="let property of tab.ItemAttributeVariations"
-                            [value]="property">
-                                {{property.Name}}
-                        </mat-list-option>
+                    <mat-selection-list #properties [(ngModel)]="tab.SelectedItemAttributeVariations" (ngModelChange)="onNgModelChange(tab)">
+                        <mat-list-option *ngFor="let property of tab.ItemAttributeVariations" [value]="property"> {{property.Name}}</mat-list-option>
                     </mat-selection-list>
-
-                    <div class="m-t-lg" *ngIf="canShowDefaultOldSettingsInput" #oldDefaultRef>
+                    <div class="m-t-lg" *ngIf="canShowDefaultOldSettingsInput && tab.SelectedItemAttributeVariations" #oldDefaultRef>
                         <h5>Default old settings to:</h5>
                         <ng-select [items]="tab.SelectedItemAttributeVariations"
                                     bindLabel="Name"
                                     placeholder="{{ 'Choose Variation for new default' | translate }}"
-                                    [(ngModel)]="oldDefault"
+                                    [(ngModel)]="tab.OldDefault"
                                     (change)="validateItemVariation()"
+                                    clearable="false"
                                     name="selectAttribute"
                                     required
                                     loadingText="Loading..."
-                                    class="inbound-line"
-                                    style="width: 100%;">
+                                    class="inbound-line max-width">
                                     <ng-template ng-notfound-tmp let-searchTerm="searchTerm">
                                         <div class="ng-option disabled">
                                             {{ 'Please select a ' | translate }} {{ tab.attributeName }} {{ ' Variation' | translate }}
@@ -39,12 +31,9 @@
                         </ng-select>
                         <!-- <p class="m-t-xs" *ngIf="this.oldDefaultRef && !this.oldDefault"> * Required </p> -->
                     </div>
-                    <p class="abs-bottom">
-                        Options selected: {{properties.selectedOptions.selected.length}}
-                    </p>
+                    <p class="abs-bottom">Options selected: {{properties.selectedOptions.selected.length}}</p>
                 </div>
             </ng-container>
-            
         </mat-tab>
         <mat-tab>
             <ng-template mat-tab-label>
@@ -62,8 +51,7 @@
                                 required
                                 [loading]="!attributesVariationsListData"
                                 loadingText="Loading..."
-                                class="inbound-line"
-                                style="width: 100%;">
+                                class="inbound-line max-width">
                     </ng-select>
                 </div>
 

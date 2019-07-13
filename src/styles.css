@@ -14,6 +14,9 @@ a:hover {
     padding-top: 10px;
     padding-left: 40px;
 }
+.lightgray-bg {
+    background-color: #f3f3f4 !important;
+}
 .white-bg {
     background-color: #fff !important;
 }
@@ -2132,6 +2135,7 @@ th.mat-header-cell {
     font-weight: 600;
     font-family: "open sans", "Helvetica Neue", Helvetica, Arial, sans-serif;
 }
+.md-strong, 
 .item-variation .mat-list-text {
     font-weight: 700;
 }
@@ -2159,7 +2163,10 @@ th.mat-header-cell {
     border-top: 1px solid #e0e0e0;
 }
 .btn-main {
-    background-color: #1ab394;
+    background-color: #1ab394 !important;
+}
+.w-140 {
+    width: 140px !important;
 }
 .abs-bottom {
     position: absolute;
@@ -2187,4 +2194,7 @@ th.mat-header-cell {
 }
 .select-item-layout .form-group div {
     flex: 5 !important;
-} 
+}
+.min-h-300 {
+    min-height: 300px;
+}

@@ -1,9 +1,9 @@
 import { Component, OnInit, OnDestroy, ViewChild, Inject } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
-import { MatTableDataSource, MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material';
+import {  MatDialog } from '@angular/material';
 import { Subscription } from 'rxjs';
 
-import { Item, ItemList, ItemImage } from '../../shared/class/item';
+import { Item } from '../../shared/class/item';
 import { ItemService } from '../item.service';
 
 import { environment } from '../../../environments/environment';
@@ -25,13 +25,12 @@ export class ItemEditVariationComponent implements OnInit {
     isLoading: boolean = false;
     
     constructor(private route: ActivatedRoute,
-        private router: Router,
         private itemService: ItemService, public itemUploadDialog: MatDialog) { }
 
     ngOnInit(): void {
         this.isLoading = true;
         this.itemid = this.route.parent.snapshot.params['id'];
-        this.itemService.getCurrentItemEdit(this.itemid).subscribe(
+        this.subscription = this.itemService.getCurrentItemEdit(this.itemid).subscribe(
             (item: Item) => {
                 this.itemService.currentItemEdit = item;
                 this.item = this.itemService.currentItemEdit;
@@ -41,16 +40,19 @@ export class ItemEditVariationComponent implements OnInit {
         );
     }
 
-    test(param: number) {
-        this.subscription = this.itemService.getItem(param).subscribe(
-            (item: Item) => {
-                this.itemService.currentItemEdit = item;
-                this.router.navigate(['/item', param, 'edit']);                  
-            },
-            error => {
-                this.itemService.sendNotification({ type: 'error', title: 'Error', content: this.errorMessage });
-                this.router.navigate(['/item']);                
-            }
-        );
+    ngOnDestroy() {
+        this.subscription.unsubscribe();
     }
+    // test(param: number) {
+    //     this.subscription = this.itemService.getItem(param).subscribe(
+    //         (item: Item) => {
+    //             this.itemService.currentItemEdit = item;
+    //             this.router.navigate(['/item', param, 'edit']);                  
+    //         },
+    //         error => {
+    //             this.itemService.sendNotification({ type: 'error', title: 'Error', content: this.errorMessage });
+    //             this.router.navigate(['/item']);                
+    //         }
+    //     );
+    // }
 }

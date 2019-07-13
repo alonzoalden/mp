@@ -21,13 +21,10 @@ export class ItemVariationSelectItemComponentDialog implements OnInit {
         @Inject(MAT_DIALOG_DATA) public data: any) {}
 
     ngOnInit() {
-        console.log(this.data);
         if (this.data.item) {
-
             this.itemList = this.data.itemLists.find((item) => item.ItemID === this.data.item.ItemID);
-
-            //this.itemList = new ItemList(this.data.item.ItemID, this.data.item.ItemName, null, this.data.item.ItemName, this.data.item.ItemTPIN, this.data.item.ItemVendorSKU, this.data.item.ItemImagePath)
         }
+        
         //splice out existing variation items from itemLists
         this.data.variationListing.ItemVariations.forEach((itemvariation) => {
             if (this.data.item && this.data.item.ItemID === itemvariation.ItemID) return;

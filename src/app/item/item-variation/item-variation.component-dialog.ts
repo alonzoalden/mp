@@ -1,5 +1,5 @@
 import { Component, OnInit, Inject, ViewChild, ElementRef } from '@angular/core';
-import { ItemInsert, ItemAttribute, ItemVariationListing, ItemVariation, ItemTierPriceInsert, ItemRelatedProductInsert, ItemUpSellInsert, ItemCrossSellInsert, ItemAttachmentInsert, ItemVideoInsert } from '../../shared/class/item';
+import { ItemAttribute, ItemVariationListing, ItemAttributeVariation } from '../../shared/class/item';
 
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material';
 import { ItemService } from '../item.service';
@@ -12,14 +12,12 @@ export class ItemVariationComponentDialog implements OnInit {
     
     attributesVariationsListData: ItemAttribute[];
     selectedItemAttributes: ItemAttribute[] = [];
-    oldDefault: any;
-    newAttribute: any;
+    oldDefault: ItemAttributeVariation;
+    newAttribute: ItemAttribute;
     addItemVariationInvalid: boolean = true;
     canShowDefaultOldSettingsInput: boolean = false;
     
     itemVariationListing: ItemVariationListing;
-    //product: ItemInsert[];
-    
     originalData: ItemAttribute[];
     
     @ViewChild('oldDefaultRef') oldDefaultRef: ElementRef;
@@ -34,16 +32,6 @@ export class ItemVariationComponentDialog implements OnInit {
             }
         }
     ngOnInit() {
-        // let data = this.itemService.getItemAttributes();
-        // this.attributesVariationsListData = data;
-        // this.displayAvailableAttributes();
-        // console.log(this.attributesVariationsListData);
-        // if (this.attributesVariationsListData.length) {
-        //     this.newAttribute = this.attributesVariationsListData[0];
-        // }
-        
-        //USE THIS WHEN API IS WORKING
-
         this.itemService.getItemAttributes()
             .subscribe((data) => {
                 this.attributesVariationsListData = data;
@@ -52,15 +40,14 @@ export class ItemVariationComponentDialog implements OnInit {
                     this.newAttribute = this.attributesVariationsListData[0];
                 }
             });
-        //this.itemService.product.subscribe((product) => this.product = product);
-        
-        
+            
         if (this.data.isEdit) {
             this.itemVariationListing = this.data.itemVariationListing;
         }
         else {
             this.itemVariationListing = this.itemService.defaultVariationListingInsert();
         }
+        this.validateItemVariation();
     }
 
     createAttribute() {
@@ -80,14 +67,16 @@ export class ItemVariationComponentDialog implements OnInit {
                const index = updatedListData.findIndex((item) => item.ItemAttributeID === itemAttribute.ItemAttributeID);
                if (index > -1) updatedListData.splice(index, 1);
            })
-           console.log(updatedListData);
-           console.log(this.attributesVariationsListData);
            this.attributesVariationsListData = updatedListData;
        }
    }
 
    canShowDefaultOldSettings(e) {
-        this.canShowDefaultOldSettingsInput = (this.data.isEdit && this.data.selectedItemAttributes.length > this.originalData.length && this.originalData.length > 0 && this.originalData.indexOf(e) < 0);
+        this.canShowDefaultOldSettingsInput = (this.data.isEdit
+            && this.data.selectedItemAttributes.length > this.originalData.length
+            && this.originalData.length > 0
+            && this.originalData.indexOf(e) < 0
+        );
    }
 
     clearNewAttributeField() {    
@@ -97,51 +86,39 @@ export class ItemVariationComponentDialog implements OnInit {
     onCancelClick(): void {
         this.dialogRef.close();
     }
-
+    
     onAddItemVariationClick() {
-        const listing = this.itemService.addItemVariation(this.itemVariationListing, this.selectedItemAttributes, this.oldDefault);
-        
-        // this.attributesVariationsList.forEach((item) => {
-        //     if (item.variationOptions && item.variationOptions.length > 0) {
-        //         item.selectedVariation = item.variationOptions[0];
-        //     }
-        // })
-        
-        //this.onUpdateItemData(this.attributesVariationsList);
-        console.log(listing);
+        this.selectedItemAttributes = this.selectedItemAttributes.filter((itemAttribute) => itemAttribute.SelectedItemAttributeVariations.length);
+        const listing = this.itemService.addItemVariation(this.itemVariationListing, this.selectedItemAttributes);
         this.dialogRef.close(listing);
     }
 
-    // onUpdateItemData(list) {
-    //     if (list && this.itemVariationListing) {
-    //         const selectedVariations = list.map((i) => {
-    //             if (i.selectedVariation) return i.selectedVariation;
-    //         });
-    //         this.itemVariationListing.ItemVariations.forEach((item) => {
-    //             if (item.ItemVariationLines) {
-    //                 let variation = item.ItemVariationLines.every((variation) => selectedVariations.indexOf(variation) !== -1);
-    //                 if (variation) return this.viewVariationItem(item);
-    //             }
-    //         });
-    //     }
-    // }
-    onNgModelChange(e) {
-        //console.log(e);
-        this.canShowDefaultOldSettings(e);
+    onNgModelChange(tab) {        
+        if (tab.OldDefault && tab.OldDefault.ItemAttributeVariationID) {
+            var x = tab.SelectedItemAttributeVariations.find((attributevariation) => { attributevariation.ItemAttributeVariationID === tab.OldDefault.ItemAttributeVariationID})
+            
+            tab.OldDefault = tab.SelectedItemAttributeVariations[0];
+        }
+         
+        if (this.canShowDefaultOldSettingsInput && !tab.OldDefault) {
+            tab.OldDefault = tab.SelectedItemAttributeVariations[0];
+        }
+        if (this.canShowDefaultOldSettingsInput && !tab.SelectedItemAttributeVariations.length && tab.OldDefault) {
+            tab.OldDefault = null;
+        }
         this.validateItemVariation();
     }
     viewVariationItem(item) {
         this.itemService.currentProductItemInsert.next(item);
     }
-    validateItemVariation() {     
-        this.addItemVariationInvalid = !!this.selectedItemAttributes.find((item) =>       {  
-           return !(item && item.SelectedItemAttributeVariations && item.SelectedItemAttributeVariations.length > 1)
+    validateItemVariation() {
+        this.addItemVariationInvalid = !!this.selectedItemAttributes.find((item) => {  
+           return !(item && item.SelectedItemAttributeVariations && item.SelectedItemAttributeVariations.length !== 1);
         } );
-        if (this.oldDefaultRef && !this.oldDefault ) {
-            this.addItemVariationInvalid = true;
-        }
-    }
-    test(a) {
-        console.log(a)
+        const noVariationsSelected = this.selectedItemAttributes.every((itemattribute) => {
+            if (itemattribute.SelectedItemAttributeVariations) return itemattribute.SelectedItemAttributeVariations.length === 0;
+        });
+        if (noVariationsSelected) this.addItemVariationInvalid = true;
+        //if (this.oldDefaultRef && !this.oldDefault) this.addItemVariationInvalid = true;
     }
 }

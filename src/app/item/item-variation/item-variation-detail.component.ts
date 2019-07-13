@@ -51,9 +51,6 @@ export class ItemVariationDetailComponent implements OnInit {
         this.loading = true;
         const param = this.route.snapshot.params['id'];
 
-        console.log(this.paginator);
-
-
         if (param) {
             this.isEdit = true;
             this.itemService.getItemList().subscribe(
@@ -99,24 +96,7 @@ export class ItemVariationDetailComponent implements OnInit {
     refreshDataSource(data: any[]) {
         this.dataSource = new MatTableDataSource<any>(data);
         this.dataSource.sort = this.sort;
-        //this.dataSource.paginator = this.paginator;
     }
-    // onUpdateItemData(list) {
-    //     if (list && this.itemVariationListing) {
-    //         const selectedVariations = list.map((i) => {
-    //             if (i.selectedVariation) return i.selectedVariation;
-    //         });
-    //         this.itemVariationListing.ItemVariations.forEach((item) => {
-    //             if (item.ItemVariationLines) {
-    //                 let variation = item.ItemVariationLines.every((variation) => selectedVariations.indexOf(variation) !== -1);
-    //                 if (variation) return this.viewVariationItem(item);
-    //             }
-    //         });
-    //     }
-    // }
-    // viewVariationItem(item) {
-    //     this.itemService.currentProductItemInsert.next(item);
-    // }
 
     realIndex(index) {
         if (this.currentPage > 0) {
@@ -154,10 +134,10 @@ export class ItemVariationDetailComponent implements OnInit {
         });
     }
     updateListing() {
-        this.pendingSave = true;
-
         console.log(this.itemVariationListing);
-
+        this.pendingSave = true;
+        const noPrimaryItemSelected = this.itemVariationListing.ItemVariations.every((itemvaration) => !itemvaration.IsPrimary)
+        if (noPrimaryItemSelected) this.itemVariationListing.PrimaryItemID = null;
         const itemMethod = this.isEdit ? 'editItemVariationListing' : 'addItemVariationListing';
             this.itemService[itemMethod](this.itemVariationListing).subscribe(
                 (listing: ItemVariationListing) => {
@@ -176,17 +156,18 @@ export class ItemVariationDetailComponent implements OnInit {
     }
 
     openDialogItemVariation() {
+        this.selectedItemAttributes = this.selectedItemAttributes.filter((itemAttribute) => itemAttribute.SelectedItemAttributeVariations.length);
         const data = {
             selectedItemAttributes: this.selectedItemAttributes,
             itemVariationListing: this.itemVariationListing,
             isEdit: true,
         }
-
         const dialogRef = this.printDialog.open(ItemVariationComponentDialog, {
             data: data
         });
     
         dialogRef.afterClosed().subscribe(listing => {
+            console.log(listing);
             if (!listing) return;
             this.itemVariationListing.ItemVariations = listing.ItemVariations;
             this.displayedColumns = listing.ItemVariations[0].ItemVariationLines.map((line) => {
@@ -214,16 +195,20 @@ export class ItemVariationDetailComponent implements OnInit {
         });
     }
     selectPrimaryItem(index) {
+        const itemVariation = this.itemVariationListing.ItemVariations[index];
+        if (!itemVariation.ItemID) return;
+        if (itemVariation.IsPrimary) {
+            itemVariation.IsPrimary = !itemVariation.IsPrimary;
+        }
         this.itemVariationListing.ItemVariations.forEach((itemvariation, i) => {
             if (i !== index) itemvariation.IsPrimary = false;
         })
-        const selectedVariation = this.itemVariationListing.ItemVariations[index];
 
-        this.itemVariationListing.PrimaryItemID = selectedVariation.ItemID
-        this.itemVariationListing.ItemName = selectedVariation.ItemName
-        this.itemVariationListing.ItemVendorSKU = selectedVariation.ItemVendorSKU
-        this.itemVariationListing.ItemTPIN = selectedVariation.ItemTPIN
-        this.itemVariationListing.ItemImagePath = selectedVariation.ItemImagePath
+        this.itemVariationListing.PrimaryItemID = itemVariation.ItemID
+        this.itemVariationListing.ItemName = itemVariation.ItemName
+        this.itemVariationListing.ItemVendorSKU = itemVariation.ItemVendorSKU
+        this.itemVariationListing.ItemTPIN = itemVariation.ItemTPIN
+        this.itemVariationListing.ItemImagePath = itemVariation.ItemImagePath
     }
     createAttributesVariationsList(itemVariationListing: ItemVariationListing, itemAttributes: ItemAttribute[]) {
         itemVariationListing.ItemVariations.forEach((itemvariation) => {
@@ -261,7 +246,7 @@ export class ItemVariationDetailComponent implements OnInit {
         this.refreshDataSource(data);
     }
     setPrimaryItem(listing) {
-        if(listing.PrimaryItemID && listing.PrimaryItemID != "" && listing.PrimaryItemID != 0)
+        if (listing.PrimaryItemID && listing.PrimaryItemID != "" && listing.PrimaryItemID != 0)
         {
             listing.ItemVariations.forEach((itemvariation) => {
                 if (listing.PrimaryItemID === itemvariation.ItemID) itemvariation.IsPrimary = true;
@@ -269,8 +254,23 @@ export class ItemVariationDetailComponent implements OnInit {
         }
     }
     handlePage($event) {
-        this.currentPage = $event.pageIndex
-        this.itemsPerPage = $event.pageSize
-        console.log($event);
+        this.currentPage = $event.pageIndex;
+        this.itemsPerPage = $event.pageSize;
     }
+    // onUpdateItemData(list) {
+    //     if (list && this.itemVariationListing) {
+    //         const selectedVariations = list.map((i) => {
+    //             if (i.selectedVariation) return i.selectedVariation;
+    //         });
+    //         this.itemVariationListing.ItemVariations.forEach((item) => {
+    //             if (item.ItemVariationLines) {
+    //                 let variation = item.ItemVariationLines.every((variation) => selectedVariations.indexOf(variation) !== -1);
+    //                 if (variation) return this.viewVariationItem(item);
+    //             }
+    //         });
+    //     }
+    // }
+    // viewVariationItem(item) {
+    //     this.itemService.currentProductItemInsert.next(item);
+    // }
 }
