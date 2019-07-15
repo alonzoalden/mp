@@ -88,7 +88,7 @@ export class ItemVariationComponentDialog implements OnInit {
     }
     
     onAddItemVariationClick() {
-        this.selectedItemAttributes = this.selectedItemAttributes.filter((itemAttribute) => itemAttribute.SelectedItemAttributeVariations.length);
+        this.selectedItemAttributes = this.selectedItemAttributes.filter((itemAttribute:  ItemAttribute) => itemAttribute.SelectedItemAttributeVariations.length);
         const listing = this.itemService.addItemVariation(this.itemVariationListing, this.selectedItemAttributes);
         this.dialogRef.close(listing);
     }

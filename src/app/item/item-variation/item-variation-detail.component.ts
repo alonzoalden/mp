@@ -134,7 +134,6 @@ export class ItemVariationDetailComponent implements OnInit {
         });
     }
     updateListing() {
-        console.log(this.itemVariationListing);
         this.pendingSave = true;
         const noPrimaryItemSelected = this.itemVariationListing.ItemVariations.every((itemvaration) => !itemvaration.IsPrimary)
         if (noPrimaryItemSelected) this.itemVariationListing.PrimaryItemID = null;
@@ -162,12 +161,12 @@ export class ItemVariationDetailComponent implements OnInit {
             itemVariationListing: this.itemVariationListing,
             isEdit: true,
         }
+
         const dialogRef = this.printDialog.open(ItemVariationComponentDialog, {
             data: data
         });
     
         dialogRef.afterClosed().subscribe(listing => {
-            console.log(listing);
             if (!listing) return;
             this.itemVariationListing.ItemVariations = listing.ItemVariations;
             this.displayedColumns = listing.ItemVariations[0].ItemVariationLines.map((line) => {

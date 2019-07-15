@@ -1062,7 +1062,7 @@ export class ItemService {
     }
     
     addItemVariation(itemVariationListing: ItemVariationListing, itemAttributes: ItemAttribute[]) {
-        console.log(itemAttributes);
+        //console.log(itemAttributes);
         let itemInsertList = this.createProductVariations(itemVariationListing, itemAttributes);
         
         
@@ -1073,7 +1073,7 @@ export class ItemService {
         let oldItemInsertList = itemVariationListing.ItemVariations;
         let oldDefaults: ItemVariationLine[] = itemAttributes.filter((itemattribute) => itemattribute.OldDefault)
                                                                   .map((item) => new ItemVariationLine(null, null, item.OldDefault.ItemAttributeVariationID, item.OldDefault.ItemAttributeID, null, item.OldDefault.Name, null, null));
-        console.log(oldDefaults);
+        //console.log(oldDefaults);
         this.updateWithOriginalItems(oldItemInsertList, itemInsertList, oldDefaults);
 
         // itemInsertList.forEach((itemvariation) => {
@@ -1102,9 +1102,9 @@ export class ItemService {
 
     updateWithOriginalItems(oldItemlist: ItemVariation[], newItemList: ItemVariation[], defaultTo: ItemVariationLine[]): void {
         
-        oldItemlist.forEach((oldItemVariation) => {
-            newItemList.forEach((newItemVariation, i) => {
-                const variationLinesToCompare = oldItemVariation.ItemVariationLines.concat(defaultTo);
+        newItemList.forEach((newItemVariation, i) => {
+            oldItemlist.forEach((oldItemVariation) => {
+                const variationLinesToCompare = [...oldItemVariation.ItemVariationLines].concat(defaultTo);
                 
                 const oldMatch = variationLinesToCompare.every((oldItemVariationLine) => {
                     return !!newItemVariation.ItemVariationLines.find((newItemVariationLine) => newItemVariationLine.ItemAttributeVariationID === oldItemVariationLine.ItemAttributeVariationID)
@@ -1115,34 +1115,30 @@ export class ItemService {
                     //const defaultToMatch = false;
                     if (oldMatch) {
                         newItemList[i] = oldItemVariation;
-                        newItemList[i].ItemVariationLines = newItemVariation.ItemVariationLines;
+                        newItemList[i].ItemVariationLines = [...newItemVariation.ItemVariationLines];
                         newItemList[i].ItemVariationLines.forEach((itemvariationline) => {
                             itemvariationline.ItemVariationID = oldItemVariation.ItemVariationID
                         });
                         newItemList[i].IsPrimary = false;
                         console.log(newItemList[i]);
+
+                        // let a = newItemVariation.ItemVariationLines.map((itemvariationline) => {
+                        //     itemvariationline.ItemVariationID = oldItemVariation.ItemVariationID
+                        //     return new ItemVariationLine(itemvariationline.ItemVariationLineID, oldItemVariation.ItemVariationID, itemvariationline.ItemAttributeVariationID, itemvariationline.ItemAttributeID, itemvariationline.ItemAttributeName, itemvariationline.ItemAttributeVariationName, itemvariationline.UpdatedOn, itemvariationline.CreatedOn);
+                        // });
                     }
                 }
-                if (oldMatch && !defaultTo.length) {
+                else if (oldMatch && !defaultTo.length) {
                     newItemList[i] = oldItemVariation;
                     newItemList[i].IsPrimary = false;                    
                 }
             })
         });
     }
-
-    // productItemCurrentItemInsert(variations, existingItem) {
-    //     if (variations) {
-    //         // let item = this.defaultCurrentItemInsert();
-    //         // item.ItemVariationItems = variations;
-    //         // return item;
-    //         return variations;
-    //     }
-    //     if (existingItem) {
-    //         return existingItem;
-    //     }
-    // }
-
+    // let a = newItemVariation.ItemVariationLines.map((itemvariationline) => {
+                        //     itemvariationline.ItemVariationID = oldItemVariation.ItemVariationID
+                        //     return new ItemVariationLine(itemvariationline.ItemVariationLineID, oldItemVariation.ItemVariationID, itemvariationline.ItemAttributeVariationID, itemvariationline.ItemAttributeID, itemvariationline.ItemAttributeName, itemvariationline.ItemAttributeVariationName, itemvariationline.UpdatedOn, itemvariationline.CreatedOn);
+                        // });
     defaultVariationListingInsert() {
         return new ItemVariationListing(null, null, null, null, null, null, null, null, null, null, []);
     }
