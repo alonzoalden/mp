@@ -52,10 +52,7 @@ export class ItemService {
 
     batchUpdateItems: Item[];
 
-    public variationListing: BehaviorSubject<any>;
-    public product: BehaviorSubject<any>;
     public currentProductItemInsert: BehaviorSubject<any>;
-    
 
     constructor(private http: HttpClient,
                 private oauthService: OAuthService,
@@ -1053,86 +1050,55 @@ export class ItemService {
                                 catchError(this.handleError)
                             );
     }
-
-    setVariationListing(item: any) {
-        this.variationListing = new BehaviorSubject(item);
-    }
-    setProductItem(item: any) {
-        this.currentProductItemInsert = new BehaviorSubject(item);
-    }
     
     addItemVariation(itemVariationListing: ItemVariationListing, itemAttributes: ItemAttribute[]) {
         
         let itemInsertList = this.createProductVariations(itemVariationListing, itemAttributes);
-        
-        
+
         let oldItemInsertList = itemVariationListing.ItemVariations;
         let oldDefaults: ItemVariationLine[] = itemAttributes.filter((itemattribute) => itemattribute.OldDefault)
                                                              .map((item) => new ItemVariationLine(null, null, item.OldDefault.ItemAttributeVariationID, item.OldDefault.ItemAttributeID, null, item.OldDefault.Name, null, null));
         
-        this.updateWithOriginalItems(oldItemInsertList, itemInsertList, oldDefaults);
-
-        // itemInsertList.forEach((itemvariation) => {
-        //     if(itemvariation.ItemVariationID && itemvariation.ItemVariationID != "" && itemvariation.ItemVariationID != 0) {
-        //         itemvariation.ItemVariationLines.forEach((line) => line.ItemVariationID = itemvariation.ItemVariationID) 
-        //     }
-        // })
-
+        this.updateItemVariationsWithOriginalInfo(oldItemInsertList, itemInsertList, oldDefaults);
         itemVariationListing.ItemVariations = itemInsertList;
         return itemVariationListing;
     }
 
     createProductVariations(itemVariationListing: ItemVariationListing, itemAttributes: ItemAttribute[]): ItemVariation[] {
-        
-        const items = itemAttributes.map((item) => item.SelectedItemAttributeVariations);
+        const selectedItemAttributeVariations = itemAttributes.map((item) => item.SelectedItemAttributeVariations);
+        const possibleVariationLineCombos = this.cartesian(selectedItemAttributeVariations);
 
-        const possibleVariations = this.cartesian([...items]);
-
-        return possibleVariations.map((itemVariationLines: ItemVariationLine[]) => {
-            return new ItemVariation(null, itemVariationListing.ItemVariationListingID, itemVariationListing.Name, null, null, null, null, null, null, null, null, itemVariationLines, false);
-
+        return possibleVariationLineCombos.map((itemVariationLines: any[]) => {
+            const variationLines = itemVariationLines.map((variationline) => new ItemVariationLine(variationline.ItemVariationLineID, null, variationline.ItemAttributeVariationID, variationline.ItemAttributeID, null, variationline.Name, variationline.UpdatedOn, variationline.CreatedOn ))
+            return new ItemVariation(null, itemVariationListing.ItemVariationListingID, itemVariationListing.Name, null, null, null, null, null, null, null, null, variationLines, false);
         });
     }
 
-    updateWithOriginalItems(oldItemlist: ItemVariation[], newItemList: ItemVariation[], defaultTo: ItemVariationLine[]): void {
-        
-        newItemList.forEach((newItemVariation, i) => {
-            oldItemlist.forEach((oldItemVariation) => {
-                const variationLinesToCompare = [...oldItemVariation.ItemVariationLines].concat(defaultTo);
-                
+    updateItemVariationsWithOriginalInfo(originalItemVariations: ItemVariation[], newItemVariations: ItemVariation[], defaultTo: ItemVariationLine[]): void {
+        newItemVariations.forEach((newItemVariation, i) => {
+            originalItemVariations.forEach((oldItemVariation) => {
+                const variationLinesToCompare = oldItemVariation.ItemVariationLines.concat(defaultTo);
                 const oldMatch = variationLinesToCompare.every((oldItemVariationLine) => {
                     return !!newItemVariation.ItemVariationLines.find((newItemVariationLine) => newItemVariationLine.ItemAttributeVariationID === oldItemVariationLine.ItemAttributeVariationID)
                 });
                 
                 if (defaultTo.length) {
-                    // const defaultToMatch = newItemVariation.ItemVariationLines.indexOf(defaultTo) > -1;
-                    //const defaultToMatch = false;
                     if (oldMatch) {
-                        newItemList[i] = oldItemVariation;
-                        newItemList[i].ItemVariationLines = [...newItemVariation.ItemVariationLines];
-                        newItemList[i].ItemVariationLines.forEach((itemvariationline) => {
+                        newItemVariations[i] = oldItemVariation;
+                        newItemVariations[i].ItemVariationLines = [...newItemVariation.ItemVariationLines];
+                        newItemVariations[i].ItemVariationLines.forEach((itemvariationline) => {
                             itemvariationline.ItemVariationID = oldItemVariation.ItemVariationID
                         });
-                        newItemList[i].IsPrimary = false;
-                        console.log(newItemList[i]);
-
-                        // let a = newItemVariation.ItemVariationLines.map((itemvariationline) => {
-                        //     itemvariationline.ItemVariationID = oldItemVariation.ItemVariationID
-                        //     return new ItemVariationLine(itemvariationline.ItemVariationLineID, oldItemVariation.ItemVariationID, itemvariationline.ItemAttributeVariationID, itemvariationline.ItemAttributeID, itemvariationline.ItemAttributeName, itemvariationline.ItemAttributeVariationName, itemvariationline.UpdatedOn, itemvariationline.CreatedOn);
-                        // });
+                        newItemVariations[i].IsPrimary = false;
                     }
                 }
                 else if (oldMatch && !defaultTo.length) {
-                    newItemList[i] = oldItemVariation;
-                    newItemList[i].IsPrimary = false;                    
+                    newItemVariations[i] = oldItemVariation;
+                    newItemVariations[i].IsPrimary = false;                    
                 }
             })
         });
     }
-    // let a = newItemVariation.ItemVariationLines.map((itemvariationline) => {
-                        //     itemvariationline.ItemVariationID = oldItemVariation.ItemVariationID
-                        //     return new ItemVariationLine(itemvariationline.ItemVariationLineID, oldItemVariation.ItemVariationID, itemvariationline.ItemAttributeVariationID, itemvariationline.ItemAttributeID, itemvariationline.ItemAttributeName, itemvariationline.ItemAttributeVariationName, itemvariationline.UpdatedOn, itemvariationline.CreatedOn);
-                        // });
     defaultVariationListingInsert() {
         return new ItemVariationListing(null, null, null, null, null, null, null, null, null, null, []);
     }
