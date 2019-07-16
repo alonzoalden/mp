@@ -1062,18 +1062,14 @@ export class ItemService {
     }
     
     addItemVariation(itemVariationListing: ItemVariationListing, itemAttributes: ItemAttribute[]) {
-        //console.log(itemAttributes);
+        
         let itemInsertList = this.createProductVariations(itemVariationListing, itemAttributes);
         
         
-        // if (listing && oldDefault) {
-        //     let oldItemInsertList = listing.ItemVariations;
-        //     this.updateWithOriginalItems(oldItemInsertList, itemInsertList, oldDefault);
-        // }
         let oldItemInsertList = itemVariationListing.ItemVariations;
         let oldDefaults: ItemVariationLine[] = itemAttributes.filter((itemattribute) => itemattribute.OldDefault)
-                                                                  .map((item) => new ItemVariationLine(null, null, item.OldDefault.ItemAttributeVariationID, item.OldDefault.ItemAttributeID, null, item.OldDefault.Name, null, null));
-        //console.log(oldDefaults);
+                                                             .map((item) => new ItemVariationLine(null, null, item.OldDefault.ItemAttributeVariationID, item.OldDefault.ItemAttributeID, null, item.OldDefault.Name, null, null));
+        
         this.updateWithOriginalItems(oldItemInsertList, itemInsertList, oldDefaults);
 
         // itemInsertList.forEach((itemvariation) => {
@@ -1083,8 +1079,6 @@ export class ItemService {
         // })
 
         itemVariationListing.ItemVariations = itemInsertList;
-
-        //this.variationListing.next(variationListingInfo);
         return itemVariationListing;
     }
 

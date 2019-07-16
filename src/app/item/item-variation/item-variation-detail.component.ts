@@ -3,7 +3,7 @@ import { Component, OnInit, ViewContainerRef, ViewChild, Inject, ElementRef, Inp
 import { Router, ActivatedRoute } from '@angular/router';
 import { ItemInsert, ItemList, ItemVariationListing, ItemAttribute, ItemTierPriceInsert, ItemRelatedProductInsert, ItemUpSellInsert, ItemCrossSellInsert, ItemAttachmentInsert, ItemVideoInsert, ItemVariation } from '../../shared/class/item';
 import { VendorBrand } from '../../shared/class/vendor-brand';
-import { MatDialog, MatPaginator, MatSort, MatDialogRef, MAT_DIALOG_DATA, MatTableDataSource } from '@angular/material';
+import { MatDialog, MatPaginator, MatSort, MatDialogRef, MAT_DIALOG_DATA, MatTableDataSource, MatTabGroupBase } from '@angular/material';
 import { ItemService } from '../item.service';
 import { Observable, Subscription } from 'rxjs';
 import { ItemVariationSelectItemComponentDialog } from '../item-variation/item-variation-select-item.component-dialog';
@@ -26,6 +26,7 @@ export class ItemVariationDetailComponent implements OnInit {
     dataSource: any = null;
         
     selectedItemAttributes: ItemAttribute[] = [];
+    originalItemAttributes: ItemAttribute[] = [];
     variationCount: number;    
     
     private imageURL = environment.imageURL;
@@ -155,19 +156,20 @@ export class ItemVariationDetailComponent implements OnInit {
     }
 
     openDialogItemVariation() {
+        this.originalItemAttributes = [...this.selectedItemAttributes];
         this.selectedItemAttributes = this.selectedItemAttributes.filter((itemAttribute) => itemAttribute.SelectedItemAttributeVariations.length);
         const data = {
             selectedItemAttributes: this.selectedItemAttributes,
             itemVariationListing: this.itemVariationListing,
             isEdit: true,
         }
-
         const dialogRef = this.printDialog.open(ItemVariationComponentDialog, {
             data: data
         });
     
-        dialogRef.afterClosed().subscribe(listing => {
-            if (!listing) return;
+        dialogRef.afterClosed().subscribe((listing) => {
+            if (!listing) return this.selectedItemAttributes = this.originalItemAttributes;
+            
             this.itemVariationListing.ItemVariations = listing.ItemVariations;
             this.displayedColumns = listing.ItemVariations[0].ItemVariationLines.map((line) => {
                 if (line.ItemAttributeName) return line.ItemAttributeName

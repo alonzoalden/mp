@@ -95,9 +95,10 @@ export class ItemVariationComponentDialog implements OnInit {
 
     onNgModelChange(tab) {        
         if (tab.OldDefault && tab.OldDefault.ItemAttributeVariationID) {
-            var x = tab.SelectedItemAttributeVariations.find((attributevariation) => { attributevariation.ItemAttributeVariationID === tab.OldDefault.ItemAttributeVariationID})
-            
-            tab.OldDefault = tab.SelectedItemAttributeVariations[0];
+            const variationUnselected = tab.SelectedItemAttributeVariations.find((attributevariation) => { 
+                return attributevariation.ItemAttributeVariationID === tab.OldDefault.ItemAttributeVariationID;
+            })
+            if (!variationUnselected) tab.OldDefault = tab.SelectedItemAttributeVariations[0];
         }
          
         if (this.canShowDefaultOldSettingsInput && !tab.OldDefault) {
