@@ -116,7 +116,7 @@
                                 {{ 'Part' | translate }} 
                             </a>
                         </li>
-                        <li routerLinkActive="active">
+                        <li routerLinkActive="active" *ngIf="item.ItemVariations.length">
                             <a [routerLink]="['variation']" routerLinkActive="active">
                                 {{ 'Variation' | translate }} 
                             </a>
