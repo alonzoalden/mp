@@ -109,9 +109,6 @@ export class ItemVariationComponentDialog implements OnInit {
         }
         this.validateItemVariation();
     }
-    viewVariationItem(item) {
-        this.itemService.currentProductItemInsert.next(item);
-    }
     validateItemVariation() {
         this.addItemVariationInvalid = !!this.selectedItemAttributes.find((item) => {  
            return !(item && item.SelectedItemAttributeVariations && item.SelectedItemAttributeVariations.length !== 1);
@@ -120,6 +117,5 @@ export class ItemVariationComponentDialog implements OnInit {
             if (itemattribute.SelectedItemAttributeVariations) return itemattribute.SelectedItemAttributeVariations.length === 0;
         });
         if (noVariationsSelected) this.addItemVariationInvalid = true;
-        //if (this.oldDefaultRef && !this.oldDefault) this.addItemVariationInvalid = true;
     }
 }

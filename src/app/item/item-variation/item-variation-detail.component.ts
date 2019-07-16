@@ -158,6 +158,7 @@ export class ItemVariationDetailComponent implements OnInit {
     openDialogItemVariation() {
         this.originalItemAttributes = [...this.selectedItemAttributes];
         this.selectedItemAttributes = this.selectedItemAttributes.filter((itemAttribute) => itemAttribute.SelectedItemAttributeVariations.length);
+        
         const data = {
             selectedItemAttributes: this.selectedItemAttributes,
             itemVariationListing: this.itemVariationListing,
@@ -171,8 +172,9 @@ export class ItemVariationDetailComponent implements OnInit {
             if (!listing) return this.selectedItemAttributes = this.originalItemAttributes;
             
             this.itemVariationListing.ItemVariations = listing.ItemVariations;
+            
             this.displayedColumns = listing.ItemVariations[0].ItemVariationLines.map((line) => {
-                if (line.ItemAttributeName) return line.ItemAttributeName
+                if (line.ItemAttributeName) return line.ItemAttributeName;
                 else {
                     const attribute = this.itemAttributes.find((item) => item.ItemAttributeID === line.ItemAttributeID);
                     return attribute.Name;
@@ -192,6 +194,7 @@ export class ItemVariationDetailComponent implements OnInit {
             this.displayedColumns.unshift('PrimaryItem');
             this.displayedColumns.push('ItemSelection');
             let data = this.itemVariationListing.ItemVariations.map((itemvariation) => itemvariation.ItemVariationLines);
+            
             this.refreshDataSource(data);
         });
     }
