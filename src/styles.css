@@ -2156,6 +2156,7 @@ th.mat-header-cell {
     margin-bottom: 10px;
 }
 .border-list.flex-details {
+    height: 72px;
     border-bottom: 1px solid #e0e0e0;
 }
 
@@ -2184,6 +2185,10 @@ th.mat-header-cell {
 }
 .p-v-5 {
     padding: 5px 0;
+}
+.row-height {
+    height: 70px !important;
+    padding: 3px !important;
 }
 .row-image-lg {
     max-width: 120px;

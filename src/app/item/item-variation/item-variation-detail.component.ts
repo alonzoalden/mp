@@ -1,17 +1,13 @@
 
 import { Component, OnInit, ViewContainerRef, ViewChild, Inject, ElementRef, Input} from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
-import { ItemInsert, ItemList, ItemVariationListing, ItemAttribute, ItemTierPriceInsert, ItemRelatedProductInsert, ItemUpSellInsert, ItemCrossSellInsert, ItemAttachmentInsert, ItemVideoInsert, ItemVariation } from '../../shared/class/item';
-import { VendorBrand } from '../../shared/class/vendor-brand';
-import { MatDialog, MatPaginator, MatSort, MatDialogRef, MAT_DIALOG_DATA, MatTableDataSource, MatTabGroupBase } from '@angular/material';
+import { ItemList, ItemVariationListing, ItemAttribute, ItemVariation } from '../../shared/class/item';
+import { MatDialog, MatPaginator, MatSort, MatTableDataSource } from '@angular/material';
 import { ItemService } from '../item.service';
-import { Observable, Subscription } from 'rxjs';
 import { ItemVariationSelectItemComponentDialog } from '../item-variation/item-variation-select-item.component-dialog';
 import { ItemVariationComponentDialog } from '../item-variation/item-variation.component-dialog';
 
-import { utf8Encode } from '@angular/compiler/src/util';
 import { environment } from '../../../environments/environment';
-import { and } from '@angular/router/src/utils/collection';
 
 @Component({
   selector: 'item-variation-detail',
@@ -261,20 +257,4 @@ export class ItemVariationDetailComponent implements OnInit {
         this.currentPage = $event.pageIndex;
         this.itemsPerPage = $event.pageSize;
     }
-    // onUpdateItemData(list) {
-    //     if (list && this.itemVariationListing) {
-    //         const selectedVariations = list.map((i) => {
-    //             if (i.selectedVariation) return i.selectedVariation;
-    //         });
-    //         this.itemVariationListing.ItemVariations.forEach((item) => {
-    //             if (item.ItemVariationLines) {
-    //                 let variation = item.ItemVariationLines.every((variation) => selectedVariations.indexOf(variation) !== -1);
-    //                 if (variation) return this.viewVariationItem(item);
-    //             }
-    //         });
-    //     }
-    // }
-    // viewVariationItem(item) {
-    //     this.itemService.currentProductItemInsert.next(item);
-    // }
 }

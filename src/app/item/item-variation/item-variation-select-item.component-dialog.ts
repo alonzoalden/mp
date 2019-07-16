@@ -1,5 +1,5 @@
-import { Component, OnInit, Inject, ViewChild, ElementRef } from '@angular/core';
-import { ItemList, Item, ItemInsert, ItemAttribute, ItemVariationListing, ItemTierPriceInsert, ItemRelatedProductInsert, ItemUpSellInsert, ItemCrossSellInsert, ItemAttachmentInsert, ItemVideoInsert } from '../../shared/class/item';
+import { Component, OnInit, Inject } from '@angular/core';
+import { ItemList } from '../../shared/class/item';
 
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material';
 import { ItemService } from '../item.service';

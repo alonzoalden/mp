@@ -93,14 +93,18 @@
                                                     </div>
                                                 </ng-container>
                                                 <ng-container *ngIf="itemVariationListing?.ItemVariations[i]?.ItemID">
-                                                    <div class="flex-details">
+                                                    <div class="flex-details animated fadeIn">
                                                         <div class="img-detail">
                                                             <img *ngIf='!itemVariationListing?.ItemVariations[i].ItemImagePath' class="opaque" src='https://content-merchantportal.toolots.net/assets/images/no-image-icon.png' matTooltip='Product has no image' matTooltipShowDelay="500" (click)="openDialogSelectItem(row, i, itemVariationListing.ItemVariations[i])">
                                                             <img class="row-image" *ngIf='itemVariationListing?.ItemVariations[i].ItemImagePath' [src]='imageURL + itemVariationListing?.ItemVariations[i].ItemImagePath' [matTooltip]='itemVariationListing?.ItemVariations[i].ItemName' [alt]='itemVariationListing?.ItemVariations[i].ItemName' matTooltipShowDelay="500" (click)="openDialogSelectItem(row, i, itemVariationListing.ItemVariations[i])">
                                                         </div>
                                                         <div>
                                                             <div class="row">
-                                                                <div class="col-xs-12 "><span class="sm-strong"><a (click)="openDialogSelectItem(row, i, itemVariationListing.ItemVariations[i])">{{itemVariationListing.ItemVariations[i].ItemName}}</a></span></div>
+                                                                <div class="col-xs-12 ">
+                                                                    <div class="ibox-tools text-left">
+                                                                        <a class="sm-strong m-n" (click)="openDialogSelectItem(row, i, itemVariationListing.ItemVariations[i])">{{itemVariationListing.ItemVariations[i].ItemName}}</a>
+                                                                    </div>
+                                                                </div>
                                                             </div>
                                                             <div class="row">
                                                                 <div class="col-xs-12 "> <span class="sm-text m-r-xs">SKU: </span> {{itemVariationListing.ItemVariations[i].ItemVendorSKU}}</div> 
@@ -121,7 +125,7 @@
                                         </td>
                                     </ng-container>
                                     <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-                                    <tr mat-row *matRowDef="let row; columns: displayedColumns;" style="height: 70px;"></tr>
+                                    <tr mat-row *matRowDef="let row; columns: displayedColumns;" class="row-height"></tr>
                                 </table>
                             
                                 <!-- <mat-paginator #paginator (page)="handlePage($event)" [pageSizeOptions]="[20, 50, 100, 200]" [showFirstLastButtons]="true"></mat-paginator> -->
@@ -134,7 +138,7 @@
                                             mat-raised-button
                                             class="btn-main w-140"
                                             type="button"
-                                            [disabled]="!itemVariationListing.Name || itemVariationListing.ItemVariations.length < 1"
+                                            [disabled]="!itemVariationListing.Name || itemVariationListing.ItemVariations.length < 1 || pendingSave"
                                             (click)="updateListing()">
                                             <ng-container *ngIf="pendingSave"><i class="fa fa-spinner fa-spin fs-16"></i></ng-container>
                                             <ng-container *ngIf="!pendingSave">{{ 'Save' | translate }}</ng-container>
