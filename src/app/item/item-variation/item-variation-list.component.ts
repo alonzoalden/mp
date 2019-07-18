@@ -17,7 +17,7 @@ export class ItemVariationListComponent implements OnInit {
     subscription: Subscription;
     errorMessage: string;
     variationListings: ItemVariationListing[]; 
-    displayedColumns = ['Menu', 'Title', 'ItemSelection', 'CreatedOn'];
+    displayedColumns = ['Menu', 'Name', 'ItemName', 'CreatedOn'];
     dataSource: any = null;
     
     @ViewChild(MatPaginator) paginator: MatPaginator;

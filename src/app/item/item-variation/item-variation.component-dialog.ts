@@ -3,13 +3,14 @@ import { ItemAttribute, ItemVariationListing, ItemAttributeVariation, ItemVariat
 
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material';
 import { ItemService } from '../item.service';
+import { Subscription } from 'rxjs';
 
 @Component({
     selector: 'item-variation.component-dialog',
     templateUrl: 'item-variation.component-dialog.html',
 })
 export class ItemVariationComponentDialog implements OnInit {
-    
+    subscription: Subscription;
     attributesVariationsListData: ItemAttribute[];
     selectedItemAttributes: ItemAttribute[] = [];
     oldDefault: ItemAttributeVariation;
@@ -32,7 +33,7 @@ export class ItemVariationComponentDialog implements OnInit {
             }
         }
     ngOnInit() {
-        this.itemService.getItemAttributes()
+        this.subscription = this.itemService.getItemAttributes()
             .subscribe((data) => {
                 this.attributesVariationsListData = data;
                 this.displayAvailableAttributes();
@@ -127,7 +128,10 @@ export class ItemVariationComponentDialog implements OnInit {
 
         let originalItemInsertList = itemVariationListing.ItemVariations;
         let oldDefaults: ItemVariationLine[] = itemAttributes.filter((itemattribute) => itemattribute.OldDefault)
-                                                             .map((item) => new ItemVariationLine(null, null, item.OldDefault.ItemAttributeVariationID, item.OldDefault.ItemAttributeID, null, item.OldDefault.Name, null, null));
+                                                             .map((item) => new ItemVariationLine(
+                                                                 null, null, item.OldDefault.ItemAttributeVariationID,
+                                                                 item.OldDefault.ItemAttributeID, null, item.OldDefault.Name,
+                                                                 null, null));
         
         this.updateItemVariationsWithOriginalInfo(originalItemInsertList, itemInsertList, oldDefaults);
         itemVariationListing.ItemVariations = itemInsertList;
@@ -139,7 +143,11 @@ export class ItemVariationComponentDialog implements OnInit {
         const possibleVariationLineCombos = this.cartesian(selectedItemAttributeVariations);
 
         return possibleVariationLineCombos.map((itemVariationLines: any[]) => {
-            const variationLines = itemVariationLines.map((variationline) => new ItemVariationLine(variationline.ItemVariationLineID, null, variationline.ItemAttributeVariationID, variationline.ItemAttributeID, null, variationline.Name, variationline.UpdatedOn, variationline.CreatedOn ))
+            const variationLines = itemVariationLines.map((variationline) => {
+                const attributeName = this.selectedItemAttributes.find((attribute) => attribute.ItemAttributeID === variationline.ItemAttributeID).Name;
+                return new ItemVariationLine(variationline.ItemVariationLineID, null, variationline.ItemAttributeVariationID, variationline.ItemAttributeID,
+                        attributeName, variationline.Name, variationline.UpdatedOn, variationline.CreatedOn )
+            })
             return new ItemVariation(null, itemVariationListing.ItemVariationListingID, itemVariationListing.Name, null, null, null, null, null, null, null, null, variationLines, false);
         });
     }
@@ -149,7 +157,7 @@ export class ItemVariationComponentDialog implements OnInit {
             originalItemVariations.forEach((oldItemVariation) => {
                 const variationLinesToCompare = oldItemVariation.ItemVariationLines.concat(defaultTo);
                 const oldMatch = variationLinesToCompare.every((oldItemVariationLine) => {
-                    return !!newItemVariation.ItemVariationLines.find((newItemVariationLine) => newItemVariationLine.ItemAttributeVariationID === oldItemVariationLine.ItemAttributeVariationID)
+                    return !!newItemVariation.ItemVariationLines.find((newItemVariationLine) => newItemVariationLine.ItemAttributeVariationID === oldItemVariationLine.ItemAttributeVariationID);
                 });
                 
                 if (defaultTo.length) {
@@ -168,6 +176,9 @@ export class ItemVariationComponentDialog implements OnInit {
                 }
             })
         });
+    }
+    ngOnDestroy() {
+        this.subscription.unsubscribe();
     }
 
     private cartesian(args) {
