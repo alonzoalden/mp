@@ -106,7 +106,6 @@ export class ItemVariationDetailComponent implements OnInit {
         return index;
     }
     openDialogSelectItem(item: ItemVariation, index: number) {
-        //this.realIndex(index);
         const variationTitle = item.ItemVariationLines.map((attribute) => attribute.ItemAttributeVariationName).join(' / ');
         
         const data = {
