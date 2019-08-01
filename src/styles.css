@@ -17,6 +17,9 @@ a:hover {
 .white-bg {
     background-color: #fff !important;
 }
+.underline {
+    text-decoration: underline;
+}
 .m-l-10imp {
     margin-left: 10px !important;
 }
@@ -2047,4 +2050,12 @@ th.mat-header-cell {
     .left-icon-layout + .email-support {
         text-align: left;
     }
+}
+.agreement {
+    letter-spacing: 0.2px;
+    font-size: 16px;
+    line-height: 24px;
+}
+.agreement .agreement-block {
+    margin-top: 20px;
 }
