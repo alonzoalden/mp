@@ -2059,3 +2059,13 @@ th.mat-header-cell {
 .agreement .agreement-block {
     margin-top: 20px;
 }
+.dialog-content {
+    background-color: #f3f3f4;
+    padding: 40px !important;
+    overflow: scroll;
+    min-height: 410px;
+}
+.diaglog-content .ibox-content {
+    padding: 40px;
+    height: 100%;
+}
