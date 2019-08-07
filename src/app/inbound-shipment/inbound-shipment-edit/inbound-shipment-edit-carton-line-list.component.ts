@@ -1,13 +1,12 @@
 import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
-import { MatSort, MatTableDataSource, MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material';
+import { MatSort, MatTableDataSource, MatDialog } from '@angular/material';
 
 // import { Carton } from '../../shared/class/carton';
 // import { CartonLine, CartonLineInsert } from '../../shared/class/carton-line';
 import { PurchaseOrder, PurchaseOrderLine, PurchaseOrderLineList, Carton, CartonLine} from '../../shared/class/purchase-order';
 import { PurchaseOrderService } from '../purchase-order.service';
 import { InboundShipmentSelectItemComponentDialog } from './inbound-shipment-edit-carton-list.component-select-dialog';
-
 //import { PurchaseOrderLineList } from '../../shared/class/purchase-order-line';
 
 @Component({
@@ -35,6 +34,7 @@ export class InboundShipmentEditCartonLineListComponent implements OnInit {
     canAdd = false;
     cartonlines: CartonLine[];
     carton: Carton;
+
     @ViewChild('linePurchaseOrderIDRef') linePurchaseOrderIDRef: ElementRef;
 
     @ViewChild(MatSort) sort: MatSort;
@@ -58,7 +58,7 @@ export class InboundShipmentEditCartonLineListComponent implements OnInit {
     //     return this.purchaseOrderService.currentCartonLines;
     // }
 
-    ngOnInit() {
+    ngOnInit() {        
         
         
         this.purchaseorderid = this.route.snapshot.parent.parent.params['id'];
@@ -92,7 +92,7 @@ export class InboundShipmentEditCartonLineListComponent implements OnInit {
                 this.purchaseorderlineList = purchaseorderlinelist;
             },
             (error: any) => this.errorMessage = <any>error
-        );
+        );       
     }
 
     addPendingLine() {
@@ -108,7 +108,7 @@ export class InboundShipmentEditCartonLineListComponent implements OnInit {
     }
 
     refreshDataSource(cartonlines: CartonLine[]) {
-        //cartonlines.forEach((c) => this.purchaseOrderService.updateCartonLineRemainingQuantity(c) );
+        cartonlines.forEach((c) => this.purchaseOrderService.updateCartonLineRemainingQuantity(c) );
 
         this.dataSource = new MatTableDataSource<CartonLine>(cartonlines);
         this.dataSource.sort = this.sort;
@@ -138,7 +138,7 @@ export class InboundShipmentEditCartonLineListComponent implements OnInit {
                 if(this.isValidQuantity(cartonline))
                 {
                     this.purchaseOrderService.updatePurchaseLineCartonQuantity();
-                    //this.purchaseOrderService.updateCartonLineRemainingQuantity(cartonline);
+                    this.purchaseOrderService.updateCartonLineRemainingQuantity(cartonline);
                 }
             }
         }
@@ -171,7 +171,7 @@ export class InboundShipmentEditCartonLineListComponent implements OnInit {
     }
 
     isValidQuantity(cartonline: CartonLine, isPendingAdd: boolean = false) {
-        
+
         const foundPurchaseOrderLine = this.purchaseOrderService.currentPurchaseOrderEdit.PurchaseOrderLines.find(x => x.PurchaseOrderLineID === cartonline.PurchaseOrderLineID);
 
         if(foundPurchaseOrderLine)
@@ -197,7 +197,7 @@ export class InboundShipmentEditCartonLineListComponent implements OnInit {
         }
 
         if(RemainingQuantity < 0) {
-            //this.purchaseOrderService.sendNotification({ type: 'error', title: 'Error', content: "Exceeded line quantity" });
+            this.purchaseOrderService.sendNotification({ type: 'error', title: 'Error', content: "Exceeded line quantity" });
             cartonline.Quantity = 0;    
             return false;
         }
@@ -217,7 +217,7 @@ export class InboundShipmentEditCartonLineListComponent implements OnInit {
                 this.refreshDataSource(this.cartonlines);
                 this.purchaseOrderService.updatePurchaseLineCartonQuantity();
             } else {
-                //this.purchaseOrderService.sendNotification({ type: 'error', title: 'Error', content: "Product already exists" });
+                this.purchaseOrderService.sendNotification({ type: 'error', title: 'Error', content: "Product already exists" });
             }
         }
     }
@@ -230,10 +230,12 @@ export class InboundShipmentEditCartonLineListComponent implements OnInit {
             }
             else {
                 this.purchaseOrderService.sendNotification({ type: 'error', title: 'Error', content: "Please enter quantity" });
+                return false;
             }
         } 
         else {
             this.purchaseOrderService.sendNotification({ type: 'error', title: 'Error', content: "Please select an item" });
+            return false;
         }
     }
 
@@ -246,16 +248,16 @@ export class InboundShipmentEditCartonLineListComponent implements OnInit {
 
             this.purchaseOrderService.updatePurchaseLineCartonQuantity();
 
-            this.purchaseOrderService.deleteCartonLine(cartonline.CartonLineID).subscribe(
-                (data) => {
-                    this.onDeleteComplete(cartonline, `${cartonline.CartonLineID} was deleted`);
-                },
-                (error: any) => {
-                    this.errorMessage = <any>error;
-                    this.purchaseOrderService.sendNotification({ type: 'error', title: 'Error', content: this.errorMessage });
-                    window.location.reload();
-                }
-            );
+            // this.purchaseOrderService.deleteCartonLine(cartonline.CartonLineID).subscribe(
+            //     (data) => {
+            //         this.onDeleteComplete(cartonline, `${cartonline.CartonLineID} was deleted`);
+            //     },
+            //     (error: any) => {
+            //         this.errorMessage = <any>error;
+            //         this.purchaseOrderService.sendNotification({ type: 'error', title: 'Error', content: this.errorMessage });
+            //         window.location.reload();
+            //     }
+            // );
         }
     }
 
@@ -279,7 +281,7 @@ export class InboundShipmentEditCartonLineListComponent implements OnInit {
             this.pendingAdd = false;
         }
         else {
-            //this.purchaseOrderService.updatePurchaseLineCartonQuantity();
+            this.purchaseOrderService.updatePurchaseLineCartonQuantity();
             this.currentIndex = index;
         } 
     }
@@ -313,5 +315,4 @@ export class InboundShipmentEditCartonLineListComponent implements OnInit {
             this.purchaseOrderService.sendNotification({ type: 'error', title: 'Error', content: error });
         });
     }
-
 }
