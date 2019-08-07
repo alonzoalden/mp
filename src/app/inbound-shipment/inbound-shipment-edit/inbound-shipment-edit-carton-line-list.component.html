@@ -12,7 +12,7 @@
     
     <div class="ibox-content wiz-content" style="height: 300px;">
         <div class="form-group">
-            <div class="m-md m-t-none animated fadeIn">{{ 'Carton #' | translate }}: {{ carton.CartonNumber}}</div>
+            <div class="m-md m-t-none ">{{ 'Carton #' | translate }}: {{ carton.CartonNumber}}</div>
         </div>
         <div class="form-group row">
             <div class="col-md-12">
@@ -72,7 +72,7 @@
                                         <a><i (click)="openDialogSelectItem(cartonline, i)" matTooltip="Edit item selection" class="fa fa-edit fs-18 m-l-sm" ></i></a>
                                     </div> -->
 
-                                <div class="animated fadeIn" *ngIf="currentIndex !== i">
+                                <div *ngIf="currentIndex !== i">
                                     <div class="col-xs-3 p-l-none" *ngIf='cartonline.ItemImage'>
                                         <img style="max-height:70px" [src]='imageURL + cartonline.ItemImage' [title]='cartonline.ItemName'>
                                     </div>
@@ -216,9 +216,9 @@
                         <!-- <tr mat-row *matRowDef="let cartonline; let i = index; columns: displayedColumns"
                             [ngStyle]="{'background-color': i === cartonlines.length-1 ? '#99CCFF' : currentIndex === i ? '#FF9933' : '#FFFFFF' }"
                             (click)="onEditCartonLine(i)"></tr> -->
-                        <tr  mat-row *matRowDef="let cartonline; let i = index; columns: displayedColumns" 
+                        <tr mat-row *matRowDef="let cartonline; let i = index; columns: displayedColumns" 
                             [ngStyle]="{'background-color': purchaseOrderService.rowColorConditions(i, cartonlines, currentIndex, formDirty)}"
-                            (click)='onEditCartonLine(i)' ></tr>
+                            (click)='onEditCartonLine(i)' style="height: 70px;" ></tr>
                     </table>
                 </div>
             </div>

@@ -32,16 +32,12 @@ export class PurchaseOrderService {
 
     private cartons: Carton[];
     //currentCarton: Carton;
-
-    currentCarton = new Subject<Carton>();
-
-
+    currentCarton = new Subject<Carton>()
     currentPurchaseOrderID: number;
 
     private cartonlines: CartonLine[];
     //currentCartonLines: CartonLine[];
-    currentCartonLines = new Subject<CartonLine[]>();
-
+    currentCartonLines = new Subject<CartonLine[]>()
     currentCartonLine: CartonLine;
     currentCartonID: number;
 
@@ -390,46 +386,46 @@ export class PurchaseOrderService {
                                 catchError(this.handleError)
                             );
     }
-    updatePurchaseLineCartonQuantity() {     
+    updatePurchaseLineCartonQuantity() {        
         this.currentPurchaseOrderEdit.PurchaseOrderLines.forEach((purchaseorderline) => {
             purchaseorderline.CartonQuantity = 0;
         });
-        return
-        // this.currentPurchaseOrderEdit.Cartons.forEach((carton, ci) => {
-        //     carton.CartonLines.forEach((cartonline, cli) => {
-        //         if(!cartonline.pendingAdd)
-        //         {
-        //             const purchaseorderline = this.currentPurchaseOrderEdit.PurchaseOrderLines.find(x => x.PurchaseOrderLineID === cartonline.PurchaseOrderLineID);
-        //             if(purchaseorderline)
-        //             {
-        //                 purchaseorderline.CartonQuantity += cartonline.Quantity;
-        //                 this.replacePurchaseOrderLine(cartonline.PurchaseOrderLineID, purchaseorderline);
+        
+        this.currentPurchaseOrderEdit.Cartons.forEach((carton, ci) => {
+            carton.CartonLines.forEach((cartonline, cli) => {
+                if(!cartonline.pendingAdd)
+                {
+                    const purchaseorderline = this.currentPurchaseOrderEdit.PurchaseOrderLines.find(x => x.PurchaseOrderLineID === cartonline.PurchaseOrderLineID);
+                    if(purchaseorderline)
+                    {
+                        purchaseorderline.CartonQuantity += cartonline.Quantity;
+                        this.replacePurchaseOrderLine(cartonline.PurchaseOrderLineID, purchaseorderline);
 
-        //                 this.currentPurchaseOrderEdit.PurchaseOrderLines[this.currentPurchaseOrderEdit.PurchaseOrderLines.findIndex(i => i.PurchaseOrderLineID === cartonline.PurchaseOrderLineID)] = purchaseorderline;
-        //             }
-        //         }
-        //     });
-        // })
+                        this.currentPurchaseOrderEdit.PurchaseOrderLines[this.currentPurchaseOrderEdit.PurchaseOrderLines.findIndex(i => i.PurchaseOrderLineID === cartonline.PurchaseOrderLineID)] = purchaseorderline;
+                    }
+                }
+            });
+        })
     };
 
-    updateCartonLineRemainingQuantity(cartonline: CartonLine) {
+    updateCartonLineRemainingQuantity(cartonline: CartonLine) {        
         const foundPurchaseOrderLine = this.currentPurchaseOrderEdit.PurchaseOrderLines.find(x => x.PurchaseOrderLineID === cartonline.PurchaseOrderLineID);
 
-        // if(foundPurchaseOrderLine)
-        // {
-        //     cartonline.RemainingQuantity = foundPurchaseOrderLine.Quantity;
+        if(foundPurchaseOrderLine)
+        {
+            cartonline.RemainingQuantity = foundPurchaseOrderLine.Quantity;
             
-        //     this.currentPurchaseOrderEdit.Cartons.forEach((carton, ci) => {
-        //         carton.CartonLines.forEach((cartonline2, cli) => {
-        //             if(!cartonline2.pendingAdd)
-        //             {
-        //                 if(cartonline2.PurchaseOrderLineID == cartonline.PurchaseOrderLineID) {
-        //                     cartonline.RemainingQuantity = cartonline.RemainingQuantity - cartonline2.Quantity;
-        //                 }
-        //             }
-        //         });
-        //     })
-        // }
+            this.currentPurchaseOrderEdit.Cartons.forEach((carton, ci) => {
+                carton.CartonLines.forEach((cartonline2, cli) => {
+                    if(!cartonline2.pendingAdd)
+                    {
+                        if(cartonline2.PurchaseOrderLineID == cartonline.PurchaseOrderLineID) {
+                            cartonline.RemainingQuantity = cartonline.RemainingQuantity - cartonline2.Quantity;
+                        }
+                    }
+                });
+            })
+        }
     };
 
     getSimpleItemList(): Observable<ItemList[]>  {
@@ -515,8 +511,7 @@ export class PurchaseOrderService {
                                     const foundIndex = this.cartons.findIndex(c => c.CartonID === id);
                                     if (foundIndex > -1) {
                                         this.cartons.splice(foundIndex, 1);
-                                        //this.currentCarton = null;
-                                        this.currentCarton.next(null);
+                                        this.currentCarton = null;
                                     }
                                 }),
                                 catchError(this.handleError)

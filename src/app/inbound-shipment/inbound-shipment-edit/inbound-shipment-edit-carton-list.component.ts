@@ -35,7 +35,7 @@ export class InboundShipmentEditCartonListComponent implements OnInit {
     constructor(private route: ActivatedRoute,
                 private router: Router,
                 private purchaseOrderService: PurchaseOrderService,
-                public cartonPrintDialog: MatDialog) { }
+                private cartonPrintDialog: MatDialog) { }
 
     ngOnInit() {
         this.purchaseorderid = this.route.parent.snapshot.params['id'];
