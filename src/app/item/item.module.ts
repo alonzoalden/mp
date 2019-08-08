@@ -86,6 +86,11 @@ import { ItemPartEditPriceComponent } from './item-part-edit/item-part-edit-pric
 import { ItemPartEditImageComponent } from './item-part-edit/item-part-edit-image.component';
 import { ItemPartEditGuard } from './item-part-edit/item-part-edit.guard';
 
+// /* NgRx */
+// import { StoreModule } from '@ngrx/store';
+// import { itemreducer } from './item-variation/state/item-variation.reducer';
+// import { EffectsModule } from '@ngrx/effects';
+// import { ItemVariationEffects } from './item-variation/state/item-variation.effects';
 
 @NgModule({
     declarations: [
@@ -181,7 +186,9 @@ import { ItemPartEditGuard } from './item-part-edit/item-part-edit.guard';
         MatTooltipModule,
         ToolModule,
         itemRouting,
-        NgSelectModule
+        NgSelectModule,
+        // StoreModule.forFeature('ItemVariations', itemreducer),
+        // EffectsModule.forFeature([ItemVariationEffects])
     ],
     providers: [
         ItemService,
