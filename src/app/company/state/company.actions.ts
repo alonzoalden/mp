@@ -1,6 +1,6 @@
 import { CompanyInfo } from '../../shared/class/company-info';
 import { VendorBrand } from '../../shared/class/vendor-brand';
-import { AddressCountry } from '../../shared/class/address';
+import { AddressCountry, AddressState } from '../../shared/class/address';
 /* NgRx */
 import { Action } from '@ngrx/store';
 
@@ -105,7 +105,20 @@ export class LoadAddressCountryFail implements Action {
   readonly type = CompanyActionTypes.LoadCompanyInfoFail;
   constructor(public payload: string) { }
 }
+export class LoadAddressState implements Action {
+  readonly type = CompanyActionTypes.LoadAddressState;
+  constructor(public payload: string) { }
+}
 
+export class LoadAddressStateSuccess implements Action {
+  readonly type = CompanyActionTypes.LoadAddressStateSuccess;
+  constructor(public payload: AddressState[]) { }
+}
+
+export class LoadAddressStateFail implements Action {
+  readonly type = CompanyActionTypes.LoadAddressStateFail;
+  constructor(public payload: string) { }
+}
 // export class UpdateItemVariationListing implements Action {
 //   readonly type = CompanyActionTypes.UpdateItemVariationListing;
 

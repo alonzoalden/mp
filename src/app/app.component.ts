@@ -1,10 +1,8 @@
 import { Component, ViewChild, OnInit, OnDestroy } from '@angular/core';
-import { Subscription } from 'rxjs/Subscription';
+import { Subscription ,  Observable } from 'rxjs';
 
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { TranslateService } from '@ngx-translate/core';
-
-import { Observable } from 'rxjs/Observable';
 
 import { Router } from '@angular/router';
 

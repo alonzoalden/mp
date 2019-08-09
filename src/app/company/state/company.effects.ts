@@ -68,6 +68,24 @@ export class ItemVariationEffects {
     ),
     take(1)
   );
+
+  @Effect()
+  loadAddressState$: Observable<Action> = this.actions$.pipe(
+    ofType(companyActions.CompanyActionTypes.LoadAddressState),
+    map((action: companyActions.LoadAddressState) => action.payload),
+    mergeMap((id) =>
+    this.companyService.getAddressState(id).pipe(
+        map(addresscountry => (new companyActions.LoadAddressStateSuccess(addresscountry))),
+        catchError(err => {
+          of(new companyActions.LoadAddressStateFail(err))
+          return EMPTY;
+        })
+      )
+    ),
+    take(1)
+  );
+  
+
   // @Effect()
   // loadItemLists$: Observable<Action> = this.actions$.pipe(
   //   ofType(itemVariationActions.ItemVariationActionTypes.GetItemList),

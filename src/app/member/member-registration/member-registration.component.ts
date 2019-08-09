@@ -1,3 +1,5 @@
+
+import {filter} from 'rxjs/operators';
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { FormBuilder, Validators, FormGroup, FormControl } from '@angular/forms';
@@ -6,7 +8,7 @@ import { Member } from '../../shared/class/member';
 
 import { MemberService } from '../member.service';
 
-import 'rxjs/add/operator/filter';
+
 
 @Component({
   selector: 'o-member-registration',
@@ -41,8 +43,8 @@ export class MemberRegistrationComponent implements OnInit {
     }
 
   ngOnInit(): void {
-    this.route.queryParams
-      .filter(params => params.inviteGUID)
+    this.route.queryParams.pipe(
+      filter(params => params.inviteGUID))
       .subscribe(params => {
         this.inviteGUID = params.inviteGUID;
       });
