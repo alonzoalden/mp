@@ -18,7 +18,7 @@ import { AppService } from '../app.service';
 export class DashboardComponent implements OnInit, OnDestroy {
   subscription: Subscription;
 
-  @ViewChild(NotificationComponent)
+  @ViewChild(NotificationComponent, { static: true })
   private  notificationComponent: NotificationComponent;
 
   constructor(private route: ActivatedRoute,

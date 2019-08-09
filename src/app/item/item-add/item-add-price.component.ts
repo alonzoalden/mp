@@ -32,7 +32,7 @@ export class ItemAddPriceComponent implements OnInit {
     canAdd = false;    
     constructor(private itemService: ItemService, private appService: AppService) { }
 
-    @ViewChild(MatSort) sort: MatSort;
+    @ViewChild(MatSort, { static: false }) sort: MatSort;
 
     ngOnInit(): void {
         this.item = this.itemService.currentItemInsert;

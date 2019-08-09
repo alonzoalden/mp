@@ -24,7 +24,7 @@ export class ItemEditCategoryComponent implements OnInit {
     formDirty = false;
     canAdd = false;
 
-    @ViewChild('selectionCategories') selectionCategoriesRef: ElementRef;
+    @ViewChild('selectionCategories', { static: false }) selectionCategoriesRef: ElementRef;
 
     constructor(private route: ActivatedRoute,
                 private itemService: ItemService) { }

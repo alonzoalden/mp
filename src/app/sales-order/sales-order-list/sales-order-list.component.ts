@@ -30,10 +30,10 @@ export class SalesOrderListComponent implements OnInit {
     displayedColumns = ['Menu', 'ProductInfo', 'ItemImage', 'ItemName', 'ShippingMethod', 'Status', 'VendorTotal'];
     dataSource: any = null;
 
-    @ViewChild(MatPaginator) paginator: MatPaginator;
-    @ViewChild(MatSort) sort: MatSort;
+    @ViewChild(MatPaginator, { static: true }) paginator: MatPaginator;
+    @ViewChild(MatSort, { static: false }) sort: MatSort;
 
-    @ViewChild('FilterBy') FilterBy: ElementRef;
+    @ViewChild('FilterBy', { static: true }) FilterBy: ElementRef;
     
     loading: boolean;
 

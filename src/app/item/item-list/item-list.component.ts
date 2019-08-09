@@ -37,8 +37,8 @@ export class ItemListComponent implements OnInit {
     displayedColumns = ['Menu','ItemID','ProductDetails','FulfilledBy','Price','Quantity','MerchantQuantity','Approval','Visibility','UpdatedOn'];
     dataSource: any = null;
 
-    @ViewChild(MatPaginator) paginator: MatPaginator;
-    @ViewChild(MatSort) sort: MatSort;
+    @ViewChild(MatPaginator, { static: true }) paginator: MatPaginator;
+    @ViewChild(MatSort, { static: true }) sort: MatSort;
 
     loading: boolean;
 
@@ -420,7 +420,7 @@ export class ItemListComponentImportDialog implements OnInit {
     loading: boolean;
     updated: boolean;
 
-    @ViewChild('fileUpload') fileUploadVar: any;
+    @ViewChild('fileUpload', { static: true }) fileUploadVar: any;
 
     constructor( public dialogRef: MatDialogRef<ItemListComponentImportDialog>, private itemService: ItemService ) {        
     }

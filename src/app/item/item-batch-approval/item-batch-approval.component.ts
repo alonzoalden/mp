@@ -28,8 +28,8 @@ export class ItemBatchApprovalComponent implements OnInit {
 
     loading: boolean;
 
-    @ViewChild(MatPaginator) paginator: MatPaginator;
-    @ViewChild(MatSort) sort: MatSort;
+    @ViewChild(MatPaginator, { static: true }) paginator: MatPaginator;
+    @ViewChild(MatSort, { static: true }) sort: MatSort;
 
     constructor(private router: Router,
         private itemService: ItemService,

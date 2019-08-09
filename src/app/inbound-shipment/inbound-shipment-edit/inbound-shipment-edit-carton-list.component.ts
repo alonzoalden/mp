@@ -30,7 +30,7 @@ export class InboundShipmentEditCartonListComponent implements OnInit {
     formDirty = false;
     canAdd = false;
 
-    @ViewChild(MatSort) sort: MatSort;
+    @ViewChild(MatSort, { static: false }) sort: MatSort;
 
     constructor(private route: ActivatedRoute,
                 private router: Router,
@@ -513,9 +513,9 @@ export class InboundShipmentEditCartonListComponentCartonLineDialog implements O
 
     formDirty = false;
     canAdd = false;
-    @ViewChild("linePurchaseOrderIDRef") linePurchaseOrderIDRef: ElementRef;
+    @ViewChild("linePurchaseOrderIDRef", { static: false }) linePurchaseOrderIDRef: ElementRef;
 
-    @ViewChild(MatSort) sort: MatSort;
+    @ViewChild(MatSort, { static: false }) sort: MatSort;
 
     get carton(): Carton | null {
         return this.purchaseOrderService ? this.purchaseOrderService.currentCarton : null;

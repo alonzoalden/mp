@@ -19,8 +19,8 @@ export class SettingVendorListComponent implements OnInit {
     displayedColumns = ['VendorID', 'MerchantID', 'VendorName', 'CreatedOn', 'Switch'];
     dataSource: any = null;
 
-    @ViewChild(MatPaginator) paginator: MatPaginator;
-    @ViewChild(MatSort) sort: MatSort;
+    @ViewChild(MatPaginator, { static: true }) paginator: MatPaginator;
+    @ViewChild(MatSort, { static: true }) sort: MatSort;
 
     constructor(private route: ActivatedRoute,
         private router: Router,

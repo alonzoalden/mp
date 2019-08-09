@@ -19,7 +19,7 @@ export class AdminComponent implements OnInit, OnDestroy {
     subscription: Subscription;
     currentMember: Member;
 
-    @ViewChild(NotificationComponent)
+    @ViewChild(NotificationComponent, { static: true })
     private  notificationComponent: NotificationComponent;
 
     constructor(private route: ActivatedRoute,

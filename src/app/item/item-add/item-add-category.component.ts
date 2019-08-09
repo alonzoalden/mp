@@ -22,7 +22,7 @@ export class ItemAddCategoryComponent implements OnInit {
     dataSource: any = null;
     formDirty = false;
 
-    @ViewChild('selectionCategories') selectionCategoriesRef: ElementRef;
+    @ViewChild('selectionCategories', { static: false }) selectionCategoriesRef: ElementRef;
 
     constructor(private itemService: ItemService) { }
 

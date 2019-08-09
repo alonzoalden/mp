@@ -32,7 +32,7 @@ export class ItemVideoComponent implements OnInit, OnDestroy {
     displayedColumns = ['Position', 'Down', 'Up', 'Thumbnail', 'Label', 'Description', 'Exclude', 'Remove'];
     dataSource: any = null;
 
-    @ViewChild(MatSort) sort: MatSort;
+    @ViewChild(MatSort, { static: false }) sort: MatSort;
 
     constructor(private route: ActivatedRoute,
         private router: Router,

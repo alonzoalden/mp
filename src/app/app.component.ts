@@ -33,7 +33,7 @@ export class AppComponent implements OnInit, OnDestroy {
     errorMessage: string;
     subscription: Subscription;
 
-    @ViewChild(NotificationComponent)
+    @ViewChild(NotificationComponent, { static: false })
     private  notificationComponent: NotificationComponent;
 
     title = 'app';

@@ -32,9 +32,9 @@ export class InboundShipmentEditCartonLineListComponent implements OnInit {
 
     formDirty = false;
     canAdd = false;
-    @ViewChild('linePurchaseOrderIDRef') linePurchaseOrderIDRef: ElementRef;
+    @ViewChild('linePurchaseOrderIDRef', { static: false }) linePurchaseOrderIDRef: ElementRef;
 
-    @ViewChild(MatSort) sort: MatSort;
+    @ViewChild(MatSort, { static: false }) sort: MatSort;
 
     constructor(private route: ActivatedRoute,
                 private router: Router,

@@ -19,8 +19,8 @@ export class InboundShipmentListComponent implements OnInit {
     displayedColumns = ['Menu', 'PackingSlipNumber', 'TransactionDate', 'ShipmentDate', 'Status', 'CreatedOn'];
     dataSource: any = null;
 
-    @ViewChild(MatPaginator) paginator: MatPaginator;
-    @ViewChild(MatSort) sort: MatSort;
+    @ViewChild(MatPaginator, { static: true }) paginator: MatPaginator;
+    @ViewChild(MatSort, { static: true }) sort: MatSort;
 
     loading: boolean;
 

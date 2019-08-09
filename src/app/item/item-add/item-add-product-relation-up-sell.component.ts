@@ -22,7 +22,7 @@ export class ItemAddProductRelationUpSellComponent implements OnInit {
     currentItemUpSellIndex: number;
     formDirty = false;
     
-    @ViewChild('selectionCategoriesRef') selectionCategoriesRef: ElementRef;
+    @ViewChild('selectionCategoriesRef', { static: false }) selectionCategoriesRef: ElementRef;
 
     constructor(private itemService: ItemService) { }
 

@@ -14,7 +14,7 @@ import { NotificationComponent } from '../shared/tool/notification/notification.
 export class SettingComponent implements OnInit, OnDestroy {
     subscription: Subscription;
 
-    @ViewChild(NotificationComponent)
+    @ViewChild(NotificationComponent, { static: true })
     private  notificationComponent: NotificationComponent;
 
     constructor(private route: ActivatedRoute,

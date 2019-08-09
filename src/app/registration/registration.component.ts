@@ -26,7 +26,7 @@ export class RegistrationComponent implements OnInit, OnDestroy {
 
     registrationCompleted: boolean;
 
-    @ViewChild(NotificationComponent)
+    @ViewChild(NotificationComponent, { static: true })
     private  notificationComponent: NotificationComponent;
 
     

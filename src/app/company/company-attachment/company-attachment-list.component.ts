@@ -25,8 +25,8 @@ export class CompanyAttachmentListComponent implements OnInit, OnDestroy {
     displayedColumns = ['Menu', 'View', 'ID', 'Title', 'CreatedOn', 'Exclude'];
     dataSource: any = null;
     
-    @ViewChild(MatPaginator) paginator: MatPaginator;
-    @ViewChild(MatSort) sort: MatSort;
+    @ViewChild(MatPaginator, { static: true }) paginator: MatPaginator;
+    @ViewChild(MatSort, { static: true }) sort: MatSort;
 
     constructor(private route: ActivatedRoute,
         private router: Router,

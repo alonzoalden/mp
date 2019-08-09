@@ -29,8 +29,8 @@ export class SalesOrderCancelComponent implements OnInit {
     displayedColumns = ['ItemImage', 'ProductDetails','ProductInfo','CancellationReason'];
     dataSource: any = null;
 
-    @ViewChild(MatPaginator) paginator: MatPaginator;
-    @ViewChild(MatSort) sort: MatSort;
+    @ViewChild(MatPaginator, { static: false }) paginator: MatPaginator;
+    @ViewChild(MatSort, { static: true }) sort: MatSort;
 
     // salesorderline: SalesOrderLine;
     deliveryDetail: string;

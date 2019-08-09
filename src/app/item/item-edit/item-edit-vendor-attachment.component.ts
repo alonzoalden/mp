@@ -29,7 +29,7 @@ export class ItemEditVendorAttachmentComponent implements OnInit {
     formDirty = false;
     canAdd = false;
 
-    @ViewChild('selectionCategoriesRef') selectionCategoriesRef: ElementRef;
+    @ViewChild('selectionCategoriesRef', { static: false }) selectionCategoriesRef: ElementRef;
 
     constructor(private route: ActivatedRoute,
         private itemService: ItemService) { }

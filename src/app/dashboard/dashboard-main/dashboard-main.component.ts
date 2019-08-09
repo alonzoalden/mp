@@ -39,9 +39,9 @@ export class DashboardMainComponent implements OnInit {
   newsClick: any = false;
   opened = true;
 
-  @ViewChild(MatPaginator) paginator: MatPaginator;
-  @ViewChild(MatSort) sort: MatSort;
-  @ViewChild('sidenav') sidenav: MatSidenav;
+  @ViewChild(MatPaginator, { static: false }) paginator: MatPaginator;
+  @ViewChild(MatSort, { static: false }) sort: MatSort;
+  @ViewChild('sidenav', { static: true }) sidenav: MatSidenav;
   @HostListener('window:resize', [])
   onResize() {
     if(window.innerWidth < 700){

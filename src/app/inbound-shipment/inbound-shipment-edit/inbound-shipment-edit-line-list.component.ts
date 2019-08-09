@@ -37,10 +37,10 @@ export class InboundShipmentEditLineListComponent implements OnInit {
 
     formDirty = false;
     
-    @ViewChild('lineItemIDRef') lineItemIDRef: ElementRef;
+    @ViewChild('lineItemIDRef', { static: false }) lineItemIDRef: ElementRef;
 
-    @ViewChild(MatPaginator) paginator: MatPaginator;
-    @ViewChild(MatSort) sort: MatSort;
+    @ViewChild(MatPaginator, { static: false }) paginator: MatPaginator;
+    @ViewChild(MatSort, { static: false }) sort: MatSort;
 
     constructor(private route: ActivatedRoute,
         private purchaseOrderService: PurchaseOrderService,

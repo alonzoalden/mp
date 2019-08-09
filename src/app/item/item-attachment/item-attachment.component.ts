@@ -35,7 +35,7 @@ export class ItemAttachmentComponent implements OnInit, OnDestroy  {
     displayedColumns = ['View', 'Position', 'Down', 'Up', 'ID', 'Title', 'FileName', 'Remove'];
     dataSource: any = null;
 
-    @ViewChild(MatSort) sort: MatSort;
+    @ViewChild(MatSort, { static: false }) sort: MatSort;
 
     constructor(private route: ActivatedRoute,
         private router: Router,

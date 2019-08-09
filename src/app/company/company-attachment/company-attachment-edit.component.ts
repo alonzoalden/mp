@@ -25,7 +25,7 @@ export class CompanyAttachmentEditComponent implements OnInit {
     selectedFileNames: string[] = [];
     res: Array<string>
 
-    @ViewChild('fileUpload') fileUploadVar: any;
+    @ViewChild('fileUpload', { static: false }) fileUploadVar: any;
 
     constructor(private route: ActivatedRoute,
         private router: Router,

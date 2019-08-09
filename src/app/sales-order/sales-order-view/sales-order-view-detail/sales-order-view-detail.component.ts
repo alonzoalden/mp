@@ -28,8 +28,8 @@ export class SalesOrderDetailComponent implements OnInit {
     displayedColumns = ['ItemImage', 'ProductDetails', 'Quantity', 'MerchantStatus', 'UnitPrice', 'LineSubTotal'];
     dataSource: any = null;
 
-    @ViewChild(MatPaginator) paginator: MatPaginator;
-    @ViewChild(MatSort) sort: MatSort;
+    @ViewChild(MatPaginator, { static: false }) paginator: MatPaginator;
+    @ViewChild(MatSort, { static: false }) sort: MatSort;
 
     // salesorderline: SalesOrderLine;
     deliveryDetail: string;
@@ -182,8 +182,8 @@ export class SalesOrderCancelComponentPrintDialog implements OnInit {
     dataSource: MatTableDataSource<any>;
     displayedColumns = ['ItemImage', 'ProductDetails','ProductInfo','CancellationReason'];
 
-    @ViewChild(MatPaginator) paginator: MatPaginator;
-    @ViewChild(MatSort) sort: MatSort;
+    @ViewChild(MatPaginator, { static: false }) paginator: MatPaginator;
+    @ViewChild(MatSort, { static: true }) sort: MatSort;
 
     constructor(
         @Inject(MAT_DIALOG_DATA) public data: any,

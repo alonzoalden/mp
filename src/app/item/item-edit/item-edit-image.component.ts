@@ -350,7 +350,7 @@ export class ItemEditImageComponentUploadDialog implements OnInit {
     selectedFiles: Array<File> = [];
     selectedFileNames: string[] = [];
 
-    @ViewChild('fileUpload') fileUploadVar: any;
+    @ViewChild('fileUpload', { static: true }) fileUploadVar: any;
 
     constructor( public dialogRef: MatDialogRef<ItemEditImageComponentUploadDialog>,
         private itemService: ItemService,
