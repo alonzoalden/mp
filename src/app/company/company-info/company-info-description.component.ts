@@ -6,6 +6,13 @@ import { CompanyInfo } from '../../shared/class/company-info';
 import { AddressCountry, AddressState } from '../../shared/class/address';
 import { TranslateService } from '@ngx-translate/core';
 
+/* NgRx */
+import { Store, select } from '@ngrx/store';
+import * as fromCompany from '../state/company.reducer';
+import * as companyActions from '../state/company.actions';
+import { takeWhile } from 'rxjs/operators';
+
+
 @Component({
   selector: 'o-company-info-description',
   templateUrl: './company-info-description.component.html',
@@ -20,11 +27,28 @@ export class CompanyInfoDescriptionComponent implements OnInit {
     shippingAddressStates: AddressState[];
     billingAddressStates: AddressState[];
 
-    constructor(private route: ActivatedRoute,
+    constructor(
+        private store: Store<fromCompany.State>,
+        private route: ActivatedRoute,
         private companyService: CompanyService,
         private translate: TranslateService) { }
 
     ngOnInit(): void {
+        // this.store.dispatch(new companyActions.LoadVendorBrands());
+        
+        // this.store.pipe(
+        //     select(fromCompany.getVendorBrands),
+        //     takeWhile(() => this.componentActive)
+        // ).subscribe(
+        //     (vendorBrands: VendorBrand[]) => {
+        //         this.vendorBrands = vendorBrands;
+        //     },
+        //     (error: any) => {
+        //         this.errorMessage = <any>error;                
+        //     }
+        // );
+
+        
         this.companyService.getCompanyInfo().subscribe(
             (companyInfo: CompanyInfo) => {
                 this.companyInfo = companyInfo;

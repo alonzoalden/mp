@@ -21,6 +21,12 @@ import { CompanyInfoTrademarkRegistrationComponent } from './company-info/compan
 import { CompanyInfoBrandComponent } from './company-info/company-info-brand.component';
 import { TranslateModule } from '@ngx-translate/core';
 
+/* NgRx */
+import { StoreModule } from '@ngrx/store';
+import { reducer } from './state/company.reducer';
+import { EffectsModule } from '@ngrx/effects';
+import { ItemVariationEffects } from './state/company.effects';
+
 @NgModule({
     declarations: [
         CompanyComponent,
@@ -53,7 +59,9 @@ import { TranslateModule } from '@ngx-translate/core';
         MatRadioModule,
         ToolModule,
         NgSelectModule,
-        companyRouting
+        companyRouting,
+        StoreModule.forFeature('Company', reducer),
+        EffectsModule.forFeature([ItemVariationEffects])
     ],
     providers: [
         CompanyService

@@ -11,24 +11,22 @@ import * as userActions from './user-state.actions';
 @Injectable()
 export class UserEffects {
 
-  constructor(private appService: AppService, 
-              private actions$: Actions) { }
+    constructor(private appService: AppService,
+        private actions$: Actions) { }
 
-  @Effect()
-  getCurrentMember$: Observable<Action> = this.actions$.pipe(
-    ofType(userActions.UserActionTypes.GetCurrentUser),
-    mergeMap(() =>
-    this.appService.getCurrentMember().pipe(
-        map(member => {
-          console.log(member);
-          return (new userActions.GetCurrentUserSuccess(member))
-        }),
-        catchError(err => {
-          console.log(err);
-          of(new userActions.GetCurrentUserFail(err))
-          return EMPTY;
-        })
-      )
-    )
-  );
+    @Effect()
+    getCurrentMember$: Observable<Action> = this.actions$.pipe(
+        ofType(userActions.UserActionTypes.GetCurrentUser),
+        mergeMap(() =>
+            this.appService.getCurrentMember().pipe(
+                map(member => {
+                    return (new userActions.GetCurrentUserSuccess(member))
+                }),
+                catchError(err => {
+                    of(new userActions.GetCurrentUserFail(err))
+                    return EMPTY;
+                })
+            )
+        )
+    );
 }

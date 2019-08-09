@@ -20,6 +20,10 @@ import { PurchaseOrder } from './shared/class/purchase-order';
 import { environment } from './../environments/environment';
 import { DeviceDetectorService } from 'ngx-device-detector';
 
+import * as fromUser from './shared/state/user-state.reducer';
+import { Store } from '@ngrx/store';
+import * as userActions from './shared/state/user-state.actions';
+
 declare var $: any;
 
 @Component({
@@ -40,7 +44,9 @@ export class AppComponent implements OnInit, OnDestroy {
 
     currentLanguage: string;
 
-    constructor(private oauthService: OAuthService,
+    constructor(
+                private userStore: Store<fromUser.State>,
+                private oauthService: OAuthService,
                 private httpClient: HttpClient,
                 private router: Router,
                 private appService: AppService,
@@ -62,6 +68,10 @@ export class AppComponent implements OnInit, OnDestroy {
     }
     
     ngOnInit() {
+        
+        
+        this.userStore.dispatch(new userActions.GetCurrentUser());
+
         // this.appService.verifyBrowserCompatibility()
         //     .subscribe((data) => {
         //         const browser = this.deviceService.getDeviceInfo().browser;
@@ -85,6 +95,8 @@ export class AppComponent implements OnInit, OnDestroy {
         // console.log(sessionStorage);
         // console.log(window.navigator.userAgent);
         // console.log(window.navigator.mimeTypes);
+
+        
 
         this.subscription = this.appService.subject.subscribe(
             notification => this.doNotification(notification)

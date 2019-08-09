@@ -1,10 +1,6 @@
 import { Component, ViewChild, OnInit, OnDestroy } from '@angular/core';
-import { ActivatedRoute, Router } from '@angular/router';
-import { MatSort, MatTableDataSource } from '@angular/material';
 import { CompanyService } from './company.service';
-
 import { Subscription } from 'rxjs';
-
 import { NotificationComponent } from '../shared/tool/notification/notification.component';
 
 @Component({
@@ -19,8 +15,7 @@ export class CompanyComponent implements OnInit, OnDestroy {
     @ViewChild(NotificationComponent)
     private  notificationComponent: NotificationComponent;
 
-    constructor(private route: ActivatedRoute,
-        private router: Router,
+    constructor(
         private companyService: CompanyService) {
     }
 
