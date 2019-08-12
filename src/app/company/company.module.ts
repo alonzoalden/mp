@@ -11,14 +11,15 @@ import { CompanyComponent } from './company.component';
 import { companyRouting } from './company.routing';
 
 import { CompanyService } from './company.service';
+import { CompanyInfoShellComponent } from './company-info/containers/company-info-shell/company-info-shell.component'
 import { CompanyAttachmentComponent } from './company-attachment/company-attachment.component';
 import { CompanyAttachmentListComponent } from './company-attachment/company-attachment-list.component';
 import { CompanyAttachmentAddComponent } from './company-attachment/company-attachment-add.component';
 import { CompanyAttachmentEditComponent } from './company-attachment/company-attachment-edit.component';
-import { CompanyInfoComponent } from './company-info/company-info.component';
-import { CompanyInfoDescriptionComponent } from './company-info/company-info-description.component';
-import { CompanyInfoTrademarkRegistrationComponent } from './company-info/company-info-trademark-registration.component';
-import { CompanyInfoBrandComponent } from './company-info/company-info-brand.component';
+//import { CompanyInfoComponent } from './company-info/components/company-info.component';
+import { CompanyInfoDescriptionComponent } from './company-info/components/company-info-description.component';
+import { CompanyInfoTrademarkRegistrationComponent } from './company-info/components/company-info-trademark-registration.component';
+import { CompanyInfoBrandComponent } from './company-info/components/company-info-brand.component';
 import { TranslateModule } from '@ngx-translate/core';
 
 /* NgRx */
@@ -27,6 +28,7 @@ import { reducer } from './state/company.reducer';
 import { EffectsModule } from '@ngrx/effects';
 import { ItemVariationEffects } from './state/company.effects';
 
+
 @NgModule({
     declarations: [
         CompanyComponent,
@@ -34,7 +36,8 @@ import { ItemVariationEffects } from './state/company.effects';
         CompanyAttachmentListComponent,
         CompanyAttachmentAddComponent,
         CompanyAttachmentEditComponent,
-        CompanyInfoComponent,
+        //CompanyInfoComponent,
+        CompanyInfoShellComponent,
         CompanyInfoDescriptionComponent,
         CompanyInfoBrandComponent,
         CompanyInfoTrademarkRegistrationComponent

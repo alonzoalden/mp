@@ -8,7 +8,7 @@
                         <div class="form-group">
                             <div class="col-sm-12" style="min-height: 420px;">
                                 <ng-container *ngIf="vendorBrands && vendorBrands.length > 0">
-                                    <div class="row" *ngFor="let vendorbrand of dataSource.data">
+                                    <div class="row" *ngFor="let vendorbrand of vendorBrands">
                                         <h2 class="col-md-4 col-md-offset-1 border-bottom">{{vendorbrand.BrandName}}</h2>
                                     </div>
                                 </ng-container>

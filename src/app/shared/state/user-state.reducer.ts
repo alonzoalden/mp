@@ -9,7 +9,6 @@ export interface State extends fromRoot.State {
     user: UserState;
 }
 
-
 // State for this feature (User)
 export interface UserState {
     currentUser: Member;

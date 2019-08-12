@@ -3,6 +3,7 @@ import { VendorBrand } from '../../shared/class/vendor-brand';
 import { AddressCountry, AddressState } from '../../shared/class/address';
 /* NgRx */
 import { Action } from '@ngrx/store';
+import { MatTableDataSource } from '@angular/material';
 
 
 export enum CompanyActionTypes {
@@ -71,7 +72,7 @@ export class LoadVendorBrands implements Action {
 
 export class LoadVendorBrandsSuccess implements Action {
   readonly type = CompanyActionTypes.LoadVendorBrandsSuccess;
-  constructor(public payload: VendorBrand[]) { }
+  constructor(public payload: MatTableDataSource<VendorBrand>) { }
 }
 
 export class LoadVendorBrandsFail implements Action {

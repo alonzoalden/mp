@@ -14,6 +14,8 @@ import { CompanyService } from '../company.service';
 import { CompanyInfo } from 'app/shared/class/company-info';
 import { VendorBrand } from '../../shared/class/vendor-brand';
 import { Router } from '@angular/router';
+import { MatTableDataSource } from '@angular/material';
+
 
 @Injectable()
 export class ItemVariationEffects {
@@ -27,6 +29,7 @@ export class ItemVariationEffects {
     ofType(companyActions.CompanyActionTypes.LoadVendorBrands),
     mergeMap(() =>
       this.companyService.getVendorBrands().pipe(
+        map(vendorbrands1 => (new MatTableDataSource<VendorBrand>(vendorbrands1))),
         map(vendorbrands => (new companyActions.LoadVendorBrandsSuccess(vendorbrands))),
         catchError(err => {
           of(new companyActions.LoadVendorBrandsFail(err))

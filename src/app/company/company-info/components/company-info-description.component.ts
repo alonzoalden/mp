@@ -1,28 +1,30 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Input } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
-import { CompanyService } from '../company.service';
+import { CompanyService } from '../../company.service';
 
-import { CompanyInfo } from '../../shared/class/company-info';
-import { AddressCountry, AddressState } from '../../shared/class/address';
+import { CompanyInfo } from '../../../shared/class/company-info';
+import { AddressCountry, AddressState } from '../../../shared/class/address';
 import { TranslateService } from '@ngx-translate/core';
 
 /* NgRx */
 import { Store, select } from '@ngrx/store';
-import * as fromCompany from '../state/company.reducer';
-import * as companyActions from '../state/company.actions';
+import * as fromCompany from '../../state';
+import * as companyActions from '../../state/company.actions';
 import { takeWhile } from 'rxjs/operators';
 
 
 @Component({
   selector: 'o-company-info-description',
   templateUrl: './company-info-description.component.html',
-  styleUrls: ['../company.component.scss']
+  styleUrls: ['../../company.component.scss']
 })
 
 export class CompanyInfoDescriptionComponent implements OnInit {
-    errorMessage: string;
-    companyInfo: CompanyInfo;
-
+    // errorMessage: string;
+    // companyInfo: CompanyInfo;
+    @Input() companyInfo: CompanyInfo;
+    @Input() errorMessage: string;
+    
     addressCountries: AddressCountry[];
     shippingAddressStates: AddressState[];
     billingAddressStates: AddressState[];
@@ -48,7 +50,7 @@ export class CompanyInfoDescriptionComponent implements OnInit {
         //     }
         // );
 
-        
+
         this.companyService.getCompanyInfo().subscribe(
             (companyInfo: CompanyInfo) => {
                 this.companyInfo = companyInfo;
