@@ -15,7 +15,7 @@ import * as companyActions from '../../state/company.actions';
 export class CompanyInfoBrandComponent implements OnInit {
     @Input() vendorBrands: VendorBrand[];
     @Input() errorMessage: string;
-    @Input() isLoading: boolean;
+    @Input() isVendorBrandLoading: boolean;
 
     constructor(private store: Store<fromCompany.State>) {
     }

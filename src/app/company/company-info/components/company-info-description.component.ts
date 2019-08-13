@@ -28,6 +28,7 @@ export class CompanyInfoDescriptionComponent implements OnInit {
     @Input() shippingAddressStates: AddressState[];
     @Input() addressCountries: AddressCountry[];
     @Input() billingAddressStates: AddressState[];
+    @Input() isInfoDescriptionLoading: boolean;
 
     constructor(
         private store: Store<fromCompany.State>,

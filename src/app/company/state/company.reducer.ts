@@ -1,23 +1,19 @@
-/* NgRx */
-import { createFeatureSelector, createSelector } from '@ngrx/store';
 import { CompanyActions, CompanyActionTypes } from './company.actions';
-
 import { VendorBrand } from 'app/shared/class/vendor-brand';
 import { AddressCountry, AddressState } from 'app/shared/class/address';
 import { CompanyInfo } from '../../shared/class/company-info';
 
-
 // State for this feature (Item Variation)
 export interface CompanyState {
     vendorBrands: VendorBrand[];
-    //vendorBrands: MatTableDataSource<VendorBrand>;
     companyInfo: CompanyInfo;
     addressCountry: AddressCountry[];
     shippingAddressStates: AddressState[];
     billingAddressStates: AddressState[];
     pendingSave: boolean;
     pendingDelete: boolean;
-    isLoading: boolean;
+    isVendorBrandLoading: boolean;
+    isInfoDescriptionLoading: boolean;
     error: string;
 };
 
@@ -29,25 +25,20 @@ const initialState: CompanyState = {
     billingAddressStates: [],
     pendingSave: false,
     pendingDelete: false,
-    isLoading: true,
+    isVendorBrandLoading: true,
+    isInfoDescriptionLoading: true,
     error: ''
 };
 
 export function reducer(state = initialState, action: CompanyActions): CompanyState {
 
     switch (action.type) {
-        case CompanyActionTypes.SetLoadingStatus:
-            return {
-                ...state,
-                isLoading: action.payload
-            };
-
         case CompanyActionTypes.LoadVendorBrandsSuccess:
             return {
                 ...state,
                 vendorBrands: action.payload,
                 error: '',
-                isLoading: false,
+                isVendorBrandLoading: false,
             };
 
         case CompanyActionTypes.LoadVendorBrandsFail:
@@ -55,12 +46,13 @@ export function reducer(state = initialState, action: CompanyActions): CompanySt
                 ...state,
                 vendorBrands: [],
                 error: action.payload,
-                isLoading: false,
+                isVendorBrandLoading: false,
             };
         case CompanyActionTypes.LoadCompanyInfoSuccess:
             return {
                 ...state,
                 companyInfo: action.payload,
+                isInfoDescriptionLoading: false,
                 error: ''
             };
 
@@ -68,6 +60,7 @@ export function reducer(state = initialState, action: CompanyActions): CompanySt
             return {
                 ...state,
                 companyInfo: null,
+                isInfoDescriptionLoading: false,
                 error: action.payload
             };
         case CompanyActionTypes.LoadAddressCountrySuccess:

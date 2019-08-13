@@ -1,7 +1,17 @@
 <div class="tab-content">
+    <div class="ibox-content" style="min-height: 40vh" *ngIf="isInfoDescriptionLoading">
+        <div class="spinner-container">
+            <div class="animated fadeIn sk-spinner sk-spinner-three-bounce big-spinner">
+                <div class="sk-bounce1"></div>
+                <div class="sk-bounce2"></div>
+                <div class="sk-bounce3"></div>
+            </div>
+        </div>
+    </div>
     <div class="tab-pane active">
         <div class="panel-body p-w-none">
-            <form class="form-horizontal" #companyInfoForm="ngForm" *ngIf="companyInfo">
+            
+            <form class="animated fadeIn form-horizontal" #companyInfoForm="ngForm" *ngIf="companyInfo">
                 <fieldset>
                     <div class="ibox-title"><h5>{{ 'General' | translate }}</h5></div>
                     <div class="ibox-content">

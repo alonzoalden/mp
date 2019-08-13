@@ -20,14 +20,6 @@ export const getCompanyInfo = createSelector(
     getCompanyFeatureState,
     state => state.companyInfo
 );
-export const getLoadingStatus = createSelector(
-    getCompanyFeatureState,
-    state => state.isLoading
-);
-export const getError = createSelector(
-    getCompanyFeatureState,
-    state => state.error
-);
 export const getShippingAddressStates = createSelector(
     getCompanyFeatureState,
     state => state.shippingAddressStates
@@ -40,9 +32,15 @@ export const getBillingAddressStates = createSelector(
     getCompanyFeatureState,
     state => state.billingAddressStates
 );
-export const isLoading = createSelector(
+export const isVendorBrandLoading = createSelector(
     getCompanyFeatureState,
-    state => state.isLoading
+    state => state.isVendorBrandLoading
 );
-
-
+export const isInfoDescriptionLoading = createSelector(
+    getCompanyFeatureState,
+    state => state.isInfoDescriptionLoading
+);
+export const getError = createSelector(
+    getCompanyFeatureState,
+    state => state.error
+);

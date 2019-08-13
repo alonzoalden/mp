@@ -1,12 +1,9 @@
 import { CompanyInfo } from '../../shared/class/company-info';
 import { VendorBrand } from '../../shared/class/vendor-brand';
 import { AddressCountry, AddressState } from '../../shared/class/address';
-/* NgRx */
 import { Action } from '@ngrx/store';
 
-
 export enum CompanyActionTypes {
-
   LoadVendorBrands = '[Company] Load Vendor Brands',
   LoadVendorBrandsSuccess = '[Company] Load Vendor Brands Success',
   LoadVendorBrandsFail = '[Company] Load Vendor Brands Fail',
@@ -26,17 +23,9 @@ export enum CompanyActionTypes {
   LoadBillingAddressState = '[Company] Load Billing Address State',
   LoadBillingAddressStateSuccess = '[Company] Load Billing Address State Success',
   LoadBillingAddressStateFail = '[Company] Load Billing Address State Fail',
-  
-  //SetLoadingStatus =  '[Company] Set Loading Status',
-  SetLoadingStatus =  '[Company] Set Loading Status',
 }
 
 // Action Creators
-export class SetLoadingStatus implements Action {
-  readonly type = CompanyActionTypes.SetLoadingStatus;
-  constructor(public payload: boolean) { }
-}
-
 export class LoadVendorBrands implements Action {
   readonly type = CompanyActionTypes.LoadVendorBrands;
 }
@@ -110,7 +99,6 @@ export class LoadBillingAddressStateFail implements Action {
 export type CompanyActions = LoadVendorBrands
   | LoadVendorBrandsSuccess
   | LoadVendorBrandsFail
-  | SetLoadingStatus
   | LoadAddressCountry
   | LoadAddressCountrySuccess
   | LoadAddressCountryFail
@@ -123,10 +111,6 @@ export type CompanyActions = LoadVendorBrands
   | LoadCompanyInfo
   | LoadCompanyInfoSuccess
   | LoadCompanyInfoFail;
-  // ToggleProductCode
-  // | SetCurrentProduct
-  // | ClearCurrentProduct
-  // | InitializeCurrentProduct
   
   
   
