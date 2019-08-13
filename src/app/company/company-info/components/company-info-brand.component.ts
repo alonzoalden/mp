@@ -21,8 +21,6 @@ export class CompanyInfoBrandComponent implements OnInit {
     }
 
     ngOnInit() {
-        console.log(this.vendorBrands)
-
         // Do NOT subscribe here because it uses an async pipe
         // This gets the initial values until the load is complete.
         // this.products$ = this.store.pipe(select(fromProduct.getProducts)) as Observable<Product[]>;

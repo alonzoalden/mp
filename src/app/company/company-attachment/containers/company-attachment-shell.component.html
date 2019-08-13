@@ -3,9 +3,9 @@
 <o-company-attachment-list
     *ngIf="!this.route.includes('edit') && !this.route.includes('add')"
     [userInfo]="userInfo$ | async"
-    [vendorAttachments1]="vendorAttachments$ | async"
+    [vendorAttachments]="vendorAttachments$ | async"
     (getVendorAttachmentList)="getVendorAttachmentList()"
-    
+    (deleteVendorAttachment)="deleteVendorAttachment(id)"
     >
 </o-company-attachment-list>
 

@@ -50,6 +50,9 @@ export class CompanyAttachmentShellComponent implements OnInit {
     setVendorAttachmentID(vendorattachmentid: number) {
         this.store.dispatch(new companyActions.SetVendorAttachmentID(vendorattachmentid));
     }
+    deleteVendorAttachment(vendorattachmentid: number) {
+        this.store.dispatch(new companyActions.DeleteVendorAttachment(vendorattachmentid));
+    }
 
 
 }

@@ -28,7 +28,7 @@
                     <input (keyup)="applyFilter($event.target.value)" placeholder="{{ 'Filter By' | translate }}" class="form-control">
                 </div>
                 <div class="ibox-content" style="min-height: 40vh;">
-                    <div *ngIf="!dataSource" class="spinner-container">
+                    <div *ngIf="!vendorAttachments" class="spinner-container">
                         <div class="sk-spinner sk-spinner-three-bounce big-spinner">
                             <div class="sk-bounce1"></div>
                             <div class="sk-bounce2"></div>

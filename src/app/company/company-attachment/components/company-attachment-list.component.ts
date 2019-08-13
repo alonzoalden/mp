@@ -32,7 +32,7 @@ export class CompanyAttachmentListComponent implements OnInit, OnDestroy {
     @Input() userInfo: Member;
     @Input() vendorAttachments: MatTableDataSource<VendorAttachment>;
     @Output() getVendorAttachmentList = new EventEmitter<void>();
-
+    @Output() deleteVendorAttachment = new EventEmitter<number>();
     @ViewChild(MatPaginator, { static: true }) paginator: MatPaginator;
     @ViewChild(MatSort, { static: true }) sort: MatSort;
 
@@ -43,6 +43,8 @@ export class CompanyAttachmentListComponent implements OnInit, OnDestroy {
 
     ngOnInit(): void {
         this.getVendorAttachmentList.emit();
+        //this.vendorAttachments.sort = this.sort;
+        //this.vendorAttachments.paginator = this.paginator;
         // if (this.userInfo.DefaultPageSize) {
         //     this.paginator.pageSize = this.userInfo.DefaultPageSize;
         // }
@@ -84,24 +86,25 @@ export class CompanyAttachmentListComponent implements OnInit, OnDestroy {
     onDeleteAttachment(vendorattachment: VendorAttachment) {
         const confirmation = confirm(`Remove ${vendorattachment.VendorAttachmentID}: ${vendorattachment.Title}?`);
         if (confirmation) {
-            this.companyService.deleteVendorAttachment(vendorattachment.VendorAttachmentID).subscribe(
-                () => {
-                    this.onDeleteComplete(vendorattachment, `${vendorattachment.VendorAttachmentID} was deleted`);
+            this.deleteVendorAttachment.emit(vendorattachment.VendorAttachmentID);
+            // this.companyService.deleteVendorAttachment(vendorattachment.VendorAttachmentID).subscribe(
+            //     () => {
+            //         this.onDeleteComplete(vendorattachment, `${vendorattachment.VendorAttachmentID} was deleted`);
 
-                    const foundIndex = this.vendorAttachments1.findIndex(i => i.VendorAttachmentID === vendorattachment.VendorAttachmentID);
-                    if (foundIndex > -1) {
-                        this.vendorAttachments1.splice(foundIndex, 1);
-                    }
+            //         const foundIndex = this.vendorAttachments1.findIndex(i => i.VendorAttachmentID === vendorattachment.VendorAttachmentID);
+            //         if (foundIndex > -1) {
+            //             this.vendorAttachments1.splice(foundIndex, 1);
+            //         }
 
-                    this.refreshDataSource(this.vendorAttachments1);
-                },
-                (error: any) => {
-                    this.refreshDataSource(this.vendorAttachments1);
-                    this.errorMessage = <any>error;
-                    this.companyService.sendNotification({ type: 'error', title: 'Error', content: this.errorMessage });
-                    window.location.reload();
-                }
-            );
+            //         this.refreshDataSource(this.vendorAttachments1);
+            //     },
+            //     (error: any) => {
+            //         this.refreshDataSource(this.vendorAttachments1);
+            //         this.errorMessage = <any>error;
+            //         this.companyService.sendNotification({ type: 'error', title: 'Error', content: this.errorMessage });
+            //         window.location.reload();
+            //     }
+            // );
         }
     }
 

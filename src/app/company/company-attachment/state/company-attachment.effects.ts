@@ -33,4 +33,19 @@ export class CompanyAttachmentEffects {
         take(1)
     );
 
+    @Effect()
+    deleteVendorAttachments$: Observable<Action> = this.actions$.pipe(
+      ofType(companyActions.CompanyAttachmentActionTypes.DeleteVendorAttachment),
+      map((action: companyActions.DeleteVendorAttachment) => action.payload),
+      mergeMap((vendorattachmentid: number) =>
+        this.companyService.deleteVendorAttachment(vendorattachmentid).pipe(
+          map(() => {
+            const message = `${vendorattachmentid} was deleted`
+            this.companyService.sendNotification({ type: 'success', title: 'Successfully Deleted', content: message });
+            return (new companyActions.DeleteVendorAttachmentSuccess(vendorattachmentid))
+          }),
+          catchError(err => of(new companyActions.DeleteVendorAttachmentSuccess(err)))
+        )
+      )
+    );
 }

@@ -8,15 +8,19 @@ import { MatTableDataSource } from '@angular/material';
 // State for this feature (Item Variation)
 export interface CompanyAttachmentState {
     vendorAttachments: MatTableDataSource<VendorAttachment>;
+    //vendorAttachmentsList: VendorAttachment[];
     vendorAttachmentID: number;
     isVendorAttachmentsLoading: boolean;
+    pendingDelete: boolean,
     error: string;
 };
 
 const initialState: CompanyAttachmentState = {
     vendorAttachments: null,
+    //vendorAttachmentsList: [],
     vendorAttachmentID: null,
     isVendorAttachmentsLoading: true,
+    pendingDelete: false,
     error: ''
 };
 
@@ -43,7 +47,21 @@ export function companyAttachmentReducer(state = initialState, action: CompanyAt
                 error: action.payload,
                 isVendorAttachmentsLoading: false,
             };
-        
+        case CompanyAttachmentActionTypes.DeleteVendorAttachmentSuccess:
+            const _updatedVendorAttachments = state.vendorAttachments.data.filter(attachment => attachment.VendorAttachmentID !== action.payload)
+            return {
+                ...state,
+                vendorAttachments: new MatTableDataSource<VendorAttachment>(_updatedVendorAttachments),
+                pendingDelete: false,
+                error: ''
+            };
+
+        case CompanyAttachmentActionTypes.DeleteVendorAttachmentFail:
+            return {
+                ...state,
+                pendingDelete: false,
+                error: action.payload
+            };
         default:
             return state;
     }
