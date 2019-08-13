@@ -41,13 +41,21 @@
               </ul>
               
               <!-- <router-outlet></router-outlet> -->
-              <o-company-info-brand
-                  *ngIf="this.route === '/company/info/brand'"
-                  [vendorBrands]="vendorBrands$ | async">
+              <o-company-info-brand *ngIf="this.route === '/company/info/brand'"
+                  [vendorBrands]="vendorBrands$ | async"
+                  [errorMessage]="errorMessage$ | async"
+                  [isLoading]="isLoading$ | async"
+                  >
               </o-company-info-brand>
               
-              <o-company-info-description
-                  *ngIf="this.route === '/company/info/description'">
+              <o-company-info-description *ngIf="this.route === '/company/info/description'"
+                  [companyInfo]="companyInfo$ | async"
+                  [shippingAddressStates]="shippingAddressStates$ | async"
+                  [addressCountries]="addressCountries$ | async"
+                  [billingAddressStates]="billingAddressStates$ | async"
+                  [errorMessage]="errorMessage$ | async"
+                  
+                  >
               </o-company-info-description>
               
               <o-company-info-trademark-registration

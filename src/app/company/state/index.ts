@@ -28,3 +28,21 @@ export const getError = createSelector(
     getCompanyFeatureState,
     state => state.error
 );
+export const getShippingAddressStates = createSelector(
+    getCompanyFeatureState,
+    state => state.shippingAddressStates
+);
+export const getAddressCountries = createSelector(
+    getCompanyFeatureState,
+    state => state.addressCountry
+);
+export const getBillingAddressStates = createSelector(
+    getCompanyFeatureState,
+    state => state.billingAddressStates
+);
+export const isLoading = createSelector(
+    getCompanyFeatureState,
+    state => state.isLoading
+);
+
+

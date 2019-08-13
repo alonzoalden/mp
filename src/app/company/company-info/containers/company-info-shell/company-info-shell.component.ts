@@ -6,8 +6,10 @@ import { CompanyInfo } from 'app/shared/class/company-info';
 import { VendorBrand } from 'app/shared/class/vendor-brand';
 import { Store, select } from '@ngrx/store';
 import * as fromCompany from '../../../state';
+import * as companyActions from '../../../state/company.actions';
 import { Observable } from 'rxjs';
-import { MatTableDataSource } from '@angular/material';
+import { AddressState, AddressCountry } from 'app/shared/class/address';
+
 @Component({
     selector: 'o-company-info',
     templateUrl: './company-info-shell.component.html',
@@ -15,8 +17,13 @@ import { MatTableDataSource } from '@angular/material';
 
 export class CompanyInfoShellComponent implements OnInit {
     companyInfo$: Observable<CompanyInfo>;
-    vendorBrands$: Observable<MatTableDataSource<VendorBrand>>;
+    vendorBrands$: Observable<VendorBrand[]>;
+    //vendorBrands$: Observable<MatTableDataSource<VendorBrand>>;
+    shippingAddressStates$: Observable<AddressState[]>;
+    addressCountries$: Observable<AddressCountry[]>;
+    billingAddressStates$: Observable<AddressState[]>;
     errorMessage$: Observable<string>;
+    isLoading$: Observable<boolean>;
     route: string;
 
     constructor(
@@ -25,8 +32,19 @@ export class CompanyInfoShellComponent implements OnInit {
     }
 
     ngOnInit() {
+
+        // this.store.dispatch(new companyActions.LoadCompanyInfo());
+        // this.store.dispatch(new companyActions.LoadAddressCountry());
+        
         this.companyInfo$ = this.store.pipe(select(fromCompany.getCompanyInfo));
         this.vendorBrands$ = this.store.pipe(select(fromCompany.getVendorBrands));
+
+        this.shippingAddressStates$ = this.store.pipe(select(fromCompany.getShippingAddressStates));
+        this.addressCountries$ = this.store.pipe(select(fromCompany.getAddressCountries));
+        this.billingAddressStates$ = this.store.pipe(select(fromCompany.getBillingAddressStates));
+
+        this.isLoading$ = this.store.pipe(select(fromCompany.isLoading));
+
         this.errorMessage$ = this.store.pipe(select(fromCompany.getError));
         this.router.events.subscribe((event: NavigationEnd): void => {
             if (event instanceof NavigationEnd) {

@@ -25,9 +25,9 @@ export class CompanyInfoDescriptionComponent implements OnInit {
     @Input() companyInfo: CompanyInfo;
     @Input() errorMessage: string;
     
-    addressCountries: AddressCountry[];
-    shippingAddressStates: AddressState[];
-    billingAddressStates: AddressState[];
+    @Input() shippingAddressStates: AddressState[];
+    @Input() addressCountries: AddressCountry[];
+    @Input() billingAddressStates: AddressState[];
 
     constructor(
         private store: Store<fromCompany.State>,
@@ -49,48 +49,58 @@ export class CompanyInfoDescriptionComponent implements OnInit {
         //         this.errorMessage = <any>error;                
         //     }
         // );
+        this.store.dispatch(new companyActions.LoadCompanyInfo());
+        this.store.dispatch(new companyActions.LoadAddressCountry());
+        // if (this.companyInfo) {
+        //     if(this.companyInfo.ShippingCountryID == 'US' || this.companyInfo.ShippingCountryID == 'CA') {
+        //         this.getShippingAddressState();
+        //     }
+        //     if(this.companyInfo.BillingCountryID == 'US' || this.companyInfo.BillingCountryID == 'CA') {
+        //         this.getBillingAddressState();
+        //     }
+        // }
+        // this.companyService.getCompanyInfo().subscribe(
+        //     (companyInfo: CompanyInfo) => {
+        //         this.companyInfo = companyInfo;
 
-
-        this.companyService.getCompanyInfo().subscribe(
-            (companyInfo: CompanyInfo) => {
-                this.companyInfo = companyInfo;
-
-                if(this.companyInfo.ShippingCountryID == 'US' || this.companyInfo.ShippingCountryID == 'CA') {
-                    this.getShippingAddressState();
-                }
+        //         if(this.companyInfo.ShippingCountryID == 'US' || this.companyInfo.ShippingCountryID == 'CA') {
+        //             //this.getShippingAddressState();
+        //         }
         
-                if(this.companyInfo.BillingCountryID == 'US' || this.companyInfo.BillingCountryID == 'CA') {
-                    this.getBillingAddressState();
-                }
-            },
-            (error: any) => this.errorMessage = <any>error
-        );        
+        //         if(this.companyInfo.BillingCountryID == 'US' || this.companyInfo.BillingCountryID == 'CA') {
+        //             //this.getBillingAddressState();
+        //         }
+        //     },
+        //     (error: any) => this.errorMessage = <any>error
+        // );        
 
-        this.companyService.getAddressCountry().subscribe(
-            (addresscountries: AddressCountry[]) => {
-                this.addressCountries = addresscountries;
-            },
-            (error: any) => this.errorMessage = <any>error
-        );
+        // this.companyService.getAddressCountry().subscribe(
+        //     (addresscountries: AddressCountry[]) => {
+        //         this.addressCountries = addresscountries;
+        //     },
+        //     (error: any) => this.errorMessage = <any>error
+        // );
     }
 
     getShippingAddressState() {
-        this.companyService.getAddressState(this.companyInfo.ShippingCountryID).subscribe(
-            (addresssState: AddressState[]) => {
-                this.shippingAddressStates = addresssState;
-                //console.log(this.shippingAddressStates);
-            },
-            (error: any) => this.errorMessage = <any>error
-        );
+        this.store.dispatch(new companyActions.LoadShippingAddressState(this.companyInfo.ShippingCountryID));
+        // this.companyService.getAddressState(this.companyInfo.ShippingCountryID).subscribe(
+        //     (addresssState: AddressState[]) => {
+        //         this.shippingAddressStates = addresssState;
+        //         //console.log(this.shippingAddressStates);
+        //     },
+        //     (error: any) => this.errorMessage = <any>error
+        // );
     }
 
     getBillingAddressState() {
-        this.companyService.getAddressState(this.companyInfo.BillingCountryID).subscribe(
-            (addresssState: AddressState[]) => {
-                this.billingAddressStates = addresssState;
-            },
-            (error: any) => this.errorMessage = <any>error
-        );
+        this.store.dispatch(new companyActions.LoadBillingAddressState(this.companyInfo.ShippingCountryID));
+        // this.companyService.getAddressState(this.companyInfo.BillingCountryID).subscribe(
+        //     (addresssState: AddressState[]) => {
+        //         this.billingAddressStates = addresssState;
+        //     },
+        //     (error: any) => this.errorMessage = <any>error
+        // );
     }
 
     updateShippingAddress() {

@@ -1,16 +1,10 @@
 import { Component, Input, OnInit } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
-import { MatTableDataSource } from '@angular/material';
-import { CompanyService } from '../../company.service';
-import { Subscription, Observable } from 'rxjs';
 import { VendorBrand } from '../../../shared/class/vendor-brand';
-import { TranslateService } from '@ngx-translate/core';
+
 /* NgRx */
-import { Store, select } from '@ngrx/store';
+import { Store } from '@ngrx/store';
 import * as fromCompany from '../../state';
 import * as companyActions from '../../state/company.actions';
-import { takeWhile } from 'rxjs/operators';
-import { CompanyInfo } from 'app/shared/class/company-info';
 
 @Component({
     selector: 'o-company-info-brand',
@@ -19,24 +13,11 @@ import { CompanyInfo } from 'app/shared/class/company-info';
 })
 
 export class CompanyInfoBrandComponent implements OnInit {
-    //subscription: Subscription;
-    //errorMessage: string;
-    //vendorBrands$: Observable<VendorBrand[]>
-    //vendorBrands: VendorBrand[];
-    
-    
     @Input() vendorBrands: VendorBrand[];
     @Input() errorMessage: string;
+    @Input() isLoading: boolean;
 
-    displayedColumns = ['BrandName'];
-    dataSource: any = null;
-    componentActive: boolean = true;
-
-
-    constructor(private route: ActivatedRoute,
-        private companyService: CompanyService,
-        private translate: TranslateService,
-        private store: Store<fromCompany.State>) {
+    constructor(private store: Store<fromCompany.State>) {
     }
 
     ngOnInit() {
@@ -67,7 +48,7 @@ export class CompanyInfoBrandComponent implements OnInit {
         // showProductCode => this.displayCode = showProductCode
         // );
 
-        
+        // this.store.dispatch(new companyActions.SetLoadingStatus(true));
         this.store.dispatch(new companyActions.LoadVendorBrands());
         
         // this.store.pipe(
