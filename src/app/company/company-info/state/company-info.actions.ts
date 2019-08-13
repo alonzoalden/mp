@@ -1,9 +1,9 @@
-import { CompanyInfo } from '../../shared/class/company-info';
-import { VendorBrand } from '../../shared/class/vendor-brand';
-import { AddressCountry, AddressState } from '../../shared/class/address';
+import { CompanyInfo } from '../../../shared/class/company-info';
+import { VendorBrand } from '../../../shared/class/vendor-brand';
+import { AddressCountry, AddressState } from '../../../shared/class/address';
 import { Action } from '@ngrx/store';
 
-export enum CompanyActionTypes {
+export enum CompanyInfoActionTypes {
   LoadVendorBrands = '[Company] Load Vendor Brands',
   LoadVendorBrandsSuccess = '[Company] Load Vendor Brands Success',
   LoadVendorBrandsFail = '[Company] Load Vendor Brands Fail',
@@ -27,76 +27,76 @@ export enum CompanyActionTypes {
 
 // Action Creators
 export class LoadVendorBrands implements Action {
-  readonly type = CompanyActionTypes.LoadVendorBrands;
+  readonly type = CompanyInfoActionTypes.LoadVendorBrands;
 }
 
 export class LoadVendorBrandsSuccess implements Action {
-  readonly type = CompanyActionTypes.LoadVendorBrandsSuccess;
+  readonly type = CompanyInfoActionTypes.LoadVendorBrandsSuccess;
   constructor(public payload: VendorBrand[]) { }
 }
 
 export class LoadVendorBrandsFail implements Action {
-  readonly type = CompanyActionTypes.LoadVendorBrandsFail;
+  readonly type = CompanyInfoActionTypes.LoadVendorBrandsFail;
   constructor(public payload: string) { }
 }
 
 export class LoadCompanyInfo implements Action {
-  readonly type = CompanyActionTypes.LoadCompanyInfo;
+  readonly type = CompanyInfoActionTypes.LoadCompanyInfo;
 }
 
 export class LoadCompanyInfoSuccess implements Action {
-  readonly type = CompanyActionTypes.LoadCompanyInfoSuccess;
+  readonly type = CompanyInfoActionTypes.LoadCompanyInfoSuccess;
   constructor(public payload: CompanyInfo) { }
 }
 
 export class LoadCompanyInfoFail implements Action {
-  readonly type = CompanyActionTypes.LoadCompanyInfoFail;
+  readonly type = CompanyInfoActionTypes.LoadCompanyInfoFail;
   constructor(public payload: string) { }
 }
 export class LoadAddressCountry implements Action {
-  readonly type = CompanyActionTypes.LoadAddressCountry;
+  readonly type = CompanyInfoActionTypes.LoadAddressCountry;
 }
 
 export class LoadAddressCountrySuccess implements Action {
-  readonly type = CompanyActionTypes.LoadAddressCountrySuccess;
+  readonly type = CompanyInfoActionTypes.LoadAddressCountrySuccess;
   constructor(public payload: AddressCountry[]) { }
 }
 
 export class LoadAddressCountryFail implements Action {
-  readonly type = CompanyActionTypes.LoadAddressCountryFail;
+  readonly type = CompanyInfoActionTypes.LoadAddressCountryFail;
   constructor(public payload: string) { }
 }
 export class LoadShippingAddressState implements Action {
-  readonly type = CompanyActionTypes.LoadShippingAddressState;
+  readonly type = CompanyInfoActionTypes.LoadShippingAddressState;
   constructor(public payload: string) { }
 }
 
 export class LoadShippingAddressStateSuccess implements Action {
-  readonly type = CompanyActionTypes.LoadShippingAddressStateSuccess;
+  readonly type = CompanyInfoActionTypes.LoadShippingAddressStateSuccess;
   constructor(public payload: AddressState[]) { }
 }
 
 export class LoadShippingAddressStateFail implements Action {
-  readonly type = CompanyActionTypes.LoadShippingAddressStateFail;
+  readonly type = CompanyInfoActionTypes.LoadShippingAddressStateFail;
   constructor(public payload: string) { }
 }
 export class LoadBillingAddressState implements Action {
-  readonly type = CompanyActionTypes.LoadBillingAddressState;
+  readonly type = CompanyInfoActionTypes.LoadBillingAddressState;
   constructor(public payload: string) { }
 }
 
 export class LoadBillingAddressStateSuccess implements Action {
-  readonly type = CompanyActionTypes.LoadBillingAddressStateSuccess;
+  readonly type = CompanyInfoActionTypes.LoadBillingAddressStateSuccess;
   constructor(public payload: AddressState[]) { }
 }
 
 export class LoadBillingAddressStateFail implements Action {
-  readonly type = CompanyActionTypes.LoadBillingAddressStateFail;
+  readonly type = CompanyInfoActionTypes.LoadBillingAddressStateFail;
   constructor(public payload: string) { }
 }
 
 // Union the valid types
-export type CompanyActions = LoadVendorBrands
+export type CompanyInfoActions = LoadVendorBrands
   | LoadVendorBrandsSuccess
   | LoadVendorBrandsFail
   | LoadAddressCountry

@@ -4,10 +4,10 @@ import { componentFactoryName } from '@angular/compiler';
 import { CompanyComponent } from './company.component';
 //import { CompanyShellComponent } from './company-shell/company-shell.component';
 import { CompanyInfoShellComponent } from './company-info/containers/company-info-shell/company-info-shell.component';
-import { CompanyAttachmentComponent } from './company-attachment/company-attachment.component';
-import { CompanyAttachmentListComponent } from './company-attachment/company-attachment-list.component';
-import { CompanyAttachmentAddComponent } from './company-attachment/company-attachment-add.component';
-import { CompanyAttachmentEditComponent } from './company-attachment/company-attachment-edit.component';
+import { CompanyAttachmentShellComponent } from './company-attachment/containers/company-attachment-shell.component';
+import { CompanyAttachmentListComponent } from './company-attachment/components/company-attachment-list.component';
+import { CompanyAttachmentAddComponent } from './company-attachment/components/company-attachment-add.component';
+import { CompanyAttachmentEditComponent } from './company-attachment/components/company-attachment-edit.component';
 //import { CompanyInfoComponent } from './company-info/components/company-info.component';
 import { CompanyInfoBrandComponent } from './company-info/components/company-info-brand.component';
 import { CompanyInfoDescriptionComponent } from './company-info/components/company-info-description.component';
@@ -18,7 +18,7 @@ const COMPANY_ROUTES: Routes = [
         component: CompanyComponent,
         children: [ {
             path: 'attachment',
-            component: CompanyAttachmentComponent,
+            component: CompanyAttachmentShellComponent,
             children: [ {
                 path: '',
                 component: CompanyAttachmentListComponent

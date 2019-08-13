@@ -1,10 +1,10 @@
-import { CompanyActions, CompanyActionTypes } from './company.actions';
+import { CompanyInfoActions, CompanyInfoActionTypes } from './company-info.actions';
 import { VendorBrand } from 'app/shared/class/vendor-brand';
 import { AddressCountry, AddressState } from 'app/shared/class/address';
-import { CompanyInfo } from '../../shared/class/company-info';
+import { CompanyInfo } from '../../../shared/class/company-info';
 
 // State for this feature (Item Variation)
-export interface CompanyState {
+export interface CompanyInfoState {
     vendorBrands: VendorBrand[];
     companyInfo: CompanyInfo;
     addressCountry: AddressCountry[];
@@ -17,7 +17,7 @@ export interface CompanyState {
     error: string;
 };
 
-const initialState: CompanyState = {
+const initialState: CompanyInfoState = {
     vendorBrands: [],
     companyInfo: null,
     addressCountry: [],
@@ -30,79 +30,73 @@ const initialState: CompanyState = {
     error: ''
 };
 
-export function reducer(state = initialState, action: CompanyActions): CompanyState {
+export function companyInfoReducer(state = initialState, action: CompanyInfoActions): CompanyInfoState {
 
     switch (action.type) {
-        case CompanyActionTypes.LoadVendorBrandsSuccess:
+        case CompanyInfoActionTypes.LoadVendorBrandsSuccess:
             return {
                 ...state,
                 vendorBrands: action.payload,
                 error: '',
                 isVendorBrandLoading: false,
             };
-
-        case CompanyActionTypes.LoadVendorBrandsFail:
+        case CompanyInfoActionTypes.LoadVendorBrandsFail:
             return {
                 ...state,
                 vendorBrands: [],
                 error: action.payload,
                 isVendorBrandLoading: false,
             };
-        case CompanyActionTypes.LoadCompanyInfoSuccess:
+        case CompanyInfoActionTypes.LoadCompanyInfoSuccess:
             return {
                 ...state,
                 companyInfo: action.payload,
                 isInfoDescriptionLoading: false,
                 error: ''
             };
-
-        case CompanyActionTypes.LoadCompanyInfoFail:
+        case CompanyInfoActionTypes.LoadCompanyInfoFail:
             return {
                 ...state,
                 companyInfo: null,
                 isInfoDescriptionLoading: false,
                 error: action.payload
             };
-        case CompanyActionTypes.LoadAddressCountrySuccess:
+        case CompanyInfoActionTypes.LoadAddressCountrySuccess:
             return {
                 ...state,
                 addressCountry: action.payload,
                 error: ''
             };
-
-        case CompanyActionTypes.LoadAddressCountryFail:
+        case CompanyInfoActionTypes.LoadAddressCountryFail:
             return {
                 ...state,
                 addressCountry: [],
                 error: action.payload,
             };
-        case CompanyActionTypes.LoadShippingAddressStateSuccess:
+        case CompanyInfoActionTypes.LoadShippingAddressStateSuccess:
             return {
                 ...state,
                 shippingAddressStates: action.payload,
                 error: ''
             };
-
-        case CompanyActionTypes.LoadShippingAddressStateFail:
+        case CompanyInfoActionTypes.LoadShippingAddressStateFail:
             return {
                 ...state,
                 shippingAddressStates: [],
                 error: action.payload,
             };
-        case CompanyActionTypes.LoadBillingAddressStateSuccess:
+        case CompanyInfoActionTypes.LoadBillingAddressStateSuccess:
             return {
                 ...state,
                 billingAddressStates: action.payload,
                 error: ''
             };
-
-        case CompanyActionTypes.LoadBillingAddressStateFail:
+        case CompanyInfoActionTypes.LoadBillingAddressStateFail:
             return {
                 ...state,
                 billingAddressStates: [],
                 error: action.payload,
             };
-
         default:
             return state;
     }

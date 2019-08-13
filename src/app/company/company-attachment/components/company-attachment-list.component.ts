@@ -4,14 +4,14 @@ import { MatMenuModule, MatPaginator, MatSort, MatTableDataSource, MatDialog, Ma
 import { MatMenu } from '@angular/material/menu';
 import { Subscription } from 'rxjs';
 
-import { VendorAttachment } from '../../shared/class/vendor-attachment';
-import { CompanyService } from '../company.service';
-import { AppService } from '../../app.service';
+import { VendorAttachment } from '../../../shared/class/vendor-attachment';
+import { CompanyService } from '../../company.service';
+import { AppService } from '../../../app.service';
 
-import { environment } from '../../../environments/environment';
+import { environment } from '../../../../environments/environment';
 
 @Component({
-    selector: 'o-company-attachmen-list',
+    selector: 'o-company-attachment-list',
     templateUrl: './company-attachment-list.component.html',
     styleUrls: ['./company-attachment-list.component.css']
 })

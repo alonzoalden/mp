@@ -2,8 +2,8 @@ import { Component, OnInit, OnDestroy, ViewChild } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 import { Subscription } from 'rxjs';
 
-import { VendorAttachment } from '../../shared/class/vendor-attachment';
-import { CompanyService } from '../company.service';
+import { VendorAttachment } from '../../../shared/class/vendor-attachment';
+import { CompanyService } from '../../company.service';
 
 @Component({
     selector: 'o-company-attachment-edit',
@@ -33,6 +33,8 @@ export class CompanyAttachmentEditComponent implements OnInit {
 
     ngOnInit(): void {
         const vendorattachmentid = this.route.snapshot.params['id'];
+        console.log(this.route);
+        console.log(this.router)
         this.companyService.getVendorAttachment(vendorattachmentid).subscribe(
             (vendorAttachment: VendorAttachment) => {
                 this.vendorAttachment = vendorAttachment;

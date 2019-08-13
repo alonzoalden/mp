@@ -3,8 +3,8 @@ import { VendorBrand } from '../../../shared/class/vendor-brand';
 
 /* NgRx */
 import { Store } from '@ngrx/store';
-import * as fromCompany from '../../state';
-import * as companyActions from '../../state/company.actions';
+import * as fromCompany from '../state';
+import * as companyActions from '../state/company-info.actions';
 
 @Component({
     selector: 'o-company-info-brand',

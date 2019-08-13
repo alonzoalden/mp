@@ -8,8 +8,8 @@ import { TranslateService } from '@ngx-translate/core';
 
 /* NgRx */
 import { Store, select } from '@ngrx/store';
-import * as fromCompany from '../../state';
-import * as companyActions from '../../state/company.actions';
+import * as fromCompany from '../state';
+import * as companyActions from '../state/company-info.actions';
 import { takeWhile } from 'rxjs/operators';
 
 

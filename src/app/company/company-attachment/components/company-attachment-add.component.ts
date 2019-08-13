@@ -2,8 +2,8 @@ import { Component, OnInit, OnDestroy, ViewChild } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 import { Subscription } from 'rxjs';
 
-import { VendorAttachment, VendorAttachmentInsert } from '../../shared/class/vendor-attachment';
-import { CompanyService } from '../company.service';
+import { VendorAttachment, VendorAttachmentInsert } from '../../../shared/class/vendor-attachment';
+import { CompanyService } from '../../company.service';
 
 @Component({
     selector: 'o-company-attachment-add',

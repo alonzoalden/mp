@@ -3,12 +3,12 @@ import { Observable, of, EMPTY } from 'rxjs';
 import { mergeMap, map, catchError, take } from 'rxjs/operators';
 import { Action, Store } from '@ngrx/store';
 import { Actions, Effect, ofType } from '@ngrx/effects';
-import { CompanyService } from '../company.service';
+import { CompanyService } from '../../company.service';
 import * as fromCompany from './index';
-import * as companyActions from './company.actions';
+import * as companyInfoActions from './company-info.actions';
 
 @Injectable()
-export class ItemVariationEffects {
+export class CompanyInfoEffects {
 
     constructor(private store: Store<fromCompany.State>,
         private companyService: CompanyService,
@@ -16,12 +16,12 @@ export class ItemVariationEffects {
 
     @Effect()
     loadVendorBrands$: Observable<Action> = this.actions$.pipe(
-        ofType(companyActions.CompanyActionTypes.LoadVendorBrands),
+        ofType(companyInfoActions.CompanyInfoActionTypes.LoadVendorBrands),
         mergeMap(() =>
             this.companyService.getVendorBrands().pipe(
-                map(vendorbrands => (new companyActions.LoadVendorBrandsSuccess(vendorbrands))),
+                map(vendorbrands => (new companyInfoActions.LoadVendorBrandsSuccess(vendorbrands))),
                 catchError(err => {
-                    of(new companyActions.LoadVendorBrandsFail(err))
+                    of(new companyInfoActions.LoadVendorBrandsFail(err))
                     return EMPTY;
                 })
             )
@@ -31,20 +31,20 @@ export class ItemVariationEffects {
 
     @Effect()
     loadCompanyInfo$: Observable<Action> = this.actions$.pipe(
-        ofType(companyActions.CompanyActionTypes.LoadCompanyInfo),
+        ofType(companyInfoActions.CompanyInfoActionTypes.LoadCompanyInfo),
         mergeMap(() =>
             this.companyService.getCompanyInfo().pipe(
                 map(companyinfo => {
                     if (companyinfo.ShippingCountryID === 'US' || companyinfo.ShippingCountryID === 'CA') {
-                        this.store.dispatch(new companyActions.LoadShippingAddressState(companyinfo.ShippingCountryID));
+                        this.store.dispatch(new companyInfoActions.LoadShippingAddressState(companyinfo.ShippingCountryID));
                     }
                     if (companyinfo.BillingCountryID === 'US' || companyinfo.BillingCountryID === 'CA') {
-                        this.store.dispatch(new companyActions.LoadBillingAddressState(companyinfo.ShippingCountryID));
+                        this.store.dispatch(new companyInfoActions.LoadBillingAddressState(companyinfo.ShippingCountryID));
                     }
-                    return (new companyActions.LoadCompanyInfoSuccess(companyinfo));
+                    return (new companyInfoActions.LoadCompanyInfoSuccess(companyinfo));
                 }),
                 catchError(err => {
-                    of(new companyActions.LoadCompanyInfoFail(err))
+                    of(new companyInfoActions.LoadCompanyInfoFail(err))
                     return EMPTY;
                 })
             )
@@ -54,12 +54,12 @@ export class ItemVariationEffects {
 
     @Effect()
     loadAddressCountry$: Observable<Action> = this.actions$.pipe(
-        ofType(companyActions.CompanyActionTypes.LoadAddressCountry),
+        ofType(companyInfoActions.CompanyInfoActionTypes.LoadAddressCountry),
         mergeMap(() =>
             this.companyService.getAddressCountry().pipe(
-                map(addresscountry => (new companyActions.LoadAddressCountrySuccess(addresscountry))),
+                map(addresscountry => (new companyInfoActions.LoadAddressCountrySuccess(addresscountry))),
                 catchError(err => {
-                    of(new companyActions.LoadAddressCountryFail(err))
+                    of(new companyInfoActions.LoadAddressCountryFail(err))
                     return EMPTY;
                 })
             )
@@ -69,13 +69,13 @@ export class ItemVariationEffects {
 
     @Effect()
     loadShippingAddressState$: Observable<Action> = this.actions$.pipe(
-        ofType(companyActions.CompanyActionTypes.LoadShippingAddressState),
-        map((action: companyActions.LoadShippingAddressState) => action.payload),
+        ofType(companyInfoActions.CompanyInfoActionTypes.LoadShippingAddressState),
+        map((action: companyInfoActions.LoadShippingAddressState) => action.payload),
         mergeMap((id) =>
             this.companyService.getAddressState(id).pipe(
-                map(addresscountry => (new companyActions.LoadShippingAddressStateSuccess(addresscountry))),
+                map(addresscountry => (new companyInfoActions.LoadShippingAddressStateSuccess(addresscountry))),
                 catchError(err => {
-                    of(new companyActions.LoadShippingAddressStateFail(err))
+                    of(new companyInfoActions.LoadShippingAddressStateFail(err))
                     return EMPTY;
                 })
             )
@@ -85,13 +85,13 @@ export class ItemVariationEffects {
 
     @Effect()
     loadBillingAddressState$: Observable<Action> = this.actions$.pipe(
-        ofType(companyActions.CompanyActionTypes.LoadBillingAddressState),
-        map((action: companyActions.LoadBillingAddressState) => action.payload),
+        ofType(companyInfoActions.CompanyInfoActionTypes.LoadBillingAddressState),
+        map((action: companyInfoActions.LoadBillingAddressState) => action.payload),
         mergeMap((id) =>
             this.companyService.getAddressState(id).pipe(
-                map(addresscountry => (new companyActions.LoadBillingAddressStateSuccess(addresscountry))),
+                map(addresscountry => (new companyInfoActions.LoadBillingAddressStateSuccess(addresscountry))),
                 catchError(err => {
-                    of(new companyActions.LoadBillingAddressStateFail(err))
+                    of(new companyInfoActions.LoadBillingAddressStateFail(err))
                     return EMPTY;
                 })
             )

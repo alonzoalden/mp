@@ -1,0 +1,17 @@
+<!-- <router-outlet></router-outlet> -->
+
+<o-company-attachment-list
+    *ngIf="!this.route.includes('edit') && !this.route.includes('add')">
+</o-company-attachment-list>
+
+<o-company-attachment-edit
+    *ngIf="this.route.includes('edit')">
+</o-company-attachment-edit>
+
+<!-- <o-company-attachment-add
+    *ngIf="this.route === '/company/attachment/add'"
+    > -->
+<o-company-attachment-add
+    *ngIf="this.route.includes('add')"
+    >
+</o-company-attachment-add>

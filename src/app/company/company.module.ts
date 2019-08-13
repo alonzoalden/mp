@@ -12,10 +12,10 @@ import { companyRouting } from './company.routing';
 
 import { CompanyService } from './company.service';
 import { CompanyInfoShellComponent } from './company-info/containers/company-info-shell/company-info-shell.component'
-import { CompanyAttachmentComponent } from './company-attachment/company-attachment.component';
-import { CompanyAttachmentListComponent } from './company-attachment/company-attachment-list.component';
-import { CompanyAttachmentAddComponent } from './company-attachment/company-attachment-add.component';
-import { CompanyAttachmentEditComponent } from './company-attachment/company-attachment-edit.component';
+import { CompanyAttachmentShellComponent } from './company-attachment/containers/company-attachment-shell.component';
+import { CompanyAttachmentListComponent } from './company-attachment/components/company-attachment-list.component';
+import { CompanyAttachmentAddComponent } from './company-attachment/components/company-attachment-add.component';
+import { CompanyAttachmentEditComponent } from './company-attachment/components/company-attachment-edit.component';
 //import { CompanyInfoComponent } from './company-info/components/company-info.component';
 import { CompanyInfoDescriptionComponent } from './company-info/components/company-info-description.component';
 import { CompanyInfoTrademarkRegistrationComponent } from './company-info/components/company-info-trademark-registration.component';
@@ -24,15 +24,17 @@ import { TranslateModule } from '@ngx-translate/core';
 
 /* NgRx */
 import { StoreModule } from '@ngrx/store';
-import { reducer } from './state/company.reducer';
+import { companyInfoReducer } from './company-info/state/company-info.reducer';
 import { EffectsModule } from '@ngrx/effects';
-import { ItemVariationEffects } from './state/company.effects';
+import { CompanyInfoEffects } from './company-info/state/company-info.effects';
+import { CompanyAttachmentEffects } from './company-attachment/state/company-attachment.effects';
+import { companyAttachmentReducer } from './company-attachment/state/company-attachment.reducer';
 
 
 @NgModule({
     declarations: [
         CompanyComponent,
-        CompanyAttachmentComponent,
+        CompanyAttachmentShellComponent,
         CompanyAttachmentListComponent,
         CompanyAttachmentAddComponent,
         CompanyAttachmentEditComponent,
@@ -63,8 +65,10 @@ import { ItemVariationEffects } from './state/company.effects';
         ToolModule,
         NgSelectModule,
         companyRouting,
-        StoreModule.forFeature('Company', reducer),
-        EffectsModule.forFeature([ItemVariationEffects])
+        StoreModule.forFeature('CompanyInfo', companyInfoReducer),
+        StoreModule.forFeature('CompanyAttachment', companyAttachmentReducer),
+        EffectsModule.forFeature([CompanyInfoEffects]),
+        EffectsModule.forFeature([CompanyAttachmentEffects]),
     ],
     providers: [
         CompanyService

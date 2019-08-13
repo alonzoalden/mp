@@ -3,7 +3,7 @@ import { Router, NavigationEnd } from '@angular/router';
 import { CompanyInfo } from 'app/shared/class/company-info';
 import { VendorBrand } from 'app/shared/class/vendor-brand';
 import { Store, select } from '@ngrx/store';
-import * as fromCompany from '../../../state';
+import * as fromCompany from '../../state';
 // import * as companyActions from '../../../state/company.actions';
 import { Observable } from 'rxjs';
 import { AddressState, AddressCountry } from 'app/shared/class/address';
@@ -33,13 +33,13 @@ export class CompanyInfoShellComponent implements OnInit {
     ngOnInit() {
         this.companyInfo$ = this.store.pipe(select(fromCompany.getCompanyInfo));
         this.vendorBrands$ = this.store.pipe(select(fromCompany.getVendorBrands));
-        this.shippingAddressStates$ = this.store.pipe(select(fromCompany.getShippingAddressStates));
         this.addressCountries$ = this.store.pipe(select(fromCompany.getAddressCountries));
         this.billingAddressStates$ = this.store.pipe(select(fromCompany.getBillingAddressStates));
+        this.shippingAddressStates$ = this.store.pipe(select(fromCompany.getShippingAddressStates));
         this.isVendorBrandLoading$ = this.store.pipe(select(fromCompany.isVendorBrandLoading));
         this.isInfoDescriptionLoading$ = this.store.pipe(select(fromCompany.isInfoDescriptionLoading));
-
         this.errorMessage$ = this.store.pipe(select(fromCompany.getError));
+        
         this.router.events.subscribe((event: NavigationEnd): void => {
             if (event instanceof NavigationEnd) {
                 this.route = event.url;
