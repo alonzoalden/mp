@@ -1,12 +1,13 @@
 import { CompanyInfo } from '../../../shared/class/company-info';
-import { VendorBrand } from '../../../shared/class/vendor-brand';
 import { AddressCountry, AddressState } from '../../../shared/class/address';
 import { Action } from '@ngrx/store';
+import { VendorAttachment } from 'app/shared/class/vendor-attachment';
+import { MatTableDataSource } from '@angular/material';
 
 export enum CompanyAttachmentActionTypes {
-  LoadVendorBrands = '[Company] Load Vendor Brands',
-  LoadVendorBrandsSuccess = '[Company] Load Vendor Brands Success',
-  LoadVendorBrandsFail = '[Company] Load Vendor Brands Fail',
+  LoadVendorAttachments = '[Company] Load Vendor Attachments',
+  LoadVendorAttachmentsSuccess = '[Company] Load Vendor Attachments Success',
+  LoadVendorAttachmentsFail = '[Company] Load Vendor Attachments Fail',
   SetVendorAttachmentID = '[Company] Set Vendor Attachment ID',
   
 }
@@ -16,25 +17,25 @@ export class SetVendorAttachmentID implements Action {
   readonly type = CompanyAttachmentActionTypes.SetVendorAttachmentID;
   constructor(public payload: number) { }
 }
-export class LoadVendorBrands implements Action {
-  readonly type = CompanyAttachmentActionTypes.LoadVendorBrands;
+export class LoadVendorAttachments implements Action {
+  readonly type = CompanyAttachmentActionTypes.LoadVendorAttachments;
 }
 
-export class LoadVendorBrandsSuccess implements Action {
-  readonly type = CompanyAttachmentActionTypes.LoadVendorBrandsSuccess;
-  constructor(public payload: VendorBrand[]) { }
+export class LoadVendorAttachmentsSuccess implements Action {
+  readonly type = CompanyAttachmentActionTypes.LoadVendorAttachmentsSuccess;
+  constructor(public payload: MatTableDataSource<VendorAttachment>) { }
 }
 
-export class LoadVendorBrandsFail implements Action {
-  readonly type = CompanyAttachmentActionTypes.LoadVendorBrandsFail;
+export class LoadVendorAttachmentsFail implements Action {
+  readonly type = CompanyAttachmentActionTypes.LoadVendorAttachmentsFail;
   constructor(public payload: string) { }
 }
 
 
 // Union the valid types
-export type CompanyAttachmentActions = LoadVendorBrands
-  | LoadVendorBrandsSuccess
-  | LoadVendorBrandsFail
+export type CompanyAttachmentActions = LoadVendorAttachments
+  | LoadVendorAttachmentsSuccess
+  | LoadVendorAttachmentsFail
   | SetVendorAttachmentID;
   
   

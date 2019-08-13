@@ -12,9 +12,9 @@ export interface State extends fromRoot.State {
 // Selector functions
 const getCompanyFeatureState = createFeatureSelector<fromCompany.CompanyAttachmentState>('CompanyAttachment');
 
-export const getVendorBrands = createSelector(
+export const getVendorAttachments = createSelector(
     getCompanyFeatureState,
-    state => state.vendorBrands
+    state => state.vendorAttachments
 );
 
 export const getError = createSelector(

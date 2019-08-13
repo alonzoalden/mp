@@ -1,7 +1,12 @@
 <!-- <router-outlet></router-outlet> -->
 
 <o-company-attachment-list
-    *ngIf="!this.route.includes('edit') && !this.route.includes('add')">
+    *ngIf="!this.route.includes('edit') && !this.route.includes('add')"
+    [userInfo]="userInfo$ | async"
+    [vendorAttachments1]="vendorAttachments$ | async"
+    (getVendorAttachmentList)="getVendorAttachmentList()"
+    
+    >
 </o-company-attachment-list>
 
 <o-company-attachment-edit

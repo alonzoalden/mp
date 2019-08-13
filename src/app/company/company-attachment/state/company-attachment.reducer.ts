@@ -2,19 +2,21 @@ import { CompanyAttachmentActions, CompanyAttachmentActionTypes } from './compan
 import { VendorBrand } from 'app/shared/class/vendor-brand';
 import { AddressCountry, AddressState } from 'app/shared/class/address';
 import { CompanyInfo } from '../../../shared/class/company-info';
+import { VendorAttachment } from 'app/shared/class/vendor-attachment';
+import { MatTableDataSource } from '@angular/material';
 
 // State for this feature (Item Variation)
 export interface CompanyAttachmentState {
-    vendorBrands: VendorBrand[];
+    vendorAttachments: MatTableDataSource<VendorAttachment>;
     vendorAttachmentID: number;
-    isInfoDescriptionLoading: boolean;
+    isVendorAttachmentsLoading: boolean;
     error: string;
 };
 
 const initialState: CompanyAttachmentState = {
-    vendorBrands: [],
+    vendorAttachments: null,
     vendorAttachmentID: null,
-    isInfoDescriptionLoading: true,
+    isVendorAttachmentsLoading: true,
     error: ''
 };
 
@@ -26,21 +28,20 @@ export function companyAttachmentReducer(state = initialState, action: CompanyAt
                 ...state,
                 vendorAttachmentID: action.payload,
                 error: '',
-                // isVendorBrandLoading: false,
             };
-        case CompanyAttachmentActionTypes.LoadVendorBrandsSuccess:
+        case CompanyAttachmentActionTypes.LoadVendorAttachmentsSuccess:
             return {
                 ...state,
-                vendorBrands: action.payload,
+                vendorAttachments: action.payload,
                 error: '',
-                // isVendorBrandLoading: false,
+                isVendorAttachmentsLoading: false,
             };
-        case CompanyAttachmentActionTypes.LoadVendorBrandsFail:
+        case CompanyAttachmentActionTypes.LoadVendorAttachmentsFail:
             return {
                 ...state,
-                vendorBrands: [],
-                // error: action.payload,
-                //isVendorBrandLoading: false,
+                vendorAttachments: null,
+                error: action.payload,
+                isVendorAttachmentsLoading: false,
             };
         
         default:

@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy, ViewChild, Inject } from '@angular/core';
+import { Component, OnInit, OnDestroy, ViewChild, Inject, Input, Output, EventEmitter } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 import { MatMenuModule, MatPaginator, MatSort, MatTableDataSource, MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material';
 import { MatMenu } from '@angular/material/menu';
@@ -9,6 +9,8 @@ import { CompanyService } from '../../company.service';
 import { AppService } from '../../../app.service';
 
 import { environment } from '../../../../environments/environment';
+import { Member } from 'app/shared/class/member';
+import * as companyActions from '../state/company-attachment.actions';
 
 @Component({
     selector: 'o-company-attachment-list',
@@ -17,14 +19,20 @@ import { environment } from '../../../../environments/environment';
 })
 
 export class CompanyAttachmentListComponent implements OnInit, OnDestroy {
-    subscription: Subscription;
+    //subscription: Subscription;
     errorMessage: string;
-    vendorAttachments: VendorAttachment[];
+    vendorAttachments1: VendorAttachment[];
+    //vendorAttachments1: MatTableDataSource<VendorAttachment>;
+    
     private fileURL = environment.fileURL;
 
     displayedColumns = ['Menu', 'View', 'ID', 'Title', 'CreatedOn', 'Exclude'];
     dataSource: any = null;
     
+    @Input() userInfo: Member;
+    @Input() vendorAttachments: MatTableDataSource<VendorAttachment>;
+    @Output() getVendorAttachmentList = new EventEmitter<void>();
+
     @ViewChild(MatPaginator, { static: true }) paginator: MatPaginator;
     @ViewChild(MatSort, { static: true }) sort: MatSort;
 
@@ -33,29 +41,38 @@ export class CompanyAttachmentListComponent implements OnInit, OnDestroy {
         private companyService: CompanyService,
         private appService: AppService) { }
 
-    ngOnInit(): void {   
-        this.appService.getCurrentMember()
-            .subscribe(
-                (data) => {
-                    if (data.DefaultPageSize) {
-                        this.paginator.pageSize = data.DefaultPageSize;
-                    }
-                    else {
-                        this.paginator.pageSize = 100;                        
-                    }
-                },
-                (error: any) => {
-                    this.companyService.sendNotification({ type: 'error', title: 'Error', content: error });
-                }
-            );
+    ngOnInit(): void {
+        this.getVendorAttachmentList.emit();
+        // if (this.userInfo.DefaultPageSize) {
+        //     this.paginator.pageSize = this.userInfo.DefaultPageSize;
+        // }
+        // else {
+        //     this.paginator.pageSize = 100;                        
+        // }
+        //this.store.dispatch(new companyActions.LoadVendorAttachments());
 
-        this.subscription = this.companyService.getVendorAttachments().subscribe(
-            (vendorAttachments: VendorAttachment[]) => {
-                this.vendorAttachments = vendorAttachments;
-                this.refreshDataSource(this.vendorAttachments);
-            },
-            (error: any) => this.errorMessage = <any>error
-        );                            
+        // this.appService.getCurrentMember()
+        //     .subscribe(
+        //         (data) => {
+        //             if (data.DefaultPageSize) {
+        //                 this.paginator.pageSize = data.DefaultPageSize;
+        //             }
+        //             else {
+        //                 this.paginator.pageSize = 100;                        
+        //             }
+        //         },
+        //         (error: any) => {
+        //             this.companyService.sendNotification({ type: 'error', title: 'Error', content: error });
+        //         }
+        //     );
+
+        // this.subscription = this.companyService.getVendorAttachments().subscribe(
+        //     (vendorAttachments: VendorAttachment[]) => {
+        //         this.vendorAttachments = vendorAttachments;
+        //         this.refreshDataSource(this.vendorAttachments);
+        //     },
+        //     (error: any) => this.errorMessage = <any>error
+        // );                            
     }
 
     refreshDataSource(vendorAttachments: VendorAttachment[]) {
@@ -71,15 +88,15 @@ export class CompanyAttachmentListComponent implements OnInit, OnDestroy {
                 () => {
                     this.onDeleteComplete(vendorattachment, `${vendorattachment.VendorAttachmentID} was deleted`);
 
-                    const foundIndex = this.vendorAttachments.findIndex(i => i.VendorAttachmentID === vendorattachment.VendorAttachmentID);
+                    const foundIndex = this.vendorAttachments1.findIndex(i => i.VendorAttachmentID === vendorattachment.VendorAttachmentID);
                     if (foundIndex > -1) {
-                        this.vendorAttachments.splice(foundIndex, 1);
+                        this.vendorAttachments1.splice(foundIndex, 1);
                     }
 
-                    this.refreshDataSource(this.vendorAttachments);
+                    this.refreshDataSource(this.vendorAttachments1);
                 },
                 (error: any) => {
-                    this.refreshDataSource(this.vendorAttachments);
+                    this.refreshDataSource(this.vendorAttachments1);
                     this.errorMessage = <any>error;
                     this.companyService.sendNotification({ type: 'error', title: 'Error', content: this.errorMessage });
                     window.location.reload();
@@ -89,12 +106,12 @@ export class CompanyAttachmentListComponent implements OnInit, OnDestroy {
     }
 
     onDeleteComplete(vendorattachment: VendorAttachment, message?: string): void {
-        this.refreshDataSource(this.vendorAttachments);
+        this.refreshDataSource(this.vendorAttachments1);
         this.companyService.sendNotification({ type: 'success', title: 'Successfully Deleted', content: message });
     }
 
     ngOnDestroy() {
-        this.subscription.unsubscribe();
+        //this.subscription.unsubscribe();
     }
 
     applyFilter(filterValue: string) {
