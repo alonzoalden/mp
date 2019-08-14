@@ -42,7 +42,7 @@
                     </ng-container>  
                     <!-- Item Name Column -->
                     <ng-container matColumnDef="ItemName">
-                        <th mat-header-cell *matHeaderCellDef width="300px">{{ 'Item Name' | translate }}</th>
+                        <th mat-header-cell *matHeaderCellDef width="300px">{{ 'Item Description' | translate }}</th>
                         <td mat-cell *matCellDef="let itemCrossSell; let i = index">
                             <div *ngIf="currentItemCrossSellIndex !== i && i !== item.ItemCrossSells.length-1">
                                 <div class="flex-details">
