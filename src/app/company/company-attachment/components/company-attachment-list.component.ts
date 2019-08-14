@@ -11,7 +11,9 @@ import { AppService } from '../../../app.service';
 import { environment } from '../../../../environments/environment';
 import { Member } from 'app/shared/class/member';
 import * as companyActions from '../state/company-attachment.actions';
-
+import * as fromCompany from '../state';
+import { Store, select } from '@ngrx/store';
+import { takeWhile } from 'rxjs/operators';
 @Component({
     selector: 'o-company-attachment-list',
     templateUrl: './company-attachment-list.component.html',
@@ -34,15 +36,31 @@ export class CompanyAttachmentListComponent implements OnInit, OnDestroy {
     @Output() getVendorAttachmentList = new EventEmitter<void>();
     @Output() deleteVendorAttachment = new EventEmitter<number>();
     @ViewChild(MatPaginator, { static: true }) paginator: MatPaginator;
-    @ViewChild(MatSort, { static: true }) sort: MatSort;
+    //private paginator: MatPaginator;
 
+    // @ViewChild(MatPaginator, { static: true }) set matPaginator(mp: MatPaginator) {
+    //     this.paginator = mp;
+    //     this.vendorAttachments.paginator = this.paginator;
+    // }
+    @ViewChild(MatSort, { static: true }) sort: MatSort;
+    componentActive: boolean = true;
     constructor(private route: ActivatedRoute,
         private router: Router,
         private companyService: CompanyService,
-        private appService: AppService) { }
+        private appService: AppService,
+        private store: Store<fromCompany.State>) { }
 
     ngOnInit(): void {
         this.getVendorAttachmentList.emit();
+        this.store.pipe(select(fromCompany.getVendorAttachments), 
+            takeWhile(()=> this.componentActive))
+            .subscribe(
+                (vendorattachments: MatTableDataSource<VendorAttachment>) => {
+                    console.log(vendorattachments);
+                    if (vendorattachments) this.vendorAttachments.paginator = this.paginator;
+                },
+                (error: any) => this.errorMessage = error
+            );
         //this.vendorAttachments.sort = this.sort;
         //this.vendorAttachments.paginator = this.paginator;
         // if (this.userInfo.DefaultPageSize) {
@@ -115,6 +133,7 @@ export class CompanyAttachmentListComponent implements OnInit, OnDestroy {
 
     ngOnDestroy() {
         //this.subscription.unsubscribe();
+        this.componentActive = false;
     }
 
     applyFilter(filterValue: string) {

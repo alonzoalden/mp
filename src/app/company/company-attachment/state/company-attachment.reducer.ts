@@ -16,7 +16,7 @@ export interface CompanyAttachmentState {
 };
 
 const initialState: CompanyAttachmentState = {
-    vendorAttachments: null,
+    vendorAttachments: new MatTableDataSource<VendorAttachment>([]),
     //vendorAttachmentsList: [],
     vendorAttachmentID: null,
     isVendorAttachmentsLoading: true,
