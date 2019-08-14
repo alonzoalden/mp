@@ -193,13 +193,13 @@ export class ItemPartListComponent implements OnInit {
                 const _pendingItemTierPrice = new ItemTierPrice(0, null, 0, 0, null, null, true);
                 this.duplicateItemTierPrices.push(_pendingItemTierPrice);   
                 this.duplicateItemRelatedProducts = item.ItemRelatedProducts;
-                const _pendingItemRelatedProduct = new ItemRelatedProduct(0, null, null, null, null, null, null, item.ItemRelatedProducts.length + 1, null, null, true);
+                const _pendingItemRelatedProduct = new ItemRelatedProduct(0, null, null, null, null, null, null, item.ItemRelatedProducts.length + 1, null, null, null, true);
                 this.duplicateItemRelatedProducts.push(_pendingItemRelatedProduct);   
                 this.duplicateItemUpSells = item.ItemUpSells;
-                const _pendingItemUpSell = new ItemUpSell(0, null, null, null, null, null, null, item.ItemUpSells.length + 1, null, null, true);
+                const _pendingItemUpSell = new ItemUpSell(0, null, null, null, null, null, null, item.ItemUpSells.length + 1, null, null, null, true);
                 this.duplicateItemUpSells.push(_pendingItemUpSell);   
                 this.duplicateItemCrossSells = item.ItemCrossSells;
-                const _pendingItemCrossSell = new ItemCrossSell(0, null, null, null, null, null, null, item.ItemCrossSells.length + 1, null, null, true);
+                const _pendingItemCrossSell = new ItemCrossSell(0, null, null, null, null, null, null, item.ItemCrossSells.length + 1, null, null, null, true);
                 this.duplicateItemCrossSells.push(_pendingItemCrossSell);   
                 this.duplicateItemAttachments = item.ItemAttachments;
                 const _pendingItemAttachment = new ItemAttachment(0, null, null, null, null, null, item.ItemCrossSells.length + 1, null, null, true);

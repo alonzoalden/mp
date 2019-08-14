@@ -45,7 +45,18 @@
                         <th mat-header-cell *matHeaderCellDef width="300px">{{ 'Item Name' | translate }}</th>
                         <td mat-cell *matCellDef="let itemCrossSell; let i = index">
                             <div *ngIf="currentItemCrossSellIndex !== i && i !== item.ItemCrossSells.length-1">
-                                {{itemCrossSell.CrossSellItemName}}
+                                <div class="flex-details">
+                                    <div class="img-detail">
+                                        <img *ngIf='!itemCrossSell.ImagePath' class="opaque" src='https://content-merchantportal.toolots.net/assets/images/no-image-icon.png' matTooltip='Product has no image' matTooltipShowDelay="500">
+                                        <!-- <a [routerLink]="[item.ItemID, 'edit']"><img class="row-image" *ngIf='item.ImagePath' [src]='imageURL + item.ImagePath' [matTooltip]='item.Name' [alt]='item.Name' matTooltipShowDelay="500"></a> -->
+                                        <span class="sm-strong"><img class="row-image" *ngIf='itemCrossSell.ImagePath' [src]='imageURL + itemCrossSell.ImagePath' [matTooltip]='itemCrossSell.CrossSellItemName' [alt]='itemCrossSell.CrossSellItemName' matTooltipShowDelay="500"></span>
+                                    </div>
+                                    <div>
+                                        <div class="row">
+                                            <div class="col-xs-12 "><span class="sm-strong">{{itemCrossSell.CrossSellItemName}}</span></div>
+                                        </div>
+                                    </div>
+                                </div>
                             </div>         
                             <div *ngIf="currentItemCrossSellIndex === i || i === item.ItemCrossSells.length-1">
                                 <ng-select  [items]="crossSellItemlist"
@@ -114,7 +125,7 @@
                     </ng-container>
                                     
                     <tr mat-header-row *matHeaderRowDef="crossSellDisplayedColumns"></tr>
-                    <tr mat-row *matRowDef="let itemCrossSell; let i = index; columns: crossSellDisplayedColumns;"
+                    <tr mat-row *matRowDef="let itemCrossSell; let i = index; columns: crossSellDisplayedColumns;" class="row-height-80"
                         [ngStyle]="{'background-color': itemService.rowColorConditions(i, item.ItemCrossSells, currentItemCrossSellIndex, formDirty)}"
                         (click)="onEditItemCrossSell(i)"></tr>                                            
                 </table>

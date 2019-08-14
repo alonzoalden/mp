@@ -45,8 +45,18 @@
                         <th mat-header-cell *matHeaderCellDef width="300px">{{ 'Item Name' | translate }}</th>
                         <td mat-cell *matCellDef="let itemUpSell; let i = index">
                             <div *ngIf="currentItemUpSellIndex !== i && i !== item.ItemUpSells.length-1">
-                                {{itemUpSell.UpSellItemName}}
-                            </div>         
+                                <div class="flex-details">
+                                    <div class="img-detail">
+                                        <div><img *ngIf='!itemUpSell.ImagePath' class="opaque" src='https://content-merchantportal.toolots.net/assets/images/no-image-icon.png' matTooltip='Product has no image' matTooltipShowDelay="500"></div>
+                                        <div><img *ngIf='itemUpSell.ImagePath' class="row-image" [src]='imageURL + itemUpSell.ImagePath' [matTooltip]='itemUpSell.UpSellItemName' [alt]='itemUpSell.UpSellItemName' matTooltipShowDelay="500"></div>
+                                    </div>
+                                    <div>
+                                        <div class="row">
+                                            <div class="col-xs-12"><div class="sm-strong p-sm">{{itemUpSell.UpSellItemName}}</div></div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
                             <div *ngIf="currentItemUpSellIndex === i || i === item.ItemUpSells.length-1">
                                 <ng-select  [items]="upSellItemlist"
                                             [virtualScroll]="true"
@@ -114,9 +124,9 @@
                     </ng-container>
                                     
                     <tr mat-header-row *matHeaderRowDef="upSellDisplayedColumns"></tr>
-                    <tr mat-row *matRowDef="let itemUpSell; let i = index; columns: upSellDisplayedColumns;"
+                    <tr mat-row *matRowDef="let itemUpSell; let i = index; columns: upSellDisplayedColumns;" class="row-height-80"
                     [ngStyle]="{'background-color': itemService.rowColorConditions(i, item.ItemUpSells, currentItemUpSellIndex, formDirty)}"
-                        (click)="onEditItemUpSell(i)"></tr>
+                    (click)="onEditItemUpSell(i)"></tr>
                 </table>
             </div>
         </div>
