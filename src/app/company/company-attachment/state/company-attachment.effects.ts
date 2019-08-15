@@ -6,8 +6,6 @@ import { Actions, Effect, ofType } from '@ngrx/effects';
 import { CompanyService } from '../../company.service';
 import * as fromCompany from './index';
 import * as companyActions from './company-attachment.actions';
-import { MatTableDataSource } from '@angular/material';
-import { VendorAttachment } from 'app/shared/class/vendor-attachment';
 
 @Injectable()
 export class CompanyAttachmentEffects {
@@ -18,12 +16,9 @@ export class CompanyAttachmentEffects {
     @Effect()
     loadVendorAttachments$: Observable<Action> = this.actions$.pipe(
         ofType(companyActions.CompanyAttachmentActionTypes.LoadVendorAttachments),
-        mergeMap(() =>
+        mergeMap((mat) =>
             this.companyService.getVendorAttachments().pipe(
-                map(vendorattachments => {
-                    const _vendorattachments = new MatTableDataSource<VendorAttachment>(vendorattachments);
-                    return (new companyActions.LoadVendorAttachmentsSuccess(_vendorattachments))
-                }),
+                map(vendorattachments => (new companyActions.LoadVendorAttachmentsSuccess(vendorattachments))),
                 catchError(err => {
                     of(new companyActions.LoadVendorAttachmentsFail(err))
                     return EMPTY;
@@ -35,17 +30,20 @@ export class CompanyAttachmentEffects {
 
     @Effect()
     deleteVendorAttachments$: Observable<Action> = this.actions$.pipe(
-      ofType(companyActions.CompanyAttachmentActionTypes.DeleteVendorAttachment),
-      map((action: companyActions.DeleteVendorAttachment) => action.payload),
-      mergeMap((vendorattachmentid: number) =>
-        this.companyService.deleteVendorAttachment(vendorattachmentid).pipe(
-          map(() => {
-            const message = `${vendorattachmentid} was deleted`
-            this.companyService.sendNotification({ type: 'success', title: 'Successfully Deleted', content: message });
-            return (new companyActions.DeleteVendorAttachmentSuccess(vendorattachmentid))
-          }),
-          catchError(err => of(new companyActions.DeleteVendorAttachmentSuccess(err)))
+        ofType(companyActions.CompanyAttachmentActionTypes.DeleteVendorAttachment),
+        map((action: companyActions.DeleteVendorAttachment) => action.payload),
+        mergeMap((vendorattachmentid: number) =>
+            this.companyService.deleteVendorAttachment(vendorattachmentid).pipe(
+                map(() => {
+                    const message = `${vendorattachmentid} was deleted`
+                    this.companyService.sendNotification({ type: 'success', title: 'Successfully Deleted', content: message });
+                    return (new companyActions.DeleteVendorAttachmentSuccess(vendorattachmentid))
+                }),
+                catchError(err => {
+                    this.companyService.sendNotification({ type: 'error', title: 'Error', content: err });
+                    return of(new companyActions.DeleteVendorAttachmentFail(err))
+                })
+            )
         )
-      )
     );
 }

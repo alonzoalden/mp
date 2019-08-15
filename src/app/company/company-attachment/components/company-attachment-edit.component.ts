@@ -33,8 +33,7 @@ export class CompanyAttachmentEditComponent implements OnInit {
 
     ngOnInit(): void {
         const vendorattachmentid = this.route.snapshot.params['id'];
-        console.log(this.route);
-        console.log(this.router)
+        
         this.companyService.getVendorAttachment(vendorattachmentid).subscribe(
             (vendorAttachment: VendorAttachment) => {
                 this.vendorAttachment = vendorAttachment;

@@ -1,14 +1,9 @@
 import { CompanyAttachmentActions, CompanyAttachmentActionTypes } from './company-attachment.actions';
-import { VendorBrand } from 'app/shared/class/vendor-brand';
-import { AddressCountry, AddressState } from 'app/shared/class/address';
-import { CompanyInfo } from '../../../shared/class/company-info';
 import { VendorAttachment } from 'app/shared/class/vendor-attachment';
-import { MatTableDataSource } from '@angular/material';
 
 // State for this feature (Item Variation)
 export interface CompanyAttachmentState {
-    vendorAttachments: MatTableDataSource<VendorAttachment>;
-    //vendorAttachmentsList: VendorAttachment[];
+    vendorAttachments: VendorAttachment[];
     vendorAttachmentID: number;
     isVendorAttachmentsLoading: boolean;
     pendingDelete: boolean,
@@ -16,8 +11,7 @@ export interface CompanyAttachmentState {
 };
 
 const initialState: CompanyAttachmentState = {
-    vendorAttachments: new MatTableDataSource<VendorAttachment>([]),
-    //vendorAttachmentsList: [],
+    vendorAttachments: [],
     vendorAttachmentID: null,
     isVendorAttachmentsLoading: true,
     pendingDelete: false,
@@ -43,15 +37,15 @@ export function companyAttachmentReducer(state = initialState, action: CompanyAt
         case CompanyAttachmentActionTypes.LoadVendorAttachmentsFail:
             return {
                 ...state,
-                vendorAttachments: null,
+                vendorAttachments: [],
                 error: action.payload,
                 isVendorAttachmentsLoading: false,
             };
         case CompanyAttachmentActionTypes.DeleteVendorAttachmentSuccess:
-            const _updatedVendorAttachments = state.vendorAttachments.data.filter(attachment => attachment.VendorAttachmentID !== action.payload)
+            const _updatedVendorAttachments = state.vendorAttachments.filter(attachment => attachment.VendorAttachmentID !== action.payload);
             return {
                 ...state,
-                vendorAttachments: new MatTableDataSource<VendorAttachment>(_updatedVendorAttachments),
+                vendorAttachments: _updatedVendorAttachments,
                 pendingDelete: false,
                 error: ''
             };

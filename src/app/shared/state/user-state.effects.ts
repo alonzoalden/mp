@@ -19,9 +19,7 @@ export class UserEffects {
         ofType(userActions.UserActionTypes.GetCurrentUser),
         mergeMap(() =>
             this.appService.getCurrentMember().pipe(
-                map(member => {
-                    return (new userActions.GetCurrentUserSuccess(member))
-                }),
+                map(member => (new userActions.GetCurrentUserSuccess(member))),
                 catchError(err => {
                     of(new userActions.GetCurrentUserFail(err))
                     return EMPTY;

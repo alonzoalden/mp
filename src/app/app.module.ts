@@ -114,7 +114,7 @@ export function HttpLoaderFactory(http: HttpClient) {
         StoreModule.forRoot({}),
         StoreDevtoolsModule.instrument({
             name: 'Toolots Merchant Portal DevTools',
-            maxAge: 25,
+            maxAge: 20,
             logOnly: environment.production,
         }),
         EffectsModule.forRoot([]),

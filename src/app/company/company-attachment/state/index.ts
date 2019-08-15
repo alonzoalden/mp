@@ -1,6 +1,8 @@
 import { createSelector, createFeatureSelector } from '@ngrx/store';
 import * as fromRoot from '../../../state/app.state';
 import * as fromCompany from './company-attachment.reducer';
+import { MatTableDataSource } from '@angular/material';
+import { VendorAttachment } from 'app/shared/class/vendor-attachment';
 
 // Extends the app state to include the product feature.
 // This is required because products are lazy loaded.
@@ -16,7 +18,10 @@ export const getVendorAttachments = createSelector(
     getCompanyFeatureState,
     state => state.vendorAttachments
 );
-
+export const getVendorAttachmentsMatTable = createSelector(
+    getCompanyFeatureState,
+    state => new MatTableDataSource<VendorAttachment>(state.vendorAttachments)
+);
 export const getError = createSelector(
     getCompanyFeatureState,
     state => state.error

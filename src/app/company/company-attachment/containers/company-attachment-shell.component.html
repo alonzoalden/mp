@@ -2,12 +2,15 @@
 
 <o-company-attachment-list
     *ngIf="!this.route.includes('edit') && !this.route.includes('add')"
-    [userInfo]="userInfo$ | async"
-    [vendorAttachments]="vendorAttachments$ | async"
-    (getVendorAttachmentList)="getVendorAttachmentList()"
-    (deleteVendorAttachment)="deleteVendorAttachment(id)"
+    
+    [userInfoDefaultPageSize]="userInfoDefaultPageSize$ | async"
+    [vendorAttachmentsMatTable]="vendorAttachmentsMatTable$ | async"
+    [errorMessage]="errorMessage$ | async"
+    (getVendorAttachments)="getVendorAttachments($event)"
+    (deleteVendorAttachment)="deleteVendorAttachment($event)"
     >
 </o-company-attachment-list>
+
 
 <o-company-attachment-edit
     *ngIf="this.route.includes('edit')">
