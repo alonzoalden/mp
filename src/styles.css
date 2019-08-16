@@ -2067,9 +2067,6 @@ th.mat-header-cell {
 }
 
 /* Material Tab */
-.mat-tab-list {
-    /* background-color: #eee; */
-}
 .mat-tab-labels {
     
     border-right: 0;
@@ -2216,5 +2213,7 @@ th.mat-header-cell {
 }
 .row-height-80 {
     height: 80px !important;
-
+}
+.z-under {
+    z-index: -1;
 }

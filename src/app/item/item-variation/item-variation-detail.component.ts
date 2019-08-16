@@ -35,6 +35,7 @@ export class ItemVariationDetailComponent implements OnInit {
     loading: boolean = false;
     pendingSave: boolean = false;
     itemAttributes: ItemAttribute[];
+    tempitems = ['tools', 'cars'];
     
     @ViewChild(MatPaginator) paginator: MatPaginator;
     @ViewChild(MatSort) sort: MatSort;
@@ -50,7 +51,7 @@ export class ItemVariationDetailComponent implements OnInit {
     ngOnInit(): void {
         this.loading = true;
         const param = this.route.snapshot.params['id'];
-
+        
         if (param) {
             this.isEdit = true;
             this.subscriptionItemList = this.itemService.getItemList().subscribe(
