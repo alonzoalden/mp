@@ -39,7 +39,7 @@ export class ItemCrossSellComponent implements OnInit, OnDestroy  {
     ngOnInit(): void {
         this.itemid = this.route.snapshot.params['id'];
 
-        this.itemCrossSell = new ItemCrossSellInsert(this.itemid, null, null, null, null, null, null);
+        this.itemCrossSell = new ItemCrossSellInsert(this.itemid, null, null, null, null, null, null, null);
 
         this.itemService.getItem(this.itemid).subscribe(
             (item: Item) => {
@@ -99,7 +99,7 @@ export class ItemCrossSellComponent implements OnInit, OnDestroy  {
                     }
 
                     this.refreshDataSource(this.itemCrossSells);
-                    this.itemCrossSell = new ItemCrossSellInsert(this.itemid, null, null, null, null, null, null);
+                    this.itemCrossSell = new ItemCrossSellInsert(this.itemid, null, null, null, null, null, null, null);
                 },
                 (error: any) => {
                     this.pendingAdd = false;

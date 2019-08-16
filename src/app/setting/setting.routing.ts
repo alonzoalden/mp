@@ -6,6 +6,7 @@ import { SettingMemberPreferenceComponent } from './setting-member-preference/se
 
 import { AuthGuard } from '../auth/auth.guard';
 import { componentFactoryName } from '@angular/compiler';
+import { SettingMerchantAgreementComponent } from './setting-merchant-agreement/setting-merchant-agreement.component';
 
 
 const SETTING_ROUTES: Routes = [
@@ -19,6 +20,10 @@ const SETTING_ROUTES: Routes = [
         {
             path: 'memberpreference',
             component: SettingMemberPreferenceComponent
+        },
+        {
+            path: 'merchantagreement',
+            component: SettingMerchantAgreementComponent
         } ]
     }
 ];

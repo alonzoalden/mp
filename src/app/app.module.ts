@@ -71,8 +71,6 @@ import { AnimateOnScrollModule } from 'ng2-animate-on-scroll';
 import { APP_BASE_HREF } from '@angular/common';
 import { DeviceDetectorModule } from 'ngx-device-detector';
 import { BrowserCompatibilityComponent } from './browser-compatibility/browser-compatibility.component';
-//import { HttpClientInMemoryWebApiModule } from 'angular-in-memory-web-api';
-import { ItemVariationData } from './item/item-variation-data';
 
 export function HttpLoaderFactory(http: HttpClient) {
     return new TranslateHttpLoader(http);

@@ -70,7 +70,7 @@ export class ItemEditProductRelationRelatedProductComponent implements OnInit {
     }
 
     relatedProductAddPendingLine() {
-        const _temp = new ItemRelatedProduct(0, this.itemid, null, null, null, null, null, this.item.ItemRelatedProducts.length + 1, null, null, true);
+        const _temp = new ItemRelatedProduct(0, this.itemid, null, null, null, null, null, this.item.ItemRelatedProducts.length + 1, null, null, null, true);
         this.item.ItemRelatedProducts.push(_temp);   
     }
 
@@ -158,6 +158,8 @@ export class ItemEditProductRelationRelatedProductComponent implements OnInit {
                     this.item.ItemRelatedProducts[index].RelatedItemName = item.Name;
                     this.item.ItemRelatedProducts[index].RelatedItemVendorSKU = item.VendorSKU;
                     this.item.ItemRelatedProducts[index].RelatedTPIN = item.TPIN;
+                    this.item.ItemRelatedProducts[index].ImagePath = item.ImagePath;
+                    this.currentItemRelatedProductIndex = this.item.ItemRelatedProducts.length - 1;
                 },
                 (error: any) => {
                     this.errorMessage = <any>error;

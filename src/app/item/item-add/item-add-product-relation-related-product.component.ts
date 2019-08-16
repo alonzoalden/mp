@@ -5,6 +5,7 @@ import { Subscription } from 'rxjs';
 
 import { Item, ItemInsert, ItemList, ItemRelatedProductInsert } from '../../shared/class/item';
 import { ItemService } from '../item.service';
+import { environment } from 'environments/environment';
 
 @Component({
   selector: 'o-item-add-product-relation-related-product',
@@ -19,9 +20,12 @@ export class ItemAddProductRelationRelatedProductComponent implements OnInit {
     relatedProductDisplayedColumns = ['Add', 'Down', 'Position', 'Up', 'ItemName', 'SKU', 'TPIN', 'Remove'];
     relatedProductDataSource: any = null;
     relatedProductPendingAdd: boolean;
+    relatedProductPendingImage: boolean;
     currentItemRelatedProductIndex: number;
     formDirty = false;
     
+    private imageURL = environment.imageURL;
+
     @ViewChild('selectionCategoriesRef') selectionCategoriesRef: ElementRef;
 
     constructor(private itemService: ItemService) { }
@@ -30,7 +34,7 @@ export class ItemAddProductRelationRelatedProductComponent implements OnInit {
         this.item = this.itemService.currentItemInsert;
         
         if(this.item.ItemRelatedProducts.length === 0) {
-            const _temp = new ItemRelatedProductInsert(0, null, null, null, null, null, null);
+            const _temp = new ItemRelatedProductInsert(0, null, null, null, null, null, null, null);
             this.item.ItemRelatedProducts.push(_temp);
         }
 
@@ -59,6 +63,7 @@ export class ItemAddProductRelationRelatedProductComponent implements OnInit {
                         itemRelatedProduct.RelatedItemName = item.Name;
                         itemRelatedProduct.RelatedItemVendorSKU = item.VendorSKU;
                         itemRelatedProduct.RelatedTPIN = item.TPIN;
+                        itemRelatedProduct.ImagePath = item.ImagePath;
                     },
                     (error: any) => {
                         this.errorMessage = <any>error;
@@ -66,7 +71,7 @@ export class ItemAddProductRelationRelatedProductComponent implements OnInit {
                     }
                 );
 
-                const _temp = new ItemRelatedProductInsert(0, null, null, null, null, null, this.item.ItemRelatedProducts.length + 1);
+                const _temp = new ItemRelatedProductInsert(0, null, null, null, null, null, null, this.item.ItemRelatedProducts.length + 1);
                 this.item.ItemRelatedProducts.push(_temp);
                 this.relatedProductRefreshDataSource(this.item.ItemRelatedProducts);
             }
@@ -88,7 +93,7 @@ export class ItemAddProductRelationRelatedProductComponent implements OnInit {
         }
     }
 
-    onRelatedProductItemChange(index: number) {
+    onRelatedProductItemChange(index: number, ) {
         if(this.item.ItemRelatedProducts[index].RelatedProductItemID) {
             if(!this.existRelatedProduct(this.item.ItemRelatedProducts[index].RelatedProductItemID)) {
                 this.itemService.getItem(this.item.ItemRelatedProducts[index].RelatedProductItemID).subscribe(
@@ -97,6 +102,8 @@ export class ItemAddProductRelationRelatedProductComponent implements OnInit {
                         this.item.ItemRelatedProducts[index].RelatedItemName = item.Name;
                         this.item.ItemRelatedProducts[index].RelatedItemVendorSKU = item.VendorSKU;
                         this.item.ItemRelatedProducts[index].RelatedTPIN = item.TPIN;
+                        this.item.ItemRelatedProducts[index].ImagePath = item.ImagePath;
+                        this.currentItemRelatedProductIndex = this.item.ItemRelatedProducts.length - 1;
                     },
                     (error: any) => {
                         this.errorMessage = <any>error;

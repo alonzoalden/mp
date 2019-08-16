@@ -69,7 +69,7 @@ export class ItemEditProductRelationUpSellComponent implements OnInit {
     }
 
     upSellAddPendingLine() {
-        const _temp = new ItemUpSell(0, this.itemid, null, null, null, null, null, this.item.ItemUpSells.length + 1, null, null, true);
+        const _temp = new ItemUpSell(0, this.itemid, null, null, null, null, null, this.item.ItemUpSells.length + 1, null, null, null, true);
         this.item.ItemUpSells.push(_temp);   
     }
 
@@ -158,6 +158,8 @@ export class ItemEditProductRelationUpSellComponent implements OnInit {
                         this.item.ItemUpSells[index].UpSellItemName = item.Name;
                         this.item.ItemUpSells[index].UpSellItemVendorSKU = item.VendorSKU;
                         this.item.ItemUpSells[index].UpSellTPIN = item.TPIN;
+                        this.item.ItemUpSells[index].ImagePath = item.ImagePath;
+                        this.currentItemUpSellIndex = this.item.ItemUpSells.length - 1;
                     },
                     (error: any) => {
                         this.errorMessage = <any>error;
