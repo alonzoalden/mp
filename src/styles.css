@@ -64,13 +64,14 @@ a:hover {
     transition: all 100ms ease;
 }
 .skinny1 {
-    font-weight: 300;
+    font-weight: 300 !important;
 }
 .skinny-label {
     font-weight: 200;
     text-transform: uppercase;
     font-size: 13px;
 }
+
 .w165 {
     width: 165px;
 }

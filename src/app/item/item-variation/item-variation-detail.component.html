@@ -134,30 +134,31 @@
                                 <mat-paginator #paginator [pageSizeOptions]="[10, 20, 50, 100, 200]" [showFirstLastButtons]="true"></mat-paginator>
                             </div>
 
-                            <div class="form-group m-t-xl">
-                                <div class="col-sm-12">
-                                    <span class="m-r-md m-b-sm">
-                                        <button color="primary"
-                                            mat-raised-button
-                                            class="btn-main w-140"
-                                            type="button"
-                                            [disabled]="!itemVariationListing.Name || itemVariationListing.ItemVariations.length < 1 || pendingSave"
-                                            (click)="updateListing()">
-                                            <ng-container *ngIf="pendingSave"><i class="fa fa-spinner fa-spin fs-16"></i></ng-container>
-                                            <ng-container *ngIf="!pendingSave">{{ 'Save' | translate }}</ng-container>
-                                        </button>
-                                    </span>
-                                    <span>
-                                        <button 
-                                            mat-raised-button
-                                            type="button"
-                                            [routerLink]="['/item/variation-listing']">{{ 'Cancel' | translate }}
-                                        </button>
-                                    </span>
-                                </div> 
-                            </div>
+                            
                         </fieldset>
                     </form>
+                </div>
+                <div class="row form-group m-t-md">
+                    <div class="col-sm-12">
+                        <span class="m-r-md">
+                            <button color="primary"
+                                mat-raised-button
+                                class="btn-main w-140"
+                                type="button"
+                                [disabled]="!itemVariationListing?.Name || itemVariationListing?.ItemVariations.length < 1 || pendingSave"
+                                (click)="updateListing()">
+                                <ng-container *ngIf="pendingSave"><i class="fa fa-spinner fa-spin fs-16"></i></ng-container>
+                                <ng-container *ngIf="!pendingSave">{{ 'Save' | translate }}</ng-container>
+                            </button>
+                        </span>
+                        <span>
+                            <button 
+                                mat-raised-button
+                                type="button"
+                                [routerLink]="['/item/variation-listing']">{{ 'Cancel' | translate }}
+                            </button>
+                        </span>
+                    </div> 
                 </div>
             </div>
         </div>
