@@ -30,6 +30,7 @@
     "@types/detect-browser": "^3.0.0",
     "angular-oauth2-oidc": "^4.0.1",
     "angular2-notifications": "^1.0.2",
+    "browser-sync": "^2.26.7",
     "classlist.js": "^1.1.20150312",
     "core-js": "^2.5.4",
     "flag-icon-css": "^3.2.1",
