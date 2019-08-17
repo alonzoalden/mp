@@ -98,4 +98,42 @@ export class CompanyInfoEffects {
         ),
         take(1)
     );
+
+    @Effect()
+    updateCompanyInfoShippingAddress$: Observable<Action> = this.actions$.pipe(
+        ofType(companyInfoActions.CompanyInfoActionTypes.UpdateCompanyInfoShippingAddress),
+        map((action: companyInfoActions.UpdateCompanyInfoShippingAddress) => action.payload),
+        mergeMap((companyinfo) =>
+            this.companyService.editCompanyInfoShippingAddress(companyinfo).pipe(
+                map(companyinfo => {
+                    this.companyService.sendNotification({ type: 'success', title: 'Successfully Updated', content: "Shipping address has been updated" }); 
+                    return (new companyInfoActions.UpdateCompanyInfoShippingAddressSuccess(companyinfo))
+                }),
+                catchError(err => {
+                    this.companyService.sendNotification({ type: 'error', title: 'Error', content: err });
+                    of(new companyInfoActions.UpdateCompanyInfoShippingAddressFail(err))
+                    return EMPTY;
+                })
+            )
+        )
+    );
+
+    @Effect()
+    updateCompanyInfoBillingAddress$: Observable<Action> = this.actions$.pipe(
+        ofType(companyInfoActions.CompanyInfoActionTypes.UpdateCompanyInfoBillingAddress),
+        map((action: companyInfoActions.UpdateCompanyInfoBillingAddress) => action.payload),
+        mergeMap((companyinfo) =>
+            this.companyService.editCompanyInfoBillingAddress(companyinfo).pipe(
+                map(companyinfo => {
+                    this.companyService.sendNotification({ type: 'success', title: 'Successfully Updated', content: "Billing address has been updated" }); 
+                    return (new companyInfoActions.UpdateCompanyInfoBillingAddressSuccess(companyinfo))
+                }),
+                catchError(err => {
+                    this.companyService.sendNotification({ type: 'error', title: 'Error', content: err });
+                    of(new companyInfoActions.UpdateCompanyInfoBillingAddressFail(err))
+                    return EMPTY;
+                })
+            )
+        )
+    );
 }

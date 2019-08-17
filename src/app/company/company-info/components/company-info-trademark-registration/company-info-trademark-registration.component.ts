@@ -1,16 +1,15 @@
 import { Component, OnInit } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
-import { CompanyService } from '../../company.service';
+import { CompanyService } from '../../../company.service';
 import { FormGroup, FormControl, Form } from '@angular/forms';
-import { CompanyInfo } from '../../../shared/class/company-info';
-import { TrademarkRegistration } from '../../../shared/class/trademark-registration';
-import { AddressCountry, AddressState } from '../../../shared/class/address';
+import { CompanyInfo } from '../../../../shared/class/company-info';
+import { TrademarkRegistration } from '../../../../shared/class/trademark-registration';
+import { AddressCountry, AddressState } from '../../../../shared/class/address';
 import { TranslateService } from '@ngx-translate/core';
 
 @Component({
   selector: 'o-company-info-trademark-registration',
-  templateUrl: './company-info-trademark-registration.component.html',
-  styleUrls: ['../../company.component.scss']
+  templateUrl: './company-info-trademark-registration.component.html'
 })
 
 export class CompanyInfoTrademarkRegistrationComponent implements OnInit {

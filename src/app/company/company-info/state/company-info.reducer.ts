@@ -97,6 +97,30 @@ export function companyInfoReducer(state = initialState, action: CompanyInfoActi
                 billingAddressStates: [],
                 error: action.payload,
             };
+        case CompanyInfoActionTypes.UpdateCompanyInfoShippingAddressSuccess:
+            return {
+                ...state,
+                companyInfo: action.payload,
+                error: ''
+            };
+        case CompanyInfoActionTypes.UpdateCompanyInfoShippingAddressFail:
+            return {
+                ...state,
+                companyInfo: null,
+                error: action.payload
+            };
+        case CompanyInfoActionTypes.UpdateCompanyInfoBillingAddressSuccess:
+            return {
+                ...state,
+                companyInfo: action.payload,
+                error: ''
+            };
+        case CompanyInfoActionTypes.UpdateCompanyInfoBillingAddressFail:
+            return {
+                ...state,
+                companyInfo: null,
+                error: action.payload,
+            };
         default:
             return state;
     }

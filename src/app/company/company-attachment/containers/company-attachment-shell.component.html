@@ -16,10 +16,8 @@
     *ngIf="this.route.includes('edit')">
 </o-company-attachment-edit>
 
-<!-- <o-company-attachment-add
-    *ngIf="this.route === '/company/attachment/add'"
-    > -->
 <o-company-attachment-add
     *ngIf="this.route.includes('add')"
+    (uploadVendorAttachment)="uploadVendorAttachment($event)"
     >
 </o-company-attachment-add>

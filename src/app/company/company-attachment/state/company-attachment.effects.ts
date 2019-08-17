@@ -6,10 +6,15 @@ import { Actions, Effect, ofType } from '@ngrx/effects';
 import { CompanyService } from '../../company.service';
 import * as fromCompany from './index';
 import * as companyActions from './company-attachment.actions';
+import { VendorAttachment } from 'app/shared/class/vendor-attachment';
+import { Router } from '@angular/router';
 
 @Injectable()
 export class CompanyAttachmentEffects {
-    constructor(private store: Store<fromCompany.State>,
+    [x: string]: any;
+    constructor(
+        private router: Router,
+        private store: Store<fromCompany.State>,
         private companyService: CompanyService,
         private actions$: Actions) { }
 
@@ -37,13 +42,52 @@ export class CompanyAttachmentEffects {
                 map(() => {
                     const message = `${vendorattachmentid} was deleted`
                     this.companyService.sendNotification({ type: 'success', title: 'Successfully Deleted', content: message });
-                    return (new companyActions.DeleteVendorAttachmentSuccess(vendorattachmentid))
+                    return (new companyActions.DeleteVendorAttachmentSuccess(vendorattachmentid));
                 }),
                 catchError(err => {
                     this.companyService.sendNotification({ type: 'error', title: 'Error', content: err });
-                    return of(new companyActions.DeleteVendorAttachmentFail(err))
+                    return of(new companyActions.DeleteVendorAttachmentFail(err));
                 })
             )
         )
     );
+    @Effect()
+    uploadVendorAttachments$: Observable<Action> = this.actions$.pipe(
+        ofType(companyActions.CompanyAttachmentActionTypes.UploadVendorAttachment),
+        map((action: companyActions.UploadVendorAttachment) => action.payload),
+        mergeMap((payload) =>
+            this.companyService.uploadAttachment(payload.form).pipe(
+                map((vendorattachment: VendorAttachment) => {
+                    console.log(payload);
+                    vendorattachment[0].Title = payload.title;
+                    console.log(vendorattachment)
+                    this.store.dispatch(new companyActions.EditVendorAttachment(vendorattachment[0]));
+                    return (new companyActions.UploadVendorAttachmentSuccess(vendorattachment));
+                }),
+                catchError(err => {
+                    this.companyService.sendNotification({ type: 'error', title: 'Error', content: err });
+                    return of(new companyActions.UploadVendorAttachmentFail(err));
+                })
+            )
+        )
+    );
+    @Effect()
+    editVendorAttachments$: Observable<Action> = this.actions$.pipe(
+        ofType(companyActions.CompanyAttachmentActionTypes.EditVendorAttachment),
+        map((action: companyActions.EditVendorAttachment) => action.payload),
+        mergeMap((payload: VendorAttachment) =>
+            this.companyService.editVendorAttachment(payload).pipe(
+                map((vendorattachment: VendorAttachment) => {
+                    this.companyService.sendNotification({ type: 'success', title: 'Successfully Updated', content: 'Attachment Saved' });
+                    this.router.navigate(['/company/attachment']);
+                    return (new companyActions.EditVendorAttachmentSuccess(vendorattachment));
+                }),
+                catchError(err => {
+                    this.companyService.sendNotification({ type: 'error', title: 'Error', content: err });
+                    return of(new companyActions.EditVendorAttachmentFail(err));
+                })
+            )
+        )
+    );
+    
 }

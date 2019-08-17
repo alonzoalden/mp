@@ -2,16 +2,18 @@ import { Component, OnInit, OnDestroy, ViewChild } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 import { Subscription } from 'rxjs';
 
-import { VendorAttachment, VendorAttachmentInsert } from '../../../shared/class/vendor-attachment';
-import { CompanyService } from '../../company.service';
+import { VendorAttachment } from '../../../../shared/class/vendor-attachment';
+import { CompanyService } from '../../../company.service';
 
 @Component({
-    selector: 'o-company-attachment-add',
-    templateUrl: './company-attachment-add.component.html'
+    selector: 'o-company-attachment-edit',
+    templateUrl: './company-attachment-edit.component.html'
 })
 
-export class CompanyAttachmentAddComponent implements OnInit {
-    vendorAttachment: VendorAttachmentInsert;
+export class CompanyAttachmentEditComponent implements OnInit {
+    vendorAttachment: VendorAttachment;
+    vendorAttachmentID: number;
+    title: string;
     errorMessage: string;
 
     pendingUpload: boolean;
@@ -30,7 +32,17 @@ export class CompanyAttachmentAddComponent implements OnInit {
         private companyService: CompanyService) { }
 
     ngOnInit(): void {
-        this.vendorAttachment = new VendorAttachmentInsert(null, null, null);
+        const vendorattachmentid = this.route.snapshot.params['id'];
+        
+        this.companyService.getVendorAttachment(vendorattachmentid).subscribe(
+            (vendorAttachment: VendorAttachment) => {
+                this.vendorAttachment = vendorAttachment;
+                this.vendorAttachmentID = this.vendorAttachment.VendorAttachmentID;
+                this.title = this.vendorAttachment.Title;
+                this.selectedFileNames.push(vendorAttachment.UploadedFile);
+            },
+            (error: any) => this.errorMessage = <any>error
+        );
     }
 
     fileChangeEvent(fileInput: any) {
@@ -42,29 +54,12 @@ export class CompanyAttachmentAddComponent implements OnInit {
     }
 
     upload() {
-        if(this.isRequirementValid()) {
-            if (this.filesToUpload.length === 0) {
-                //alert('Please select at least 1 files to upload!');
-                this.companyService.sendNotification({ type: 'error', title: 'Invalid Upload', content: 'Please select at least 1 files to upload!' });
-            } else if (this.filesToUpload.length > 3) {
-                //alert('Please select a maximum of 3 files to upload!');
-                this.companyService.sendNotification({ type: 'error', title: 'Invalid Upload', content: 'Please select at least 1 files to upload!' });
-            } else {
-                this.uploadFiles();
-            }
+        if (this.selectedFileNames.length === 0) {
+            //alert('Please select at least 1 files to upload!');
+            this.companyService.sendNotification({ type: 'error', title: 'Invalid Upload', content: 'Please select at least 1 files to upload!' });
         }
         else {
-            this.companyService.sendNotification({ type: 'error', title: 'Error', content: "Please enter all required fields" });
-        }
-    }
-
-    isRequirementValid(): boolean {
-        if (this.vendorAttachment
-            && this.vendorAttachment.Title) {
-            return true;
-        } 
-        else {
-            return false;
+            this.uploadFiles();
         }
     }
 
@@ -77,16 +72,14 @@ export class CompanyAttachmentAddComponent implements OnInit {
                 var reader = new FileReader();
                 formData.append('uploadedFiles', this.filesToUpload[i], this.filesToUpload[i].name);
             }
-            this.companyService.uploadAttachment(formData)
+            this.companyService.uploadUpdateAttachment(this.vendorAttachment.VendorAttachmentID, formData)
                 .subscribe (
                     (data: VendorAttachment) => {
-
-                        console.log(data);
-                        
                         this.pendingUpload = false;
                         //this.errorMessage = '';
-                        data[0].Title = this.vendorAttachment.Title;
-                        this.companyService.editVendorAttachment(data[0]).subscribe(
+                        data.Title = this.vendorAttachment.Title;
+                        data.Exclude = this.vendorAttachment.Exclude;
+                        this.companyService.editVendorAttachment(data).subscribe(
                             () => {
                                 this.onSaveComplete(`Attachment saved`);
                                 //route to list
@@ -114,6 +107,19 @@ export class CompanyAttachmentAddComponent implements OnInit {
                     }
                 );
         }
+        else {
+            this.companyService.editVendorAttachment(this.vendorAttachment).subscribe(
+                () => {
+                    this.onSaveComplete(`Attachment saved`);
+                    //route to list
+                    this.router.navigate(['/company/attachment']);
+                },
+                (error: any) => {
+                    this.errorMessage = <any>error;
+                    this.companyService.sendNotification({ type: 'error', title: 'Error', content: this.errorMessage });
+                }
+            );
+        }
     }
 
     cancelUpload() {
@@ -124,5 +130,8 @@ export class CompanyAttachmentAddComponent implements OnInit {
     onSaveComplete(message?: string): void {
         // Navigate back to the item list
         this.companyService.sendNotification({ type: 'success', title: 'Successfully Updated', content: message });
+    }
+
+    ngOnDestroy() {
     }
 }

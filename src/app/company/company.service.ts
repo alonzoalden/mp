@@ -75,7 +75,7 @@ export class CompanyService {
         });
         return this.http.put<CompanyInfo>(this.apiURL + '/company/shippingaddress', companyInfo, { headers: headers} )
                             .pipe(
-                                tap(data => console.log(companyInfo)),
+                                tap(data => console.log(data)),
                                 catchError(this.handleError)
                             );
     }

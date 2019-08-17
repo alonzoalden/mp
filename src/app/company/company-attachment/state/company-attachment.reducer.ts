@@ -49,6 +49,7 @@ export function companyAttachmentReducer(state = initialState, action: CompanyAt
                 pendingDelete: false,
                 error: ''
             };
+        
 
         case CompanyAttachmentActionTypes.DeleteVendorAttachmentFail:
             return {
@@ -56,6 +57,39 @@ export function companyAttachmentReducer(state = initialState, action: CompanyAt
                 pendingDelete: false,
                 error: action.payload
             };
+        
+        case CompanyAttachmentActionTypes.EditVendorAttachmentSuccess:
+            let _attachment = state.vendorAttachments.find(item => action.payload.VendorAttachmentID === item.VendorAttachmentID);
+            
+            if (_attachment) {
+                _attachment = action.payload
+            }
+            else {
+                state.vendorAttachments.push(action.payload);
+            }
+            
+            // var _updatedAttachments = state.vendorAttachments.map(
+            //         item => action.payload.VendorAttachmentID === item.VendorAttachmentID ? action.payload : item);
+
+            return {
+                ...state,
+                vendorAttachments: state.vendorAttachments
+            };
+    
+        case CompanyAttachmentActionTypes.EditVendorAttachmentFail:
+            return {
+                ...state,
+            };
+        // case CompanyAttachmentActionTypes.UploadVendorAttachmentSuccess:
+        //     return {
+        //         ...state
+        //     };
+
+        // case CompanyAttachmentActionTypes.UploadVendorAttachmentFail:
+        //     return {
+        //         ...state,
+        //     };
+
         default:
             return state;
     }

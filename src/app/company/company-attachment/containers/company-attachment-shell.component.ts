@@ -47,5 +47,7 @@ export class CompanyAttachmentShellComponent implements OnInit {
     deleteVendorAttachment(vendorattachmentid: number) {
         this.store.dispatch(new companyActions.DeleteVendorAttachment(vendorattachmentid));
     }
-
+    uploadVendorAttachment(payload: { form: FormData, title: string }) {
+        this.store.dispatch(new companyActions.UploadVendorAttachment({ form: payload.form, title: payload.title } ));
+    }
 }

@@ -13,13 +13,12 @@ import { companyRouting } from './company.routing';
 import { CompanyService } from './company.service';
 import { CompanyInfoShellComponent } from './company-info/containers/company-info-shell/company-info-shell.component'
 import { CompanyAttachmentShellComponent } from './company-attachment/containers/company-attachment-shell.component';
-import { CompanyAttachmentListComponent } from './company-attachment/components/company-attachment-list.component';
-import { CompanyAttachmentAddComponent } from './company-attachment/components/company-attachment-add.component';
-import { CompanyAttachmentEditComponent } from './company-attachment/components/company-attachment-edit.component';
-//import { CompanyInfoComponent } from './company-info/components/company-info.component';
-import { CompanyInfoDescriptionComponent } from './company-info/components/company-info-description.component';
-import { CompanyInfoTrademarkRegistrationComponent } from './company-info/components/company-info-trademark-registration.component';
-import { CompanyInfoBrandComponent } from './company-info/components/company-info-brand.component';
+import { CompanyAttachmentListComponent } from './company-attachment/components/company-attachment-list/company-attachment-list.component';
+import { CompanyAttachmentAddComponent } from './company-attachment/components/company-attachment-add/company-attachment-add.component';
+import { CompanyAttachmentEditComponent } from './company-attachment/components/company-attachment-edit/company-attachment-edit.component';
+import { CompanyInfoDescriptionComponent } from './company-info/components/company-info-description/company-info-description.component';
+import { CompanyInfoTrademarkRegistrationComponent } from './company-info/components/company-info-trademark-registration/company-info-trademark-registration.component';
+import { CompanyInfoBrandComponent } from './company-info/components/company-info-brand/company-info-brand.component';
 import { TranslateModule } from '@ngx-translate/core';
 
 /* NgRx */
@@ -38,7 +37,6 @@ import { companyAttachmentReducer } from './company-attachment/state/company-att
         CompanyAttachmentListComponent,
         CompanyAttachmentAddComponent,
         CompanyAttachmentEditComponent,
-        //CompanyInfoComponent,
         CompanyInfoShellComponent,
         CompanyInfoDescriptionComponent,
         CompanyInfoBrandComponent,

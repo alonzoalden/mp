@@ -1,14 +1,13 @@
 import { Component, ViewChild, Input, Output, EventEmitter, SimpleChanges, OnChanges, AfterViewInit } from '@angular/core';
 import { MatTableDataSource, MatPaginator, MatSort } from '@angular/material';
-import { VendorAttachment } from '../../../shared/class/vendor-attachment';
-import { environment } from '../../../../environments/environment';
+import { VendorAttachment } from '../../../../shared/class/vendor-attachment';
+import { environment } from '../../../../../environments/environment';
 import { Store } from '@ngrx/store';
-import * as fromUser from '../../../shared/state/user-state.reducer';
+import * as fromUser from '../../../../shared/state/user-state.reducer';
 
 @Component({
     selector: 'o-company-attachment-list',
-    templateUrl: './company-attachment-list.component.html',
-    styleUrls: ['./company-attachment-list.component.css']
+    templateUrl: './company-attachment-list.component.html'
 })
 
 export class CompanyAttachmentListComponent implements OnChanges, AfterViewInit {
@@ -18,7 +17,7 @@ export class CompanyAttachmentListComponent implements OnChanges, AfterViewInit 
     @Input() userInfoDefaultPageSize: number;
     @Input() vendorAttachmentsMatTable: MatTableDataSource<VendorAttachment>;
     @Input() errorMessage: string;
-    @Output() getVendorAttachments = new EventEmitter<any>();
+    @Output() getVendorAttachments = new EventEmitter<void>();
     @Output() deleteVendorAttachment = new EventEmitter<number>();
     @ViewChild(MatPaginator, { static: true }) paginator: MatPaginator;
     @ViewChild(MatSort, { static: true }) sort: MatSort;
