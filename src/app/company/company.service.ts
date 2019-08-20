@@ -13,7 +13,7 @@ import { VendorBrand } from '../shared/class/vendor-brand';
 import { Member } from '../shared/class/member';
 import { CompanyInfo } from '../shared/class/company-info';
 import { AddressCountry, AddressState } from '../shared/class/address';
-
+import { NotificationComponent } from '../shared/tool/notification/notification.component';
 
 @Injectable()
 export class CompanyService {
@@ -25,10 +25,12 @@ export class CompanyService {
 
     constructor(private http: HttpClient,
             private oauthService: OAuthService,
-            private appService: AppService) { }
+            private appService: AppService,
+            private notificationComponent: NotificationComponent) { }
 
     sendNotification(notification: any) {
-        this.subject.next(notification);
+        //this.subject.next(notification);
+        this.notificationComponent.notify(notification);
     }
 
     getVendorID() {

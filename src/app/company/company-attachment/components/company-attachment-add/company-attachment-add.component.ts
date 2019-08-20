@@ -1,6 +1,6 @@
-import { Component, OnInit, ViewChild, Output, EventEmitter } from '@angular/core';
+import { Component, OnInit, ViewChild, Output, EventEmitter, Input } from '@angular/core';
 import { Router } from '@angular/router';
-import { VendorAttachment, VendorAttachmentInsert } from '../../../../shared/class/vendor-attachment';
+import { VendorAttachmentInsert } from '../../../../shared/class/vendor-attachment';
 import { CompanyService } from '../../../company.service';
 
 @Component({
@@ -10,9 +10,6 @@ import { CompanyService } from '../../../company.service';
 
 export class CompanyAttachmentAddComponent implements OnInit {
     vendorAttachment: VendorAttachmentInsert;
-    errorMessage: string;
-
-    pendingUpload: boolean;
 
     private isUploadBtn: Boolean = true;
     public isLoadingData: Boolean = false;
@@ -21,8 +18,10 @@ export class CompanyAttachmentAddComponent implements OnInit {
     selectedFileNames: string[] = [];
     res: Array<string>
     
-    @Output() uploadVendorAttachment = new EventEmitter<{ form: FormData, title: string}>();
-
+    @Input() pendingUpload: boolean = false;
+    @Input() errorMessage: string;
+    @Output() uploadVendorAttachment = new EventEmitter<{ form: FormData, title: string }>();
+    
     @ViewChild('fileUpload', { static: false }) fileUploadVar: any;
 
     constructor( 
@@ -76,53 +75,11 @@ export class CompanyAttachmentAddComponent implements OnInit {
                 formData.append('uploadedFiles', this.filesToUpload[i], this.filesToUpload[i].name);
             }
             this.uploadVendorAttachment.emit({form: formData, title: this.vendorAttachment.Title});
-            
-            // this.companyService.uploadAttachment(formData)
-            //     .subscribe (
-            //         (data: VendorAttachment) => {
-
-            //             console.log(data);
-                        
-            //             this.pendingUpload = false;
-            //             //this.errorMessage = '';
-            //             data[0].Title = this.vendorAttachment.Title;
-            //             this.companyService.editVendorAttachment(data[0]).subscribe(
-            //                 () => {
-            //                     this.onSaveComplete(`Attachment saved`);
-            //                     //route to list
-            //                     this.router.navigate(['/company/attachment']);
-            //                 },
-            //                 (error: any) => {
-            //                     this.errorMessage = <any>error;
-            //                     this.companyService.sendNotification({ type: 'error', title: 'Error', content: this.errorMessage });
-            //                 }
-            //             );
-            //         },
-            //         err => {
-            //             this.pendingUpload = false;
-            //             //this.errorMessage = err;
-            //             this.companyService.sendNotification({ type: 'error', title: 'Error', content: err });
-            //             this.isLoadingData = false;
-            //             this.filesToUpload = [];
-            //             this.selectedFileNames = [];
-            //         },
-            //         () => {
-            //             this.pendingUpload = false;
-            //             this.isLoadingData = false;
-            //             this.filesToUpload = [];
-            //             this.selectedFileNames = [];
-            //         }
-            //     );
         }
     }
 
     cancelUpload() {
         this.filesToUpload = [];
         this.selectedFileNames = [];
-    }
-
-    onSaveComplete(message?: string): void {
-        // Navigate back to the item list
-        this.companyService.sendNotification({ type: 'success', title: 'Successfully Updated', content: message });
     }
 }

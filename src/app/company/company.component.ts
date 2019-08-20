@@ -1,34 +1,33 @@
 import { Component, ViewChild, OnInit, OnDestroy } from '@angular/core';
-import { CompanyService } from './company.service';
-import { Subscription } from 'rxjs';
-import { NotificationComponent } from '../shared/tool/notification/notification.component';
+// import { CompanyService } from './company.service';
+// import { Subscription } from 'rxjs';
+// import { NotificationComponent } from '../shared/tool/notification/notification.component';
 
 @Component({
     selector: 'app-company',
     templateUrl: './company.component.html'
 })
 
-export class CompanyComponent implements OnInit, OnDestroy {
-    subscription: Subscription;
+export class CompanyComponent {
+    // subscription: Subscription;
 
-    @ViewChild(NotificationComponent, { static: true })
-    private  notificationComponent: NotificationComponent;
+    // @ViewChild(NotificationComponent, { static: true })
+    // private  notificationComponent: NotificationComponent;
 
-    constructor(
-        private companyService: CompanyService) {
-    }
+    // constructor() {
+    // }
 
-    ngOnInit() {
-            this.subscription = this.companyService.subject.subscribe(
-            notification => this.doNotification(notification)
-        );
-    }
+    //ngOnInit() {
+        //     this.subscription = this.companyService.subject.subscribe(
+        //     notification => this.doNotification(notification)
+        // );
+    //}
 
-    doNotification(notification) {
-        this.notificationComponent.notify(notification);
-    }
+    // doNotification(notification) {
+    //     this.notificationComponent.notify(notification);
+    // }
 
-    ngOnDestroy(): void {
-        this.subscription.unsubscribe();
-    }
+    // ngOnDestroy(): void {
+    //     this.subscription.unsubscribe();
+    // }
 }

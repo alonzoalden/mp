@@ -58,10 +58,27 @@ export class CompanyAttachmentEffects {
         mergeMap((payload) =>
             this.companyService.uploadAttachment(payload.form).pipe(
                 map((vendorattachment: VendorAttachment) => {
-                    console.log(payload);
                     vendorattachment[0].Title = payload.title;
-                    console.log(vendorattachment)
                     this.store.dispatch(new companyActions.EditVendorAttachment(vendorattachment[0]));
+                    return (new companyActions.UploadVendorAttachmentSuccess(vendorattachment));
+                }),
+                catchError(err => {
+                    this.companyService.sendNotification({ type: 'error', title: 'Error', content: err });
+                    return of(new companyActions.UploadVendorAttachmentFail(err));
+                })
+            )
+        )
+    );
+    @Effect()
+    uploadUpdateVendorAttachments$: Observable<Action> = this.actions$.pipe(
+        ofType(companyActions.CompanyAttachmentActionTypes.UploadUpdateVendorAttachment),
+        map((action: companyActions.UploadUpdateVendorAttachment) => action.payload),
+        mergeMap((payload) =>
+            this.companyService.uploadUpdateAttachment(payload.id, payload.form).pipe(
+                map((vendorattachment: VendorAttachment) => {
+                    vendorattachment.Title = payload.title;
+                    vendorattachment.Exclude = payload.exclude;
+                    this.store.dispatch(new companyActions.EditVendorAttachment(vendorattachment));
                     return (new companyActions.UploadVendorAttachmentSuccess(vendorattachment));
                 }),
                 catchError(err => {
@@ -89,5 +106,22 @@ export class CompanyAttachmentEffects {
             )
         )
     );
-    
+    @Effect()
+    getVendorAttachment$: Observable<Action> = this.actions$.pipe(
+        ofType(companyActions.CompanyAttachmentActionTypes.GetVendorAttachment),
+        map((action: companyActions.GetVendorAttachment) => action.payload),
+        mergeMap((id: number) =>
+            this.companyService.getVendorAttachment(id).pipe(
+                map((vendorattachment: VendorAttachment) => {
+                    // this.companyService.sendNotification({ type: 'success', title: 'Successfully Updated', content: 'Attachment Saved' });
+                    // this.router.navigate(['/company/attachment']);
+                    return (new companyActions.GetVendorAttachmentSuccess(vendorattachment));
+                }),
+                catchError(err => {
+                    this.companyService.sendNotification({ type: 'error', title: 'Error', content: err });
+                    return of(new companyActions.GetVendorAttachmentFail(err));
+                })
+            )
+        )
+    );
 }

@@ -18,9 +18,22 @@ export const getVendorAttachments = createSelector(
     getCompanyFeatureState,
     state => state.vendorAttachments
 );
+export const getCurrentVendorAttachment = createSelector(
+    getCompanyFeatureState,
+    state => state.vendorAttachments.find(item => item.VendorAttachmentID === state.currentVendorAttachmentID)
+);
+
 export const getVendorAttachmentsMatTable = createSelector(
     getCompanyFeatureState,
     state => new MatTableDataSource<VendorAttachment>(state.vendorAttachments)
+);
+export const getPendingUpload = createSelector(
+    getCompanyFeatureState,
+    state => state.pendingUpload
+);
+export const getPendingDelete = createSelector(
+    getCompanyFeatureState,
+    state => state.pendingDelete
 );
 export const getError = createSelector(
     getCompanyFeatureState,

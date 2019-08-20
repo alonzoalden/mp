@@ -15,6 +15,9 @@ import { DialogComponent } from './dialog/dialog.component';
         CommonModule,
         SimpleNotificationsModule.forRoot(),
     ],
+    providers: [
+        NotificationComponent
+    ],
     exports: [
         NotificationComponent
     ]

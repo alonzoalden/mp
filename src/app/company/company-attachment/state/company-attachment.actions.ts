@@ -2,7 +2,6 @@ import { Action } from '@ngrx/store';
 import { VendorAttachment } from 'app/shared/class/vendor-attachment';
 
 export enum CompanyAttachmentActionTypes {
-  // RegisterMatTableElements = '[Company] Register Mat Table',
   LoadVendorAttachments = '[Company] Load Vendor Attachments',
   LoadVendorAttachmentsSuccess = '[Company] Load Vendor Attachments Success',
   LoadVendorAttachmentsFail = '[Company] Load Vendor Attachments Fail',
@@ -16,7 +15,12 @@ export enum CompanyAttachmentActionTypes {
   EditVendorAttachment = '[Company] Edit Vendor Attachment',
   EditVendorAttachmentSuccess = '[Company] Edit Vendor Attachment Success',
   EditVendorAttachmentFail = '[Company] Edit Vendor Attachment Fail',
-
+  GetVendorAttachment = '[Company] Get Vendor Attachment',
+  GetVendorAttachmentSuccess = '[Company] Get Vendor Attachment Success',
+  GetVendorAttachmentFail = '[Company] Get Vendor Attachment Fail',
+  UploadUpdateVendorAttachment = '[Company] Upload Update Vendor Attachment',
+  UploadUpdateVendorAttachmentSuccess = '[Company] Upload Update Vendor Attachment Success',
+  UploadUpdateVendorAttachmentFail = '[Company] Upload Update Vendor Attachment Fail'
 }
 
 // Action Creators
@@ -79,6 +83,37 @@ export class EditVendorAttachmentFail implements Action {
 
   constructor(public payload: string) { }
 }
+export class GetVendorAttachment implements Action {
+  readonly type = CompanyAttachmentActionTypes.GetVendorAttachment;
+
+  constructor(public payload: number) { }
+}
+export class GetVendorAttachmentSuccess implements Action {
+  readonly type = CompanyAttachmentActionTypes.GetVendorAttachmentSuccess;
+
+  constructor(public payload: VendorAttachment) { }
+}
+export class GetVendorAttachmentFail implements Action {
+  readonly type = CompanyAttachmentActionTypes.GetVendorAttachmentFail;
+
+  constructor(public payload: string) { }
+}
+export class UploadUpdateVendorAttachment implements Action {
+  readonly type = CompanyAttachmentActionTypes.UploadUpdateVendorAttachment;
+
+  constructor(public payload: {id: number, form: FormData, title: string, exclude: boolean}) { }
+}
+export class UploadUpdateVendorAttachmentSuccess implements Action {
+  readonly type = CompanyAttachmentActionTypes.UploadUpdateVendorAttachmentSuccess;
+
+  constructor(public payload: VendorAttachment) { }
+}
+export class UploadUpdateVendorAttachmentFail implements Action {
+  readonly type = CompanyAttachmentActionTypes.UploadUpdateVendorAttachmentFail;
+
+  constructor(public payload: string) { }
+}
+
 
 
 // Union the valid types
@@ -86,6 +121,9 @@ export type CompanyAttachmentActions = LoadVendorAttachments
   | LoadVendorAttachmentsSuccess
   | LoadVendorAttachmentsFail
   | SetVendorAttachmentID
+  | GetVendorAttachment
+  | GetVendorAttachmentSuccess
+  | GetVendorAttachmentFail
   | DeleteVendorAttachment
   | DeleteVendorAttachmentSuccess
   | DeleteVendorAttachmentFail
@@ -94,7 +132,10 @@ export type CompanyAttachmentActions = LoadVendorAttachments
   | UploadVendorAttachmentFail
   | EditVendorAttachment
   | EditVendorAttachmentSuccess
-  | EditVendorAttachmentFail;
+  | EditVendorAttachmentFail
+  | UploadUpdateVendorAttachment
+  | UploadUpdateVendorAttachmentSuccess
+  | UploadUpdateVendorAttachmentFail;
   
   
   

@@ -4,6 +4,7 @@ import { VendorAttachment } from '../../../../shared/class/vendor-attachment';
 import { environment } from '../../../../../environments/environment';
 import { Store } from '@ngrx/store';
 import * as fromUser from '../../../../shared/state/user-state.reducer';
+import { SetVendorAttachmentID } from '../../state/company-attachment.actions';
 
 @Component({
     selector: 'o-company-attachment-list',
@@ -12,12 +13,14 @@ import * as fromUser from '../../../../shared/state/user-state.reducer';
 
 export class CompanyAttachmentListComponent implements OnChanges, AfterViewInit {
     private fileURL = environment.fileURL;
-
     displayedColumns = ['Menu', 'View', 'ID', 'Title', 'CreatedOn', 'Exclude'];
+    currentIndex = null;
     @Input() userInfoDefaultPageSize: number;
     @Input() vendorAttachmentsMatTable: MatTableDataSource<VendorAttachment>;
+    @Input() pendingDelete: boolean;
     @Input() errorMessage: string;
     @Output() getVendorAttachments = new EventEmitter<void>();
+    @Output() setVendorAttachmentID = new EventEmitter<number>();
     @Output() deleteVendorAttachment = new EventEmitter<number>();
     @ViewChild(MatPaginator, { static: true }) paginator: MatPaginator;
     @ViewChild(MatSort, { static: true }) sort: MatSort;
@@ -30,10 +33,14 @@ export class CompanyAttachmentListComponent implements OnChanges, AfterViewInit 
             this.vendorAttachmentsMatTable.sort = this.sort;
         }
     }
+    onSetVendorAttachmentID(id: number) {
+        this.setVendorAttachmentID.emit(id);
+    }
     ngAfterViewInit(): void {
         this.getVendorAttachments.emit();
     }
-    onDeleteAttachment(vendorattachment: VendorAttachment) {
+    onDeleteAttachment(vendorattachment: VendorAttachment, index: number) {
+        this.currentIndex = index;
         const _confirmation = confirm(`Remove ${vendorattachment.VendorAttachmentID}: ${vendorattachment.Title}?`);
         if (_confirmation) {
             this.deleteVendorAttachment.emit(vendorattachment.VendorAttachmentID);
