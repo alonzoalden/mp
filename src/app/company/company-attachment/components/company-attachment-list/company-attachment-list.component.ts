@@ -2,9 +2,6 @@ import { Component, ViewChild, Input, Output, EventEmitter, SimpleChanges, OnCha
 import { MatTableDataSource, MatPaginator, MatSort } from '@angular/material';
 import { VendorAttachment } from '../../../../shared/class/vendor-attachment';
 import { environment } from '../../../../../environments/environment';
-import { Store } from '@ngrx/store';
-import * as fromUser from '../../../../shared/state/user-state.reducer';
-import { SetVendorAttachmentID } from '../../state/company-attachment.actions';
 
 @Component({
     selector: 'o-company-attachment-list',

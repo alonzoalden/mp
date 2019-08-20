@@ -10,7 +10,6 @@
     (getVendorAttachments)="getVendorAttachments($event)"
     (deleteVendorAttachment)="deleteVendorAttachment($event)"
     (setVendorAttachmentID)="setVendorAttachmentID($event)"
-
     >
 </o-company-attachment-list>
 
@@ -22,13 +21,12 @@
     (editVendorAttachment)="editVendorAttachment($event)"
     (getCurrentVendorAttachment)="getCurrentVendorAttachment($event)"
     (uploadUpdateVendorAttachment)="uploadUpdateVendorAttachment($event)"
-
-    
     >
 </o-company-attachment-edit>
 
 <o-company-attachment-add
     *ngIf="this.route.includes('add')"
     (uploadVendorAttachment)="uploadVendorAttachment($event)"
+    [pendingUpload]="pendingUpload$ | async"
     >
 </o-company-attachment-add>

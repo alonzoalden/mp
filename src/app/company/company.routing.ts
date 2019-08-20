@@ -1,14 +1,11 @@
 import { Routes, RouterModule } from '@angular/router';
-import { componentFactoryName } from '@angular/compiler';
 
 import { CompanyComponent } from './company.component';
-//import { CompanyShellComponent } from './company-shell/company-shell.component';
 import { CompanyInfoShellComponent } from './company-info/containers/company-info-shell/company-info-shell.component';
 import { CompanyAttachmentShellComponent } from './company-attachment/containers/company-attachment-shell.component';
 import { CompanyAttachmentListComponent } from './company-attachment/components/company-attachment-list/company-attachment-list.component';
 import { CompanyAttachmentAddComponent } from './company-attachment/components/company-attachment-add/company-attachment-add.component';
 import { CompanyAttachmentEditComponent } from './company-attachment/components/company-attachment-edit/company-attachment-edit.component';
-//import { CompanyInfoComponent } from './company-info/components/company-info.component';
 import { CompanyInfoBrandComponent } from './company-info/components/company-info-brand/company-info-brand.component';
 import { CompanyInfoDescriptionComponent } from './company-info/components/company-info-description/company-info-description.component';
 import { CompanyInfoTrademarkRegistrationComponent } from './company-info/components/company-info-trademark-registration/company-info-trademark-registration.component';

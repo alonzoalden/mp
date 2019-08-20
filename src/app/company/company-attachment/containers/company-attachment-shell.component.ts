@@ -31,7 +31,6 @@ export class CompanyAttachmentShellComponent implements OnInit {
     ngOnInit() {
         this.vendorAttachmentsMatTable$ = this.store.pipe(select(fromCompany.getVendorAttachmentsMatTable));
         this.vendorAttachment$ = this.store.pipe(select(fromCompany.getCurrentVendorAttachment));
-        
         this.userInfoDefaultPageSize$ = this.store.pipe(select(fromUser.getCurrentUserDefaultPageSize));
         this.pendingUpload$ = this.store.pipe(select(fromCompany.getPendingUpload));
         this.pendingDelete$ = this.store.pipe(select(fromCompany.getPendingDelete));

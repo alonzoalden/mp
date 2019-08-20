@@ -1,5 +1,4 @@
-import { Component, OnInit, ViewChild, Output, EventEmitter, Input } from '@angular/core';
-import { Router } from '@angular/router';
+import { Component, OnInit, Output, EventEmitter, Input } from '@angular/core';
 import { VendorAttachmentInsert } from '../../../../shared/class/vendor-attachment';
 import { CompanyService } from '../../../company.service';
 
@@ -10,23 +9,14 @@ import { CompanyService } from '../../../company.service';
 
 export class CompanyAttachmentAddComponent implements OnInit {
     vendorAttachment: VendorAttachmentInsert;
-
-    private isUploadBtn: Boolean = true;
-    public isLoadingData: Boolean = false;
-
     filesToUpload: Array<File> = [];
-    selectedFileNames: string[] = [];
-    res: Array<string>
+    selectedFileNames: string[] = [];    
     
     @Input() pendingUpload: boolean = false;
     @Input() errorMessage: string;
     @Output() uploadVendorAttachment = new EventEmitter<{ form: FormData, title: string }>();
-    
-    @ViewChild('fileUpload', { static: false }) fileUploadVar: any;
 
-    constructor( 
-        private router: Router,
-        private companyService: CompanyService) { }
+    constructor(private companyService: CompanyService) { }
 
     ngOnInit(): void {
         this.vendorAttachment = new VendorAttachmentInsert(null, null, null);
@@ -67,11 +57,8 @@ export class CompanyAttachmentAddComponent implements OnInit {
 
     uploadFiles() {
         if (this.filesToUpload.length > 0) {
-            this.pendingUpload = true;
-            this.isLoadingData = true;
             const formData: FormData = new FormData();
             for (let i = 0; i < this.filesToUpload.length; i++) {
-                var reader = new FileReader();
                 formData.append('uploadedFiles', this.filesToUpload[i], this.filesToUpload[i].name);
             }
             this.uploadVendorAttachment.emit({form: formData, title: this.vendorAttachment.Title});

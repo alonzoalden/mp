@@ -23,8 +23,8 @@ import { TranslateModule } from '@ngx-translate/core';
 
 /* NgRx */
 import { StoreModule } from '@ngrx/store';
-import { companyInfoReducer } from './company-info/state/company-info.reducer';
 import { EffectsModule } from '@ngrx/effects';
+import { companyInfoReducer } from './company-info/state/company-info.reducer';
 import { CompanyInfoEffects } from './company-info/state/company-info.effects';
 import { CompanyAttachmentEffects } from './company-attachment/state/company-attachment.effects';
 import { companyAttachmentReducer } from './company-attachment/state/company-attachment.reducer';
