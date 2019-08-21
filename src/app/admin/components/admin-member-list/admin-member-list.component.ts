@@ -1,13 +1,7 @@
-import { Component, OnInit, OnChanges, AfterViewInit, ViewChild, Input, Output, EventEmitter, SimpleChanges } from '@angular/core';
-import { Router, ActivatedRoute } from '@angular/router';
-import { CurrencyPipe } from '@angular/common';
+import { Component, OnChanges, AfterViewInit, ViewChild, Input, Output, EventEmitter, SimpleChanges } from '@angular/core';
+import { Router } from '@angular/router';
 import { MatPaginator, MatSort, MatTableDataSource } from '@angular/material';
 import { Member } from '../../../shared/class/member';
-import { AdminService } from '../../admin.service';
-import { AppService } from '../../../app.service';
-//import { environment } from 'environments/environment';
-
-
 
 @Component({
     selector: 'o-admin-member-list',
@@ -16,7 +10,6 @@ import { AppService } from '../../../app.service';
 
 export class AdminMemberListComponent implements OnChanges, AfterViewInit {
     displayedColumns = ['FirstName', 'LastName', 'Email', 'Vendor', 'Detail'];
-    currentIndex = null;
     @Input() userInfo: Member;
     @Input() membersMatTable: MatTableDataSource<Member>;
     @Input() pendingDelete: boolean;
@@ -26,8 +19,7 @@ export class AdminMemberListComponent implements OnChanges, AfterViewInit {
     @ViewChild(MatPaginator, { static: true }) paginator: MatPaginator;
     @ViewChild(MatSort, { static: true }) sort: MatSort;
 
-    constructor(
-        private router: Router) { }
+    constructor(private router: Router) { }
 
     ngOnChanges(changes: SimpleChanges): void {
         if (changes.membersMatTable && changes.membersMatTable.currentValue.data.length) {
@@ -58,31 +50,4 @@ export class AdminMemberListComponent implements OnChanges, AfterViewInit {
             this.membersMatTable.paginator.firstPage();
         }
     }
-
-
-    // inactivateMember(member: Member): void {
-    //     member.IsActive = false;
-    //     this.saveMember(member);
-    // }
-
-    // activateMember(member: Member): void {
-    //     member.IsActive = true;
-    //     this.saveMember(member);
-    // }
-
-    // saveMember(member: Member): void {
-    //     this.adminService.editMember(member).subscribe(
-    //         () => this.onSaveComplete(`${member.Email} was saved`),
-    //         (error: any) => this.errorMessage = <any>error
-    //     );
-
-    // }
-
-    // onSaveComplete(message?: string): void {
-    //     this.adminService.sendNotification({ type: 'success', title: 'Successfully Updated', content: message });
-    //     // Navigate back to dashboard
-    //     // this.router.navigate(['/dashboard']);
-    // }
-
-    
 }

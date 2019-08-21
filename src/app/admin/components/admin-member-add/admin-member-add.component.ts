@@ -1,11 +1,8 @@
 import { Component, OnInit, Input, Output, EventEmitter, OnChanges, SimpleChanges } from '@angular/core';
 import { Router } from '@angular/router';
 import { FormBuilder, Validators, FormGroup, FormControl } from '@angular/forms';
-
 import { MemberInsert, Member } from '../../../shared/class/member';
-
 import { AdminService } from '../../admin.service';
-import { AppService } from '../../../app.service';
 
 @Component({
   selector: 'o-admin-member-add',
@@ -14,24 +11,17 @@ import { AppService } from '../../../app.service';
 
 export class AdminMemberAddComponent implements OnInit, OnChanges {
     memberForm: any;
-
-    //errorMessage: string;
     member: MemberInsert;
-    pendingCreate: boolean;
 
     @Input() userInfo: Member;
     @Input() pendingSave: boolean = false;
     @Input() errorMessage: string;
     @Output() addMember = new EventEmitter<MemberInsert>();
 
-
-    private dataIsValid: boolean;
-
     constructor(
         private router: Router,
         private formBuilder: FormBuilder,
-        private adminService: AdminService,
-        private appService: AppService) {
+        private adminService: AdminService) {
 
         this.memberForm = this.formBuilder.group({
             'memberData': this.formBuilder.group({
@@ -53,11 +43,6 @@ export class AdminMemberAddComponent implements OnInit, OnChanges {
         }
     }
     ngOnInit(): void {
-        // Current User must be Admin - redirect to home/dashboard
-        
-        // if (!this.appService.currentMember || !this.appService.currentMember.IsAdmin) {
-        //     this.router.navigate(['/home']);
-        // }
         this.member = new MemberInsert('', '', '', '', false, false, '', '');
     }
 
@@ -65,25 +50,7 @@ export class AdminMemberAddComponent implements OnInit, OnChanges {
         if (this.isValid()) {
             this.member.IsAdmin = true;
             this.member.IsSuperAdmin = true;
-            //this.pendingCreate = true;
-            
             this.addMember.emit(this.member)
-
-            // this.adminService.addMember(this.member)
-            //     .subscribe(
-            //         (member) => {
-            //             this.member = member;
-            //             this.pendingCreate = false;
-            //             console.log(this.member);
-            //             this.onAddComplete(`${this.member.Email} was saved`);
-            //         },
-            //         (error: any) => {
-            //             this.pendingCreate = false;
-            //             this.errorMessage = <any>error;
-            //             this.adminService.sendNotification({ type: 'error', title: 'Error', content: this.errorMessage });
-            //             this.router.navigate(['/admin']);
-            //         }
-            //     );
         }
     }
 
@@ -117,10 +84,5 @@ export class AdminMemberAddComponent implements OnInit, OnChanges {
             }
             return false;
         }
-    }
-
-    onAddComplete(message?: string) {
-        this.adminService.sendNotification({ type: 'success', title: 'Successfully Created', content: message });
-        this.router.navigate(['/admin']);
     }
 }

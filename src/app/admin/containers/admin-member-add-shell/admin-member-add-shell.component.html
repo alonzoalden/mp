@@ -1,0 +1,6 @@
+<o-admin-member-add
+    [userInfo]="userInfo$ | async"
+    [pendingSave]="pendingSave$ | async"
+    [errorMessage]="errorMessage$ | async"
+    (addMember)="addMember($event)"
+></o-admin-member-add>

@@ -1,0 +1,10 @@
+<o-admin-member-edit
+    [member]="member$ | async"
+    [userInfo]="userInfo$ | async"
+    [vendorList]="vendorList$ | async"
+    [pendingSave]="pendingSave$ | async"
+    [errorMessage]="errorMessage$ | async"
+    (editMember)="editMember($event)"
+    (getMember)="getMember($event)"
+    (getVendorList)="getVendorList()"
+></o-admin-member-edit>

@@ -1,0 +1,8 @@
+<o-admin-member-list
+    [membersMatTable]="membersMatTable$ | async"
+    [userInfo]="userInfo$ | async"
+    [errorMessage]="errorMessage$ | async"
+    (getMembers)="getMembers($event)"
+    (editMember)="editMember($event)"
+    (setMemberID)="setMemberID($event)"
+></o-admin-member-list>

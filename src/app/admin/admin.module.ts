@@ -8,6 +8,10 @@ import { ToolModule } from '../shared/tool/tool.module';
 import { TranslateModule } from '@ngx-translate/core';
 
 import { AdminShellComponent } from './containers/admin-shell/admin-shell.component';
+import { AdminMemberAddShellComponent } from './containers/admin-member-add-shell/admin-member-add-shell.component';
+import { AdminMemberEditShellComponent } from './containers/admin-member-edit-shell/admin-member-edit-shell.component';
+import { AdminMemberListShellComponent } from './containers/admin-member-list-shell/admin-member-list-shell.component';
+
 import { AdminMemberListComponent } from './components/admin-member-list/admin-member-list.component';
 import { AdminMemberAddComponent } from './components/admin-member-add/admin-member-add.component';
 import { AdminMemberEditComponent } from './components/admin-member-edit/admin-member-edit.component';
@@ -23,11 +27,13 @@ import { AdminEffects } from './state/admin.effects';
 
 @NgModule({
     declarations: [
-        //AdminComponent,
         AdminShellComponent,
-        AdminMemberListComponent,
+        AdminMemberAddShellComponent,
+        AdminMemberEditShellComponent,
+        AdminMemberListShellComponent,
         AdminMemberAddComponent,
-        AdminMemberEditComponent
+        AdminMemberEditComponent,
+        AdminMemberListComponent,
     ],
     imports: [
         TranslateModule,

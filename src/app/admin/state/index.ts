@@ -49,6 +49,10 @@ export const getError = createSelector(
     getAdminFeatureState,
     state => state.error
 );
+export const getVendorList = createSelector(
+    getAdminFeatureState,
+    state => state.vendorList
+);
 
 // export const getCurrentVendorAttachment = createSelector(
 //     getCompanyFeatureState,

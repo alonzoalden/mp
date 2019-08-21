@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpErrorResponse, HttpHeaders } from '@angular/common/http';
 
-import { Observable, Subject, of, throwError } from 'rxjs';
+import { Observable, of, throwError } from 'rxjs';
 import { catchError, tap } from 'rxjs/operators';
 
 import { Member, MemberInsert } from '../shared/class/member';
@@ -16,7 +16,7 @@ import { NotificationComponent } from '../shared/tool/notification/notification.
 export class AdminService {
     private apiURL = environment.webapiURL;
     private members: Member[];
-    public subject = new Subject<string>();
+    //public subject = new Subject<string>();
 
     private vendorList: VendorList[];
     currentMember: Member;

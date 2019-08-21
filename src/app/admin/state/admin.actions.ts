@@ -1,5 +1,6 @@
 import { Action } from '@ngrx/store';
 import { Member, MemberInsert } from 'app/shared/class/member';
+import { VendorList } from 'app/shared/class/vendor';
 
 export enum AdminActionTypes {
   LoadMembers = '[Admin] Load Members',
@@ -15,6 +16,9 @@ export enum AdminActionTypes {
   EditMember = '[Admin] Edit Current Member',
   EditMemberSuccess = '[Admin] Edit Current Member Success',
   EditMemberFail = '[Admin] Edit Current Member Fail',
+  LoadVendorList = '[Admin] Load Vendor List',
+  LoadVendorListSuccess = '[Admin] Load Vendor List Success',
+  LoadVendorListFail = '[Admin] Load Vendor List Fail',
   // SetVendorAttachmentID = '[Company] Set Vendor Attachment ID',
   // DeleteVendorAttachment = '[Company] Delete Vendor Attachment',
   // DeleteVendorAttachmentSuccess = '[Company] Delete Vendor Attachment Success',
@@ -97,7 +101,19 @@ export class EditMemberFail implements Action {
   readonly type = AdminActionTypes.EditMemberFail;
   constructor(public payload: string) { }
 }
+export class LoadVendorList implements Action {
+  readonly type = AdminActionTypes.LoadVendorList;
+}
 
+export class LoadVendorListSuccess implements Action {
+  readonly type = AdminActionTypes.LoadVendorListSuccess;
+  constructor(public payload: VendorList[]) { }
+}
+
+export class LoadVendorListFail implements Action {
+  readonly type = AdminActionTypes.LoadVendorListFail;
+  constructor(public payload: string) { }
+}
 
 // Union the valid types
 export type AdminActions = SetMemberID
@@ -112,4 +128,7 @@ export type AdminActions = SetMemberID
 | EditMemberFail
 | AddMember
 | AddMemberSuccess
-| AddMemberFail;
+| AddMemberFail
+| LoadVendorList
+| LoadVendorListSuccess
+| LoadVendorListFail;
