@@ -5,20 +5,26 @@ import { MatDatepickerModule, MatFormFieldModule, MatInputModule, MatPaginatorMo
 import { CdkTableModule } from '@angular/cdk/table';
 import { NgSelectModule } from '@ng-select/ng-select';
 import { ToolModule } from '../shared/tool/tool.module';
+import { TranslateModule } from '@ngx-translate/core';
 
-import { AdminComponent } from './admin.component';
-import { AdminMemberListComponent } from './admin-member-list/admin-member-list.component';
-import { AdminMemberAddComponent } from './admin-member-add/admin-member-add.component';
-import { AdminMemberEditComponent } from './admin-member-edit/admin-member-edit.component';
+import { AdminShellComponent } from './containers/admin-shell/admin-shell.component';
+import { AdminMemberListComponent } from './components/admin-member-list/admin-member-list.component';
+import { AdminMemberAddComponent } from './components/admin-member-add/admin-member-add.component';
+import { AdminMemberEditComponent } from './components/admin-member-edit/admin-member-edit.component';
 
 import { adminRouting } from './admin.routing';
 
 import { AdminService } from './admin.service';
-import { TranslateModule } from '@ngx-translate/core';
+import { StoreModule } from '@ngrx/store';
+import { EffectsModule } from '@ngrx/effects';
+import { adminReducer } from './state/admin.reducer';
+import { AdminEffects } from './state/admin.effects';
+
 
 @NgModule({
     declarations: [
-        AdminComponent,
+        //AdminComponent,
+        AdminShellComponent,
         AdminMemberListComponent,
         AdminMemberAddComponent,
         AdminMemberEditComponent
@@ -38,7 +44,9 @@ import { TranslateModule } from '@ngx-translate/core';
         MatTooltipModule,
         ToolModule,
         adminRouting,
-        NgSelectModule
+        NgSelectModule,
+        StoreModule.forFeature('Admin', adminReducer),
+        EffectsModule.forFeature([AdminEffects])
     ],
     providers: [
         AdminService

@@ -1,7 +1,7 @@
 <div class="row wrapper border-bottom white-bg page-heading">
     <div class="col-lg-12">
         <h2>
-            {{ 'Edit Admin' | translate }}: {{ member.Email }}
+            {{ 'Edit Admin' | translate }}: {{ member?.Email }}
         </h2>
         <ol class="breadcrumb">
             <li>
@@ -19,11 +19,11 @@
 <div class="wrapper wrapper-content animated fadeIn">
     <div class="row">
         <div class="col-lg-12">
-            <form class="form-horizontal" [formGroup]="memberForm" *ngIf='member'>
+            <form class="form-horizontal" [formGroup]="memberForm">
                 <div formGroupName="memberData">
                     <fieldset>
                         <div class="ibox-title"><h5>{{ 'Enter Details' | translate }}</h5></div>
-                        <div class="ibox-content">
+                        <div class="ibox-content" *ngIf="member">
                             <div class="form-group" 
                                 [ngClass]="{'has-error': (memberForm.controls['memberData'].controls['memberFirstName'].touched || 
                                     memberForm.controls['memberData'].controls['memberFirstName'].dirty) && 

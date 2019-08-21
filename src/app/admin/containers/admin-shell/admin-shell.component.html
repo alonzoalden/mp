@@ -1,0 +1,33 @@
+<div>
+    <!-- <router-outlet></router-outlet> -->
+    
+    <o-admin-member-list
+        *ngIf="!this.route.includes('member-edit') && !this.route.includes('member-add')"
+        [membersMatTable]="membersMatTable$ | async"
+        [userInfo]="userInfo$ | async"
+        [errorMessage]="errorMessage$ | async"
+        [pendingDelete]="pendingDelete$ | async"
+        (getMembers)="getMembers($event)"
+        (editMember)="editMember($event)"
+        (setMemberID)="setMemberID($event)"
+    ></o-admin-member-list>
+
+    <o-admin-member-edit
+        *ngIf="this.route.includes('member-edit')"
+        [member]="member$ | async"
+        [userInfo]="userInfo$ | async"
+        (getMembers)="getMembers($event)"
+        (getMember)="getMember($event)"
+        (setMemberID)="setMemberID($event)"
+    ></o-admin-member-edit>
+
+    <o-admin-member-add
+        *ngIf="this.route.includes('member-add')"
+        [userInfo]="userInfo$ | async"
+        [pendingSave]="pendingSave$ | async"
+        (addMember)="addMember($event)"
+    ></o-admin-member-add>
+
+
+    <o-notification></o-notification>
+</div>

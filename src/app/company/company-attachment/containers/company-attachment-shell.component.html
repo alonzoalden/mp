@@ -2,7 +2,6 @@
 
 <o-company-attachment-list
     *ngIf="!this.route.includes('edit') && !this.route.includes('add')"
-    
     [userInfoDefaultPageSize]="userInfoDefaultPageSize$ | async" 
     [vendorAttachmentsMatTable]="vendorAttachmentsMatTable$ | async"
     [errorMessage]="errorMessage$ | async"
@@ -10,8 +9,7 @@
     (getVendorAttachments)="getVendorAttachments($event)"
     (deleteVendorAttachment)="deleteVendorAttachment($event)"
     (setVendorAttachmentID)="setVendorAttachmentID($event)"
-    >
-</o-company-attachment-list>
+></o-company-attachment-list>
 
 
 <o-company-attachment-edit
@@ -21,12 +19,10 @@
     (editVendorAttachment)="editVendorAttachment($event)"
     (getCurrentVendorAttachment)="getCurrentVendorAttachment($event)"
     (uploadUpdateVendorAttachment)="uploadUpdateVendorAttachment($event)"
-    >
-</o-company-attachment-edit>
+></o-company-attachment-edit>
 
 <o-company-attachment-add
     *ngIf="this.route.includes('add')"
-    (uploadVendorAttachment)="uploadVendorAttachment($event)"
     [pendingUpload]="pendingUpload$ | async"
-    >
-</o-company-attachment-add>
+    (uploadVendorAttachment)="uploadVendorAttachment($event)"
+></o-company-attachment-add>

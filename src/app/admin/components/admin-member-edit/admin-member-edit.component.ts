@@ -1,28 +1,35 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Input, SimpleChanges, EventEmitter, Output, OnChanges } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 import { FormBuilder, Validators, FormGroup, FormControl } from '@angular/forms';
 import { Subscription } from 'rxjs';
 
-import { Member } from '../../shared/class/member';
-import { VendorList } from '../../shared/class/vendor';
+import { Member } from '../../../shared/class/member';
+import { VendorList } from '../../../shared/class/vendor';
 
-import { AdminService } from '../admin.service';
-import { AppService } from '../../app.service';
+import { AdminService } from '../../admin.service';
+import { AppService } from '../../../app.service';
 
 @Component({
   selector: 'o-admin-member-edit',
   templateUrl: './admin-member-edit.component.html'
 })
 
-export class AdminMemberEditComponent implements OnInit {
+export class AdminMemberEditComponent implements OnInit, OnChanges {
     memberForm: any;
     subscription: Subscription;
 
-    errorMessage: string;
-    member: Member;
+    //errorMessage: string;
+    //member: Member;
     vendorList: VendorList[];
 
     memberid: number;
+
+    @Input() userInfo: Member;
+    @Input() member: Member;
+    @Input() errorMessage: string;
+    @Output() getMember = new EventEmitter<number>();
+    @Output() getMembers = new EventEmitter<void>();
+    @Output() setMemberID = new EventEmitter<number>(); 
 
     private dataIsValid: boolean;
 
@@ -41,6 +48,25 @@ export class AdminMemberEditComponent implements OnInit {
             })
         });
     }
+    ngOnChanges(changes: SimpleChanges): void {
+        console.log(changes);
+        // Current User must be Admin - redirect to home/dashboard
+        if (changes.userInfo && changes.userInfo.currentValue) {
+            if (!changes.userInfo.currentValue.IsAdmin) {
+                this.router.navigate(['/home']);
+            }
+        }
+        if (changes.member && changes.member.currentValue && changes.member.firstChange) {
+            
+            //this.member = changes.member.currentValue;
+            this.getMember.emit(this.route.snapshot.firstChild.params['id']);
+            console.log('huh');
+            console.log(this.route.snapshot.firstChild.params['id'])
+            //this.getMembers.emit();
+            //this.setMemberID.emit(this.route.snapshot.firstChild.params['id']);
+
+        }
+    }
 
     ngOnInit(): void {
         // Current User must be Admin - redirect to home/dashboard
@@ -49,13 +75,13 @@ export class AdminMemberEditComponent implements OnInit {
         }
 
         this.memberid = this.route.snapshot.params['id'];
-
-        this.adminService.getMember(this.memberid).subscribe(
-            (member: Member) => {
-                this.member = member;
-            },
-            (error: any) => this.errorMessage = <any>error
-        );
+        
+        // this.adminService.getMember(this.memberid).subscribe(
+        //     (member: Member) => {
+        //         this.member = member;
+        //     },
+        //     (error: any) => this.errorMessage = <any>error
+        // );
 
         this.adminService.getVendorList().subscribe(
             (vendorList: VendorList[]) => {

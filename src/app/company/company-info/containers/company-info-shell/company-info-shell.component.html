@@ -30,8 +30,7 @@
                     [vendorBrands]="vendorBrands$ | async"
                     [isVendorBrandLoading]="isVendorBrandLoading$ | async"
                     [errorMessage]="errorMessage$ | async"
-                    (loadCompanyInfoVendorBrands)="loadCompanyInfoVendorBrands($event)"
-                    >
+                    (loadCompanyInfoVendorBrands)="loadCompanyInfoVendorBrands($event)">
                 </o-company-info-brand>
 
                 <o-company-info-description
@@ -46,8 +45,7 @@
                     (getShippingAddressState)="getShippingAddressState($event)"
                     (getBillingAddressState)="getBillingAddressState($event)"
                     (updateCompanyInfoShippingAddress)="updateCompanyInfoShippingAddress($event)"
-                    (updateCompanyInfoBillingAddress)="updateCompanyInfoBillingAddress($event)"
-                    >
+                    (updateCompanyInfoBillingAddress)="updateCompanyInfoBillingAddress($event)">
                 </o-company-info-description>
 
                 <o-company-info-trademark-registration 

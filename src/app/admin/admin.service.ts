@@ -10,6 +10,7 @@ import { OAuthService } from 'angular-oauth2-oidc';
 import { environment } from '../../environments/environment';
 
 import { VendorList } from '../shared/class/vendor';
+import { NotificationComponent } from '../shared/tool/notification/notification.component';
 
 @Injectable()
 export class AdminService {
@@ -21,10 +22,12 @@ export class AdminService {
     currentMember: Member;
 
     constructor(private http: HttpClient,
-                private oauthService: OAuthService) { }
+                private oauthService: OAuthService,
+                private notificationComponent: NotificationComponent) { }
 
     sendNotification(notification: any) {
-        this.subject.next(notification);
+        this.notificationComponent.notify(notification);
+        //this.subject.next(notification);
     }
 
     getMembers(): Observable<Member[]> {
@@ -41,7 +44,9 @@ export class AdminService {
 
     getMember(id: number): Observable<Member> {
         if (this.members) {
+            
             const foundMember = this.members.find(x => x.MemberID === id);
+            console.log(foundMember)
             return of(foundMember);
         }
         return this.http.get<Member>(this.apiURL + '/member/' + id)
