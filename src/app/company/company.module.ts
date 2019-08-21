@@ -11,11 +11,17 @@ import { CompanyComponent } from './company.component';
 import { companyRouting } from './company.routing';
 
 import { CompanyService } from './company.service';
-import { CompanyInfoShellComponent } from './company-info/containers/company-info-shell/company-info-shell.component'
-import { CompanyAttachmentShellComponent } from './company-attachment/containers/company-attachment-shell.component';
-import { CompanyAttachmentListComponent } from './company-attachment/components/company-attachment-list/company-attachment-list.component';
+import { CompanyAttachmentShellComponent } from './company-attachment/containers/company-attachment-shell/company-attachment-shell.component';
+import { CompanyAttachmentAddShellComponent } from './company-attachment/containers/company-attachment-add-shell/company-attachment-add-shell.component';
+import { CompanyAttachmentEditShellComponent } from './company-attachment/containers/company-attachment-edit-shell/company-attachment-edit-shell.component';
+import { CompanyAttachmentListShellComponent } from './company-attachment/containers/company-attachment-list-shell/company-attachment-list-shell.component';
 import { CompanyAttachmentAddComponent } from './company-attachment/components/company-attachment-add/company-attachment-add.component';
 import { CompanyAttachmentEditComponent } from './company-attachment/components/company-attachment-edit/company-attachment-edit.component';
+import { CompanyAttachmentListComponent } from './company-attachment/components/company-attachment-list/company-attachment-list.component';
+import { CompanyInfoShellComponent } from './company-info/containers/company-info-shell/company-info-shell.component'
+import { CompanyInfoBrandShellComponent } from './company-info/containers/company-info-brand-shell/company-info-brand-shell.component'
+import { CompanyInfoDescriptionShellComponent } from './company-info/containers/company-info-description-shell/company-info-description-shell.component'
+import { CompanyInfoTrademarkRegistrationShellComponent } from './company-info/containers/company-info-trademark-registration-shell/company-info-trademark-registration-shell.component'
 import { CompanyInfoDescriptionComponent } from './company-info/components/company-info-description/company-info-description.component';
 import { CompanyInfoTrademarkRegistrationComponent } from './company-info/components/company-info-trademark-registration/company-info-trademark-registration.component';
 import { CompanyInfoBrandComponent } from './company-info/components/company-info-brand/company-info-brand.component';
@@ -34,10 +40,16 @@ import { companyAttachmentReducer } from './company-attachment/state/company-att
     declarations: [
         CompanyComponent,
         CompanyAttachmentShellComponent,
-        CompanyAttachmentListComponent,
+        CompanyAttachmentAddShellComponent,
+        CompanyAttachmentEditShellComponent,
+        CompanyAttachmentListShellComponent,
         CompanyAttachmentAddComponent,
         CompanyAttachmentEditComponent,
+        CompanyAttachmentListComponent,
         CompanyInfoShellComponent,
+        CompanyInfoBrandShellComponent,
+        CompanyInfoDescriptionShellComponent,
+        CompanyInfoTrademarkRegistrationShellComponent,
         CompanyInfoDescriptionComponent,
         CompanyInfoBrandComponent,
         CompanyInfoTrademarkRegistrationComponent

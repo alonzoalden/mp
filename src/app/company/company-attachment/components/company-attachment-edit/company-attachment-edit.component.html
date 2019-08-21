@@ -24,7 +24,6 @@
                     <h5>{{ 'Edit Attachment' | translate }}</h5>
                 </div>
                 <div class="ibox-content">
-
                     <form class="form-horizontal" #purchaseorderForm="ngForm" *ngIf="vendorAttachment">
                         <fieldset>
                             <div class="form-group" [ngClass]="{'has-error': (vendorAttachmentTitleVar.touched || 
@@ -92,7 +91,7 @@
                                         (click)="upload()">
                                         <span *ngIf="!pendingUpload">{{ 'Save' | translate }}</span>
                                         
-                                        <div *ngIf="pendingUpload" class="flex-va-center sk-spinner sk-spinner-three-bounce">
+                                        <div *ngIf="pendingUpload" class="flex-center sk-spinner sk-spinner-three-bounce">
                                             <div class="sk-bounce1"></div>
                                             <div class="sk-bounce2"></div>
                                             <div class="sk-bounce3"></div>
@@ -100,10 +99,9 @@
                                     </button>
                                 </div>
                             </div>
-                            
-                            
                         </fieldset>
                     </form>
+                    <div class="has-error" *ngIf="errorMessage">{{errorMessage}}</div>
                 </div>
             </div>
         </div>

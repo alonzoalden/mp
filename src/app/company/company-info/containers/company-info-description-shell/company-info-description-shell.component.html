@@ -1,0 +1,11 @@
+<o-company-info-description
+    [companyInfo]="companyInfo$ | async"
+    [addressCountries]="addressCountries$ | async"
+    [billingAddressStates]="billingAddressStates$ | async"
+    [shippingAddressStates]="shippingAddressStates$ | async"
+    [isInfoDescriptionLoading]="isInfoDescriptionLoading$ | async"
+    [errorMessage]="errorMessage$ | async"
+    (loadCompanyInfoDescription)="loadCompanyInfoDescription($event)"
+    (updateCompanyInfoShippingAddress)="updateCompanyInfoShippingAddress($event)"
+    (updateCompanyInfoBillingAddress)="updateCompanyInfoBillingAddress($event)">
+</o-company-info-description>

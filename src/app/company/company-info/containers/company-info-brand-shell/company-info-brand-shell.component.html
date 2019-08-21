@@ -1,0 +1,6 @@
+<o-company-info-brand
+    [vendorBrands]="vendorBrands$ | async"
+    [isVendorBrandLoading]="isVendorBrandLoading$ | async"
+    [errorMessage]="errorMessage$ | async"
+    (loadCompanyInfoVendorBrands)="loadCompanyInfoVendorBrands($event)">
+</o-company-info-brand>

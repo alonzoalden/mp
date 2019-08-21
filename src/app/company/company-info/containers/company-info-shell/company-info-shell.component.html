@@ -23,34 +23,7 @@
                     </li> -->
                 </ul>
 
-                <!-- <router-outlet></router-outlet> -->
-
-                <o-company-info-brand
-                    *ngIf="this.route === '/company/info/brand'"
-                    [vendorBrands]="vendorBrands$ | async"
-                    [isVendorBrandLoading]="isVendorBrandLoading$ | async"
-                    [errorMessage]="errorMessage$ | async"
-                    (loadCompanyInfoVendorBrands)="loadCompanyInfoVendorBrands($event)">
-                </o-company-info-brand>
-
-                <o-company-info-description
-                    *ngIf="this.route === '/company/info/description'"
-                    [companyInfo]="companyInfo$ | async"
-                    [addressCountries]="addressCountries$ | async"
-                    [billingAddressStates]="billingAddressStates$ | async"
-                    [shippingAddressStates]="shippingAddressStates$ | async"
-                    [isInfoDescriptionLoading]="isInfoDescriptionLoading$ | async"
-                    [errorMessage]="errorMessage$ | async"
-                    (loadCompanyInfoDescription)="loadCompanyInfoDescription($event)"
-                    (getShippingAddressState)="getShippingAddressState($event)"
-                    (getBillingAddressState)="getBillingAddressState($event)"
-                    (updateCompanyInfoShippingAddress)="updateCompanyInfoShippingAddress($event)"
-                    (updateCompanyInfoBillingAddress)="updateCompanyInfoBillingAddress($event)">
-                </o-company-info-description>
-
-                <o-company-info-trademark-registration 
-                    *ngIf="this.route === '/company/info/trademark'">
-                </o-company-info-trademark-registration>
+                <router-outlet></router-outlet>
             </div>
         </div>
     </div>

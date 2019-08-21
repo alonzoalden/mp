@@ -1,0 +1,5 @@
+<o-company-attachment-add
+    [pendingUpload]="pendingUpload$ | async"
+    [errorMessage]="errorMessage$ | async"
+    (uploadVendorAttachment)="uploadVendorAttachment($event)"
+></o-company-attachment-add>

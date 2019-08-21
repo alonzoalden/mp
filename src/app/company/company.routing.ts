@@ -1,14 +1,14 @@
 import { Routes, RouterModule } from '@angular/router';
 
 import { CompanyComponent } from './company.component';
+import { CompanyAttachmentShellComponent } from './company-attachment/containers/company-attachment-shell/company-attachment-shell.component';
+import { CompanyAttachmentListShellComponent } from './company-attachment/containers/company-attachment-list-shell/company-attachment-list-shell.component';
+import { CompanyAttachmentAddShellComponent } from './company-attachment/containers/company-attachment-add-shell/company-attachment-add-shell.component';
+import { CompanyAttachmentEditShellComponent } from './company-attachment/containers/company-attachment-edit-shell/company-attachment-edit-shell.component';
 import { CompanyInfoShellComponent } from './company-info/containers/company-info-shell/company-info-shell.component';
-import { CompanyAttachmentShellComponent } from './company-attachment/containers/company-attachment-shell.component';
-import { CompanyAttachmentListComponent } from './company-attachment/components/company-attachment-list/company-attachment-list.component';
-import { CompanyAttachmentAddComponent } from './company-attachment/components/company-attachment-add/company-attachment-add.component';
-import { CompanyAttachmentEditComponent } from './company-attachment/components/company-attachment-edit/company-attachment-edit.component';
-import { CompanyInfoBrandComponent } from './company-info/components/company-info-brand/company-info-brand.component';
-import { CompanyInfoDescriptionComponent } from './company-info/components/company-info-description/company-info-description.component';
-import { CompanyInfoTrademarkRegistrationComponent } from './company-info/components/company-info-trademark-registration/company-info-trademark-registration.component';
+import { CompanyInfoBrandShellComponent } from './company-info/containers/company-info-brand-shell/company-info-brand-shell.component';
+import { CompanyInfoDescriptionShellComponent } from './company-info/containers/company-info-description-shell/company-info-description-shell.component';
+import { CompanyInfoTrademarkRegistrationShellComponent } from './company-info/containers/company-info-trademark-registration-shell/company-info-trademark-registration-shell.component';
 const COMPANY_ROUTES: Routes = [
     {
         path: '',
@@ -18,15 +18,15 @@ const COMPANY_ROUTES: Routes = [
             component: CompanyAttachmentShellComponent,
             children: [ {
                 path: '',
-                component: CompanyAttachmentListComponent
+                component: CompanyAttachmentListShellComponent
             },
             {
                 path: 'add',
-                component: CompanyAttachmentAddComponent
+                component: CompanyAttachmentAddShellComponent
             },
             {
                 path: ':id/edit',
-                component: CompanyAttachmentEditComponent
+                component: CompanyAttachmentEditShellComponent
             } ]
         },
         {
@@ -34,15 +34,15 @@ const COMPANY_ROUTES: Routes = [
             component: CompanyInfoShellComponent,
             children: [ {
                 path: 'description',
-                component: CompanyInfoDescriptionComponent
+                component: CompanyInfoDescriptionShellComponent
             },
             {
                 path: 'brand',
-                component: CompanyInfoBrandComponent
+                component: CompanyInfoBrandShellComponent
             },
             {
                 path: 'trademark',
-                component: CompanyInfoTrademarkRegistrationComponent
+                component: CompanyInfoTrademarkRegistrationShellComponent
             }
         ]                
         } ]        

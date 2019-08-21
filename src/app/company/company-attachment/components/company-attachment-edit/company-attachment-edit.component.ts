@@ -32,7 +32,7 @@ export class CompanyAttachmentEditComponent implements OnChanges {
                 this.selectedFileNames.push(changes.vendorAttachment.currentValue.UploadedFile);
             }
             else if (!changes.vendorAttachment.currentValue && changes.vendorAttachment.firstChange) {
-                this.getCurrentVendorAttachment.emit(this.route.snapshot.firstChild.params['id']);
+                this.getCurrentVendorAttachment.emit(this.route.snapshot.params['id']);
             }
         }
     }

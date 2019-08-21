@@ -1,0 +1,8 @@
+<o-company-attachment-edit
+    [vendorAttachment]="vendorAttachment$ | async"
+    [pendingUpload]="pendingUpload$ | async"
+    [errorMessage]="errorMessage$ | async"
+    (editVendorAttachment)="editVendorAttachment($event)"
+    (getCurrentVendorAttachment)="getCurrentVendorAttachment($event)"
+    (uploadUpdateVendorAttachment)="uploadUpdateVendorAttachment($event)"
+></o-company-attachment-edit>
