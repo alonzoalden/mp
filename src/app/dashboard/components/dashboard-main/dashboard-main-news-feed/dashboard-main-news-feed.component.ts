@@ -1,13 +1,13 @@
 import { Component, ViewChild, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { MatTableDataSource } from '@angular/material';
-import { DashboardService } from '../dashboard.service';
-import { Dashboard, DashboardNews } from '../../shared/class/dashboard';
-import { growContainerAnimation } from './smooth-open-animation.component';
+import { DashboardService } from '../../../dashboard.service';
+import { Dashboard, DashboardNews } from '../../../../shared/class/dashboard';
+import { growContainerAnimation } from '../smooth-open-animation.component';
 import { trigger, transition, useAnimation } from '@angular/animations';
 @Component({
     selector: 'o-dashboard-main-news-feed',
-    styleUrls: ['../dashboard.component.css'],
+    styleUrls: ['../../../dashboard.component.css'],
     templateUrl: './dashboard-main-news-feed.component.html',
     animations: [
         trigger('smoothOpen', [

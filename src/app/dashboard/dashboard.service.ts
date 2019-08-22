@@ -8,7 +8,7 @@ import { Dashboard, ItemSalesTotal, InboundShipmentStatusCount, SalesStatusTotal
 
 import { OAuthService } from 'angular-oauth2-oidc';
 import { environment } from '../../environments/environment';
-
+import { NotificationComponent } from '../shared/tool/notification/notification.component';
 @Injectable()
 export class DashboardService {
     private apiURL = environment.webapiURL;
@@ -22,10 +22,12 @@ export class DashboardService {
     public subject = new Subject<string>();
 
     constructor(private http: HttpClient,
-                private oauthService: OAuthService) { }
+                private oauthService: OAuthService,
+                private notificationComponent: NotificationComponent) { }
 
     sendNotification(notification: any) {
-        this.subject.next(notification);
+        this.notificationComponent.notify(notification);
+        //this.subject.next(notification);
     }
 
     reset() {

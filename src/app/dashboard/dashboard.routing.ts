@@ -1,18 +1,18 @@
 import { Routes, RouterModule } from '@angular/router';
 
 import { DashboardComponent } from './dashboard.component';
-import { DashboardMainComponent } from './dashboard-main/dashboard-main.component';
+import { DashboardMainShellComponent } from './containers/dashboard-main-shell/dashboard-main-shell.component';
 
 import { componentFactoryName } from '@angular/compiler';
 
 const DASHBOARD_ROUTES: Routes = [
     {
         path: '',
-        component: DashboardComponent,
-        children: [ {
-            path: '',
-            component: DashboardMainComponent
-        } ]
+        component: DashboardMainShellComponent,
+        // children: [ {
+        //     path: '',
+        //     component: DashboardMainComponent
+        // } ]
     }
 ];
 

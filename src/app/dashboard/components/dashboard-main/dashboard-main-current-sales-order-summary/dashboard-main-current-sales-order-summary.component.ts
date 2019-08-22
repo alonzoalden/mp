@@ -1,10 +1,10 @@
 import { Component, ViewChild, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { MatTableDataSource } from '@angular/material';
-import { DashboardService } from '../dashboard.service';
+import { DashboardService } from '../../../dashboard.service';
 
-import { CurrentSalesOrderSummary, DashboardSalesOrderSummary } from '../../shared/class/dashboard';
-import { growContainerAnimation } from './smooth-open-animation.component';
+import { CurrentSalesOrderSummary, DashboardSalesOrderSummary } from '../../../../shared/class/dashboard';
+import { growContainerAnimation } from '../smooth-open-animation.component';
 import { trigger, transition, useAnimation } from '@angular/animations';
 
 @Component({

@@ -1,14 +1,14 @@
 import { Component, ViewChild, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { MatTableDataSource } from '@angular/material';
-import { DashboardService } from '../dashboard.service';
-import { InboundShipmentStatusCount } from '../../shared/class/dashboard';
-import { growContainerAnimation } from './smooth-open-animation.component';
+import { DashboardService } from '../../../dashboard.service';
+import { InboundShipmentStatusCount } from '../../../../shared/class/dashboard';
+import { growContainerAnimation } from '../smooth-open-animation.component';
 import { trigger, transition, useAnimation } from '@angular/animations';
 
 @Component({
     selector: 'o-dashboard-main-inbound-shipment-status-count',
-    styleUrls: ['dashboard-main-inbound-shipment-status-count.component.css', '../dashboard.component.css'],
+    styleUrls: ['../../../dashboard.component.css'],
     templateUrl: './dashboard-main-inbound-shipment-status-count.component.html',
     animations: [
         trigger('smoothOpen', [

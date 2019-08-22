@@ -5,7 +5,6 @@ import * as fromCompany from '../../state';
 import { Observable } from 'rxjs';
 import * as companyActions from '../../state/company-info.actions';
 @Component({
-    selector: 'o-company-brand-info',
     templateUrl: './company-info-brand-shell.component.html',
 })
 

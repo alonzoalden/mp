@@ -6,7 +6,6 @@ import { Store, select } from '@ngrx/store';
 import * as companyActions from '../../state/company-info.actions';
 import * as fromCompany from '../../state';
 @Component({
-    selector: 'o-company-info-description-shell',
     templateUrl: './company-info-description-shell.component.html',
 })
 
@@ -18,8 +17,7 @@ export class CompanyInfoDescriptionShellComponent implements OnInit {
     isInfoDescriptionLoading$: Observable<boolean>;
     errorMessage$: Observable<string>;
 
-    constructor(private store: Store<fromCompany.State>) {
-    }
+    constructor(private store: Store<fromCompany.State>) {}
 
     ngOnInit() {
         this.companyInfo$ = this.store.pipe(select(fromCompany.getCompanyInfo));

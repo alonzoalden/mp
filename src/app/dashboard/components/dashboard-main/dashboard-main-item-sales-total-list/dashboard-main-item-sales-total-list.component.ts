@@ -1,17 +1,17 @@
 import { Component, ViewChild, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { MatTableDataSource } from '@angular/material';
-import { DashboardService } from '../dashboard.service';
+import { DashboardService } from '../../../dashboard.service';
 
-import { ItemSalesTotal } from '../../shared/class/dashboard';
-import { growContainerAnimation } from './smooth-open-animation.component';
+import { ItemSalesTotal } from '../../../../shared/class/dashboard';
+import { growContainerAnimation } from '../smooth-open-animation.component';
 import { trigger, transition, useAnimation } from '@angular/animations';
 
-import { environment } from '../../../environments/environment';
+import { environment } from '../../../../../environments/environment';
 
 @Component({
     selector: 'o-dashboard-main-item-sales-total-list',
-    styleUrls: ['dashboard-main-item-sales-total-list.component.css', '../dashboard.component.css'],
+    styleUrls: ['dashboard-main-item-sales-total-list.component.css', '../../../dashboard.component.css'],
     templateUrl: './dashboard-main-item-sales-total-list.component.html',
     animations: [
         trigger('smoothOpen', [

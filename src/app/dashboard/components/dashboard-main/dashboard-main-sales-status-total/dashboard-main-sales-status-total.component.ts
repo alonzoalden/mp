@@ -1,15 +1,15 @@
 import { Component, ViewChild, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { MatTableDataSource } from '@angular/material';
-import { DashboardService } from '../dashboard.service';
+import { DashboardService } from '../../../dashboard.service';
 
-import { SalesStatusTotal } from '../../shared/class/dashboard';
-import { growContainerAnimation } from './smooth-open-animation.component';
+import { SalesStatusTotal } from '../../../../shared/class/dashboard';
+import { growContainerAnimation } from '../smooth-open-animation.component';
 import { trigger, transition, useAnimation } from '@angular/animations';
 
 @Component({
     selector: 'o-dashboard-main-sales-status-total',
-    styleUrls: ['dashboard-main-sales-status-total.component.css', '../dashboard.component.css'],
+    styleUrls: ['../../../dashboard.component.css'],
     templateUrl: './dashboard-main-sales-status-total.component.html',
     animations: [
         trigger('smoothOpen', [
