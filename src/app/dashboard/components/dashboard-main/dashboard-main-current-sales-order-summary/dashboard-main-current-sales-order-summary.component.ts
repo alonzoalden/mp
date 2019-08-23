@@ -26,13 +26,13 @@ export class DashboardMainCurrentSalesOrderSummaryComponent implements OnInit {
     @Input() salesOrderSummaryMerchantMatTable: MatTableDataSource<DashboardSalesOrderSummary>;
     @Input() salesOrderSummaryToolotsMatTable: MatTableDataSource<DashboardSalesOrderSummary>;
     @Input() errorMessage: string;
-    @Output() getSalesOrderSummaryMerchant = new EventEmitter<void>();
-    @Output() getSalesOrderSummaryToolots = new EventEmitter<void>();
+    // @Output() getSalesOrderSummaryMerchant = new EventEmitter<void>();
+    // @Output() getSalesOrderSummaryToolots = new EventEmitter<void>();
 
     constructor() { }
 
     ngOnInit() {
-        this.getSalesOrderSummaryMerchant.emit();
-        this.getSalesOrderSummaryToolots.emit();
+        // this.getSalesOrderSummaryMerchant.emit();
+        // this.getSalesOrderSummaryToolots.emit();
     }
 }

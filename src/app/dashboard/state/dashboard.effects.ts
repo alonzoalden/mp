@@ -26,8 +26,7 @@ export class DashboardEffects {
                     return EMPTY;
                 })
             )
-        ),
-        take(1)
+        )
     );    
     @Effect()
     loadSalesOrderSummaryMerchant$: Observable<Action> = this.actions$.pipe(
@@ -40,8 +39,7 @@ export class DashboardEffects {
                     return EMPTY;
                 })
             )
-        ),
-        take(1)
+        )
     );
     @Effect()
     loadSalesOrderSummaryToolots$: Observable<Action> = this.actions$.pipe(
@@ -54,8 +52,7 @@ export class DashboardEffects {
                     return EMPTY;
                 })
             )
-        ),
-        take(1)
+        )
     );
     @Effect()
     loadInboundShipmentStatusCounts$: Observable<Action> = this.actions$.pipe(
@@ -64,12 +61,11 @@ export class DashboardEffects {
             this.dashboardService.getInboundShipmentStatusCounts().pipe(
                 map((inboundshipments: InboundShipmentStatusCount[]) => (new dashboardActions.LoadInboundShipmentStatusCountsSuccess(inboundshipments))),
                 catchError(err => {
-                    of(new dashboardActions.LoadSalesOrderSummaryToolotsFail(err))
+                    of(new dashboardActions.LoadInboundShipmentStatusCountsFail(err))
                     return EMPTY;
                 })
             )
-        ),
-        take(1)
+        )
     );
     @Effect()
     loadItemSalesTotal$: Observable<Action> = this.actions$.pipe(
@@ -82,8 +78,7 @@ export class DashboardEffects {
                     return EMPTY;
                 })
             )
-        ),
-        take(1)
+        )
     );
     @Effect()
     loadSalesOrderSummary$: Observable<Action> = this.actions$.pipe(
@@ -96,8 +91,7 @@ export class DashboardEffects {
                     return EMPTY;
                 })
             )
-        ),
-        take(1)
+        )
     );
     @Effect()
     loadSalesStatusTotals$: Observable<Action> = this.actions$.pipe(
@@ -110,12 +104,11 @@ export class DashboardEffects {
                     return EMPTY;
                 })
             )
-        ),
-        take(1)
+        )
     );
 
     @Effect()
-    loadDashboarVendorNotification$: Observable<Action> = this.actions$.pipe(
+    loadDashboardVendorNotification$: Observable<Action> = this.actions$.pipe(
         ofType(dashboardActions.DashboardActionTypes.LoadDashboardVendorNotification),
         mergeMap(() =>
             this.dashboardService.getDashboarVendorNotification().pipe(
@@ -125,7 +118,6 @@ export class DashboardEffects {
                     return EMPTY;
                 })
             )
-        ),
-        take(1)
+        )
     );
 }

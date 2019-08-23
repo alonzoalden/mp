@@ -18,6 +18,7 @@ export class DashboardService {
     private currentSalesOrderSummary: CurrentSalesOrderSummary[];
     private salesOrderSummary: SalesOrderSummary[];
     private dashboard: Dashboard;
+    private dashboarVendorNotification: DashboardVendorNotification;
 
     public subject = new Subject<string>();
 
@@ -35,6 +36,7 @@ export class DashboardService {
         this.inboundShipmentStatusCounts = null;
         this.salesStatusTotals = null;
         this.dashboard = null;
+        this.dashboarVendorNotification = null;
         this.currentSalesOrderSummary = null;
         this.salesOrderSummary = null;
     }
@@ -52,7 +54,6 @@ export class DashboardService {
     }
 
     getDashboarVendorNotification(): Observable<DashboardVendorNotification> {
-
         return this.http.get<DashboardVendorNotification>(this.apiURL + '/dashboard/dashboardvendornotification')
                         .pipe(
                             //tap(data => console.log(JSON.stringify(data))),
