@@ -1,0 +1,6 @@
+<o-setting-member-preference 
+    [userInfo]="userInfo$ | async"
+    [pendingSave]="pendingSave$ | async"
+    [errorMessage]="errorMessage$ | async"
+    (editCurrentMember)="editCurrentMember($event)"
+></o-setting-member-preference>

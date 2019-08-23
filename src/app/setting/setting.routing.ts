@@ -1,29 +1,25 @@
 import { Routes, RouterModule } from '@angular/router';
 
-import { SettingComponent } from './setting.component';
-import { SettingVendorListComponent } from './setting-vendor-list/setting-vendor-list.component';
-import { SettingMemberPreferenceComponent } from './setting-member-preference/setting-member-preference.component';
-
-import { AuthGuard } from '../auth/auth.guard';
-import { componentFactoryName } from '@angular/compiler';
-import { SettingMerchantAgreementComponent } from './setting-merchant-agreement/setting-merchant-agreement.component';
-
+import { SettingShellComponent } from './containers/setting-shell/setting-shell.component';
+import { SettingVendorListShellComponent } from './containers/setting-vendor-list-shell/setting-vendor-list-shell.component';
+import { SettingMemberPreferenceShellComponent } from './containers/setting-member-preference-shell/setting-member-preference-shell.component';
+import { SettingMerchantAgreementShellComponent } from './containers/setting-merchant-agreement-shell/setting-merchant-agreement-shell.component';
 
 const SETTING_ROUTES: Routes = [
     {
         path: '',
-        component: SettingComponent,
+        component: SettingShellComponent,
         children: [ {
             path: '',
-            component: SettingVendorListComponent
+            component: SettingVendorListShellComponent
         },
         {
             path: 'memberpreference',
-            component: SettingMemberPreferenceComponent
+            component: SettingMemberPreferenceShellComponent
         },
         {
             path: 'merchantagreement',
-            component: SettingMerchantAgreementComponent
+            component: SettingMerchantAgreementShellComponent
         } ]
     }
 ];

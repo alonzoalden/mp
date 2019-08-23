@@ -30,7 +30,7 @@
                 </div>
                 <div class="ibox-content">
                     <div class="table-responsive">
-                        <table mat-table #table [dataSource]="dataSource" style="width: 100%;" matSort>
+                        <table mat-table #table [dataSource]="memberVendorsMatTable" style="width: 100%;" matSort>
                             <!-- Vendor ID Column -->
                             <ng-container matColumnDef="VendorID">
                                 <th mat-header-cell *matHeaderCellDef mat-sort-header>{{ 'ID' | translate }}</th>
@@ -68,6 +68,7 @@
                         </table>
                         <mat-paginator #paginator [pageSizeOptions]="[10, 20, 50, 100, 200]" [showFirstLastButtons]="true">
                         </mat-paginator>
+                        <div class="has-error" *ngIf="errorMessage">{{errorMessage}}</div>
                     </div>
                 </div>
             </div>

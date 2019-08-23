@@ -4,10 +4,11 @@ import { HttpClient, HttpErrorResponse, HttpHeaders } from '@angular/common/http
 import { Observable, Subject, of, throwError } from 'rxjs';
 import { catchError, tap } from 'rxjs/operators';
 
-import { Member, MemberInsert, MemberVendor } from '../shared/class/member';
+import { Member, MemberVendor } from '../shared/class/member';
 
 import { OAuthService } from 'angular-oauth2-oidc';
 import { environment } from '../../environments/environment';
+import { NotificationComponent } from '../shared/tool/notification/notification.component';
 
 @Injectable()
 export class SettingService {
@@ -16,10 +17,12 @@ export class SettingService {
     public subject = new Subject<string>();
 
     constructor(private http: HttpClient,
-                private oauthService: OAuthService) { }
+                private oauthService: OAuthService,
+                private notificationComponent: NotificationComponent) { }
 
     sendNotification(notification: any) {
-        this.subject.next(notification);
+        this.notificationComponent.notify(notification);
+        //this.subject.next(notification);
     }
 
     getMemberVendors(): Observable<MemberVendor[]> {
