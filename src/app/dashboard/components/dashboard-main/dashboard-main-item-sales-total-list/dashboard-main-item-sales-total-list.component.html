@@ -1,4 +1,4 @@
-<div class="ibox float-e-margins" *ngIf="dataSource?.data.length > 0">
+<div class="ibox float-e-margins" *ngIf="itemSalesTotalsMatTable?.data.length > 0">
     <!-- <div class="ibox-title">
         <h5>{{ 'Top Item Sales' | translate }}</h5>
     </div> -->
@@ -10,7 +10,7 @@
         </mat-expansion-panel-header>
     
         <div class="ibox-content" style="min-height: 338px;">
-                <table mat-table #table [dataSource]="dataSource" style="width: 100%;" class="table-striped">
+                <table mat-table #table [dataSource]="itemSalesTotalsMatTable" style="width: 100%;" class="table-striped">
                     <!-- Item Name -->
                     <ng-container matColumnDef="ItemName">
                         <th mat-header-cell *matHeaderCellDef width="200px" style="align-items: left">{{ 'Item Name' | translate }}</th>

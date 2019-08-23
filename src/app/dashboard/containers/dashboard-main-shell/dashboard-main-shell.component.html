@@ -1,138 +1,81 @@
-
 <mat-sidenav-container class="example-container">
     <mat-sidenav #sidenav mode="side" [(opened)]="opened">
-        <!-- <i class="fa fa-arrow-circle-o-left animated fadeIn" (click)="sidenav.close()"></i> -->
         <i class="fa fa-angle-left animated fadeIn" (click)="sidenav.close()"></i>
-        <div class="animated fadeIn">
-            <div *ngIf="name" class="animated fadeIn m-b-lg" style="text-align: center;">
-                <h2>{{ 'Welcome' | translate }} {{ name }}</h2>
-            </div>
-            <div *ngIf="dashboard" class="ibox ibox-gray float-e-margins no-shadow">
-                <div class="ibox-title">
-                    <h5>{{ 'Notifications' | translate }}</h5>
-                    <div class="ibox-tools">
-                        <span class="label label-warning animated m-l-10imp fadeIn">{{ 'Updated' | translate }} {{ dashboard.UpdatedOn | date }}</span>
-                    </div>
-                </div>
-                <div class="ibox-content">
-                    <div class="alert alert-success" *ngIf="dashboard" @smoothOpen>
-                        {{ dashboard.Notification }}
-                    </div>
-                    <div class="alert alert-danger" *ngIf="dashboard && !DashboardVendorNotification?.IsBillingAddressComplete">
-                        {{ 'Warning! Your Billing Address is Incomplete.' | translate }} <a class="sm-strong" [routerLink]="['/company/info/description']">Complete address</a>
-                    </div>
-                    <div class="alert alert-danger" *ngIf="dashboard && !DashboardVendorNotification?.IsShippingAddressComplete">
-                        {{ 'Warning! Your Shipping Address is Incomplete.' | translate }} <a class="sm-strong" [routerLink]="['/company/info/description']">Complete address</a>
-                    </div>
-                    <div class="alert alert-danger" *ngIf="dashboard && DashboardVendorNotification?.LateOrderCount > 0">
-                        <span [innerHTML]="'Warning! You have ## late orders.' | translate:DashboardVendorNotification"></span><a class="m-l-xs sm-strong" [routerLink]="['/sales-order/merchant/status/unshipped']">{{ 'Manage Orders' | translate }} </a>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <o-dashboard-main-current-sales-order-summary *ngIf="dashboard"></o-dashboard-main-current-sales-order-summary>
-        <o-dashboard-main-inbound-shipment-status-count *ngIf="dashboard"></o-dashboard-main-inbound-shipment-status-count>
+        <o-dashboard-main-vendor-notification 
+            [dashboardVendorNotification]="dashboardVendorNotification$ | async"
+            [dashboard]="dashboard$ | async"
+            [userInfo]="userInfo$ | async"
+            (getDashboardVendorNotification)="getDashboardVendorNotification()"
+        ></o-dashboard-main-vendor-notification>
+        <o-dashboard-main-current-sales-order-summary 
+            [salesOrderSummaryMerchantMatTable]="salesOrderSummaryMerchantMatTable$ | async"
+            [salesOrderSummaryToolotsMatTable]="salesOrderSummaryToolotsMatTable$ | async"
+            [errorMessage]="errorMessage$ | async"
+            (getSalesOrderSummaryMerchant)="getSalesOrderSummaryMerchant()"
+            (getSalesOrderSummaryToolots)="getSalesOrderSummaryToolots()"
+        ></o-dashboard-main-current-sales-order-summary>
+        <o-dashboard-main-inbound-shipment-status-count 
+            [inboundShipmentStatusCountsMatTable]="inboundShipmentStatusCountsMatTable$ | async"
+            [errorMessage]="errorMessage$ | async"
+            (getInboundShipmentStatusCounts)="getInboundShipmentStatusCounts()"
+        ></o-dashboard-main-inbound-shipment-status-count>
     </mat-sidenav>
-    
+
     <mat-sidenav-content>
         <i class="fa fa-angle-right animated fadeInLeft hide-700" *ngIf="!sidenav.opened" (click)="sidenav.open()"></i>
         <div id="mwrapper">
             <div class="wrapper wrapper-content animated fadeIn hide-y">
                 <div id="page-mwrapper" class="gray-bg">
                     <div class="mwrapper mwrapper-content" style="min-height: 1200px;">
-                        <div class="">
-                            <div class="col-xs-12 hide-lg m-res">
-                                <div class="animated fadeIn mobile-view-side">
-                                    <div class="ibox">
-                                        <div *ngIf="name" class="mobile-header ibox-content animated fadeIn">
-                                            <span class="text-24">{{ 'Welcome' | translate }} {{ name }}</span>
-                                        </div>
+                        <div class="col-xs-12 hide-lg m-res">
+                            <o-dashboard-main-vendor-notification
+                                [dashboardVendorNotification]="dashboardVendorNotification$ | async"
+                                [userInfo]="userInfo$ | async"
+                                (getDashboardVendorNotification)="getDashboardVendorNotification()"
+                            ></o-dashboard-main-vendor-notification>
+                            <div class="animated fadeIn mobile-view-side">
+                                <div class="row">
+                                    <div class="col-xs-12 col-md-6">
+                                        <o-dashboard-main-current-sales-order-summary
+                                            [salesOrderSummaryMerchantMatTable]="salesOrderSummaryMerchantMatTable$ | async"
+                                            [salesOrderSummaryToolotsMatTable]="salesOrderSummaryToolotsMatTable$ | async"
+                                            [errorMessage]="errorMessage$ | async"
+                                            (getSalesOrderSummaryMerchant)="getSalesOrderSummaryMerchant()"
+                                            (getSalesOrderSummaryToolots)="getSalesOrderSummaryToolots()"
+                                        ></o-dashboard-main-current-sales-order-summary>
                                     </div>
-                                    <div *ngIf="dashboard" class="ibox float-e-margins no-shadow" style="min-height: 73px;">
-                                        <div class="ibox-title">
-                                            <h5>{{ 'Notifications' | translate }}</h5>
-                                            <div class="ibox-tools">
-                                                <span class="label label-warning animated m-l-10imp fadeIn">{{ 'Updated' | translate }} {{ dashboard.UpdatedOn | date }}</span>
-                                            </div>
-                                        </div>
-                                        <div class="alert alert-success" *ngIf="dashboard" >
-                                            {{ dashboard.Notification }}
-                                        </div>
-                                        <div class="alert alert-danger" *ngIf="dashboard && !DashboardVendorNotification?.IsBillingAddressComplete">
-                                            {{ 'Warning! Your Billing Address is Incomplete.' | translate }} <a class="sm-strong" [routerLink]="['/company/info/description']">{{ 'Complete address' | translate }}</a>
-                                        </div>
-                                        <div class="alert alert-danger" *ngIf="dashboard && !DashboardVendorNotification?.IsShippingAddressComplete">
-                                            {{ 'Warning! Your Shipping Address is Incomplete.' | translate }} <a class="sm-strong" [routerLink]="['/company/info/description']">{{ 'Complete address' | translate }}</a>
-                                        </div>
-                                        <div class="alert alert-danger" *ngIf="dashboard && DashboardVendorNotification?.LateOrderCount > 0">
-                                            <span [innerHTML]="'Warning! You have ## late orders.' | translate:DashboardVendorNotification"></span><a class="m-l-xs sm-strong" [routerLink]="['/sales-order/merchant/status/unshipped']">{{ 'Manage Orders' | translate }} </a>
-                                        </div>
-                                    </div>
-                                    <div class="row">
-                                        <div class="col-xs-12 col-md-6">
-                                            <o-dashboard-main-current-sales-order-summary *ngIf="dashboard"></o-dashboard-main-current-sales-order-summary>
-                                        </div>
-                                        <div class="col-xs-12 col-md-6">
-                                            <o-dashboard-main-inbound-shipment-status-count *ngIf="dashboard"></o-dashboard-main-inbound-shipment-status-count>
-                                        </div>
+                                    <div class="col-xs-12 col-md-6">
+                                        <o-dashboard-main-inbound-shipment-status-count
+                                            
+                                            [inboundShipmentStatusCountsMatTable]="inboundShipmentStatusCountsMatTable$ | async"
+                                            [errorMessage]="errorMessage$ | async"
+                                            (getInboundShipmentStatusCounts)="getInboundShipmentStatusCounts()"
+                                        ></o-dashboard-main-inbound-shipment-status-count>
                                     </div>
                                 </div>
                             </div>
-                            <div class="col-xs-12">
-                                
-                                <div *ngIf="dashboard">
-                                    <div class="ibox float-e-margins">
-                                        <!-- <div class="ibox-title">
-                                            <h5>{{ 'News' | translate }}</h5>
-                                            <div class="ibox-tools">
-                                                <span class="label label-primary pull-right animated fadeIn" *ngIf="dataSource?.data[0]"> {{ 'Updated' | translate }} {{ dataSource.data[0].CreatedOn | date:'MMMM yyyy'}}</span>
-                                            </div>
-                                        </div> -->
-                                        <div *ngIf="dashboard && dashboard.DashboardNews">
-
-                                            <mat-expansion-panel [expanded]="true">
-                                                <mat-expansion-panel-header class="ibox-title">
-                                                    <mat-panel-title>
-                                                        <h5>{{ 'News' | translate }} <span class="m-l-10imp label label-primary pull-right animated fadeIn" *ngIf="dataSource?.data[0]">{{ 'Updated' | translate }} {{ dataSource.data[0].CreatedOn | date:'MMMM yyyy'}}</span> </h5> 
-                                                    </mat-panel-title>
-                                                </mat-expansion-panel-header>
-                                            
-                                                <div class="ibox-content no-scroll-bar" >
-                                                    <div class="profile-content">
-                                                        <div class="feed-element animated fadeInDown" *ngFor="let dashboardnews of dataSource.data" >
-                                                            <div [@smoothOpen]="dashboard.DashboardNews.length === dataSource.data.length">
-                                                                <h3>{{dashboardnews.Subject}}</h3>
-                                                                <p><span class="text-muted"> <i class="fa fa-clock-o"></i>  {{dashboardnews.CreatedOn | date:'fullDate'}}</span></p>
-                                                                <p style="white-space: pre-wrap">{{dashboardnews.News}} </p>
-                                                            </div>
-                                                        </div>
-                                                        <div class="m-t-sm" *ngIf="dataSource.data.length < 4 && dashboard.DashboardNews.length > 1">
-                                                            <h4>{{ 'Latest News' | translate }}</h4>
-                                                            <h5> <a (click)="dataSource.data[0] = dashboard.DashboardNews[0]">{{dashboard.DashboardNews[0].Subject}} <span class="text-muted skinny"> - {{dashboard.DashboardNews[1].CreatedOn | date:'fullDate'}}</span></a></h5>
-                                                            <h5> <a *ngIf="dashboard.DashboardNews.length > 1" (click)="dataSource.data[0] = dashboard.DashboardNews[1]">{{dashboard.DashboardNews[1].Subject}} <span class="text-muted skinny"> - {{dashboard.DashboardNews[1].CreatedOn | date:'fullDate'}}</span></a></h5>
-                                                            <h5> <a *ngIf="dashboard.DashboardNews.length > 2" (click)="dataSource.data[0] = dashboard.DashboardNews[2]">{{dashboard.DashboardNews[2].Subject}}<span class="text-muted skinny"> - {{dashboard.DashboardNews[1].CreatedOn | date:'fullDate'}}</span></a></h5>
-                                                        </div>
-                                                        <div class="m-t-sm m-b-none" (click)="toggleNews(dashboard.DashboardNews)">
-                                                            <a *ngIf="dataSource.data.length < 4 && dashboard.DashboardNews.length > 3"><small><strong>See all recent news...</strong></small></a>
-                                                            <a *ngIf="dataSource.data.length > 3 && dashboard.DashboardNews.length > 3 && dashboard.DashboardNews.length === dataSource.data.length"><small><strong>Hide all recent news...</strong></small></a>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </mat-expansion-panel>
-                                        </div>
-                                    </div>
+                        </div>
+                        <div class="col-xs-12">
+                            <o-dashboard-main-news-feed
+                                [dashboardNews]="dashboardNews$ | async"
+                            ></o-dashboard-main-news-feed>
+                            <o-dashboard-main-item-sales-total-list 
+                                [itemSalesTotalsMatTable]="itemSalesTotalsMatTable$ | async"
+                                [errorMessage]="errorMessage$ | async" (getItemSalesTotal)="getItemSalesTotal()"
+                            ></o-dashboard-main-item-sales-total-list>
+                            <div class="row">
+                                <div class="col-xs-12 col-lg-6">
+                                    <o-dashboard-main-sales-order-summary 
+                                        [salesOrderSummaryMatTable]="salesOrderSummaryMatTable$ | async"
+                                        (getSalesOrderSummary)="getSalesOrderSummary()"
+                                    ></o-dashboard-main-sales-order-summary>
                                 </div>
-                                    
-                                <o-dashboard-main-item-sales-total-list *ngIf="dashboard"></o-dashboard-main-item-sales-total-list>
-                                <div class="row">
-                                    <div class="col-xs-12 col-lg-6">
-                                        <o-dashboard-main-sales-order-summary *ngIf="dashboard"></o-dashboard-main-sales-order-summary>
-                                    </div>
-                                    <div class="col-xs-12 col-lg-6">
-                                        <o-dashboard-main-sales-status-total *ngIf="dashboard"></o-dashboard-main-sales-status-total>
-                                    </div>
+                                <div class="col-xs-12 col-lg-6">
+                                    <o-dashboard-main-sales-status-total 
+                                        [salesStatusTotalsMatTable]="salesStatusTotalsMatTable$ | async"
+                                        (getSalesStatusTotals)="getSalesStatusTotals()"
+                                    ></o-dashboard-main-sales-status-total>
                                 </div>
-                                
                             </div>
                         </div>
                     </div>
@@ -141,3 +84,4 @@
         </div>
     </mat-sidenav-content>
 </mat-sidenav-container>
+<o-notification></o-notification>

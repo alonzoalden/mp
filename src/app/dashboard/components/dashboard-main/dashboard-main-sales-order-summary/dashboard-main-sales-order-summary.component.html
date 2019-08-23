@@ -1,4 +1,4 @@
-<div class="animated fadeIn" *ngIf="dataSource?.data.length > 0">
+<div class="animated fadeIn" *ngIf="salesOrderSummaryMatTable?.data.length > 0">
     <div class="ibox float-e-margins">
 
         <mat-expansion-panel [expanded]="true">
@@ -9,7 +9,7 @@
             </mat-expansion-panel-header>
         
             <div class="ibox-content" style="min-height: 286px">
-                <table mat-table #table [dataSource]="dataSource" style="width: 100%;">
+                <table mat-table #table [dataSource]="salesOrderSummaryMatTable" style="width: 100%;">
                     <!-- Number Of Days -->
                     <ng-container matColumnDef="NumberOfDays">
                         <th mat-header-cell *matHeaderCellDef width="33%"></th>

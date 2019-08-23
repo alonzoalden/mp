@@ -1,14 +1,15 @@
 import { Component, OnInit, Input, EventEmitter, Output } from '@angular/core';
 import { MatTableDataSource } from '@angular/material';
 
-import { DashboardSalesOrderSummary } from '../../../../shared/class/dashboard';
+import { DashboardVendorNotification, Dashboard } from '../../../../shared/class/dashboard';
 import { growContainerAnimation } from '../smooth-open-animation.component';
 import { trigger, transition, useAnimation } from '@angular/animations';
 import { Member } from 'app/shared/class/member';
 
 @Component({
-    selector: 'o-dashboard-main-current-sales-order-summary',
-    templateUrl: './dashboard-main-current-sales-order-summary.component.html',
+    selector: 'o-dashboard-main-vendor-notification',
+    styleUrls: ['../../../dashboard.component.css'],
+    templateUrl: './dashboard-main-vendor-notification.component.html',
     animations: [
         trigger('smoothOpen', [
             transition('void => *', [
@@ -18,21 +19,20 @@ import { Member } from 'app/shared/class/member';
     ]
 })
 
-export class DashboardMainCurrentSalesOrderSummaryComponent implements OnInit {
+export class DashboardMainVendorNotificationComponent implements OnInit {
     displayedColumns = ['Status', 'Count'];
     displayedMerchantColumns = ['Unshipped', 'Shipped'];
     displayedToolotsColumns = ['Unshipped', 'Shipped'];
-
-    @Input() salesOrderSummaryMerchantMatTable: MatTableDataSource<DashboardSalesOrderSummary>;
-    @Input() salesOrderSummaryToolotsMatTable: MatTableDataSource<DashboardSalesOrderSummary>;
+    
+    @Input() userInfo: Member;
+    @Input() dashboard: Dashboard;
+    @Input() dashboardVendorNotification: DashboardVendorNotification;
     @Input() errorMessage: string;
-    @Output() getSalesOrderSummaryMerchant = new EventEmitter<void>();
-    @Output() getSalesOrderSummaryToolots = new EventEmitter<void>();
+    @Output() getDashboardVendorNotification = new EventEmitter<void>();
 
     constructor() { }
 
     ngOnInit() {
-        this.getSalesOrderSummaryMerchant.emit();
-        this.getSalesOrderSummaryToolots.emit();
+        this.getDashboardVendorNotification.emit();
     }
 }

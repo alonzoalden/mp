@@ -1,12 +1,18 @@
 import { Component, OnInit, ViewChild, HostListener } from '@angular/core';
-import { ActivatedRoute, Router } from '@angular/router';
 import { MatTableDataSource, MatPaginator, MatSort, MatSidenav } from '@angular/material';
 import { DashboardService } from '../../dashboard.service';
-import { Dashboard, DashboardNews, DashboardVendorNotification } from '../../../shared/class/dashboard';
+import { Dashboard, DashboardNews, DashboardVendorNotification, DashboardSalesOrderSummary, InboundShipmentStatusCount, ItemSalesTotal, SalesOrderSummary, SalesStatusTotal } from '../../../shared/class/dashboard';
 import { trigger, transition, useAnimation } from '@angular/animations';
 import { growContainerAnimation, shinkContainerAnimation } from '../../components/dashboard-main/smooth-open-animation.component';
-
 import { AppService } from '../../../app.service';
+import { Observable } from 'rxjs';
+import * as fromUser from '../../../shared/state/user-state.reducer';
+import * as dashboardActions from '../../state/dashboard.actions';
+import * as fromDashboard from '../../state';
+import { select, Store } from '@ngrx/store';
+import { Member } from 'app/shared/class/member';
+import { ActivatedRoute } from '@angular/router';
+import { OAuthService } from 'angular-oauth2-oidc';
 
 @Component({
     selector: 'o-dashboard-main-shell',
@@ -28,19 +34,19 @@ import { AppService } from '../../../app.service';
 })
 
 export class DashboardMainShellComponent implements OnInit {
-    errorMessage: string;
-    dashboard: Dashboard;
-    DashboardVendorNotification: DashboardVendorNotification;
+    opened: boolean = true;
+    dashboard$: Observable<Dashboard>;
+    dashboardNews$: Observable<DashboardNews[]>;
+    salesOrderSummaryMatTable$: Observable<MatTableDataSource<SalesOrderSummary>>;
+    salesOrderSummaryMerchantMatTable$: Observable<MatTableDataSource<DashboardSalesOrderSummary>>;
+    salesOrderSummaryToolotsMatTable$: Observable<MatTableDataSource<DashboardSalesOrderSummary>>;
+    inboundShipmentStatusCountsMatTable$: Observable<MatTableDataSource<InboundShipmentStatusCount>>;
+    itemSalesTotalsMatTable$: Observable<MatTableDataSource<ItemSalesTotal>>;
+    salesStatusTotalsMatTable$: Observable<MatTableDataSource<SalesStatusTotal>>;
+    userInfo$: Observable<Member>;
+    dashboardVendorNotification$: Observable<DashboardVendorNotification>;
+    errorMessage$: Observable<string>;
 
-    name: string;
-
-    displayedColumns = ['Subject', 'News', 'CreatedOn'];
-    dataSource: any = null;
-    newsClick: any = false;
-    opened = true;
-
-    @ViewChild(MatPaginator, { static: false }) paginator: MatPaginator;
-    @ViewChild(MatSort, { static: false }) sort: MatSort;
     @ViewChild('sidenav', { static: true }) sidenav: MatSidenav;
     @HostListener('window:resize', [])
     onResize() {
@@ -51,63 +57,63 @@ export class DashboardMainShellComponent implements OnInit {
         }
     }
 
-    constructor(private route: ActivatedRoute,
-        private router: Router,
+    constructor(
+        private store: Store<fromDashboard.State>,
+        private route: ActivatedRoute,
         private dashboardService: DashboardService,
-        private appService: AppService) {
-
+        private appService: AppService,
+        private oauthService: OAuthService,) {
     }
 
     ngOnInit() {
-        this.appService.getCurrentMember()
-            .subscribe(
-                (data) => {
-                    this.appService.currentMember = data;
-                    this.name = this.appService.currentMember.FirstName;
-                },
-                (error: any) => {
-                    this.dashboardService.sendNotification({ type: 'error', title: 'Error', content: error });
-                }
-            );
+        this.store.dispatch(new dashboardActions.LoadDashboard());
+        this.userInfo$ = this.store.pipe(select(fromUser.getCurrentUser));
+        this.dashboard$ = this.store.pipe(select(fromDashboard.getDashboard));
+        this.dashboardNews$ = this.store.pipe(select(fromDashboard.getDashboardNews));
+        this.dashboardVendorNotification$ = this.store.pipe(select(fromDashboard.getDashboardVendorNotification));
+        this.salesOrderSummaryMatTable$ = this.store.pipe(select(fromDashboard.getSalesOrderSummaryMatTable));
+        this.itemSalesTotalsMatTable$ = this.store.pipe(select(fromDashboard.getItemSalesTotalsMatTable));
+        this.salesStatusTotalsMatTable$ = this.store.pipe(select(fromDashboard.getSalesStatusTotalsMatTable));
+        this.salesOrderSummaryMerchantMatTable$ = this.store.pipe(select(fromDashboard.getSalesOrderSummaryMerchantMatTable));
+        this.salesOrderSummaryToolotsMatTable$ = this.store.pipe(select(fromDashboard.getSalesOrderSummaryToolotsMatTable));
+        this.inboundShipmentStatusCountsMatTable$ = this.store.pipe(select(fromDashboard.getInboundShipmentStatusCountsMatTable));
+        this.errorMessage$ = this.store.pipe(select(fromDashboard.getError));
 
-        this.dashboardService.getDashboard().subscribe(
-            (dashboard: Dashboard) => {
-                this.dashboard = dashboard;
-                let firstItem = [dashboard.DashboardNews[0]];
-                this.refreshDataSource(firstItem);
-            },
-            (error: any) => {
-                this.dashboardService.sendNotification({ type: 'error', title: 'Error', content: error });
-                this.errorMessage = <any>error;
-            }
-        );
 
-        this.dashboardService.getDashboarVendorNotification().subscribe(
-            (dashboardvendornotification: DashboardVendorNotification) => {
-                this.DashboardVendorNotification = dashboardvendornotification;
-            },
-            (error: any) => {
-                this.dashboardService.sendNotification({ type: 'error', title: 'Error', content: error });
-                this.errorMessage = <any>error;
-            }
-        );
+        if (this.route.snapshot.queryParams['init']) {
+            this.dashboardService.reset();
+          }
+          
+        this.oauthService.events.subscribe(e => {
+        // console.log('oauth/oidc event');
+        // console.log(e);
+            this.appService.setWasLoggedIn();
+        });
 
         if ((window.innerWidth) < 700) {
             this.opened = false;
         }
     }
-
-    refreshDataSource(dashboardNews: DashboardNews[]) {
-        this.dataSource = new MatTableDataSource<DashboardNews>(dashboardNews);
-        this.dataSource.sort = this.sort;
-        this.dataSource.paginator = this.paginator;
+    getDashboardVendorNotification() {
+        this.store.dispatch(new dashboardActions.LoadDashboardVendorNotification());
     }
-
-    toggleNews() {
-        this.newsClick = true;
-        this.dataSource.data.length < 2 && this.dashboard.DashboardNews.length > 1
-            ? this.refreshDataSource(this.dashboard.DashboardNews)
-            : this.refreshDataSource([this.dashboard.DashboardNews[0]]);
+    getInboundShipmentStatusCounts() {
+        this.store.dispatch(new dashboardActions.LoadInboundShipmentStatusCounts());
     }
-
+    getItemSalesTotal() {
+        this.store.dispatch(new dashboardActions.LoadItemSalesTotal());
+    }
+    getSalesOrderSummary() {
+        this.store.dispatch(new dashboardActions.LoadSalesOrderSummary());
+    }
+    getSalesStatusTotals() {
+        this.store.dispatch(new dashboardActions.LoadSalesStatusTotals());
+    }
+    getSalesOrderSummaryMerchant() {
+        this.store.dispatch(new dashboardActions.LoadSalesOrderSummaryMerchant());
+    }
+    getSalesOrderSummaryToolots() {
+        this.store.dispatch(new dashboardActions.LoadSalesOrderSummaryToolots());
+    }
+    
 }

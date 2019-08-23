@@ -1,4 +1,4 @@
-import { Component, ViewChild, OnInit } from '@angular/core';
+import { Component, ViewChild, OnInit, Input, Output, EventEmitter } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { MatTableDataSource } from '@angular/material';
 import { DashboardService } from '../../../dashboard.service';
@@ -24,30 +24,15 @@ import { environment } from '../../../../../environments/environment';
 
 
 export class DashboardMainItemSalesTotalListComponent implements OnInit {
-    errorMessage: string;
-    itemSalesTotals: ItemSalesTotal[];
-
     private linkURL = environment.linkURL;
-
     displayedColumns = ['ItemName', 'Quantity', 'Amount'];
-    dataSource: any = null;
-  
-    constructor(private route: ActivatedRoute, private dashboardService: DashboardService) { }
+    
+    @Input() itemSalesTotalsMatTable: MatTableDataSource<ItemSalesTotal>;
+    @Input() errorMessage: string;
+    @Output() getItemSalesTotal = new EventEmitter<void>();
+    constructor() { }
 
     ngOnInit() {
-        this.dashboardService.getItemSalesTotals().subscribe(
-            (itemSalesTotals: ItemSalesTotal[]) => {
-                this.itemSalesTotals = itemSalesTotals;
-                this.refreshDataSource(this.itemSalesTotals);
-            },
-            (error: any) => {
-                this.dashboardService.sendNotification({ type: 'error', title: 'Error', content: error });
-                this.errorMessage = <any>error;
-            }
-        );
-    }
-
-    refreshDataSource(itemSalesTotals: ItemSalesTotal[]) {
-        this.dataSource = new MatTableDataSource<ItemSalesTotal>(itemSalesTotals);
+        this.getItemSalesTotal.emit();
     }
 }

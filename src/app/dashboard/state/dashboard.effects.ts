@@ -1,131 +1,131 @@
 import { Injectable } from '@angular/core';
 import { Observable, of, EMPTY } from 'rxjs';
 import { mergeMap, map, catchError, take } from 'rxjs/operators';
-import { Action, Store } from '@ngrx/store';
+import { Action } from '@ngrx/store';
 import { Actions, Effect, ofType } from '@ngrx/effects';
 import { DashboardService } from '../dashboard.service';
-import * as fromDashboard from './index';
 import * as dashboardActions from './dashboard.actions';
-import { VendorAttachment } from 'app/shared/class/vendor-attachment';
-import { Router } from '@angular/router';
-import { Member } from 'app/shared/class/member';
-import { VendorList } from 'app/shared/class/vendor';
+import { DashboardSalesOrderSummary, InboundShipmentStatusCount, ItemSalesTotal, Dashboard, SalesOrderSummary, SalesStatusTotal, DashboardVendorNotification } from 'app/shared/class/dashboard';
 
 @Injectable()
 export class DashboardEffects {
     
     constructor(
-        private router: Router,
-        private store: Store<fromDashboard.State>,
         private dashboardService: DashboardService,
-        private actions$: Actions) { }
+        private actions$: Actions) { 
+    }
 
+    @Effect()
+    loadDashboard$: Observable<Action> = this.actions$.pipe(
+        ofType(dashboardActions.DashboardActionTypes.LoadDashboard),
+        mergeMap(() =>
+            this.dashboardService.getDashboard().pipe(
+                map((dashboard: Dashboard) => (new dashboardActions.LoadDashboardSuccess(dashboard))),
+                catchError(err => {
+                    of(new dashboardActions.LoadDashboardFail(err))
+                    return EMPTY;
+                })
+            )
+        ),
+        take(1)
+    );    
+    @Effect()
+    loadSalesOrderSummaryMerchant$: Observable<Action> = this.actions$.pipe(
+        ofType(dashboardActions.DashboardActionTypes.LoadSalesOrderSummaryMerchant),
+        mergeMap(() =>
+            this.dashboardService.getFulfilledBySalesOrderSummary('merchant').pipe(
+                map((members: DashboardSalesOrderSummary[]) => (new dashboardActions.LoadSalesOrderSummaryMerchantSuccess(members))),
+                catchError(err => {
+                    of(new dashboardActions.LoadSalesOrderSummaryMerchantFail(err))
+                    return EMPTY;
+                })
+            )
+        ),
+        take(1)
+    );
+    @Effect()
+    loadSalesOrderSummaryToolots$: Observable<Action> = this.actions$.pipe(
+        ofType(dashboardActions.DashboardActionTypes.LoadSalesOrderSummaryToolots),
+        mergeMap(() =>
+            this.dashboardService.getFulfilledBySalesOrderSummary('toolots').pipe(
+                map((members: DashboardSalesOrderSummary[]) => (new dashboardActions.LoadSalesOrderSummaryToolotsSuccess(members))),
+                catchError(err => {
+                    of(new dashboardActions.LoadSalesOrderSummaryToolotsFail(err))
+                    return EMPTY;
+                })
+            )
+        ),
+        take(1)
+    );
+    @Effect()
+    loadInboundShipmentStatusCounts$: Observable<Action> = this.actions$.pipe(
+        ofType(dashboardActions.DashboardActionTypes.LoadInboundShipmentStatusCounts),
+        mergeMap(() =>
+            this.dashboardService.getInboundShipmentStatusCounts().pipe(
+                map((inboundshipments: InboundShipmentStatusCount[]) => (new dashboardActions.LoadInboundShipmentStatusCountsSuccess(inboundshipments))),
+                catchError(err => {
+                    of(new dashboardActions.LoadSalesOrderSummaryToolotsFail(err))
+                    return EMPTY;
+                })
+            )
+        ),
+        take(1)
+    );
+    @Effect()
+    loadItemSalesTotal$: Observable<Action> = this.actions$.pipe(
+        ofType(dashboardActions.DashboardActionTypes.LoadItemSalesTotal),
+        mergeMap(() =>
+            this.dashboardService.getItemSalesTotals().pipe(
+                map((itemsalestotals: ItemSalesTotal[]) => (new dashboardActions.LoadItemSalesTotalSuccess(itemsalestotals))),
+                catchError(err => {
+                    of(new dashboardActions.LoadItemSalesTotalFail(err))
+                    return EMPTY;
+                })
+            )
+        ),
+        take(1)
+    );
+    @Effect()
+    loadSalesOrderSummary$: Observable<Action> = this.actions$.pipe(
+        ofType(dashboardActions.DashboardActionTypes.LoadSalesOrderSummary),
+        mergeMap(() =>
+            this.dashboardService.getSalesOrderSummary().pipe(
+                map((salesordersummary: SalesOrderSummary[]) => (new dashboardActions.LoadSalesOrderSummarySuccess(salesordersummary))),
+                catchError(err => {
+                    of(new dashboardActions.LoadSalesOrderSummaryFail(err))
+                    return EMPTY;
+                })
+            )
+        ),
+        take(1)
+    );
+    @Effect()
+    loadSalesStatusTotals$: Observable<Action> = this.actions$.pipe(
+        ofType(dashboardActions.DashboardActionTypes.LoadSalesStatusTotals),
+        mergeMap(() =>
+            this.dashboardService.getSalesStatusTotals().pipe(
+                map((salesstatustotals: SalesStatusTotal[]) => (new dashboardActions.LoadSalesStatusTotalsSuccess(salesstatustotals))),
+                catchError(err => {
+                    of(new dashboardActions.LoadSalesStatusTotalsFail(err))
+                    return EMPTY;
+                })
+            )
+        ),
+        take(1)
+    );
 
-        
-    // @Effect()
-    // loadMembers$: Observable<Action> = this.actions$.pipe(
-    //     ofType(dashboardActions.DashboardActionTypes.LoadMembers),
-    //     mergeMap(() =>
-    //         this.dashboardService.getMembers().pipe(
-    //             map((members: Member[]) => (new dashboardActions.LoadMembersSuccess(members))),
-    //             catchError(err => {
-    //                 of(new dashboardActions.LoadMembersFail(err))
-    //                 return EMPTY;
-    //             })
-    //         )
-    //     ),
-    //     take(1)
-    // );
-    // @Effect()
-    // loadVendorList$: Observable<Action> = this.actions$.pipe(
-    //     ofType(dashboardActions.DashboardActionTypes.LoadVendorList),
-    //     mergeMap(() =>
-    //         this.adminService.getVendorList().pipe(
-    //             map((vendorlist: VendorList[]) => (new dashboardActions.LoadVendorListSuccess(vendorlist))),
-    //             catchError(err => {
-    //                 of(new dashboardActions.LoadVendorListFail(err))
-    //                 return EMPTY;
-    //             })
-    //         )
-    //     ),
-    //     take(1)
-    // );
-
-
-
-
-    // @Effect()
-    // loadMember$: Observable<Action> = this.actions$.pipe(
-    //     ofType(dashboardActions.DashboardActionTypes.LoadMembers),
-    //     map((action: dashboardActions.LoadMember) => action.payload),
-    //     mergeMap((id: number) =>
-    //         this.adminService.getMember(id).pipe(
-    //             map((member: Member) => (new dashboardActions.LoadMemberSuccess(member))),
-    //             catchError(err => {
-    //                 this.companyService.sendNotification({ type: 'error', title: 'Error', content: err });
-    //                 return of(new dashboardActions.LoadMemberFail(err));
-    //             })
-    //         )
-    //     )
-    // );
-
-    // @Effect()
-    // deleteVendorAttachments$: Observable<Action> = this.actions$.pipe(
-    //     ofType(companyActions.CompanyAttachmentActionTypes.DeleteVendorAttachment),
-    //     map((action: companyActions.DeleteVendorAttachment) => action.payload),
-    //     mergeMap((vendorattachmentid: number) =>
-    //         this.companyService.deleteVendorAttachment(vendorattachmentid).pipe(
-    //             map(() => {
-    //                 const message = `${vendorattachmentid} was deleted`
-    //                 this.companyService.sendNotification({ type: 'success', title: 'Successfully Deleted', content: message });
-    //                 return (new companyActions.DeleteVendorAttachmentSuccess(vendorattachmentid));
-    //             }),
-    //             catchError(err => {
-    //                 this.companyService.sendNotification({ type: 'error', title: 'Error', content: err });
-    //                 return of(new companyActions.DeleteVendorAttachmentFail(err));
-    //             })
-    //         )
-    //     )
-    // );
-    // @Effect()
-    // editMember$: Observable<Action> = this.actions$.pipe(
-    //     ofType(dashboardActions.AdminActionTypes.EditMember),
-    //     map((action: dashboardActions.EditMember) => action.payload),
-    //     mergeMap((payload: Member) =>
-    //         this.adminService.editMember(payload).pipe(
-    //             map((member: Member) => {
-    //                 this.adminService.replaceMember(member.MemberID, member);
-    //                 this.adminService.sendNotification({ type: 'success', title: 'Successfully Created', content: `${member.Email} was saved` });
-    //                 window.location.reload();
-    //                 this.router.navigate(['/admin']);
-    //                 return (new dashboardActions.EditMemberSuccess(member));
-    //             }),
-    //             catchError(err => {
-    //                 this.adminService.sendNotification({ type: 'error', title: 'Error', content: err });
-    //                 this.router.navigate(['/admin']);
-    //                 return of(new dashboardActions.EditMemberFail(err));
-    //             })
-    //         )
-    //     )
-    // );
-    // @Effect()
-    // addMember$: Observable<Action | unknown> = this.actions$.pipe(
-    //     ofType(dashboardActions.AdminActionTypes.AddMember),
-    //     map((action: dashboardActions.AddMember) => action.payload),
-    //     mergeMap((payload) =>
-    //         this.adminService.addMember(payload).pipe(
-    //             map((member: Member) => {
-    //                 const message = `${member.Email} was saved`;
-    //                 this.adminService.sendNotification({ type: 'success', title: 'Successfully Created', content: message });
-    //                 this.router.navigate(['/admin']);
-    //                 return (new dashboardActions.AddMemberSuccess(member));
-    //             }),
-    //             catchError(err => {
-    //                 this.companyService.sendNotification({ type: 'error', title: 'Error', content: err });
-    //                 this.router.navigate(['/admin']);
-    //                 return of(new dashboardActions.AddMemberFail(err));
-    //             })
-    //         )
-    //     )
-    // );
+    @Effect()
+    loadDashboarVendorNotification$: Observable<Action> = this.actions$.pipe(
+        ofType(dashboardActions.DashboardActionTypes.LoadDashboardVendorNotification),
+        mergeMap(() =>
+            this.dashboardService.getDashboarVendorNotification().pipe(
+                map((dashboardvendornotification: DashboardVendorNotification) => (new dashboardActions.LoadDashboardVendorNotificationSuccess(dashboardvendornotification))),
+                catchError(err => {
+                    of(new dashboardActions.LoadDashboardVendorNotificationFail(err))
+                    return EMPTY;
+                })
+            )
+        ),
+        take(1)
+    );
 }

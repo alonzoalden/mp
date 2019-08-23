@@ -1,8 +1,5 @@
-import { Component, ViewChild, OnInit } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
+import { Component, ViewChild, OnInit, Input, Output, EventEmitter } from '@angular/core';
 import { MatTableDataSource } from '@angular/material';
-import { DashboardService } from '../../../dashboard.service';
-
 import { SalesOrderSummary } from '../../../../shared/class/dashboard';
 import { growContainerAnimation } from '../smooth-open-animation.component';
 import { trigger, transition, useAnimation } from '@angular/animations';
@@ -20,29 +17,17 @@ import { trigger, transition, useAnimation } from '@angular/animations';
       ]
 })
 
-
 export class DashboardMainSalesOrderSummaryComponent implements OnInit {
-    errorMessage: string;
+    @Input() salesOrderSummaryMatTable: MatTableDataSource<SalesOrderSummary>;
+    @Input() errorMessage: string;
+    @Output() getSalesOrderSummary = new EventEmitter<void>();
     salesOrderSummary: SalesOrderSummary[];
-
     displayedColumns = ['NumberOfDays', 'SalesAmount', 'SalesQuantity'];
     dataSource: any = null;
-    constructor(private route: ActivatedRoute, private dashboardService: DashboardService) { }
-
+    
+    constructor() { }
+    
     ngOnInit() {
-        this.dashboardService.getSalesOrderSummary().subscribe(
-            (salesOrderSummary: SalesOrderSummary[]) => {
-                this.salesOrderSummary = salesOrderSummary;
-                this.refreshDataSource(this.salesOrderSummary);
-            },
-            (error: any) => {
-                this.dashboardService.sendNotification({ type: 'error', title: 'Error', content: error });
-                this.errorMessage = <any>error;
-            }
-        );
-    }
-
-    refreshDataSource(salesOrderSummary: SalesOrderSummary[]) {
-        this.dataSource = new MatTableDataSource<SalesOrderSummary>(salesOrderSummary);
+        this.getSalesOrderSummary.emit();
     }
 }

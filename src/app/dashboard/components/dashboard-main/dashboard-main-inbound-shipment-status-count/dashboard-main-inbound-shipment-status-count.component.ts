@@ -1,7 +1,5 @@
-import { Component, ViewChild, OnInit } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
+import { Component, ViewChild, OnInit, Input, Output, EventEmitter } from '@angular/core';
 import { MatTableDataSource } from '@angular/material';
-import { DashboardService } from '../../../dashboard.service';
 import { InboundShipmentStatusCount } from '../../../../shared/class/dashboard';
 import { growContainerAnimation } from '../smooth-open-animation.component';
 import { trigger, transition, useAnimation } from '@angular/animations';
@@ -19,29 +17,15 @@ import { trigger, transition, useAnimation } from '@angular/animations';
       ]
 })
 
-
 export class DashboardMainInboundShipmentStatusCountComponent implements OnInit {
-    errorMessage: string;
-    inboundShipmentStatusCounts: InboundShipmentStatusCount[];
-
     displayedColumns = ['Status', 'Count'];
-    dataSource: any = null;
-    constructor(private route: ActivatedRoute, private dashboardService: DashboardService) { }
+    @Input() inboundShipmentStatusCountsMatTable: MatTableDataSource<InboundShipmentStatusCount>;
+    @Input() errorMessage: string;
+    @Output() getInboundShipmentStatusCounts = new EventEmitter<void>()
+
+    constructor() { }
 
     ngOnInit() {
-        this.dashboardService.getInboundShipmentStatusCounts().subscribe(
-            (inboundShipmentStatusCounts: InboundShipmentStatusCount[]) => {
-                this.inboundShipmentStatusCounts = inboundShipmentStatusCounts;
-                this.refreshDataSource(this.inboundShipmentStatusCounts);
-            },
-            (error: any) => {
-                this.dashboardService.sendNotification({ type: 'error', title: 'Error', content: error });
-                this.errorMessage = <any>error;
-            }
-        );
-    }
-
-    refreshDataSource(inboundShipmentStatusCounts: InboundShipmentStatusCount[]) {
-        this.dataSource = new MatTableDataSource<InboundShipmentStatusCount>(inboundShipmentStatusCounts);
+        this.getInboundShipmentStatusCounts.emit();
     }
 }

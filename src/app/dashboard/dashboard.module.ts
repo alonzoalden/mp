@@ -6,7 +6,7 @@ import { CdkTableModule } from '@angular/cdk/table';
 
 import { ToolModule } from '../shared/tool/tool.module';
 
-import { DashboardComponent } from './dashboard.component';
+import { DashboardMainVendorNotificationComponent } from './components/dashboard-main/dashboard-main-vendor-notification/dashboard-main-vendor-notification.component';
 import { DashboardMainItemSalesTotalListComponent } from './components/dashboard-main/dashboard-main-item-sales-total-list/dashboard-main-item-sales-total-list.component';
 import { DashboardMainInboundShipmentStatusCountComponent } from './components/dashboard-main/dashboard-main-inbound-shipment-status-count/dashboard-main-inbound-shipment-status-count.component';
 import { DashboardMainSalesStatusTotalComponent } from './components/dashboard-main/dashboard-main-sales-status-total/dashboard-main-sales-status-total.component';
@@ -28,14 +28,14 @@ import { DashboardEffects } from './state/dashboard.effects';
 
 @NgModule({
     declarations: [
-        DashboardComponent,
         DashboardMainShellComponent,
         DashboardMainItemSalesTotalListComponent,
         DashboardMainInboundShipmentStatusCountComponent,
         DashboardMainSalesStatusTotalComponent,
         DashboardMainCurrentSalesOrderSummaryComponent,
         DashboardMainSalesOrderSummaryComponent,
-        DashboardMainNewsFeedComponent
+        DashboardMainNewsFeedComponent,
+        DashboardMainVendorNotificationComponent
     ],
     imports: [
         TranslateModule,

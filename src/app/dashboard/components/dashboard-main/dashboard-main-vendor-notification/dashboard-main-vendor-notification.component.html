@@ -1,0 +1,37 @@
+<div class="animated fadeIn">
+    <div *ngIf="userInfo?.FirstName" class="animated fadeIn m-b-lg text-center">
+        <h2>{{ 'Welcome' | translate }} {{ userInfo.FirstName }}</h2>
+    </div>
+    <div *ngIf="dashboard" class="ibox ibox-gray float-e-margins no-shadow">
+        <div class="ibox-title">
+            <h5>{{ 'Notifications' | translate }}</h5>
+            <div class="ibox-tools">
+                <span class="label label-warning animated m-l-10imp fadeIn">{{ 'Updated' | translate }}
+                    {{ dashboard.UpdatedOn | date }}</span>
+            </div>
+        </div>
+        <div class="ibox-content">
+            <div class="alert alert-success" @smoothOpen>
+                {{ dashboard.Notification }}
+            </div>
+            <div class="alert alert-danger"
+                *ngIf="!dashboardVendorNotification?.IsBillingAddressComplete">
+                {{ 'Warning! Your Billing Address is Incomplete.' | translate }} <a class="sm-strong"
+                    [routerLink]="['/company/info/description']">Complete address</a>
+            </div>
+            <div class="alert alert-danger"
+                *ngIf="dashboardVendorNotification?.IsShippingAddressComplete">
+                {{ 'Warning! Your Shipping Address is Incomplete.' | translate }} <a class="sm-strong"
+                    [routerLink]="['/company/info/description']">Complete address</a>
+            </div>
+            <div class="alert alert-danger"
+                *ngIf="dashboardVendorNotification?.LateOrderCount > 0">
+                <span
+                    [innerHTML]="'Warning! You have ## late orders.' | translate:dashboardVendorNotification"></span><a
+                    class="m-l-xs sm-strong"
+                    [routerLink]="['/sales-order/merchant/status/unshipped']">{{ 'Manage Orders' | translate }}
+                </a>
+            </div>
+        </div>
+    </div>
+</div>

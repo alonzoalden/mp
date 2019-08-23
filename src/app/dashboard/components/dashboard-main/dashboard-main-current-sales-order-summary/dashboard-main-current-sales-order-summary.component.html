@@ -1,12 +1,12 @@
-<div class="animated fadeIn" *ngIf="dataSourceMerchant?.data.length > 0 || dataSourceToolots?.data.length > 0">
+<div class="animated fadeIn" *ngIf="salesOrderSummaryMerchantMatTable?.data.length > 0 || salesOrderSummaryToolotsMatTable?.data.length > 0">
     <div class="ibox ibox-gray float-e-margins">
         <div class="ibox-title">
             <h5>{{ 'Sales Orders' | translate }}</h5>
         </div>
         <div class="ibox-content hide-y" style="min-height: 87px">
-            <ng-container *ngIf="dataSourceMerchant?.data.length > 0">
+            <ng-container *ngIf="salesOrderSummaryMerchantMatTable?.data.length > 0">
                 <h5 class="m-l-sm">{{ 'Fulfilled By Merchant' | translate }}</h5>
-                <table mat-table #table [dataSource]="dataSourceMerchant" class="m-b-md">
+                <table mat-table #table [dataSource]="salesOrderSummaryMerchantMatTable" class="m-b-md">
                     <ng-container matColumnDef="Status">
                         <th mat-header-cell *matHeaderCellDef>{{ 'Status' | translate }}</th>
                         <td mat-cell *matCellDef="let currentSalesOrderSummary" width="60%" height="20px" class="no-border">
@@ -29,11 +29,11 @@
                 </table>
             </ng-container>
 
-            <hr *ngIf="dataSourceMerchant?.data.length > 0 && dataSourceToolots?.data.length > 0">
+            <hr *ngIf="salesOrderSummaryMerchantMatTable?.data.length > 0 && salesOrderSummaryToolotsMatTable?.data.length > 0">
 
-            <ng-container *ngIf="dataSourceToolots?.data.length > 0">
+            <ng-container *ngIf="salesOrderSummaryToolotsMatTable?.data.length > 0">
                 <h5 class="m-l-sm">{{ 'Fulfilled By Toolots' | translate }}</h5>
-                <table mat-table #table [dataSource]="dataSourceToolots">
+                <table mat-table #table [dataSource]="salesOrderSummaryToolotsMatTable">
 
                     <ng-container matColumnDef="Status">
                         <th mat-header-cell *matHeaderCellDef>{{ 'Status' | translate }}</th>
