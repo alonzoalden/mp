@@ -2,21 +2,20 @@ import { Component, OnInit, ViewChild } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { MatMenuModule, MatPaginator, MatSort, MatTableDataSource} from '@angular/material';
 
-import { SalesOrderLine } from '../../../shared/class/sales-order-line';
-import { SalesOrder } from '../../../shared/class/sales-order';
+import { SalesOrderLine } from '../../../../shared/class/sales-order-line';
+import { SalesOrder } from '../../../../shared/class/sales-order';
 
-import { SalesOrderService } from '../../sales-order.service';
-import { AppService } from '../../../app.service';
+import { SalesOrderService } from '../../../sales-order.service';
+import { AppService } from '../../../../app.service';
 
-import { environment } from '../../../../environments/environment';
+import { environment } from '../../../../../environments/environment';
 
 @Component({
-  selector: 'o-sales-order-cancel',
-  templateUrl: './sales-order-view-cancel.component.html',
-  styleUrls: ['../../sales-order.component.css'] 
+  templateUrl: './sales-order-view-cancel-shell.component.html',
+  styleUrls: ['../../../sales-order.component.css'] 
 })
 
-export class SalesOrderCancelComponent implements OnInit {
+export class SalesOrderViewCancelShellComponent implements OnInit {
     errorMessage: string;
     fulfilledby: string;
     orderid: number;

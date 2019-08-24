@@ -2,13 +2,13 @@ import { Component, OnInit, ViewChild } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { MatMenuModule, MatPaginator, MatSort, MatTableDataSource} from '@angular/material';
 
-import { SalesOrderLine } from '../../../shared/class/sales-order-line';
-import { SalesOrder } from '../../../shared/class/sales-order';
-import { Fulfillment, ShipmentTracking, FulfillmentSalesOrderLine } from '../../../shared/class/fulfillment';
+import { SalesOrderLine } from '../../../../../shared/class/sales-order-line';
+import { SalesOrder } from '../../../../../shared/class/sales-order';
+import { Fulfillment, ShipmentTracking, FulfillmentSalesOrderLine } from '../../../../../shared/class/fulfillment';
 
-import { SalesOrderService } from '../../sales-order.service';
+import { SalesOrderService } from '../../../../sales-order.service';
 
-import { environment } from '../../../../environments/environment';
+import { environment } from '../../../../../../environments/environment';
 
 @Component({
   selector: 'o-sales-order-fulfillment-edit',

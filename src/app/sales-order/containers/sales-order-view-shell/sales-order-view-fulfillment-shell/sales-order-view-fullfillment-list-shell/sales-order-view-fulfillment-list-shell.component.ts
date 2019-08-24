@@ -2,19 +2,18 @@ import { Component, OnInit, ViewChild } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { MatMenuModule, MatPaginator, MatSort, MatTableDataSource} from '@angular/material';
 
-import { SalesOrderLine } from '../../../shared/class/sales-order-line';
-import { SalesOrder } from '../../../shared/class/sales-order';
-import { Fulfillment } from '../../../shared/class/fulfillment';
+import { SalesOrderLine } from '../../../../../shared/class/sales-order-line';
+import { SalesOrder } from '../../../../../shared/class/sales-order';
+import { Fulfillment } from '../../../../../shared/class/fulfillment';
 
-import { SalesOrderService } from '../../sales-order.service';
+import { SalesOrderService } from '../../../../sales-order.service';
 import { DataSource } from '@angular/cdk/table';
 
 @Component({
-  selector: 'o-sales-order-fulfillment-list',
-  templateUrl: './sales-order-view-fulfillment-list.component.html'
+  templateUrl: './sales-order-view-fulfillment-list-shell.component.html'
 })
 
-export class SalesOrderFulfillmentListComponent implements OnInit {
+export class SalesOrderFulfillmentListShellComponent implements OnInit {
     errorMessage: string;
     deliveryDetail: string;
     salesorder: SalesOrder;

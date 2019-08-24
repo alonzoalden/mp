@@ -1,15 +1,16 @@
 import { Routes, RouterModule } from '@angular/router';
 
 import { SalesOrderComponent } from './sales-order.component';
-import { SalesOrderViewComponent } from './sales-order-view/sales-order-view.component';
-import { SalesOrderListComponent } from './sales-order-list/sales-order-list.component';
-import { SalesOrderDetailComponent } from './sales-order-view/sales-order-view-detail/sales-order-view-detail.component';
-import { SalesOrderCancelComponent } from './sales-order-view/sales-order-view-cancel/sales-order-view-cancel.component';
+import { SalesOrderViewCancelShellComponent } from './containers/sales-order-view-shell/sales-order-view-cancel-shell/sales-order-view-cancel-shell.component';
+
+import { SalesOrderViewDetailShellComponent } from './containers/sales-order-view-shell/sales-order-view-detail-shell/sales-order-view-detail-shell.component';
+import { SalesOrderViewShellComponent } from './containers/sales-order-view-shell/sales-order-view-shell.component';
+import { SalesOrderListShellComponent } from './containers/sales-order-list-shell/sales-order-list-shell.component';
 import { componentFactoryName } from '@angular/compiler';
-import { SalesOrderFulfillmentComponent } from './sales-order-view/sales-order-view-fulfillment/sales-order-view-fulfillment.component';
-import { SalesOrderFulfillmentAddComponent } from './sales-order-view/sales-order-view-fulfillment/sales-order-view-fulfillment-add.component';
-import { SalesOrderFulfillmentEditComponent } from './sales-order-view/sales-order-view-fulfillment/sales-order-view-fulfillment-edit.component';
-import { SalesOrderFulfillmentListComponent } from './sales-order-view/sales-order-view-fulfillment/sales-order-view-fulfillment-list.component';
+
+import { SalesOrderFulfillmentAddShellComponent } from './containers/sales-order-view-shell/sales-order-view-fulfillment-shell/sales-order-view-fullfillment-add-shell/sales-order-view-fulfillment-add-shell.component';
+import { SalesOrderFulfillmentEditShellComponent } from './containers/sales-order-view-shell/sales-order-view-fulfillment-shell/sales-order-view-fullfillment-edit-shell/sales-order-view-fulfillment-edit-shell.component';
+import { SalesOrderFulfillmentListShellComponent } from './containers/sales-order-view-shell/sales-order-view-fulfillment-shell/sales-order-view-fullfillment-list-shell/sales-order-view-fulfillment-list-shell.component';
 
 const SALESORDER_ROUTES: Routes = [
     {
@@ -17,15 +18,15 @@ const SALESORDER_ROUTES: Routes = [
         component: SalesOrderComponent,
         children: [ {
                 path: '',
-                component: SalesOrderListComponent
+                component: SalesOrderListShellComponent
             },
             {
                 path: ':id/cancellation',
-                component: SalesOrderCancelComponent
+                component: SalesOrderViewCancelShellComponent
             },
             {
                 path: ':fulfilledby/status/:status',
-                component: SalesOrderListComponent,
+                component: SalesOrderListShellComponent,
                 pathMatch: 'full'            
             },
             
@@ -48,23 +49,23 @@ const SALESORDER_ROUTES: Routes = [
 
             {
                 path: 'view/:fulfilledby/:id',
-                component: SalesOrderViewComponent,
+                component: SalesOrderViewShellComponent,
                 children: [
                     {
                         path: 'detail',
-                        component: SalesOrderDetailComponent
+                        component: SalesOrderViewDetailShellComponent
                     },
                     {
                         path: 'fulfillment',
-                        component: SalesOrderFulfillmentListComponent
+                        component: SalesOrderFulfillmentListShellComponent
                     },
                     {
                         path: 'fulfillment/add',
-                        component: SalesOrderFulfillmentAddComponent
+                        component: SalesOrderFulfillmentAddShellComponent
                     },
                     {
                         path: 'fulfillment/edit/:fulfillmentid',
-                        component: SalesOrderFulfillmentEditComponent
+                        component: SalesOrderFulfillmentEditShellComponent
                     }
                 ]
             },

@@ -3,20 +3,23 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { MatMenuModule, MatPaginator, MatSort, MatTableDataSource} from '@angular/material';
 import { DataSource } from '@angular/cdk/collections';
 
-import { SalesOrder } from '../../shared/class/sales-order';
+import { SalesOrder } from '../../../shared/class/sales-order';
 
-import { SalesOrderService } from '../sales-order.service';
-import { AppService } from '../../app.service';
+import { SalesOrderService } from '../../sales-order.service';
+import { AppService } from '../../../app.service';
 
-import { environment } from '../../../environments/environment';
+import { environment } from '../../../../environments/environment';
+
+import * as salesOrderActions from '../../state/sales-order.actions';
+import * as fromSalesOrder from '../../state';
+import * as fromUser from '../../../shared/state/user-state.reducer';
+import { Store } from '@ngrx/store';
 
 @Component({
-  selector: 'o-sales-order-list',
-  templateUrl: './sales-order-list.component.html',
-  styleUrls: ['./sales-order-list.component.css']
+  templateUrl: './sales-order-list-shell.component.html'
 })
 
-export class SalesOrderListComponent implements OnInit {
+export class SalesOrderListShellComponent implements OnInit {
     salesorders: SalesOrder[];
 
     private imageURL = environment.imageURL;
@@ -37,7 +40,8 @@ export class SalesOrderListComponent implements OnInit {
     
     loading: boolean;
 
-    constructor(private route: ActivatedRoute,
+    constructor(private store: Store<fromSalesOrder.State>,
+        private route: ActivatedRoute,
         private router: Router,
         private salesorderService: SalesOrderService,
         private appService: AppService) { }
@@ -65,24 +69,13 @@ export class SalesOrderListComponent implements OnInit {
                 this.fulfilledby = paramFulfilledby;
                 this.status = paramStatus;
 
-                this.getSalesOrderByVendor(this.fulfilledby, this.status);                
+                //this.getSalesOrderByVendor(this.fulfilledby, this.status);                
             }
         );        
     }
     
-    getSalesOrderByVendor(fulfilledby: string, status: string) {
-        this.loading = true; 
-        this.salesorderService.getSalesOrderByVendor(fulfilledby, status).subscribe(
-            (salesorders: SalesOrder[]) => {
-                this.loading = false; 
-                this.salesorders = salesorders;
-                this.refreshDataSource(this.salesorders);
-            },
-            (error: any) => {
-                this.loading = false;
-                this.errorMessage = <any>error;
-            }
-        );
+    getSalesOrderByVendor(payload: {fulfilledby: string, status: string} ) {
+        this.store.dispatch(new salesOrderActions.LoadSalesOrders(payload));
     }
 
     refreshDataSource(salesorders: SalesOrder[]) {
@@ -108,7 +101,7 @@ export class SalesOrderListComponent implements OnInit {
         this.fulfilledby = fulfilledby;
         this.status = status;
 
-        this.getSalesOrderByVendor(this.fulfilledby, this.status);
+        //this.getSalesOrderByVendor(this.fulfilledby, this.status);
     }
 
     onPrintPackingSlip(salesorder: SalesOrder) {

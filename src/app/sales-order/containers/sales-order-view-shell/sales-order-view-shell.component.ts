@@ -1,17 +1,16 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 
-import { SalesOrderService } from '../sales-order.service';
-import { SalesOrder } from '../../shared/class/sales-order';
-import { environment } from '../../../environments/environment';
+import { SalesOrderService } from '../../sales-order.service';
+import { SalesOrder } from '../../../shared/class/sales-order';
+import { environment } from '../../../../environments/environment';
 
 @Component({
-  selector: 'o-sales-order-view',
-  templateUrl: './sales-order-view.component.html',
-  styleUrls: ['../sales-order.component.css'] 
+  templateUrl: './sales-order-view-shell.component.html',
+  styleUrls: ['../../sales-order.component.css'] 
 })
 
-export class SalesOrderViewComponent implements OnInit {
+export class SalesOrderViewShellComponent implements OnInit {
     isMerchant: boolean;
     fulfilledby: string;
     orderid: number;

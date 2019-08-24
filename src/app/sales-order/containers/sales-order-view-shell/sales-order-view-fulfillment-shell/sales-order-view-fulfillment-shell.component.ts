@@ -1,15 +1,14 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 
-import { SalesOrder } from '../../../shared/class/sales-order';
-import { SalesOrderService } from '../../sales-order.service';
+import { SalesOrder } from '../../../../shared/class/sales-order';
+import { SalesOrderService } from '../../../sales-order.service';
 
 @Component({
-  selector: 'o-sales-order-fulfillment',
-  templateUrl: './sales-order-view-fulfillment.component.html'
+  templateUrl: './sales-order-view-fulfillment-shell.component.html'
 })
 
-export class SalesOrderFulfillmentComponent implements OnInit {
+export class SalesOrderFulfillmentShellComponent implements OnInit {
     errorMessage: string;
     deliveryDetail: string;
     salesorder: SalesOrder;

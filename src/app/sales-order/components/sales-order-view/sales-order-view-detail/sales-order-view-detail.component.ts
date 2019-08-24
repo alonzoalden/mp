@@ -2,18 +2,18 @@ import { Component, OnInit, ViewChild, Inject } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { MatMenuModule, MatPaginator, MatSort, MatTableDataSource, MatDialog, MatDialogRef, MAT_DIALOG_DATA} from '@angular/material';
 
-import { SalesOrderLine } from '../../../shared/class/sales-order-line';
-import { SalesOrder } from '../../../shared/class/sales-order';
+import { SalesOrderLine } from '../../../../shared/class/sales-order-line';
+import { SalesOrder } from '../../../../shared/class/sales-order';
 
-import { SalesOrderService } from '../../sales-order.service';
-import { AppService } from '../../../app.service';
+import { SalesOrderService } from '../../../sales-order.service';
+import { AppService } from '../../../../app.service';
 
-import { environment } from '../../../../environments/environment';
+import { environment } from '../../../../../environments/environment';
 
 @Component({
   selector: 'o-sales-order-detail',
   templateUrl: './sales-order-view-detail.component.html',
-  styleUrls: ['../../sales-order.component.css'] 
+  styleUrls: ['../../../sales-order.component.css'] 
 })
 
 export class SalesOrderDetailComponent implements OnInit {
