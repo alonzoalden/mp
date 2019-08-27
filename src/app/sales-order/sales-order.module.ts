@@ -19,7 +19,7 @@ import { SalesOrderListComponent } from './components/sales-order-list/sales-ord
 import { SalesOrderDetailComponent, SalesOrderCancelComponentPrintDialog } from './components/sales-order-view/sales-order-view-detail/sales-order-view-detail.component';
 import { SalesOrderViewComponent } from './components/sales-order-view/sales-order-view.component';
 import { SalesOrderCancelComponent } from './components/sales-order-view/sales-order-view-cancel/sales-order-view-cancel.component';
-import { SalesOrderFulfillmentComponent } from './components/sales-order-view/sales-order-view-fulfillment/sales-order-view-fulfillment.component';
+//import { SalesOrderFulfillmentComponent } from './components/sales-order-view/sales-order-view-fulfillment/sales-order-view-fulfillment.component';
 import { SalesOrderFulfillmentListComponent } from './components/sales-order-view/sales-order-view-fulfillment/sales-order-view-fullfillment-list/sales-order-view-fulfillment-list.component';
 import { SalesOrderFulfillmentAddComponent } from './components/sales-order-view/sales-order-view-fulfillment/sales-order-view-fullfillment-add/sales-order-view-fulfillment-add.component';
 import { SalesOrderFulfillmentEditComponent } from './components/sales-order-view/sales-order-view-fulfillment/sales-order-view-fullfillment-edit/sales-order-view-fulfillment-edit.component';
@@ -49,7 +49,7 @@ import { EffectsModule } from '@ngrx/effects';
         SalesOrderListComponent,
         SalesOrderDetailComponent,
         SalesOrderCancelComponent,
-        SalesOrderFulfillmentComponent,
+        //SalesOrderFulfillmentComponent,
         SalesOrderFulfillmentListComponent,
         SalesOrderFulfillmentAddComponent,
         SalesOrderFulfillmentEditComponent,

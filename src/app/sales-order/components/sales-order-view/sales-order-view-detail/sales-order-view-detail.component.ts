@@ -191,26 +191,27 @@ export class SalesOrderCancelComponentPrintDialog implements OnInit {
         if(this.isValid()) {            
             const confirmation = confirm(`Are you sure you want to cancel this order?`);        
             if (confirmation) {
-                this.salesorderService.cancelSalesOrderLines(this.salesorderlines).subscribe(
-                    () => {
+                this.store.dispatch(new salesOrderActions.CancelSalesOrderLines(this.salesorderlines));
+                // this.salesorderService.cancelSalesOrderLines(this.salesorderlines).subscribe(
+                //     () => {
                         
-                        this.salesorderService.sendNotification({ type: 'success', title: 'Successfully Canceled', content: this.errorMessage });
-                        // this.router.navigate(['/sales-order', 'view', 'merchant', this.orderid, 'detail']);
-                        // this.router.navigate(['/sales-order', 'merchant', 'status', 'unshipped']);
-                        // this.salesorderService.getFulfilledBySalesOrder(this.orderid, this.fulfilledby).subscribe(
-                        //     (salesorder: SalesOrder) => {
-                        //         this.salesorder = salesorder;
-                        //     },
-                        //     (error: any) => this.errorMessage = <any>error
-                        // );
-                        this.dialogRef.close();
-                    },
-                    (error: any) => {
-                        this.errorMessage = <any>error;
-                        this.salesorderService.sendNotification({ type: 'error', title: 'Error', content: this.errorMessage });
-                        window.location.reload();
-                    }
-                );
+                //         this.salesorderService.sendNotification({ type: 'success', title: 'Successfully Canceled', content: this.errorMessage });
+                //         // this.router.navigate(['/sales-order', 'view', 'merchant', this.orderid, 'detail']);
+                //         // this.router.navigate(['/sales-order', 'merchant', 'status', 'unshipped']);
+                //         // this.salesorderService.getFulfilledBySalesOrder(this.orderid, this.fulfilledby).subscribe(
+                //         //     (salesorder: SalesOrder) => {
+                //         //         this.salesorder = salesorder;
+                //         //     },
+                //         //     (error: any) => this.errorMessage = <any>error
+                //         // );
+                //         this.dialogRef.close();
+                //     },
+                //     (error: any) => {
+                //         this.errorMessage = <any>error;
+                //         this.salesorderService.sendNotification({ type: 'error', title: 'Error', content: this.errorMessage });
+                //         window.location.reload();
+                //     }
+                // );
             }
         }
     }

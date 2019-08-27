@@ -1,1 +1,5 @@
-<o-sales-order-view></o-sales-order-view>
+<o-sales-order-view
+    [salesorder]="salesorder$ | async"
+    [errorMessage]="errorMessage$ | async"
+    (getFulfilledBySalesOrder)="getFulfilledBySalesOrder($event)"
+></o-sales-order-view>

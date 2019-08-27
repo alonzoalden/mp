@@ -8,6 +8,9 @@ import { Fulfillment } from '../../../../../shared/class/fulfillment';
 
 import { SalesOrderService } from '../../../../sales-order.service';
 import { DataSource } from '@angular/cdk/table';
+import * as salesOrderActions from '../../../../state/sales-order.actions';
+import * as fromSalesOrder from '../../../../state/index';
+
 
 @Component({
   templateUrl: './sales-order-view-fulfillment-list-shell.component.html'
@@ -88,6 +91,18 @@ export class SalesOrderFulfillmentListShellComponent implements OnInit {
             (error: any) => this.errorMessage = <any>error
         );
     }
+    getFulfilledBySalesOrder(payload: {orderid: number, fulfilledby: string}) {
+        //this.store.dispatch(new salesOrderActions.LoadSalesOrder(payload));
+    }
+    getFulfilledByFulfillments(payload: {orderid: number, fulfilledby: string}) {
+        //this.store.dispatch(new salesOrderActions.LoadSalesOrder(payload));
+    }
+    getSalesOrderDelivery(payload: number) {
+        //this.store.dispatch(new salesOrderActions.LoadSalesOrderDelivery(payload));
+    }
+
+    
+
 
     refreshDataSource(fulfillments: Fulfillment[]){
         this.dataSource = new MatTableDataSource<Fulfillment>(fulfillments);
