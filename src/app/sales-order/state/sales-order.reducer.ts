@@ -51,7 +51,11 @@ export function salesOrderReducer(state = initialState, action: SalesOrderAction
                 isLoading: false,
                 error: action.payload,
             };
-
+        case SalesOrderActionTypes.SetSalesOrder:
+            return {
+                ...state,
+                salesOrder: action.payload
+            };
         case SalesOrderActionTypes.SetSalesOrderID:
             return {
                 ...state,
@@ -63,7 +67,6 @@ export function salesOrderReducer(state = initialState, action: SalesOrderAction
                 isLoading: true,
                 error: '',
             };
-
         case SalesOrderActionTypes.LoadSalesOrderSuccess:
             return {
                 ...state,

@@ -25,9 +25,14 @@ export const getSalesOrdersListMatTable = createSelector(
 );
 
 export const getSalesOrder = createSelector(
-    getSalesOrderFeatureState,
-    state => state.salesOrder
-);
+        getSalesOrderFeatureState,
+        state => state.salesOrder
+    );
+
+// export const getSalesOrder = createSelector(
+//     getSalesOrderFeatureState,
+//     state => state.salesOrders.find(item => item.OrderID === state.currentSalesOrderID)
+// );
 
 // export const getCurrentSalesOrderID = createSelector(
 //     getSalesOrderFeatureState,

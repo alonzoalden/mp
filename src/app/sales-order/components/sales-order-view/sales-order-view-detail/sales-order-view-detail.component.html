@@ -4,13 +4,13 @@
         <div class="panel-body p-w-none animated fadeIn" style="min-height: 400px;">
             <!-- <div class="ibox-title"> -->
 
-                <!-- <h5>{{ 'Order Details' | translate }}</h5> <span class="label label-warning m-l-md"> {{ salesorder.MerchantStatus | translate }}</span> -->
+                <!-- <h5>{{ 'Order Details' | translate }}</h5> <span class="label label-warning m-l-md"> {{ salesOrder.MerchantStatus | translate }}</span> -->
 
                 <!-- <div class="ibox-tools">
                     
                 </div> -->
             <!-- </div> -->
-            <ng-container *ngIf="!salesorder">
+            <ng-container *ngIf="!salesOrder">
                 <div class="spinner-full-page"> 
                     <div>
                         <div>
@@ -26,9 +26,9 @@
                 </div>
                 <div class="gray-cover-bg1"></div>
             </ng-container>
-                <div *ngIf="salesorder" class="animated fadeIn">
+                <div *ngIf="salesOrder" class="animated fadeIn">
                 <div class="ibox-content hide-y no-border-top">
-                    <!-- <div class="col-sm-2 col-sm-push-8" *ngIf="!isMerchant && salesorder.MerchantStatus != 'Canceled'">
+                    <!-- <div class="col-sm-2 col-sm-push-8" *ngIf="!isMerchant && salesOrder.MerchantStatus != 'Canceled'">
                         <div class="row">
                             <button type="button" class="btn btn-success max" style="min-width: 160px;" [routerLink]="['/','sales-order', 'view', fulfilledby,orderid,'fulfillment']"><i class="fa fa-check"></i> {{ 'View Shipments' | translate }}</button>
                         </div>
@@ -38,7 +38,7 @@
                             <form class="form-horizontal">
                                 <div class="form-group">
                                     <label class="col-md-2 control-label">{{ 'Ship By' | translate }}</label>
-                                    <div class="col-md-8 grey-highlight pt7">{{salesorder?.ShipByDate | date}}</div>
+                                    <div class="col-md-8 grey-highlight pt7">{{salesOrder?.ShipByDate | date}}</div>
                                 </div>
                                 <div class="form-group">
                                     <label class="col-md-2 control-label">{{ 'Ship To' | translate }}</label>
@@ -46,11 +46,11 @@
                                 </div>
                                 <div class="form-group">
                                     <label class="col-md-2 control-label">{{ 'Purchase Date' | translate }}</label>
-                                    <div class="col-md-8 grey-highlight pt7">{{salesorder?.TransactionDate | date}}</div>
+                                    <div class="col-md-8 grey-highlight pt7">{{salesOrder?.TransactionDate | date}}</div>
                                 </div>
                                 <div class="form-group">
                                     <label class="col-md-2 control-label">{{ 'Buyer Name' | translate }}</label>
-                                    <div class="col-md-8 grey-highlight pt7">{{salesorder?.CustomerName}}</div>
+                                    <div class="col-md-8 grey-highlight pt7">{{salesOrder?.CustomerName}}</div>
                                 </div>
                             </form>
                         </div>
@@ -58,7 +58,7 @@
                             <button type="button" class="btn btn-info" (click)="onPrintPackingSlip()">
                                 <i class="fa fa-print m-r-xs"></i><span class=""> {{ 'Print Packing Slip' | translate }}</span>
                             </button>             
-                            <button type="button" class="btn btn-danger" *ngIf="fulfilledby =='merchant' && salesorder?.MerchantStatus === 'Unshipped'" (click)="openDialogCancelOrder(orderid)">
+                            <button type="button" class="btn btn-danger" *ngIf="fulfilledby =='merchant' && salesOrder?.MerchantStatus === 'Unshipped'" (click)="openDialogCancelOrder(orderid)">
                                 <i class="fa fa-remove"></i><span class=""> {{ 'Cancel Order' | translate }}</span>
                             </button>
                         </div>
@@ -67,7 +67,7 @@
                 <div class="ibox-title"><h5>{{ 'Order Items' | translate }}</h5></div>
                 <div class="ibox-content hide-y">
                     <div class="table-responsive">
-                        <table mat-table #table [dataSource]="dataSource" class="table" matSort>
+                        <table mat-table #table [dataSource]="salesOrderLinesMatTable" class="table" matSort>
 
                             <!-- Item Image Column -->
                             <ng-container matColumnDef="ItemImage">

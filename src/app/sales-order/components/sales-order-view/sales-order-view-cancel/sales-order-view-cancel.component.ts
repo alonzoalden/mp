@@ -22,19 +22,18 @@ export class SalesOrderCancelComponent implements OnInit {
     @Input() salesOrder: SalesOrder;
     @Input() salesOrderLinesMatTable: MatTableDataSource<SalesOrderLine>;
     @Input() pendingDelete: boolean = false;
-    @Input() orderid: number;
     @Input() errorMessage: string;
     @Output() getFulfilledBySalesOrder = new EventEmitter<{orderid: number, fulfilledby: string}>();
     @Output() getSalesOrderLineByVendor = new EventEmitter<{orderid: number, fulfilledby: string}>();
     @Output() getFulfilledBySalesOrderDelivery = new EventEmitter<{orderid: number, fulfilledby: string}>();
     @Output() cancelSalesOrderLines = new EventEmitter<SalesOrderLine[]>();
-    @Output() setSalesOrderID = new EventEmitter<number>();
     @Output() getSalesOrderByVendor = new EventEmitter<{fulfilledby: string, status: string}>();
     @ViewChild(MatPaginator, { static: false }) paginator: MatPaginator;
     @ViewChild(MatSort, { static: true }) sort: MatSort;
 
     displayedColumns = ['ItemImage', 'ProductDetails', 'ProductInfo', 'CancellationReason'];
-    fulfilledby: string;
+    fulfilledby: string = 'merchant';
+    orderid: number;
     hasCancellationQty: boolean = false;
     constructor(private route: ActivatedRoute,
         private salesorderService: SalesOrderService) { }
@@ -44,8 +43,7 @@ export class SalesOrderCancelComponent implements OnInit {
             this.salesOrderLinesMatTable.paginator = this.paginator;
             this.salesOrderLinesMatTable.sort = this.sort;
             this.salesOrderLinesMatTable.data.forEach((salesorderline) => {
-                if(salesorderline.Quantity - salesorderline.FulfilledQuantity > 0)
-                {
+                if(salesorderline.Quantity - salesorderline.FulfilledQuantity > 0) {
                     this.hasCancellationQty = true;
                 }
             });
@@ -53,12 +51,13 @@ export class SalesOrderCancelComponent implements OnInit {
         if (changes.deliveryDetail && changes.deliveryDetail.currentValue) {
             this.deliveryDetail = changes.deliveryDetail.currentValue.trim().replace(new RegExp('<br />', 'g'), '\n');
         }
+        if (changes.salesOrder && !changes.salesOrder.currentValue && changes.salesOrder.firstChange) {
+            this.getFulfilledBySalesOrder.emit({orderid: this.route.snapshot.params['id'], fulfilledby: this.fulfilledby});
+        }
+        
     }
     ngOnInit() {
         this.orderid = this.route.snapshot.params['id'];
-        this.fulfilledby = 'merchant';
-        this.setSalesOrderID.emit(this.orderid);
-        this.getFulfilledBySalesOrder.emit({orderid: this.orderid, fulfilledby: this.fulfilledby});
         this.getSalesOrderLineByVendor.emit({orderid: this.orderid, fulfilledby: this.fulfilledby});
         this.getFulfilledBySalesOrderDelivery.emit({orderid: this.orderid, fulfilledby: this.fulfilledby});
     }

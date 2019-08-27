@@ -1,5 +1,4 @@
 import { Action } from '@ngrx/store';
-import { Member, MemberVendor } from 'app/shared/class/member';
 import { SalesOrder } from 'app/shared/class/sales-order';
 import { SalesOrderLine } from 'app/shared/class/sales-order-line';
 
@@ -8,6 +7,7 @@ export enum SalesOrderActionTypes {
   LoadSalesOrdersSuccess = '[Sales Order] Load Sales Orders Success',
   LoadSalesOrdersFail = '[Sales Order] Load Sales Orders Fail',
   LoadSalesOrder = '[Sales Order] Load Sales Order',
+  SetSalesOrder = '[Sales Order] Set Sales Order',
   SetSalesOrderID = '[Sales Order] Set Sales Order ID',
   LoadSalesOrderSuccess = '[Sales Order] Load Sales Order Success',
   LoadSalesOrderFail = '[Sales Order] Load Sales Order Fail',
@@ -45,6 +45,10 @@ export class LoadSalesOrdersFail implements Action {
   constructor(public payload: string) { }
 }
 
+export class SetSalesOrder implements Action {
+  readonly type = SalesOrderActionTypes.SetSalesOrder;
+  constructor(public payload: SalesOrder) { }
+}
 export class SetSalesOrderID implements Action {
   readonly type = SalesOrderActionTypes.SetSalesOrderID;
   constructor(public payload: number) { }
@@ -143,6 +147,7 @@ export class DownloadSalesOrderPackingSlipFail implements Action {
 export type SalesOrderActions = LoadSalesOrders
 | LoadSalesOrdersSuccess
 | LoadSalesOrdersFail
+| SetSalesOrder
 | SetSalesOrderID
 | LoadSalesOrder
 | LoadSalesOrderSuccess

@@ -16,18 +16,18 @@ export class SalesOrderListComponent implements OnInit, OnChanges {
     private linkURL = environment.linkURL;
     @Input() salesOrdersMatTable: MatTableDataSource<SalesOrder>;
     @Input() userInfo: Member;
-    @Input() isLoading: boolean = false;
+    @Input() isLoading: boolean = true;
     @Input() errorMessage: string;
     @Output() getSalesOrderByVendor = new EventEmitter<{fulfilledby: string, status: string}>();
     @Output() downloadSalesOrderPackingSlip = new EventEmitter<SalesOrder>();
-    @Output() setSalesOrderID = new EventEmitter<number>();
-
+    @Output() setSalesOrder = new EventEmitter<SalesOrder>();
+    
     displayedColumns = ['Menu', 'ProductInfo', 'ItemImage', 'ItemName', 'ShippingMethod', 'Status', 'VendorTotal'];
     fulfilledby: string;
     status: string;
 
     @ViewChild(MatPaginator, { static: true }) paginator: MatPaginator;
-    @ViewChild(MatSort, { static: false }) sort: MatSort;
+    @ViewChild(MatSort, { static: true }) sort: MatSort;
     @ViewChild('FilterBy', { static: true }) FilterBy: ElementRef;
     
     constructor(private route: ActivatedRoute,
@@ -37,13 +37,16 @@ export class SalesOrderListComponent implements OnInit, OnChanges {
             this.salesOrdersMatTable.paginator = this.paginator;
             this.salesOrdersMatTable.sort = this.sort;
         }
+        
     }
     ngOnInit() {
         this.route.params.subscribe(() => {
-                this.fulfilledby = this.route.snapshot.params['fulfilledby'];;
-                this.status = this.route.snapshot.params['status'];;
-                this.getSalesOrdersByVendor(this.fulfilledby, this.status);                
+            this.fulfilledby = this.route.snapshot.params['fulfilledby'];
+            this.status = this.route.snapshot.params['status'];
+            if (!this.salesOrdersMatTable.data.length) {
+                this.getSalesOrdersByVendor(this.fulfilledby, this.status);
             }
+        }
         );
         if(this.FilterBy.nativeElement.value) {
             this.applyFilter(this.FilterBy.nativeElement.value);
@@ -54,9 +57,9 @@ export class SalesOrderListComponent implements OnInit, OnChanges {
     }
     applyFilter(filterValue: string) {
         this.salesOrdersMatTable.filter = filterValue.trim().toLowerCase();
-        if (this.salesOrdersMatTable.paginator) {
-            this.salesOrdersMatTable.paginator.firstPage();
-        }
+        // if (this.salesOrdersMatTable.paginator) {
+        //     this.salesOrdersMatTable.paginator.firstPage();
+        // }
     }
     onFilterChange(fulfilledby: string, status: string) {
         this.router.navigate(['/sales-order/' + fulfilledby + '/status/' + status]);

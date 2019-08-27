@@ -16,10 +16,8 @@ import * as fromUser from '../../../../shared/state/user-state.reducer';
 
 export class SalesOrderViewCancelShellComponent implements OnInit {
     displayedColumns = ['ItemImage', 'ProductDetails', 'ProductInfo', 'CancellationReason'];
-    fulfilledby: string;
     salesOrderLinesMatTable$: Observable<MatTableDataSource<SalesOrderLine>>;
     salesOrder$: Observable<SalesOrder>;
-    currentSalesOrderID$: Observable<number>;
     deliveryDetail$: Observable<string>;
     userInfo$: Observable<Member>;
     errorMessage$: Observable<string>;
@@ -31,7 +29,6 @@ export class SalesOrderViewCancelShellComponent implements OnInit {
         this.userInfo$ = this.store.pipe(select(fromUser.getCurrentUser));
         this.salesOrderLinesMatTable$ = this.store.pipe(select(fromSalesOrder.getSalesOrderLinesMatTable));
         this.salesOrder$ = this.store.pipe(select(fromSalesOrder.getSalesOrder));
-        //this.currentSalesOrderID$ = this.store.pipe(select(fromSalesOrder.getCurrentSalesOrderID));
         this.deliveryDetail$ = this.store.pipe(select(fromSalesOrder.getDeliveryDetail));
         this.errorMessage$ = this.store.pipe(select(fromSalesOrder.getError));
         this.pendingDelete$ = this.store.pipe(select(fromSalesOrder.getPendingDelete));
@@ -47,8 +44,5 @@ export class SalesOrderViewCancelShellComponent implements OnInit {
     }
     cancelSalesOrderLines(payload: SalesOrderLine[]) {
         this.store.dispatch(new salesOrderActions.CancelSalesOrderLines(payload));
-    }
-    setSalesOrderID(payload: number) {
-        this.store.dispatch(new salesOrderActions.SetSalesOrderID(payload));
     }
 }

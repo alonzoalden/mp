@@ -27,8 +27,8 @@ export class SalesOrderListShellComponent implements OnInit {
     getSalesOrderByVendor(payload: {fulfilledby: string, status: string} ) {
         this.store.dispatch(new salesOrderActions.LoadSalesOrders(payload));
     }
-    setSalesOrderID(payload: number) {
-        this.store.dispatch(new salesOrderActions.SetSalesOrderID(payload));
+    setSalesOrder(payload: SalesOrder) {
+        this.store.dispatch(new salesOrderActions.SetSalesOrder(payload));
     }
     downloadSalesOrderPackingSlip(payload: SalesOrder) {
         this.store.dispatch(new salesOrderActions.DownloadSalesOrderPackingSlip(payload));
