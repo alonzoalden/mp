@@ -2217,3 +2217,10 @@ th.mat-header-cell {
 .z-under {
     z-index: -1;
 }
+.cdk-overlay-pane {
+    overflow: scroll;
+}
+.flex-center {
+    display: flex;
+    justify-content: center;
+}

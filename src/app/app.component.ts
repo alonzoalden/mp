@@ -95,7 +95,6 @@ export class AppComponent implements OnInit, OnDestroy {
                 .subscribe(
                     (data) => {
                         this.appService.currentMember = data;
-
                         //Set Default Language
                         this.currentLanguage =this.appService.currentMember.DefaultLanguage;
                         this.translate.setDefaultLang(this.currentLanguage);

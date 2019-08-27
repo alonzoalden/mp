@@ -9,7 +9,7 @@
                         <ul role="menu" class="dropdown-menu menu-fix" aria-labelledby="dropdownMenu">
                             <li><a [routerLink]="['setting']">{{ 'Change Merchant' | translate }}</a></li>
                             <li><a [routerLink]="['setting','memberpreference']">{{ 'Member Preference' | translate }}</a></li>
-                            <li><a [routerLink]="['setting','merchantagreement']">{{ 'Merchant Agreement' | translate }}</a></li>
+                            <li *ngIf="appService.currentMember?.IsDropship"><a [routerLink]="['setting','merchantagreement']">{{ 'Merchant Agreement' | translate }}</a></li>
                             <li class="divider"></li>
                             <li *ngIf="isLoggedin">                                
                                 <a (click)="logout()">
@@ -125,7 +125,7 @@
                                     <ul role="menu" class="dropdown-menu">
                                         <li><a [routerLink]="['setting']">{{ 'Change Merchant' | translate }}</a></li>
                                         <li><a [routerLink]="['setting','memberpreference']">{{ 'Member Preference' | translate }}</a></li>
-                                        <li><a [routerLink]="['setting','merchantagreement']">{{ 'Merchant Agreement' | translate }}</a></li>
+                                        <li *ngIf="appService.currentMember?.IsDropship"><a [routerLink]="['setting','merchantagreement']">{{ 'Merchant Agreement' | translate }}</a></li>
                                         <li class="divider"></li>
                                         <li *ngIf="isLoggedin">                                
                                             <a (click)="logout()">
