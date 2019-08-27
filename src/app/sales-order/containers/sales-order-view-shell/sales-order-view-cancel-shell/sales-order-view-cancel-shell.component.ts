@@ -1,14 +1,13 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
-import { ActivatedRoute, Router } from '@angular/router';
-import { MatMenuModule, MatPaginator, MatSort, MatTableDataSource} from '@angular/material';
-
+import { Component, OnInit } from '@angular/core';
+import { MatTableDataSource} from '@angular/material';
 import { SalesOrderLine } from '../../../../shared/class/sales-order-line';
 import { SalesOrder } from '../../../../shared/class/sales-order';
-
-import { SalesOrderService } from '../../../sales-order.service';
-import { AppService } from '../../../../app.service';
-
-import { environment } from '../../../../../environments/environment';
+import { Member } from 'app/shared/class/member';
+import { Observable } from 'rxjs';
+import { select, Store } from '@ngrx/store';
+import * as salesOrderActions from '../../../state/sales-order.actions';
+import * as fromSalesOrder from '../../../state';
+import * as fromUser from '../../../../shared/state/user-state.reducer';
 
 @Component({
   templateUrl: './sales-order-view-cancel-shell.component.html',
@@ -16,135 +15,40 @@ import { environment } from '../../../../../environments/environment';
 })
 
 export class SalesOrderViewCancelShellComponent implements OnInit {
-    errorMessage: string;
+    displayedColumns = ['ItemImage', 'ProductDetails', 'ProductInfo', 'CancellationReason'];
     fulfilledby: string;
-    orderid: number;
-    hasCancellationQty: boolean;
-
-    private imageURL = environment.imageURL;
-    private linkURL = environment.linkURL;
-
-    //displayedColumns = ['ItemImage','ItemName', 'SKU', 'TPIN', 'Quantity', 'ShippedQty', 'CancellationQty'];
-    displayedColumns = ['ItemImage', 'ProductDetails','ProductInfo','CancellationReason'];
-    dataSource: any = null;
-
-    @ViewChild(MatPaginator, { static: false }) paginator: MatPaginator;
-    @ViewChild(MatSort, { static: true }) sort: MatSort;
-
-    // salesorderline: SalesOrderLine;
-    deliveryDetail: string;
-    salesorder: SalesOrder;
-    salesorderlines: SalesOrderLine[];
-
-    constructor(private route: ActivatedRoute,
-        private router: Router,
-        private salesorderService: SalesOrderService,
-        private appService: AppService) { }
-
+    salesOrderLinesMatTable$: Observable<MatTableDataSource<SalesOrderLine>>;
+    salesOrder$: Observable<SalesOrder>;
+    currentSalesOrderID$: Observable<number>;
+    deliveryDetail$: Observable<string>;
+    userInfo$: Observable<Member>;
+    errorMessage$: Observable<string>;
+    pendingDelete$: Observable<boolean>;
+    
+    constructor(private store: Store<fromSalesOrder.State>) { }
+    
     ngOnInit() {
-        const paramOrderID = this.route.snapshot.params['id'];
-        this.orderid = paramOrderID;
-        this.fulfilledby = 'merchant';
-
-        this.appService.getCurrentMember()
-            .subscribe(
-                (data) => {
-                    if(data.DefaultPageSize){
-                        this.paginator.pageSize = data.DefaultPageSize;
-                    }
-                },
-                (error: any) => {
-                    this.salesorderService.sendNotification({ type: 'error', title: 'Error', content: error });
-                }
-            );
-
-        this.salesorderService.getFulfilledBySalesOrder(this.orderid, this.fulfilledby).subscribe(
-            (salesorder: SalesOrder) => {
-                this.salesorder = salesorder;
-            },
-            (error: any) => this.errorMessage = <any>error
-        );
-
-        this.hasCancellationQty = false;
-        this.salesorderService.getSalesOrderLineByVendor(this.orderid, this.fulfilledby).subscribe(
-            (salesorderlines: SalesOrderLine[]) => {
-                this.salesorderlines = salesorderlines;
-
-                this.salesorderlines.forEach((salesorderline) => {
-                    if(salesorderline.Quantity - salesorderline.FulfilledQuantity > 0)
-                    {
-                        this.hasCancellationQty = true;
-                    }
-                });
-
-                this.dataSource = new MatTableDataSource<SalesOrderLine>(salesorderlines);
-                this.dataSource.paginator = this.paginator;
-                this.dataSource.sort = this.sort;
-            },
-            (error: any) => this.errorMessage = <any>error
-        );
-
-        this.salesorderService.getFulfilledBySalesOrderDelivery(this.orderid, this.fulfilledby).subscribe(
-            (deliveryDetail: string) => {
-                this.deliveryDetail = deliveryDetail.trim().replace(new RegExp('<br />', 'g'), '\n');
-            },
-            (error: any) => this.errorMessage = <any>error
-        );
+        this.userInfo$ = this.store.pipe(select(fromUser.getCurrentUser));
+        this.salesOrderLinesMatTable$ = this.store.pipe(select(fromSalesOrder.getSalesOrderLinesMatTable));
+        this.salesOrder$ = this.store.pipe(select(fromSalesOrder.getSalesOrder));
+        //this.currentSalesOrderID$ = this.store.pipe(select(fromSalesOrder.getCurrentSalesOrderID));
+        this.deliveryDetail$ = this.store.pipe(select(fromSalesOrder.getDeliveryDetail));
+        this.errorMessage$ = this.store.pipe(select(fromSalesOrder.getError));
+        this.pendingDelete$ = this.store.pipe(select(fromSalesOrder.getPendingDelete));
     }
-
-    onCancel() {
-        if(this.isValid()) {            
-            const confirmation = confirm(`Are you sure you want to cancel this order?`);        
-            if (confirmation) {
-                // this.salesorderService.cancelSalesOrder(this.orderid).subscribe(
-                //     () => {
-                //         this.salesorderService.sendNotification({ type: 'success', title: 'Successfully Canceled', content: this.errorMessage });
-                //         this.router.navigate(['/sales-order','merchant', this.orderid, 'detail']);
-                //     },
-                //     (error: any) => {
-                //         this.errorMessage = <any>error;
-                //         this.salesorderService.sendNotification({ type: 'error', title: 'Error', content: this.errorMessage });
-                //         window.location.reload();
-                //     }
-                // );
-                
-                this.salesorderService.cancelSalesOrderLines(this.salesorderlines).subscribe(
-                    () => {
-                        this.salesorderService.sendNotification({ type: 'success', title: 'Successfully Canceled', content: this.errorMessage });
-                        //this.router.navigate(['/sales-order','merchant', this.orderid, 'detail']);
-                        //window.location.reload();
-                    },
-                    (error: any) => {
-                        this.errorMessage = <any>error;
-                        this.salesorderService.sendNotification({ type: 'error', title: 'Error', content: this.errorMessage });
-                        //window.location.reload();
-                    }
-                );
-            }
-        }
+    getFulfilledBySalesOrder(payload: {orderid: number, fulfilledby: string}) {
+        this.store.dispatch(new salesOrderActions.LoadSalesOrder(payload));
     }
-
-    isValid() {   
-        var _ret = false;
-        var _count = 0;
-
-        this.salesorderlines.forEach((salesorderline) => {
-            _count++;
-
-            if(_count == 1) {
-                _ret = true;
-            }
-
-            if (salesorderline.Quantity - salesorderline.FulfilledQuantity > 0 && !salesorderline.CancellationReason) {
-                this.salesorderService.sendNotification({ type: 'error', title: 'Error', content: 'Cancellation Reasons are required' });
-                _ret = false;
-            }
-        });
-
-        if(_count == 0) {
-            this.salesorderService.sendNotification({ type: 'error', title: 'Error', content: 'No Lines to cancel' });
-        }
-
-        return _ret;
+    getSalesOrderLineByVendor(payload: {orderid: number, fulfilledby: string}) {
+        this.store.dispatch(new salesOrderActions.LoadSalesOrderLines(payload));
+    }
+    getFulfilledBySalesOrderDelivery(payload: {orderid: number, fulfilledby: string}) {
+        this.store.dispatch(new salesOrderActions.LoadFulfilledBySalesOrderDelivery(payload));
+    }
+    cancelSalesOrderLines(payload: SalesOrderLine[]) {
+        this.store.dispatch(new salesOrderActions.CancelSalesOrderLines(payload));
+    }
+    setSalesOrderID(payload: number) {
+        this.store.dispatch(new salesOrderActions.SetSalesOrderID(payload));
     }
 }

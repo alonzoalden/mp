@@ -1,14 +1,12 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
-import { ActivatedRoute, Router } from '@angular/router';
-import { MatMenuModule, MatPaginator, MatSort, MatTableDataSource} from '@angular/material';
-
+import { Component, OnInit, ViewChild, SimpleChanges, Input, Output, EventEmitter } from '@angular/core';
+import { ActivatedRoute } from '@angular/router';
+import { MatPaginator, MatSort, MatTableDataSource} from '@angular/material';
 import { SalesOrderLine } from '../../../../shared/class/sales-order-line';
 import { SalesOrder } from '../../../../shared/class/sales-order';
-
 import { SalesOrderService } from '../../../sales-order.service';
-import { AppService } from '../../../../app.service';
-
 import { environment } from '../../../../../environments/environment';
+import { Member } from 'app/shared/class/member';
+
 
 @Component({
   selector: 'o-sales-order-cancel',
@@ -17,119 +15,67 @@ import { environment } from '../../../../../environments/environment';
 })
 
 export class SalesOrderCancelComponent implements OnInit {
-    errorMessage: string;
-    fulfilledby: string;
-    orderid: number;
-    hasCancellationQty: boolean;
-
     private imageURL = environment.imageURL;
     private linkURL = environment.linkURL;
-
-    //displayedColumns = ['ItemImage','ItemName', 'SKU', 'TPIN', 'Quantity', 'ShippedQty', 'CancellationQty'];
-    displayedColumns = ['ItemImage', 'ProductDetails','ProductInfo','CancellationReason'];
-    dataSource: any = null;
-
+    @Input() userInfo: Member;
+    @Input() deliveryDetail: string;
+    @Input() salesOrder: SalesOrder;
+    @Input() salesOrderLinesMatTable: MatTableDataSource<SalesOrderLine>;
+    @Input() pendingDelete: boolean = false;
+    @Input() orderid: number;
+    @Input() errorMessage: string;
+    @Output() getFulfilledBySalesOrder = new EventEmitter<{orderid: number, fulfilledby: string}>();
+    @Output() getSalesOrderLineByVendor = new EventEmitter<{orderid: number, fulfilledby: string}>();
+    @Output() getFulfilledBySalesOrderDelivery = new EventEmitter<{orderid: number, fulfilledby: string}>();
+    @Output() cancelSalesOrderLines = new EventEmitter<SalesOrderLine[]>();
+    @Output() setSalesOrderID = new EventEmitter<number>();
+    @Output() getSalesOrderByVendor = new EventEmitter<{fulfilledby: string, status: string}>();
     @ViewChild(MatPaginator, { static: false }) paginator: MatPaginator;
     @ViewChild(MatSort, { static: true }) sort: MatSort;
 
-    // salesorderline: SalesOrderLine;
-    deliveryDetail: string;
-    salesorder: SalesOrder;
-    salesorderlines: SalesOrderLine[];
-
+    displayedColumns = ['ItemImage', 'ProductDetails', 'ProductInfo', 'CancellationReason'];
+    fulfilledby: string;
+    hasCancellationQty: boolean = false;
     constructor(private route: ActivatedRoute,
-        private router: Router,
-        private salesorderService: SalesOrderService,
-        private appService: AppService) { }
-
-    ngOnInit() {
-        const paramOrderID = this.route.snapshot.params['id'];
-        this.orderid = paramOrderID;
-        this.fulfilledby = 'merchant';
-
-        this.appService.getCurrentMember()
-            .subscribe(
-                (data) => {
-                    if(data.DefaultPageSize){
-                        this.paginator.pageSize = data.DefaultPageSize;
-                    }
-                },
-                (error: any) => {
-                    this.salesorderService.sendNotification({ type: 'error', title: 'Error', content: error });
+        private salesorderService: SalesOrderService) { }
+        
+    ngOnChanges(changes: SimpleChanges): void {
+        if (changes.salesOrderLinesMatTable && changes.salesOrderLinesMatTable.currentValue.data.length) {
+            this.salesOrderLinesMatTable.paginator = this.paginator;
+            this.salesOrderLinesMatTable.sort = this.sort;
+            this.salesOrderLinesMatTable.data.forEach((salesorderline) => {
+                if(salesorderline.Quantity - salesorderline.FulfilledQuantity > 0)
+                {
+                    this.hasCancellationQty = true;
                 }
-            );
-
-        this.salesorderService.getFulfilledBySalesOrder(this.orderid, this.fulfilledby).subscribe(
-            (salesorder: SalesOrder) => {
-                this.salesorder = salesorder;
-            },
-            (error: any) => this.errorMessage = <any>error
-        );
-
-        this.hasCancellationQty = false;
-        this.salesorderService.getSalesOrderLineByVendor(this.orderid, this.fulfilledby).subscribe(
-            (salesorderlines: SalesOrderLine[]) => {
-                this.salesorderlines = salesorderlines;
-
-                this.salesorderlines.forEach((salesorderline) => {
-                    if(salesorderline.Quantity - salesorderline.FulfilledQuantity > 0)
-                    {
-                        this.hasCancellationQty = true;
-                    }
-                });
-
-                this.dataSource = new MatTableDataSource<SalesOrderLine>(salesorderlines);
-                this.dataSource.paginator = this.paginator;
-                this.dataSource.sort = this.sort;
-            },
-            (error: any) => this.errorMessage = <any>error
-        );
-
-        this.salesorderService.getFulfilledBySalesOrderDelivery(this.orderid, this.fulfilledby).subscribe(
-            (deliveryDetail: string) => {
-                this.deliveryDetail = deliveryDetail.trim().replace(new RegExp('<br />', 'g'), '\n');
-            },
-            (error: any) => this.errorMessage = <any>error
-        );
+            });
+        }
+        if (changes.deliveryDetail && changes.deliveryDetail.currentValue) {
+            this.deliveryDetail = changes.deliveryDetail.currentValue.trim().replace(new RegExp('<br />', 'g'), '\n');
+        }
+    }
+    ngOnInit() {
+        this.orderid = this.route.snapshot.params['id'];
+        this.fulfilledby = 'merchant';
+        this.setSalesOrderID.emit(this.orderid);
+        this.getFulfilledBySalesOrder.emit({orderid: this.orderid, fulfilledby: this.fulfilledby});
+        this.getSalesOrderLineByVendor.emit({orderid: this.orderid, fulfilledby: this.fulfilledby});
+        this.getFulfilledBySalesOrderDelivery.emit({orderid: this.orderid, fulfilledby: this.fulfilledby});
     }
 
     onCancel() {
         if(this.isValid()) {            
             const confirmation = confirm(`Are you sure you want to cancel this order?`);        
             if (confirmation) {
-                // this.salesorderService.cancelSalesOrder(this.orderid).subscribe(
-                //     () => {
-                //         this.salesorderService.sendNotification({ type: 'success', title: 'Successfully Canceled', content: this.errorMessage });
-                //         this.router.navigate(['/sales-order','merchant', this.orderid, 'detail']);
-                //     },
-                //     (error: any) => {
-                //         this.errorMessage = <any>error;
-                //         this.salesorderService.sendNotification({ type: 'error', title: 'Error', content: this.errorMessage });
-                //         window.location.reload();
-                //     }
-                // );
-                
-                this.salesorderService.cancelSalesOrderLines(this.salesorderlines).subscribe(
-                    () => {
-                        this.salesorderService.sendNotification({ type: 'success', title: 'Successfully Canceled', content: this.errorMessage });
-                        //this.router.navigate(['/sales-order','merchant', this.orderid, 'detail']);
-                        //window.location.reload();
-                    },
-                    (error: any) => {
-                        this.errorMessage = <any>error;
-                        this.salesorderService.sendNotification({ type: 'error', title: 'Error', content: this.errorMessage });
-                        //window.location.reload();
-                    }
-                );
+                this.cancelSalesOrderLines.emit(this.salesOrderLinesMatTable.data);
             }
         }
     }
-
     isValid() {   
         var _ret = false;
         var _count = 0;
 
-        this.salesorderlines.forEach((salesorderline) => {
+        this.salesOrderLinesMatTable.data.forEach((salesorderline) => {
             _count++;
 
             if(_count == 1) {

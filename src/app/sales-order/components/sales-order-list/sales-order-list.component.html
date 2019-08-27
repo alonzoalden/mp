@@ -52,20 +52,20 @@
                             <div class="ibox float-e-margins">
                                 <div class="ibox-title"><h5>{{ 'View Sales Orders' | translate }}</h5></div>
                                 <div class="toolbar-search-1">
-                                    <i class="fa fa-search search-icon-adjust" [ngClass]="this.dataSource?.filter ? 'selected' : ''" aria-label="Icon for Filter By Input Bar" (click)="FilterBy.select()"></i> 
+                                    <i class="fa fa-search search-icon-adjust" [ngClass]="this.salesOrdersMatTable?.filter ? 'selected' : ''" aria-label="Icon for Filter By Input Bar" (click)="FilterBy.select()"></i> 
                                     <input (keyup)="applyFilter($event.target.value)" placeholder="{{ 'Filter By' | translate }}" class="form-control" #FilterBy>
                                 </div>
                                 <div class="ibox-content">
-                                    <div *ngIf="loading" class="m-t-xl">
+                                    <div *ngIf="isLoading" class="m-t-xl">
                                         <div class="sk-spinner sk-spinner-three-bounce big-spinner">
                                             <div class="sk-bounce1"></div>
                                             <div class="sk-bounce2"></div>
                                             <div class="sk-bounce3"></div>
                                         </div>
                                     </div>
-                                    <div class="table-responsive" [hidden]="loading">
-                                        <p *ngIf="!dataSource || (dataSource && dataSource.data && dataSource.data.length < 1)" class="m-l-xl m-t-md">{{ 'There are no sales orders to display.' | translate }}</p>
-                                        <table mat-table #table [dataSource]="dataSource" class="table animated fadeIn" matSort *ngIf="dataSource && dataSource.data && dataSource.data.length > 0">
+                                    <div class="table-responsive" *ngIf="!isLoading">
+                                        <p *ngIf="!salesOrdersMatTable || (salesOrdersMatTable && salesOrdersMatTable.data && salesOrdersMatTable.data.length < 1)" class="m-l-xl m-t-md">{{ 'There are no sales orders to display.' | translate }}</p>
+                                        <table mat-table #table [dataSource]="salesOrdersMatTable" class="table animated fadeIn" matSort *ngIf="salesOrdersMatTable && salesOrdersMatTable.data && salesOrdersMatTable.data.length > 0">
                                             
                                             <!-- Menu Column -->
                                             <ng-container matColumnDef="Menu">
@@ -77,7 +77,7 @@
                                                             <button mat-menu-item [routerLink]="['/', 'sales-order', 'view', fulfilledby, salesorder.OrderID, 'detail']">{{ 'View Details' | translate }}</button> 
                                                             <button mat-menu-item (click)="onPrintPackingSlip(salesorder)">{{ 'Print Packing Slip' | translate }}</button> 
                                                             <button mat-menu-item [routerLink]="['/', 'sales-order', 'view', fulfilledby, salesorder.OrderID, 'fulfillment']" *ngIf="salesorder.Status != 'Canceled'">{{ 'Manage Shipments' | translate }}</button> 
-                                                            <button mat-menu-item [routerLink]="['/', 'sales-order', salesorder.OrderID, 'cancellation']" *ngIf="salesorder.Status != 'Canceled'">{{ 'Cancel Order' | translate }}</button>                                                                          
+                                                            <button mat-menu-item (click)="setSalesOrderID.emit(salesorder.OrderID)" [routerLink]="['/', 'sales-order', salesorder.OrderID, 'cancellation']" *ngIf="salesorder.Status != 'Canceled'">{{ 'Cancel Order' | translate }}</button>                                                                          
                                                         </mat-menu>
                                                     </div>
                                                     <div *ngIf="fulfilledby != 'merchant'">
@@ -218,7 +218,7 @@
                                             <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
                                             <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
                                         </table>
-                                        <mat-paginator #paginator [pageSizeOptions]="[10, 20, 50, 100, 200]" [showFirstLastButtons]="true"></mat-paginator>
+                                        <mat-paginator [pageSize]="userInfo?.DefaultPageSize" #paginator [pageSizeOptions]="[10, 20, 50, 100, 200]" [showFirstLastButtons]="true"></mat-paginator>
                                     </div>
                                 </div>
                             </div>

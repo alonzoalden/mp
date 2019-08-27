@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient, HttpErrorResponse, HttpHeaders } from '@angular/common/http';
 
 import { Observable, Subject, of, throwError } from 'rxjs';
-import { catchError, tap } from 'rxjs/operators';
+import { catchError, tap, delay } from 'rxjs/operators';
 
 import { SalesOrder } from '../shared/class/sales-order';
 import { SalesOrderLine } from '../shared/class/sales-order-line';

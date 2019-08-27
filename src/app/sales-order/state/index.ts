@@ -2,7 +2,8 @@ import { createSelector, createFeatureSelector } from '@ngrx/store';
 import * as fromRoot from '../../state/app.state';
 import * as fromSalesOrder from './sales-order.reducer';
 import { MatTableDataSource } from '@angular/material';
-import { MemberVendor } from 'app/shared/class/member';
+import { SalesOrder } from 'app/shared/class/sales-order';
+import { SalesOrderLine } from 'app/shared/class/sales-order-line';
 
 // Extends the app state to include the product feature.
 // This is required because products are lazy loaded.
@@ -14,13 +15,50 @@ export interface State extends fromRoot.State {
 // Selector functions
 const getSalesOrderFeatureState = createFeatureSelector<fromSalesOrder.SalesOrderState>('SalesOrder');
 
-export const getMemberVendorList = createSelector(
+export const getSalesOrdersList = createSelector(
     getSalesOrderFeatureState,
-    state => state.memberVendors
+    state => state.salesOrders
 );
-export const getMemberVendorListMatTable = createSelector(
+export const getSalesOrdersListMatTable = createSelector(
     getSalesOrderFeatureState,
-    state => new MatTableDataSource<MemberVendor>(state.memberVendors)
+    state => new MatTableDataSource<SalesOrder>(state.salesOrders)
+);
+
+export const getSalesOrder = createSelector(
+    getSalesOrderFeatureState,
+    state => state.salesOrder
+);
+
+// export const getCurrentSalesOrderID = createSelector(
+//     getSalesOrderFeatureState,
+//     state => state.currentSalesOrderID
+// );
+// export const getSalesOrder = createSelector(
+//     getSalesOrderFeatureState,
+//     getCurrentSalesOrderID, 
+//     (state, currentSalesOrderID) => state.salesOrders.find(item => item.OrderID === currentSalesOrderID)
+// );
+export const getSalesOrderLines = createSelector(
+    getSalesOrderFeatureState,
+    state => state.salesOrderLines
+);
+export const getSalesOrderLinesMatTable = createSelector(
+    getSalesOrderFeatureState,
+    state => new MatTableDataSource<SalesOrderLine>(state.salesOrderLines)
+);
+
+export const getDeliveryDetail = createSelector(
+    getSalesOrderFeatureState,
+    state => state.deliveryDetail
+);
+
+export const getIsLoading = createSelector(
+    getSalesOrderFeatureState,
+    state => state.isLoading
+);
+export const getPendingDelete = createSelector(
+    getSalesOrderFeatureState,
+    state => state.pendingDelete
 );
 export const getPendingSave = createSelector(
     getSalesOrderFeatureState,

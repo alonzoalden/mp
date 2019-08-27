@@ -1,3 +1,9 @@
 <o-sales-order-list
+    [salesOrdersMatTable]="salesOrdersMatTable$ | async"
+    [userInfo]="userInfo$ | async"
+    [isLoading]="isLoading$ | async"
+    [errorMessage]="errorMessage$ | async"
     (getSalesOrderByVendor)="getSalesOrderByVendor($event)"
+    (downloadSalesOrderPackingSlip)="downloadSalesOrderPackingSlip($event)"
+    (setSalesOrderID)="setSalesOrderID($event)"
 ></o-sales-order-list>

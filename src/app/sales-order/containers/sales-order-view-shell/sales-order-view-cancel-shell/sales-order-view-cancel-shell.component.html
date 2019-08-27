@@ -1,3 +1,12 @@
-<o-sales-order-cancel>
-    
-</o-sales-order-cancel>
+<o-sales-order-cancel
+    [userInfo]="userInfo$ | async"
+    [salesOrderLinesMatTable]="salesOrderLinesMatTable$ | async"
+    [salesOrder]="salesOrder$ | async"
+    [deliveryDetail]="deliveryDetail$ | async"
+    [pendingDelete]="pendingDelete$ | async"    
+    [errorMessage]="errorMessage$ | async"
+    (getFulfilledBySalesOrder)="getFulfilledBySalesOrder($event)"
+    (getSalesOrderLineByVendor)="getSalesOrderLineByVendor($event)"
+    (getFulfilledBySalesOrderDelivery)="getFulfilledBySalesOrderDelivery($event)"
+    (cancelSalesOrderLines)="cancelSalesOrderLines($event)"
+></o-sales-order-cancel>
