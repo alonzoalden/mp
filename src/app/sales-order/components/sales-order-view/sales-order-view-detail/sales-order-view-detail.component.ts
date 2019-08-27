@@ -7,6 +7,9 @@ import { SalesOrderService } from '../../../sales-order.service';
 import { AppService } from '../../../../app.service';
 import { environment } from '../../../../../environments/environment';
 import { Member } from 'app/shared/class/member';
+import * as salesOrderActions from '../../../state/sales-order.actions';
+import * as fromSalesOrder from '../../../state';
+import { Store } from '@ngrx/store';
 
 @Component({
   selector: 'o-sales-order-detail',
@@ -79,9 +82,9 @@ export class SalesOrderDetailComponent implements OnInit {
         this.downloadSalesOrderPackingSlip.emit(this.salesOrder);
     }
 
-    openDialogCancelOrder(id) {
+    openDialogCancelOrder(salesorder) {
         const dialogRef = this.printDialog.open(SalesOrderCancelComponentPrintDialog, {
-            data: id,
+            data: salesorder,
             width: '840px'
         });
     
@@ -107,7 +110,7 @@ export class SalesOrderCancelComponentPrintDialog implements OnInit {
     errorMessage: string;
     fulfilledby: string;
     orderid: number;
-    salesorder: SalesOrder;
+    salesOrder: SalesOrder;
     hasCancellationQty: boolean;
     salesorderlines: SalesOrderLine[];
     deliveryDetail: string;
@@ -121,14 +124,16 @@ export class SalesOrderCancelComponentPrintDialog implements OnInit {
     @ViewChild(MatSort, { static: true }) sort: MatSort;
 
     constructor(
-        @Inject(MAT_DIALOG_DATA) public data: any,
+        @Inject(MAT_DIALOG_DATA) public data: SalesOrder,
         public dialogRef: MatDialogRef<SalesOrderCancelComponentPrintDialog>,
         private route: ActivatedRoute,
         private router: Router,
+        private store: Store<fromSalesOrder.State>,
         private salesorderService: SalesOrderService) {}
 
     ngOnInit() {
-        this.orderid = this.data;
+        this.salesOrder = this.data;
+        this.orderid = this.data.OrderID;
         this.fulfilledby = 'merchant';
 
         // this.salesorderService.getSalesOrder(this.orderid).subscribe(
@@ -137,13 +142,16 @@ export class SalesOrderCancelComponentPrintDialog implements OnInit {
         //     },
         //     (error: any) => this.errorMessage = <any>error
         // );
+        
+        // this.salesorderService.getFulfilledBySalesOrder(this.orderid, this.fulfilledby).subscribe(
+        //     (salesorder: SalesOrder) => {
+        //         this.salesOrder = salesorder;
+        //     },
+        //     (error: any) => this.errorMessage = <any>error
+        // );
+        this.store.dispatch(new salesOrderActions.LoadSalesOrderLines({orderid: this.orderid, fulfilledby: this.fulfilledby}));
 
-        this.salesorderService.getFulfilledBySalesOrder(this.orderid, this.fulfilledby).subscribe(
-            (salesorder: SalesOrder) => {
-                this.salesorder = salesorder;
-            },
-            (error: any) => this.errorMessage = <any>error
-        );
+        //get coode for take until here
 
         this.hasCancellationQty = false;
         this.salesorderService.getSalesOrderLineByVendor(this.orderid, this.fulfilledby).subscribe(
@@ -171,12 +179,12 @@ export class SalesOrderCancelComponentPrintDialog implements OnInit {
         //     (error: any) => this.errorMessage = <any>error
         // );
 
-        this.salesorderService.getFulfilledBySalesOrderDelivery(this.orderid, this.fulfilledby).subscribe(
-            (deliveryDetail: string) => {
-                this.deliveryDetail = deliveryDetail.trim().replace(new RegExp('<br />', 'g'), '\n');
-            },
-            (error: any) => this.errorMessage = <any>error
-        );
+        // this.salesorderService.getFulfilledBySalesOrderDelivery(this.orderid, this.fulfilledby).subscribe(
+        //     (deliveryDetail: string) => {
+        //         this.deliveryDetail = deliveryDetail.trim().replace(new RegExp('<br />', 'g'), '\n');
+        //     },
+        //     (error: any) => this.errorMessage = <any>error
+        // );
     }
 
     onCancel() {

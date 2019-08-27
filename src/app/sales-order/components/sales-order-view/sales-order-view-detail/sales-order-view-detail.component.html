@@ -58,7 +58,7 @@
                             <button type="button" class="btn btn-info" (click)="onPrintPackingSlip()">
                                 <i class="fa fa-print m-r-xs"></i><span class=""> {{ 'Print Packing Slip' | translate }}</span>
                             </button>             
-                            <button type="button" class="btn btn-danger" *ngIf="fulfilledby =='merchant' && salesOrder?.MerchantStatus === 'Unshipped'" (click)="openDialogCancelOrder(orderid)">
+                            <button type="button" class="btn btn-danger" *ngIf="fulfilledby =='merchant' && salesOrder?.MerchantStatus === 'Unshipped'" (click)="openDialogCancelOrder(salesOrder)">
                                 <i class="fa fa-remove"></i><span class=""> {{ 'Cancel Order' | translate }}</span>
                             </button>
                         </div>
