@@ -31,7 +31,7 @@ export class ItemAddProductRelationCrossSellComponent implements OnInit {
     this.item = this.itemService.currentItemInsert;
 
     if(this.item.ItemCrossSells.length === 0) {
-      const _temp = new ItemCrossSellInsert(0, null, null, null, null, null, null);
+      const _temp = new ItemCrossSellInsert(0, null, null, null, null, null, null, null);
       this.item.ItemCrossSells.push(_temp);
     }
 
@@ -68,7 +68,7 @@ export class ItemAddProductRelationCrossSellComponent implements OnInit {
                 }
             );
 
-            const _temp = new ItemCrossSellInsert(0, null, null, null, null, null, this.item.ItemCrossSells.length + 1);
+            const _temp = new ItemCrossSellInsert(0, null, null, null, null, null, null, this.item.ItemCrossSells.length + 1);
             this.item.ItemCrossSells.push(_temp);
             this.crossSellRefreshDataSource(this.item.ItemCrossSells);
         }
@@ -100,6 +100,8 @@ export class ItemAddProductRelationCrossSellComponent implements OnInit {
                     this.item.ItemCrossSells[index].CrossSellItemName = item.Name;
                     this.item.ItemCrossSells[index].CrossSellItemVendorSKU = item.VendorSKU;
                     this.item.ItemCrossSells[index].CrossSellTPIN = item.TPIN;
+                    this.currentItemCrossSellIndex = this.item.ItemCrossSells.length - 1;
+                    this.item.ItemCrossSells[index].ImagePath = item.ImagePath;
                 },
                 (error: any) => {
                     this.errorMessage = <any>error;

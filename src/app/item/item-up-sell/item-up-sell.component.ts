@@ -39,7 +39,7 @@ export class ItemUpSellComponent implements OnInit, OnDestroy  {
     ngOnInit(): void {
         this.itemid = this.route.snapshot.params['id'];
 
-        this.itemUpSell = new ItemUpSellInsert(this.itemid, null, null, null, null, null, null);
+        this.itemUpSell = new ItemUpSellInsert(this.itemid, null, null, null, null, null, null, null);
 
         this.itemService.getItem(this.itemid).subscribe(
             (item: Item) => {
@@ -99,7 +99,7 @@ export class ItemUpSellComponent implements OnInit, OnDestroy  {
                     }
 
                     this.refreshDataSource(this.itemUpSells);
-                    this.itemUpSell = new ItemUpSellInsert(this.itemid, null, null, null, null, null, null);
+                    this.itemUpSell = new ItemUpSellInsert(this.itemid, null, null, null, null, null, null, null);
                 },
                 (error: any) => {
                     this.pendingAdd = false;

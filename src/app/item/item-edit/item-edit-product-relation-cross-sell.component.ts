@@ -70,7 +70,7 @@ export class ItemEditProductRelationCrossSellComponent implements OnInit {
     }
 
     crossSellAddPendingLine() {
-        const _temp = new ItemCrossSell(0, this.itemid, null, null, null, null, null, this.item.ItemCrossSells.length + 1, null, null, true);
+        const _temp = new ItemCrossSell(0, this.itemid, null, null, null, null, null, this.item.ItemCrossSells.length + 1, null, null, null, true);
         this.item.ItemCrossSells.push(_temp);   
     }
 
@@ -159,6 +159,8 @@ export class ItemEditProductRelationCrossSellComponent implements OnInit {
                         this.item.ItemCrossSells[index].CrossSellItemName = item.Name;
                         this.item.ItemCrossSells[index].CrossSellItemVendorSKU = item.VendorSKU;
                         this.item.ItemCrossSells[index].CrossSellTPIN = item.TPIN;
+                        this.item.ItemCrossSells[index].ImagePath = item.ImagePath;
+                        this.currentItemCrossSellIndex = this.item.ItemCrossSells.length - 1;
                     },
                     (error: any) => {
                         this.errorMessage = <any>error;

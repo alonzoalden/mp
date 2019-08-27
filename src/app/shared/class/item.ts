@@ -299,7 +299,7 @@ export class ItemRelatedProduct {
         public Position: number,
         public UpdatedOn: string,
         public CreatedOn: string,
-
+        public ImagePath: string,
         public pendingAdd: boolean
     ) {}
 }
@@ -313,6 +313,7 @@ export class ItemRelatedProductInsert {
         public RelatedItemName: string,
         public RelatedItemVendorSKU: string,
         public RelatedTPIN: string,
+        public ImagePath: string,
 
         public Position: number
     ) {}
@@ -333,7 +334,8 @@ export class ItemUpSell {
         public Position: number,
         public UpdatedOn: string,
         public CreatedOn: string,
-
+        public ImagePath: string,
+        
         public pendingAdd: boolean
     ) {}
 }
@@ -347,6 +349,7 @@ export class ItemUpSellInsert {
         public UpSellItemName: string,
         public UpSellItemVendorSKU: string,
         public UpSellTPIN: string,
+        public ImagePath: string,
 
         public Position: number
     ) {}
@@ -367,7 +370,7 @@ export class ItemCrossSell {
         public Position: number,
         public UpdatedOn: string,
         public CreatedOn: string,
-
+        public ImagePath: string,
         public pendingAdd: boolean
     ) {}
 }
@@ -381,7 +384,7 @@ export class ItemCrossSellInsert {
         public CrossSellItemName: string,
         public CrossSellItemVendorSKU: string,
         public CrossSellTPIN: string,
-
+        public ImagePath: string,
         public Position: number
     ) {}
 }
