@@ -7,7 +7,7 @@
 
     <div class="ibox-content hide-y">
         <div class="table-responsive">
-            <table mat-table #table [dataSource]="dataSource" class="table" matSort>
+            <table mat-table #table [dataSource]="salesOrderLinesMatTable" class="table" matSort>
                 <!-- Item Image Column -->
                 <ng-container matColumnDef="ItemImage">
                     <th mat-header-cell *matHeaderCellDef width="100px" style="min-width: 150px;">{{ 'Product Details' | translate }}</th>

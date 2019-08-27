@@ -1,7 +1,7 @@
 <div class="tab-content animated fadeIn">
     <div class="tab-pane active">
         <div class="panel-body p-w-none" style="min-height: 400px;">
-            <ng-container *ngIf="!salesorder || isLoading">
+            <ng-container *ngIf="isLoading">
                 <div class="spinner-full-page"> 
                     <div>
                         <div>
@@ -24,20 +24,20 @@
                     <div class="sk-bounce3"></div>
                 </div>
             </div> -->
-            <ng-container *ngIf="salesorder">
+            <ng-container *ngIf="salesOrder && !isLoading">
                 <div class="ibox-title"><h5>{{ 'Shipments' | translate }}</h5></div>
                 <div class="ibox-content hide-y">
                     <div class="table-responsive">
-                        <table mat-table #table [dataSource]="dataSource" class="table animated fadeIn">
+                        <table mat-table #table [dataSource]="fulfillmentsMatTable" class="table animated fadeIn">
                             <!-- Menu Column -->
                             <ng-container matColumnDef="Menu">
                                 <th mat-header-cell *matHeaderCellDef width="100px"></th>
                                 <td mat-cell *matCellDef="let fulfillment; let i = index">
                                     <button mat-button [matMenuTriggerFor]="menu"><i class="fa fa-bars fa-2x"></i></button>
                                     <mat-menu #menu="matMenu">
-                                        <button mat-menu-item [routerLink]="['/','sales-order', 'view', fulfilledby, orderid, 'fulfillment', 'edit',fulfillment.FulfillmentID]" *ngIf="isMerchant && !fulfillment.InternalID">{{ 'Edit' | translate }}</button> 
+                                        <button mat-menu-item (click)="setFulfillment.emit(fulfillment)" [routerLink]="['/','sales-order', 'view', fulfilledby, orderid, 'fulfillment', 'edit',fulfillment.FulfillmentID]" *ngIf="isMerchant && !fulfillment.InternalID">{{ 'Edit' | translate }}</button> 
                                         <button mat-menu-item (click)="onDeleteFulfillment(fulfillment)" *ngIf="isMerchant && !fulfillment.InternalID" >{{ 'Delete' | translate }}</button>                                                                         
-                                        <button mat-menu-item [routerLink]="['/','sales-order', 'view', fulfilledby, orderid, 'fulfillment', 'edit',fulfillment.FulfillmentID]" *ngIf="!isMerchant || fulfillment.InternalID">{{ 'View Details' | translate }}</button> 
+                                        <button mat-menu-item (click)="setFulfillment.emit(fulfillment)" [routerLink]="['/','sales-order', 'view', fulfilledby, orderid, 'fulfillment', 'edit',fulfillment.FulfillmentID]" *ngIf="!isMerchant || fulfillment.InternalID">{{ 'View Details' | translate }}</button> 
                                     </mat-menu>
                                 </td>
                             </ng-container>
@@ -45,7 +45,7 @@
                             <ng-container matColumnDef="Package">
                                 <th mat-header-cell *matHeaderCellDef width="150px">{{ 'Package' | translate }}</th>
                                 <td mat-cell *matCellDef="let fulfillment; let i = index">
-                                    <a [routerLink]="['/','sales-order', 'view', fulfilledby, orderid, 'fulfillment', 'edit',fulfillment.FulfillmentID]">Package #{{ i + 1 }}</a>
+                                    <a (click)="setFulfillment.emit(fulfillment)" [routerLink]="['/','sales-order', 'view', fulfilledby, orderid, 'fulfillment', 'edit',fulfillment.FulfillmentID]">Package #{{ i + 1 }}</a>
                                 </td>
                             </ng-container>
                             <!-- Shipment ID -->
@@ -78,7 +78,7 @@
                             <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
                         </table>
                         <div class="m-l-md">
-                            <div class="animated fadeIn" *ngIf="dataSource?.data.length === 0">
+                            <div class="animated fadeIn" *ngIf="fulfillmentsMatTable?.data.length === 0">
                                 <span class="m-r-xs">{{ 'There are no shipments to display.' | translate }}</span>
                                 <span *ngIf="isMerchant && salesorder?.MerchantStatus === 'Unshipped'">{{ 'Please add a new shipment.' | translate }}</span>
                             </div>

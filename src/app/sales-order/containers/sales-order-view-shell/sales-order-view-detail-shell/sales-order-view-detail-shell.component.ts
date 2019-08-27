@@ -52,13 +52,4 @@ export class SalesOrderViewDetailShellComponent implements OnInit {
     downloadSalesOrderPackingSlip(payload: SalesOrder) {
         this.store.dispatch(new salesOrderActions.DownloadSalesOrderPackingSlip(payload));
     }
-    
-}
-
-
-export class SalesOrderCancelDialog {
-    constructor(
-        public Size: string,
-        public Border: string
-    ) {}
 }

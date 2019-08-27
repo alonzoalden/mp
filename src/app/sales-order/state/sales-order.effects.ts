@@ -9,6 +9,7 @@ import { Router } from '@angular/router';
 import { Member, MemberVendor } from 'app/shared/class/member';
 import { SalesOrder } from 'app/shared/class/sales-order';
 import { SalesOrderLine } from 'app/shared/class/sales-order-line';
+import { Fulfillment } from 'app/shared/class/fulfillment';
 
 @Injectable()
 export class SalesOrderEffects {
@@ -78,6 +79,36 @@ export class SalesOrderEffects {
     );
     
     @Effect()
+    getFulfilledByFulfillments$: Observable<Action> = this.actions$.pipe(
+        ofType(salesOrderActions.SalesOrderActionTypes.LoadFulfilledByFulfillments),
+        map((action: salesOrderActions.LoadFulfilledByFulfillments) => action.payload),
+        mergeMap((payload) => {
+            return this.salesOrderService.getFulfilledByFulfillments(payload.orderid, payload.fulfilledby).pipe(
+                map((fullfillment: Fulfillment[]) => (new salesOrderActions.LoadFulfilledByFulfillmentsSuccess(fullfillment))),
+                catchError(err => {
+                    of(new salesOrderActions.LoadFulfilledByFulfillmentsFail(err))
+                    return EMPTY;
+                })
+            )
+        }
+        )
+    );
+    @Effect()
+    getFulfilledByFulfillment$: Observable<Action> = this.actions$.pipe(
+        ofType(salesOrderActions.SalesOrderActionTypes.LoadFulfilledByFulfillment),
+        map((action: salesOrderActions.LoadFulfilledByFulfillment) => action.payload),
+        mergeMap((payload) => {
+            return this.salesOrderService.getFulfilledByFulfillment(payload.fulfillmentid, payload.fulfilledby).pipe(
+                map((fullfillment: Fulfillment) => (new salesOrderActions.LoadFulfilledByFulfillmentSuccess(fullfillment))),
+                catchError(err => {
+                    of(new salesOrderActions.LoadFulfilledByFulfillmentFail(err))
+                    return EMPTY;
+                })
+            )
+        }
+        )
+    );
+    @Effect()
     cancelSalesOrderLines$: Observable<Action> = this.actions$.pipe(
         ofType(salesOrderActions.SalesOrderActionTypes.CancelSalesOrderLines),
         map((action: salesOrderActions.CancelSalesOrderLines) => action.payload),
@@ -85,6 +116,44 @@ export class SalesOrderEffects {
             this.salesOrderService.cancelSalesOrderLines(payload).pipe(
                 map((salesorderlines: SalesOrderLine[]) => {
                     this.salesOrderService.sendNotification({ type: 'success', title: 'Successfully Canceled' });
+                    return (new salesOrderActions.CancelSalesOrderLinesSuccess(salesorderlines))
+                }),
+                catchError(err => {
+                    this.salesOrderService.sendNotification({ type: 'error', title: 'Error', content: err });
+                    of(new salesOrderActions.CancelSalesOrderLinesFail(err))
+                    return EMPTY;
+                })
+            )
+        )
+    );
+    
+    @Effect()
+    editFulfillment$: Observable<Action> = this.actions$.pipe(
+        ofType(salesOrderActions.SalesOrderActionTypes.EditFulfillment),
+        map((action: salesOrderActions.EditFulfillment) => action.payload),
+        mergeMap((payload) =>
+            this.salesOrderService.editFulfillment(payload).pipe(
+                map((fulfillment: Fulfillment) => {
+                    this.salesOrderService.sendNotification({ type: 'success', title: 'Save Completed', content: "" });
+                    window.location.reload();
+                    return (new salesOrderActions.EditFulfillmentSuccess(fulfillment))
+                }),
+                catchError(err => {
+                    this.salesOrderService.sendNotification({ type: 'error', title: 'Error', content: err });
+                    of(new salesOrderActions.EditFulfillmentFail(err))
+                    return EMPTY;
+                })
+            )
+        )
+    );
+    @Effect()
+    deleteFulfillment$: Observable<Action> = this.actions$.pipe(
+        ofType(salesOrderActions.SalesOrderActionTypes.DeleteFulfillment),
+        map((action: salesOrderActions.CancelSalesOrderLines) => action.payload),
+        mergeMap((payload) =>
+            this.salesOrderService.cancelSalesOrderLines(payload).pipe(
+                map((salesorderlines: SalesOrderLine[]) => {
+                    this.salesOrderService.sendNotification({ type: 'success', title: 'Successfully Deleted' });
                     return (new salesOrderActions.CancelSalesOrderLinesSuccess(salesorderlines))
                 }),
                 catchError(err => {

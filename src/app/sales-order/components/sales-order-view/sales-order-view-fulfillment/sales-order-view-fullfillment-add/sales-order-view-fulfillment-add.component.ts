@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, OnInit, ViewChild, Input } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { MatMenuModule, MatPaginator, MatSort, MatTableDataSource} from '@angular/material';
 
@@ -16,8 +16,14 @@ import { environment } from '../../../../../../environments/environment';
 })
 
 export class SalesOrderFulfillmentAddComponent implements OnInit {
-    errorMessage: string;
-    deliveryDetail: string;
+    @Input() errorMessage: string;
+    @Input() deliveryDetail: string;
+    @Input() salesOrder: SalesOrder;
+    @Input() fulfillment: Fulfillment;
+    @Input() isLoading: boolean;
+
+    // errorMessage: string;
+    // deliveryDetail: string;
     salesorder: SalesOrder;
     orderid: number;
     fulfilledby: string;
@@ -30,7 +36,7 @@ export class SalesOrderFulfillmentAddComponent implements OnInit {
     displayedColumns = ['ProductDetails', 'RemainingQuantity', 'PackageQuantity'];
     dataSource: any = null;
 
-    fulfillment: Fulfillment;
+    //fulfillment: Fulfillment;
     shipmentTrackings: ShipmentTracking[];
 
     pendingCreate: boolean;

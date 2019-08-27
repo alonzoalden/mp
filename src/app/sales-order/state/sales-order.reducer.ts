@@ -1,24 +1,32 @@
 import { SalesOrderActionTypes, SalesOrderActions } from './sales-order.actions';
 import { SalesOrder } from 'app/shared/class/sales-order';
 import { SalesOrderLine } from 'app/shared/class/sales-order-line';
+import { Fulfillment } from 'app/shared/class/fulfillment';
 
 // State for this feature (Item Variation)
 export interface SalesOrderState {
     salesOrders: SalesOrder[];
+    fulfillments: Fulfillment[];
+    fulfillment: Fulfillment;
     salesOrder: SalesOrder;
     salesOrderLines: SalesOrderLine[];
+    salesOrderDeliveryDetail: string;
     deliveryDetail: string;
     currentSalesOrderID: number;
     isLoading: boolean;
     pendingDelete: boolean,
     pendingSave: boolean,
     error: string;
+    
 };
 
 const initialState: SalesOrderState = {
     salesOrders: [],
+    fulfillments: [],
+    fulfillment: null,
     salesOrder: null,
     salesOrderLines: [],
+    salesOrderDeliveryDetail: '',
     deliveryDetail: '',
     currentSalesOrderID: null,
     isLoading: true,
@@ -55,6 +63,11 @@ export function salesOrderReducer(state = initialState, action: SalesOrderAction
             return {
                 ...state,
                 salesOrder: action.payload
+            };
+        case SalesOrderActionTypes.SetFulfillment:
+            return {
+                ...state,
+                fulfillment: action.payload
             };
         case SalesOrderActionTypes.SetSalesOrderID:
             return {
@@ -102,12 +115,54 @@ export function salesOrderReducer(state = initialState, action: SalesOrderAction
                 isLoading: false,
                 error: action.payload,
             };
+        case SalesOrderActionTypes.LoadFulfilledByFulfillments:
+            return {
+                ...state,
+                isLoading: true,
+                error: '',
+            };
+
+        case SalesOrderActionTypes.LoadFulfilledByFulfillmentsSuccess:
+            return {
+                ...state,
+                fulfillments: action.payload,
+                isLoading: false,
+                error: '',
+            };
+        case SalesOrderActionTypes.LoadFulfilledByFulfillmentsFail:
+            return {
+                ...state,
+                fulfillments: null,
+                isLoading: false,
+                error: action.payload,
+            };
+        case SalesOrderActionTypes.LoadFulfilledByFulfillment:
+            return {
+                ...state,
+                isLoading: true,
+                error: '',
+            };
+
+        case SalesOrderActionTypes.LoadFulfilledByFulfillmentSuccess:
+            return {
+                ...state,
+                fulfillment: action.payload,
+                isLoading: false,
+                error: '',
+            };
+        case SalesOrderActionTypes.LoadFulfilledByFulfillmentFail:
+            return {
+                ...state,
+                fulfillments: null,
+                isLoading: false,
+                error: action.payload,
+            };
         case SalesOrderActionTypes.CancelSalesOrderLines:
             return {
                 ...state,
                 pendingDelete: true,
             };
-
+            
         case SalesOrderActionTypes.CancelSalesOrderLinesSuccess:
             return {
                 ...state,
@@ -129,16 +184,45 @@ export function salesOrderReducer(state = initialState, action: SalesOrderAction
                 pendingDelete: false,
                 error: '',
             };
-        case SalesOrderActionTypes.LoadFulfilledBySalesOrderDeliveryFail:
+        case SalesOrderActionTypes.LoadSalesOrderDelivery:
             return {
                 ...state,
-                deliveryDetail: '',
+                isLoading: true,
+            };
+        case SalesOrderActionTypes.LoadSalesOrderDeliverySuccess:
+            return {
+                ...state,
+                salesOrderDeliveryDetail: action.payload,
+                isLoading: false,
+                error: '',
+            };
+        case SalesOrderActionTypes.LoadSalesOrderDeliveryFail:
+            return {
+                ...state,
+                salesOrderDeliveryDetail: '',
+                isLoading: false,
+                error: action.payload,
+            };
+        case SalesOrderActionTypes.DeleteFulfillment:
+            return {
+                ...state,
+                pendingDelete: true,
+            };
+
+        case SalesOrderActionTypes.DeleteFulfillmentSuccess:
+            return {
+                ...state,
+                fulfillments: state.fulfillments,
+                pendingDelete: false,
+                error: '',
+            };
+        case SalesOrderActionTypes.DeleteFulfillmentFail:
+            return {
+                ...state,
+                fulfillments: [],
                 pendingDelete: false,
                 error: action.payload,
             };
-            
-
-
         default:
             return state;
     }

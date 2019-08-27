@@ -9,7 +9,7 @@
                 </div>
             </div>
             
-            <ng-container *ngIf="!salesorder || !fulfillment || !fulfillment.FulfillmentSalesOrderLines">
+            <ng-container *ngIf="!salesOrder || !fulfillment || !fulfillment.FulfillmentSalesOrderLines">
                 <div class="spinner-full-page"> 
                     <div>
                         <div>
@@ -25,7 +25,7 @@
                 </div>
                 <div class="gray-cover-bg1"></div>
             </ng-container>
-            <div class="animated fadeIn" *ngIf="salesorder">
+            <div class="animated fadeIn" *ngIf="salesOrder">
                 <div class="ibox-content hide-y">
                     <div class="col-lg-12" *ngIf="fulfillment && fulfillment.ShipmentTrackings">
                         <form class="form-horizontal" #fulfillmentForm="ngForm">
@@ -133,7 +133,7 @@
                 <div class="ibox-title"><h5>{{ 'Shipment Items' | translate }}</h5></div>
                 <div class="ibox-content hide-y">
                     <div class="table-responsive" *ngIf="fulfillment && fulfillment.FulfillmentSalesOrderLines">
-                        <table mat-table #table [dataSource]="dataSource" class="table" matSort>
+                        <table mat-table #table [dataSource]="fulfillmentSalesOrderLinesMatTable" class="table" matSort>
                             <!-- Product Details Column -->
                             <ng-container matColumnDef="ProductDetails">
                                 <th mat-header-cell *matHeaderCellDef width="300px">{{ 'Product Details' | translate }}</th>

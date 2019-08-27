@@ -1,6 +1,7 @@
 import { Action } from '@ngrx/store';
 import { SalesOrder } from 'app/shared/class/sales-order';
 import { SalesOrderLine } from 'app/shared/class/sales-order-line';
+import { Fulfillment } from 'app/shared/class/fulfillment';
 
 export enum SalesOrderActionTypes {
   LoadSalesOrders = '[Sales Order] Load Sales Orders',
@@ -9,6 +10,7 @@ export enum SalesOrderActionTypes {
   LoadSalesOrder = '[Sales Order] Load Sales Order',
   SetSalesOrder = '[Sales Order] Set Sales Order',
   SetSalesOrderID = '[Sales Order] Set Sales Order ID',
+  SetFulfillment = '[Sales Order] Set Fulfillment',
   LoadSalesOrderSuccess = '[Sales Order] Load Sales Order Success',
   LoadSalesOrderFail = '[Sales Order] Load Sales Order Fail',
   LoadSalesOrderLines = '[Sales Order] Load Sales Order Lines',
@@ -23,6 +25,22 @@ export enum SalesOrderActionTypes {
   DownloadSalesOrderPackingSlip = '[Sales Order] Download Sales Order Packing Slip ',
   DownloadSalesOrderPackingSlipSuccess = '[Sales Order] Download Sales Order Packing Slip Success',
   DownloadSalesOrderPackingSlipFail = '[Sales Order] Download Sales Order Packing Slip Fail',
+  LoadFulfilledByFulfillments = '[Sales Order] Load Fulfilled By Fulfillments',
+  LoadFulfilledByFulfillmentsSuccess = '[Sales Order] Load Fulfilled By Fulfillments Success',
+  LoadFulfilledByFulfillmentsFail = '[Sales Order] Load Fulfilled By Fulfillments Fail',
+  LoadFulfilledByFulfillment = '[Sales Order] Load Fulfilled By Fulfillment',
+  LoadFulfilledByFulfillmentSuccess = '[Sales Order] Load Fulfilled By Fulfillment Success',
+  LoadFulfilledByFulfillmentFail = '[Sales Order] Load Fulfilled By Fulfillment Fail',
+  LoadSalesOrderDelivery = '[Sales Order] Load Sales Order Delivery',
+  LoadSalesOrderDeliverySuccess = '[Sales Order] Load Sales Order Delivery Success',
+  LoadSalesOrderDeliveryFail = '[Sales Order] Load Sales Order Delivery Fail',
+  DeleteFulfillment  = '[Sales Order] Delete Fulfillment',
+  DeleteFulfillmentSuccess  = '[Sales Order] Delete Fulfillment Success',
+  DeleteFulfillmentFail  = '[Sales Order] Delete Fulfillment Fail',
+  EditFulfillment  = '[Sales Order] Edit Fulfillment',
+  EditFulfillmentSuccess  = '[Sales Order] Edit Fulfillment Success',
+  EditFulfillmentFail  = '[Sales Order] Edit Fulfillment Fail',
+
   
   // EditCurrentMember = '[Admin] Edit Current Member',
   // EditCurrentMemberSuccess = '[Admin] Edit Current Member Success',
@@ -53,7 +71,10 @@ export class SetSalesOrderID implements Action {
   readonly type = SalesOrderActionTypes.SetSalesOrderID;
   constructor(public payload: number) { }
 }
-
+export class SetFulfillment implements Action {
+  readonly type = SalesOrderActionTypes.SetFulfillment;
+  constructor(public payload: Fulfillment) { }
+}
 export class LoadSalesOrder implements Action {
   readonly type = SalesOrderActionTypes.LoadSalesOrder;
   constructor(public payload: { orderid: number, fulfilledby: string }) { }
@@ -112,6 +133,72 @@ export class LoadFulfilledBySalesOrderDeliveryFail implements Action {
   constructor(public payload: string) { }
 }
 
+export class LoadFulfilledByFulfillments implements Action {
+  readonly type = SalesOrderActionTypes.LoadFulfilledByFulfillments;
+  constructor(public payload: { orderid: number, fulfilledby: string }) { }
+}
+export class LoadFulfilledByFulfillmentsSuccess implements Action {
+  readonly type = SalesOrderActionTypes.LoadFulfilledByFulfillmentsSuccess;
+  constructor(public payload: Fulfillment[]) { }
+}
+export class LoadFulfilledByFulfillmentsFail implements Action {
+  readonly type = SalesOrderActionTypes.LoadFulfilledByFulfillmentsFail;
+  constructor(public payload: string) { }
+}
+
+export class LoadFulfilledByFulfillment implements Action {
+  readonly type = SalesOrderActionTypes.LoadFulfilledByFulfillment;
+  constructor(public payload: { fulfillmentid: number, fulfilledby: string }) { }
+}
+export class LoadFulfilledByFulfillmentSuccess implements Action {
+  readonly type = SalesOrderActionTypes.LoadFulfilledByFulfillmentSuccess;
+  constructor(public payload: Fulfillment) { }
+}
+export class LoadFulfilledByFulfillmentFail implements Action {
+  readonly type = SalesOrderActionTypes.LoadFulfilledByFulfillmentFail;
+  constructor(public payload: string) { }
+}
+
+export class EditFulfillment implements Action {
+  readonly type = SalesOrderActionTypes.EditFulfillment;
+  constructor(public payload: Fulfillment) { }
+}
+export class EditFulfillmentSuccess implements Action {
+  readonly type = SalesOrderActionTypes.EditFulfillmentSuccess;
+  constructor(public payload: Fulfillment) { }
+}
+export class EditFulfillmentFail implements Action {
+  readonly type = SalesOrderActionTypes.EditFulfillmentFail;
+  constructor(public payload: string) { }
+}
+
+export class DeleteFulfillment implements Action {
+  readonly type = SalesOrderActionTypes.DeleteFulfillment;
+  constructor(public payload: number) { }
+}
+export class DeleteFulfillmentSuccess implements Action {
+  readonly type = SalesOrderActionTypes.DeleteFulfillmentSuccess;
+  constructor(public payload: Fulfillment) { }
+}
+export class DeleteFulfillmentFail implements Action {
+  readonly type = SalesOrderActionTypes.DeleteFulfillmentFail;
+  constructor(public payload: string) { }
+}
+
+export class LoadSalesOrderDelivery implements Action {
+  readonly type = SalesOrderActionTypes.LoadSalesOrderDelivery;
+  constructor(public payload: number) { }
+}
+export class LoadSalesOrderDeliverySuccess implements Action {
+  readonly type = SalesOrderActionTypes.LoadSalesOrderDeliverySuccess;
+  constructor(public payload: string) { }
+}
+export class LoadSalesOrderDeliveryFail implements Action {
+  readonly type = SalesOrderActionTypes.LoadSalesOrderDeliveryFail;
+  constructor(public payload: string) { }
+}
+
+
 export class DownloadSalesOrderPackingSlip implements Action {
   readonly type = SalesOrderActionTypes.DownloadSalesOrderPackingSlip;
   constructor(public payload: SalesOrder) { }
@@ -149,6 +236,7 @@ export type SalesOrderActions = LoadSalesOrders
 | LoadSalesOrdersFail
 | SetSalesOrder
 | SetSalesOrderID
+| SetFulfillment
 | LoadSalesOrder
 | LoadSalesOrderSuccess
 | LoadSalesOrderFail
@@ -160,4 +248,19 @@ export type SalesOrderActions = LoadSalesOrders
 | CancelSalesOrderLinesFail
 | LoadFulfilledBySalesOrderDelivery
 | LoadFulfilledBySalesOrderDeliverySuccess
-| LoadFulfilledBySalesOrderDeliveryFail;
+| LoadFulfilledBySalesOrderDeliveryFail
+| LoadFulfilledByFulfillments
+| LoadFulfilledByFulfillmentsSuccess
+| LoadFulfilledByFulfillmentsFail
+| LoadFulfilledByFulfillment
+| LoadFulfilledByFulfillmentSuccess
+| LoadFulfilledByFulfillmentFail
+| LoadSalesOrderDelivery
+| LoadSalesOrderDeliverySuccess
+| LoadSalesOrderDeliveryFail
+| DeleteFulfillment
+| DeleteFulfillmentSuccess
+| DeleteFulfillmentFail
+| EditFulfillment
+| EditFulfillmentSuccess
+| EditFulfillmentFail;

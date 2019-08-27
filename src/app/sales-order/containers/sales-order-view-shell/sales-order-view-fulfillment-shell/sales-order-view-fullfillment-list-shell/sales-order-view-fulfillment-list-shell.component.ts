@@ -1,144 +1,54 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
-import { ActivatedRoute, Router } from '@angular/router';
-import { MatMenuModule, MatPaginator, MatSort, MatTableDataSource} from '@angular/material';
-
-import { SalesOrderLine } from '../../../../../shared/class/sales-order-line';
+import { MatTableDataSource} from '@angular/material';
 import { SalesOrder } from '../../../../../shared/class/sales-order';
 import { Fulfillment } from '../../../../../shared/class/fulfillment';
-
-import { SalesOrderService } from '../../../../sales-order.service';
-import { DataSource } from '@angular/cdk/table';
 import * as salesOrderActions from '../../../../state/sales-order.actions';
 import * as fromSalesOrder from '../../../../state/index';
-
+import { Observable } from 'rxjs';
+import { Member } from 'app/shared/class/member';
+import { Store, select } from '@ngrx/store';
+import * as fromUser from '../../../../../shared/state/user-state.reducer';
 
 @Component({
   templateUrl: './sales-order-view-fulfillment-list-shell.component.html'
 })
 
 export class SalesOrderFulfillmentListShellComponent implements OnInit {
-    errorMessage: string;
-    deliveryDetail: string;
-    salesorder: SalesOrder;
-    orderid: number;
-    fulfilledby: string;
-
+    fulfillmentsMatTable$: Observable<MatTableDataSource<Fulfillment>>;
+    salesOrder$: Observable<SalesOrder>;
+    userInfo$: Observable<Member>;
+    errorMessage$: Observable<string>;
+    pendingDelete$: Observable<boolean>;
+    isLoading$: Observable<boolean>;
+    
     fulfillments: Fulfillment[];
     displayedColumns = ['Menu','Package','ID','ShipDate','Carrier','ShippingService','TrackingNumber'];
     dataSource: any = null;
 
     isMerchant: boolean;
-    isLoading: boolean;
-    constructor(private route: ActivatedRoute,
-        private router: Router,
-        private salesorderService: SalesOrderService) { }
+    constructor(private store: Store<fromSalesOrder.State>) { }
 
     ngOnInit() {
-        // const param = this.route.snapshot.params['id'];
-        // this.orderid = param;
-        // this.fulfilledby = 'merchant';
-
-        // const paramFulfilledBy = this.route.snapshot.params['fulfilledby'];
-        // const paramOrderID = this.route.snapshot.params['id'];
-        const paramFulfilledBy = this.route.parent.snapshot.params['fulfilledby'];
-        const paramOrderID = this.route.parent.snapshot.params['id'];
-        this.orderid = paramOrderID;
-        this.fulfilledby = paramFulfilledBy;
-        
-
-        if(this.fulfilledby == 'merchant') {
-            this.isMerchant = true;
-        }
-        else {
-            this.isMerchant = false;
-        }
-
-        // this.salesorderService.getSalesOrder(param).subscribe(
-        //     (salesorder: SalesOrder) => {
-        //         this.salesorder = salesorder;                
-        //     },
-        //     (error: any) => this.errorMessage = <any>error
-        // );
-        this.isLoading = true;
-        this.salesorderService.getFulfilledBySalesOrder(this.orderid, this.fulfilledby).subscribe(
-            (salesorder: SalesOrder) => {
-                this.salesorder = salesorder;
-                
-            },
-            (error: any) => this.errorMessage = <any>error
-        );
-
-        //this.salesorderService.getFulfillments(this.orderid).subscribe(
-        this.salesorderService.getFulfilledByFulfillments(this.orderid, this.fulfilledby).subscribe(
-            (fulfillments: Fulfillment[]) => {
-                this.fulfillments = fulfillments;
-                
-                // if(this.fulfillments.length == 0) {
-                //if(this.isMerchant && this.fulfillments.length == 0) {
-                    // this.router.navigate(['/','sales-order', 'view', this.fulfilledby,this.orderid,'fulfillment','add']);
-                //}
-
-                this.refreshDataSource(this.fulfillments);
-                this.isLoading = false;
-            },
-            (error: any) => this.errorMessage = <any>error
-        );
-
-        this.salesorderService.getSalesOrderDelivery(this.orderid).subscribe(
-            (deliveryDetail: string) => {
-                this.deliveryDetail = deliveryDetail.trim().replace(new RegExp('<br />', 'g'), '\n');
-            },
-            (error: any) => this.errorMessage = <any>error
-        );
+        this.userInfo$ = this.store.pipe(select(fromUser.getCurrentUser));
+        this.fulfillmentsMatTable$ = this.store.pipe(select(fromSalesOrder.getFulfilledByFulfillmentsMatTable));
+        this.isLoading$ = this.store.pipe(select(fromSalesOrder.getIsLoading));
+        this.salesOrder$ = this.store.pipe(select(fromSalesOrder.getSalesOrder));
+        this.errorMessage$ = this.store.pipe(select(fromSalesOrder.getError));
+        this.pendingDelete$ = this.store.pipe(select(fromSalesOrder.getPendingDelete));
     }
     getFulfilledBySalesOrder(payload: {orderid: number, fulfilledby: string}) {
-        //this.store.dispatch(new salesOrderActions.LoadSalesOrder(payload));
+        this.store.dispatch(new salesOrderActions.LoadSalesOrder(payload));
     }
     getFulfilledByFulfillments(payload: {orderid: number, fulfilledby: string}) {
-        //this.store.dispatch(new salesOrderActions.LoadSalesOrder(payload));
+        this.store.dispatch(new salesOrderActions.LoadFulfilledByFulfillments(payload));
     }
     getSalesOrderDelivery(payload: number) {
-        //this.store.dispatch(new salesOrderActions.LoadSalesOrderDelivery(payload));
+        this.store.dispatch(new salesOrderActions.LoadSalesOrderDelivery(payload));
     }
-
-    
-
-
-    refreshDataSource(fulfillments: Fulfillment[]){
-        this.dataSource = new MatTableDataSource<Fulfillment>(fulfillments);
+    setFulfillment(payload: Fulfillment) {
+        this.store.dispatch(new salesOrderActions.SetFulfillment(payload));
     }
-
-    onDeleteFulfillment(fulfillment: Fulfillment) {
-        const confirmation = confirm(`Remove Shipment ID# ${fulfillment.FulfillmentID}?`);
-        if (confirmation) {
-            this.salesorderService.deleteFulfillment(fulfillment.FulfillmentID).subscribe(
-                () => {
-                    this.salesorderService.sendNotification({ type: 'success', title: 'Successfully Deleted', content: this.errorMessage });
-                    
-                    // const foundIndex = this.fulfillments.findIndex(i => i.FulfillmentID === fulfillment.FulfillmentID);
-                    // if (foundIndex > -1) {
-                    //     this.fulfillments.splice(foundIndex, 1);
-                    // }
-
-                    // this.refreshDataSource(this.fulfillments);
-
-                    window.location.reload();
-                },
-                (error: any) => {
-                    this.errorMessage = <any>error;
-                    this.salesorderService.sendNotification({ type: 'error', title: 'Error', content: this.errorMessage });
-
-                    this.salesorderService.getFulfilledByFulfillments(this.orderid, this.fulfilledby).subscribe(
-                        (fulfillments: Fulfillment[]) => {
-                            this.fulfillments = fulfillments;                
-                            this.refreshDataSource(this.fulfillments);
-                        },
-                        (error: any) => this.errorMessage = <any>error
-                    );
-                    
-                    //window.location.reload();
-                }
-            );
-        }
+    deleteFulfillment(payload: number) {
+        this.store.dispatch(new salesOrderActions.DeleteFulfillment(payload));
     }
 }

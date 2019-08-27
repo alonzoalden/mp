@@ -1,1 +1,9 @@
-<o-sales-order-fulfillment-edit></o-sales-order-fulfillment-edit>>
+<o-sales-order-fulfillment-edit
+    [errorMessage]="errorMessage$ | async"
+    [deliveryDetail]="deliveryDetail$ | async"
+    [fulfillment]="fulfillment$ | async"
+    [salesOrder]="salesOrder$ | async"
+    [isLoading]="isLoading$ | async"
+    (getFulfilledByFulfillment)="getFulfilledByFulfillment($event)"
+    (editFulfillment)="editFulfillment($event)"
+></o-sales-order-fulfillment-edit>>

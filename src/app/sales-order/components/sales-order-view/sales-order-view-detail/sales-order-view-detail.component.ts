@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild, Inject, Output, Input, EventEmitter, SimpleChanges } from '@angular/core';
+import { Component, OnInit, ViewChild, OnDestroy, Inject, Output, Input, EventEmitter, SimpleChanges } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { MatPaginator, MatSort, MatTableDataSource, MatDialog, MatDialogRef, MAT_DIALOG_DATA} from '@angular/material';
 import { SalesOrderLine } from '../../../../shared/class/sales-order-line';
@@ -9,7 +9,8 @@ import { environment } from '../../../../../environments/environment';
 import { Member } from 'app/shared/class/member';
 import * as salesOrderActions from '../../../state/sales-order.actions';
 import * as fromSalesOrder from '../../../state';
-import { Store } from '@ngrx/store';
+import { Store, select } from '@ngrx/store';
+import { takeWhile } from 'rxjs/operators';
 
 @Component({
   selector: 'o-sales-order-detail',
@@ -105,21 +106,21 @@ export class SalesOrderCancelDialog {
     templateUrl: '../sales-order-view-cancel/sales-order-view-cancel.component-cancel-dialog.html',
 })
     
-export class SalesOrderCancelComponentPrintDialog implements OnInit {
+export class SalesOrderCancelComponentPrintDialog implements OnInit, OnDestroy {
     itemLabelPrintDialog: SalesOrderCancelDialog;
     errorMessage: string;
     fulfilledby: string;
     orderid: number;
     salesOrder: SalesOrder;
-    hasCancellationQty: boolean;
-    salesorderlines: SalesOrderLine[];
+    hasCancellationQty: boolean = false;
+    salesOrderLinesMatTable: MatTableDataSource<SalesOrderLine>;
     deliveryDetail: string;
     private imageURL = environment.imageURL;
     private linkURL = environment.linkURL;
     
     dataSource: MatTableDataSource<any>;
     displayedColumns = ['ItemImage', 'ProductDetails','ProductInfo','CancellationReason'];
-
+    componentActive: boolean = true;
     @ViewChild(MatPaginator, { static: false }) paginator: MatPaginator;
     @ViewChild(MatSort, { static: true }) sort: MatSort;
 
@@ -136,82 +137,28 @@ export class SalesOrderCancelComponentPrintDialog implements OnInit {
         this.orderid = this.data.OrderID;
         this.fulfilledby = 'merchant';
 
-        // this.salesorderService.getSalesOrder(this.orderid).subscribe(
-        //     (salesorder: SalesOrder) => {
-        //         this.salesorder = salesorder;
-        //     },
-        //     (error: any) => this.errorMessage = <any>error
-        // );
-        
-        // this.salesorderService.getFulfilledBySalesOrder(this.orderid, this.fulfilledby).subscribe(
-        //     (salesorder: SalesOrder) => {
-        //         this.salesOrder = salesorder;
-        //     },
-        //     (error: any) => this.errorMessage = <any>error
-        // );
-        this.store.dispatch(new salesOrderActions.LoadSalesOrderLines({orderid: this.orderid, fulfilledby: this.fulfilledby}));
-
-        //get coode for take until here
-
-        this.hasCancellationQty = false;
-        this.salesorderService.getSalesOrderLineByVendor(this.orderid, this.fulfilledby).subscribe(
-            (salesorderlines: SalesOrderLine[]) => {
-                this.salesorderlines = salesorderlines;
-
-                this.salesorderlines.forEach((salesorderline) => {
-                    if(salesorderline.Quantity - salesorderline.FulfilledQuantity > 0)
-                    {
+        //this.store.dispatch(new salesOrderActions.LoadSalesOrderLines({orderid: this.orderid, fulfilledby: this.fulfilledby}));
+        this.store.pipe(
+            select(fromSalesOrder.getSalesOrderLines),
+            takeWhile(() => this.componentActive)
+          ).subscribe(
+            salesorderlines => {
+                salesorderlines.forEach((salesorderline) => {
+                    if (salesorderline.Quantity - salesorderline.FulfilledQuantity > 0) {
                         this.hasCancellationQty = true;
                     }
                 });
-
-                this.dataSource = new MatTableDataSource<SalesOrderLine>(salesorderlines);
-                this.dataSource.paginator = this.paginator;
-                this.dataSource.sort = this.sort;
-            },
-            (error: any) => this.errorMessage = <any>error
-        );
-
-        // this.salesorderService.getSalesOrderDelivery(this.orderid).subscribe(
-        //     (deliveryDetail: string) => {
-        //         this.deliveryDetail = deliveryDetail.trim().replace(new RegExp('<br />', 'g'), '\n');
-        //     },
-        //     (error: any) => this.errorMessage = <any>error
-        // );
-
-        // this.salesorderService.getFulfilledBySalesOrderDelivery(this.orderid, this.fulfilledby).subscribe(
-        //     (deliveryDetail: string) => {
-        //         this.deliveryDetail = deliveryDetail.trim().replace(new RegExp('<br />', 'g'), '\n');
-        //     },
-        //     (error: any) => this.errorMessage = <any>error
-        // );
+                console.log(salesorderlines);
+                return this.salesOrderLinesMatTable = new MatTableDataSource<SalesOrderLine>(salesorderlines);
+            }
+          );
     }
 
     onCancel() {
         if(this.isValid()) {            
             const confirmation = confirm(`Are you sure you want to cancel this order?`);        
             if (confirmation) {
-                this.store.dispatch(new salesOrderActions.CancelSalesOrderLines(this.salesorderlines));
-                // this.salesorderService.cancelSalesOrderLines(this.salesorderlines).subscribe(
-                //     () => {
-                        
-                //         this.salesorderService.sendNotification({ type: 'success', title: 'Successfully Canceled', content: this.errorMessage });
-                //         // this.router.navigate(['/sales-order', 'view', 'merchant', this.orderid, 'detail']);
-                //         // this.router.navigate(['/sales-order', 'merchant', 'status', 'unshipped']);
-                //         // this.salesorderService.getFulfilledBySalesOrder(this.orderid, this.fulfilledby).subscribe(
-                //         //     (salesorder: SalesOrder) => {
-                //         //         this.salesorder = salesorder;
-                //         //     },
-                //         //     (error: any) => this.errorMessage = <any>error
-                //         // );
-                //         this.dialogRef.close();
-                //     },
-                //     (error: any) => {
-                //         this.errorMessage = <any>error;
-                //         this.salesorderService.sendNotification({ type: 'error', title: 'Error', content: this.errorMessage });
-                //         window.location.reload();
-                //     }
-                // );
+                this.store.dispatch(new salesOrderActions.CancelSalesOrderLines(this.salesOrderLinesMatTable.data));
             }
         }
     }
@@ -220,7 +167,7 @@ export class SalesOrderCancelComponentPrintDialog implements OnInit {
         var _ret = false;
         var _count = 0;
 
-        this.salesorderlines.forEach((salesorderline) => {
+        this.salesOrderLinesMatTable.data.forEach((salesorderline) => {
             _count++;
 
             if(_count == 1) {
@@ -241,5 +188,8 @@ export class SalesOrderCancelComponentPrintDialog implements OnInit {
     }
     onCloseClick(): void {
         this.dialogRef.close();
+    }
+    ngOnDestroy(): void {
+        this.componentActive = false;
     }
 }
