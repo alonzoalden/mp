@@ -2062,15 +2062,13 @@ th.mat-header-cell {
 .agreement .agreement-block {
     margin-top: 20px;
 }
-<<<<<<< HEAD
 .flex-center {
     display: flex;
     justify-content: center;
 }
 .btn.btn-primary {
     min-height: 34px;
-=======
+}
 .row-height-80 {
     height: 80px !important;
->>>>>>> master
 }

@@ -60,6 +60,9 @@ export class SalesOrderFulfillmentEditComponent implements OnInit {
         if (changes.fulfillment && !changes.fulfillment.currentValue && changes.fulfillment.firstChange) {
             this.getFulfilledByFulfillment.emit({fulfillmentid: this.route.snapshot.params['fulfillmentid'], fulfilledby: this.route.parent.snapshot.params['fulfilledby']});
         }
+        if (changes.salesOrder && !changes.salesOrder.currentValue && changes.salesOrder.firstChange) {
+            this.getFulfilledBySalesOrder.emit({orderid: this.route.parent.snapshot.params['id'], fulfilledby: this.route.parent.snapshot.params['fulfilledby']});
+        }
     }
     ngOnInit() {
         this.orderid = this.route.parent.snapshot.params['id'];

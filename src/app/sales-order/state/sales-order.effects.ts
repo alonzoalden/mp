@@ -9,7 +9,7 @@ import { Router } from '@angular/router';
 import { Member, MemberVendor } from 'app/shared/class/member';
 import { SalesOrder } from 'app/shared/class/sales-order';
 import { SalesOrderLine } from 'app/shared/class/sales-order-line';
-import { Fulfillment } from 'app/shared/class/fulfillment';
+import { Fulfillment, FulfillmentSalesOrderLine } from 'app/shared/class/fulfillment';
 
 @Injectable()
 export class SalesOrderEffects {
@@ -109,6 +109,22 @@ export class SalesOrderEffects {
         )
     );
     @Effect()
+    getFulfilmmentSalesOrderLines$: Observable<Action> = this.actions$.pipe(
+        ofType(salesOrderActions.SalesOrderActionTypes.LoadFulfilmmentSalesOrderLines),
+        map((action: salesOrderActions.LoadFulfilmmentSalesOrderLines) => action.payload),
+        mergeMap((payload) => 
+            this.salesOrderService.getFulfilmmentSalesOrderLines(payload).pipe(
+                map((fullfillments: FulfillmentSalesOrderLine[]) => (new salesOrderActions.LoadFulfilmmentSalesOrderLinesSuccess(fullfillments))),
+                catchError(err => {
+                    of(new salesOrderActions.LoadFulfilmmentSalesOrderLinesFail(err))
+                    return EMPTY;
+                })
+            )
+        
+        )
+    );
+
+    @Effect()
     cancelSalesOrderLines$: Observable<Action> = this.actions$.pipe(
         ofType(salesOrderActions.SalesOrderActionTypes.CancelSalesOrderLines),
         map((action: salesOrderActions.CancelSalesOrderLines) => action.payload),
@@ -127,6 +143,28 @@ export class SalesOrderEffects {
         )
     );
     
+    @Effect()
+    addFulfillment$: Observable<Action> = this.actions$.pipe(
+        ofType(salesOrderActions.SalesOrderActionTypes.AddFulfillment),
+        map((action: salesOrderActions.AddFulfillment) => action.payload),
+        mergeMap((payload) =>
+            this.salesOrderService.addFulfillment(payload).pipe(
+                map((fulfillment: Fulfillment) => {
+                    this.salesOrderService.sendNotification({ type: 'success', title: 'Save Completed', content: "" });
+                    //this.router.navigate(['/sales-order', 'view', this.fulfilledby,this.orderid,'fulfillment']);
+                    //this.router.navigate(['/sales-order', 'view', 'merchant', this.orderid, 'detail']);
+                    window.location.reload();
+                    
+                    return (new salesOrderActions.AddFulfillmentSuccess(fulfillment))
+                }),
+                catchError(err => {
+                    this.salesOrderService.sendNotification({ type: 'error', title: 'Error', content: err });
+                    of(new salesOrderActions.AddFulfillmentFail(err))
+                    return EMPTY;
+                })
+            )
+        )
+    );
     @Effect()
     editFulfillment$: Observable<Action> = this.actions$.pipe(
         ofType(salesOrderActions.SalesOrderActionTypes.EditFulfillment),

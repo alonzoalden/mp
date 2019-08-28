@@ -4,7 +4,7 @@ import * as fromSalesOrder from './sales-order.reducer';
 import { MatTableDataSource } from '@angular/material';
 import { SalesOrder } from 'app/shared/class/sales-order';
 import { SalesOrderLine } from 'app/shared/class/sales-order-line';
-import { Fulfillment } from 'app/shared/class/fulfillment';
+import { Fulfillment, FulfillmentSalesOrderLine } from 'app/shared/class/fulfillment';
 
 // Extends the app state to include the product feature.
 // This is required because products are lazy loaded.
@@ -52,6 +52,18 @@ export const getSalesOrderLinesMatTable = createSelector(
     getSalesOrderFeatureState,
     state => new MatTableDataSource<SalesOrderLine>(state.salesOrderLines)
 );
+
+
+
+export const getFulfillmentSalesOrderLines = createSelector(
+    getSalesOrderFeatureState,
+    state => state.fulfillmentSalesOrderLines
+);
+export const getFulfillmentSalesOrderLinesMatTable = createSelector(
+    getSalesOrderFeatureState,
+    state => new MatTableDataSource<FulfillmentSalesOrderLine>(state.fulfillmentSalesOrderLines)
+);
+
 
 export const getDeliveryDetail = createSelector(
     getSalesOrderFeatureState,

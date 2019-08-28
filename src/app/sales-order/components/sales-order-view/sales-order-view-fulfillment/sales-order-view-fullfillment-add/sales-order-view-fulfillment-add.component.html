@@ -1,7 +1,7 @@
 <div class="tab-content">
     <div class="tab-pane active">
         <div class="panel-body animated fadeIn p-w-none" style="min-height: 400px;">
-            <ng-container *ngIf="!salesorder || !fulfillment || !fulfillment.ShipmentTrackings">
+            <ng-container *ngIf="!salesOrder || !fulfillment || !fulfillment.ShipmentTrackings">
                 <div class="spinner-full-page"> 
                     <div>
                         <div>
@@ -17,7 +17,7 @@
                 </div>
                 <div class="gray-cover-bg1"></div>
             </ng-container>
-            <div *ngIf="salesorder" class="animated fadeIn">
+            <div *ngIf="salesOrder" class="animated fadeIn">
                 <div class="ibox-title"><h5>{{ 'Add New Shipment' | translate }}</h5></div>
                 <div class="ibox-content hide-y">
                     <div class="col-lg-12" *ngIf="fulfillment && fulfillment.ShipmentTrackings">

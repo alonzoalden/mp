@@ -26,7 +26,7 @@ export class ItemAddProductRelationRelatedProductComponent implements OnInit {
     
     private imageURL = environment.imageURL;
 
-    @ViewChild('selectionCategoriesRef') selectionCategoriesRef: ElementRef;
+    //@ViewChild('selectionCategoriesRef') selectionCategoriesRef: ElementRef;
 
     constructor(private itemService: ItemService) { }
 

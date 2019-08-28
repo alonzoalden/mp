@@ -1,13 +1,9 @@
-import { Component, OnInit, ViewChild, Input } from '@angular/core';
+import { Component, OnInit, OnChanges, Input, Output, EventEmitter, SimpleChanges } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { MatMenuModule, MatPaginator, MatSort, MatTableDataSource} from '@angular/material';
-
-import { SalesOrderLine } from '../../../../../shared/class/sales-order-line';
+import { MatTableDataSource} from '@angular/material';
 import { SalesOrder } from '../../../../../shared/class/sales-order';
 import { Fulfillment, ShipmentTracking, FulfillmentSalesOrderLine } from '../../../../../shared/class/fulfillment';
-
 import { SalesOrderService } from '../../../../sales-order.service';
-
 import { environment } from '../../../../../../environments/environment';
 
 @Component({
@@ -15,31 +11,22 @@ import { environment } from '../../../../../../environments/environment';
   templateUrl: './sales-order-view-fulfillment-add.component.html'
 })
 
-export class SalesOrderFulfillmentAddComponent implements OnInit {
+export class SalesOrderFulfillmentAddComponent implements OnInit, OnChanges {
+    private imageURL = environment.imageURL;
+    private linkURL = environment.linkURL;
     @Input() errorMessage: string;
-    @Input() deliveryDetail: string;
     @Input() salesOrder: SalesOrder;
     @Input() fulfillment: Fulfillment;
     @Input() isLoading: boolean;
-
-    // errorMessage: string;
-    // deliveryDetail: string;
-    salesorder: SalesOrder;
+    @Input() fulfillmentSalesOrderLinesMatTable: MatTableDataSource<FulfillmentSalesOrderLine>;
+    @Output() getFulfilledBySalesOrder = new EventEmitter<{orderid: number, fulfilledby: string}>();
+    @Output() getFulfilmmentSalesOrderLines = new EventEmitter<number>();
+    @Output() addFulfillment = new EventEmitter<Fulfillment>();
     orderid: number;
     fulfilledby: string;
-
-    private imageURL = environment.imageURL;
-    private linkURL = environment.linkURL;
-
-    fulfillmentSalesOrderLines: FulfillmentSalesOrderLine[];
-    // displayedColumns = ['ItemImage', 'ItemName', 'SKU', 'TPIN', 'RemainingQuantity', 'PackageQuantity'];
     displayedColumns = ['ProductDetails', 'RemainingQuantity', 'PackageQuantity'];
     dataSource: any = null;
-
-    //fulfillment: Fulfillment;
-    shipmentTrackings: ShipmentTracking[];
-
-    pendingCreate: boolean;
+    shipmentTrackings: ShipmentTracking[] = [];
 
     constructor(private route: ActivatedRoute,
         private router: Router,
@@ -48,47 +35,24 @@ export class SalesOrderFulfillmentAddComponent implements OnInit {
     minDate = new Date(2000, 0, 1);
     maxDate = new Date(2020, 0, 1);
     
+    ngOnChanges(changes: SimpleChanges): void {
+        if (changes.fulfillmentSalesOrderLinesMatTable && changes.fulfillmentSalesOrderLinesMatTable.currentValue.data.length) {
+            this.fulfillment = new Fulfillment(null, String(this.orderid), null, null, null, null, null, null, null, null, null, this.shipmentTrackings, this.fulfillmentSalesOrderLinesMatTable.data);
+            this.dataSource = new MatTableDataSource<FulfillmentSalesOrderLine>(this.fulfillment.FulfillmentSalesOrderLines);
+        }
+        if (changes.salesOrder && !changes.salesOrder.currentValue && changes.salesOrder.firstChange) {
+            this.getFulfilledBySalesOrder.emit({orderid: this.route.parent.snapshot.params['id'], fulfilledby: this.route.parent.snapshot.params['fulfilledby']});
+        }
+    }
+
     ngOnInit() {
-        // const param = this.route.snapshot.params['id'];
-        const param = this.route.parent.snapshot.params['id'];
-        this.orderid = param;
+        this.orderid = this.route.parent.snapshot.params['id'];
         this.fulfilledby = 'merchant';
+        this.getFulfilmmentSalesOrderLines.emit(this.orderid);
+        this.fulfillment = new Fulfillment(null, String(this.orderid), null, null, null, null, null, null, null, null, null, this.shipmentTrackings, this.fulfillmentSalesOrderLinesMatTable.data);
         
-        // this.salesorderService.getSalesOrder(param).subscribe(
-        //     (salesorder: SalesOrder) => {
-        //         this.salesorder = salesorder;                
-        //     },
-        //     (error: any) => this.errorMessage = <any>error
-        // );
-
-        this.salesorderService.getFulfilledBySalesOrder(this.orderid, this.fulfilledby).subscribe(
-            (salesorder: SalesOrder) => {
-                this.salesorder = salesorder;
-            },
-            (error: any) => this.errorMessage = <any>error
-        );
-
-        this.salesorderService.getSalesOrderDelivery(param).subscribe(
-            (deliveryDetail: string) => {
-                this.deliveryDetail = deliveryDetail.trim().replace(new RegExp('<br />', 'g'), '\n');
-            },
-            (error: any) => this.errorMessage = <any>error
-        );
-
-        // this.salesorderService.getFulfilmmentSalesOrderLines(param).subscribe(
-        //     (fulfillmentSalesOrderLines: FulfillmentSalesOrderLine[]) => {
-        //         this.fulfillmentSalesOrderLines = fulfillmentSalesOrderLines;
-
-        //         this.shipmentTracking = new ShipmentTracking(null, null, null, null, null, null, null);
-        //         this.fulfillment = new Fulfillment(null, this.salesorderid, null, null, null, this.shipmentTracking, this.fulfillmentSalesOrderLines);
-        //         this.dataSource = new MatTableDataSource<FulfillmentSalesOrderLine>(this.fulfillment.FulfillmentSalesOrderLines);
-        //     },
-        //     (error: any) => this.errorMessage = <any>error
-        // );   
-    
         this.shipmentTrackings = [];
         this.addNewShipmentTracking();
-        this.refreshSalesOrderLine();
     }
 
     addNewShipmentTracking() {
@@ -100,37 +64,12 @@ export class SalesOrderFulfillmentAddComponent implements OnInit {
     }
 
     refreshSalesOrderLine() {
-        this.salesorderService.getFulfilmmentSalesOrderLines(this.orderid).subscribe(
-            (fulfillmentSalesOrderLines: FulfillmentSalesOrderLine[]) => {
-                this.fulfillmentSalesOrderLines = fulfillmentSalesOrderLines;
-
-                //this.shipmentTracking = new ShipmentTracking(null, null, null, null, null, null, null);
-                this.fulfillment = new Fulfillment(null, String(this.orderid), null, null, null, null, null, null, null, null, null, this.shipmentTrackings, this.fulfillmentSalesOrderLines);
-                this.dataSource = new MatTableDataSource<FulfillmentSalesOrderLine>(this.fulfillment.FulfillmentSalesOrderLines);
-            },
-            (error: any) => this.errorMessage = <any>error
-        );  
+        this.getFulfilmmentSalesOrderLines.emit(this.orderid);
     }
 
     onAddFulfillment() {        
         if (this.isValid()) {
-            this.pendingCreate = true;
-            this.salesorderService.addFulfillment(this.fulfillment).subscribe(
-                () => {
-                    this.pendingCreate = false;
-                    this.salesorderService.sendNotification({ type: 'success', title: 'Save Completed', content: "" });
-                    this.router.navigate(['/sales-order', 'view', this.fulfilledby,this.orderid,'fulfillment']);
-                    //this.router.navigate(['/sales-order', 'view', 'merchant', this.orderid, 'detail']);
-                    window.location.reload();
-                },
-                (error: any) => {
-                    this.pendingCreate = false;
-                    this.errorMessage = <any>error;                    
-                    this.salesorderService.sendNotification({ type: 'error', title: 'Error', content: this.errorMessage });
-                    this.router.navigate(['/sales-order', 'view', 'merchant', this.orderid, 'detail']);
-                    //this.refreshSalesOrderLine();
-                }
-            );
+            this.addFulfillment.emit(this.fulfillment);
         }
     }
 

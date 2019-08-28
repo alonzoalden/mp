@@ -1,7 +1,7 @@
 import { Action } from '@ngrx/store';
 import { SalesOrder } from 'app/shared/class/sales-order';
 import { SalesOrderLine } from 'app/shared/class/sales-order-line';
-import { Fulfillment } from 'app/shared/class/fulfillment';
+import { Fulfillment, FulfillmentSalesOrderLine } from 'app/shared/class/fulfillment';
 
 export enum SalesOrderActionTypes {
   LoadSalesOrders = '[Sales Order] Load Sales Orders',
@@ -31,9 +31,17 @@ export enum SalesOrderActionTypes {
   LoadFulfilledByFulfillment = '[Sales Order] Load Fulfilled By Fulfillment',
   LoadFulfilledByFulfillmentSuccess = '[Sales Order] Load Fulfilled By Fulfillment Success',
   LoadFulfilledByFulfillmentFail = '[Sales Order] Load Fulfilled By Fulfillment Fail',
+
+  LoadFulfilmmentSalesOrderLines = '[Sales Order] Load Fulfilmment Sales Order Lines',
+  LoadFulfilmmentSalesOrderLinesSuccess = '[Sales Order] Load Fulfilmment Sales Order Lines Success',
+  LoadFulfilmmentSalesOrderLinesFail = '[Sales Order] Load Fulfilmment Sales Order Lines Fail',
+
   LoadSalesOrderDelivery = '[Sales Order] Load Sales Order Delivery',
   LoadSalesOrderDeliverySuccess = '[Sales Order] Load Sales Order Delivery Success',
   LoadSalesOrderDeliveryFail = '[Sales Order] Load Sales Order Delivery Fail',
+  AddFulfillment  = '[Sales Order] Add Fulfillment',
+  AddFulfillmentSuccess  = '[Sales Order] Add Fulfillment Success',
+  AddFulfillmentFail  = '[Sales Order] Add Fulfillment Fail',
   DeleteFulfillment  = '[Sales Order] Delete Fulfillment',
   DeleteFulfillmentSuccess  = '[Sales Order] Delete Fulfillment Success',
   DeleteFulfillmentFail  = '[Sales Order] Delete Fulfillment Fail',
@@ -159,6 +167,34 @@ export class LoadFulfilledByFulfillmentFail implements Action {
   constructor(public payload: string) { }
 }
 
+export class LoadFulfilmmentSalesOrderLines implements Action {
+  readonly type = SalesOrderActionTypes.LoadFulfilmmentSalesOrderLines;
+  constructor(public payload: number) { }
+}
+export class LoadFulfilmmentSalesOrderLinesSuccess implements Action {
+  readonly type = SalesOrderActionTypes.LoadFulfilmmentSalesOrderLinesSuccess;
+  constructor(public payload: FulfillmentSalesOrderLine[]) { }
+}
+export class LoadFulfilmmentSalesOrderLinesFail implements Action {
+  readonly type = SalesOrderActionTypes.LoadFulfilmmentSalesOrderLinesFail;
+  constructor(public payload: string) { }
+}
+
+
+
+export class AddFulfillment implements Action {
+  readonly type = SalesOrderActionTypes.AddFulfillment;
+  constructor(public payload: Fulfillment) { }
+}
+export class AddFulfillmentSuccess implements Action {
+  readonly type = SalesOrderActionTypes.AddFulfillmentSuccess;
+  constructor(public payload: Fulfillment) { }
+}
+export class AddFulfillmentFail implements Action {
+  readonly type = SalesOrderActionTypes.AddFulfillmentFail;
+  constructor(public payload: string) { }
+}
+
 export class EditFulfillment implements Action {
   readonly type = SalesOrderActionTypes.EditFulfillment;
   constructor(public payload: Fulfillment) { }
@@ -258,6 +294,12 @@ export type SalesOrderActions = LoadSalesOrders
 | LoadSalesOrderDelivery
 | LoadSalesOrderDeliverySuccess
 | LoadSalesOrderDeliveryFail
+| LoadFulfilmmentSalesOrderLines
+| LoadFulfilmmentSalesOrderLinesSuccess
+| LoadFulfilmmentSalesOrderLinesFail
+| AddFulfillment
+| AddFulfillmentSuccess
+| AddFulfillmentFail
 | DeleteFulfillment
 | DeleteFulfillmentSuccess
 | DeleteFulfillmentFail
