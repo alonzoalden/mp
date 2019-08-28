@@ -21,11 +21,6 @@ export class SalesOrderFulfillmentListShellComponent implements OnInit {
     pendingDelete$: Observable<boolean>;
     isLoading$: Observable<boolean>;
     
-    fulfillments: Fulfillment[];
-    displayedColumns = ['Menu','Package','ID','ShipDate','Carrier','ShippingService','TrackingNumber'];
-    dataSource: any = null;
-
-    isMerchant: boolean;
     constructor(private store: Store<fromSalesOrder.State>) { }
 
     ngOnInit() {

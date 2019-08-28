@@ -179,9 +179,6 @@ export function salesOrderReducer(state = initialState, action: SalesOrderAction
                 error: action.payload,
             };
             
-
-
-            
         case SalesOrderActionTypes.CancelSalesOrderLines:
             return {
                 ...state,
@@ -238,6 +235,7 @@ export function salesOrderReducer(state = initialState, action: SalesOrderAction
             return {
                 ...state,
                 fulfillment: action.payload,
+                fulfillmentSalesOrderLines: action.payload.FulfillmentSalesOrderLines,
                 pendingSave: false,
                 error: '',
             };
@@ -245,6 +243,7 @@ export function salesOrderReducer(state = initialState, action: SalesOrderAction
             return {
                 ...state,
                 fulfillment: null,
+                fulfillmentSalesOrderLines: [],
                 pendingSave: false,
                 error: action.payload,
             };
@@ -258,6 +257,7 @@ export function salesOrderReducer(state = initialState, action: SalesOrderAction
             return {
                 ...state,
                 fulfillment: action.payload,
+                fulfillmentSalesOrderLines: action.payload.FulfillmentSalesOrderLines,
                 pendingSave: false,
                 error: '',
             };
@@ -265,6 +265,7 @@ export function salesOrderReducer(state = initialState, action: SalesOrderAction
             return {
                 ...state,
                 fulfillment: null,
+                fulfillmentSalesOrderLines: [],
                 pendingSave: false,
                 error: action.payload,
             };

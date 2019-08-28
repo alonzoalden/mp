@@ -43,12 +43,16 @@ export class SalesOrderFulfillmentAddComponent implements OnInit, OnChanges {
         if (changes.salesOrder && !changes.salesOrder.currentValue && changes.salesOrder.firstChange) {
             this.getFulfilledBySalesOrder.emit({orderid: this.route.parent.snapshot.params['id'], fulfilledby: this.route.parent.snapshot.params['fulfilledby']});
         }
+        if (changes.fulfillmentSalesOrderLinesMatTable && !changes.fulfillmentSalesOrderLinesMatTable.currentValue.data.length && changes.fulfillmentSalesOrderLinesMatTable.firstChange) {
+            this.getFulfilmmentSalesOrderLines.emit(this.route.parent.snapshot.params['id']);
+        }
+        
     }
 
     ngOnInit() {
         this.orderid = this.route.parent.snapshot.params['id'];
         this.fulfilledby = 'merchant';
-        this.getFulfilmmentSalesOrderLines.emit(this.orderid);
+        
         this.fulfillment = new Fulfillment(null, String(this.orderid), null, null, null, null, null, null, null, null, null, this.shipmentTrackings, this.fulfillmentSalesOrderLinesMatTable.data);
         
         this.shipmentTrackings = [];
@@ -61,10 +65,6 @@ export class SalesOrderFulfillmentAddComponent implements OnInit, OnChanges {
     }
     onAddShipmentTracking() {
         this.addNewShipmentTracking();
-    }
-
-    refreshSalesOrderLine() {
-        this.getFulfilmmentSalesOrderLines.emit(this.orderid);
     }
 
     onAddFulfillment() {        

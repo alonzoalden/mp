@@ -1,10 +1,7 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
-import { ActivatedRoute, Router } from '@angular/router';
+import { Component, OnInit } from '@angular/core';
 import { MatTableDataSource} from '@angular/material';
 import { SalesOrder } from '../../../../../shared/class/sales-order';
-import { Fulfillment, ShipmentTracking, FulfillmentSalesOrderLine } from '../../../../../shared/class/fulfillment';
-import { SalesOrderService } from '../../../../sales-order.service';
-import { environment } from '../../../../../../environments/environment';
+import { Fulfillment, FulfillmentSalesOrderLine } from '../../../../../shared/class/fulfillment';
 import { Observable } from 'rxjs';
 import { Store, select } from '@ngrx/store';
 import * as salesOrderActions from '../../../../state/sales-order.actions';
@@ -24,9 +21,6 @@ export class SalesOrderFulfillmentAddShellComponent implements OnInit {
     fulfillmentSalesOrderLinesMatTable$: Observable<MatTableDataSource<FulfillmentSalesOrderLine>>;
 
     constructor(private store: Store<fromSalesOrder.State>) { }
-
-    minDate = new Date(2000, 0, 1);
-    maxDate = new Date(2020, 0, 1);
     
     ngOnInit() {
         this.salesOrder$ = this.store.pipe(select(fromSalesOrder.getSalesOrder));

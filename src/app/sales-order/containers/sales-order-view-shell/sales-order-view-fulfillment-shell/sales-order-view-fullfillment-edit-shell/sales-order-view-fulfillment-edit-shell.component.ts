@@ -17,6 +17,7 @@ export class SalesOrderFulfillmentEditShellComponent implements OnInit {
     fulfillment$: Observable<Fulfillment>;
     deliveryDetail$: Observable<string>;
     errorMessage$: Observable<string>;
+    
     constructor(private store: Store<fromSalesOrder.State>) { }
 
     ngOnInit() {
