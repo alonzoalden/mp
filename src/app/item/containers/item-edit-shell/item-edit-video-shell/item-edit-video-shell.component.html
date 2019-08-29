@@ -1,0 +1,144 @@
+
+<div class="tab-content">
+    <div class="tab-pane active">
+        <div class="panel-body p-w-none">
+            <form class="form-horizontal" #itemForm="ngForm">
+                <fieldset>                
+                    <div class="ibox-title"><h5>{{ 'Videos' | translate }}</h5></div>
+                    <div class="ibox-content">
+                        <div class="form-group row">
+                            <div class="col-md-12">                            
+                                <div *ngIf="item.ItemVideos && item.ItemVideos.length && item.ItemVideos.length > 0">
+                                    <table mat-table #table [dataSource]="dataSource">
+                                        <!-- Add Button -->
+                                        <ng-container matColumnDef="Add">
+                                            <th mat-header-cell *matHeaderCellDef width="40px"></th>
+                                            <td mat-cell *matCellDef="let itemVideo; let i = index">                                                 
+                                                <div *ngIf="i === item.ItemVideos.length-1">                               
+                                                    <a (click)='onAddItemVideo(itemVideo); canAdd = false; formDirty = false;'><span [matTooltip]="canAdd ? ('Add' | translate) : ('Required fields must be complete' | translate)" class="glyphicon glyphicon-plus fs-20" [ngClass]="i === item.ItemVideos.length-1 && canAdd ? 'green' : 'gray'"></span></a>
+                                                </div>
+                                            </td>
+                                        </ng-container>
+                                        <!-- Down Column -->
+                                        <ng-container matColumnDef="Down">
+                                            <th mat-header-cell *matHeaderCellDef width="17px">{{ 'Position' | translate }}</th>
+                                            <td mat-cell *matCellDef="let itemVideo; let i = index">
+                                                <div *ngIf="i < item.ItemVideos.length-2">
+                                                    <a (click)='moveDownPosition(itemVideo)' *ngIf='i !== item.ItemVideos.length - 1'><span class="glyphicon glyphicon-arrow-down"></span></a>
+                                                </div>                                            
+                                            </td>
+                                        </ng-container>
+                                        <!-- Position Column -->
+                                        <ng-container matColumnDef="Position">
+                                            <th mat-header-cell *matHeaderCellDef width="15px"></th>
+                                            <td mat-cell *matCellDef="let itemVideo; let i = index">
+                                                <div *ngIf="i !== item.ItemVideos.length-1">
+                                                    {{i + 1}}
+                                                </div>
+                                            </td>
+                                        </ng-container>
+                                        <!-- Up Column -->
+                                        <ng-container matColumnDef="Up">
+                                            <th mat-header-cell *matHeaderCellDef  width="40px"></th>
+                                            <td mat-cell *matCellDef="let itemVideo; let i = index">
+                                                <div *ngIf="i !== item.ItemVideos.length-1">
+                                                    <a (click)='moveUpPosition(itemVideo)' *ngIf='i !== 0'><span class="glyphicon glyphicon-arrow-up"></span></a>
+                                                </div>
+                                            </td>
+                                        </ng-container> 
+                                        <!-- Thumbnail Column -->
+                                        <ng-container matColumnDef="Thumbnail">
+                                            <th mat-header-cell *matHeaderCellDef width="100px"></th>
+                                            <td mat-cell *matCellDef="let itemVideo; let i = index" width="120px">
+                                                <div *ngIf="i !== item.ItemVideos.length-1">
+                                                    <div *ngIf="itemVideo.pendingImage">
+                                                        <a href="https://www.youtube.com/watch?v={{itemVideo.Value}}" target="_blank">
+                                                            <img *ngIf='!itemVideo.Thumbnail' class="opaque" src='https://content-merchantportal.toolots.net/assets/images/no-image-icon.png' title='No image found'>
+                                                            <img *ngIf='itemVideo.Thumbnail' src="{{itemVideo.Thumbnail}}" [title]='itemVideo.Label' style="max-width: 100px; margin:5px">
+                                                        </a>
+                                                    </div>
+                                                    <div *ngIf="!itemVideo.pendingImage">
+                                                        <a href="https://www.youtube.com/watch?v={{itemVideo.Value}}" target="_blank">
+                                                            <img *ngIf='!itemVideo.Thumbnail' class="opaque" src='https://content-merchantportal.toolots.net/assets/images/no-image-icon.png' title='No image found'>
+                                                            <img *ngIf='itemVideo.Thumbnail' src="{{imageURL}}{{itemVideo.Thumbnail}}" [title]='itemVideo.Label' style="max-width: 100px; margin:5px">
+                                                        </a>
+                                                    </div>  
+                                                </div>
+                                                                             
+                                            </td>
+                                        </ng-container>
+                                        <!-- Label Column -->
+                                        <ng-container matColumnDef="Label">
+                                            <th mat-header-cell *matHeaderCellDef width="180px">{{ 'Title' | translate }}</th>
+                                            <td mat-cell *matCellDef="let itemVideo; let i = index">
+                                                <div *ngIf="currentIndex !== i && i !== item.ItemVideos.length-1">
+                                                    {{itemVideo.Label}}
+                                                </div>  
+                                                <div *ngIf="currentIndex === i || i === item.ItemVideos.length-1">
+                                                    <input (focus)="formDirty = true;"
+                                                        class="form-control" id="itemVideoLabelId" type="text" placeholder="{{ 'Title' | translate }} ({{ 'Optional' | translate }})" 
+                                                        [(ngModel)]=itemVideo.Label [ngModelOptions]="{standalone: true}" />
+                                                </div>
+                                            </td>
+                                        </ng-container>
+                                        <!-- Description Column -->
+                                        <ng-container matColumnDef="Description">
+                                            <th mat-header-cell *matHeaderCellDef width="180px">{{ 'Description' | translate }}</th>
+                                            <td mat-cell *matCellDef="let itemVideo; let i = index">  
+                                                <div *ngIf="currentIndex !== i && i !== item.ItemVideos.length-1">
+                                                    {{itemVideo.Description}}
+                                                </div>                 
+                                                <div *ngIf="currentIndex === i && i !== item.ItemVideos.length-1">    
+                                                    <textarea class="form-control" id="itemVideoDescriptionId" placeholder="{{ 'Description' | translate }}"
+                                                        [(ngModel)]=itemVideo.Description [ngModelOptions]="{standalone: true}"></textarea>
+                                                </div>
+                                                <div *ngIf="i === item.ItemVideos.length-1">
+                                                    <input (focus)="formDirty = true;" [(ngModel)]=itemVideo.URL (ngModelChange)="canAdd = true;"
+                                                        class="form-control" id="itemVideoURLId" type="text" placeholder="{{ 'Youtube URL' | translate }}" 
+                                                        #itemVideoURLVar="ngModel" [ngModelOptions]="{standalone: true}"/>
+                                                </div>
+                                            </td>                    
+                                        </ng-container>                
+                                        <!-- Exclude Column -->
+                                        <ng-container matColumnDef="Exclude">
+                                            <th mat-header-cell *matHeaderCellDef width="80px">{{ 'Exclude' | translate }}</th>
+                                            <td mat-cell *matCellDef="let itemVideo; let i = index;">
+                                                <div *ngIf="i !== item.ItemVideos.length-1">
+                                                    <!-- <input type="checkbox" name="itemVideoExclude" [(ngModel)]="itemVideo.Exclude" [ngModelOptions]="{standalone: true}"/> -->
+                                                    <mat-checkbox [(ngModel)]="itemVideo.Exclude" [ngModelOptions]="{standalone: true}"></mat-checkbox>
+                                                </div>
+                                            </td>
+                                        </ng-container>
+                                        <!-- Remove Column -->
+                                        <ng-container matColumnDef="Remove">
+                                            <th mat-header-cell *matHeaderCellDef width="80px">{{ 'Remove' | translate }}</th>
+                                            <td mat-cell *matCellDef="let itemVideo; let i = index;">
+                                                <div *ngIf="i !== item.ItemVideos.length-1"> 
+                                                    <a (click)="onRemoveVideo(itemVideo)">
+                                                        <span matTooltip="{{ 'Remove' | translate }}" attr.aria-label="{{ 'Remove' | translate}}" class="glyphicon glyphicon-trash"></span>
+                                                    </a>
+                                                </div>
+                                                <div [hidden]="!formDirty && i === item.ItemVideos.length-1"> 
+                                                    <a matTooltip="{{ 'Clear' | translate }}" attr.aria-label="{{ 'Clear' | translate}}" (click)="clearFields(itemVideo);"><i *ngIf="i === item.ItemVideos.length-1" class="fa fa-eraser"></i></a>
+                                                    <!-- <button *ngIf="i === item.ItemVideos.length-1"
+                                                            type="button" 
+                                                            class="btn btn-remove-sm"
+                                                            (click)="clearFields(itemVideo);">Clear</button> -->
+                                                </div>
+                                            </td>
+                                        </ng-container>
+
+                                        <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+                                        <tr mat-row class="selected-row" *matRowDef="let itemVideo; let i = index; columns: displayedColumns;"
+                                            [ngStyle]="{'background-color': itemService.rowColorConditions(i, item.ItemVideos, currentIndex, formDirty)}"
+                                            (click)="onEditItemVideo(i)"></tr>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </fieldset>
+            </form>
+        </div>
+    </div>    
+</div>

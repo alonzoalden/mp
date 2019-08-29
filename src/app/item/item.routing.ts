@@ -1,67 +1,88 @@
 import { Routes, RouterModule } from '@angular/router';
 
 import { ItemComponent } from './item.component';
-import { ItemListComponent } from './item-list/item-list.component';
-import { ItemPrintLabelComponent } from './item-print-label/item-print-label.component';
 
-import { ItemAddComponent } from './item-add/item-add.component';
-import { ItemAddDescriptionComponent } from './item-add/item-add-description.component';
-import { ItemAddDimensionComponent } from './item-add/item-add-dimension.component';
-import { ItemAddPriceComponent } from './item-add/item-add-price.component';
-import { ItemAddCategoryComponent } from './item-add/item-add-category.component';
-import { ItemAddBundleComponent } from './item-add/item-add-bundle.component';
-import { ItemAddProductRelationComponent } from './item-add/item-add-product-relation.component';
-import { ItemAddVendorAttachmentComponent } from './item-add/item-add-vendor-attachment.component';
-import { ItemAddVideoComponent } from './item-add/item-add-video.component';
-import { ItemAddImageComponent } from './item-add/item-add-image.component';
+import { ItemListShellComponent } from './containers/item-list-shell/item-list-shell.component';
+import { ItemPrintLabelShellComponent } from './containers/item-print-label-shell/item-print-label-shell.component';
 
-import { ItemEditComponent  } from './item-edit/item-edit.component';
-import { ItemEditDescriptionComponent } from './item-edit/item-edit-description.component';
-import { ItemEditDimensionComponent } from './item-edit/item-edit-dimension.component';
-import { ItemEditPriceComponent } from './item-edit/item-edit-price.component';
-import { ItemEditCategoryComponent } from './item-edit/item-edit-category.component';
-import { ItemEditBundleComponent } from './item-edit/item-edit-bundle.component';
-import { ItemEditProductRelationComponent } from './item-edit/item-edit-product-relation.component';
-import { ItemEditVendorAttachmentComponent } from './item-edit/item-edit-vendor-attachment.component';
-import { ItemEditVideoComponent } from './item-edit/item-edit-video.component';
-import { ItemEditImageComponent } from './item-edit/item-edit-image.component';
-import { ItemEditInventoryComponent } from './item-edit/item-edit-inventory.component';
+//import { ItemListComponent } from './components/item-list/item-list.component';
+//import { ItemPrintLabelComponent } from './components/item-print-label/item-print-label.component';
 
-import { ItemImageComponent } from './item-image/item-image.component';
-import { ItemVideoComponent } from './item-video/item-video.component';
-import { ItemAttachmentComponent } from './item-attachment/item-attachment.component';
-import { ItemRelatedProductComponent } from './item-related-product/item-related-product.component';
-import { ItemUpSellComponent } from './item-up-sell/item-up-sell.component';
-import { ItemCrossSellComponent } from './item-cross-sell/item-cross-sell.component';
+// import { ItemAddComponent } from './item-add/item-add/item-add.component';
+// import { ItemAddDescriptionComponent } from './item-add/item-add-description/item-add-description.component';
+// import { ItemAddDimensionComponent } from './item-add/item-add-dimension/item-add-dimension.component';
+// import { ItemAddPriceComponent } from './item-add/item-add-price/item-add-price.component';
+// import { ItemAddCategoryComponent } from './item-add/item-add-category/item-add-category.component';
+// import { ItemAddBundleComponent } from './item-add/item-add-bundle/item-add-bundle.component';
+// import { ItemAddProductRelationComponent } from './item-add/item-add-product-relation/item-add-product-relation.component';
+// import { ItemAddVendorAttachmentComponent } from './item-add/item-add-vendor-attachment/item-add-vendor-attachment.component';
+// import { ItemAddVideoComponent } from './item-add/item-add-video/item-add-video.component';
+// import { ItemAddImageComponent } from './item-add/item-add-image/item-add-image.component';
 
-import { ItemDetailComponent } from './item-detail/item-detail.component';
+import { ItemAddShellComponent } from './containers/item-add-shell/item-add-shell/item-add-shell.component';
+import { ItemAddDescriptionShellComponent } from './containers/item-add-shell/item-add-description-shell/item-add-description-shell.component';
+import { ItemAddDimensionShellComponent } from './containers/item-add-shell/item-add-dimension-shell/item-add-dimension-shell.component';
+import { ItemAddPriceShellComponent } from './containers/item-add-shell/item-add-price-shell/item-add-price-shell.component';
+import { ItemAddCategoryShellComponent } from './containers/item-add-shell/item-add-category-shell/item-add-category-shell.component';
+import { ItemAddBundleShellComponent } from './containers/item-add-shell/item-add-bundle-shell/item-add-bundle-shell.component';
+import { ItemAddProductRelationShellComponent } from './containers/item-add-shell/item-add-product-relation-shell/item-add-product-relation-shell.component';
+import { ItemAddProductRelationRelatedProductShellComponent } from './containers/item-add-shell/item-add-product-relation-related-product-shell/item-add-product-relation-related-product-shell.component';
+import { ItemAddProductRelationUpSellShellComponent } from './containers/item-add-shell/item-add-product-relation-up-sell-shell/item-add-product-relation-up-sell-shell.component';
+import { ItemAddProductRelationCrossSellShellComponent } from './containers/item-add-shell/item-add-product-relation-cross-sell-shell/item-add-product-relation-cross-sell-shell.component';
+import { ItemAddVendorAttachmentShellComponent } from './containers/item-add-shell/item-add-vendor-attachment-shell/item-add-vendor-attachment-shell.component';
+import { ItemAddVideoShellComponent } from './containers/item-add-shell/item-add-video-shell/item-add-video-shell.component';
+import { ItemAddImageShellComponent } from './containers/item-add-shell/item-add-image-shell/item-add-image-shell.component';
 
-import { ItemAddBundleGuard } from './item-add/item-add-bundle.guard';
-import { ItemEditGuard } from './item-edit/item-edit.guard';
-import { ItemEditBundleGuard } from './item-edit/item-edit-bundle.guard';
-import { componentFactoryName } from '@angular/compiler';
+
+import { ItemEditShellComponent  } from './containers/item-edit-shell/item-edit-shell/item-edit-shell.component';
+import { ItemEditDescriptionShellComponent } from './containers/item-edit-shell/item-edit-description-shell/item-edit-description-shell.component';
+import { ItemEditDimensionShellComponent } from './containers/item-edit-shell/item-edit-dimension-shell/item-edit-dimension-shell.component';
+import { ItemEditPriceShellComponent } from './containers/item-edit-shell/item-edit-price-shell/item-edit-price-shell.component';
+import { ItemEditCategoryShellComponent } from './containers/item-edit-shell/item-edit-category-shell/item-edit-category-shell.component';
+import { ItemEditBundleShellComponent } from './containers/item-edit-shell/item-edit-bundle-shell/item-edit-bundle-shell.component';
+import { ItemEditProductRelationShellComponent } from './containers/item-edit-shell/item-edit-product-relation-shell/item-edit-product-relation-shell.component';
+import { ItemEditVendorAttachmentShellComponent } from './containers/item-edit-shell/item-edit-vendor-attachment-shell/item-edit-vendor-attachment-shell.component';
+import { ItemEditVideoShellComponent } from './containers/item-edit-shell/item-edit-video-shell/item-edit-video-shell.component';
+import { ItemEditImageShellComponent } from './containers/item-edit-shell/item-edit-image-shell/item-edit-image-shell.component';
+import { ItemEditInventoryShellComponent } from './containers/item-edit-shell/item-edit-inventory-shell/item-edit-inventory-shell.component';
+
+//  UNUSED and DELETED
+// import { ItemImageComponent } from './item-image/item-image.component';
+// import { ItemVideoComponent } from './item-video/item-video.component';
+// import { ItemAttachmentComponent } from './item-attachment/item-attachment.component';
+// import { ItemRelatedProductComponent } from './item-related-product/item-related-product.component';
+// import { ItemUpSellComponent } from './item-up-sell/item-up-sell.component';
+// import { ItemCrossSellComponent } from './item-cross-sell/item-cross-sell.component';
+// import { ItemDetailComponent } from './item-detail/item-detail.component';
+
+import { ItemAddBundleGuard } from './components/item-add/item-add-bundle/item-add-bundle.guard';
+import { ItemEditGuard } from './components/item-edit/item-edit/item-edit.guard';
+import { ItemEditBundleGuard } from './components/item-edit/item-edit-bundle/item-edit-bundle.guard';
+import { ItemPartEditGuard } from './components/item-part-edit/item-part-edit/item-part-edit.guard';
+
+
+import { ItemBatchApprovalShellComponent } from './containers/item-batch-approval-shell/item-batch-approval-shell.component';
+import { ItemBatchUpdateShellComponent } from './containers/item-batch-update-shell/item-batch-update-shell.component';
+import { ItemBatchUpdateSelectShellComponent } from './containers/item-batch-update-shell/item-batch-update-select-shell.component';
+import { ItemBatchUpdateUpdateShellComponent } from './containers/item-batch-update-shell/item-batch-update-update-shell.component';
+import { ItemAddPartShellComponent } from './containers/item-add-shell/item-add-part-shell/item-add-part-shell.component';
+import { ItemEditPartShellComponent } from './containers/item-edit-shell/item-edit-part-shell/item-edit-part-shell.component';
+
+import { ItemPartListComponentItemPrintDialog } from './components/item-part-list/item-part-list.component';
+import { ItemPartListShellComponent } from './containers/item-part-list-shell/item-part-list-shell.component';
+import { ItemPartAddShellComponent } from './containers/item-part-add-shell/item-part-add-shell/item-part-add-shell.component';
+import { ItemPartAddDescriptionShellComponent } from './containers/item-part-add-shell/item-part-add-description-shell/item-part-add-description-shell.component';
+import { ItemPartAddDimensionShellComponent } from './containers/item-part-add-shell/item-part-add-dimension-shell/item-part-add-dimension-shell.component';
+import { ItemPartAddPriceShellComponent } from './containers/item-part-add-shell/item-part-add-price-shell/item-part-add-price-shell.component';
+import { ItemPartAddImageShellComponent } from './containers/item-part-add-shell/item-part-add-image-shell/item-part-add-image-shell.component';
+import { ItemPartEditShellComponent } from './containers/item-part-edit-shell/item-part-edit-shell/item-part-edit-shell.component';
+import { ItemPartEditDescriptionShellComponent } from './containers/item-part-edit-shell/item-part-edit-description-shell/item-part-edit-description-shell.component';
+import { ItemPartEditDimensionShellComponent } from './containers/item-part-edit-shell/item-part-edit-dimension-shell/item-part-edit-dimension-shell.component';
+import { ItemPartEditPriceShellComponent } from './containers/item-part-edit-shell/item-part-edit-price-shell/item-part-edit-price-shell.component';
+import { ItemPartEditImageShellComponent } from './containers/item-part-edit-shell/item-part-edit-image-shell/item-part-edit-image-shell.component';
+import { ItemPartEditInventoryShellComponent } from './containers/item-part-edit-shell/item-part-edit-inventory-shell/item-part-edit-inventory-shell.component';
 
 import { PageNotFoundComponent } from './page-not-found.component';
-import { ItemBatchApprovalComponent } from './item-batch-approval/item-batch-approval.component';
-import { ItemBatchUpdateComponent } from './item-batch-update/item-batch-update.component';
-import { ItemBatchUpdateSelectComponent } from './item-batch-update/item-batch-update-select.component';
-import { ItemBatchUpdateUpdateComponent } from './item-batch-update/item-batch-update-update.component';
-import { ItemAddPartComponent } from './item-add/item-add-part.component';
-import { ItemEditPartComponent } from './item-edit/item-edit-part.component';
-
-import { ItemPartListComponent, ItemPartListComponentItemPrintDialog } from './item-part-list/item-part-list.component';
-import { ItemPartAddComponent } from './item-part-add/item-part-add.component';
-import { ItemPartAddDescriptionComponent } from './item-part-add/item-part-add-description.component';
-import { ItemPartAddDimensionComponent } from './item-part-add/item-part-add-dimension.component';
-import { ItemPartAddPriceComponent } from './item-part-add/item-part-add-price.component';
-import { ItemPartAddImageComponent } from './item-part-add/item-part-add-image.component';
-import { ItemPartEditComponent } from './item-part-edit/item-part-edit.component';
-import { ItemPartEditDescriptionComponent } from './item-part-edit/item-part-edit-description.component';
-import { ItemPartEditDimensionComponent } from './item-part-edit/item-part-edit-dimension.component';
-import { ItemPartEditPriceComponent } from './item-part-edit/item-part-edit-price.component';
-import { ItemPartEditImageComponent } from './item-part-edit/item-part-edit-image.component';
-import { ItemPartEditGuard } from './item-part-edit/item-part-edit.guard';
-import { ItemPartEditInventoryComponent } from './item-part-edit/item-part-edit-inventory.component';
 
 const ITEM_ROUTES: Routes = [
     {
@@ -69,11 +90,11 @@ const ITEM_ROUTES: Routes = [
         component: ItemComponent,
         children: [ {
                 path: '',
-                component: ItemListComponent
+                component: ItemListShellComponent
             },
             {
                 path: 'printlabel',
-                component: ItemPrintLabelComponent
+                component: ItemPrintLabelShellComponent
             },            
             {
                 path: 'printlabel',
@@ -81,7 +102,7 @@ const ITEM_ROUTES: Routes = [
             },
             {
                 path: 'add',
-                component: ItemAddComponent,
+                component: ItemAddShellComponent,
                 children: [
                     {
                         path: '',
@@ -90,84 +111,85 @@ const ITEM_ROUTES: Routes = [
                     },
                     {
                         path: 'description',
-                        component: ItemAddDescriptionComponent
+                        component: ItemAddDescriptionShellComponent
                     },
                     {
                         path: 'dimension',
-                        component: ItemAddDimensionComponent
+                        component: ItemAddDimensionShellComponent
                     },
                     {
                         path: 'price',
-                        component: ItemAddPriceComponent
+                        component: ItemAddPriceShellComponent
                     },
                     {
                         path: 'category',
-                        component: ItemAddCategoryComponent
+                        component: ItemAddCategoryShellComponent
                     },
                     {
                         path: 'bundle',
-                        component: ItemAddBundleComponent,
+                        component: ItemAddBundleShellComponent,
                         canDeactivate: [ItemAddBundleGuard]
                     },
                     {
                         path: 'productrelation',
-                        component: ItemAddProductRelationComponent
+                        component: ItemAddProductRelationShellComponent
                     },
                     {
                         path: 'attachment',
-                        component: ItemAddVendorAttachmentComponent
+                        component: ItemAddVendorAttachmentShellComponent
                     },
                     {
                         path: 'video',
-                        component: ItemAddVideoComponent
+                        component: ItemAddVideoShellComponent
                     },
                     {
                         path: 'image',
-                        component: ItemAddImageComponent
+                        component: ItemAddImageShellComponent
                     },
                     {
                         path: 'part',
-                        component: ItemAddPartComponent
+                        component: ItemAddPartShellComponent
                     }
                 ]
             },
-            {
-                path: ':id/detail',
-                component: ItemDetailComponent,
-                children: [
-                ]
-            },
-            {
-                path: ':id/image',
-                component: ItemImageComponent,
-                children: [
-                ]
-            },
-            {
-                path: ':id/video',
-                component: ItemVideoComponent,
-                children: [
-                ]
-            },
-            {
-                path: ':id/attachment',
-                component: ItemAttachmentComponent
-            },
-            {
-                path: ':id/relatedproduct',
-                component: ItemRelatedProductComponent
-            },
-            {
-                path: ':id/upsell',
-                component: ItemUpSellComponent
-            },
-            {
-                path: ':id/crosssell',
-                component: ItemCrossSellComponent
-            },
+            //UNSED AND DELETED
+            // {
+            //     path: ':id/detail',
+            //     component: ItemDetailComponent,
+            //     children: [
+            //     ]
+            // },
+            // {
+            //     path: ':id/image',
+            //     component: ItemImageComponent,
+            //     children: [
+            //     ]
+            // },
+            // {
+            //     path: ':id/video',
+            //     component: ItemVideoComponent,
+            //     children: [
+            //     ]
+            // },
+            // {
+            //     path: ':id/attachment',
+            //     component: ItemAttachmentComponent
+            // },
+            // {
+            //     path: ':id/relatedproduct',
+            //     component: ItemRelatedProductComponent
+            // },
+            // {
+            //     path: ':id/upsell',
+            //     component: ItemUpSellComponent
+            // },
+            // {
+            //     path: ':id/crosssell',
+            //     component: ItemCrossSellComponent
+            // },
             {
                 path: ':id/edit',
-                component: ItemEditComponent,
+                component: ItemEditShellComponent,
                 canDeactivate: [ItemEditGuard],
                 children: [
                     {
@@ -177,58 +199,58 @@ const ITEM_ROUTES: Routes = [
                     },
                     {
                         path: 'description',
-                        component: ItemEditDescriptionComponent
+                        component: ItemEditDescriptionShellComponent
                     },
                     {
                         path: 'dimension',
-                        component: ItemEditDimensionComponent
+                        component: ItemEditDimensionShellComponent
                     },
                     {
                         path: 'price',
-                        component: ItemEditPriceComponent
+                        component: ItemEditPriceShellComponent
                     },
                     {
                         path: 'productrelation',
-                        component: ItemEditProductRelationComponent
+                        component: ItemEditProductRelationShellComponent
                     },
                     {
                         path: 'category',
-                        component: ItemEditCategoryComponent
+                        component: ItemEditCategoryShellComponent
                     },
                     {
                         path: 'attachment',
-                        component: ItemEditVendorAttachmentComponent
+                        component: ItemEditVendorAttachmentShellComponent
                     },
                     {
                         path: 'video',
-                        component: ItemEditVideoComponent
+                        component: ItemEditVideoShellComponent
                     },                    
                     {
                         path: 'image',
-                        component: ItemEditImageComponent
+                        component: ItemEditImageShellComponent
                     },
                     {
                         path: 'bundle',
-                        component: ItemEditBundleComponent,
+                        component: ItemEditBundleShellComponent,
                         canDeactivate: [ItemEditBundleGuard]
                     },
                     {
                         path: 'inventory',
-                        component: ItemEditInventoryComponent
+                        component: ItemEditInventoryShellComponent
                     },                    
                     {
                         path: 'part',
-                        component: ItemEditPartComponent
+                        component: ItemEditPartShellComponent
                     }
                 ]
             },
             {
                 path: 'batch',
-                component: ItemBatchApprovalComponent
+                component: ItemBatchApprovalShellComponent
             },
             {
                 path: 'batchupdate',
-                component: ItemBatchUpdateComponent,
+                component: ItemBatchUpdateShellComponent,
                 children: [
                     {
                         path: '',
@@ -237,21 +259,21 @@ const ITEM_ROUTES: Routes = [
                     },
                     {
                         path: 'select',
-                        component: ItemBatchUpdateSelectComponent
+                        component: ItemBatchUpdateSelectShellComponent
                     },
                     {
                         path: 'update',
-                        component: ItemBatchUpdateUpdateComponent
+                        component: ItemBatchUpdateUpdateShellComponent
                     },
                 ]
             },
             {
                 path: 'part',
-                component: ItemPartListComponent,
+                component: ItemPartListShellComponent,
             },
             {
                 path: 'partadd',
-                component: ItemPartAddComponent,
+                component: ItemPartAddShellComponent,
                 children: [
                     {
                         path: '',
@@ -260,25 +282,25 @@ const ITEM_ROUTES: Routes = [
                     },
                     {
                         path: 'partdescription',
-                        component: ItemPartAddDescriptionComponent
+                        component: ItemPartAddDescriptionShellComponent
                     },
                     {
                         path: 'partdimension',
-                        component: ItemPartAddDimensionComponent
+                        component: ItemPartAddDimensionShellComponent
                     },
                     {
                         path: 'partprice',
-                        component: ItemPartAddPriceComponent
+                        component: ItemPartAddPriceShellComponent
                     },
                     {
                         path: 'partimage',
-                        component: ItemPartAddImageComponent
+                        component: ItemPartAddImageShellComponent
                     },
                 ]
             },
             {
                 path: 'part/:id/partedit',
-                component: ItemPartEditComponent,
+                component: ItemPartEditShellComponent,
                 canDeactivate: [ItemPartEditGuard],
                 children: [
                     {
@@ -288,23 +310,23 @@ const ITEM_ROUTES: Routes = [
                     },
                     {
                         path: 'partdescription',
-                        component: ItemPartEditDescriptionComponent
+                        component: ItemPartEditDescriptionShellComponent
                     },
                     {
                         path: 'partinventory',
-                        component: ItemPartEditInventoryComponent
+                        component: ItemPartEditInventoryShellComponent
                     },
                     {
                         path: 'partdimension',
-                        component: ItemPartEditDimensionComponent
+                        component: ItemPartEditDimensionShellComponent
                     },
                     {
                         path: 'partprice',
-                        component: ItemPartEditPriceComponent
+                        component: ItemPartEditPriceShellComponent
                     },
                     {
                         path: 'partimage',
-                        component: ItemPartEditImageComponent
+                        component: ItemPartEditImageShellComponent
                     },
                 ]
             },

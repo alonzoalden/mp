@@ -1,0 +1,146 @@
+
+<div class="tab-content">
+    <div class="tab-pane active">
+        <div class="panel-body p-w-none">
+            <form class="form-horizontal" #itemForm="ngForm">
+                <fieldset>                
+                    <div class="ibox-title"><h5>{{ 'Attachments' | translate }}</h5></div>
+                    <div class="ibox-content">
+                        <div class="form-group row">
+                            <div class="col-md-12">                            
+                                <div *ngIf="item.ItemAttachments && item.ItemAttachments.length && item.ItemAttachments.length > 0">
+                                    <table mat-table #table [dataSource]="dataSource">
+                                        <!-- Add Button -->
+                                        <ng-container matColumnDef="Add">
+                                            <th mat-header-cell *matHeaderCellDef width="45px"></th>
+                                            <td mat-cell *matCellDef="let itemAttachment; let i = index">                                                 
+                                                <div *ngIf="i === item.ItemAttachments.length-1">                               
+                                                    <a (click)='onAddItemAttachment(itemAttachment); formDirty = false;'><span [matTooltip]="itemAttachment.VendorAttachmentID ? ('Add' | translate) : ('Required fields must be complete' | translate)" class="glyphicon glyphicon-plus fs-20" [ngClass]="itemAttachment.VendorAttachmentID ? 'green' : 'gray'"></span></a>
+                                                </div>
+                                            </td>
+                                        </ng-container>
+                                        <!-- Down Column -->
+                                        <ng-container matColumnDef="Down">
+                                            <th mat-header-cell *matHeaderCellDef width="17px">{{ 'Position' | translate }}</th>
+                                            <td mat-cell *matCellDef="let itemAttachment; let i = index">
+                                                <div *ngIf="i < item.ItemAttachments.length-2">
+                                                    <a (click)='moveDownPosition(itemAttachment)' *ngIf='i !== item.ItemAttachments.length - 1'><span class="glyphicon glyphicon-arrow-down"></span></a>
+                                                </div>                                            
+                                            </td>
+                                        </ng-container>
+                                        <!-- Position Column -->
+                                        <ng-container matColumnDef="Position">
+                                            <th mat-header-cell *matHeaderCellDef width="15px"></th>
+                                            <td mat-cell *matCellDef="let itemAttachment; let i = index">
+                                                <div *ngIf="i !== item.ItemAttachments.length-1">
+                                                    {{i + 1}}
+                                                </div>
+                                            </td>
+                                        </ng-container>
+                                        <!-- Up Column -->
+                                        <ng-container matColumnDef="Up">
+                                            <th mat-header-cell *matHeaderCellDef width="40px"></th>
+                                            <td mat-cell *matCellDef="let itemAttachment; let i = index">
+                                                <div *ngIf="i !== item.ItemAttachments.length-1">
+                                                    <a (click)='moveUpPosition(itemAttachment)' *ngIf='i !== 0'><span class="glyphicon glyphicon-arrow-up"></span></a>
+                                                </div>
+                                            </td>
+                                        </ng-container>
+                                        <!-- View Column -->
+                                        <ng-container matColumnDef="View">
+                                            <th mat-header-cell *matHeaderCellDef width="80px"></th>
+                                            <td mat-cell *matCellDef="let itemAttachment; let i = index">
+                                                <div *ngIf="i !== item.ItemAttachments.length-1">
+                                                    <a class="button" href="{{fileURL}}{{itemAttachment.UploadedFile}}" target="_blank">
+                                                        <span class="glyphicon glyphicon-download"></span> {{ 'View File' | translate }}
+                                                    </a>
+                                                </div>
+                                            </td>
+                                        </ng-container>
+                                        <!-- Attachment ID Column -->
+                                        <ng-container matColumnDef="AttachmentID">
+                                            <th mat-header-cell *matHeaderCellDef width="160px">{{ 'Attachment ID' | translate }}</th>
+                                            <td mat-cell *matCellDef="let itemAttachment; let i = index">
+                                                <div *ngIf="i !== item.ItemAttachments.length-1">
+                                                    {{itemAttachment.VendorAttachmentID}}            
+                                                </div>
+                                            </td>
+                                        </ng-container>
+                                        <!-- Title Column -->
+                                        <ng-container matColumnDef="Title">
+                                            <th mat-header-cell width="250px" *matHeaderCellDef>{{ 'Title' | translate }}</th>
+                                            <td mat-cell *matCellDef="let itemAttachment; let i = index">
+                                                <div *ngIf="i !== item.ItemAttachments.length-1">
+                                                    {{itemAttachment.Title}}
+                                                </div>         
+                                                <div *ngIf="i === item.ItemAttachments.length-1">
+                                                    <ng-select  [items]="vendorattachmentlist"
+                                                                [virtualScroll]="true"
+                                                                bindLabel="Label"
+                                                                bindValue="Value"
+                                                                placeholder="{{ 'Search Item' | translate }}"
+                                                                [(ngModel)]="itemAttachment.VendorAttachmentID"
+                                                                (focus)="formDirty = true;"
+                                                                #selectionCategoriesRef
+                                                                id="itemAttachmentIDId"
+                                                                name="itemAttachmentID"
+                                                                required
+                                                                #itemAttachmentIDVar="ngModel"
+                                                                [loading]="!vendorattachmentlist"
+                                                                loadingText="Loading..."
+                                                                >
+                                                        <ng-template ng-option-tmp let-item="item">
+                                                            <div matTooltip="{{item.Label}}" matTooltipPosition="right" matTooltipShowDelay="400">{{item.Label}}</div>
+                                                        </ng-template>
+                                                    </ng-select>
+                                                    <!-- <select class="form-control" id="itemAttachmentIDId" name="itemAttachmentID"  required
+                                                        (change)="canAdd = true;" (focus)="formDirty = true;" #selectionCategoriesRef
+                                                        [(ngModel)]=itemAttachment.VendorAttachmentID #itemAttachmentIDVar="ngModel">
+                                                        <option [ngValue]="null" style="font-style: italic" disabled selected>--Select an attachment--</option>
+                                                        <option [value]="vendorattachment.Value" *ngFor="let vendorattachment of vendorattachmentlist">{{vendorattachment.Label}}</option>
+                                                    </select> -->
+                                                </div>                                  
+                                            </td>                   
+                                        </ng-container>  
+                                        <!-- FileName Column -->
+                                        <ng-container matColumnDef="FileName">
+                                            <th mat-header-cell *matHeaderCellDef width="250px">{{ 'File Name' | translate }}</th>
+                                            <td mat-cell *matCellDef="let itemAttachment; let i = index">
+                                                <div *ngIf="i !== item.ItemAttachments.length-1">
+                                                    {{itemAttachment.FileName}}
+                                                </div>     
+                                            </td>                    
+                                        </ng-container>              
+                                        <!-- Remove Column -->
+                                        <ng-container matColumnDef="Remove">
+                                            <th mat-header-cell *matHeaderCellDef width="80px">{{ 'Remove' | translate }}</th>
+                                            <td mat-cell *matCellDef="let itemAttachment; let i = index;">
+                                                <div *ngIf="i !== item.ItemAttachments.length-1">    
+                                                    <a (click)="onRemoveAttachment(itemAttachment)">
+                                                        <span matTooltip="{{ 'Remove' | translate }}" attr.aria-label="{{ 'Remove' | translate}}"  class="glyphicon glyphicon-trash"></span>
+                                                    </a>
+                                                </div>
+                                                <div [hidden]="!formDirty && i === item.ItemAttachments.length-1"> 
+                                                    <a matTooltip="{{ 'Clear' | translate }}" attr.aria-label="{{ 'Clear' | translate}}"  (click)="clearFields(itemAttachment);"><i *ngIf="i === item.ItemAttachments.length-1" class="fa fa-eraser"></i></a>
+                                                    <!-- <button *ngIf="i === item.ItemAttachments.length-1"
+                                                            type="button" 
+                                                            class="btn btn-remove-sm"
+                                                            (click)="clearFields();">Clear</button> -->
+                                                </div>
+                                            </td>
+                                        </ng-container>
+                                                        
+                                        <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+                                        <tr class="selected-row" mat-row *matRowDef="let itemAttachment; let i = index; columns: displayedColumns;"
+                                            [ngStyle]="{'background-color': itemService.rowColorConditions(i, item.ItemAttachments, currentIndex, formDirty)}"
+                                            (click)="onEditItemAttachment(i)"></tr>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </fieldset>
+            </form>
+        </div>
+    </div>
+</div>

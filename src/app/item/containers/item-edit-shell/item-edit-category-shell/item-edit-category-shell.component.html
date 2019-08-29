@@ -1,0 +1,66 @@
+<div class="tab-content">
+    <div class="tab-pane active">
+        <div class="panel-body p-w-none">
+            <div class="ibox-title"><h5>{{ 'Toolots Categories' | translate }}</h5></div>
+            <div class="ibox-content">
+                <div class="row p-lg">
+                    <div class="item-add-category-layout">
+                        <div class="col-sm-10 col-md-12 p-w-none" *ngIf="currentResult.length > 0">
+                            <table mat-table #table [dataSource]="dataSource" style="width: 100%;" matSort>                        
+                                <!-- Selected Category Column -->
+                                <ng-container matColumnDef="SelectedCategory">
+                                    <th mat-header-cell *matHeaderCellDef>{{ 'Selected Category' | translate }}</th>
+                                    <td mat-cell class="left-text" *matCellDef="let categories"><div *ngFor='let category of categories;' class="selected-category-list"><span> >> </span>{{category.Name}}</div></td>
+                                </ng-container>                        
+                                <!-- Remove Column -->
+                                <ng-container matColumnDef="Remove">
+                                    <th mat-header-cell *matHeaderCellDef width="100px">{{ 'Remove' | translate }}</th>
+                                    <td mat-cell *matCellDef="let categories; let i = index"><a (click)="removeCategories(i)"><span class="glyphicon glyphicon-trash"></span></a></td>
+                                </ng-container>
+                                <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+                                <tr mat-row *matRowDef="let categories; columns: displayedColumns;"></tr>
+                            </table>
+                        </div>
+                        <div class="col-md-12 pt8 mat-row-border" [ngStyle]="{'background-color': formDirty ? '#F5F5F5' : '#E8E8E8'}">
+                            <div class="col-md-1">
+                                <div class="item-add-category-button">                               
+                                    <a (click)='onAddCategory(); formDirty = false; canAdd = false;'><span [matTooltip]="lastSelectedValue > 0 ? ( 'Add' | translate ) : ( 'Required fields must be complete' | translate )" class="glyphicon glyphicon-plus fs-20" [ngClass]="lastSelectedValue > 0 ? 'green' : 'gray'"></span></a>
+                                </div>
+                            </div>
+                            <div class="col-md-3 pb6" *ngFor="let categories of categoryiesList; let i = index">
+                                <div class="flex-row">
+                                    <span class="greater-separater" *ngIf="i > 0"> > </span>
+                                    <ng-select  [items]="categories"
+                                                bindLabel="Name"
+                                                bindValue="ItemCategoryID"
+                                                placeholder="{{ 'Search Item' | translate }}"
+                                                (change)="onChange($event?.ItemCategoryID, i, $event);"
+                                                (focus)="formDirty = true;"
+                                                #selectionCategories
+                                                class="max-width"
+                                                [loading]="!categories"
+                                                loadingText="Loading..."
+                                                >
+                                    <ng-template ng-option-tmp let-item="item">
+                                        <div matTooltip="{{item.Name}}" matTooltipPosition="right" matTooltipShowDelay="400">{{item.Name}}</div>
+                                    </ng-template>
+                                    </ng-select>
+                                    <!-- <select class="form-control" (focus)="formDirty = true;" (change)="onChange($event.target.value, i); canAdd = true;" #selectionCategories>
+                                        <option value="0">-----SELECT-----</option>
+                                        <option [value]="category.ItemCategoryID" *ngFor="let category of categories">{{category.Name}}</option>
+                                    </select> -->
+                                </div>
+                            </div>
+                            <div [hidden]="!formDirty" class="float-right pb6"> 
+                                <a matTooltip="{{ 'Clear' | translate }}" attr.aria-label="{{ 'Clear' | translate}}" (click)="clearFields();"><i class="fa fa-eraser m-t-sm"></i></a>
+                                <!-- <button type="button" 
+                                        class="btn btn-remove-sm"
+                                        (click)="clearFields();">Clear</button> -->
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

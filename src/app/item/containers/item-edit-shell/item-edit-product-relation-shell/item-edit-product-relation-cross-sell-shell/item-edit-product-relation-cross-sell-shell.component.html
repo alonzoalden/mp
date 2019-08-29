@@ -1,0 +1,135 @@
+<div class="ibox-title"><h5>{{ 'Companion Products' | translate }}</h5></div>
+<div class="ibox-content">
+    <div class="form-group row">
+        <div class="col-md-12">                            
+            <div *ngIf="item.ItemCrossSells && item.ItemCrossSells.length && item.ItemCrossSells.length > 0">
+                <table mat-table #table [dataSource]="crossSellDataSource" style="width: 100%;">
+                    <!-- Add Button -->
+                    <ng-container matColumnDef="Add">
+                        <th mat-header-cell *matHeaderCellDef width="45px"></th>
+                        <td mat-cell *matCellDef="let itemCrossSell; let i = index">                                                 
+                            <div *ngIf="i === item.ItemCrossSells.length-1">                               
+                                <a (click)='onAddItemCrossSell(itemCrossSell); formDirty = false;'><span [matTooltip]="itemCrossSell.CrossSellItemID ? ( 'Add' | translate ) : ( 'Required fields must be complete' | translate )" class="glyphicon glyphicon-plus fs-20" [ngClass]="itemCrossSell.CrossSellItemID ? 'green' : 'gray'"></span></a>
+                            </div>
+                        </td>
+                    </ng-container>
+                    <!-- Down Column -->
+                    <ng-container matColumnDef="Down">
+                        <th mat-header-cell *matHeaderCellDef width="17px">{{ 'Position' | translate }}</th>
+                        <td mat-cell *matCellDef="let itemCrossSell; let i = index">
+                            <div *ngIf="i < item.ItemCrossSells.length-2">
+                                <a (click)='crossSellMoveDownPosition(itemCrossSell)' *ngIf='i !== item.ItemCrossSells.length - 1'><span class="glyphicon glyphicon-arrow-down"></span></a>
+                            </div>                                            
+                        </td>
+                    </ng-container>
+                    <!-- Position Column -->
+                    <ng-container matColumnDef="Position">
+                        <th mat-header-cell *matHeaderCellDef width="15px"></th>
+                        <td mat-cell *matCellDef="let itemCrossSell; let i = index">
+                            <div *ngIf="i !== item.ItemCrossSells.length-1">
+                                {{i + 1}}
+                            </div>
+                        </td>
+                    </ng-container>
+                    <!-- Up Column -->
+                    <ng-container matColumnDef="Up">
+                        <th mat-header-cell *matHeaderCellDef width="40px"></th>
+                        <td mat-cell *matCellDef="let itemCrossSell; let i = index">
+                            <div *ngIf="i !== item.ItemCrossSells.length-1">
+                                <a (click)='crossSellMoveUpPosition(itemCrossSell)' *ngIf='i !== 0'><span class="glyphicon glyphicon-arrow-up"></span></a>
+                            </div>
+                        </td>
+                    </ng-container>  
+                    <!-- Item Name Column -->
+                    <ng-container matColumnDef="ItemName">
+                        <th mat-header-cell *matHeaderCellDef width="300px">{{ 'Item Description' | translate }}</th>
+                        <td mat-cell *matCellDef="let itemCrossSell; let i = index">
+                            <div *ngIf="currentItemCrossSellIndex !== i && i !== item.ItemCrossSells.length-1">
+                                <div class="flex-details">
+                                    <div class="img-detail">
+                                        <img *ngIf='!itemCrossSell.ImagePath' class="opaque" src='https://content-merchantportal.toolots.net/assets/images/no-image-icon.png' matTooltip='Product has no image' matTooltipShowDelay="500">
+                                        <!-- <a [routerLink]="[item.ItemID, 'edit']"><img class="row-image" *ngIf='item.ImagePath' [src]='imageURL + item.ImagePath' [matTooltip]='item.Name' [alt]='item.Name' matTooltipShowDelay="500"></a> -->
+                                        <span class="sm-strong"><img class="row-image" *ngIf='itemCrossSell.ImagePath' [src]='imageURL + itemCrossSell.ImagePath' [matTooltip]='itemCrossSell.CrossSellItemName' [alt]='itemCrossSell.CrossSellItemName' matTooltipShowDelay="500"></span>
+                                    </div>
+                                    <div>
+                                        <div class="row">
+                                            <div class="col-xs-12 "><span class="sm-strong">{{itemCrossSell.CrossSellItemName}}</span></div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>         
+                            <div *ngIf="currentItemCrossSellIndex === i || i === item.ItemCrossSells.length-1">
+                                <ng-select  [items]="crossSellItemlist"
+                                            [virtualScroll]="true"
+                                            bindLabel="Description"
+                                            bindValue="ItemID"
+                                            placeholder="{{ 'Search Item' | translate }}"
+                                            [(ngModel)]="itemCrossSell.CrossSellItemID"
+                                            (change)="onCrossSellItemChange(i)"
+                                            (focus)="formDirty = true;"
+                                            #selectionCategoriesRef
+                                            id="itemUpSellUpSellItemIDId"
+                                            name="itemUpSellItemID"
+                                            required
+                                            #itemCrossSellCrossSellItemIDVar="ngModel"
+                                            [loading]="!crossSellItemlist"
+                                            loadingText="Loading...">
+                                    <ng-template ng-option-tmp let-item="item">
+                                        <div matTooltip="{{item.Description}}" matTooltipPosition="right" matTooltipShowDelay="400">{{item.Description}}</div>
+                                    </ng-template>
+                                </ng-select>
+                                <!-- <select class="form-control" id="itemCrossSellCrossSellItemIDId" name="itemCrossSellItemID" #selectionCategoriesRef required 
+                                    [(ngModel)]=itemCrossSell.CrossSellItemID (change)="onCrossSellItemChange(i)" #itemCrossSellCrossSellItemIDVar="ngModel"
+                                    (ngModelChange)="i === item.ItemCrossSells.length-1 && canAdd = true;" (focus)="formDirty = true;">
+                                    <option [ngValue]="null" style="font-style: italic" disabled selected>--Select an item--</option>
+                                    <option [value]="item.ItemID" *ngFor="let item of crossSellItemlist">{{item.Description}}</option>
+                                </select> -->
+                            </div>                                  
+                        </td>
+                    </ng-container>
+                    <!-- SKU Column -->
+                    <ng-container matColumnDef="SKU">
+                        <th mat-header-cell *matHeaderCellDef width="100px">{{ 'SKU' | translate }}</th>
+                        <td mat-cell *matCellDef="let itemCrossSell; let i = index">
+                            <div *ngIf="i !== item.ItemCrossSells.length-1">
+                                {{itemCrossSell.CrossSellItemVendorSKU}}
+                            </div>                                         
+                        </td>                   
+                    </ng-container>  
+                    <!-- TPIN Column -->
+                    <ng-container matColumnDef="TPIN">
+                        <th mat-header-cell *matHeaderCellDef width="100px">{{ 'TPIN' | translate }}</th>
+                        <td mat-cell *matCellDef="let itemCrossSell; let i = index">
+                            <div *ngIf="i !== item.ItemCrossSells.length-1">
+                                {{itemCrossSell.CrossSellTPIN}}
+                            </div>     
+                        </td>                    
+                    </ng-container>              
+                    <!-- Remove Column -->
+                    <ng-container matColumnDef="Remove">
+                        <th mat-header-cell *matHeaderCellDef width="100px">{{ 'Remove' | translate }}</th>
+                        <td mat-cell *matCellDef="let itemCrossSell; let i = index;">
+                            <div *ngIf="i !== item.ItemCrossSells.length-1">    
+                                <a (click)="onRemoveCrossSell(itemCrossSell); currentItemCrossSellIndex = item.ItemCrossSells.length-1;">
+                                    <span matTooltip="{{ 'Remove' | translate }}" attr.aria-label="{{ 'Remove' | translate}}" class="glyphicon glyphicon-trash"></span>
+                                </a>
+                            </div>
+                            <div [hidden]="!formDirty && i === item.ItemCrossSells.length-1"> 
+                                <a matTooltip="{{ 'Clear' | translate }}" attr.aria-label="{{ 'Clear' | translate}}" (click)="clearFields(itemCrossSell);"><i *ngIf="i === item.ItemCrossSells.length-1" class="fa fa-eraser"></i></a>
+                                <!-- <button *ngIf="i === item.ItemCrossSells.length-1"
+                                        type="button" 
+                                        class="btn btn-remove-sm"
+                                        (click)="clearFields();">Clear</button> -->
+                            </div>
+                        </td>
+                    </ng-container>
+                                    
+                    <tr mat-header-row *matHeaderRowDef="crossSellDisplayedColumns"></tr>
+                    <tr mat-row *matRowDef="let itemCrossSell; let i = index; columns: crossSellDisplayedColumns;" class="row-height-80"
+                        [ngStyle]="{'background-color': itemService.rowColorConditions(i, item.ItemCrossSells, currentItemCrossSellIndex, formDirty)}"
+                        (click)="onEditItemCrossSell(i)"></tr>                                            
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
