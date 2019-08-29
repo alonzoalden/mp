@@ -50,19 +50,19 @@ export class MemberRegistrationComponent implements OnInit {
             });
         this.memberService.getMemberByInviteGUID(this.inviteGUID).subscribe(
             (member: Member) => {
-                this.member = member;
                 this.member.Password = '';
                 this.member.ConfirmPassword = '';
+                this.member = member;
                 
 
                 if (this.member.IsConfirmed) {
-                    this.router.navigate(['/home']);
+                    //this.router.navigate(['/home']);
                 }
             },
             error => {
                 this.errorMessage = <any>error;
                 this.memberService.sendNotification({ type: 'error', title: 'Error', content: this.errorMessage });
-                this.router.navigate(['/home']);
+                //this.router.navigate(['/home']);
             }
         );
     }
