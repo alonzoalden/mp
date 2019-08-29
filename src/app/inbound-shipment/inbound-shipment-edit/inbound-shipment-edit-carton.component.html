@@ -1,19 +1,11 @@
 <div class="tab-content border">
     <div class="tab-pane active">
         <div class="panel-body p-w-none">
-            <div *ngIf='!(isCartonAdd || isCartonEdit)'>            
+            <div *ngIf='!(isCartonAdd || isCartonEdit)'>
                 <o-inbound-shipment-edit-carton-list></o-inbound-shipment-edit-carton-list>
             </div>
-            
         </div>
     </div>
 </div>
-<div class="tab-content border">
-    <div class="tab-pane active">
-        <div class="panel-body p-w-none">
-            <div>
-                <router-outlet></router-outlet>
-            </div>
-        </div>
-    </div>
-</div>
+
+<router-outlet></router-outlet>
