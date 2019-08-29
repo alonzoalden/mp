@@ -3,7 +3,7 @@ import { Router, ActivatedRoute } from '@angular/router';
 import { MatTableDataSource } from '@angular/material';
 import { Subscription } from 'rxjs';
 
-import { Item, ItemInsert, ItemList, ItemPartInsert } from '../../shared/class/item';
+import { Item, ItemInsert, ItemList, ItemPartInsert, ItemPartGroupInsert } from '../../shared/class/item';
 import { ItemService } from '../item.service';
 import { NgSelectComponent } from '@ng-select/ng-select';
 
@@ -26,9 +26,17 @@ export class ItemAddPartComponent implements OnInit {
     itemlist: ItemList[];    
     //displayedColumns = ['Add', 'Down', 'Position', 'Up', 'New', 'Select', 'ItemName', 'SKU', 'TPIN', 'Price', 'Remove'];
     displayedColumns = ['Add', 'Down', 'Position', 'Up', 'Thumbnail', 'Label', 'Select', 'ItemName', 'SKU', 'TPIN', 'Price', 'Remove'];
+    displayedColumnsGroup = ['Add', 'Down', 'Position', 'Up', 'Thumbnail','ItemName', 'Remove'];
+    
+    partGroups: ItemPartGroupInsert[] = [];
+    selectedPartGroup: ItemPartGroupInsert;
+
+
     dataSource: any = null;
+    dataSourceGroups: any = null;
     pendingAdd: boolean;
     currentIndex: number;
+    currentIndexGroup: number;
     formDirty = false;
 
     filesToUpload: Array<File> = [];
@@ -60,27 +68,62 @@ export class ItemAddPartComponent implements OnInit {
 
         this.item = this.itemService.currentItemInsert;
 
+
+
+        
+
+        //this.refreshDataSource(this.selectedPartGroup.ItemParts);
+
+
         if(this.item.ItemParts.length === 0) {
             const _temp = new ItemPartInsert(null, null, null, null, null, null, null, null, null, null,  null, true, null, true);
             this.item.ItemParts.push(_temp);
+            //
+
+            const _tempGroupInsert = new ItemPartGroupInsert(null, null, null, null, null,null, null,  null, true, null, []);
+            this.partGroups.push(_tempGroupInsert);
+            
+            this.dataSourceGroups = new MatTableDataSource<ItemPartGroupInsert>(this.partGroups);
+
+
         }
+        
 
         this.currentIndex = this.item.ItemParts.length - 1;
+        this.currentIndexGroup = this.partGroups.length - 1;
 
+
+        
+
+        //make this based off group
         this.itemService.getPartItemList().subscribe(
             (itemlist: ItemList[]) => {
                 this.itemlist = itemlist;
                 const _temp = new ItemList(null, 'New Item', null, null, null, null);
                 this.itemlist.splice(0,0,_temp);
 
-                this.refreshDataSource(this.item.ItemParts);
+                //this.refreshDataSource(this.selectedPartGroup.ItemParts);
             },
             (error: any) => this.errorMessage = <any>error
         );        
     }
 
     refreshDataSource(itemParts: ItemPartInsert[]) { 
+        console.log(itemParts);
         this.dataSource = new MatTableDataSource<ItemPartInsert>(itemParts);
+    }
+
+    onAddItemPartGroup(group: ItemPartGroupInsert) {
+        console.log('ADD ')
+        const _temp = new ItemPartInsert(null, null, null, null, null, null, null, null, null, null,  null, true, null, true);
+        group.ItemParts.push(_temp)
+        this.selectedPartGroup = group;
+        this.refreshDataSource(this.selectedPartGroup.ItemParts);
+
+        const _tempGroupInsert = new ItemPartGroupInsert(null, null, null, null, null,null, null,  null, true, null, []);
+        console.log(this.partGroups);
+        this.partGroups.push(_tempGroupInsert);
+        //this.dataSourceGroups = new MatTableDataSource<ItemPartGroupInsert>(this.partGroups);
     }
 
     onAddItemPart(itemPart: ItemPartInsert) {
@@ -106,7 +149,7 @@ export class ItemAddPartComponent implements OnInit {
                 
                 const _temp = new ItemPartInsert(0, null, null, null, null, null, null, null, null, null, null, true, this.item.ItemParts.length + 1, true);
                 this.item.ItemParts.push(_temp);
-                this.refreshDataSource(this.item.ItemParts);
+                this.refreshDataSource(this.selectedPartGroup.ItemParts);
             }
             else {
                 this.itemService.sendNotification({ type: 'error', title: 'Error', content: "Part already exists" });
@@ -157,6 +200,33 @@ export class ItemAddPartComponent implements OnInit {
         else { return false; }
     }
 
+
+    onEditItemPartGroup(index: number) {
+        console.log('EDIT')
+        
+        this.selectedPartGroup = this.partGroups[index];
+
+        this.refreshDataSource(this.selectedPartGroup.ItemParts)
+
+        if (index === this.partGroups.length - 1 && this.partGroups.length > 0) {
+            this.dataSource = null;
+            this.selectedPartGroup = null;
+        }
+        else {
+            
+        }
+        console.log(this.selectedPartGroup)
+       
+
+        if(this.pendingAdd) {
+            this.currentIndexGroup = this.partGroups.length - 1;
+            this.pendingAdd = false;
+        }
+        else {
+            this.currentIndexGroup = index;
+        }    
+    }
+
     onEditItemPart(index: number) {
         if(this.currentIndex != index)
         {
@@ -170,7 +240,7 @@ export class ItemAddPartComponent implements OnInit {
                         || !itempart.PartFOBPrice || itempart.PartFOBPrice == 0 ) {
     
                         this.item.ItemParts.splice(i, 1);
-                        this.refreshDataSource(this.item.ItemParts);
+                        this.refreshDataSource(this.selectedPartGroup.ItemParts);
                     }
                 }
             });    
@@ -202,7 +272,7 @@ export class ItemAddPartComponent implements OnInit {
                             this.item.ItemParts[index].ImageFilePath = item.ImagePath;
                             this.item.ItemParts[index].IsNewImage = false;
 
-                            this.refreshDataSource(this.item.ItemParts);
+                            this.refreshDataSource(this.selectedPartGroup.ItemParts);
                         },
                         (error: any) => {
                             this.errorMessage = <any>error;
@@ -227,7 +297,7 @@ export class ItemAddPartComponent implements OnInit {
                     this.item.ItemParts[index].PartItemID = this.item.ItemParts[index].PrevPartItemID;
                 }
                 this.currentIndex = this.item.ItemParts.length - 1;
-                this.refreshDataSource(this.item.ItemParts);
+                this.refreshDataSource(this.selectedPartGroup.ItemParts);
                 this.itemService.sendNotification({ type: 'error', title: 'Error', content: "Part already exists" });
             }
         }
@@ -241,7 +311,7 @@ export class ItemAddPartComponent implements OnInit {
             this.item.ItemParts[index].PartFOBPrice = null;
             this.item.ItemParts[index].PartPrice = null;
             
-            this.refreshDataSource(this.item.ItemParts);
+            this.refreshDataSource(this.selectedPartGroup.ItemParts);
         }
     }
 
@@ -261,7 +331,7 @@ export class ItemAddPartComponent implements OnInit {
             value.Position = index + 1;
         });
 
-        this.refreshDataSource(this.item.ItemParts);
+        this.refreshDataSource(this.selectedPartGroup.ItemParts);
     }
 
     moveUpPosition(itemPart: ItemPartInsert) {
@@ -270,7 +340,7 @@ export class ItemAddPartComponent implements OnInit {
             value.Position = index + 1;                        
         });
 
-        this.refreshDataSource(this.item.ItemParts);
+        this.refreshDataSource(this.selectedPartGroup.ItemParts);
     }
 
     positionMove(array, element, delta) {
@@ -288,7 +358,7 @@ export class ItemAddPartComponent implements OnInit {
             if (foundIndex > -1) {
                 this.item.ItemParts.splice(foundIndex, 1);
             }            
-            this.refreshDataSource(this.item.ItemParts);
+            this.refreshDataSource(this.selectedPartGroup.ItemParts);
         }
     }
     clearFields(ItemPartInsert: ItemPartInsert) {

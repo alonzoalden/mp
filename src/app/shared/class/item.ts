@@ -641,3 +641,41 @@ export class ItemPartInsert {
         public isNew: boolean
     ) {}
 }
+export class ItemPartGroup {
+    constructor(
+        public ItemPartGroupID: number,
+        public ItemID: number,
+
+        public PrevPartGroupID: number,
+        public PartGroupName: string,
+
+        public ImageRaw: string,
+        public ImageFilePath: string,
+        public IsNewImage: boolean,
+        
+        public Position: number,
+
+        public pendingAdd: boolean,
+        public isNew: boolean,
+        public ItemParts: Array<ItemPartInsert>
+    ) {}
+}
+
+export class ItemPartGroupInsert {
+    constructor(
+        public ItemID: number,
+        public PartGroupID: number,
+        public PrevPartGroupID: number,
+        public PartGroupName: string,
+        
+        public ImageRaw: string,
+        public ImageFilePath: string,
+        public IsNewImage: boolean,
+        
+        public Position: number,
+
+        public pendingAdd: boolean,
+        public isNew: boolean,
+        public ItemParts: Array<ItemPartInsert>
+    ) {}
+}
