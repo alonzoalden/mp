@@ -2063,3 +2063,13 @@ th.mat-header-cell {
 .row-height-80 {
     height: 80px !important;
 }
+
+
+
+.cdk-overlay-pane {
+    overflow: scroll;
+}
+.flex-center {
+    display: flex;
+    justify-content: center;
+}
