@@ -99,6 +99,7 @@ export class MemberRegistrationComponent implements OnInit {
             && this.memberForm.valid) {
                 if (this.member.IsDropship && !this.merchantAgreement) {
                     this.memberService.sendNotification({ type: 'error', title: 'You must accept the Merchant Agreement', content: '' });
+                    return false;
                 }
                 return true;
         } else {
