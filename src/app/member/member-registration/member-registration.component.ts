@@ -15,8 +15,8 @@ export class MemberRegistrationComponent implements OnInit {
     memberForm: any;
 
     errorMessage: string;
-    //member: Member;
-    member: Member = new Member(null, '', '', '', '', true, '', '', true, true, true, true, '', 1, true, '', '', '', '', );
+    member: Member;
+    //member: Member = new Member(null, '', '', '', '', true, '', '', true, true, true, true, '', 1, true, '', '', '', '', );
     
     inviteGUID: string;
     pendingRegister: boolean;
