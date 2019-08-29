@@ -229,7 +229,7 @@ export class ItemService {
             const newItemRelatedProduct = new ItemRelatedProduct(itemRelatedProduct.ItemRelatedProductID, itemRelatedProduct.ItemID
                 , itemRelatedProduct.RelatedProductItemID, itemRelatedProduct.PrevRelatedProductItemID, itemRelatedProduct.RelatedItemName
                 , itemRelatedProduct.RelatedItemVendorSKU, itemRelatedProduct.RelatedTPIN, itemRelatedProduct.Position, itemRelatedProduct.UpdatedOn
-                , itemRelatedProduct.CreatedOn, itemRelatedProduct.pendingAdd);
+                , itemRelatedProduct.CreatedOn, itemRelatedProduct.ImagePath, itemRelatedProduct.pendingAdd);
                 
             newItem.ItemRelatedProducts.push(newItemRelatedProduct);
         });
@@ -238,7 +238,7 @@ export class ItemService {
             const newItemUpSell = new ItemUpSell(itemUpSell.ItemUpSellID, itemUpSell.ItemID
                 , itemUpSell.UpSellItemID, itemUpSell.PrevUpSellItemID, itemUpSell.UpSellItemName
                 , itemUpSell.UpSellItemVendorSKU, itemUpSell.UpSellTPIN, itemUpSell.Position, itemUpSell.UpdatedOn
-                , itemUpSell.CreatedOn, itemUpSell.pendingAdd);
+                , itemUpSell.CreatedOn, itemUpSell.ImagePath, itemUpSell.pendingAdd);
                 
             newItem.ItemUpSells.push(newItemUpSell);
         });
@@ -247,7 +247,7 @@ export class ItemService {
             const newItemCrossSell = new ItemCrossSell(itemCrossSell.ItemCrossSellID, itemCrossSell.ItemID
                 , itemCrossSell.CrossSellItemID, itemCrossSell.PrevCrossSellItemID, itemCrossSell.CrossSellItemName
                 , itemCrossSell.CrossSellItemVendorSKU, itemCrossSell.CrossSellTPIN, itemCrossSell.Position, itemCrossSell.UpdatedOn
-                , itemCrossSell.CreatedOn, itemCrossSell.pendingAdd);
+                , itemCrossSell.CreatedOn, itemCrossSell.ImagePath, itemCrossSell.pendingAdd);
                 
             newItem.ItemCrossSells.push(newItemCrossSell);
         });
@@ -325,19 +325,19 @@ export class ItemService {
 
         item.ItemRelatedProducts.forEach((itemRelatedProduct) => {
             const newItemRelatedProduct = new ItemRelatedProductInsert(itemRelatedProduct.ItemID, itemRelatedProduct.RelatedProductItemID, itemRelatedProduct.PrevRelatedProductItemID
-                , itemRelatedProduct.RelatedItemName, itemRelatedProduct.RelatedItemVendorSKU, itemRelatedProduct.RelatedTPIN, itemRelatedProduct.Position);                
+                , itemRelatedProduct.RelatedItemName, itemRelatedProduct.RelatedItemVendorSKU, itemRelatedProduct.RelatedTPIN, itemRelatedProduct.ImagePath, itemRelatedProduct.Position);                
             newItemInsert.ItemRelatedProducts.push(newItemRelatedProduct);
         });
 
         item.ItemUpSells.forEach((itemUpSell) => {
             const newItemUpSell = new ItemUpSellInsert(itemUpSell.ItemID, itemUpSell.UpSellItemID, itemUpSell.PrevUpSellItemID, itemUpSell.UpSellItemName
-                , itemUpSell.UpSellItemVendorSKU, itemUpSell.UpSellTPIN, itemUpSell.Position);                
+                , itemUpSell.UpSellItemVendorSKU, itemUpSell.UpSellTPIN, itemUpSell.ImagePath, itemUpSell.Position);                
             newItemInsert.ItemUpSells.push(newItemUpSell);
         });
 
         item.ItemCrossSells.forEach((itemCrossSell) => {
             const newItemCrossSell = new ItemCrossSellInsert(itemCrossSell.ItemID, itemCrossSell.CrossSellItemID, itemCrossSell.PrevCrossSellItemID, itemCrossSell.CrossSellItemName
-                , itemCrossSell.CrossSellItemVendorSKU, itemCrossSell.CrossSellTPIN, itemCrossSell.Position);
+                , itemCrossSell.CrossSellItemVendorSKU, itemCrossSell.CrossSellTPIN, itemCrossSell.ImagePath, itemCrossSell.Position);
                 
             newItemInsert.ItemCrossSells.push(newItemCrossSell);
         });

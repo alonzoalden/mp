@@ -1,7 +1,7 @@
 import { NgModule } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
-import { MatButtonModule, MatDatepickerModule, MatFormFieldModule, MatInputModule, MatPaginatorModule, MatTableModule, MatSortModule, MatCheckboxModule, MatTooltipModule, MatMenuModule } from '@angular/material';
+import { MatButtonModule, MatDatepickerModule, MatFormFieldModule, MatInputModule, MatPaginatorModule, MatTableModule, MatSortModule, MatDialogModule, MatCheckboxModule, MatTooltipModule, MatMenuModule } from '@angular/material';
 import { CdkTableModule } from '@angular/cdk/table';
 
 import { ToolModule } from '../shared/tool/tool.module';
@@ -11,6 +11,7 @@ import { MemberListComponent } from './member-list/member-list.component';
 import { MemberInviteComponent } from './member-invite/member-invite.component';
 import { MemberConfirmComponent } from './member-confirm/member-confirm.component';
 import { MemberRegistrationComponent } from './member-registration/member-registration.component';
+import { MerchantAgreementComponentDialog } from './member-registration/member-registration.component';
 
 import { memberRouting } from './member.routing';
 
@@ -23,7 +24,11 @@ import { TranslateModule } from '@ngx-translate/core';
         MemberListComponent,
         MemberConfirmComponent,
         MemberInviteComponent,
-        MemberRegistrationComponent
+        MemberRegistrationComponent,
+        MerchantAgreementComponentDialog
+    ],
+    entryComponents: [
+        MerchantAgreementComponentDialog
     ],
     imports: [
         TranslateModule,
@@ -42,6 +47,7 @@ import { TranslateModule } from '@ngx-translate/core';
         MatCheckboxModule,
         ToolModule,
         MatTooltipModule,
+        MatDialogModule,
         memberRouting
     ],
     providers: [

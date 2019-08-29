@@ -17,6 +17,9 @@ a:hover {
 .white-bg {
     background-color: #fff !important;
 }
+.underline {
+    text-decoration: underline;
+}
 .m-l-10imp {
     margin-left: 10px !important;
 }
@@ -1609,6 +1612,7 @@ table {
 }
 .img-detail {
     min-width: 90px;
+    overflow: hidden;
 }
 .flex-details > div > img {
     max-height: 70px;
@@ -2057,6 +2061,7 @@ th.mat-header-cell {
         text-align: left;
     }
 }
+<<<<<<< HEAD
 
 
 /* Material Tab */
@@ -2184,3 +2189,26 @@ th.mat-header-cell {
 .select-item-layout .form-group div {
     flex: 5 !important;
 } 
+=======
+.agreement {
+    letter-spacing: 0.2px;
+    font-size: 16px;
+    line-height: 24px;
+}
+.agreement .agreement-block {
+    margin-top: 20px;
+}
+.row-height-80 {
+    height: 80px !important;
+}
+
+
+
+.cdk-overlay-pane {
+    overflow: scroll;
+}
+.flex-center {
+    display: flex;
+    justify-content: center;
+}
+>>>>>>> bbac685cb37de030928b971705545c18c7698ac0
