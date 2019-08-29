@@ -15,8 +15,8 @@ export class MemberRegistrationComponent implements OnInit {
     memberForm: any;
 
     errorMessage: string;
-    member: Member;
-    //member: Member = new Member(null, '', '', '', '', true, '', '', true, true, true, true, '', 1, true, '', '', '', '', );
+    //member: Member;
+    member: Member = new Member(null, '', '', '', '', true, '', '', true, true, true, true, '', 1, true, '', '', '', '', );
     
     inviteGUID: string;
     pendingRegister: boolean;
@@ -50,17 +50,19 @@ export class MemberRegistrationComponent implements OnInit {
             });
         this.memberService.getMemberByInviteGUID(this.inviteGUID).subscribe(
             (member: Member) => {
+                this.member.Password = '';
+                this.member.ConfirmPassword = '';
                 this.member = member;
                 
 
                 if (this.member.IsConfirmed) {
-                    this.router.navigate(['/home']);
+                    //this.router.navigate(['/home']);
                 }
             },
             error => {
                 this.errorMessage = <any>error;
                 this.memberService.sendNotification({ type: 'error', title: 'Error', content: this.errorMessage });
-                this.router.navigate(['/home']);
+                //this.router.navigate(['/home']);
             }
         );
     }
@@ -95,11 +97,11 @@ export class MemberRegistrationComponent implements OnInit {
             && this.member.Password
             && this.member.ConfirmPassword
             && this.memberForm.valid) {
-            return true;
+                if (this.member.IsDropship && !this.merchantAgreement) {
+                    this.memberService.sendNotification({ type: 'error', title: 'You must accept the Merchant Agreement', content: '' });
+                }
+                return true;
         } else {
-            if (this.member.IsDropship && !this.merchantAgreement) {
-                this.memberService.sendNotification({ type: 'error', title: 'You must accept the Merchant Agreement', content: '' });
-            }
             if (!this.member.FirstName || !this.member.LastName || !this.member.Password) {
                 //alert('Please enter all required fields');
                 this.memberService.sendNotification({ type: 'error', title: 'Invalid Data', content: 'Please enter all required fields' });
