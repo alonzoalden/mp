@@ -2061,7 +2061,6 @@ th.mat-header-cell {
         text-align: left;
     }
 }
-<<<<<<< HEAD
 
 
 /* Material Tab */
@@ -2189,7 +2188,6 @@ th.mat-header-cell {
 .select-item-layout .form-group div {
     flex: 5 !important;
 } 
-=======
 .agreement {
     letter-spacing: 0.2px;
     font-size: 16px;
@@ -2201,14 +2199,17 @@ th.mat-header-cell {
 .row-height-80 {
     height: 80px !important;
 }
-
-
-
-.cdk-overlay-pane {
-    overflow: scroll;
-}
 .flex-center {
     display: flex;
     justify-content: center;
 }
->>>>>>> bbac685cb37de030928b971705545c18c7698ac0
+.dialog-content {
+    background-color: #f3f3f4;
+    padding: 40px !important;
+    overflow: scroll;
+    min-height: 410px;
+}
+.diaglog-content .ibox-content {
+    padding: 40px;
+    height: 100%;
+}
