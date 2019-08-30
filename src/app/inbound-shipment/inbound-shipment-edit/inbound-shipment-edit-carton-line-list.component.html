@@ -1,174 +1,208 @@
 <ng-container *ngIf='carton && cartonlines && cartonlines.length > 0'>
-    <div class="ibox-title"><h5>{{ 'Carton Lines' | translate }}</h5></div>
-    <div class="ibox-content">
-        <div class="form-group row">
-            <div class="col-md-12">
-                <div *ngIf='carton && cartonlines && cartonlines.length > 0'>
-                    <table mat-table #table [dataSource]="dataSource" matSort>
-                        <!-- Add Button -->
-                        <ng-container matColumnDef="Add">
-                            <th mat-header-cell *matHeaderCellDef width="45px"></th>
-                            <td mat-cell *matCellDef="let cartonline; let i = index">
-                                <div *ngIf="purchaseorder.Status === 'Pending' && i === cartonlines.length-1">                               
-                                    <a (click)='onAddCartonLine(cartonline, i); canAdd = false; formDirty = false;'><span [matTooltip]="canAdd ? ( 'Add' | translate ) : ( 'Required fields must be complete' | translate )" attr.aria-label="{{ 'Add' | translate}}" 
-                                        class="glyphicon glyphicon-plus green fs-20" [ngClass]="(i === cartonlines.length-1 && cartonlines[i].PurchaseOrderLineID && cartonlines[i].Quantity > 0)  ? 'green' : 'gray'"></span></a>
-                                </div>
-                            </td>
-                        </ng-container>
+    <div class="tab-content border animated fadeInDown m-t-sm">
+        <div class="tab-pane active">
+            <div class="panel-body p-w-none">
+                <div class="ibox-title"><h5>{{ 'Carton Lines' | translate }} </h5></div>
+                <div class="ibox-content wiz-content" style="height: 300px;">
+                    <div class="form-group">
+                        <div class="m-md m-t-none ">{{ 'Carton Box #' | translate }}{{ carton.Position}}</div>
+                    </div>
+                    <div class="form-group row">
+                        <div class="col-md-12">
+                            <div *ngIf='carton && cartonlines && cartonlines.length > 0'>
+                                <table class="animated fadeIn" mat-table #table [dataSource]="dataSource" matSort>
+                                    <!-- Add Button -->
+                                    <ng-container matColumnDef="Add">
+                                        <th mat-header-cell *matHeaderCellDef width="45px"></th>
+                                        <td mat-cell *matCellDef="let cartonline; let i = index">
+                                            <div *ngIf="purchaseorder.Status === 'Pending' && i === cartonlines.length-1">                               
+                                                <a (click)='onAddCartonLine(cartonline, i); canAdd = false; formDirty = false;'><span [matTooltip]="canAdd ? ( 'Add' | translate ) : ( 'Required fields must be complete' | translate )" attr.aria-label="{{ 'Add' | translate}}" 
+                                                    class="glyphicon glyphicon-plus green fs-20" [ngClass]="(i === cartonlines.length-1 && cartonlines[i].PurchaseOrderLineID && cartonlines[i].Quantity > 0)  ? 'green' : 'gray'"></span></a>
+                                            </div>
+                                        </td>
+                                    </ng-container>
+                                    <!-- Product Details Column -->
+                                    <ng-container matColumnDef="ProductDetails">
+                                        <th mat-header-cell *matHeaderCellDef width="200px">{{ 'Product Details' | translate }}</th>
+                                        <td mat-cell *matCellDef="let cartonline; let i = index" class="wrap">
+                                            <!-- <ng-container  *ngIf="currentIndex !== i">
+                                                <div class="col-xs-3 p-l-none" *ngIf='cartonline.ItemImage'>
+                                                    <img style="max-height:70px" [src]='imageURL + cartonline.ItemImage' [title]='cartonline.ItemName'>
+                                                </div>
+                                                <div [ngClass]="cartonline.ItemImage ? col-xs-8 : col-xs-12">
+                                                    <div class="row">
+                                                        <div class="col-xs-12"><span class="sm-strong"><a [href]="linkURL + '/' + cartonline.URLKey + '.html'" target="_blank">{{cartonline.ItemName}}</a></span></div>
+                                                    </div>
+                                                    <div class="row" *ngIf="cartonline.ItemVendorSKU">
+                                                        <div class="col-xs-12"> <span class="sm-text m-r-xs">{{ 'SKU' | translate }}: </span> {{cartonline.ItemVendorSKU}}</div> 
+                                                    </div>
+                                                    <div class="row" *ngIf="cartonline.TPIN">
+                                                        <div class="col-xs-12"><span class="sm-text m-r-xs">{{ 'TPIN' | translate }}: </span> {{cartonline.TPIN}}</div>                                         
+                                                    </div>
+                                                </div>
+                                            </ng-container> -->
+                                            <!-- <ng-container *ngIf="currentIndex === i">
+                                                <div class="ibox-tools text-left">
+                                                    <a class="sm-strong animated fadeIn" (click)="openDialogSelectItem(cartonline, i)">{{ 'Select Item' | translate }}</a>
+                                                </div>
+                                            </ng-container>
+                                            <div [ngClass]="cartonline.ItemImage ? col-xs-8 : col-xs-12">
+                                                <div class="row">
+                                                    <div (click)="openDialogSelectItem(cartonline, i)" class="col-xs-12"><span class="sm-strong"><a [href]="linkURL + '/' + cartonline.URLKey + '.html'" target="_blank">{{cartonline.ItemName}}</a></span></div>
+                                                </div>
+                                                <div class="row" *ngIf="cartonline.ItemVendorSKU">
+                                                    <div class="col-xs-12"> <span class="sm-text m-r-xs">{{ 'SKU' | translate }}: </span> {{cartonline.ItemVendorSKU}}</div> 
+                                                </div>
+                                                <div class="row" *ngIf="cartonline.TPIN">
+                                                    <div class="col-xs-12"><span class="sm-text m-r-xs">{{ 'TPIN' | translate }}: </span> {{cartonline.TPIN}}</div>                                         
+                                                </div>
+                                                <div class="m-l-md ibox-tools">
+                                                    <a><i (click)="openDialogSelectItem(cartonline, i)" matTooltip="Edit item selection" class="fa fa-edit fs-18 m-l-sm" ></i></a>
+                                                </div> -->
+                                            <div *ngIf="currentIndex !== i">
+                                                <div class="col-xs-3 p-l-none" *ngIf='cartonline.ItemImage'>
+                                                    <img style="max-height:70px" [src]='imageURL + cartonline.ItemImage' [title]='cartonline.ItemName'>
+                                                </div>
+                                                <div [ngClass]="cartonline.ItemImage ? col-xs-8 : col-xs-12">
+                                                    <div class="row">
+                                                        <div class="col-xs-12"><span class="sm-strong"><a [href]="linkURL + '/' + cartonline.URLKey + '.html'" target="_blank">{{cartonline.ItemName}}</a></span></div>
+                                                    </div>
+                                                    <div class="row" *ngIf="cartonline.ItemVendorSKU">
+                                                        <div class="col-xs-12"> <span class="sm-text m-r-xs">{{ 'SKU' | translate }}: </span> {{cartonline.ItemVendorSKU}}</div> 
+                                                    </div>
+                                                    <div class="row" *ngIf="cartonline.TPIN">
+                                                        <div class="col-xs-12"><span class="sm-text m-r-xs">{{ 'TPIN' | translate }}: </span> {{cartonline.TPIN}}</div>                                         
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div *ngIf="currentIndex === i || i === cartonlines.length-1">
+                                                <ng-select  [items]="purchaseorderlineList"
+                                                            [virtualScroll]="true"
+                                                            bindLabel="Label"
+                                                            bindValue="Value"
+                                                            placeholder="{{ 'Search Item' | translate }}"
+                                                            [(ngModel)]="cartonline.PurchaseOrderLineID"
+                                                            (change)="onItemChange(cartonline, i);"
+                                                            (focus)="formDirty = true;"
+                                                            #linePurchaseOrderIDRef
+                                                            #purchaseorderlineIDVar="ngModel"
+                                                            id="purchaseorderlineidID"
+                                                            name="purchaseorderlineID"
+                                                            required
+                                                            [disabled]="purchaseorder.Status != 'Pending'"
+                                                            [loading]="!purchaseorderlineList"
+                                                            loadingText="Loading..."
+                                                            class="inbound-line"
+                                                            >
+                                                    <ng-template ng-option-tmp let-item="item">
+                                                        <div matTooltip="{{item.Label}}" matTooltipPosition="right" matTooltipShowDelay="400">{{item.Label}}</div>
+                                                    </ng-template>
+                                                </ng-select>
+                                                
+                                            </div>
+                                        </td>
+                                    </ng-container>
 
-                        <!-- Product Details Column -->
-                        <ng-container matColumnDef="ProductDetails">
-                            <th mat-header-cell *matHeaderCellDef width="200px">{{ 'Product Details' | translate }}</th>
-                            <td mat-cell *matCellDef="let cartonline; let i = index" class="wrap">
-                                <ng-container  *ngIf="currentIndex !== i">
-                                    <div class="col-xs-3 p-l-none" *ngIf='cartonline.ItemImage'>
-                                        <img style="max-height:70px" [src]='imageURL + cartonline.ItemImage' [title]='cartonline.ItemName'>
-                                    </div>
-                                    <div [ngClass]="cartonline.ItemImage ? col-xs-8 : col-xs-12">
-                                        <div class="row">
-                                            <div class="col-xs-12"><span class="sm-strong"><a [href]="linkURL + '/' + cartonline.URLKey + '.html'" target="_blank">{{cartonline.ItemName}}</a></span></div>
-                                        </div>
-                                        <div class="row" *ngIf="cartonline.ItemVendorSKU">
-                                            <div class="col-xs-12"> <span class="sm-text m-r-xs">{{ 'SKU' | translate }}: </span> {{cartonline.ItemVendorSKU}}</div> 
-                                        </div>
-                                        <div class="row" *ngIf="cartonline.TPIN">
-                                            <div class="col-xs-12"><span class="sm-text m-r-xs">{{ 'TPIN' | translate }}: </span> {{cartonline.TPIN}}</div>                                         
-                                        </div>
-                                    </div>
-                                </ng-container>
-                                <div *ngIf="currentIndex === i || i === cartonlines.length-1">
-                                    <ng-select  [items]="purchaseorderlineList"
-                                                [virtualScroll]="true"
-                                                bindLabel="Label"
-                                                bindValue="Value"
-                                                placeholder="{{ 'Search Item' | translate }}"
-                                                [(ngModel)]="cartonline.PurchaseOrderLineID"
-                                                (change)="onItemChange(cartonline, i);"
-                                                (focus)="formDirty = true;"
-                                                #linePurchaseOrderIDRef
-                                                #purchaseorderlineIDVar="ngModel"
-                                                id="purchaseorderlineidID"
-                                                name="purchaseorderlineID"
-                                                required
-                                                [disabled]="purchaseorder.Status != 'Pending'"
-                                                dropdownPosition="top"
-                                                [loading]="!purchaseorderlineList"
-                                                loadingText="Loading..."
-                                                class="inbound-line"
-                                                >
-                                        <ng-template ng-option-tmp let-item="item">
-                                            <div matTooltip="{{item.Label}}" matTooltipPosition="right" matTooltipShowDelay="400">{{item.Label}}</div>
-                                        </ng-template>
-                                    </ng-select>
-                                    
-                                    <!-- <select class="form-control" id="purchaseorderlineidID" name="purchaseorderlineID"  required 
-                                        [disabled]="purchaseorder.Status != 'Pending'"
-                                        (focus)="formDirty = true;" #linePurchaseOrderIDRef
-                                        [(ngModel)]="cartonline.PurchaseOrderLineID" (change)="onItemChange(cartonline, i);" #purchaseorderlineIDVar="ngModel">
-                                        <option [ngValue]="null" style="font-style: italic" disabled selected>--Select an item--</option>
-                                        <option [value]="purchaseorderline.Value" *ngFor="let purchaseorderline of purchaseorderlineList">{{purchaseorderline.Label}}</option>
-                                    </select> -->
-                                </div>
-                            </td>
-                        </ng-container>
-
-                        <!-- Item Name Column -->
-                        <ng-container matColumnDef="ItemName">
-                            <th mat-header-cell *matHeaderCellDef width="180px">{{ 'Item Name' | translate }}</th>
-                            <td mat-cell *matCellDef="let cartonline; let i = index" >
-                                <div *ngIf="currentIndex !== i && i !== cartonlines.length-1">
-                                    {{cartonline.ItemName}}
-                                </div>
-                                <div *ngIf="currentIndex === i || i === cartonlines.length-1">
-                                    <select class="form-control" id="purchaseorderlineidID" name="purchaseorderlineID"  required 
-                                        [disabled]="purchaseorder.Status != 'Pending'"
-                                        (focus)="formDirty = true;" #linePurchaseOrderIDRef
-                                        [(ngModel)]="cartonline.PurchaseOrderLineID" (change)="onItemChange(cartonline, i); canAdd = true;" #purchaseorderlineIDVar="ngModel">
-                                        <option [ngValue]="null" style="font-style: italic" disabled selected>--{{ 'Select an item' | translate }}--</option>
-                                        <option [value]="purchaseorderline.Value" *ngFor="let purchaseorderline of purchaseorderlineList">{{purchaseorderline.Label}}</option>
-                                    </select>
-                                </div>
-                            </td>
-                        </ng-container>
-                        <!-- SKU Column -->
-                        <ng-container matColumnDef="ItemVendorSKU">
-                            <th mat-header-cell *matHeaderCellDef width="100px">{{ 'SKU' | translate }}</th>
-                            <td mat-cell *matCellDef="let cartonline; let i = index" >
-                                <div *ngIf="currentIndex !== i && i !== cartonlines.length-1">
-                                    {{cartonline.ItemVendorSKU}}
-                                </div>
-                            </td>
-                        </ng-container> 
-                        <!-- TPIN Column -->
-                        <ng-container matColumnDef="TPIN">
-                            <th mat-header-cell *matHeaderCellDef width="100px">{{ 'TPIN' | translate }}</th>
-                            <td mat-cell *matCellDef="let cartonline; let i = index" >
-                                <div *ngIf="currentIndex !== i && i !== cartonlines.length-1">
-                                    {{cartonline.TPIN}}
-                                </div>
-                            </td>
-                        </ng-container>
-                        <!-- Remaining Quantity Column -->
-                        <ng-container matColumnDef="RemainingQuantity">
-                            <th mat-header-cell *matHeaderCellDef width="100px">{{ 'Remaining Quantity' | translate }}</th>
-                            <td mat-cell *matCellDef="let cartonline; let i = index" >
-                                <div *ngIf="cartonline.PurchaseOrderLineID">
-                                    {{cartonline.RemainingQuantity}}
-                                </div>
-                            </td>
-                        </ng-container>
-                        <!-- Carton Quantity Column -->
-                        <ng-container matColumnDef="CartonQuantity">
-                            <th mat-header-cell *matHeaderCellDef width="85px">{{ 'Carton Quantity' | translate }}</th>
-                            <td mat-cell *matCellDef="let cartonline; let i = index" >
-                                <div *ngIf="currentIndex !== i && i !== cartonlines.length-1">
-                                    {{cartonline.Quantity}}
-                                </div>
-                                <div *ngIf="currentIndex === i || i === cartonlines.length-1">
-                                    <input (focus)="formDirty = true;" id="cartonlineQuantity" type="number" placeholder="{{ 'Quantity' | translate }}" class="form-control"
-                                        onkeydown="return event.keyCode == 69 || event.keyCode == 189 || event.keyCode == 190 ? false : true" min="0"
-                                        (input)="quantityChange(cartonline)"
-                                        [disabled]="purchaseorder.Status != 'Pending'"
-                                        [(ngModel)]=cartonline.Quantity [ngModelOptions]="{standalone: true}" />
-                                </div>
-                            </td>
-                        </ng-container> 
-                        <!-- Quantity Column -->
-                        <ng-container matColumnDef="Quantity">
-                            <th mat-header-cell *matHeaderCellDef width="85px">{{ 'Quantity' | translate }}</th>
-                            <td mat-cell *matCellDef="let cartonline; let i = index" >
-                                <div *ngIf="currentIndex !== i && i !== cartonlines.length-1">
-                                    {{cartonline.Quantity}}
-                                </div>
-                                <div *ngIf="currentIndex === i || i === cartonlines.length-1">
-                                    <input (focus)="formDirty = true;" class="form-control" id="cartonlineQuantity" type="number" placeholder="{{ 'Quantity' | translate }}" 
-                                        onkeydown="return event.keyCode == 69 || event.keyCode == 189 || event.keyCode == 190 ? false : true" min="0"
-                                        (input)="quantityChange(cartonline)"
-                                        [disabled]="purchaseorder.Status != 'Pending'"
-                                        [(ngModel)]=cartonline.Quantity [ngModelOptions]="{standalone: true}" />
-                                </div>
-                            </td>
-                        </ng-container>
-                        <!-- Remove Column -->
-                        <ng-container matColumnDef="Delete">
-                            <th mat-header-cell *matHeaderCellDef width="100px">{{ 'Remove' | translate }}</th>
-                            <td mat-cell *matCellDef="let cartonline; let i = index">
-                                <div *ngIf="purchaseorder.Status === 'Pending' && i !== cartonlines.length-1">    
-                                    <a (click)='onRemoveCartonLine(cartonline, i)'><span matTooltip="{{ 'Remove' | translate }}" attr.aria-label="{{ 'Remove' | translate}}" class="glyphicon glyphicon-trash"></span></a>
-                                </div>
-                                <div [hidden]="!formDirty && i === cartonlines.length-1"> 
-                                    <a (click)="clearFields(cartonline);"><i *ngIf="i === cartonlines.length-1" matTooltip="{{ 'Clear' | translate }}" attr.aria-label="{{ 'Clear' | translate}}" class="fa fa-eraser"></i></a>
-                                </div>
-                            </td>
-                        </ng-container> 
-                        <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-                        <!-- <tr mat-row *matRowDef="let cartonline; let i = index; columns: displayedColumns"
-                            [ngStyle]="{'background-color': i === cartonlines.length-1 ? '#99CCFF' : currentIndex === i ? '#FF9933' : '#FFFFFF' }"
-                            (click)="onEditCartonLine(i)"></tr> -->
-                        <tr mat-row *matRowDef="let cartonline; let i = index; columns: displayedColumns" 
-                            [ngStyle]="{'background-color': purchaseOrderService.rowColorConditions(i, cartonlines, currentIndex, formDirty)}"
-                            (click)='onEditCartonLine(i)' ></tr>
-                    </table>
+                                    <!-- Item Name Column -->
+                                    <ng-container matColumnDef="ItemName">
+                                        <th mat-header-cell *matHeaderCellDef width="180px">{{ 'Item Name' | translate }}</th>
+                                        <td mat-cell *matCellDef="let cartonline; let i = index" >
+                                            <div *ngIf="currentIndex !== i && i !== cartonlines.length-1">
+                                                {{cartonline.ItemName}}
+                                            </div>
+                                            <div *ngIf="currentIndex === i || i === cartonlines.length-1">
+                                                <select class="form-control" id="purchaseorderlineidID" name="purchaseorderlineID"  required 
+                                                    [disabled]="purchaseorder.Status != 'Pending'"
+                                                    (focus)="formDirty = true;" #linePurchaseOrderIDRef
+                                                    [(ngModel)]="cartonline.PurchaseOrderLineID" (change)="onItemChange(cartonline, i); canAdd = true;" #purchaseorderlineIDVar="ngModel">
+                                                    <option [ngValue]="null" style="font-style: italic" disabled selected>--{{ 'Select an item' | translate }}--</option>
+                                                    <option [value]="purchaseorderline.Value" *ngFor="let purchaseorderline of purchaseorderlineList">{{purchaseorderline.Label}}</option>
+                                                </select>
+                                            </div>
+                                        </td>
+                                    </ng-container>
+                                    <!-- SKU Column -->
+                                    <ng-container matColumnDef="ItemVendorSKU">
+                                        <th mat-header-cell *matHeaderCellDef width="100px">{{ 'SKU' | translate }}</th>
+                                        <td mat-cell *matCellDef="let cartonline; let i = index" >
+                                            <div *ngIf="currentIndex !== i && i !== cartonlines.length-1">
+                                                {{cartonline.ItemVendorSKU}}
+                                            </div>
+                                        </td>
+                                    </ng-container> 
+                                    <!-- TPIN Column -->
+                                    <ng-container matColumnDef="TPIN">
+                                        <th mat-header-cell *matHeaderCellDef width="100px">{{ 'TPIN' | translate }}</th>
+                                        <td mat-cell *matCellDef="let cartonline; let i = index" >
+                                            <div *ngIf="currentIndex !== i && i !== cartonlines.length-1">
+                                                {{cartonline.TPIN}}
+                                            </div>
+                                        </td>
+                                    </ng-container>
+                                    <!-- Remaining Quantity Column -->
+                                    <ng-container matColumnDef="RemainingQuantity">
+                                        <th mat-header-cell *matHeaderCellDef width="100px">{{ 'Remaining Quantity' | translate }}</th>
+                                        <td mat-cell *matCellDef="let cartonline; let i = index" >
+                                            <div *ngIf="cartonline.PurchaseOrderLineID">
+                                                {{cartonline.RemainingQuantity}}
+                                            </div>
+                                        </td>
+                                    </ng-container>
+                                    <!-- Carton Quantity Column -->
+                                    <ng-container matColumnDef="CartonQuantity">
+                                        <th mat-header-cell *matHeaderCellDef width="85px">{{ 'Carton Quantity' | translate }}</th>
+                                        <td mat-cell *matCellDef="let cartonline; let i = index" >
+                                            <div *ngIf="currentIndex !== i && i !== cartonlines.length-1">
+                                                {{cartonline.Quantity}}
+                                            </div>
+                                            <div *ngIf="currentIndex === i || i === cartonlines.length-1">
+                                                <input (focus)="formDirty = true;" id="cartonlineQuantity" type="number" placeholder="{{ 'Quantity' | translate }}" class="form-control"
+                                                    onkeydown="return event.keyCode == 69 || event.keyCode == 189 || event.keyCode == 190 ? false : true" min="0"
+                                                    (input)="quantityChange(cartonline)"
+                                                    [disabled]="purchaseorder.Status != 'Pending'"
+                                                    [(ngModel)]=cartonline.Quantity [ngModelOptions]="{standalone: true}" />
+                                            </div>
+                                        </td>
+                                    </ng-container> 
+                                    <!-- Quantity Column -->
+                                    <ng-container matColumnDef="Quantity">
+                                        <th mat-header-cell *matHeaderCellDef width="85px">{{ 'Quantity' | translate }}</th>
+                                        <td mat-cell *matCellDef="let cartonline; let i = index" >
+                                            <div *ngIf="currentIndex !== i && i !== cartonlines.length-1">
+                                                {{cartonline.Quantity}}
+                                            </div>
+                                            <div *ngIf="currentIndex === i || i === cartonlines.length-1">
+                                                <input (focus)="formDirty = true;" class="form-control" id="cartonlineQuantity" type="number" placeholder="{{ 'Quantity' | translate }}" 
+                                                    onkeydown="return event.keyCode == 69 || event.keyCode == 189 || event.keyCode == 190 ? false : true" min="0"
+                                                    (input)="quantityChange(cartonline)"
+                                                    [disabled]="purchaseorder.Status != 'Pending'"
+                                                    [(ngModel)]=cartonline.Quantity [ngModelOptions]="{standalone: true}" />
+                                            </div>
+                                        </td>
+                                    </ng-container>
+                                    <!-- Remove Column -->
+                                    <ng-container matColumnDef="Delete">
+                                        <th mat-header-cell *matHeaderCellDef width="100px">{{ 'Remove' | translate }}</th>
+                                        <td mat-cell *matCellDef="let cartonline; let i = index">
+                                            <div *ngIf="purchaseorder.Status === 'Pending' && i !== cartonlines.length-1">    
+                                                <a (click)='onRemoveCartonLine(cartonline, i)'><span matTooltip="{{ 'Remove' | translate }}" attr.aria-label="{{ 'Remove' | translate}}" class="glyphicon glyphicon-trash"></span></a>
+                                            </div>
+                                            <div [hidden]="!formDirty && i === cartonlines.length-1"> 
+                                                <a (click)="clearFields(cartonline);"><i *ngIf="i === cartonlines.length-1" matTooltip="{{ 'Clear' | translate }}" attr.aria-label="{{ 'Clear' | translate}}" class="fa fa-eraser"></i></a>
+                                            </div>
+                                        </td>
+                                    </ng-container> 
+                                    <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+                                    <!-- <tr mat-row *matRowDef="let cartonline; let i = index; columns: displayedColumns"
+                                        [ngStyle]="{'background-color': i === cartonlines.length-1 ? '#99CCFF' : currentIndex === i ? '#FF9933' : '#FFFFFF' }"
+                                        (click)="onEditCartonLine(i)"></tr> -->
+                                    <tr mat-row *matRowDef="let cartonline; let i = index; columns: displayedColumns" 
+                                        [ngStyle]="{'background-color': purchaseOrderService.rowColorConditions(i, cartonlines, currentIndex, formDirty)}"
+                                        (click)='onEditCartonLine(i)' style="height: 70px;" ></tr>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
