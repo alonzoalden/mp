@@ -56,13 +56,13 @@ export class MemberRegistrationComponent implements OnInit {
                 
 
                 if (this.member.IsConfirmed) {
-                    //this.router.navigate(['/home']);
+                    this.router.navigate(['/home']);
                 }
             },
             error => {
                 this.errorMessage = <any>error;
                 this.memberService.sendNotification({ type: 'error', title: 'Error', content: this.errorMessage });
-                //this.router.navigate(['/home']);
+                this.router.navigate(['/home']);
             }
         );
     }
