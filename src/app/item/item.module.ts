@@ -32,6 +32,10 @@ import { ItemAddVendorAttachmentComponent } from './item-add/item-add-vendor-att
 import { ItemAddVideoComponent } from './item-add/item-add-video.component';
 import { ItemAddImageComponent, ItemAddImageComponentUploadDialog } from './item-add/item-add-image.component';
 import { ItemAddPartComponent } from './item-add/item-add-part.component';
+import { ItemAddPartSelectionPartComponent } from './item-add/item-add-part-selection-part.component';
+import { ItemAddPartSelectionComponent } from './item-add/item-add-part-selection.component';
+
+
 
 import { ItemEditComponent } from './item-edit/item-edit.component';
 import { ItemEditDescriptionComponent } from './item-edit/item-edit-description.component';
@@ -78,6 +82,7 @@ import { ItemPartAddDescriptionComponent } from './item-part-add/item-part-add-d
 import { ItemPartAddDimensionComponent } from './item-part-add/item-part-add-dimension.component';
 import { ItemPartAddPriceComponent } from './item-part-add/item-part-add-price.component';
 import { ItemPartAddImageComponent } from './item-part-add/item-part-add-image.component';
+
 import { ItemPartEditComponent } from './item-part-edit/item-part-edit.component';
 import { ItemPartEditDescriptionComponent } from './item-part-edit/item-part-edit-description.component';
 import { ItemPartEditInventoryComponent } from './item-part-edit/item-part-edit-inventory.component';
@@ -105,6 +110,8 @@ import { ItemPartEditGuard } from './item-part-edit/item-part-edit.guard';
         ItemAddVideoComponent,
         ItemAddImageComponent,
         ItemAddPartComponent,
+        ItemAddPartSelectionPartComponent,
+        ItemAddPartSelectionComponent,
         ItemEditComponent,
         ItemEditDescriptionComponent,
         ItemEditDimensionComponent,

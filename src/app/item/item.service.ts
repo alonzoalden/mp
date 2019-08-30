@@ -6,7 +6,7 @@ import { catchError, tap } from 'rxjs/operators';
 
 import { Item, ItemInsert, ItemOption, ItemOptionInsert, ItemSelection, ItemSelectionInsert, ItemTierPrice, ItemTierPriceInsert
     , ItemCategoryAssignment, ItemRelatedProduct, ItemRelatedProductInsert, ItemUpSell, ItemUpSellInsert, ItemCrossSell, ItemCrossSellInsert
-    , ItemAttachment, ItemAttachmentInsert, ItemVideo, ItemVideoInsert, ItemImage, ItemImageInsert, ItemPrintLabel, ItemBatch, ItemPart, ItemPartInsert } from '../shared/class/item';
+    , ItemAttachment, ItemAttachmentInsert, ItemVideo, ItemVideoInsert, ItemImage, ItemImageInsert, ItemPrintLabel, ItemBatch, ItemPart, ItemPartInsert, ItemPartSelectionInsert, ItemPartSelection } from '../shared/class/item';
 //import { ItemImage } from '../shared/class/item-image';
 import { URLVideo, URLVideoItems, URLVideoItemsSnippet, URLVideoItemsSnippetThumbnails, URLVideoItemsSnippetThumbnailsStandard } from '../shared/class/item-video';
 
@@ -39,6 +39,8 @@ export class ItemService {
     currentItem: Item;
     currentItemInsert: ItemInsert;
     currentItemEdit: Item;
+
+    currentItemPartSelection: Subject<ItemPartSelectionInsert>;
 
     duplicateItemInsert: ItemInsert;
 
@@ -352,12 +354,11 @@ export class ItemService {
             newItemInsert.ItemImages.push(newItemImage);
         });
 
-        item.ItemParts.forEach((itemPart) => {
-            const newItemPart = new ItemPartInsert(itemPart.ItemID , itemPart.PartLabel, itemPart.PartItemID, itemPart.PrevPartItemID, itemPart.PartItemName
-                , itemPart.PartItemVendorSKU, itemPart.PartTPIN, itemPart.PartFOBPrice, itemPart.PartPrice
-                ,  itemPart.ImageRaw, itemPart.ImageFilePath, itemPart.IsNewImage, itemPart.Position, itemPart.isNew);
+        item.ItemPartSelections.forEach((itemPart) => {
+            const newItemPart = new ItemPartSelectionInsert(itemPart.ItemID , itemPart.PartGroupID, itemPart.PrevPartGroupID, itemPart.PartGroupName, itemPart.ImageRaw
+                ,  itemPart.ImageFilePath, itemPart.IsNewImage, itemPart.Position, itemPart.pendingAdd, itemPart.isNew, []);
 
-            newItemInsert.ItemParts.push(newItemPart);
+            newItemInsert.ItemPartSelections.push(newItemPart);
         });
 
         return newItemInsert;

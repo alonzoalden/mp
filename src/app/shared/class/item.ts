@@ -167,7 +167,7 @@ export class ItemInsert {
         public ItemAttachments: Array<ItemAttachmentInsert>,
         public ItemVideos: Array<ItemVideoInsert>,
         public ItemImages: Array<ItemImageInsert>,
-        public ItemParts: Array<ItemPartInsert>
+        public ItemPartSelections: Array<ItemPartSelectionInsert>
     ) {}
 }
 
@@ -641,7 +641,7 @@ export class ItemPartInsert {
         public isNew: boolean
     ) {}
 }
-export class ItemPartGroup {
+export class ItemPartSelection {
     constructor(
         public ItemPartGroupID: number,
         public ItemID: number,
@@ -661,7 +661,7 @@ export class ItemPartGroup {
     ) {}
 }
 
-export class ItemPartGroupInsert {
+export class ItemPartSelectionInsert {
     constructor(
         public ItemID: number,
         public PartGroupID: number,
