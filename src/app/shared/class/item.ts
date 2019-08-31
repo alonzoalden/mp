@@ -592,13 +592,53 @@ export class ItemBatch {
 }
 
 //Item Part
+
+export class ItemPartSelection {
+    constructor(
+        public ItemPartSelectionID: number,
+        public ItemID: number,
+
+        public PrevPartSelectionID: number,
+        public PartGroupName: string,
+
+        public ImageRaw: string,
+        public ImageFilePath: string,
+        public IsNewImage: boolean,
+        
+        public Position: number,
+
+        public pendingAdd: boolean,
+        public isNew: boolean,
+        public ItemParts: Array<ItemPartInsert>
+    ) {}
+}
+
+export class ItemPartSelectionInsert {
+    constructor(
+        public ItemID: number,
+        public ItemPartSelectionID: number,
+        public PrevPartSelectionID: number,
+        public PartSelectionName: string,
+        
+        public ImageRaw: string,
+        public ImageFilePath: string,
+        public IsNewImage: boolean,
+        
+        public Position: number,
+
+        public pendingAdd: boolean,
+        public isNew: boolean,
+        public ItemParts: Array<ItemPartInsert>
+    ) {}
+}
 export class ItemPart {
     constructor(
         public ItemPartID: number,
-        public ItemID: number,
+        public ItemPartSelectionID: number,
         public PartLabel: string,
         public PartItemID: number,
 
+        
         public PrevPartItemID: number,
         public PartItemName: string,
         public PartItemVendorSKU: string,
@@ -621,7 +661,7 @@ export class ItemPart {
 
 export class ItemPartInsert {
     constructor(
-        public ItemID: number,
+        public ItemPartSelectionID: number,
         public PartLabel: string,
         public PartItemID: number,
         
@@ -639,43 +679,5 @@ export class ItemPartInsert {
         public Position: number,
 
         public isNew: boolean
-    ) {}
-}
-export class ItemPartSelection {
-    constructor(
-        public ItemPartGroupID: number,
-        public ItemID: number,
-
-        public PrevPartGroupID: number,
-        public PartGroupName: string,
-
-        public ImageRaw: string,
-        public ImageFilePath: string,
-        public IsNewImage: boolean,
-        
-        public Position: number,
-
-        public pendingAdd: boolean,
-        public isNew: boolean,
-        public ItemParts: Array<ItemPartInsert>
-    ) {}
-}
-
-export class ItemPartSelectionInsert {
-    constructor(
-        public ItemID: number,
-        public PartGroupID: number,
-        public PrevPartGroupID: number,
-        public PartGroupName: string,
-        
-        public ImageRaw: string,
-        public ImageFilePath: string,
-        public IsNewImage: boolean,
-        
-        public Position: number,
-
-        public pendingAdd: boolean,
-        public isNew: boolean,
-        public ItemParts: Array<ItemPartInsert>
     ) {}
 }

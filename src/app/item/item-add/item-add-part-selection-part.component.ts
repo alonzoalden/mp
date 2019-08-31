@@ -76,9 +76,9 @@ export class ItemAddPartSelectionPartComponent implements OnInit {
         //this.refreshDataSource(this.currentItemPartSelection.ItemParts.ItemParts);
 
 
-        if(currentItemPartSelection.length === 0) {
+        if(this.currentItemPartSelection.ItemParts.length === 0) {
             const _temp = new ItemPartInsert(null, null, null, null, null, null, null, null, null, null,  null, true, null, true);
-            currentItemPartSelection.push(_temp);
+            this.currentItemPartSelection.ItemParts.push(_temp);
             //
 
             const _tempGroupInsert = new ItemPartSelectionInsert(null, null, null, null, null,null, null,  null, true, null, []);
@@ -90,7 +90,7 @@ export class ItemAddPartSelectionPartComponent implements OnInit {
         }
         
 
-        this.currentIndex = currentItemPartSelection.length - 1;
+        this.currentIndex = this.currentItemPartSelection.ItemParts.length - 1;
         this.currentIndexGroup = this.partGroups.length - 1;
 
 
@@ -122,8 +122,8 @@ export class ItemAddPartSelectionPartComponent implements OnInit {
     onAddItemPartGroup(group: ItemPartSelectionInsert) {
         const _temp = new ItemPartInsert(null, null, null, null, null, null, null, null, null, null,  null, true, null, true);
         group.ItemParts.push(_temp)
-        this.currentItemPartSelection.ItemParts = group;
-        this.refreshDataSource(this.currentItemPartSelection.ItemParts.ItemParts);
+        this.currentItemPartSelection = group;
+        this.refreshDataSource(this.currentItemPartSelection.ItemParts);
 
         const _tempGroupInsert = new ItemPartSelectionInsert(null, null, null, null, null,null, null,  null, true, null, []);
         console.log(this.partGroups);
@@ -179,7 +179,7 @@ export class ItemAddPartSelectionPartComponent implements OnInit {
 
     existItemID(itemID: number, isNew: boolean = false){
         var counter: number = 0;
-        this.currentItemPartSelection.forEach((value, index) => {
+        this.currentItemPartSelection.ItemParts.forEach((value, index) => {
                 if(value.PartItemID === itemID) { 
                     if(isNew || index != this.currentItemPartSelection.ItemParts.length - 1) {
                         counter += 1; 
@@ -208,9 +208,9 @@ export class ItemAddPartSelectionPartComponent implements OnInit {
 
     onEditItemPartGroup(index: number) {
         
-        this.currentItemPartSelection.ItemParts = this.partGroups[index];
+        this.currentItemPartSelection = this.partGroups[index];
 
-        this.refreshDataSource(this.currentItemPartSelection.ItemParts.ItemParts)
+        this.refreshDataSource(this.currentItemPartSelection.ItemParts)
 
         if (index === this.partGroups.length - 1 && this.partGroups.length > 0) {
             this.dataSource = null;
@@ -244,7 +244,7 @@ export class ItemAddPartSelectionPartComponent implements OnInit {
                         || !itempart.PartFOBPrice || itempart.PartFOBPrice == 0 ) {
     
                         this.currentItemPartSelection.ItemParts.splice(i, 1);
-                        this.refreshDataSource(this.currentItemPartSelection.ItemParts.ItemParts);
+                        this.refreshDataSource(this.currentItemPartSelection.ItemParts);
                     }
                 }
             });    
@@ -276,7 +276,7 @@ export class ItemAddPartSelectionPartComponent implements OnInit {
                             this.currentItemPartSelection.ItemParts[index].ImageFilePath = item.ImagePath;
                             this.currentItemPartSelection.ItemParts[index].IsNewImage = false;
 
-                            this.refreshDataSource(this.currentItemPartSelection.ItemParts.ItemParts);
+                            this.refreshDataSource(this.currentItemPartSelection.ItemParts);
                         },
                         (error: any) => {
                             this.errorMessage = <any>error;
@@ -301,7 +301,7 @@ export class ItemAddPartSelectionPartComponent implements OnInit {
                     this.currentItemPartSelection.ItemParts[index].PartItemID = this.currentItemPartSelection.ItemParts[index].PrevPartItemID;
                 }
                 this.currentIndex = this.currentItemPartSelection.ItemParts.length - 1;
-                this.refreshDataSource(this.currentItemPartSelection.ItemParts.ItemParts);
+                this.refreshDataSource(this.currentItemPartSelection.ItemParts);
                 this.itemService.sendNotification({ type: 'error', title: 'Error', content: "Part already exists" });
             }
         }
@@ -315,7 +315,7 @@ export class ItemAddPartSelectionPartComponent implements OnInit {
             this.currentItemPartSelection.ItemParts[index].PartFOBPrice = null;
             this.currentItemPartSelection.ItemParts[index].PartPrice = null;
             
-            this.refreshDataSource(this.currentItemPartSelection.ItemParts.ItemParts);
+            this.refreshDataSource(this.currentItemPartSelection.ItemParts);
         }
     }
 
@@ -335,7 +335,7 @@ export class ItemAddPartSelectionPartComponent implements OnInit {
             value.Position = index + 1;
         });
 
-        this.refreshDataSource(this.currentItemPartSelection.ItemParts.ItemParts);
+        this.refreshDataSource(this.currentItemPartSelection.ItemParts);
     }
 
     moveUpPosition(itemPart: ItemPartInsert) {
@@ -344,7 +344,7 @@ export class ItemAddPartSelectionPartComponent implements OnInit {
             value.Position = index + 1;                        
         });
 
-        this.refreshDataSource(this.currentItemPartSelection.ItemParts.ItemParts);
+        this.refreshDataSource(this.currentItemPartSelection.ItemParts);
     }
 
     positionMove(array, element, delta) {
@@ -362,7 +362,7 @@ export class ItemAddPartSelectionPartComponent implements OnInit {
             if (foundIndex > -1) {
                 this.currentItemPartSelection.ItemParts.splice(foundIndex, 1);
             }            
-            this.refreshDataSource(this.currentItemPartSelection.ItemParts.ItemParts);
+            this.refreshDataSource(this.currentItemPartSelection.ItemParts);
         }
     }
     clearFields(ItemPartInsert: ItemPartInsert) {

@@ -273,7 +273,7 @@ export class ItemService {
 
         item.ItemParts.forEach((itemPart) => {
 
-            const newItemPart = new ItemPart(itemPart.ItemPartID, itemPart.ItemID
+            const newItemPart = new ItemPart(itemPart.ItemPartID, itemPart.ItemPartSelectionID
                 , itemPart.PartLabel, itemPart.PartItemID, itemPart.PrevPartItemID, itemPart.PartItemName
                 , itemPart.PartItemVendorSKU, itemPart.PartTPIN, itemPart.PartFOBPrice, itemPart.PartPrice, itemPart.ImageRaw, itemPart.ImageFilePath, itemPart.IsNewImage
                 ,  itemPart.Position, itemPart.UpdatedOn
@@ -355,7 +355,7 @@ export class ItemService {
         });
 
         item.ItemPartSelections.forEach((itemPart) => {
-            const newItemPart = new ItemPartSelectionInsert(itemPart.ItemID , itemPart.PartGroupID, itemPart.PrevPartGroupID, itemPart.PartGroupName, itemPart.ImageRaw
+            const newItemPart = new ItemPartSelectionInsert(itemPart.ItemID , itemPart.ItemPartSelectionID, itemPart.PrevPartSelectionID, itemPart.PartSelectionName, itemPart.ImageRaw
                 ,  itemPart.ImageFilePath, itemPart.IsNewImage, itemPart.Position, itemPart.pendingAdd, itemPart.isNew, []);
 
             newItemInsert.ItemPartSelections.push(newItemPart);
