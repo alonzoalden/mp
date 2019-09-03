@@ -15,7 +15,7 @@ import { THIS_EXPR } from '@angular/compiler/src/output/output_ast';
   styleUrls: ['./inbound-shipment-edit-line-list.component.css', './inbound-shipment-edit.component.css']
 })
 
-export class InboundShipmentEditLineListComponent implements OnInit {
+export class InboundShipmentEditLineListComponent implements OnInit, OnDestroy {
     errorMessage: string;
     purchaseorder: PurchaseOrder;
     purchaseorderid: number;
@@ -74,6 +74,9 @@ export class InboundShipmentEditLineListComponent implements OnInit {
         // );
     }
 
+    ngOnDestroy() {
+        //console.log('sadfasdfasfd');
+    }
     initialize() {
         this.purchaseOrderService.getPurchaseOrder(this.purchaseorderid).subscribe(
             (purchaseorder: PurchaseOrder) => {
@@ -84,6 +87,7 @@ export class InboundShipmentEditLineListComponent implements OnInit {
 
         this.purchaseOrderService.getSimpleItemList().subscribe(
             (itemlist: ItemList[]) => {
+                console.log(itemlist);
                 this.itemList = itemlist;
             },
             (error: any) => this.errorMessage = <any>error
@@ -91,6 +95,7 @@ export class InboundShipmentEditLineListComponent implements OnInit {
         if (this.purchaseOrderService.currentPurchaseOrderEdit.PurchaseOrderLines === null) {
             this.purchaseOrderService.getPurchaseOrderLines(this.purchaseorderid).subscribe(
                 (purchaseorderlines: PurchaseOrderLine[]) => {
+                    console.log(purchaseorderlines);
                     this.purchaseorder.PurchaseOrderLines = purchaseorderlines;  
                     
                     this.purchaseorder.PurchaseOrderLines.forEach((value) => {

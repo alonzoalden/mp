@@ -2072,3 +2072,17 @@ th.mat-header-cell {
 .row-height-80 {
     height: 80px !important;
 }
+.flex-center {
+    display: flex;
+    justify-content: center;
+}
+.dialog-content {
+    background-color: #f3f3f4;
+    padding: 40px !important;
+    overflow: scroll;
+    min-height: 410px;
+}
+.diaglog-content .ibox-content {
+    padding: 40px;
+    height: 100%;
+}

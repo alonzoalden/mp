@@ -7,6 +7,7 @@ import { Subscription } from 'rxjs';
 import { CartonLine, PurchaseOrderLineList } from '../../shared/class/purchase-order';
 
 import { PurchaseOrderService } from '../purchase-order.service';
+import { Carton } from 'app/shared/class/carton';
 
 @Component({
   selector: 'o-inbound-shipment-edit-carton-line-edit',
@@ -33,7 +34,14 @@ export class InboundShipmentEditCartonLineEditComponent implements OnInit, OnDes
 
     ngOnInit() {
         const cartonlineid = this.route.snapshot.params['lid'];
-        this.cartonnumber = this.purchaseOrderService.currentCarton.CartonNumber;
+
+        this.purchaseOrderService.currentCarton.subscribe(
+            (currentcarton: Carton) => {
+                this.cartonnumber = currentcarton.CartonNumber;
+            },
+            (error: any) => this.errorMessage = <any>error
+        );
+        //this.cartonnumber = this.purchaseOrderService.currentCarton.CartonNumber;
         this.purchaseOrderService.getCurrentCartonLine(cartonlineid).subscribe(
             (cartonline: CartonLine) => {
                 this.cartonline = cartonline;
