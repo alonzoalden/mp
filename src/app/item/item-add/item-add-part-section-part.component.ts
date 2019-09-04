@@ -2,7 +2,7 @@ import { Component, OnInit, ViewChildren } from '@angular/core';
 import { Router } from '@angular/router';
 import { MatTableDataSource } from '@angular/material';
 
-import { Item, ItemInsert, ItemList, ItemPartInsert, ItemPartSelectionInsert } from '../../shared/class/item';
+import { Item, ItemInsert, ItemList, ItemPartInsert, ItemSectionInsert } from '../../shared/class/item';
 import { ItemService } from '../item.service';
 
 import { AppService } from '../../app.service';
@@ -10,24 +10,24 @@ import { AppService } from '../../app.service';
 import { environment } from '../../../environments/environment';
 
 @Component({
-    selector: 'o-item-add-part-selection-part',
-    templateUrl: './item-add-part-selection-part.component.html'
+    selector: 'o-item-add-part-section-part',
+    templateUrl: './item-add-part-section-part.component.html'
 })
 
-export class ItemAddPartSelectionPartComponent implements OnInit {
+export class ItemAddPartSectionPartComponent implements OnInit {
     private imageURL = environment.imageURL;
     isPM: boolean;
     
     errorMessage: string;
-    item: ItemInsert;
+    //item: ItemInsert;
 
     itemlist: ItemList[];    
     //displayedColumns = ['Add', 'Down', 'Position', 'Up', 'New', 'Select', 'ItemName', 'SKU', 'TPIN', 'Price', 'Remove'];
     displayedColumns = ['Add', 'Down', 'Position', 'Up', 'Thumbnail', 'Label', 'Select', 'ItemName', 'SKU', 'TPIN', 'Price', 'Remove'];
     
     //displayedColumns = ['Add', 'Down', 'Position', 'Up', 'Thumbnail','ItemName', 'Remove'];
-    partGroups: ItemPartSelectionInsert[] = [];
-    currentItemPartSelection: ItemPartSelectionInsert;
+    //partGroups: ItemPartSelectionInsert[] = [];
+    currentItemPartSelection: ItemSectionInsert;
 
     dataSource: any = null;
     dataSourceGroups: any = null;
@@ -67,40 +67,29 @@ export class ItemAddPartSelectionPartComponent implements OnInit {
                     }
                 );
 
-        this.item = this.itemService.currentItemInsert;
+        //this.item = this.itemService.currentItemInsert;
 
 
-
-        
-
-        //this.refreshDataSource(this.currentItemPartSelection.ItemParts.ItemParts);
-
-
-        if(this.currentItemPartSelection.ItemParts.length === 0) {
-            const _temp = new ItemPartInsert(null, null, null, null, null, null, null, null, null, null,  null, true, null, true);
-            this.currentItemPartSelection.ItemParts.push(_temp);
-            //
-
-            const _tempGroupInsert = new ItemPartSelectionInsert(null, null, null, null, null,null, null,  null, true, null, []);
-            this.partGroups.push(_tempGroupInsert);
-            
-            this.dataSourceGroups = new MatTableDataSource<ItemPartSelectionInsert>(this.partGroups);
-
-
-        }
-        
-
-        this.currentIndex = this.currentItemPartSelection.ItemParts.length - 1;
-        this.currentIndexGroup = this.partGroups.length - 1;
-
-
+        this.itemService.currentItemPartSelection.subscribe(partselection => {
+            if (partselection) {
+                this.currentItemPartSelection = partselection;
+                if (partselection.ItemParts.length === 0) {
+                    const _temp = new ItemPartInsert(null, null, null, null, null, null, null, null, null, null, null, true, null, true);
+                    this.currentItemPartSelection.ItemParts.push(_temp);
+                    
+                }
+                
+                this.refreshDataSource(this.currentItemPartSelection.ItemParts)
+                this.currentIndex = this.currentItemPartSelection.ItemParts.length - 1;
+            }
+        });
         
 
         //make this based off group
         this.itemService.getPartItemList().subscribe(
             (itemlist: ItemList[]) => {
                 this.itemlist = itemlist;
-                const _temp = new ItemList(null, 'New Item', null, null, null, null);
+                const _temp = new ItemList(null, 'New Item', null, null, null, null, null);
                 this.itemlist.splice(0,0,_temp);
 
                 //this.refreshDataSource(this.currentItemPartSelection.ItemParts.ItemParts);
@@ -113,22 +102,21 @@ export class ItemAddPartSelectionPartComponent implements OnInit {
         console.log(itemParts);
         this.dataSource = new MatTableDataSource<ItemPartInsert>(itemParts);
     }
-    refreshDataSourceGroups(partgroups: ItemPartSelectionInsert[]) { 
-        this.dataSourceGroups = new MatTableDataSource<ItemPartSelectionInsert>(partgroups);
-    }
+    // refreshDataSourceGroups(partselections: ItemPartSelectionInsert[]) { 
+    //     this.dataSourceGroups = new MatTableDataSource<ItemPartSelectionInsert>(partselections);
+    // }
     
 
     
-    onAddItemPartGroup(group: ItemPartSelectionInsert) {
-        const _temp = new ItemPartInsert(null, null, null, null, null, null, null, null, null, null,  null, true, null, true);
-        group.ItemParts.push(_temp)
-        this.currentItemPartSelection = group;
-        this.refreshDataSource(this.currentItemPartSelection.ItemParts);
+    onAddItemPartGroup(group: ItemSectionInsert) {
+        // const _temp = new ItemPartInsert(null, null, null, null, null, null, null, null, null, null,  null, true, null, true);
+        // group.ItemParts.push(_temp)
+        // this.currentItemPartSelection = group;
+        // this.refreshDataSource(this.currentItemPartSelection.ItemParts);
 
-        const _tempGroupInsert = new ItemPartSelectionInsert(null, null, null, null, null,null, null,  null, true, null, []);
-        console.log(this.partGroups);
-        this.partGroups.push(_tempGroupInsert);
-        this.refreshDataSourceGroups(this.partGroups)
+        // const _tempGroupInsert = new ItemPartSelectionInsert(null, null, null, null, null,null, null,  null, true, null, []);
+        // this.item.ItemPartSelections.push(_tempGroupInsert);
+        // this.refreshDataSourceGroups(this.item.ItemPartSelections)
     }
 
     onAddItemPart(itemPart: ItemPartInsert) {
@@ -139,8 +127,7 @@ export class ItemAddPartSelectionPartComponent implements OnInit {
             if(!this.existVendorSKU(itemPart.PartItemVendorSKU, true)) {        
                 this.pendingAdd = true;
 
-                if(itemPart.PartItemID && itemPart.PartItemID != 0)
-                {
+                if(itemPart.PartItemID && itemPart.PartItemID != 0) {
                     this.itemService.getItem(itemPart.PartItemID).subscribe(
                         (item: Item) => {
                             itemPart.PrevPartItemID = item.ItemID;
@@ -206,30 +193,29 @@ export class ItemAddPartSelectionPartComponent implements OnInit {
     }
 
 
-    onEditItemPartGroup(index: number) {
+    // onEditItemPartGroup(index: number) {
         
-        this.currentItemPartSelection = this.partGroups[index];
+    //     //this.currentItemPartSelection = this.item.ItemPartSelections[index];
 
-        this.refreshDataSource(this.currentItemPartSelection.ItemParts)
+    //     this.refreshDataSource(this.currentItemPartSelection.ItemParts)
 
-        if (index === this.partGroups.length - 1 && this.partGroups.length > 0) {
-            this.dataSource = null;
-            this.currentItemPartSelection.ItemParts = null;
-        }
-        else {
+    //     if (index === this.item.ItemPartSelections.length - 1 && this.item.ItemPartSelections.length > 0) {
+    //         this.dataSource = null;
+    //         this.currentItemPartSelection.ItemParts = null;
+    //     }
+    //     else {
             
-        }
-        console.log(this.currentItemPartSelection.ItemParts)
+    //     }
        
 
-        if(this.pendingAdd) {
-            this.currentIndexGroup = this.partGroups.length - 1;
-            this.pendingAdd = false;
-        }
-        else {
-            this.currentIndexGroup = index;
-        }    
-    }
+    //     if(this.pendingAdd) {
+    //         this.currentIndexGroup = this.item.ItemPartSelections.length - 1;
+    //         this.pendingAdd = false;
+    //     }
+    //     else {
+    //         this.currentIndexGroup = index;
+    //     }    
+    // }
 
     onEditItemPart(index: number) {
         if(this.currentIndex != index)
@@ -260,7 +246,7 @@ export class ItemAddPartSelectionPartComponent implements OnInit {
     }
 
     onPartItemChange(index: number, itemPart: any) {  
-        if(this.currentItemPartSelection.ItemParts[index].PartItemID && this.currentItemPartSelection.ItemParts[index].PartItemID != 0) {
+        if(this.currentItemPartSelection.ItemParts[index] && this.currentItemPartSelection.ItemParts[index].PartItemID && this.currentItemPartSelection.ItemParts[index].PartItemID != 0) {
             if(!this.existItemID(this.currentItemPartSelection.ItemParts[index].PartItemID)) {
                 if(this.currentItemPartSelection.ItemParts[index].PartItemID && this.currentItemPartSelection.ItemParts[index].PartItemID != 0)
                 {

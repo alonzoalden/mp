@@ -196,12 +196,12 @@ export class ItemEditComponent implements OnInit, OnDestroy {
                     });
                 }
 
-                if(newItem.ItemParts) {
-                    const pendingItemPartIndex = newItem.ItemParts.findIndex(i => i.pendingAdd === true);
+                if(newItem.ItemSections) {
+                    const pendingItemPartIndex = newItem.ItemSections.findIndex(i => i.pendingAdd === true);
                     if (pendingItemPartIndex > -1) {
-                        newItem.ItemParts.splice(pendingItemPartIndex, 1);
+                        newItem.ItemSections.splice(pendingItemPartIndex, 1);
                     }
-                    newItem.ItemParts.forEach((value, i) => {
+                    newItem.ItemSections.forEach((value, i) => {
                         value.Position = i + 1;
                     });
                 }

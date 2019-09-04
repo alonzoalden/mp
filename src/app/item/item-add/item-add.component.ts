@@ -93,8 +93,8 @@ export class ItemAddComponent {
                     })
                 });            
 
-                newItem.ItemPartSelections.splice(newItem.ItemPartSelections.length-1, 1);
-                newItem.ItemPartSelections.forEach((value, i) => {
+                newItem.ItemSections.splice(newItem.ItemSections.length-1, 1);
+                newItem.ItemSections.forEach((value, i) => {
                     value.Position = i + 1;
                 });
 

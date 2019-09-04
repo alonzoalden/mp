@@ -3,7 +3,7 @@ import { Router, ActivatedRoute } from '@angular/router';
 import { MatTableDataSource } from '@angular/material';
 import { Subscription } from 'rxjs';
 
-import { Item, ItemList, ItemPart } from '../../shared/class/item';
+import { Item, ItemList, ItemPart, ItemSection } from '../../shared/class/item';
 import { ItemService } from '../item.service';
 import { AppService } from '../../app.service';
 
@@ -21,6 +21,8 @@ export class ItemEditPartComponent implements OnInit {
     errorMessage: string;
     item: Item;
     itemid: number;
+
+    currentItemSection: ItemSection;
 
     itemlist: ItemList[];    
     //displayedColumns = ['Add', 'Down', 'Position', 'Up', 'New', 'Select', 'ItemName', 'SKU', 'TPIN', 'Price', 'Remove'];
@@ -71,42 +73,43 @@ export class ItemEditPartComponent implements OnInit {
         this.itemService.getPartItemList().subscribe(
             (itemlist: ItemList[]) => {
                 this.itemlist = itemlist;
-                const _temp = new ItemList(null, 'New Item', null, null, null, null);
+                const _temp = new ItemList(null, 'New Item', null, null, null, null, null);
                 this.itemlist.splice(0,0,_temp);
-                this.refreshDataSource(this.item.ItemParts);
+                this.refreshDataSource(this.currentItemSection.ItemParts);
             },
             (error: any) => this.errorMessage = <any>error
         );
     }
 
     initialize() {
-        if (this.itemService.currentItemEdit.ItemParts === null) {
+        if (this.itemService.currentItemEdit.ItemSections === null) {
             this.itemService.getItemParts(this.itemid).subscribe(
                 (itemParts: ItemPart[]) => {
-                    this.item.ItemParts = itemParts;                    
+                    this.currentItemSection.ItemParts = itemParts;                    
                     this.addPendingLine();         
-                    this.currentIndex = this.item.ItemParts.length - 1;
-                    this.refreshDataSource(this.item.ItemParts);
+                    this.currentIndex = this.item.ItemSections.length - 1;
+                    this.refreshDataSource(this.currentItemSection.ItemParts);
                 },
                 (error: any) => this.errorMessage = <any>error
             );
         } else {
             this.removePendingLine();
             this.addPendingLine();               
-            this.currentIndex = this.item.ItemParts.length - 1;
-            this.refreshDataSource(this.item.ItemParts);
+            this.currentIndex = this.item.ItemSections.length - 1;
+            this.refreshDataSource(this.currentItemSection.ItemParts);
         }
     }
 
     addPendingLine() {
-        const _temp = new ItemPart(0, this.itemid, null, null, null, null, null, null, null, null, null, null, true, this.item.ItemParts.length + 1, null, null, true, true);
-        this.item.ItemParts.push(_temp);   
+        const _temp = new ItemPart(0, null, null, null, null, null, null, null, null, null, null, null, true, this.currentItemSection.ItemParts.length + 1, null, null, true, true);
+        
+        this.currentItemSection.ItemParts.push(_temp);
     }
 
     removePendingLine() {
-        const foundIndex = this.item.ItemParts.findIndex(i => i.pendingAdd === true);
+        const foundIndex = this.item.ItemSections.findIndex(i => i.pendingAdd === true);
         if (foundIndex > -1) {
-            this.item.ItemParts.splice(foundIndex, 1);
+            this.item.ItemSections.splice(foundIndex, 1);
         }
     }
 
@@ -138,7 +141,7 @@ export class ItemEditPartComponent implements OnInit {
                 itemPart.pendingAdd = false;
                 
                 this.addPendingLine();  
-                this.refreshDataSource(this.item.ItemParts);
+                this.refreshDataSource(this.currentItemSection.ItemParts);
             }
             else {
                 this.itemService.sendNotification({ type: 'error', title: 'Error', content: "Up-sell product already exists" });
@@ -163,9 +166,9 @@ export class ItemEditPartComponent implements OnInit {
 
     existItemID(itemID: number, isNew: boolean = false){
         var counter: number = 0;
-        this.item.ItemParts.forEach((value, index) => {
+        this.currentItemSection.ItemParts.forEach((value, index) => {
                 if(value.PartItemID === itemID) { 
-                    if(isNew || index != this.item.ItemParts.length - 1) {
+                    if(isNew || index != this.currentItemSection.ItemParts.length - 1) {
                         counter += 1; 
                     }
                 }
@@ -177,9 +180,9 @@ export class ItemEditPartComponent implements OnInit {
 
     existVendorSKU(vendorSKU: string, isNew: boolean = false){
         var counter: number = 0;
-        this.item.ItemParts.forEach((value, index) => {
+        this.currentItemSection.ItemParts.forEach((value, index) => {
                 if(value.PartItemVendorSKU === vendorSKU) { 
-                    if(isNew || index != this.item.ItemParts.length - 1) {
+                    if(isNew || index != this.currentItemSection.ItemParts.length - 1) {
                         counter += 1; 
                     }
                 }
@@ -192,24 +195,24 @@ export class ItemEditPartComponent implements OnInit {
     onEditItemPart(index: number) {
         if(this.currentIndex != index)
         {
-            this.item.ItemParts.forEach((itempart, i) => {
+            this.currentItemSection.ItemParts.forEach((itempart, i) => {
                 
                 this.onChangeFOBPrice(itempart);
 
-                if(i != this.item.ItemParts.length - 1) {
+                if(i != this.currentItemSection.ItemParts.length - 1) {
                     if(!itempart.PartItemName || itempart.PartItemName == '' 
                         || !itempart.PartItemVendorSKU || itempart.PartItemVendorSKU == '' 
                         || !itempart.PartFOBPrice || itempart.PartFOBPrice == 0 ) {
     
-                        this.item.ItemParts.splice(i, 1);
-                        this.refreshDataSource(this.item.ItemParts);
+                            this.currentItemSection.ItemParts.splice(i, 1);
+                        this.refreshDataSource(this.currentItemSection.ItemParts);
                     }
                 }
             });    
         }
 
         if(this.pendingAdd) {
-            this.currentIndex = this.item.ItemParts.length - 1;
+            this.currentIndex = this.currentItemSection.ItemParts.length - 1;
             this.pendingAdd = false;
         }
         else {
@@ -218,23 +221,23 @@ export class ItemEditPartComponent implements OnInit {
     }
 
     onPartItemChange(index: number, itemPart: any) {          
-        if(this.item.ItemParts[index].PartItemID && this.item.ItemParts[index].PartItemID != 0) {
-            if(!this.existItemID(this.item.ItemParts[index].PartItemID)) {
-                if(this.item.ItemParts[index].PartItemID && this.item.ItemParts[index].PartItemID != 0)
+        if(this.currentItemSection.ItemParts[index].PartItemID && this.currentItemSection.ItemParts[index].PartItemID != 0) {
+            if(!this.existItemID(this.currentItemSection.ItemParts[index].PartItemID)) {
+                if(this.currentItemSection.ItemParts[index].PartItemID && this.currentItemSection.ItemParts[index].PartItemID != 0)
                 {
-                    this.itemService.getItem(this.item.ItemParts[index].PartItemID).subscribe(
+                    this.itemService.getItem(this.currentItemSection.ItemParts[index].PartItemID).subscribe(
                         (item: Item) => {
-                            this.item.ItemParts[index].PrevPartItemID = item.ItemID;
-                            this.item.ItemParts[index].PartItemName = item.Name;
-                            this.item.ItemParts[index].PartItemVendorSKU = item.VendorSKU;
-                            this.item.ItemParts[index].PartTPIN = item.TPIN;
-                            this.item.ItemParts[index].PartFOBPrice = item.FOBPrice;
-                            this.item.ItemParts[index].PartPrice = item.Price;
+                            this.currentItemSection.ItemParts[index].PrevPartItemID = item.ItemID;
+                            this.currentItemSection.ItemParts[index].PartItemName = item.Name;
+                            this.currentItemSection.ItemParts[index].PartItemVendorSKU = item.VendorSKU;
+                            this.currentItemSection.ItemParts[index].PartTPIN = item.TPIN;
+                            this.currentItemSection.ItemParts[index].PartFOBPrice = item.FOBPrice;
+                            this.currentItemSection.ItemParts[index].PartPrice = item.Price;
 
-                            this.item.ItemParts[index].ImageFilePath = item.ImagePath;
-                            this.item.ItemParts[index].IsNewImage = false;
+                            this.currentItemSection.ItemParts[index].ImageFilePath = item.ImagePath;
+                            this.currentItemSection.ItemParts[index].IsNewImage = false;
 
-                            this.refreshDataSource(this.item.ItemParts);
+                            this.refreshDataSource(this.currentItemSection.ItemParts);
                         },
                         (error: any) => {
                             this.errorMessage = <any>error;
@@ -246,7 +249,7 @@ export class ItemEditPartComponent implements OnInit {
             else {
                 //This prevents selected value from changing into an existing value
                 var originalItem = this.selectionCategoriesRef._results[index].itemsList.items
-                            .find(item => item.value.ItemID === this.item.ItemParts[index].PrevPartItemID);
+                            .find(item => item.value.ItemID === this.currentItemSection.ItemParts[index].PrevPartItemID);
                 this.selectionCategoriesRef._results[index].itemsList.select(originalItem);
 
                 itemPart.PartItemName = originalItem.value.ItemName;
@@ -255,25 +258,25 @@ export class ItemEditPartComponent implements OnInit {
                 itemPart.PartFOBPrice = originalItem.value.FOBPrice;
                 itemPart.PartPrice = originalItem.value.PartPrice;
 
-                if (!this.item.ItemParts[index].isNew) {
-                    this.item.ItemParts[index].PartItemID = this.item.ItemParts[index].PrevPartItemID;
+                if (!this.currentItemSection.ItemParts[index].isNew) {
+                    this.currentItemSection.ItemParts[index].PartItemID = this.currentItemSection.ItemParts[index].PrevPartItemID;
                 }
-                this.currentIndex = this.item.ItemParts.length - 1;
-                this.refreshDataSource(this.item.ItemParts);
+                this.currentIndex = this.currentItemSection.ItemParts.length - 1;
+                this.refreshDataSource(this.currentItemSection.ItemParts);
                 this.itemService.sendNotification({ type: 'error', title: 'Error', content: "Part already exists" });
             }
         }            
         else
         {
-            this.item.ItemParts[index].isNew = true;
+            this.currentItemSection.ItemParts[index].isNew = true;
             
-            this.item.ItemParts[index].PartItemName = null;
-            this.item.ItemParts[index].PartItemVendorSKU = null;
-            this.item.ItemParts[index].PartTPIN = null;
-            this.item.ItemParts[index].PartFOBPrice = null;
-            this.item.ItemParts[index].PartPrice = null;
+            this.currentItemSection.ItemParts[index].PartItemName = null;
+            this.currentItemSection.ItemParts[index].PartItemVendorSKU = null;
+            this.currentItemSection.ItemParts[index].PartTPIN = null;
+            this.currentItemSection.ItemParts[index].PartFOBPrice = null;
+            this.currentItemSection.ItemParts[index].PartPrice = null;
 
-            this.refreshDataSource(this.item.ItemParts);
+            this.refreshDataSource(this.currentItemSection.ItemParts);
         }
     }
     
@@ -288,21 +291,21 @@ export class ItemEditPartComponent implements OnInit {
     }
 
     moveDownPosition(itemPart: ItemPart) {
-        this.positionMove(this.item.ItemParts, itemPart, 1);
-        this.item.ItemParts.forEach((value, index) => {
+        this.positionMove(this.currentItemSection.ItemParts, itemPart, 1);
+        this.currentItemSection.ItemParts.forEach((value, index) => {
             value.Position = index + 1;
         });
 
-        this.refreshDataSource(this.item.ItemParts);
+        this.refreshDataSource(this.currentItemSection.ItemParts);
     }
 
     moveUpPosition(itemPart: ItemPart) {
-        this.positionMove(this.item.ItemParts, itemPart, -1);
-        this.item.ItemParts.forEach((value, index) => {
+        this.positionMove(this.currentItemSection.ItemParts, itemPart, -1);
+        this.currentItemSection.ItemParts.forEach((value, index) => {
             value.Position = index + 1;                        
         });
 
-        this.refreshDataSource(this.item.ItemParts);
+        this.refreshDataSource(this.currentItemSection.ItemParts);
     }
 
     positionMove(array, element, delta) {
@@ -316,11 +319,11 @@ export class ItemEditPartComponent implements OnInit {
     onRemove(itemPart: ItemPart) {
         const confirmation = confirm(`Remove ${itemPart.PartItemName}?`);
         if (confirmation) {
-            const foundIndex = this.item.ItemParts.findIndex(i => i.PartItemID === itemPart.PartItemID);
+            const foundIndex = this.currentItemSection.ItemParts.findIndex(i => i.PartItemID === itemPart.PartItemID);
             if (foundIndex > -1) {
-                this.item.ItemParts.splice(foundIndex, 1);
+                this.currentItemSection.ItemParts.splice(foundIndex, 1);
             }            
-            this.refreshDataSource(this.item.ItemParts);
+            this.refreshDataSource(this.currentItemSection.ItemParts);
         }
     }
     clearFields(ItemPartInsert: ItemPart) {
@@ -340,7 +343,7 @@ export class ItemEditPartComponent implements OnInit {
     }
     setPlaceholderText(i: number, itemPart: any) {
         if (this.itemlist) {
-            return i === this.item.ItemParts.length-1
+            return i === this.currentItemSection.ItemParts.length-1
                 ? 'Search Item'
                 : itemPart.PartItemID
                     ? this.itemlist.find(item => itemPart.PartItemID === item.ItemID).Description
@@ -461,10 +464,6 @@ export class ItemEditPartComponent implements OnInit {
             const r = Math.random() * 16 | 0, v = c === 'x' ? r : ( r & 0x3 | 0x8 );
             return v.toString(16);
         });
-    }
-
-    test() {
-        console.log(this.item);
     }
 }
 

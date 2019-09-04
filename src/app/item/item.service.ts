@@ -6,7 +6,7 @@ import { catchError, tap } from 'rxjs/operators';
 
 import { Item, ItemInsert, ItemOption, ItemOptionInsert, ItemSelection, ItemSelectionInsert, ItemTierPrice, ItemTierPriceInsert
     , ItemCategoryAssignment, ItemRelatedProduct, ItemRelatedProductInsert, ItemUpSell, ItemUpSellInsert, ItemCrossSell, ItemCrossSellInsert
-    , ItemAttachment, ItemAttachmentInsert, ItemVideo, ItemVideoInsert, ItemImage, ItemImageInsert, ItemPrintLabel, ItemBatch, ItemPart, ItemPartInsert, ItemPartSelectionInsert, ItemPartSelection } from '../shared/class/item';
+    , ItemAttachment, ItemAttachmentInsert, ItemVideo, ItemVideoInsert, ItemImage, ItemImageInsert, ItemPrintLabel, ItemBatch, ItemPart, ItemPartInsert, ItemSectionInsert, ItemSection } from '../shared/class/item';
 //import { ItemImage } from '../shared/class/item-image';
 import { URLVideo, URLVideoItems, URLVideoItemsSnippet, URLVideoItemsSnippetThumbnails, URLVideoItemsSnippetThumbnailsStandard } from '../shared/class/item-video';
 
@@ -37,10 +37,11 @@ export class ItemService {
     currentMember: Member;
 
     currentItem: Item;
+    
     currentItemInsert: ItemInsert;
     currentItemEdit: Item;
 
-    currentItemPartSelection: Subject<ItemPartSelectionInsert>;
+    public currentItemPartSelection: Subject<ItemSectionInsert> = new Subject<ItemSectionInsert>();
 
     duplicateItemInsert: ItemInsert;
 
@@ -187,7 +188,7 @@ export class ItemService {
             , item.IsFreeShipping, item.ShippingFee, item.MetaTitle, item.MetaKeywords, item.MetaDescription, item.Origin, item.Warranty
             , item.MerchantWarranty, item.AddProtectionPlan, item.URLKey, item.Visibility, item.Description, item.ShortDescription, item.TechnicalDetail, item.AdditionalInformation
             , item.VendorBrandID, item.RequestApproval, item.RejectionReason, item.Status, item.Approval, item.ImagePath, item.IsPartItem, item.PartImageRaw, item.PartImageFilePath, item.PartIsNewImage, item.ExcludeGoogleShopping, item.UpdatedOn, item.CreatedOn
-            , [], [], [], [], [], [], [], [], [], []
+            , [], [], [], [], [], [], [], [], [], [], []
             , item.QtyOnHand, item.QtyAvailable, item.QtyOnOrder, item.QtyBackOrdered, item.MerchantQtyOnHand, item.MerchantQtyAvailable, item.MerchantQtyOnOrder, false);
 
         item.ItemCategoryAssignments.forEach((itemCategoryAssignment) => {
@@ -270,16 +271,25 @@ export class ItemService {
         });
 
         
+        item.ItemSections.forEach((itemsection) => {
 
-        item.ItemParts.forEach((itemPart) => {
+            const newItemSection = new ItemSection(itemsection.ItemSectionID, itemsection.ItemID, itemsection.Name, itemsection.ImageRaw, itemsection.ImageFilePath, itemsection.Position
+                , itemsection.UpdatedOn, itemsection.CreatedOn, itemsection.ItemParts, itemsection.pendingAdd, itemsection.isNew);
 
-            const newItemPart = new ItemPart(itemPart.ItemPartID, itemPart.ItemPartSelectionID
-                , itemPart.PartLabel, itemPart.PartItemID, itemPart.PrevPartItemID, itemPart.PartItemName
-                , itemPart.PartItemVendorSKU, itemPart.PartTPIN, itemPart.PartFOBPrice, itemPart.PartPrice, itemPart.ImageRaw, itemPart.ImageFilePath, itemPart.IsNewImage
-                ,  itemPart.Position, itemPart.UpdatedOn
-                , itemPart.CreatedOn, itemPart.pendingAdd, itemPart.isNew);
 
-            newItem.ItemParts.push(newItemPart);
+            itemsection.ItemParts.forEach((itemPart) => {
+
+                const newItemPart = new ItemPart(itemPart.ItemPartID, itemPart.ItemSectionID
+                    , itemPart.PartLabel, itemPart.PartItemID, itemPart.PrevPartItemID, itemPart.PartItemName
+                    , itemPart.PartItemVendorSKU, itemPart.PartTPIN, itemPart.PartFOBPrice, itemPart.PartPrice, itemPart.ImageRaw, itemPart.ImageFilePath, itemPart.IsNewImage
+                    , itemPart.Position, itemPart.UpdatedOn
+                    , itemPart.CreatedOn, itemPart.pendingAdd, itemPart.isNew);
+
+                itemsection.ItemParts.push(newItemPart);
+            });
+
+            newItem.ItemSections.push(newItemSection);
+            
         });
 
         return newItem;
@@ -354,11 +364,11 @@ export class ItemService {
             newItemInsert.ItemImages.push(newItemImage);
         });
 
-        item.ItemPartSelections.forEach((itemPart) => {
-            const newItemPart = new ItemPartSelectionInsert(itemPart.ItemID , itemPart.ItemPartSelectionID, itemPart.PrevPartSelectionID, itemPart.PartSelectionName, itemPart.ImageRaw
-                ,  itemPart.ImageFilePath, itemPart.IsNewImage, itemPart.Position, itemPart.pendingAdd, itemPart.isNew, []);
+        item.ItemSections.forEach((itemPart) => {
+            const newItemPart = new ItemSectionInsert(itemPart.ItemID, itemPart.Name, itemPart.ImageRaw
+                ,  itemPart.ImageFilePath, itemPart.Position, []);
 
-            newItemInsert.ItemPartSelections.push(newItemPart);
+            newItemInsert.ItemSections.push(newItemPart);
         });
 
         return newItemInsert;

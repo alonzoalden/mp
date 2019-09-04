@@ -3,10 +3,10 @@
         <div class="panel-body p-w-none">
             <form class="form-horizontal" #itemForm="ngForm">
                 <fieldset>
-                    <div class="ibox-title"><h5>{{ 'Item Parts' | translate }}</h5></div>                  
+                    <div class="ibox-title"><h5>{{ 'Item Part Selections' | translate }}</h5></div>                  
                     <div class="ibox-content x-scroll">  
                         <div class="form-group row">
-                            <div class="col-md-2">
+                            <!-- <div class="col-md-2">
                                 <button *ngIf="!partPendingUpload" type="button" class="m-t-md btn btn-primary" (click)="partFileUpload.click()"> <i class="fa fa-files-o"></i> {{ 'Upload Part Image' | translate }}</button> 
                                 <div *ngIf="partPendingUpload" class="m-t-md pt-5 w165">
                                     <div class="sk-spinner sk-spinner-three-bounce">
@@ -31,17 +31,18 @@
                                     <span *ngIf="item && !item.PartImageRaw && !partPendingUpload" class="text-muted">{{ 'No Image Selected' | translate }}</span>
                                     <div *ngIf="item && !item.PartImageRaw && partPendingUpload" class="text-muted">{{ 'Uploading Image...' | translate }}</div>
                                 </div>
-                            </div>
+                            </div> -->
                             <div class="col-md-12">                            
-                                <div *ngIf="item.ItemParts.length && item.ItemParts.length > 0">
+                                <!-- <div *ngIf="item?.ItemSections.length && item?.ItemSections.length > 0"> -->
+                                    <div>
                                     <table mat-table #table [dataSource]="dataSource">
                                         <!-- Add Button -->
                                         <ng-container matColumnDef="Add">
                                             <th mat-header-cell *matHeaderCellDef width="45px"></th>
                                             <td mat-cell *matCellDef="let itemPart; let i = index">                                                 
-                                                <div *ngIf="i === item.ItemParts.length-1">
-                                                    <a (click)='onAddItemPart(itemPart); formDirty = false;'><span [matTooltip]="itemPart.PartItemName && itemPart.PartItemName != '' ? ( 'Add' | translate ) : ( 'Required fields must be complete' | translate )" class="glyphicon glyphicon-plus fs-20" 
-                                                        [ngClass]="itemPart.PartItemName && itemPart.PartItemName != '' && itemPart.PartItemVendorSKU && itemPart.PartItemVendorSKU != '' && itemPart.PartFOBPrice && itemPart.PartFOBPrice != '' ? 'green' : 'gray'"></span></a>
+                                                <div *ngIf="i === item.ItemSections.length-1">
+                                                    <a (click)='onAddItemPart(itemPart); formDirty = false;'><span [matTooltip]="itemPart.Name && itemPart.Name != '' ? ( 'Add' | translate ) : ( 'Required fields must be complete' | translate )" class="glyphicon glyphicon-plus fs-20" 
+                                                        [ngClass]="itemPart.Name && itemPart.Name != '' ? 'green' : 'gray'"></span></a>
                                                 </div>
                                             </td>
                                         </ng-container>
@@ -49,8 +50,8 @@
                                         <ng-container matColumnDef="Down">
                                             <th mat-header-cell *matHeaderCellDef width="17px">{{ 'Position' | translate }}</th>
                                             <td mat-cell *matCellDef="let itemPart; let i = index">
-                                                <div *ngIf="i < item.ItemParts.length-2">
-                                                    <a (click)='moveDownPosition(itemPart);' *ngIf='i !== item.ItemParts.length - 1'><span class="glyphicon glyphicon-arrow-down"></span></a>
+                                                <div *ngIf="i < item.ItemSections.length-2">
+                                                    <a (click)='moveDownPosition(itemPart);' *ngIf='i !== item.ItemSections.length - 1'><span class="glyphicon glyphicon-arrow-down"></span></a>
                                                 </div>                                            
                                             </td>
                                         </ng-container>
@@ -58,7 +59,7 @@
                                         <ng-container matColumnDef="Position">
                                             <th mat-header-cell *matHeaderCellDef width="15px"></th>
                                             <td mat-cell *matCellDef="let itemPart; let i = index">
-                                                <div *ngIf="i !== item.ItemParts.length-1">
+                                                <div *ngIf="i !== item.ItemSections.length-1">
                                                     {{i + 1}}
                                                 </div>
                                             </td>
@@ -68,7 +69,7 @@
                                         <ng-container matColumnDef="Up">
                                             <th mat-header-cell *matHeaderCellDef width="40px"></th>
                                             <td mat-cell *matCellDef="let itemPart; let i = index">
-                                                <div class="selected-row" *ngIf="i !== item.ItemParts.length-1">
+                                                <div class="selected-row" *ngIf="i !== item.ItemSections.length-1">
                                                     <a (click)='moveUpPosition(itemPart)' *ngIf='i !== 0'><span class="selected-row glyphicon glyphicon-arrow-up"></span></a>
                                                 </div>
                                             </td>
@@ -83,12 +84,12 @@
                                                     accept="image/gif,image/jpeg,image/png,.jpeg,.jpg,.png" 
                                                     #fileUpload>
 
-                                                <div *ngIf="(i === item.ItemParts.length-1 && !itemPart.ImageRaw && !itemPart.PartItemID && !pendingUpload)
-                                                            || (i === item.ItemParts.length-1 && i !== currentIndex && pendingUpload)">
+                                                <div *ngIf="(i === item.ItemSections.length-1 && !itemPart.ImageRaw && !itemPart.PartItemID && !pendingUpload)
+                                                            || (i === item.ItemSections.length-1 && i !== currentIndex && pendingUpload)">
                                                     <button [disabled]="pendingUpload" type="button" class="btn btn-primary" (click)="fileUpload.click();"><i class="fa fa-file-image-o"></i>  {{ 'Browse' | translate }}</button>
                                                 </div>    
                                                 <!-- <div *ngIf="(itemPart.ImageRaw || itemPart.PartItemID) && ( !pendingUpload || i != currentIndex )" class="thumbnail-container">                                                         -->
-                                                <div *ngIf="(i != item.ItemParts.length-1 || itemPart.PartItemID) && ( !pendingUpload || i != currentIndex )" class="thumbnail-container flex-va-center">
+                                                <div *ngIf="(i != item.ItemSections.length-1 || itemPart.PartItemID) && ( !pendingUpload || i != currentIndex )" class="thumbnail-container flex-va-center">
                                                     <a (click)="fileUpload.click()">
                                                         <!-- <img src="{{itemPart.ImageRaw}}" [title]='itemPart.PartItemName'> -->
                                                         <img src="{{imageURL + itemPart.ImageFilePath}}" [title]='itemPart.PartItemName' *ngIf="!itemPart.IsNewImage && itemPart.ImageFilePath"> 
@@ -111,10 +112,10 @@
                                         <ng-container matColumnDef="Label">
                                             <th mat-header-cell *matHeaderCellDef width="80px">{{ 'Label' | translate }}</th>
                                             <td mat-cell *matCellDef="let itemPart; let i = index">                                                
-                                                <div *ngIf="currentIndex !== i && i !== item.ItemParts.length-1">
+                                                <div *ngIf="currentIndex !== i && i !== item.ItemSections.length-1">
                                                     {{itemPart.PartLabel}}
                                                 </div>
-                                                <div *ngIf="(currentIndex === i || i === item.ItemParts.length-1)">
+                                                <div *ngIf="(currentIndex === i || i === item.ItemSections.length-1)">
                                                     <input class="form-control" id="PartLabelId" type="text" placeholder="{{ 'Label' | translate }}" 
                                                         [(ngModel)]=itemPart.PartLabel [ngModelOptions]="{standalone: true}" name="itemPartLabel" #itemPartLabelVar="ngModel" maxlength="10"/>
                                                 </div>                  
@@ -155,7 +156,7 @@
                                                                     loadingText="Loading..."
                                                                     (open)="overflowFix(true)"
                                                                     (close)="overflowFix()"
-                                                                    [ngClass]="(currentIndex !== i && i !== item.ItemParts.length-1) ? 'opaque' : ''"
+                                                                    [ngClass]="(currentIndex !== i && i !== item.ItemSections.length-1) ? 'opaque' : ''"
                                                                     >
                                                             <ng-template ng-option-tmp let-item="item">
                                                                 <div matTooltip="{{item.Description}}" matTooltipPosition="right" matTooltipShowDelay="400">{{item.Description}}</div>
@@ -168,25 +169,26 @@
 
                                         <!-- Item Name Column -->
                                         <ng-container matColumnDef="ItemName">
-                                            <th mat-header-cell *matHeaderCellDef width="300px">{{ 'Part Name' | translate }}</th>
-                                            <td mat-cell *matCellDef="let itemPart; let i = index">                                                
-                                                <div *ngIf="currentIndex !== i && i !== item.ItemParts.length-1">
-                                                    {{itemPart.PartItemName}}
+                                            <th mat-header-cell *matHeaderCellDef width="300px">{{ 'Part Selection Name' | translate }}</th>
+                                            <td mat-cell *matCellDef="let itemPart; let i = index">
+                                                                                        
+                                                <div *ngIf="currentIndex !== i && i !== item.ItemSections.length-1">
+                                                    {{itemPart.Name}}
                                                 </div>
-                                                <div *ngIf="(currentIndex === i || i === item.ItemParts.length-1)">
-                                                    <input class="form-control" id="PartItemNameId" type="text" placeholder="{{ 'Part Name' | translate }} ({{ 'Required' | translate }})" required 
-                                                        [(ngModel)]=itemPart.PartItemName name="itemPartItemName" #itemPartNameVar="ngModel" maxlength="70"/>
-                                                </div>                  
+                                                <div *ngIf="(currentIndex === i || i === item.ItemSections.length-1)">
+                                                    <input class="form-control" id="PartSectionNameID" type="text" placeholder="{{ 'Part Section Name' | translate }} ({{ 'Required' | translate }})" required 
+                                                        [(ngModel)]=itemPart.Name name="Name" [ngModelOptions]="{standalone: true}"/>
+                                                </div>
                                             </td>
                                         </ng-container>
                                         <!-- SKU Column -->
                                         <ng-container matColumnDef="SKU">
                                             <th mat-header-cell *matHeaderCellDef width="100px">{{ 'SKU' | translate }}</th>
                                             <td mat-cell *matCellDef="let itemPart; let i = index">
-                                                <div *ngIf="currentIndex !== i && i !== item.ItemParts.length-1">
+                                                <div *ngIf="currentIndex !== i && i !== item.ItemSections.length-1">
                                                     {{itemPart.PartItemVendorSKU}}
                                                 </div>      
-                                                <div *ngIf="currentIndex === i || i === item.ItemParts.length-1">
+                                                <div *ngIf="currentIndex === i || i === item.ItemSections.length-1">
                                                     <input class="form-control" id="itemPartVendorSKUId" type="text" 
                                                         pattern="^[\w\-]*$" ng-pattern-restrict placeholder="SKU ({{ 'Required' | translate }})" required 
                                                         [(ngModel)]=itemPart.PartItemVendorSKU name="itemPartVendorSKU" #itemPartVendorSKUVar="ngModel" maxlength="30" />
@@ -206,7 +208,7 @@
                                         <ng-container matColumnDef="Price">
                                             <th mat-header-cell *matHeaderCellDef [attr.width]="!isPM ? '100px' : '250px'">{{ 'Price' | translate }}</th>
                                             <td mat-cell *matCellDef="let itemPart; let i = index">
-                                                <div *ngIf="currentIndex !== i && i !== item.ItemParts.length-1">
+                                                <div *ngIf="currentIndex !== i && i !== item.ItemSections.length-1">
                                                     <div *ngIf="isPM">
                                                             {{itemPart.PartFOBPrice}} / {{itemPart.PartPrice}}
                                                     </div>
@@ -214,7 +216,7 @@
                                                             {{itemPart.PartFOBPrice}}
                                                     </div>                                                       
                                                 </div> 
-                                                <div *ngIf="currentIndex === i || i === item.ItemParts.length-1">
+                                                <div *ngIf="currentIndex === i || i === item.ItemSections.length-1">
                                                     <div *ngIf="isPM" class="flex">
                                                         <input class="form-control m-r-smi" id="itemPartFOBPriceId" type="number" placeholder="{{ 'FOB Price' | translate }} ({{ 'Required' | translate }})" 
                                                             step="0.01" (change)="onChangeFOBPrice(itemPart);" onkeydown="return event.keyCode == 69 || event.keyCode == 189 ? false : true" min="0"
@@ -236,21 +238,21 @@
                                         <ng-container matColumnDef="Remove">
                                             <th mat-header-cell *matHeaderCellDef width="100px">{{ 'Remove' | translate }}</th>
                                             <td mat-cell *matCellDef="let itemPart; let i = index;">
-                                                <div *ngIf="i !== item.ItemParts.length-1">    
-                                                    <a (click)="onRemove(itemPart); currentIndex = item.ItemParts.length-1;">
+                                                <div *ngIf="i !== item.ItemSections.length-1">    
+                                                    <a (click)="onRemove(itemPart); currentIndex = item.ItemSections.length-1;">
                                                         <span matTooltip="{{ 'Remove' | translate }}" attr.aria-label="{{ 'Remove' | translate}}" class="glyphicon glyphicon-trash"></span>
                                                     </a>
                                                 </div>
-                                                <div [hidden]="!formDirty && i === item.ItemParts.length-1">
-                                                    <a matTooltip="{{ 'Clear' | translate }}" attr.aria-label="{{ 'Clear' | translate}}" (click)="clearFields(itemPart);"><i *ngIf="i === item.ItemParts.length-1" class="fa fa-eraser"></i></a>
+                                                <div [hidden]="!formDirty && i === item.ItemSections.length-1">
+                                                    <a matTooltip="{{ 'Clear' | translate }}" attr.aria-label="{{ 'Clear' | translate}}" (click)="clearFields(itemPart);"><i *ngIf="i === item.ItemSections.length-1" class="fa fa-eraser"></i></a>
                                                 </div>
                                             </td>
                                         </ng-container>
                                                         
                                         <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-                                        <tr class="selected-row" mat-row *matRowDef="let itemPart; let i = index; columns: displayedColumns;"
-                                            [ngStyle]="{'background-color': itemService.rowColorConditions(i, item.ItemParts, currentIndex, formDirty)}"
-                                            (click)="onEditItemPart(i)">
+                                        <tr class="selected-row" mat-row *matRowDef="let partSelection; let i = index; columns: displayedColumns;"
+                                            [ngStyle]="{'background-color': itemService.rowColorConditions(i, item.ItemSections, currentIndex, formDirty)}"
+                                            (click)="onEditItemPartGroup(i)">
                                         </tr>
                                     </table>
                                 </div>
@@ -259,6 +261,6 @@
                     </div>
                 </fieldset>                
             </form>
-        </div>            
-    </div>    
+        </div>
+    </div>
 </div>
