@@ -14,6 +14,8 @@ export class InboundShipmentSelectItemComponentDialog implements OnInit {
     private imageURL = environment.imageURL;
     formInvalid: boolean = false;
 
+    itemList: ItemList;
+
     constructor(
         public dialogRef: MatDialogRef<InboundShipmentSelectItemComponentDialog>,
         @Inject(MAT_DIALOG_DATA) public data: any) {}
