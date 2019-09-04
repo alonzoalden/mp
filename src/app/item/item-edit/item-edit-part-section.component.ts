@@ -25,8 +25,6 @@ export class ItemAddPartSectionComponent implements OnInit {
     displayedColumns = ['Add', 'Down', 'Position', 'Up', 'Thumbnail','ItemName', 'Remove'];
     partGroups: ItemSectionInsert[] = [];
         
-    
-
 
     dataSource: any = null;
 
@@ -65,10 +63,6 @@ export class ItemAddPartSectionComponent implements OnInit {
                 );
 
         this.item = this.itemService.currentItemInsert;
-
-
-
-        
 
         //this.refreshDataSource(this.selectedPartGroup.ItemParts);
 

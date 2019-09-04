@@ -34,7 +34,7 @@
                                     <div *ngIf="item && !item.PartImageRaw && partPendingUpload" class="text-muted">{{ 'Uploading Image...' | translate }}</div>
                                 </div>
                             </div> -->
-                            <div class="col-md-12">
+                            <div class="col-md-12">                            
                                 <div *ngIf="currentItemPartSelection?.ItemParts.length && currentItemPartSelection?.ItemParts.length > 0">
                                     <table mat-table #table [dataSource]="dataSource">
                                         <!-- Add Button -->
