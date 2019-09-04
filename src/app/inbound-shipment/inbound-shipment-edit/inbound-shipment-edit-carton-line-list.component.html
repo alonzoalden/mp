@@ -5,7 +5,7 @@
                 <div class="ibox-title"><h5>{{ 'Carton Lines' | translate }} </h5></div>
                 <div class="ibox-content wiz-content" style="height: 300px;">
                     <div class="form-group">
-                        <div class="m-md m-t-none ">{{ 'Carton Box #' | translate }}{{ carton.Position}}</div>
+                        <div class="m-md m-t-none ">{{ 'Carton Box' | translate }}{{ carton.Position ? ' # ' + carton.Position : ''}}</div>
                     </div>
                     <div class="form-group row">
                         <div class="col-md-12">
@@ -75,7 +75,10 @@
                                                     </div>
                                                 </div>
                                             </div>
-                                            <div *ngIf="currentIndex === i || i === cartonlines.length-1">
+                                            <div
+                                                (click)="scrollToElement(i > cartonlines.length-2 ? endOfPage : topOfRow)"
+                                                *ngIf="currentIndex === i || i === cartonlines.length-1">
+                                                <div #topOfRow></div>
                                                 <ng-select  [items]="purchaseorderlineList"
                                                             [virtualScroll]="true"
                                                             bindLabel="Label"
@@ -93,6 +96,9 @@
                                                             [loading]="!purchaseorderlineList"
                                                             loadingText="Loading..."
                                                             class="inbound-line"
+                                                            dropdownPosition="bottom"
+                                                            (open)="overflowFix(true)"
+                                                            (close)="overflowFix()"
                                                             >
                                                     <ng-template ng-option-tmp let-item="item">
                                                         <div matTooltip="{{item.Label}}" matTooltipPosition="right" matTooltipShowDelay="400">{{item.Label}}</div>
@@ -201,6 +207,7 @@
                                         (click)='onEditCartonLine(i)' style="height: 70px;" ></tr>
                                 </table>
                             </div>
+                            <div class="bottom-page-anchor" #endOfPage></div>
                         </div>
                     </div>
                 </div>
