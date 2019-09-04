@@ -1,4 +1,4 @@
-import { Component, OnInit, AfterViewInit } from '@angular/core';
+import { Component, OnInit, AfterViewInit, OnChanges } from '@angular/core';
 import { Router } from '@angular/router';
 
 import { ItemInsert } from '../../../../shared/class/item';
@@ -14,7 +14,7 @@ declare var $ :any;
   templateUrl: './item-add-description.component.html'
 })
 
-export class ItemAddDescriptionComponent implements OnInit, AfterViewInit {
+export class ItemAddDescriptionComponent implements OnInit, AfterViewInit, OnChanges {
     errorMessage: string;
     isPM: boolean;
     
@@ -23,8 +23,12 @@ export class ItemAddDescriptionComponent implements OnInit, AfterViewInit {
 
     constructor(private itemService: ItemService, private appService: AppService) { }
 
+    ngOnChanges(): void {
+        //console.log(this.iten)
+    }
     ngOnInit(): void {
-        this.item = this.itemService.currentItemInsert;
+        //this.item = this.itemService.currentItemInsert;
+        this.item = this.itemService.defaultCurrentItemInsert();
 
         this.itemService.getVendorBrands().subscribe(
             (vendorBrands: VendorBrand[]) => {

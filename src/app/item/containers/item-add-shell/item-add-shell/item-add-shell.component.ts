@@ -9,7 +9,7 @@ import { Store, select } from '@ngrx/store';
 import * as itemActions from '../../../state/item.actions';
 import * as fromItem from '../../../state';
 import * as fromUser from '../../../../shared/state/user-state.reducer';
-import { getVendorBrands } from 'app/company/company-info/state';
+import { getVendorBrands } from '../../../../company/company-info/state';
 
 @Component({
   templateUrl: './item-add-shell.component.html',

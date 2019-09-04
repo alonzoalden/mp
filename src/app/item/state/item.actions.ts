@@ -1,9 +1,9 @@
 import { Action } from '@ngrx/store';
-import { SalesOrder } from 'app/shared/class/sales-order';
-import { SalesOrderLine } from 'app/shared/class/sales-order-line';
-import { Fulfillment, FulfillmentSalesOrderLine } from 'app/shared/class/fulfillment';
-import { VendorBrand } from 'app/shared/class/vendor-brand';
-import { ItemInsert } from 'app/shared/class/item';
+import { SalesOrder } from '../../shared/class/sales-order';
+import { SalesOrderLine } from '../../shared/class/sales-order-line';
+import { Fulfillment, FulfillmentSalesOrderLine } from '../../shared/class/fulfillment';
+import { VendorBrand } from '../../shared/class/vendor-brand';
+import { ItemInsert } from '../../shared/class/item';
 
 export enum ItemActionTypes {
   LoadVendorBrands = '[Item] Load Vendor Brands',

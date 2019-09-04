@@ -1,9 +1,9 @@
 import { ItemActionTypes, ItemActions } from './item.actions';
-import { SalesOrder } from 'app/shared/class/sales-order';
-import { SalesOrderLine } from 'app/shared/class/sales-order-line';
-import { Fulfillment, FulfillmentSalesOrderLine } from 'app/shared/class/fulfillment';
-import { ItemInsert } from 'app/shared/class/item';
-import { VendorBrand } from 'app/shared/class/vendor-brand';
+import { SalesOrder } from '../../shared/class/sales-order';
+import { SalesOrderLine } from '../../shared/class/sales-order-line';
+import { Fulfillment, FulfillmentSalesOrderLine } from '../../shared/class/fulfillment';
+import { ItemInsert } from '../../shared/class/item';
+import { VendorBrand } from '../../shared/class/vendor-brand';
 
 // State for this feature (Item Variation)
 export interface ItemState {
@@ -29,27 +29,26 @@ const initialState: ItemState = {
 export function itemReducer(state = initialState, action: ItemActions): ItemState {
 
     switch (action.type) {
-        // case ItemActionTypes.LoadSalesOrders:
-        //     return {
-        //         ...state,
-        //         isLoading: true,
-        //         error: '',
-        //     };
+        
+        case ItemActionTypes.SetItem:
+            return {
+                ...state,
+                item: action.payload
+            };
+        
 
-        // case ItemActionTypes.LoadSalesOrdersSuccess:
-        //     return {
-        //         ...state,
-        //         salesOrders: action.payload,
-        //         isLoading: false,
-        //         error: '',
-        //     };
-        // case ItemActionTypes.LoadSalesOrdersFail:
-        //     return {
-        //         ...state,
-        //         salesOrders: [],
-        //         isLoading: false,
-        //         error: action.payload,
-        //     };
+        case ItemActionTypes.LoadVendorBrandsSuccess:
+            return {
+                ...state,
+                vendorBrandList: action.payload,
+                error: '',
+            };
+        case ItemActionTypes.LoadVendorBrandsFail:
+            return {
+                ...state,
+                vendorBrandList: [],
+                error: action.payload,
+            };
         // case ItemActionTypes.SetSalesOrder:
         //     return {
         //         ...state,

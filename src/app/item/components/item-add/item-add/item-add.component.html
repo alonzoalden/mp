@@ -39,13 +39,13 @@
                             </a>
                         </li>
                         <li routerLinkActive="active">
-                            <a [routerLink]="['bundle']" routerLinkActive="active" *ngIf="item.ItemType === 'bundle'">
+                            <a [routerLink]="['bundle']" routerLinkActive="active" *ngIf="item?.ItemType === 'bundle'">
                                {{ 'Bundle' | translate }}
                                 <span matTooltip="Required fields must be complete" attr.aria-label="{{ 'Required fields must be complete' | translate}}" [ngClass]="{'glyphicon glyphicon-exclamation-sign': !isValid('bundle')}"></span>
                             </a>
                         </li>
                         <li routerLinkActive="active">
-                            <a [routerLink]="['dimension']" routerLinkActive="active" *ngIf="item.ItemType === 'simple'">
+                            <a [routerLink]="['dimension']" routerLinkActive="active" *ngIf="item?.ItemType === 'simple'">
                                 {{ 'Dimension' | translate }} 
                                 <span matTooltip="Required fields must be complete" attr.aria-label="{{ 'Required fields must be complete' | translate}}" [ngClass]="{'glyphicon glyphicon-exclamation-sign': !isValid('dimension')}"></span>
                             </a>

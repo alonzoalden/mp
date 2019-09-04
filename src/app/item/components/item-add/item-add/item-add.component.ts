@@ -1,4 +1,4 @@
-import { Component, Input } from '@angular/core';
+import { Component, Input, Output, EventEmitter, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { ItemInsert, ItemTierPriceInsert, ItemRelatedProductInsert, ItemUpSellInsert, ItemCrossSellInsert, ItemAttachmentInsert, ItemVideoInsert } from '../../../../shared/class/item';
 import { VendorBrand } from '../../../../shared/class/vendor-brand';
@@ -16,7 +16,7 @@ import { Observable } from 'rxjs';
   styleUrls: ['./item-add.component.css']
 })
 
-export class ItemAddComponent {
+export class ItemAddComponent implements OnInit {
     //loading: boolean;
     _item: ItemInsert;
     
@@ -29,6 +29,15 @@ export class ItemAddComponent {
     @Input() item: ItemInsert;
     @Input() errorMessage: string;
     @Input() pendingAdd: boolean;
+
+    @Output() getVendorBrands = new EventEmitter<void>();
+    @Output() setItem = new EventEmitter<ItemInsert>();
+
+    
+    // @Output() getSalesOrderByVendor = new EventEmitter<{ form: FormData, title: string }>();
+    // @Output() downloadSalesOrderPackingSlip = new EventEmitter<{ form: FormData, title: string }>();
+    // @Output() setItem = new EventEmitter<{ form: FormData, title: string }>();
+    
     //@Input() errorMessage: string;
 
 
@@ -45,16 +54,16 @@ export class ItemAddComponent {
 
     constructor(private router: Router,
                 private itemService: ItemService) {
-        this.item = this.itemService.defaultCurrentItemInsert();
+        //this.item = this.itemService.defaultCurrentItemInsert();
 
-        this.itemService.getVendorBrands().subscribe(
-            (vendorBrands: VendorBrand[]) => {
-                //this.vendorBrandList = vendorBrands;
-            },
-            (error: any) => {
-                //this.errorMessage = <any>error;                
-            }
-        ); 
+        // this.itemService.getVendorBrands().subscribe(
+        //     (vendorBrands: VendorBrand[]) => {
+        //         //this.vendorBrandList = vendorBrands;
+        //     },
+        //     (error: any) => {
+        //         //this.errorMessage = <any>error;                
+        //     }
+        // ); 
     }
 
     // get item(): ItemInsert {
@@ -71,6 +80,10 @@ export class ItemAddComponent {
     //     this.dataIsValid = null;
     //     this.item = this.itemService.defaultCurrentItemInsert();
     // }
+    ngOnInit() {
+        this.getVendorBrands.emit();
+        this.setItem.emit(this.itemService.defaultCurrentItemInsert());
+    }
 
     onAddItem() {
         if(this.isItemNameValid() && this.isSKUValid()) {

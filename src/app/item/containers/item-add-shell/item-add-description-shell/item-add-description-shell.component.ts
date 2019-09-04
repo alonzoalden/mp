@@ -23,7 +23,8 @@ export class ItemAddDescriptionShellComponent implements OnInit, AfterViewInit {
     constructor(private itemService: ItemService, private appService: AppService) { }
 
     ngOnInit(): void {
-        this.item = this.itemService.currentItemInsert;
+        //this.item = this.itemService.currentItemInsert;
+        this.item = this.itemService.defaultCurrentItemInsert();
 
         this.itemService.getVendorBrands().subscribe(
             (vendorBrands: VendorBrand[]) => {

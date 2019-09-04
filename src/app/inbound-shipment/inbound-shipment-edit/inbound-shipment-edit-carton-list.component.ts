@@ -520,7 +520,7 @@ export class InboundShipmentEditCartonListComponentCartonLineDialog implements O
     canAdd = false;
     cartonlines: CartonLine[];
     carton: Carton;
-    @ViewChild("linePurchaseOrderIDRef") linePurchaseOrderIDRef: ElementRef;
+    //@ViewChild("linePurchaseOrderIDRef") linePurchaseOrderIDRef: ElementRef;
 
     @ViewChild(MatSort, { static: false }) sort: MatSort;
 
