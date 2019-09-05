@@ -364,13 +364,20 @@ export class ItemService {
             newItemInsert.ItemImages.push(newItemImage);
         });
 
-        item.ItemSections.forEach((itemPart) => {
-            const newItemPart = new ItemSectionInsert(itemPart.ItemID, itemPart.Name, itemPart.ImageRaw
-                ,  itemPart.ImageFilePath, itemPart.Position, []);
+        item.ItemSections.forEach((itemsection) => {
+            const newItemSection = new ItemSectionInsert(itemsection.ItemID, itemsection.Name, itemsection.ImageRaw
+                , itemsection.ImageFilePath, itemsection.Position, []);
+                
+                itemsection.ItemParts.forEach((itemPart) => {
+                    const newItemPart = new ItemPartInsert(itemPart.ItemSectionID
+                        , itemPart.PartLabel, itemPart.PartItemID, itemPart.PrevPartItemID, itemPart.PartItemName
+                        , itemPart.PartItemVendorSKU, itemPart.PartTPIN, itemPart.PartFOBPrice, itemPart.PartPrice, itemPart.ImageRaw, itemPart.ImageFilePath
+                        , itemPart.IsNewImage, itemPart.Position, itemPart.isNew);
+                        newItemSection.ItemParts.push(newItemPart);
+                });
 
-            newItemInsert.ItemSections.push(newItemPart);
+            newItemInsert.ItemSections.push(newItemSection);
         });
-
         return newItemInsert;
     }
 

@@ -53,9 +53,8 @@ export class ItemAddComponent {
     onAddItem() {
         if(this.isItemNameValid() && this.isSKUValid()) {
             //if (this.isValid(null) && this.isShippingFeeValid() && this.isShipWithinDaysValid() && this.isBundleValid()) {
-                if (this.isValid(null) && this.isShipWithinDaysValid() && this.isBundleValid()) {
-                    this.pendingAdd = true;
-                            
+            if (this.isValid(null) && this.isShipWithinDaysValid() && this.isBundleValid()) {
+                this.pendingAdd = true;
                 const newItem = this.itemService.copyItemInsert(this.item);
 
                 newItem.ItemTierPrices.splice(newItem.ItemTierPrices.length-1, 1);
@@ -90,12 +89,18 @@ export class ItemAddComponent {
                     value.ItemSelections.splice(value.ItemSelections.length-1, 1);
                     value.ItemSelections.forEach((value, i) => {
                         value.Position = i + 1;
-                    })
+                    });
                 });            
 
                 newItem.ItemSections.splice(newItem.ItemSections.length-1, 1);
                 newItem.ItemSections.forEach((value, i) => {
                     value.Position = i + 1;
+
+                    value.ItemParts.splice(value.ItemParts.length-1, 1);
+                    value.ItemParts.forEach((value, i) => {
+                        value.Position = i + 1;
+                    });
+
                 });
 
                 this.loading = true; 

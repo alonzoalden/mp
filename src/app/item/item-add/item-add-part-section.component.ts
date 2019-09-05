@@ -25,8 +25,6 @@ export class ItemAddPartSectionComponent implements OnInit {
     displayedColumns = ['Add', 'Down', 'Position', 'Up', 'Thumbnail','ItemName', 'Remove'];
     partGroups: ItemSectionInsert[] = [];
         
-    
-
 
     dataSource: any = null;
 
@@ -67,30 +65,16 @@ export class ItemAddPartSectionComponent implements OnInit {
         this.item = this.itemService.currentItemInsert;
 
 
-
-        
-
-        //this.refreshDataSource(this.selectedPartGroup.ItemParts);
-
-        console.log(this.item)
         if(this.item.ItemSections.length === 0) {
-            const _temp = new ItemSectionInsert(null, null, null, null, null, []);
+            const _temp = new ItemSectionInsert(0, null, null, null, null, []);
             this.item.ItemSections.push(_temp);
-
-            // const _tempGroupInsert = new ItemPartSelectionInsert(null, null, null, null, null,null, null,  null, true, null, []);
-            // this.partGroups.push(_tempGroupInsert);
             
         }
-        //this.dataSource = new MatTableDataSource<ItemSectionInsert>(this.item.ItemSections);
         this.refreshDataSource(this.item.ItemSections);
 
         this.currentIndex = this.item.ItemSections.length - 1;
-        //this.currentIndexGroup = this.partGroups.length - 1;
-
 
         
-
-        //make this based off group
         this.itemService.getPartItemList().subscribe(
             (itemlist: ItemList[]) => {
                 this.itemlist = itemlist;
@@ -103,29 +87,10 @@ export class ItemAddPartSectionComponent implements OnInit {
         );        
     }
 
-    // refreshDataSource(itemParts: ItemPartInsert[]) { 
-    //     console.log(itemParts);
-    //     this.dataSource = new MatTableDataSource<ItemPartInsert>(itemParts);
-    // }
     refreshDataSource(partgroups: ItemSectionInsert[]) { 
         this.dataSource = new MatTableDataSource<ItemSectionInsert>(partgroups);
     }
     
-
-    
-    // onAddItemPartSection(selection: ItemSectionInsert) {
-    //     const _temp = new ItemPartInsert(null, null, null, null, null, null, null, null, null, null, null,  null, true, null, true);
-    //     selection.ItemParts.push(_temp)
-    //     //this.selectedPartGroup = group;
-    //     this.itemService.currentItemPartSelection.next(selection);
-        
-    //     this.refreshDataSource(this.item.ItemSections);
-
-    //     // const _tempGroupInsert = new ItemPartSelectionInsert(null, null, null, null, null,null, null,  null, true, null, []);
-    //     // console.log(this.partGroups);
-    //     // this.partGroups.push(_tempGroupInsert);
-    //     // this.refreshDataSourceGroups(this.partGroups)
-    // }
 
     onAddItemPartSection(itemPart: ItemSectionInsert) {
 
@@ -139,18 +104,6 @@ export class ItemAddPartSectionComponent implements OnInit {
             
                 this.pendingAdd = true;
 
-                // if(itemPart.PartSelectionID && itemPart.PartSelectionID != 0)
-                // {
-                //     this.itemService.getItem(itemPart.PartSelectionID).subscribe(
-                //         (item: Item) => {
-                //             itemPart.PrevPartSelectionID = item.ItemID;
-                //         },
-                //         (error: any) => {
-                //             this.errorMessage = <any>error;
-                //             this.itemService.sendNotification({ type: 'error', title: 'Error', content: this.errorMessage });
-                //         }
-                //     );
-                // }
                 
                 const _temp = new ItemSectionInsert(0, null, null, null, this.item.ItemSections.length + 1, []);
                 this.item.ItemSections.push(_temp);
@@ -227,29 +180,17 @@ export class ItemAddPartSectionComponent implements OnInit {
 
     onEditItemPartGroup(index: number) {
         
-        //this.selectedPartGroup = this.partGroups[index];
         if (index !== this.item.ItemSections.length - 1) {
             this.itemService.currentItemPartSelection.next(this.item.ItemSections[index]);
         }
         else {
-            console.log('eklse');
             this.itemService.currentItemPartSelection.next(null);
         }
 
         this.refreshDataSource(this.item.ItemSections)
 
-        // if (index === this.item.ItemPartSelections.length - 1 && this.item.ItemPartSelections.length > 0) {
-        //     this.dataSource = null;
-        //     this.item.ItemPartSelections = null;
-        // }
-        // else {
-            
-        // }
-        //console.log(this.item.ItemPartSelections)
-       
 
         if(this.pendingAdd) {
-            //this.currentIndex = this.item.ItemPartSelections.length - 1;
             this.pendingAdd = false;
         }
         else {
@@ -257,101 +198,7 @@ export class ItemAddPartSectionComponent implements OnInit {
         }    
      }
 
-    // onEditItemPart(index: number) {
-    //     if(this.currentIndex != index)
-    //     {
-    //         this.item.ItemPartSelections.forEach((itempart, i) => {
-
-    //             this.onChangeFOBPrice(itempart);
-                
-    //             if(i != this.item.ItemPartSelections.length - 1) {
-    //                 if(!itempart.PartItemName || itempart.PartItemName == '' 
-    //                     || !itempart.PartItemVendorSKU || itempart.PartItemVendorSKU == '' 
-    //                     || !itempart.PartFOBPrice || itempart.PartFOBPrice == 0 ) {
     
-    //                     this.item.ItemPartSelections.splice(i, 1);
-    //                     this.refreshDataSource(this.item.Sel);
-    //                 }
-    //             }
-    //         });    
-    //     }
-
-    //     if(this.pendingAdd) {
-    //         this.currentIndex = this.item.ItemPartSelections.length - 1;
-    //         this.pendingAdd = false;
-    //     }
-    //     else {
-    //         this.currentIndex = index;
-    //     }    
-    // }
-
-    // onPartItemChange(index: number, itemPart: any) {  
-    //     if(this.item.ItemSections[index].ItemID && this.item.ItemSections[index].ItemID != 0) {
-    //         if(!this.existName(this.item.ItemSections[index].Name)) {
-    //             if(this.item.ItemSections[index].Name && this.item.ItemSections[index].Name != '')
-    //             {
-    //                 this.itemService.getItem(this.item.ItemSections[index].ItemID).subscribe(
-    //                     (item: Item) => {
-    //                         this.item.ItemSections[index].ItemID = item.ItemID;
-    //                         //this.item.ItemSections[index].Name = item.Name;
-    //                         // this.item.ItemPartSelections[index].PartItemVendorSKU = item.VendorSKU;
-    //                         // this.item.ItemPartSelections[index].PartTPIN = item.TPIN;
-    //                         // this.item.ItemPartSelections[index].PartFOBPrice = item.FOBPrice;
-    //                         // this.item.ItemPartSelections[index].PartPrice = item.Price;
-
-    //                         this.item.ItemSections[index].ImageFilePath = item.ImagePath;
-    //                         //this.item.ItemSections[index].IsNewImage = false;
-
-    //                         this.refreshDataSource(this.item.ItemSections);
-    //                     },
-    //                     (error: any) => {
-    //                         this.errorMessage = <any>error;
-    //                         this.itemService.sendNotification({ type: 'error', title: 'Error', content: this.errorMessage });
-    //                     }
-    //                 );
-    //             }                
-    //         }
-    //         else {
-    //             //This prevents select input value from changing into an existing value
-    //             var originalItem = this.selectionCategoriesRef._results[index].itemsList.items
-    //                         .find(item => item.value.Name === this.item.ItemSections[index].Name);
-    //             this.selectionCategoriesRef._results[index].itemsList.select(originalItem);
-
-    //             itemPart.PartItemName = originalItem.value.ItemName;
-    //             itemPart.PartItemVendorSKU = originalItem.value.VendorSKU; 
-    //             itemPart.PartTPIN = originalItem.value.TPIN;
-    //             itemPart.PartFOBPrice = originalItem.value.FOBPrice;
-    //             itemPart.PartPrice = originalItem.value.PartPrice;
-
-    //             // if (!this.item.ItemSections[index].isNew) {
-    //             //     this.item.ItemSections[index].PartSelectionID = this.item.ItemSections[index].ItemID;
-    //             // }
-    //             this.currentIndex = this.item.ItemSections.length - 1;
-    //             this.refreshDataSource(this.item.ItemSections);
-    //             this.itemService.sendNotification({ type: 'error', title: 'Error', content: "Part already exists" });
-    //         }
-    //     }
-    //     else
-    //     {
-    //         //this.item.ItemSections[index].isNew = true;
-            
-    //         this.item.ItemSections[index].Name = null;
-    //         // this.item.ItemPartSelections[index].PartItemVendorSKU = null;
-    //         // this.item.ItemPartSelections[index].PartTPIN = null;
-    //         // this.item.ItemPartSelections[index].PartFOBPrice = null;
-    //         // this.item.ItemPartSelections[index].PartPrice = null;
-            
-    //         this.refreshDataSource(this.item.ItemSections);
-    //     }
-    // }
-
-    // clickIsNew(itemPart: ItemSectionInsert, index: number) {
-    //     itemPart.Name = null;
-    //     itemPart.ItemID = null;
-    //     itemPart.ImageRaw = null;
-    //     itemPart.ImageFilePath = null;
-    //     itemPart.ItemParts = [];
-    // }
 
     moveDownPosition(itemPart: ItemPartInsert) {
         this.positionMove(this.item.ItemSections, itemPart, 1);
@@ -398,20 +245,6 @@ export class ItemAddPartSectionComponent implements OnInit {
         
         this.formDirty = false;
     }
-    // overflowFix(bool: Boolean):void {
-    //     let container = document.getElementsByClassName('ibox-content')[0];
-    //     bool ? container.classList.add("overflow-visible") : container.classList.remove("overflow-visible");
-    // }
-    // setPlaceholderText(i: number, itemPart: ItemPartInsert) {
-    //     if (this.itemlist) {
-    //         return i === this.item.ItemSections.length-1
-    //             ? 'Search Item'
-    //             : itemPart.PartItemID
-    //                 ? this.itemlist.find(item => itemPart.PartItemID === item.ItemID).Description
-    //                 : 'New Item'
-    //     }
-    // }
-
 
     fileChangeEvent(fileInput: any, itemPart: ItemPartInsert) {
         // Clear Uploaded Files result message
@@ -456,70 +289,6 @@ export class ItemAddPartSectionComponent implements OnInit {
                 );
         }
     }
-
-    // partFileChangeEvent(fileInput: any, item: ItemInsert) {
-    //     // Clear Uploaded Files result message
-    //     this.partFilesToUpload = <Array<File>>fileInput.target.files;
-    //     for (let i = 0; i < this.partFilesToUpload.length; i++) {
-    //         this.partSelectedFileNames.push(this.partFilesToUpload[i].name);
-    //     }
-
-    //     this.partUploadFiles(item);
-    // }
-    
-    // partUploadFiles(item: ItemInsert) {
-    //     if (this.partFilesToUpload.length > 0) {
-    //         this.partPendingUpload = true;
-    //         this.isLoadingData = true;
-    //         const formData: FormData = new FormData();
-    //         for (let i = 0; i < this.partFilesToUpload.length; i++) {
-    //             var reader = new FileReader();
-    //             formData.append('partUploadedFiles', this.partFilesToUpload[i], this.partFilesToUpload[i].name);
-    //         }
-
-    //         this.itemService.uploadTempImage(this.newGuid(), formData)
-    //             .subscribe (
-    //                 (data: string) => {
-    //                     this.partPendingUpload = false;
-    //                     item.PartImageRaw = data;
-    //                     item.PartIsNewImage = true;                                                
-    //                 },
-    //                 err => {
-    //                     this.partPendingUpload = false;
-    //                     this.itemService.sendNotification({ type: 'error', title: 'Error', content: err });
-    //                     this.isLoadingData = false;
-    //                     this.partFilesToUpload = [];
-    //                     this.partSelectedFileNames = [];
-    //                 },
-    //                 () => {
-    //                     this.partPendingUpload = false;
-    //                     this.isLoadingData = false;
-    //                     this.partFilesToUpload = [];
-    //                     this.partSelectedFileNames = [];
-    //                 }
-    //             );
-    //     }
-    // }
-
-    // onChangeFOBPrice(itemPart: ItemPartInsert)
-    // {
-    //     if(itemPart.PartFOBPrice) {
-    //         itemPart.PartFOBPrice = Number(itemPart.PartFOBPrice.toFixed(2));
-    //     }
-
-    //     if(itemPart.PartPrice)
-    //     {
-    //         if(itemPart.PartPrice <= 0) {
-    //             itemPart.PartPrice = itemPart.PartFOBPrice * 3;    
-    //             itemPart.PartPrice = Number(itemPart.PartPrice.toFixed(2));                 
-    //         }                    
-    //     }
-    //     else {
-    //         itemPart.PartPrice = itemPart.PartFOBPrice * 3;    
-    //         itemPart.PartPrice = Number(itemPart.PartPrice.toFixed(2));  
-    //     }
-          
-    // }
 
     newGuid() {
         return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function(c) {

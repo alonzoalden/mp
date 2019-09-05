@@ -73,7 +73,7 @@ export class ItemAddPartSectionPartComponent implements OnInit {
             this.currentItemPartSelection = partselection;
             if (partselection) {
                 if (partselection.ItemParts.length === 0) {
-                    const _temp = new ItemPartInsert(null, null, null, null, null, null, null, null, null, null, null, true, null, true);
+                    const _temp = new ItemPartInsert(0, null, null, null, null, null, null, null, null, null, null, true, null, true);
                     this.currentItemPartSelection.ItemParts.push(_temp);
                     
                 }
@@ -107,7 +107,6 @@ export class ItemAddPartSectionPartComponent implements OnInit {
     
 
     onAddItemPart(itemPart: ItemPartInsert) {
-        
         this.onChangeFOBPrice(itemPart);
 
         if (this.isRequirementValid(itemPart)) { 

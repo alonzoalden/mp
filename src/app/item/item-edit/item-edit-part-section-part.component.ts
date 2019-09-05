@@ -10,11 +10,11 @@ import { AppService } from '../../app.service';
 import { environment } from '../../../environments/environment';
 
 @Component({
-    selector: 'o-item-add-part-section-part',
-    templateUrl: './item-add-part-section-part.component.html'
+    selector: 'o-item-edit-part-section-part',
+    templateUrl: './item-edit-part-section-part.component.html'
 })
 
-export class ItemAddPartSectionPartComponent implements OnInit {
+export class ItemEditPartSectionPartComponent implements OnInit {
     private imageURL = environment.imageURL;
     isPM: boolean;
     
@@ -72,7 +72,7 @@ export class ItemAddPartSectionPartComponent implements OnInit {
         this.itemService.currentItemPartSelection.subscribe(partselection => {
             this.currentItemPartSelection = partselection;
             if (partselection) {
-                if (partselection.ItemParts.length === 0) {
+                if (partselection.ItemParts[partselection.ItemParts.length-1].PartItemID) {
                     const _temp = new ItemPartInsert(null, null, null, null, null, null, null, null, null, null, null, true, null, true);
                     this.currentItemPartSelection.ItemParts.push(_temp);
                     
