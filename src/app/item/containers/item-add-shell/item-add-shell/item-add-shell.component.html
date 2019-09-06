@@ -1,8 +1,8 @@
 <o-item-add
-    [vendorBrandList]="salesOrdersMatTable$ | async"
-    [item]="userInfo$ | async"
+    [vendorBrandList]="vendorBrandList$ | async"
+    [item]="item$ | async"
     [isLoading]="isLoading$ | async"
-    [pendingAdd]="errorMessage$ | async"
+    [pendingAdd]="pendingAdd$ | async"
     [errorMessage]="errorMessage$ | async"
     (getVendorBrands)="getVendorBrands()"
     (setItem)="setItem($event)"    

@@ -21,15 +21,19 @@ export const getVendorBrandList = createSelector(
     getItemFeatureState,
     state => state.vendorBrandList
 );
+export const getSimpleItemList = createSelector(
+    getItemFeatureState,
+    state => state.itemList 
+);
 // export const getSalesOrdersListMatTable = createSelector(
 //     getItemFeatureState,
 //     state => new MatTableDataSource<SalesOrder>(state.salesOrders)
 // );
 
 export const getItem = createSelector(
-        getItemFeatureState,
-        state => state.item
-    );
+    getItemFeatureState,
+    state => state.item
+);
 
 // export const getSalesOrder = createSelector(
 //     getItemFeatureState,

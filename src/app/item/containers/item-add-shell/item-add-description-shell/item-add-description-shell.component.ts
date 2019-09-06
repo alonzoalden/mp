@@ -1,113 +1,29 @@
-import { Component, OnInit, AfterViewInit } from '@angular/core';
-import { Router } from '@angular/router';
-
+import { Component, OnInit } from '@angular/core';
 import { ItemInsert } from '../../../../shared/class/item';
 import { VendorBrand } from '../../../../shared/class/vendor-brand';
-
-import { ItemService } from '../../../item.service';
-import { AppService } from '../../../../app.service';
-
-declare var $ :any;
+import { Member } from 'app/shared/class/member';
+import { Observable } from 'rxjs/internal/Observable';
+import { Store, select } from '@ngrx/store';
+//import * as itemActions from '../../../state/item.actions';
+import * as fromItem from '../../../state';
+import * as fromUser from '../../../../shared/state/user-state.reducer';
 
 @Component({
   templateUrl: './item-add-description-shell.component.html'
 })
 
-export class ItemAddDescriptionShellComponent implements OnInit, AfterViewInit {
-    errorMessage: string;
-    isPM: boolean;
-    
-    item: ItemInsert;
-    vendorBrandList: VendorBrand[]; 
+export class ItemAddDescriptionShellComponent implements OnInit {
+    userInfo$: Observable<Member>;
+    item$: Observable<ItemInsert>;
+    errorMessage$: Observable<string>;
+    vendorBrandList$: Observable<VendorBrand[]>;
 
-    constructor(private itemService: ItemService, private appService: AppService) { }
+    constructor(private store: Store<fromItem.State>) { }
 
     ngOnInit(): void {
-        //this.item = this.itemService.currentItemInsert;
-        this.item = this.itemService.defaultCurrentItemInsert();
-
-        this.itemService.getVendorBrands().subscribe(
-            (vendorBrands: VendorBrand[]) => {
-                this.vendorBrandList = vendorBrands;
-            },
-            (error: any) => {
-                this.errorMessage = <any>error;                
-            }
-        ); 
-
-        this.appService.getCurrentMember().subscribe(
-            (data) => {
-                this.appService.currentMember = data;
-                this.isPM = data.IsPM;
-            },
-            (error: any) => {
-                this.errorMessage = <any>error;
-            }
-        );
-    }
-
-    ngAfterViewInit() {
-        var self = this;
-
-        $('.summernote').summernote( {
-            height: 300,
-            tabsize: 2,
-            toolbar: [
-                ["style",["style"]],
-                ["font",["bold","underline","clear"]],
-                ["fontname",["fontname"]],
-                ["color",["color"]],
-                ["para",["ul","ol","paragraph"]],
-                ["table",["table"]],
-                ["insert",["link","picture","video"]],
-                ["view",["help"]]
-            ],
-            callbacks: {
-                onBlur: function() {
-                    self.updateTextEditorFields();
-                }
-              }
-        });
-
-        $('#itemDescriptionId').summernote('code', this.item.Description);
-        $('#itemShortDescriptionId').summernote('code', this.item.ShortDescription);
-        $('#itemTechnicalDetailId').summernote('code', this.item.TechnicalDetail);
-        $('#itemAdditionalInformationId').summernote('code', this.item.AdditionalInformation);
-    }
-
-    onTextEditorBlur(id: string) {
-        switch(id) { 
-            case "Description": { 
-                this.item.Description = $('#itemDescriptionId').summernote('code');
-                break; 
-            } 
-            case "ShortDescription": { 
-                this.item.ShortDescription = $('#itemShortDescriptionId').summernote('code');
-                break; 
-            } 
-            case "TechnicalDetail": {
-                this.item.TechnicalDetail = $('#itemTechnicalDetailId').summernote('code');
-                break;    
-            } 
-            case "AdditionalInformation": { 
-                this.item.AdditionalInformation = $('#itemAdditionalInformationId').summernote('code');
-                break; 
-            }  
-            default: { 
-               console.log("Invalid choice"); 
-               break;              
-            } 
-         }
-    }
-
-    updateTextEditorFields() {
-        this.item.Description = $('#itemDescriptionId').summernote('code');
-        this.item.ShortDescription = $('#itemShortDescriptionId').summernote('code');
-        this.item.TechnicalDetail = $('#itemTechnicalDetailId').summernote('code');
-        this.item.AdditionalInformation = $('#itemAdditionalInformationId').summernote('code');
-    }
-
-    onItemTypeChange() {
-        this.item.Price = null;
+        this.vendorBrandList$ = this.store.pipe(select(fromItem.getVendorBrandList));
+        this.item$ = this.store.pipe(select(fromItem.getItem));
+        this.userInfo$ = this.store.pipe(select(fromUser.getCurrentUser));
+        this.errorMessage$ = this.store.pipe(select(fromItem.getError));
     }
 }

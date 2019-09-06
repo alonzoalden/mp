@@ -2,12 +2,13 @@ import { ItemActionTypes, ItemActions } from './item.actions';
 import { SalesOrder } from '../../shared/class/sales-order';
 import { SalesOrderLine } from '../../shared/class/sales-order-line';
 import { Fulfillment, FulfillmentSalesOrderLine } from '../../shared/class/fulfillment';
-import { ItemInsert } from '../../shared/class/item';
+import { ItemInsert, ItemList } from '../../shared/class/item';
 import { VendorBrand } from '../../shared/class/vendor-brand';
 
 // State for this feature (Item Variation)
 export interface ItemState {
     vendorBrandList: VendorBrand[];
+    itemList: ItemList[];
     item: ItemInsert;
     isLoading: boolean;
     pendingDelete: boolean,
@@ -18,6 +19,7 @@ export interface ItemState {
 
 const initialState: ItemState = {
     vendorBrandList: [],
+    itemList: [],
     item: null,
     isLoading: true,
     pendingDelete: false,
@@ -44,6 +46,18 @@ export function itemReducer(state = initialState, action: ItemActions): ItemStat
                 error: '',
             };
         case ItemActionTypes.LoadVendorBrandsFail:
+            return {
+                ...state,
+                vendorBrandList: [],
+                error: action.payload,
+            };
+        case ItemActionTypes.LoadSimpleItemListSuccess:
+            return {
+                ...state,
+                itemList: action.payload,
+                error: '',
+            };
+        case ItemActionTypes.LoadSimpleItemListFail:
             return {
                 ...state,
                 vendorBrandList: [],

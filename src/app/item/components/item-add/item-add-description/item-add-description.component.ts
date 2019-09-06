@@ -1,11 +1,6 @@
-import { Component, OnInit, AfterViewInit, OnChanges } from '@angular/core';
-import { Router } from '@angular/router';
-
+import { Component, AfterViewInit, OnChanges, Input } from '@angular/core';
 import { ItemInsert } from '../../../../shared/class/item';
 import { VendorBrand } from '../../../../shared/class/vendor-brand';
-
-import { ItemService } from '../../../item.service';
-import { AppService } from '../../../../app.service';
 
 declare var $ :any;
 
@@ -14,41 +9,13 @@ declare var $ :any;
   templateUrl: './item-add-description.component.html'
 })
 
-export class ItemAddDescriptionComponent implements OnInit, AfterViewInit, OnChanges {
-    errorMessage: string;
-    isPM: boolean;
-    
-    item: ItemInsert;
-    vendorBrandList: VendorBrand[]; 
+export class ItemAddDescriptionComponent implements AfterViewInit {
+    @Input() userInfo: string;
+    @Input() errorMessage: string;
+    @Input() item: ItemInsert;
+    @Input() vendorBrandList: VendorBrand[];
 
-    constructor(private itemService: ItemService, private appService: AppService) { }
-
-    ngOnChanges(): void {
-        //console.log(this.iten)
-    }
-    ngOnInit(): void {
-        //this.item = this.itemService.currentItemInsert;
-        this.item = this.itemService.defaultCurrentItemInsert();
-
-        this.itemService.getVendorBrands().subscribe(
-            (vendorBrands: VendorBrand[]) => {
-                this.vendorBrandList = vendorBrands;
-            },
-            (error: any) => {
-                this.errorMessage = <any>error;                
-            }
-        ); 
-
-        this.appService.getCurrentMember().subscribe(
-            (data) => {
-                this.appService.currentMember = data;
-                this.isPM = data.IsPM;
-            },
-            (error: any) => {
-                this.errorMessage = <any>error;
-            }
-        );
-    }
+    constructor() { }
 
     ngAfterViewInit() {
         var self = this;

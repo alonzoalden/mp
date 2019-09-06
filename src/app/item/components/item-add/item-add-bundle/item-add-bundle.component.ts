@@ -7,6 +7,11 @@ import { ItemInsert, ItemList, ItemOptionInsert, ItemSelectionInsert } from '../
 import { Category } from '../../../../shared/class/category';
 
 import { ItemService } from '../../../item.service';
+import { Input } from '@angular/core';
+import { EventEmitter } from 'events';
+import { Output } from '@angular/core';
+import { Observable } from 'rxjs';
+import { SimpleChanges } from '@angular/core';
 declare var $ :any;
 
 @Component({
@@ -15,19 +20,28 @@ declare var $ :any;
 })
 
 export class ItemAddBundleComponent implements OnInit, OnDestroy {
-    subscription: Subscription;
-    errorMessage: string;
-    item: ItemInsert;
-    itemList: ItemList[];
-    selections: ItemSelectionInsert[] = [];
-    selectedOption: ItemOptionInsert;
+    //@Input() userInfo: string;
+    @Input() errorMessage: string;
+    @Input() item: ItemInsert;
+    @Input() itemList: ItemList[];
+    //@Input() selections: ItemSelectionInsert[] = [];
+    @Input() selectedOption: ItemOptionInsert;
+    //@Input() optionsMatTable: MatTableDataSource<ItemOptionInsert> = [];
+    @Input() selectionsMatTable: MatTableDataSource<ItemSelectionInsert>;
+    
+    @Output() getItemList = new EventEmitter<void>();
+    @Output() setSelectedBundleOption = new EventEmitter<void>();
+    
+    //subscription: Subscription;
+    //errorMessage: string;
+    //item: ItemInsert;
+    //itemList: ItemList[];
+    //selections: ItemSelectionInsert[] = [];
+    //selectedOption: ItemOptionInsert;
+
     selectedOptionLabel: string;
 
     optionTypes: any = [
-        // {
-        //     'value': 'multi',
-        //     'label': 'Multiple Select'
-        // },
         {
             'value': 'radio',
             'label': 'Radio Button'
@@ -38,26 +52,27 @@ export class ItemAddBundleComponent implements OnInit, OnDestroy {
         }
     ];
 
-    getOptionTypeLabel(value: string){
-        return this.optionTypes.find(x => x.value == value).label;
-    }
-
+    
     optionDisplayedColumns = ['Add', 'Down', 'Position', 'Up', 'Title', 'Type', 'Required', 'Remove'];
     optionDataSource: any = null;
+    
     selectionDisplayedColumns = ['Add', 'Down', 'Position', 'Up', 'Item', 'Quantity', 'IsDefault', 'Remove'];
     selectionDataSource: any = null;
-
+    
     pendingOptionAdd: boolean;
     currentOptionIndex: number;
     formBundleDirty = false;
-
+    
     pendingSelectionAdd: boolean;
     currentSelectionIndex: number;
-
+    
     formSelectionDirty = false;
-        
+    
     constructor(private itemService: ItemService) { }
-
+    
+    getOptionTypeLabel(value: string){
+        return this.optionTypes.find(x => x.value == value).label;
+    }
     get hasEmptySelection(): boolean {
         let result = false;
         this.item.ItemOptions.forEach(option => {
@@ -81,23 +96,33 @@ export class ItemAddBundleComponent implements OnInit, OnDestroy {
         });
         return result;
     }
-
-    ngOnInit(): void {
-        this.item = this.itemService.currentItemInsert;
-        this.subscription = this.itemService.getSimpleItemList().subscribe(
-            (itemlist: ItemList[]) => {
-                this.itemList = itemlist;
-            },
-            (error: any) => this.errorMessage = <any>error
-        );
-
-        if(this.item.ItemOptions.length === 0) {
+    ngOnChanges(changes: SimpleChanges) {
+        console.log(changes)
+        
+        if(changes.item && changes.item.currentValue.ItemOptions.data.length === 0) {
             const _temp = new ItemOptionInsert(true, null, null, 'select', []);
             this.item.ItemOptions.push(_temp);
+            this.currentOptionIndex = this.item.ItemOptions.length - 1;
         }
-        this.currentOptionIndex = this.item.ItemOptions.length - 1;
+    }
+    ngOnInit(): void {
+        //this.item = this.itemService.currentItemInsert;
 
-        this.refreshOptionDataSource(this.item.ItemOptions);
+        this.getItemList.emit();
+        // this.subscription = this.itemService.getSimpleItemList().subscribe(
+        //     (itemlist: ItemList[]) => {
+        //         this.itemList = itemlist;
+        //     },
+        //     (error: any) => this.errorMessage = <any>error
+        // );
+
+        // if(this.item.ItemOptions.length === 0) {
+        //     const _temp = new ItemOptionInsert(true, null, null, 'select', []);
+        //     this.item.ItemOptions.push(_temp);
+        // }
+        // this.currentOptionIndex = this.item.ItemOptions.length - 1;
+
+        //this.refreshOptionDataSource(this.item.ItemOptions);
     }
 
     refreshOptionDataSource(options: ItemOptionInsert[]) {
@@ -157,13 +182,13 @@ export class ItemAddBundleComponent implements OnInit, OnDestroy {
     addSelection(itemSelection: ItemSelectionInsert) {
         if (this.isSelectionRequirementValid(itemSelection)) {      
             this.pendingSelectionAdd = true;
-            itemSelection.Position = this.selections.length;
+            itemSelection.Position = this.selectedOption.ItemSelections.length;
             const _temp = new ItemSelectionInsert(null, null, false, 0, 1, false);
-            if (this.selections.length === 0) {
+            if (this.selectedOption.ItemSelections.length === 0) {
                 _temp.IsDefault = true;
             }
-            this.selections.push(_temp);
-            this.refreshSelectionDataSource(this.selections);
+            this.selectedOption.ItemSelections.push(_temp);
+            this.refreshSelectionDataSource(this.selectedOption.ItemSelections);
         }
         else {
             this.itemService.sendNotification({ type: 'error', title: 'Error', content: "Item is required" });
@@ -211,32 +236,32 @@ export class ItemAddBundleComponent implements OnInit, OnDestroy {
     }
 
     onOptionTypeChange(index: number) {
-        this.selections.forEach((value) => {
+        this.selectedOption.ItemSelections.forEach((value) => {
             value.IsDefault = false;
             value.CanChangeQty = false;     
         });
-        this.refreshSelectionDataSource(this.selections);
+        this.refreshSelectionDataSource(this.selectedOption.ItemSelections);
     }
 
     onSelectOption(option: ItemOptionInsert, index: number) {
         this.currentOptionIndex = index;
 
         this.selectedOption = option;
-        this.selections =  option.ItemSelections;
+        //this.selections =  option.ItemSelections;
         this.selectedOptionLabel = this.optionTypes[this.optionTypes.findIndex(type => type.value === option.Type)].label;                
           
-        if(this.selections.length === 0 && this.currentOptionIndex !== this.item.ItemOptions.length - 1) {
+        if(this.selectedOption.ItemSelections.length === 0 && this.currentOptionIndex !== this.item.ItemOptions.length - 1) {
             const _temp = new ItemSelectionInsert(null, null, false, 0, 1, false);
-            if (this.selections.length === 0) {
+            if (this.selectedOption.ItemSelections.length === 0) {
                 _temp.IsDefault = false;
             }
-            this.selections.push(_temp);
+            this.selectedOption.ItemSelections.push(_temp);
         }
 
-        this.currentSelectionIndex = this.selections.length -1;
+        this.currentSelectionIndex = this.selectedOption.ItemSelections.length -1;
         //this.resetList();
 
-        this.refreshSelectionDataSource(this.selections);        
+        this.refreshSelectionDataSource(this.selectedOption.ItemSelections);        
     }
 
     onSelectSelection(index: number) {
@@ -264,32 +289,32 @@ export class ItemAddBundleComponent implements OnInit, OnDestroy {
     // }
 
     moveDownSelection(selection: ItemSelectionInsert) {
-        this.move(this.selections, selection, 1);
-        this.selections.forEach((value, index) => value.Position = index + 1);
-        this.refreshSelectionDataSource(this.selections);
+        this.move(this.selectedOption.ItemSelections, selection, 1);
+        this.selectedOption.ItemSelections.forEach((value, index) => value.Position = index + 1);
+        this.refreshSelectionDataSource(this.selectedOption.ItemSelections);
     }
 
     moveUpSelection(selection: ItemSelectionInsert) {
-        this.move(this.selections, selection, -1);
-        this.selections.forEach((value, index) => value.Position = index + 1);
-        this.refreshSelectionDataSource(this.selections);
+        this.move(this.selectedOption.ItemSelections, selection, -1);
+        this.selectedOption.ItemSelections.forEach((value, index) => value.Position = index + 1);
+        this.refreshSelectionDataSource(this.selectedOption.ItemSelections);
     }
 
     removeSelection(index: number) {
-        this.selections.splice(index, 1);
-        this.selections.forEach((value, i) => value.Position = i + 1);
-        this.refreshSelectionDataSource(this.selections);
+        this.selectedOption.ItemSelections.splice(index, 1);
+        this.selectedOption.ItemSelections.forEach((value, i) => value.Position = i + 1);
+        this.refreshSelectionDataSource(this.selectedOption.ItemSelections);
     }
 
     isDefaultClick(selection: ItemSelectionInsert, index: number) {
         if(this.selectedOption.Type == "radio" || this.selectedOption.Type == "select")
         {
-            this.selections.forEach((value, i) => {
+            this.selectedOption.ItemSelections.forEach((value, i) => {
                 if(i != index) {
                     value.IsDefault = false;
                 }
             });
-            this.refreshSelectionDataSource(this.selections);
+            this.refreshSelectionDataSource(this.selectedOption.ItemSelections);
         }        
     }
 
@@ -306,7 +331,7 @@ export class ItemAddBundleComponent implements OnInit, OnDestroy {
     }
 
     ngOnDestroy() {
-        this.subscription.unsubscribe();
+        //this.subscription.unsubscribe();
     }
 
     clearBundleFields(form) {

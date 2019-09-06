@@ -8,6 +8,7 @@ import * as itemActions from './item.actions';
 import { Router } from '@angular/router';
 import { Member, MemberVendor } from 'app/shared/class/member';
 import { VendorBrand } from 'app/shared/class/vendor-brand';
+import { ItemList } from 'app/shared/class/item';
 
 @Injectable()
 export class ItemEffects {
@@ -24,6 +25,19 @@ export class ItemEffects {
                 map((vendorbrands: VendorBrand[]) => (new itemActions.LoadVendorBrandsSuccess(vendorbrands))),
                 catchError(err => {
                     of(new itemActions.LoadVendorBrandsFail(err))
+                    return EMPTY;
+                })
+            )
+        )
+    );
+    @Effect()
+    loadSimpleItemList$: Observable<Action> = this.actions$.pipe(
+        ofType(itemActions.ItemActionTypes.LoadSimpleItemList),
+        mergeMap(() =>
+            this.itemService.getSimpleItemList().pipe(
+                map((itemlists: ItemList[]) => (new itemActions.LoadSimpleItemListSuccess(itemlists))),
+                catchError(err => {
+                    of(new itemActions.LoadSimpleItemListFail(err))
                     return EMPTY;
                 })
             )

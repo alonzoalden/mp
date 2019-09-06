@@ -7,6 +7,11 @@ import { ItemInsert, ItemList, ItemOptionInsert, ItemSelectionInsert } from '../
 import { Category } from '../../../../shared/class/category';
 
 import { ItemService } from '../../../item.service';
+import { Store } from '@ngrx/store';
+
+import * as itemActions from '../../../state/item.actions';
+import * as fromItem from '../../../state';
+
 declare var $ :any;
 
 @Component({
@@ -21,7 +26,7 @@ export class ItemAddBundleShellComponent implements OnInit, OnDestroy {
     selections: ItemSelectionInsert[] = [];
     selectedOption: ItemOptionInsert;
     selectedOptionLabel: string;
-
+    
     optionTypes: any = [
         // {
         //     'value': 'multi',
@@ -55,7 +60,7 @@ export class ItemAddBundleShellComponent implements OnInit, OnDestroy {
 
     formSelectionDirty = false;
         
-    constructor(private itemService: ItemService) { }
+    constructor(private itemService: ItemService, private store: Store<fromItem.State>) { }
 
     get hasEmptySelection(): boolean {
         let result = false;
@@ -79,6 +84,10 @@ export class ItemAddBundleShellComponent implements OnInit, OnDestroy {
             }
         });
         return result;
+    }
+
+    getItemList() {
+        this.store.dispatch(new itemActions.LoadSimpleItemList());
     }
 
     ngOnInit(): void {
