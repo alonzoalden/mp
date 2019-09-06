@@ -23,15 +23,12 @@ export class ItemAddPartSectionComponent implements OnInit {
     //displayedColumns = ['Add', 'Down', 'Position', 'Up', 'Thumbnail', 'Label', 'Select', 'ItemName', 'SKU', 'TPIN', 'Price', 'Remove'];
     
     displayedColumns = ['Add', 'Down', 'Position', 'Up', 'Thumbnail','ItemName', 'Remove'];
-    partGroups: ItemSectionInsert[] = [];
-        
 
     dataSource: any = null;
 
     pendingAdd: boolean;
     pendingChange: boolean;
     currentIndex: number;
-
 
     formDirty = false;
 
@@ -81,7 +78,6 @@ export class ItemAddPartSectionComponent implements OnInit {
                 const _temp = new ItemList(null, 'New Item', null, null, null, null, null);
                 this.itemlist.splice(0,0,_temp);
 
-                //this.refreshDataSource(this.selectedPartGroup.ItemParts);
             },
             (error: any) => this.errorMessage = <any>error
         );        
@@ -90,7 +86,6 @@ export class ItemAddPartSectionComponent implements OnInit {
     refreshDataSource(partgroups: ItemSectionInsert[]) { 
         this.dataSource = new MatTableDataSource<ItemSectionInsert>(partgroups);
     }
-    
 
     onAddItemPartSection(itemPart: ItemSectionInsert) {
 
@@ -103,8 +98,6 @@ export class ItemAddPartSectionComponent implements OnInit {
         if (this.isRequirementValid(itemPart)) { 
             
                 this.pendingAdd = true;
-
-                
                 const _temp = new ItemSectionInsert(0, null, null, null, this.item.ItemSections.length + 1, []);
                 this.item.ItemSections.push(_temp);
                 this.refreshDataSource(this.item.ItemSections);   
@@ -163,33 +156,15 @@ export class ItemAddPartSectionComponent implements OnInit {
         else { return false; }
     }
 
-    // existVendorSKU(vendorSKU: string, isNew: boolean = false){
-    //     var counter: number = 0;
-    //     this.item.ItemPartSelections.forEach((value, index) => {
-    //             if(value.ItemPartSelectionID === vendorSKU) { 
-    //                 if(isNew || index != this.item.ItemPartSelections.length - 1) {
-    //                     counter += 1; 
-    //                 }
-    //             }
-    //         }
-    //     );
-    //     if(counter > 1) { return true; }
-    //     else { return false; }
-    // }
-
-
     onEditItemPartGroup(index: number) {
         
         if (index !== this.item.ItemSections.length - 1) {
-            this.itemService.currentItemPartSelection.next(this.item.ItemSections[index]);
+            this.itemService.currentItemPartSelectionInsert.next(this.item.ItemSections[index]);
         }
         else {
-            this.itemService.currentItemPartSelection.next(null);
+            this.itemService.currentItemPartSelectionInsert.next(null);
         }
-
         this.refreshDataSource(this.item.ItemSections)
-
-
         if(this.pendingAdd) {
             this.pendingAdd = false;
         }
@@ -232,7 +207,8 @@ export class ItemAddPartSectionComponent implements OnInit {
             const foundIndex = this.item.ItemSections.findIndex(i => i.Name === itemPart.Name);
             if (foundIndex > -1) {
                 this.item.ItemSections.splice(foundIndex, 1);
-            }            
+            }
+            this.itemService.currentItemPartSelectionInsert.next(null);
             this.refreshDataSource(this.item.ItemSections);
         }
     }

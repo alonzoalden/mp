@@ -2,7 +2,7 @@ import { Component, OnInit, ViewChildren } from '@angular/core';
 import { Router } from '@angular/router';
 import { MatTableDataSource } from '@angular/material';
 
-import { Item, ItemInsert, ItemList, ItemPartInsert, ItemSectionInsert } from '../../shared/class/item';
+import { Item, ItemInsert, ItemList, ItemPartInsert, ItemSectionInsert, ItemPart, ItemSection } from '../../shared/class/item';
 import { ItemService } from '../item.service';
 
 import { AppService } from '../../app.service';
@@ -25,14 +25,14 @@ export class ItemEditPartSectionPartComponent implements OnInit {
     //displayedColumns = ['Add', 'Down', 'Position', 'Up', 'New', 'Select', 'ItemName', 'SKU', 'TPIN', 'Price', 'Remove'];
     displayedColumns = ['Add', 'Down', 'Position', 'Up', 'Thumbnail', 'Label', 'Select', 'ItemName', 'SKU', 'TPIN', 'Price', 'Remove'];
     
-    currentItemPartSelection: ItemSectionInsert;
+    currentItemPartSelection: ItemSection;
 
 
     dataSource: any = null;
     dataSourceGroups: any = null;
 
     pendingAdd: boolean;
-
+    pendingLoad: boolean;
     currentIndex: number;
     currentIndexGroup: number;
 
@@ -66,14 +66,12 @@ export class ItemEditPartSectionPartComponent implements OnInit {
                     }
                 );
 
-        //this.item = this.itemService.currentItemInsert;
-
 
         this.itemService.currentItemPartSelection.subscribe(partselection => {
             this.currentItemPartSelection = partselection;
             if (partselection) {
-                if (partselection.ItemParts[partselection.ItemParts.length-1].PartItemID) {
-                    const _temp = new ItemPartInsert(null, null, null, null, null, null, null, null, null, null, null, true, null, true);
+                if (partselection.ItemParts.length === 0 || partselection.ItemParts[partselection.ItemParts.length-1].PartItemID) {
+                    const _temp = new ItemPart(null, partselection.ItemSectionID, null, null, null, null, null, null, null, null, null, null, null, this.currentItemPartSelection.ItemParts.length + 1, null, null, true, true);
                     this.currentItemPartSelection.ItemParts.push(_temp);
                     
                 }
@@ -92,22 +90,17 @@ export class ItemEditPartSectionPartComponent implements OnInit {
                 const _temp = new ItemList(null, 'New Item', null, null, null, null, null);
                 this.itemlist.splice(0,0,_temp);
 
-                //this.refreshDataSource(this.currentItemPartSelection.ItemParts.ItemParts);
             },
             (error: any) => this.errorMessage = <any>error
         );        
     }
 
-    refreshDataSource(itemParts: ItemPartInsert[]) { 
-        this.dataSource = new MatTableDataSource<ItemPartInsert>(itemParts);
+    refreshDataSource(itemParts: ItemPart[]) { 
+        this.dataSource = new MatTableDataSource<ItemPart>(itemParts);
     }
-    // refreshDataSourceGroups(partselections: ItemPartSelectionInsert[]) { 
-    //     this.dataSourceGroups = new MatTableDataSource<ItemPartSelectionInsert>(partselections);
-    // }
-    
 
-    onAddItemPart(itemPart: ItemPartInsert) {
-        
+    onAddItemPart(itemPart: ItemPart) {
+        itemPart.pendingAdd = false;
         this.onChangeFOBPrice(itemPart);
 
         if (this.isRequirementValid(itemPart)) { 
@@ -126,7 +119,7 @@ export class ItemEditPartSectionPartComponent implements OnInit {
                     );
                 }
                 
-                const _temp = new ItemPartInsert(0, null, null, null, null, null, null, null, null, null, null, true, this.currentItemPartSelection.ItemParts.length + 1, true);
+                const _temp = new ItemPart(null, this.currentItemPartSelection.ItemSectionID, null, null, null, null, null, null, null, null, null, null, null, this.currentItemPartSelection.ItemParts.length + 1, null, null, true, true);
                 this.currentItemPartSelection.ItemParts.push(_temp);
                 this.refreshDataSource(this.currentItemPartSelection.ItemParts);
             }
@@ -139,7 +132,7 @@ export class ItemEditPartSectionPartComponent implements OnInit {
         }
     }
 
-    isRequirementValid(itemPart: ItemPartInsert): boolean {
+    isRequirementValid(itemPart: ItemPart): boolean {
         if (itemPart
             && itemPart.PartItemName
             && itemPart.PartItemVendorSKU
@@ -180,6 +173,7 @@ export class ItemEditPartSectionPartComponent implements OnInit {
     }
 
     onEditItemPart(index: number) {
+        if (this.pendingLoad) return;
         if(this.currentIndex != index)
         {
             this.currentItemPartSelection.ItemParts.forEach((itempart, i) => {
@@ -210,8 +204,8 @@ export class ItemEditPartSectionPartComponent implements OnInit {
     onPartItemChange(index: number, itemPart: any) {  
         if(this.currentItemPartSelection.ItemParts[index] && this.currentItemPartSelection.ItemParts[index].PartItemID && this.currentItemPartSelection.ItemParts[index].PartItemID != 0) {
             if(!this.existItemID(this.currentItemPartSelection.ItemParts[index].PartItemID)) {
-                if(this.currentItemPartSelection.ItemParts[index].PartItemID && this.currentItemPartSelection.ItemParts[index].PartItemID != 0)
-                {
+                if(this.currentItemPartSelection.ItemParts[index].PartItemID && this.currentItemPartSelection.ItemParts[index].PartItemID != 0) {
+                    this.pendingLoad = true;
                     this.itemService.getItem(this.currentItemPartSelection.ItemParts[index].PartItemID).subscribe(
                         (item: Item) => {
                             this.currentItemPartSelection.ItemParts[index].PrevPartItemID = item.ItemID;
@@ -225,10 +219,12 @@ export class ItemEditPartSectionPartComponent implements OnInit {
                             this.currentItemPartSelection.ItemParts[index].IsNewImage = false;
 
                             this.refreshDataSource(this.currentItemPartSelection.ItemParts);
+                            this.pendingLoad = false;
                         },
                         (error: any) => {
                             this.errorMessage = <any>error;
                             this.itemService.sendNotification({ type: 'error', title: 'Error', content: this.errorMessage });
+                            this.pendingLoad = false;
                         }
                     );
                 }                
@@ -267,7 +263,7 @@ export class ItemEditPartSectionPartComponent implements OnInit {
         }
     }
 
-    clickIsNew(itemPart: ItemPartInsert, index: number) {
+    clickIsNew(itemPart: ItemPart, index: number) {
         itemPart.PartItemID = null;
         itemPart.PartItemName = null;
         itemPart.PartItemVendorSKU = null;
@@ -276,7 +272,7 @@ export class ItemEditPartSectionPartComponent implements OnInit {
         itemPart.PartPrice = null;
     }
 
-    moveDownPosition(itemPart: ItemPartInsert) {
+    moveDownPosition(itemPart: ItemPart) {
         this.positionMove(this.currentItemPartSelection.ItemParts, itemPart, 1);
         this.currentItemPartSelection.ItemParts.forEach((value, index) => {
             value.Position = index + 1;
@@ -285,7 +281,7 @@ export class ItemEditPartSectionPartComponent implements OnInit {
         this.refreshDataSource(this.currentItemPartSelection.ItemParts);
     }
 
-    moveUpPosition(itemPart: ItemPartInsert) {
+    moveUpPosition(itemPart: ItemPart) {
         this.positionMove(this.currentItemPartSelection.ItemParts, itemPart, -1);
         this.currentItemPartSelection.ItemParts.forEach((value, index) => {
             value.Position = index + 1;                        
@@ -302,7 +298,7 @@ export class ItemEditPartSectionPartComponent implements OnInit {
         array.splice(indexes[0], 2, array[indexes[1]], array[indexes[0]]); // Replace from lowest index, two elements, reverting the order
     }
 
-    onRemove(itemPart: ItemPartInsert) {
+    onRemove(itemPart: ItemPart) {
         const confirmation = confirm(`Remove ${itemPart.PartItemName}?`);
         if (confirmation) {
             const foundIndex = this.currentItemPartSelection.ItemParts.findIndex(i => i.PartItemID === itemPart.PartItemID);
@@ -312,7 +308,7 @@ export class ItemEditPartSectionPartComponent implements OnInit {
             this.refreshDataSource(this.currentItemPartSelection.ItemParts);
         }
     }
-    clearFields(ItemPartInsert: ItemPartInsert) {
+    clearFields(ItemPartInsert: ItemPart) {
         ItemPartInsert.PartItemID = null;
         ItemPartInsert.PartFOBPrice = null;
         ItemPartInsert.PartPrice = null;
@@ -326,7 +322,7 @@ export class ItemEditPartSectionPartComponent implements OnInit {
         let container = document.getElementsByClassName('ibox-content')[0];
         bool ? container.classList.add("overflow-visible") : container.classList.remove("overflow-visible");
     }
-    setPlaceholderText(i: number, itemPart: ItemPartInsert) {
+    setPlaceholderText(i: number, itemPart: ItemPart) {
         if (this.itemlist) {
             return i === this.currentItemPartSelection.ItemParts.length-1
                 ? 'Search Item'
@@ -337,7 +333,7 @@ export class ItemEditPartSectionPartComponent implements OnInit {
     }
 
 
-    fileChangeEvent(fileInput: any, itemPart: ItemPartInsert) {
+    fileChangeEvent(fileInput: any, itemPart: ItemPart) {
         // Clear Uploaded Files result message
         this.filesToUpload = <Array<File>>fileInput.target.files;
         for (let i = 0; i < this.filesToUpload.length; i++) {
@@ -347,7 +343,7 @@ export class ItemEditPartSectionPartComponent implements OnInit {
         this.uploadFiles(itemPart);
     }
     
-    uploadFiles(itemPart: ItemPartInsert) {
+    uploadFiles(itemPart: ItemPart) {
         if (this.filesToUpload.length > 0) {
             this.pendingUpload = true;
             this.isLoadingData = true;

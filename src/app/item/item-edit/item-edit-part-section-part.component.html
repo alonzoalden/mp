@@ -6,7 +6,7 @@
                     <div class="ibox-title"><h5>{{ 'Item Parts' | translate }} {{ 'for' | translate }} {{ currentItemPartSelection.Name }}</h5>
                         <!-- <div class="ibox-tools">{{ currentItemPartSelection.PartSelectionName }}</div> -->
                     </div>                  
-                    <div class="ibox-content x-scroll" style="min-height: 300px;">  
+                    <div class="ibox-content x-scroll" style="min-height: 330px;">  
                         <div class="form-group row">
                             <!-- <div class="col-md-2">
                                 <button *ngIf="!partPendingUpload" type="button" class="m-t-md btn btn-primary" (click)="partFileUpload.click()"> <i class="fa fa-files-o"></i> {{ 'Upload Part Image' | translate }}</button> 
@@ -43,7 +43,7 @@
                                             <td mat-cell *matCellDef="let itemPart; let i = index">                                                 
                                                 <div *ngIf="i === currentItemPartSelection.ItemParts.length-1">
                                                     <a (click)='onAddItemPart(itemPart); formDirty = false;'><span [matTooltip]="itemPart.PartItemName && itemPart.PartItemName != '' ? ( 'Add' | translate ) : ( 'Required fields must be complete' | translate )" class="glyphicon glyphicon-plus fs-20" 
-                                                        [ngClass]="itemPart.PartItemName && itemPart.PartItemName != '' && itemPart.PartItemVendorSKU && itemPart.PartItemVendorSKU != '' && itemPart.PartFOBPrice && itemPart.PartFOBPrice != '' ? 'green' : 'gray'"></span></a>
+                                                        [ngClass]="!pendingLoad && itemPart.PartItemName && itemPart.PartItemName != '' && itemPart.PartItemVendorSKU && itemPart.PartItemVendorSKU != '' && itemPart.PartFOBPrice && itemPart.PartFOBPrice != '' ? 'green' : 'gray'"></span></a>
                                                 </div>
                                             </td>
                                         </ng-container>
@@ -87,7 +87,7 @@
 
                                                 <div *ngIf="(i === currentItemPartSelection.ItemParts.length-1 && !itemPart.ImageRaw && !itemPart.PartItemID && !pendingUpload)
                                                             || (i === currentItemPartSelection.ItemParts.length-1 && i !== currentIndex && pendingUpload)">
-                                                    <button [disabled]="pendingUpload" type="button" class="btn btn-primary" (click)="fileUpload.click();"><i class="fa fa-file-image-o"></i>  {{ 'Browse' | translate }}</button>
+                                                    <button [disabled]="pendingUpload || pendingLoad && currentIndex === i" type="button" class="btn btn-primary" (click)="fileUpload.click();"><i class="fa fa-file-image-o"></i>  {{ 'Browse' | translate }}</button>
                                                 </div>    
                                                 <!-- <div *ngIf="(itemPart.ImageRaw || itemPart.PartItemID) && ( !pendingUpload || i != currentIndex )" class="thumbnail-container">                                                         -->
                                                 <div *ngIf="(i != currentItemPartSelection.ItemParts.length-1 || itemPart.PartItemID) && ( !pendingUpload || i != currentIndex )" class="thumbnail-container flex-va-center">
@@ -117,7 +117,7 @@
                                                     {{itemPart.PartLabel}}
                                                 </div>
                                                 <div *ngIf="(currentIndex === i || i === currentItemPartSelection.ItemParts.length-1)">
-                                                    <input class="form-control" id="PartLabelId" type="text" placeholder="{{ 'Label' | translate }}" 
+                                                    <input class="form-control" id="PartLabelId" type="text" placeholder="{{ 'Label' | translate }}" [disabled]="pendingLoad && currentIndex === i"
                                                         [(ngModel)]=itemPart.PartLabel [ngModelOptions]="{standalone: true}" name="itemPartLabel" #itemPartLabelVar="ngModel" maxlength="10"/>
                                                 </div>                  
                                             </td>
@@ -156,9 +156,9 @@
                                                                     #itemPartPartItemIDVar="ngModel"
                                                                     [loading]="!itemlist"
                                                                     loadingText="Loading..."
-                                                                    (open)="overflowFix(true)"
-                                                                    (close)="overflowFix()"
                                                                     [ngClass]="(currentIndex !== i && i !== currentItemPartSelection.ItemParts.length-1) ? 'opaque' : ''"
+                                                                    dropdownPosition="bottom"
+                                                                    [disabled]="pendingLoad && currentIndex === i"
                                                                     >
                                                             <ng-template ng-option-tmp let-item="item">
                                                                 <div matTooltip="{{item.Description}}" matTooltipPosition="right" matTooltipShowDelay="400">{{item.Description}}</div>
@@ -177,7 +177,8 @@
                                                     {{itemPart.PartItemName}}
                                                 </div>
                                                 <div *ngIf="(currentIndex === i || i === currentItemPartSelection.ItemParts.length-1)">
-                                                    <input class="form-control" id="PartItemNameId" type="text" placeholder="{{ 'Part Name' | translate }} ({{ 'Required' | translate }})" required 
+                                                    <input class="form-control" id="PartItemNameId" type="text" [disabled]="pendingLoad && currentIndex === i"
+                                                        placeholder="{{ 'Part Name' | translate }} ({{ 'Required' | translate }})" required 
                                                         [(ngModel)]=itemPart.PartItemName name="itemPartItemName" #itemPartNameVar="ngModel" maxlength="70"/>
                                                 </div>                  
                                             </td>
@@ -190,7 +191,7 @@
                                                     {{itemPart.PartItemVendorSKU}}
                                                 </div>      
                                                 <div *ngIf="currentIndex === i || i === currentItemPartSelection.ItemParts.length-1">
-                                                    <input class="form-control" id="itemPartVendorSKUId" type="text" 
+                                                    <input class="form-control" id="itemPartVendorSKUId" type="text" [disabled]="pendingLoad && currentIndex === i"
                                                         pattern="^[\w\-]*$" ng-pattern-restrict placeholder="SKU ({{ 'Required' | translate }})" required 
                                                         [(ngModel)]=itemPart.PartItemVendorSKU name="itemPartVendorSKU" #itemPartVendorSKUVar="ngModel" maxlength="30" />
                                                 </div>                                   
@@ -221,15 +222,15 @@
                                                     <div *ngIf="isPM" class="flex">
                                                         <input class="form-control m-r-smi" id="itemPartFOBPriceId" type="number" placeholder="{{ 'FOB Price' | translate }} ({{ 'Required' | translate }})" 
                                                             step="0.01" (change)="onChangeFOBPrice(itemPart);" onkeydown="return event.keyCode == 69 || event.keyCode == 189 ? false : true" min="0"
-                                                            required [(ngModel)]=itemPart.PartFOBPrice name="itemPartFOBPrice" #itemPartFOBPriceVar="ngModel" />                                                        
+                                                            required [(ngModel)]=itemPart.PartFOBPrice name="itemPartFOBPrice" #itemPartFOBPriceVar="ngModel" [disabled]="pendingLoad && currentIndex === i"/>                                                        
                                                         <input class="form-control percent-80" id="itemPartPriceId" type="number" placeholder="{{ 'Selling Price' | translate }} ({{ 'Required' | translate }})" 
                                                             step="0.01" onchange="this.value = parseFloat(this.value).toFixed(2);" onkeydown="return event.keyCode == 69 || event.keyCode == 189 ? false : true" min="0"
-                                                            required [(ngModel)]=itemPart.PartPrice name="itemPartPrice" #itemPartPriceVar="ngModel" />
+                                                            required [(ngModel)]=itemPart.PartPrice name="itemPartPrice" #itemPartPriceVar="ngModel" [disabled]="pendingLoad && currentIndex === i"/>
                                                     </div> 
                                                     <div *ngIf="!isPM">
                                                         <input class="form-control percent-80" id="itemPartFOBPriceId" type="number" placeholder="{{ 'FOB Price' | translate }} ({{ 'Required' | translate }})" 
                                                             step="0.01" (change)="onChangeFOBPrice(itemPart);" onkeydown="return event.keyCode == 69 || event.keyCode == 189 ? false : true" min="0"
-                                                            required [(ngModel)]=itemPart.PartFOBPrice name="itemPartFOBPrice" #itemPartFOBPriceVar="ngModel" />
+                                                            required [(ngModel)]=itemPart.PartFOBPrice name="itemPartFOBPrice" #itemPartFOBPriceVar="ngModel" [disabled]="pendingLoad && currentIndex === i"/>
                                                     </div>
                                                     
                                                 </div>    

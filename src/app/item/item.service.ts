@@ -41,7 +41,8 @@ export class ItemService {
     currentItemInsert: ItemInsert;
     currentItemEdit: Item;
 
-    public currentItemPartSelection: Subject<ItemSectionInsert> = new Subject<ItemSectionInsert>();
+    public currentItemPartSelectionInsert: Subject<ItemSectionInsert> = new Subject<ItemSectionInsert>();
+    public currentItemPartSelection: Subject<ItemSection> = new Subject<ItemSection>();
 
     duplicateItemInsert: ItemInsert;
 
@@ -274,7 +275,7 @@ export class ItemService {
         item.ItemSections.forEach((itemsection) => {
 
             const newItemSection = new ItemSection(itemsection.ItemSectionID, itemsection.ItemID, itemsection.Name, itemsection.ImageRaw, itemsection.ImageFilePath, itemsection.Position
-                , itemsection.UpdatedOn, itemsection.CreatedOn, itemsection.ItemParts, itemsection.pendingAdd, itemsection.isNew);
+                , itemsection.UpdatedOn, itemsection.CreatedOn, [], itemsection.pendingAdd, itemsection.isNew);
 
 
             itemsection.ItemParts.forEach((itemPart) => {
@@ -285,7 +286,7 @@ export class ItemService {
                     , itemPart.Position, itemPart.UpdatedOn
                     , itemPart.CreatedOn, itemPart.pendingAdd, itemPart.isNew);
 
-                itemsection.ItemParts.push(newItemPart);
+                newItemSection.ItemParts.push(newItemPart);
             });
 
             newItem.ItemSections.push(newItemSection);

@@ -23,18 +23,12 @@ export class ItemEditPartSectionComponent implements OnInit {
     //displayedColumns = ['Add', 'Down', 'Position', 'Up', 'Thumbnail', 'Label', 'Select', 'ItemName', 'SKU', 'TPIN', 'Price', 'Remove'];
     
     displayedColumns = ['Add', 'Down', 'Position', 'Up', 'Thumbnail','ItemName', 'Remove'];
-    //partGroups: ItemSectionInsert[] = [];
-        
-
     dataSource: any = null;
 
     pendingAdd: boolean;
     pendingChange: boolean;
     currentIndex: number;
-
     itemid: number;
-
-    //currentItemSection: ItemSection;
     formDirty = false;
 
     filesToUpload: Array<File> = [];
@@ -90,9 +84,6 @@ export class ItemEditPartSectionComponent implements OnInit {
         if (this.itemService.currentItemEdit.ItemSections === null) {
             this.itemService.getItemParts(this.itemid).subscribe(
                 (itemParts: ItemPart[]) => {
-                    // this.item.ItemSections.ItemParts = itemParts;                    
-                    // this.addPendingLine();
-                    console.log(itemParts);
                     this.currentIndex = this.item.ItemSections.length - 1;
                     this.refreshDataSource(this.item.ItemSections);
                 },
@@ -107,7 +98,7 @@ export class ItemEditPartSectionComponent implements OnInit {
     }
 
     addPendingLine() {
-        const _temp = new ItemSection(0, null, null, null, null, this.item.ItemSections.length + 1,  null,  null, [],  false, true);
+        const _temp = new ItemSection(0, this.item.ItemID, null, null, null, this.item.ItemSections.length + 1,  null,  null, [],  true, true);
         
         this.item.ItemSections.push(_temp);
     }
@@ -122,47 +113,55 @@ export class ItemEditPartSectionComponent implements OnInit {
     refreshDataSource(itemsections: ItemSection[]) { 
         this.dataSource = new MatTableDataSource<ItemSection>(itemsections);
     }
-
-    onAddItemPart(itemPart: ItemPart) {
-
+    onAddItemPartSection(itemPart: ItemSection) {
+        itemPart.pendingAdd = false;
         //this.onChangeFOBPrice(itemPart);
+        if (this.existName(itemPart.Name)) {
+            this.itemService.sendNotification({ type: 'error', title: 'Error', content: "Section name exists.  Please choose another." });
+            return;
+        }
 
         if (this.isRequirementValid(itemPart)) { 
-            if(!this.existItemID(itemPart.ItemPartID, true)) {    
-                this.pendingAdd = true; 
+            
+                this.pendingAdd = true;
 
-                if(itemPart.PartItemID && itemPart.PartItemID != 0)
-                {
-                    this.itemService.getItem(itemPart.PartItemID).subscribe(
-                        (item: Item) => {
-                            itemPart.PrevPartItemID = item.ItemID;
-                        },
-                        (error: any) => {
-                            this.errorMessage = <any>error;
-                            this.itemService.sendNotification({ type: 'error', title: 'Error', content: this.errorMessage });
-                        }
-                    );
-                }
-
-                itemPart.pendingAdd = false;
                 
-                this.addPendingLine();  
-                this.refreshDataSource(this.item.ItemSections);
-            }
-            else {
-                this.itemService.sendNotification({ type: 'error', title: 'Error', content: "Up-sell product already exists" });
-            }   
+                const _temp = new ItemSection(0, this.item.ItemID, null, null,  null, this.item.ItemSections.length + 1, null, null, [], true, true);
+                this.item.ItemSections.push(_temp);
+                this.refreshDataSource(this.item.ItemSections);   
+                this.pendingChange = false;
         }
         else {
-            this.itemService.sendNotification({ type: 'error', title: 'Error', content: "Please select an item" });
+            this.itemService.sendNotification({ type: 'error', title: 'Error', content: "Please choose a name." });
         }
     }
+    onChangeSectionName(section: ItemSection) {
+        if (this.pendingChange) {
+            return;
+        }
+        
+        if (this.existName(section.Name)) {
+            this.itemService.sendNotification({ type: 'error', title: 'Error', content: "Section name exists.  Please choose another." });
+            section.Name = '';
+        }
+        
+    }
 
-    isRequirementValid(itemPart: ItemPart): boolean {
-        if (itemPart
-            && itemPart.PartItemName
-            && itemPart.PartItemVendorSKU
-            && itemPart.PartFOBPrice) {
+    existName(name: string, isNew: boolean = false){
+        var counter: number = 0;
+        this.item.ItemSections.forEach((value, index) => {
+                if (value.Name === name) {
+                    counter += 1;
+                }
+            }
+        );
+        if(counter > 1) { return true; }
+        else { return false; }
+    }
+
+    isRequirementValid(ItemSection: ItemSection): boolean {
+        if (ItemSection
+            && ItemSection.Name) {
             return true;
         } 
         else {
@@ -184,44 +183,15 @@ export class ItemEditPartSectionComponent implements OnInit {
         else { return false; }
     }
 
-    // existVendorSKU(vendorSKU: string, isNew: boolean = false){
-    //     var counter: number = 0;
-    //     this.item.ItemSections.forEach((value, index) => {
-    //             if(value.PartItemVendorSKU === vendorSKU) { 
-    //                 if(isNew || index != this.item.ItemSections.length - 1) {
-    //                     counter += 1; 
-    //                 }
-    //             }
-    //         }
-    //     );
-    //     if(counter > 1) { return true; }
-    //     else { return false; }
-    // }
-
     onEditItemPartGroup(index: number) {
-        
-        //this.selectedPartGroup = this.partGroups[index];
         if (index !== this.item.ItemSections.length - 1) {
             this.itemService.currentItemPartSelection.next(this.item.ItemSections[index]);
         }
         else {
             this.itemService.currentItemPartSelection.next(null);
         }
-
         this.refreshDataSource(this.item.ItemSections)
-
-        // if (index === this.item.ItemPartSelections.length - 1 && this.item.ItemPartSelections.length > 0) {
-        //     this.dataSource = null;
-        //     this.item.ItemPartSelections = null;
-        // }
-        // else {
-            
-        // }
-        //console.log(this.item.ItemPartSelections)
-       
-
         if(this.pendingAdd) {
-            //this.currentIndex = this.item.ItemPartSelections.length - 1;
             this.pendingAdd = false;
         }
         else {
@@ -233,9 +203,6 @@ export class ItemEditPartSectionComponent implements OnInit {
         if(this.currentIndex != index)
         {
             this.item.ItemSections.forEach((itempart, i) => {
-                
-                //this.onChangeFOBPrice(itempart);
-
                 if(i != this.item.ItemSections.length - 1) {
                     if(!itempart.Name || itempart.Name == '' ) {
     
@@ -254,67 +221,8 @@ export class ItemEditPartSectionComponent implements OnInit {
             this.currentIndex = index;
         }    
     }
-
-    // onPartItemChange(index: number, itemPart: any) {          
-    //     if(this.currentItemSection.ItemParts[index].PartItemID && this.currentItemSection.ItemParts[index].PartItemID != 0) {
-    //         if(!this.existItemID(this.currentItemSection.ItemParts[index].PartItemID)) {
-    //             if(this.currentItemSection.ItemParts[index].PartItemID && this.currentItemSection.ItemParts[index].PartItemID != 0)
-    //             {
-    //                 this.itemService.getItem(this.currentItemSection.ItemParts[index].PartItemID).subscribe(
-    //                     (item: Item) => {
-    //                         this.item.ItemSections[index].PrevPartItemID = item.ItemID;
-    //                         this.item.ItemSections[index].PartItemName = item.Name;
-    //                         this.item.ItemSections[index].PartItemVendorSKU = item.VendorSKU;
-    //                         this.currentItemSection.ItemParts[index].PartTPIN = item.TPIN;
-    //                         this.currentItemSection.ItemParts[index].PartFOBPrice = item.FOBPrice;
-    //                         this.currentItemSection.ItemParts[index].PartPrice = item.Price;
-
-    //                         this.currentItemSection.ItemParts[index].ImageFilePath = item.ImagePath;
-    //                         this.currentItemSection.ItemParts[index].IsNewImage = false;
-
-    //                         this.refreshDataSource(this.currentItemSection.ItemParts);
-    //                     },
-    //                     (error: any) => {
-    //                         this.errorMessage = <any>error;
-    //                         this.itemService.sendNotification({ type: 'error', title: 'Error', content: this.errorMessage });
-    //                     }
-    //                 );this.item.ItemSections
-    //             }
-    //         }
-    //         else {
-    //             //This prevents selected value from changing into an existing value
-    //             var originalItem = this.selectionCategoriesRef._results[index].itemsList.items
-    //                         .find(item => item.value.ItemID === this.currentItemSection.ItemParts[index].PrevPartItemID);
-    //             this.selectionCategoriesRef._results[index].itemsList.select(originalItem);
-
-                
-    //             // itemPart.PartItemName = originalItem.value.ItemName;
-    //             // itemPart.PartItemVendorSKU = originalItem.value.VendorSKU; 
-    //             // itemPart.PartTPIN = originalItem.value.TPIN;
-    //             // itemPart.PartFOBPrice = originalItem.value.FOBPrice;
-    //             // itemPart.PartPrice = originalItem.value.PartPrice;
-
-    //             // if (!this.item.ItemSections[index].isNew) {
-    //             //     this.item.ItemSections[index].ItemID = this.item.ItemSections[index].P;
-    //             // }
-    //             this.currentIndex = this.item.ItemSections.length - 1;
-    //             this.refreshDataSource(this.item.ItemSections);
-    //             this.itemService.sendNotification({ type: 'error', title: 'Error', content: "Part already exists" });
-    //         }
-    //     }            
-    //     else
-    //     {
-    //         this.item.ItemSections[index].isNew = true;
-    //         this.item.ItemSections[index].Name = null;
-    //         this.item.ItemSections[index].ImageFilePath = null;
-    //         this.item.ItemSections[index].ImageRaw = null;
-
-    //         this.refreshDataSource(this.item.ItemSections);
-    //     }
-    // }
     
-    clickIsNew(itemPart: ItemPart, index: number)
-    {
+    clickIsNew(itemPart: ItemPart, index: number) {
         itemPart.PartItemID = null;
         itemPart.PartItemName = null;
         itemPart.PartItemVendorSKU = null;
@@ -471,26 +379,6 @@ export class ItemEditPartSectionComponent implements OnInit {
                 );
         }
     }
-
-    // onChangeFOBPrice(itemPart: ItemPart)
-    // {
-
-    //     if(itemPart.PartFOBPrice) {
-    //         itemPart.PartFOBPrice = Number(itemPart.PartFOBPrice.toFixed(2));
-    //     }
-        
-    //     if(itemPart.PartPrice)
-    //     {
-    //         if(itemPart.PartPrice <= 0) {                
-    //             itemPart.PartPrice = itemPart.PartFOBPrice * 3;    
-    //             itemPart.PartPrice = Number(itemPart.PartPrice.toFixed(2));                 
-    //         }                    
-    //     }
-    //     else {
-    //         itemPart.PartPrice = itemPart.PartFOBPrice * 3;    
-    //         itemPart.PartPrice = Number(itemPart.PartPrice.toFixed(2));  
-    //     }
-    // }
 
     newGuid() {
         return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function(c) {

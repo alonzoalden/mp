@@ -17,31 +17,19 @@ import { environment } from '../../../environments/environment';
 export class ItemAddPartSectionPartComponent implements OnInit {
     private imageURL = environment.imageURL;
     isPM: boolean;
-    
     errorMessage: string;
-    //item: ItemInsert;
-
     itemlist: ItemList[];    
     //displayedColumns = ['Add', 'Down', 'Position', 'Up', 'New', 'Select', 'ItemName', 'SKU', 'TPIN', 'Price', 'Remove'];
     displayedColumns = ['Add', 'Down', 'Position', 'Up', 'Thumbnail', 'Label', 'Select', 'ItemName', 'SKU', 'TPIN', 'Price', 'Remove'];
-    
-    currentItemPartSelection: ItemSectionInsert;
-
-
+    currentItemPartSelectionInsert: ItemSectionInsert;
     dataSource: any = null;
-    dataSourceGroups: any = null;
-
     pendingAdd: boolean;
+    pendingLoad: boolean;
 
     currentIndex: number;
-    currentIndexGroup: number;
-
-
     formDirty = false;
-
     filesToUpload: Array<File> = [];
     selectedFileNames: string[] = [];
-    res: Array<string>;
     pendingUpload: boolean;
 
     partFilesToUpload: Array<File> = [];
@@ -66,33 +54,25 @@ export class ItemAddPartSectionPartComponent implements OnInit {
                     }
                 );
 
-        //this.item = this.itemService.currentItemInsert;
-
-
-        this.itemService.currentItemPartSelection.subscribe(partselection => {
-            this.currentItemPartSelection = partselection;
+        this.itemService.currentItemPartSelectionInsert.subscribe(partselection => {
+            this.currentItemPartSelectionInsert = partselection;
             if (partselection) {
                 if (partselection.ItemParts.length === 0) {
-                    const _temp = new ItemPartInsert(0, null, null, null, null, null, null, null, null, null, null, true, null, true);
-                    this.currentItemPartSelection.ItemParts.push(_temp);
-                    
+                    const _temp = new ItemPartInsert(null, null, null, null, null, null, null, null, null, null, null, true, null, true);
+                    this.currentItemPartSelectionInsert.ItemParts.push(_temp);
                 }
                 
-                this.refreshDataSource(this.currentItemPartSelection.ItemParts)
-                this.currentIndex = this.currentItemPartSelection.ItemParts.length - 1;
+                this.refreshDataSource(this.currentItemPartSelectionInsert.ItemParts)
+                this.currentIndex = this.currentItemPartSelectionInsert.ItemParts.length - 1;
             }
             
         });
-        
 
-        //make this based off group
         this.itemService.getPartItemList().subscribe(
             (itemlist: ItemList[]) => {
                 this.itemlist = itemlist;
                 const _temp = new ItemList(null, 'New Item', null, null, null, null, null);
                 this.itemlist.splice(0,0,_temp);
-
-                //this.refreshDataSource(this.currentItemPartSelection.ItemParts.ItemParts);
             },
             (error: any) => this.errorMessage = <any>error
         );        
@@ -101,14 +81,10 @@ export class ItemAddPartSectionPartComponent implements OnInit {
     refreshDataSource(itemParts: ItemPartInsert[]) { 
         this.dataSource = new MatTableDataSource<ItemPartInsert>(itemParts);
     }
-    // refreshDataSourceGroups(partselections: ItemPartSelectionInsert[]) { 
-    //     this.dataSourceGroups = new MatTableDataSource<ItemPartSelectionInsert>(partselections);
-    // }
-    
 
     onAddItemPart(itemPart: ItemPartInsert) {
+        if (this.pendingLoad) return;
         this.onChangeFOBPrice(itemPart);
-
         if (this.isRequirementValid(itemPart)) { 
             if(!this.existVendorSKU(itemPart.PartItemVendorSKU, true)) {        
                 this.pendingAdd = true;
@@ -125,9 +101,9 @@ export class ItemAddPartSectionPartComponent implements OnInit {
                     );
                 }
                 
-                const _temp = new ItemPartInsert(0, null, null, null, null, null, null, null, null, null, null, true, this.currentItemPartSelection.ItemParts.length + 1, true);
-                this.currentItemPartSelection.ItemParts.push(_temp);
-                this.refreshDataSource(this.currentItemPartSelection.ItemParts);
+                const _temp = new ItemPartInsert(null, null, null, null, null, null, null, null, null, null, null, true, this.currentItemPartSelectionInsert.ItemParts.length + 1, true);
+                this.currentItemPartSelectionInsert.ItemParts.push(_temp);
+                this.refreshDataSource(this.currentItemPartSelectionInsert.ItemParts);
             }
             else {
                 this.itemService.sendNotification({ type: 'error', title: 'Error', content: "Part already exists" });
@@ -152,9 +128,9 @@ export class ItemAddPartSectionPartComponent implements OnInit {
 
     existItemID(itemID: number, isNew: boolean = false){
         var counter: number = 0;
-        this.currentItemPartSelection.ItemParts.forEach((value, index) => {
+        this.currentItemPartSelectionInsert.ItemParts.forEach((value, index) => {
                 if(value.PartItemID === itemID) { 
-                    if(isNew || index != this.currentItemPartSelection.ItemParts.length - 1) {
+                    if(isNew || index != this.currentItemPartSelectionInsert.ItemParts.length - 1) {
                         counter += 1; 
                     }
                 }
@@ -166,9 +142,9 @@ export class ItemAddPartSectionPartComponent implements OnInit {
 
     existVendorSKU(vendorSKU: string, isNew: boolean = false){
         var counter: number = 0;
-        this.currentItemPartSelection.ItemParts.forEach((value, index) => {
+        this.currentItemPartSelectionInsert.ItemParts.forEach((value, index) => {
                 if(value.PartItemVendorSKU === vendorSKU) { 
-                    if(isNew || index != this.currentItemPartSelection.ItemParts.length - 1) {
+                    if(isNew || index != this.currentItemPartSelectionInsert.ItemParts.length - 1) {
                         counter += 1; 
                     }
                 }
@@ -179,26 +155,24 @@ export class ItemAddPartSectionPartComponent implements OnInit {
     }
 
     onEditItemPart(index: number) {
-        if(this.currentIndex != index)
-        {
-            this.currentItemPartSelection.ItemParts.forEach((itempart, i) => {
+        if(this.currentIndex != index) {
+            this.currentItemPartSelectionInsert.ItemParts.forEach((itempart, i) => {
 
                 this.onChangeFOBPrice(itempart);
                 
-                if(i != this.currentItemPartSelection.ItemParts.length - 1) {
+                if(i != this.currentItemPartSelectionInsert.ItemParts.length - 1) {
                     if(!itempart.PartItemName || itempart.PartItemName == '' 
                         || !itempart.PartItemVendorSKU || itempart.PartItemVendorSKU == '' 
                         || !itempart.PartFOBPrice || itempart.PartFOBPrice == 0 ) {
     
-                        this.currentItemPartSelection.ItemParts.splice(i, 1);
-                        this.refreshDataSource(this.currentItemPartSelection.ItemParts);
+                        this.currentItemPartSelectionInsert.ItemParts.splice(i, 1);
+                        this.refreshDataSource(this.currentItemPartSelectionInsert.ItemParts);
                     }
                 }
             });    
         }
-
         if(this.pendingAdd) {
-            this.currentIndex = this.currentItemPartSelection.ItemParts.length - 1;
+            this.currentIndex = this.currentItemPartSelectionInsert.ItemParts.length - 1;
             this.pendingAdd = false;
         }
         else {
@@ -207,27 +181,29 @@ export class ItemAddPartSectionPartComponent implements OnInit {
     }
 
     onPartItemChange(index: number, itemPart: any) {  
-        if(this.currentItemPartSelection.ItemParts[index] && this.currentItemPartSelection.ItemParts[index].PartItemID && this.currentItemPartSelection.ItemParts[index].PartItemID != 0) {
-            if(!this.existItemID(this.currentItemPartSelection.ItemParts[index].PartItemID)) {
-                if(this.currentItemPartSelection.ItemParts[index].PartItemID && this.currentItemPartSelection.ItemParts[index].PartItemID != 0)
-                {
-                    this.itemService.getItem(this.currentItemPartSelection.ItemParts[index].PartItemID).subscribe(
+        if(this.currentItemPartSelectionInsert.ItemParts[index] && this.currentItemPartSelectionInsert.ItemParts[index].PartItemID && this.currentItemPartSelectionInsert.ItemParts[index].PartItemID != 0) {
+            if(!this.existItemID(this.currentItemPartSelectionInsert.ItemParts[index].PartItemID)) {
+                if(this.currentItemPartSelectionInsert.ItemParts[index].PartItemID && this.currentItemPartSelectionInsert.ItemParts[index].PartItemID != 0) {
+                    this.pendingLoad = true;
+                    this.itemService.getItem(this.currentItemPartSelectionInsert.ItemParts[index].PartItemID).subscribe(
                         (item: Item) => {
-                            this.currentItemPartSelection.ItemParts[index].PrevPartItemID = item.ItemID;
-                            this.currentItemPartSelection.ItemParts[index].PartItemName = item.Name;
-                            this.currentItemPartSelection.ItemParts[index].PartItemVendorSKU = item.VendorSKU;
-                            this.currentItemPartSelection.ItemParts[index].PartTPIN = item.TPIN;
-                            this.currentItemPartSelection.ItemParts[index].PartFOBPrice = item.FOBPrice;
-                            this.currentItemPartSelection.ItemParts[index].PartPrice = item.Price;
+                            this.currentItemPartSelectionInsert.ItemParts[index].PrevPartItemID = item.ItemID;
+                            this.currentItemPartSelectionInsert.ItemParts[index].PartItemName = item.Name;
+                            this.currentItemPartSelectionInsert.ItemParts[index].PartItemVendorSKU = item.VendorSKU;
+                            this.currentItemPartSelectionInsert.ItemParts[index].PartTPIN = item.TPIN;
+                            this.currentItemPartSelectionInsert.ItemParts[index].PartFOBPrice = item.FOBPrice;
+                            this.currentItemPartSelectionInsert.ItemParts[index].PartPrice = item.Price;
 
-                            this.currentItemPartSelection.ItemParts[index].ImageFilePath = item.ImagePath;
-                            this.currentItemPartSelection.ItemParts[index].IsNewImage = false;
+                            this.currentItemPartSelectionInsert.ItemParts[index].ImageFilePath = item.ImagePath;
+                            this.currentItemPartSelectionInsert.ItemParts[index].IsNewImage = false;
 
-                            this.refreshDataSource(this.currentItemPartSelection.ItemParts);
+                            this.refreshDataSource(this.currentItemPartSelectionInsert.ItemParts);
+                            this.pendingLoad = false;
                         },
                         (error: any) => {
                             this.errorMessage = <any>error;
                             this.itemService.sendNotification({ type: 'error', title: 'Error', content: this.errorMessage });
+                            this.pendingLoad = false;
                         }
                     );
                 }                
@@ -235,7 +211,7 @@ export class ItemAddPartSectionPartComponent implements OnInit {
             else {
                 //This prevents select input value from changing into an existing value
                 var originalItem = this.selectionCategoriesRef._results[index].itemsList.items
-                            .find(item => item.value.ItemID === this.currentItemPartSelection.ItemParts[index].PrevPartItemID);
+                            .find(item => item.value.ItemID === this.currentItemPartSelectionInsert.ItemParts[index].PrevPartItemID);
                 this.selectionCategoriesRef._results[index].itemsList.select(originalItem);
 
                 itemPart.PartItemName = originalItem.value.ItemName;
@@ -244,25 +220,23 @@ export class ItemAddPartSectionPartComponent implements OnInit {
                 itemPart.PartFOBPrice = originalItem.value.FOBPrice;
                 itemPart.PartPrice = originalItem.value.PartPrice;
 
-                if (!this.currentItemPartSelection.ItemParts[index].isNew) {
-                    this.currentItemPartSelection.ItemParts[index].PartItemID = this.currentItemPartSelection.ItemParts[index].PrevPartItemID;
+                if (!this.currentItemPartSelectionInsert.ItemParts[index].isNew) {
+                    this.currentItemPartSelectionInsert.ItemParts[index].PartItemID = this.currentItemPartSelectionInsert.ItemParts[index].PrevPartItemID;
                 }
-                this.currentIndex = this.currentItemPartSelection.ItemParts.length - 1;
-                this.refreshDataSource(this.currentItemPartSelection.ItemParts);
+                this.currentIndex = this.currentItemPartSelectionInsert.ItemParts.length - 1;
+                this.refreshDataSource(this.currentItemPartSelectionInsert.ItemParts);
                 this.itemService.sendNotification({ type: 'error', title: 'Error', content: "Part already exists" });
             }
         }
         else
         {
-            this.currentItemPartSelection.ItemParts[index].isNew = true;
-            
-            this.currentItemPartSelection.ItemParts[index].PartItemName = null;
-            this.currentItemPartSelection.ItemParts[index].PartItemVendorSKU = null;
-            this.currentItemPartSelection.ItemParts[index].PartTPIN = null;
-            this.currentItemPartSelection.ItemParts[index].PartFOBPrice = null;
-            this.currentItemPartSelection.ItemParts[index].PartPrice = null;
-            
-            this.refreshDataSource(this.currentItemPartSelection.ItemParts);
+            this.currentItemPartSelectionInsert.ItemParts[index].isNew = true;
+            this.currentItemPartSelectionInsert.ItemParts[index].PartItemName = null;
+            this.currentItemPartSelectionInsert.ItemParts[index].PartItemVendorSKU = null;
+            this.currentItemPartSelectionInsert.ItemParts[index].PartTPIN = null;
+            this.currentItemPartSelectionInsert.ItemParts[index].PartFOBPrice = null;
+            this.currentItemPartSelectionInsert.ItemParts[index].PartPrice = null;
+            this.refreshDataSource(this.currentItemPartSelectionInsert.ItemParts);
         }
     }
 
@@ -276,21 +250,21 @@ export class ItemAddPartSectionPartComponent implements OnInit {
     }
 
     moveDownPosition(itemPart: ItemPartInsert) {
-        this.positionMove(this.currentItemPartSelection.ItemParts, itemPart, 1);
-        this.currentItemPartSelection.ItemParts.forEach((value, index) => {
+        this.positionMove(this.currentItemPartSelectionInsert.ItemParts, itemPart, 1);
+        this.currentItemPartSelectionInsert.ItemParts.forEach((value, index) => {
             value.Position = index + 1;
         });
 
-        this.refreshDataSource(this.currentItemPartSelection.ItemParts);
+        this.refreshDataSource(this.currentItemPartSelectionInsert.ItemParts);
     }
 
     moveUpPosition(itemPart: ItemPartInsert) {
-        this.positionMove(this.currentItemPartSelection.ItemParts, itemPart, -1);
-        this.currentItemPartSelection.ItemParts.forEach((value, index) => {
+        this.positionMove(this.currentItemPartSelectionInsert.ItemParts, itemPart, -1);
+        this.currentItemPartSelectionInsert.ItemParts.forEach((value, index) => {
             value.Position = index + 1;                        
         });
 
-        this.refreshDataSource(this.currentItemPartSelection.ItemParts);
+        this.refreshDataSource(this.currentItemPartSelectionInsert.ItemParts);
     }
 
     positionMove(array, element, delta) {
@@ -304,11 +278,11 @@ export class ItemAddPartSectionPartComponent implements OnInit {
     onRemove(itemPart: ItemPartInsert) {
         const confirmation = confirm(`Remove ${itemPart.PartItemName}?`);
         if (confirmation) {
-            const foundIndex = this.currentItemPartSelection.ItemParts.findIndex(i => i.PartItemID === itemPart.PartItemID);
+            const foundIndex = this.currentItemPartSelectionInsert.ItemParts.findIndex(i => i.PartItemID === itemPart.PartItemID);
             if (foundIndex > -1) {
-                this.currentItemPartSelection.ItemParts.splice(foundIndex, 1);
+                this.currentItemPartSelectionInsert.ItemParts.splice(foundIndex, 1);
             }            
-            this.refreshDataSource(this.currentItemPartSelection.ItemParts);
+            this.refreshDataSource(this.currentItemPartSelectionInsert.ItemParts);
         }
     }
     clearFields(ItemPartInsert: ItemPartInsert) {
@@ -321,13 +295,10 @@ export class ItemAddPartSectionPartComponent implements OnInit {
         ItemPartInsert.PartTPIN = null;
         this.formDirty = false;
     }
-    overflowFix(bool: Boolean):void {
-        let container = document.getElementsByClassName('ibox-content')[0];
-        bool ? container.classList.add("overflow-visible") : container.classList.remove("overflow-visible");
-    }
+
     setPlaceholderText(i: number, itemPart: ItemPartInsert) {
         if (this.itemlist) {
-            return i === this.currentItemPartSelection.ItemParts.length-1
+            return i === this.currentItemPartSelectionInsert.ItemParts.length-1
                 ? 'Search Item'
                 : itemPart.PartItemID
                     ? this.itemlist.find(item => itemPart.PartItemID === item.ItemID).Description
@@ -335,14 +306,12 @@ export class ItemAddPartSectionPartComponent implements OnInit {
         }
     }
 
-
     fileChangeEvent(fileInput: any, itemPart: ItemPartInsert) {
         // Clear Uploaded Files result message
         this.filesToUpload = <Array<File>>fileInput.target.files;
         for (let i = 0; i < this.filesToUpload.length; i++) {
             this.selectedFileNames.push(this.filesToUpload[i].name);
         }
-
         this.uploadFiles(itemPart);
     }
     
@@ -380,49 +349,49 @@ export class ItemAddPartSectionPartComponent implements OnInit {
         }
     }
 
-    partFileChangeEvent(fileInput: any, item: ItemInsert) {
-        // Clear Uploaded Files result message
-        this.partFilesToUpload = <Array<File>>fileInput.target.files;
-        for (let i = 0; i < this.partFilesToUpload.length; i++) {
-            this.partSelectedFileNames.push(this.partFilesToUpload[i].name);
-        }
+    // partFileChangeEvent(fileInput: any, item: ItemInsert) {
+    //     // Clear Uploaded Files result message
+    //     this.partFilesToUpload = <Array<File>>fileInput.target.files;
+    //     for (let i = 0; i < this.partFilesToUpload.length; i++) {
+    //         this.partSelectedFileNames.push(this.partFilesToUpload[i].name);
+    //     }
 
-        this.partUploadFiles(item);
-    }
+    //     this.partUploadFiles(item);
+    // }
     
-    partUploadFiles(item: ItemInsert) {
-        if (this.partFilesToUpload.length > 0) {
-            this.partPendingUpload = true;
-            this.isLoadingData = true;
-            const formData: FormData = new FormData();
-            for (let i = 0; i < this.partFilesToUpload.length; i++) {
-                var reader = new FileReader();
-                formData.append('partUploadedFiles', this.partFilesToUpload[i], this.partFilesToUpload[i].name);
-            }
+    // partUploadFiles(item: ItemInsert) {
+    //     if (this.partFilesToUpload.length > 0) {
+    //         this.partPendingUpload = true;
+    //         this.isLoadingData = true;
+    //         const formData: FormData = new FormData();
+    //         for (let i = 0; i < this.partFilesToUpload.length; i++) {
+    //             var reader = new FileReader();
+    //             formData.append('partUploadedFiles', this.partFilesToUpload[i], this.partFilesToUpload[i].name);
+    //         }
 
-            this.itemService.uploadTempImage(this.newGuid(), formData)
-                .subscribe (
-                    (data: string) => {
-                        this.partPendingUpload = false;
-                        item.PartImageRaw = data;
-                        item.PartIsNewImage = true;                                                
-                    },
-                    err => {
-                        this.partPendingUpload = false;
-                        this.itemService.sendNotification({ type: 'error', title: 'Error', content: err });
-                        this.isLoadingData = false;
-                        this.partFilesToUpload = [];
-                        this.partSelectedFileNames = [];
-                    },
-                    () => {
-                        this.partPendingUpload = false;
-                        this.isLoadingData = false;
-                        this.partFilesToUpload = [];
-                        this.partSelectedFileNames = [];
-                    }
-                );
-        }
-    }
+    //         this.itemService.uploadTempImage(this.newGuid(), formData)
+    //             .subscribe (
+    //                 (data: string) => {
+    //                     this.partPendingUpload = false;
+    //                     item.PartImageRaw = data;
+    //                     item.PartIsNewImage = true;                                                
+    //                 },
+    //                 err => {
+    //                     this.partPendingUpload = false;
+    //                     this.itemService.sendNotification({ type: 'error', title: 'Error', content: err });
+    //                     this.isLoadingData = false;
+    //                     this.partFilesToUpload = [];
+    //                     this.partSelectedFileNames = [];
+    //                 },
+    //                 () => {
+    //                     this.partPendingUpload = false;
+    //                     this.isLoadingData = false;
+    //                     this.partFilesToUpload = [];
+    //                     this.partSelectedFileNames = [];
+    //                 }
+    //             );
+    //     }
+    // }
 
     onChangeFOBPrice(itemPart: ItemPartInsert) {
         if(itemPart.PartFOBPrice) {
@@ -440,7 +409,6 @@ export class ItemAddPartSectionPartComponent implements OnInit {
             itemPart.PartPrice = itemPart.PartFOBPrice * 3;    
             itemPart.PartPrice = Number(itemPart.PartPrice.toFixed(2));  
         }
-          
     }
 
     newGuid() {
