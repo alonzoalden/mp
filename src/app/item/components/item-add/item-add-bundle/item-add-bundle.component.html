@@ -5,8 +5,8 @@
             <div class="ibox-content">
                 <div class="form-group row">
                     <div class="col-md-12">
-                        <div *ngIf="item.ItemOptions.length && item.ItemOptions.length > 0">
-                            <table mat-table #table [dataSource]="optionDataSource" *ngIf='item.ItemOptions.length > 0'>
+                        <div *ngIf="item && item.ItemOptions.length && item.ItemOptions.length > 0">
+                            <table mat-table #table [dataSource]="itemBundleOptionsMatTable" *ngIf='item.ItemOptions.length > 0'>
                                 <!-- Add Button -->
                                 <ng-container matColumnDef="Add">
                                     <th mat-header-cell *matHeaderCellDef width="45px"></th>
@@ -107,17 +107,18 @@
                     </div>
                 </div>
             </div>
-            <ng-container *ngIf="selectedOption && currentOptionIndex != item.ItemOptions.length-1;">
+            <ng-container *ngIf="item && selectedOption && currentOptionIndex != item.ItemOptions.length-1;">
+                <!-- <ng-container *ngIf="selectedOption"> -->
                 <div class="ibox-title"><h5>{{ 'Bundle Option Selections' | translate }}</h5></div>
                 <div class="ibox-content">
                     <div class="col-md-12 m-t-lg p-w-none">                            
                         <div>
-                            <table mat-table #table [dataSource]="selectionDataSource" *ngIf='selections.length > 0'>                            
+                            <table mat-table #table [dataSource]="itemBundleOptionSelectionsMatTable" *ngIf='selectedOption.ItemSelections.length > 0'>                            
                                 <!-- Add Button -->
                                 <ng-container matColumnDef="Add">
                                     <th mat-header-cell *matHeaderCellDef width="45px"></th>
                                     <td mat-cell *matCellDef="let selection; let i = index">                                                 
-                                        <div *ngIf="i === selections.length-1">                               
+                                        <div *ngIf="i === selectedOption.ItemSelections.length-1">                               
                                             <a (click)='selection.ItemID && selection.Qty ? addSelection(selection) : return; formSelectionDirty = false;'>
                                                 <span [matTooltip]="selection.ItemID && selection.PriceValue > 0 && selection.Qty > 0 ? ('Add' | translate) : ('Required fields must be complete' | translate)"
                                                     class="glyphicon glyphicon-plus fs-20"
@@ -131,8 +132,8 @@
                                 <ng-container matColumnDef="Down">
                                     <th mat-header-cell *matHeaderCellDef width="17px">{{ 'Position' | translate }}</th>
                                     <td mat-cell *matCellDef="let selection; let i = index">
-                                        <div *ngIf="i < selections.length-2">
-                                            <a (click)='moveDownSelection(selection)' *ngIf='i !== selections.length - 1'><span class="glyphicon glyphicon-arrow-down"></span></a>
+                                        <div *ngIf="i < selectedOption.ItemSelections.length-2">
+                                            <a (click)='moveDownSelection(selection)' *ngIf='i !== selectedOption.ItemSelections.length - 1'><span class="glyphicon glyphicon-arrow-down"></span></a>
                                         </div>                                            
                                     </td>
                                 </ng-container>
@@ -140,7 +141,7 @@
                                 <ng-container matColumnDef="Position">
                                     <th mat-header-cell *matHeaderCellDef width="15px"></th>
                                     <td mat-cell *matCellDef="let selection; let i = index">
-                                        <div *ngIf="i !== selections.length-1">
+                                        <div *ngIf="i !== selectedOption.ItemSelections.length-1">
                                             {{i + 1}}
                                         </div>
                                     </td>
@@ -149,7 +150,7 @@
                                 <ng-container matColumnDef="Up">
                                     <th mat-header-cell *matHeaderCellDef width="40px"></th>
                                     <td mat-cell *matCellDef="let selection; let i = index">
-                                        <div *ngIf="i !== selections.length-1">
+                                        <div *ngIf="i !== selectedOption.ItemSelections.length-1">
                                             <a (click)='moveUpSelection(selection)' *ngIf='i !== 0'><span class="glyphicon glyphicon-arrow-up"></span></a>
                                         </div>
                                     </td>
@@ -158,10 +159,10 @@
                                 <ng-container matColumnDef="Item">
                                     <th mat-header-cell *matHeaderCellDef width="300px">{{ 'Item' | translate }}</th>
                                     <td mat-cell *matCellDef="let selection; let i = index">
-                                        <div class="col-fit" *ngIf="currentSelectionIndex !== i && i !== selections.length-1">
+                                        <div class="col-fit" *ngIf="currentSelectionIndex !== i && i !== selectedOption.ItemSelections.length-1">
                                             {{getItemName(selection.ItemID)}}
                                         </div>         
-                                        <div *ngIf="currentSelectionIndex === i || i === selections.length-1">
+                                        <div *ngIf="currentSelectionIndex === i || i === selectedOption.ItemSelections.length-1">
                                             <ng-select  [items]="itemList"
                                                         [virtualScroll]="true"
                                                         bindLabel="Description"
@@ -180,7 +181,7 @@
                                                 </ng-template>
                                             </ng-select>
                                             <!-- <select class="form-control" [(ngModel)]='selection.ItemID'
-                                                (ngModelChange)="i === selections.length-1 && canAddSelection = true;"
+                                                (ngModelChange)="i === selectedOption.ItemSelections.length-1 && canAddSelection = true;"
                                                 (focus)="formSelectionDirty = true;">
                                                 <option [value]="item.ItemID" *ngFor="let item of itemList">{{item.Description}}</option>
                                             </select> -->
@@ -191,10 +192,10 @@
                                 <ng-container matColumnDef="Price">
                                     <th mat-header-cell *matHeaderCellDef width="100px">{{ 'Price' | translate }}</th>
                                     <td mat-cell *matCellDef="let selection; let i = index">
-                                        <div *ngIf="currentSelectionIndex !== i && i !== selections.length-1">
+                                        <div *ngIf="currentSelectionIndex !== i && i !== selectedOption.ItemSelections.length-1">
                                             {{selection.PriceValue | currency}}
                                         </div>  
-                                        <div *ngIf="currentSelectionIndex === i || i === selections.length-1">
+                                        <div *ngIf="currentSelectionIndex === i || i === selectedOption.ItemSelections.length-1">
                                             <input (focus)="formSelectionDirty = true;" class="form-control" id="selectionPriceId" type="number" 
                                                 step="0.01" onchange="this.value = parseFloat(this.value).toFixed(2);" onkeydown="return event.keyCode == 69 || event.keyCode == 189 ? false : true" min="0" 
                                                 [(ngModel)]=selection.PriceValue/>
@@ -205,10 +206,10 @@
                                 <ng-container matColumnDef="Quantity">
                                     <th mat-header-cell *matHeaderCellDef width="85px">{{ 'Quantity' | translate }}</th>
                                     <td mat-cell *matCellDef="let selection; let i = index">
-                                        <div *ngIf="currentSelectionIndex !== i && i !== selections.length-1">
+                                        <div *ngIf="currentSelectionIndex !== i && i !== selectedOption.ItemSelections.length-1">
                                             {{selection.Qty}}
                                         </div>  
-                                        <div *ngIf="currentSelectionIndex === i || i === selections.length-1">
+                                        <div *ngIf="currentSelectionIndex === i || i === selectedOption.ItemSelections.length-1">
                                             <input (focus)="formSelectionDirty = true;" class="form-control" id="selectionQtyId" type="number" 
                                                 onkeydown="return event.keyCode == 69 || event.keyCode == 189 || event.keyCode == 190 ? false : true" min="0"
                                                 [(ngModel)]="selection.Qty "/>
@@ -237,12 +238,12 @@
                                 <ng-container matColumnDef="Remove">
                                     <th mat-header-cell *matHeaderCellDef width="55px">{{ 'Remove' | translate }}</th>
                                     <td mat-cell *matCellDef="let selection; let i = index" >
-                                        <div *ngIf="i !== selections.length-1">    
+                                        <div *ngIf="i !== selectedOption.ItemSelections.length-1">    
                                             <a (click)='removeSelection(i)'><span matTooltip="{{ 'Remove' | translate }}" attr.aria-label="{{ 'Remove' | translate}}" class="glyphicon glyphicon-trash"></span></a>
                                         </div>
-                                        <div [hidden]="!formSelectionDirty && i === selections.length-1"> 
-                                            <a matTooltip="{{ 'Clear' | translate }}" attr.aria-label="{{ 'Clear' | translate}}" (click)="clearSelectionFields(selection);"><i *ngIf="i === selections.length-1" class="fa fa-eraser"></i></a>
-                                            <!-- <button *ngIf="i === selections.length-1"
+                                        <div [hidden]="!formSelectionDirty && i === selectedOption.ItemSelections.length-1"> 
+                                            <a matTooltip="{{ 'Clear' | translate }}" attr.aria-label="{{ 'Clear' | translate}}" (click)="clearSelectionFields(selection);"><i *ngIf="i === selectedOption.ItemSelections.length-1" class="fa fa-eraser"></i></a>
+                                            <!-- <button *ngIf="i === selectedOption.ItemSelections.length-1"
                                                     type="button" 
                                                     class="btn btn-remove-sm"
                                                     (click)="clearSelectionFields(selection);">Clear</button> -->
@@ -251,7 +252,7 @@
                                 </ng-container>
                                 <tr mat-header-row *matHeaderRowDef="selectionDisplayedColumns"></tr>
                                 <tr mat-row *matRowDef="let selection; let i = index; columns: selectionDisplayedColumns;"
-                                    [ngStyle]="{'background-color': itemService.rowColorConditions(i, selections, currentSelectionIndex, formSelectionDirty)}"
+                                    [ngStyle]="{'background-color': itemService.rowColorConditions(i, selectedOption.ItemSelections, currentSelectionIndex, formSelectionDirty)}"
                                     (click)="onSelectSelection(i);"></tr>
                             </table>
                         </div>

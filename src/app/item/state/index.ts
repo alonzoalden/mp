@@ -5,6 +5,7 @@ import { MatTableDataSource } from '@angular/material';
 import { SalesOrder } from 'app/shared/class/sales-order';
 import { SalesOrderLine } from 'app/shared/class/sales-order-line';
 import { Fulfillment, FulfillmentSalesOrderLine } from 'app/shared/class/fulfillment';
+import { ItemOptionInsert, ItemSelectionInsert } from 'app/shared/class/item';
 
 // Extends the app state to include the product feature.
 // This is required because products are lazy loaded.
@@ -34,6 +35,36 @@ export const getItem = createSelector(
     getItemFeatureState,
     state => state.item
 );
+export const getItemList = createSelector(
+    getItemFeatureState,
+    state => state.itemList
+);
+export const getItemBundleOptions = createSelector(
+    getItemFeatureState, 
+    state => state.item ? state.item.ItemOptions : []
+)
+export const getItemBundleOptionsMatTable = createSelector(
+    getItemFeatureState, 
+    state => new MatTableDataSource<ItemOptionInsert>(state.item ? state.item.ItemOptions : [])
+)
+
+export const getSelectedBundleOption = createSelector(
+    getItemFeatureState, 
+    state => state.selectedBundleOption
+)
+export const getItemBundleOptionSelectionsMatTable = createSelector(
+    getItemFeatureState, 
+    state => new MatTableDataSource<ItemSelectionInsert>(state.selectedBundleOptionSelectionList)
+)
+
+export const getItemCategories = createSelector(
+    getItemFeatureState, 
+    state => state.itemCategories
+)
+export const getCategoryBreadCrumbs = createSelector(
+    getItemFeatureState, 
+    state => state.categoryBreadCrumbs
+)
 
 // export const getSalesOrder = createSelector(
 //     getItemFeatureState,

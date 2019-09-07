@@ -2,14 +2,19 @@ import { ItemActionTypes, ItemActions } from './item.actions';
 import { SalesOrder } from '../../shared/class/sales-order';
 import { SalesOrderLine } from '../../shared/class/sales-order-line';
 import { Fulfillment, FulfillmentSalesOrderLine } from '../../shared/class/fulfillment';
-import { ItemInsert, ItemList } from '../../shared/class/item';
+import { ItemInsert, ItemList, ItemOption, ItemOptionInsert, ItemSelectionInsert, ItemCategoryAssignment } from '../../shared/class/item';
 import { VendorBrand } from '../../shared/class/vendor-brand';
+import { Category } from 'app/shared/class/category';
 
 // State for this feature (Item Variation)
 export interface ItemState {
     vendorBrandList: VendorBrand[];
     itemList: ItemList[];
     item: ItemInsert;
+    selectedBundleOption: ItemOptionInsert;
+    selectedBundleOptionSelectionList: ItemSelectionInsert[],
+    itemCategories: Array<Category[]>,
+    categoryBreadCrumbs: Array<Category[]>,
     isLoading: boolean;
     pendingDelete: boolean,
     pendingSave: boolean,
@@ -21,6 +26,10 @@ const initialState: ItemState = {
     vendorBrandList: [],
     itemList: [],
     item: null,
+    selectedBundleOption: null,
+    selectedBundleOptionSelectionList: [],
+    itemCategories: [],
+    categoryBreadCrumbs: [],
     isLoading: true,
     pendingDelete: false,
     pendingSave: false,
@@ -37,7 +46,12 @@ export function itemReducer(state = initialState, action: ItemActions): ItemStat
                 ...state,
                 item: action.payload
             };
-        
+        case ItemActionTypes.SetSelectedBundleOption:
+            return {
+                ...state,
+                selectedBundleOption: state.item.ItemOptions[action.payload],
+                selectedBundleOptionSelectionList: state.item.ItemOptions[action.payload].ItemSelections
+            };
 
         case ItemActionTypes.LoadVendorBrandsSuccess:
             return {
@@ -61,6 +75,32 @@ export function itemReducer(state = initialState, action: ItemActions): ItemStat
             return {
                 ...state,
                 vendorBrandList: [],
+                error: action.payload,
+            };
+        case ItemActionTypes.LoadItemCategoriesSuccess:
+            state.itemCategories.push(action.payload);
+            return {
+                ...state,
+                itemCategories: state.itemCategories,
+                error: '',
+            };
+        case ItemActionTypes.LoadItemCategoriesFail:
+            return {
+                ...state,
+                itemCategories: [],
+                error: action.payload,
+            };
+        case ItemActionTypes.LoadCategoryBreadCrumbsSuccess:
+            state.categoryBreadCrumbs.push(action.payload);
+            return {
+                ...state,
+                categoryBreadCrumbs: state.categoryBreadCrumbs,
+                error: '',
+            };
+        case ItemActionTypes.LoadCategoryBreadCrumbsFail:
+            return {
+                ...state,
+                categoryBreadCrumbs: [],
                 error: action.payload,
             };
         // case ItemActionTypes.SetSalesOrder:

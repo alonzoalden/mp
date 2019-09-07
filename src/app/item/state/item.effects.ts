@@ -9,6 +9,7 @@ import { Router } from '@angular/router';
 import { Member, MemberVendor } from 'app/shared/class/member';
 import { VendorBrand } from 'app/shared/class/vendor-brand';
 import { ItemList } from 'app/shared/class/item';
+import { Category } from 'app/shared/class/category';
 
 @Injectable()
 export class ItemEffects {
@@ -38,6 +39,34 @@ export class ItemEffects {
                 map((itemlists: ItemList[]) => (new itemActions.LoadSimpleItemListSuccess(itemlists))),
                 catchError(err => {
                     of(new itemActions.LoadSimpleItemListFail(err))
+                    return EMPTY;
+                })
+            )
+        )
+    );
+    @Effect()
+    loadItemCategories$: Observable<Action> = this.actions$.pipe(
+        ofType(itemActions.ItemActionTypes.LoadItemCategories),
+        map((action: itemActions.LoadItemCategories) => action.payload),
+        mergeMap((id: number) =>
+            this.itemService.getCategories(id).pipe(
+                map((categories: Category[]) => (new itemActions.LoadItemCategoriesSuccess(categories))),
+                catchError(err => {
+                    of(new itemActions.LoadItemCategoriesFail(err))
+                    return EMPTY;
+                })
+            )
+        )
+    );
+    @Effect()
+    loadCategoryBreadCrumbs$: Observable<Action> = this.actions$.pipe(
+        ofType(itemActions.ItemActionTypes.LoadCategoryBreadCrumbs),
+        map((action: itemActions.LoadCategoryBreadCrumbs) => action.payload),
+        mergeMap((id: number) =>
+            this.itemService.getCategoryBreadCrumbs(id).pipe(
+                map((categories: Category[]) => (new itemActions.LoadCategoryBreadCrumbsSuccess(categories))),
+                catchError(err => {
+                    of(new itemActions.LoadCategoryBreadCrumbsFail(err))
                     return EMPTY;
                 })
             )

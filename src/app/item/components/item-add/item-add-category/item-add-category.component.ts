@@ -1,10 +1,11 @@
-import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
+import { Component, OnInit, ViewChild, ElementRef, Input, EventEmitter, Output, SimpleChanges } from '@angular/core';
 import { Router } from '@angular/router';
 import { MatTableDataSource } from '@angular/material';
 import { ItemInsert, ItemCategoryAssignment } from '../../../../shared/class/item';
 import { Category } from '../../../../shared/class/category';
 
 import { ItemService } from '../../../item.service';
+import { Observable } from 'rxjs';
 
 @Component({
   selector: 'o-item-add-category',
@@ -12,10 +13,16 @@ import { ItemService } from '../../../item.service';
 })
 
 export class ItemAddCategoryComponent implements OnInit {
-    errorMessage: string;
-    item: ItemInsert;
-    categoryiesList: Array<Category[]> = [];
-    currentResult: Array<Category[]> = [];
+    @Input() userInfo: string;
+    @Input() errorMessage: string;
+    @Input() item: ItemInsert;
+    @Input() categoriesList: Array<Category[]>;
+    @Input() currentResult: Array<Category[]>;
+    @Output() getCategories = new EventEmitter<number>();
+    @Output() getCategoryBreadCrumbs = new EventEmitter<number>();
+    
+
+
     lastSelectedValue: number = 0;
 
     displayedColumns = ['SelectedCategory', 'Remove'];
@@ -26,22 +33,20 @@ export class ItemAddCategoryComponent implements OnInit {
 
     constructor(private itemService: ItemService) { }
 
+    ngOnChanges(changes: SimpleChanges) {
+        console.log(changes)
+    }
     ngOnInit(): void {
-        this.item = this.itemService.currentItemInsert;
-        this.itemService.getCategories(2).subscribe(
-            (categories: Category[]) => {
-                this.categoryiesList.push(categories);
-            },
-            (error: any) => this.errorMessage = <any>error
-        );
-        if (this.item.ItemCategoryAssignments.length > 0) {
+        this.getCategories.emit(2);
+        if (this.item && this.item.ItemCategoryAssignments.length > 0) {
             this.item.ItemCategoryAssignments.forEach((value, index) => {
-                this.itemService.getCategoryBreadCrumbs(value.ItemCategoryID).subscribe(
-                    (categories: Category[]) => {
-                        this.currentResult.push(categories);
-                        this.refreshDataSource(this.currentResult);
-                    }
-                );
+                this.getCategoryBreadCrumbs.emit(value.ItemCategoryID);
+                // this.itemService.getCategoryBreadCrumbs(value.ItemCategoryID).subscribe(
+                //     (categories: Category[]) => {
+                //         this.currentResult.push(categories);
+                //         this.refreshDataSource(this.currentResult);
+                //     }
+                // );
             });
         }
     }
@@ -53,19 +58,22 @@ export class ItemAddCategoryComponent implements OnInit {
     onChange(categoryValue, index) {
         if (categoryValue) {
             if (categoryValue === 0) {
-                this.categoryiesList = this.categoryiesList.splice(0, index + 1);
-                this.lastSelectedValue = this.categoryiesList[this.categoryiesList.length - 1][0].ParentItemCategoryID;
+                this.categoriesList = this.categoriesList.splice(0, index + 1);
+                this.lastSelectedValue = this.categoriesList[this.categoriesList.length - 1][0].ParentItemCategoryID;
             } else {
                 this.lastSelectedValue = categoryValue;
-                this.itemService.getCategories(categoryValue).subscribe(
-                    (categories: Category[]) => {
-                        this.categoryiesList = this.categoryiesList.slice(0, index + 1);
-                        if (categories.length > 0) {
-                            this.categoryiesList.push(categories);
-                        }
-                    },
-                    (error: any) => this.errorMessage = <any>error
-                );
+                this.getCategories.emit(categoryValue);
+                this.categoriesList = this.categoriesList.slice(0, index + 1);
+                
+                // this.itemService.getCategories(categoryValue).subscribe(
+                //     (categories: Category[]) => {
+                //         this.categoriesList = this.categoriesList.slice(0, index + 1);
+                //         if (categories.length > 0) {
+                //             this.categoriesList.push(categories);
+                //         }
+                //     },
+                //     (error: any) => this.errorMessage = <any>error
+                // );
             }
         }
     }
@@ -75,30 +83,35 @@ export class ItemAddCategoryComponent implements OnInit {
         this.currentResult.splice(index, 1);
         this.item.ItemCategoryAssignments.splice(this.item.ItemCategoryAssignments.findIndex(x => x.ItemCategoryID === categoryValue), 1);
 
-        this.refreshDataSource(this.currentResult);
+        //this.refreshDataSource(this.currentResult);
     }
 
     onAddCategory() {
         if (this.lastSelectedValue !== 0) {
-            this.itemService.getCategoryBreadCrumbs(this.lastSelectedValue).subscribe(
-                (categories: Category[]) => {
-                    this.currentResult.push(categories);
-                    this.categoryiesList.splice(1);
-                    this.item.ItemCategoryAssignments.push(new ItemCategoryAssignment(this.lastSelectedValue));
-                    this.lastSelectedValue = 0;
-                    //this.selectionCategoriesRef.nativeElement.value = 0;
-                    this.refreshDataSource(this.currentResult);
-                },
-                (error: any) => this.errorMessage = <any>error
-            );
-        } else {
-            console.log('nothing selected');
+            this.getCategoryBreadCrumbs.emit(this.lastSelectedValue);
+            this.categoriesList.splice(1);
+            this.item.ItemCategoryAssignments.push(new ItemCategoryAssignment(this.lastSelectedValue));
+            this.lastSelectedValue = 0;
         }
+        //     this.itemService.getCategoryBreadCrumbs(this.lastSelectedValue).subscribe(
+        //         (categories: Category[]) => {
+        //             this.currentResult.push(categories);
+        //             this.categoriesList.splice(1);
+        //             this.item.ItemCategoryAssignments.push(new ItemCategoryAssignment(this.lastSelectedValue));
+        //             this.lastSelectedValue = 0;
+        //             //this.selectionCategoriesRef.nativeElement.value = 0;
+        //             this.refreshDataSource(this.currentResult);
+        //         },
+        //         (error: any) => this.errorMessage = <any>error
+        //     );
+        // } else {
+        //     console.log('nothing selected');
+        // }
     }
     clearFields() {
         this.lastSelectedValue = 0;
         this.formDirty = false;
-        this.categoryiesList = this.categoryiesList.splice(0, 1);
+        this.categoriesList = this.categoriesList.splice(0, 1);
         //this.selectionCategoriesRef.nativeElement.value = 0;
     }
 }

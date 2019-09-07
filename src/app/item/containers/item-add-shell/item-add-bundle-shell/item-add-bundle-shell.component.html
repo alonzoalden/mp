@@ -1,23 +1,10 @@
 <o-item-add-bundle
-
     [itemList]="itemList$ | async"
     [item]="item$ | async"
-    
+    [selectedOption]="selectedBundleOption$ | async"
+    [itemBundleOptionsMatTable]="itemBundleOptionsMatTable$ | async"
+    [itemBundleOptionSelectionsMatTable]="itemBundleOptionSelectionsMatTable$ | async"
     [errorMessage]="errorMessage$ | async"
     (getItemList)="getItemList($event)"
     (setSelectedBundleOption)="setSelectedBundleOption($event)"
 ></o-item-add-bundle>
-
-<!-- 
-
-@Input() errorMessage: string;
-    @Input() item: ItemInsert;
-    @Input() itemList: ItemList[];
-    @Input() selections: ItemSelectionInsert[] = [];
-    @Input() selectedOption: ItemOptionInsert;
-    //@Input() optionsMatTable: MatTableDataSource<ItemOptionInsert> = [];
-    @Input() selectionsMatTable: MatTableDataSource<ItemSelectionInsert>;
-    
-
-    @Output() getItemList = new EventEmitter<void>();
-    @Output() setSelectedBundleOption = new EventEmitter<void>(); -->
