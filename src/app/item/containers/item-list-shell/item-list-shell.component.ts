@@ -8,6 +8,7 @@ import { AppService } from '../../../app.service';
 import { MatMenu } from '@angular/material/menu';
 
 import { environment } from '../../../../environments/environment';
+import {TranslateService} from "@ngx-translate/core";
 
 @Component({
     templateUrl: './item-list-shell.component.html'
@@ -33,24 +34,29 @@ export class ItemListShellComponent implements OnInit {
     duplicateItemVideos: ItemVideo[];
 
     //displayedColumns = ['Menu', 'ImagePath', 'VendorSKU', 'Name', 'TPIN', 'FulfilledBy', 'Price', 'Quantity', 'MerchantQuantity'];
-    displayedColumns = ['Menu','ItemID','ProductDetails','FulfilledBy','Price','Quantity','MerchantQuantity','Approval','Visibility','UpdatedOn'];
+    displayedColumns = ['Menu','ItemID','ProductDetails','ItemType','FulfilledBy','Price','Quantity','MerchantQuantity','Approval','Visibility','UpdatedOn'];
     dataSource: any = null;
 
     @ViewChild(MatPaginator, { static: true }) paginator: MatPaginator;
     @ViewChild(MatSort, { static: true }) sort: MatSort;
 
     loading: boolean;
-
+    currentLang:string;
     constructor(private router: Router,
         private itemService: ItemService,
         private appService: AppService,
         public itemPrintDialog: MatDialog,
-        public itemImportDialog: MatDialog) { 
-            
+        public itemImportDialog: MatDialog,
+        private translateService:TranslateService
+                ) {
+
         }
 
     ngOnInit() {
-
+        this.translateService.store.currentLang ? this.currentLang = this.translateService.store.currentLang : this.currentLang = this.translateService.store.defaultLang;
+        this.translateService.onLangChange.subscribe(data=>{
+          this.currentLang = data.lang;
+        });
         // console.log('here init');
         // console.log(this.appService.isMemberAdmin());
         // console.log(this.appService.getVendorID());
@@ -97,7 +103,7 @@ export class ItemListShellComponent implements OnInit {
     //       width: '250px',
     //       data: item,
     //     });
-    
+
     //     dialogRef.afterClosed().subscribe(result => {
     //         if (result && result.Quantity > 0) {
     //             if(result.Size === "small") {
@@ -121,7 +127,7 @@ export class ItemListShellComponent implements OnInit {
     //         {
     //             this.loading = true;
     //             this.itemService.refreshItems().subscribe(
-                
+
     //                 (items: Item[]) => {
     //                     this.items = items;
     //                     this.loading = false;
@@ -134,7 +140,7 @@ export class ItemListShellComponent implements OnInit {
     //                 }
     //             );
     //         }
-            
+
     //       });
     // }
 
@@ -205,9 +211,9 @@ export class ItemListShellComponent implements OnInit {
     }
 
     onRemove(item: Item) {
-        const confirmation = confirm(`Remove ${item.ItemID}: ${item.Name}?`);        
+        const confirmation = confirm(`Remove ${item.ItemID}: ${item.Name}?`);
         if (confirmation) {
-            
+
             this.loading = true;
 
             this.itemService.deleteItem(item.ItemID).subscribe(
@@ -228,14 +234,14 @@ export class ItemListShellComponent implements OnInit {
     }
 
     onConvertToPart(item: Item) {
-        const confirmation = confirm(`${item.ItemID}: ${item.Name} -Selected Item will be converted as a part item. Would you like to continue?`);        
+        const confirmation = confirm(`${item.ItemID}: ${item.Name} -Selected Item will be converted as a part item. Would you like to continue?`);
         if (confirmation) {
-            
+
             this.loading = true;
 
             this.itemService.getItem(item.ItemID).subscribe(
                 (item: Item) => {
-                    this.selectedItem = item;                        
+                    this.selectedItem = item;
 
                     if(this.isValidPart(this.selectedItem))
                     {
@@ -243,11 +249,11 @@ export class ItemListShellComponent implements OnInit {
                         // this.selectedItem.FulfilledBy = 'Toolots';
                         // this.selectedItem.ItemType = 'simple';
                         this.selectedItem.Visibility = 'Search';
-                        this.selectedItem.Approval = 'Approved';         
-                                    
+                        this.selectedItem.Approval = 'Approved';
+
                         this.itemService.editItem(this.selectedItem).subscribe(
                             () => {
-                                this.refresh();                                
+                                this.refresh();
                                 this.loading = false;
                                 this.itemService.sendNotification({ type: 'success', title: 'Successfully Updated', content: "Converted as a part item" });
                             },
@@ -257,10 +263,10 @@ export class ItemListShellComponent implements OnInit {
                                 this.itemService.sendNotification({ type: 'error', title: 'Error', content: this.errorMessage });
                             }
                         );
-                    }    
+                    }
                     else {
                         this.loading = false;
-                    }  
+                    }
                 },
                 error => {
                     this.refresh();
@@ -269,7 +275,7 @@ export class ItemListShellComponent implements OnInit {
                 }
             );
 
-                  
+
         }
     }
 
@@ -295,34 +301,34 @@ export class ItemListShellComponent implements OnInit {
         this.itemService.getItemDuplicate(itemid).subscribe(
             (item: Item) => {
                 this.duplicateItemCategoryAssignments = item.ItemCategoryAssignments;
-                this.duplicateItemOptions = item.ItemOptions;                
-                const _pendingItemOption = new ItemOption(null, null, true, item.ItemOptions.length + 1, null, 'radio', null, null, [], true);                
-                this.duplicateItemOptions.forEach((itemOption) => {                    
-                    const _pendingItemSelection = new ItemSelection(null, null, null, null, null, null, itemOption.ItemSelections.length + 1, false, 0, 0, false, null, null, true); 
+                this.duplicateItemOptions = item.ItemOptions;
+                const _pendingItemOption = new ItemOption(null, null, true, item.ItemOptions.length + 1, null, 'radio', null, null, [], true);
+                this.duplicateItemOptions.forEach((itemOption) => {
+                    const _pendingItemSelection = new ItemSelection(null, null, null, null, null, null, itemOption.ItemSelections.length + 1, false, 0, 0, false, null, null, true);
                     if (itemOption.ItemSelections.length === 0) {
                         _pendingItemSelection.IsDefault = true;
-                    }       
+                    }
                     itemOption.ItemSelections.push(_pendingItemSelection);
-                });                
+                });
                 this.duplicateItemOptions.push(_pendingItemOption);
                 this.duplicateItemTierPrices = item.ItemTierPrices;
                 const _pendingItemTierPrice = new ItemTierPrice(0, null, 0, 0, null, null, true);
-                this.duplicateItemTierPrices.push(_pendingItemTierPrice);   
+                this.duplicateItemTierPrices.push(_pendingItemTierPrice);
                 this.duplicateItemRelatedProducts = item.ItemRelatedProducts;
                 const _pendingItemRelatedProduct = new ItemRelatedProduct(0, null, null, null, null, null, null, item.ItemRelatedProducts.length + 1, null, null, null, true);
-                this.duplicateItemRelatedProducts.push(_pendingItemRelatedProduct);   
+                this.duplicateItemRelatedProducts.push(_pendingItemRelatedProduct);
                 this.duplicateItemUpSells = item.ItemUpSells;
                 const _pendingItemUpSell = new ItemUpSell(0, null, null, null, null, null, null, item.ItemUpSells.length + 1, null, null, null, true);
-                this.duplicateItemUpSells.push(_pendingItemUpSell);   
+                this.duplicateItemUpSells.push(_pendingItemUpSell);
                 this.duplicateItemCrossSells = item.ItemCrossSells;
                 const _pendingItemCrossSell = new ItemCrossSell(0, null, null, null, null, null, null, item.ItemCrossSells.length + 1, null, null, null, true);
-                this.duplicateItemCrossSells.push(_pendingItemCrossSell);   
+                this.duplicateItemCrossSells.push(_pendingItemCrossSell);
                 this.duplicateItemAttachments = item.ItemAttachments;
                 const _pendingItemAttachment = new ItemAttachment(0, null, null, null, null, null, item.ItemCrossSells.length + 1, null, null, true);
-                this.duplicateItemAttachments.push(_pendingItemAttachment);   
+                this.duplicateItemAttachments.push(_pendingItemAttachment);
                 this.duplicateItemVideos = item.ItemVideos;
                 const _pendingItemVideo = new ItemVideo(0, null, null, null, null, null, null, item.ItemCrossSells.length + 1, null, null, null, null, null, true, true);
-                this.duplicateItemVideos.push(_pendingItemVideo);   
+                this.duplicateItemVideos.push(_pendingItemVideo);
 
                 this.duplicateItemInsert = new ItemInsert(item.Name, null, item.FulfilledBy, item.ItemType, item.MerchantQuantity, item.ShipWithinDays
                     , item.PriceType, item.Price, item.FOBPrice, item.DropshipPrice, item.SpecialPrice, item.SpecialFrom
@@ -332,7 +338,7 @@ export class ItemListShellComponent implements OnInit {
                     , item.AdditionalInformation, item.VendorBrandID, item.Approval, item.IsPartItem, item.PartImageRaw, item.PartImageFilePath, item.PartIsNewImage, item.ExcludeGoogleShopping
                     , this.duplicateItemCategoryAssignments, this.duplicateItemOptions, this.duplicateItemTierPrices
                     , this.duplicateItemRelatedProducts, this.duplicateItemUpSells, this.duplicateItemCrossSells, [], [], [], []);
-                
+
                 this.itemService.duplicateItemInsert = this.duplicateItemInsert;
 
                 this.loading = false;
@@ -344,7 +350,7 @@ export class ItemListShellComponent implements OnInit {
                 this.itemService.sendNotification({ type: 'error', title: 'Error', content: this.errorMessage });
                 this.router.navigate(['/item']);
             }
-        );        
+        );
     }
 
     onPreview(itemid: string) {

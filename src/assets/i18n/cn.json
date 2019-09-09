@@ -1,5 +1,5 @@
 {
-    "Home": "主页",    
+    "Home": "主页",
     "Create": "创建",
     "Update": "更新",
     "Save": "保存",
@@ -31,8 +31,8 @@
     "is required": "是必填",
     "Please select value": "请选择",
     "Toolots":"拓拉思",
-    
-    "Merchant Portal":"卖家平台", 
+
+    "Merchant Portal":"卖家平台",
     "HOME":"主页",
     "FEATURES":"买家服务",
     "SIGN UP":"立即注册",
@@ -45,7 +45,7 @@
     "Welcome to Merchant Portal":"欢迎来到 Merchant Portal",
     "Notifications":"通知",
     "Warning! Your Billing Address is Incomplete.": "注意！您的账单地址不完整。",
-    "Warning! Your Shipping Address is Incomplete.": "注意！您的送货地址不完整。",    
+    "Warning! Your Shipping Address is Incomplete.": "注意！您的送货地址不完整。",
     "Warning! You have ## late orders.":"注意！你有<strong>{{LateOrderCount}}</strong>迟到的订单。",
     "Complete Address": "完整地址",
     "Manage Orders": "管理订单",
@@ -87,15 +87,15 @@
 
     "Shipping/Return Address": "退货地址",
     "Billing Address": "账单地址",
-    
+
     "Update Shipping Address": "更新退货地址",
     "Update Billing Address": "更新账单地址",
 
     "Title": "标题",
     "Upload File": "上传文件",
     "Choose File…": "选择文件",
-    "File Selected":"选中文件夹：",    
-    "Files Selected":"选中文件夹：",    
+    "File Selected":"选中文件夹：",
+    "Files Selected":"选中文件夹：",
     "View File": "查看文件",
     "Filter By": "筛选",
     "Items per page": "每页显示数量：",
@@ -113,7 +113,7 @@
 
     "Edit Attachment":"编辑附件",
     "Attachment Details":"附件详情",
-    
+
     "Product": "产品",
     "New Item": "添加新产品",
     "Manage Items": "产品管理",
@@ -130,7 +130,7 @@
     "Product Description": "产品描述",
     "SKU": "SKU",
     "TPIN": "TPIN",
-    "Item Type": "产品类别",    
+    "Item Type": "产品类别",
     "Origin": "原产地",
     "Warranty": "保修期",
     "No Warranty": "无保修",
@@ -158,6 +158,7 @@
     "Bundle": "捆绑产品",
     "Merchant": "商家",
     "Visibility": "可见性",
+    "Last Updated": "更新时间",
     "Not Visible Individually":"下架",
     "Catalog":"仅目录可见",
     "Search":"仅搜索可见",
@@ -206,6 +207,8 @@
     "Item Price": "产品价格",
     "Selling Price": "售价",
     "FOB Price": "FOB价格",
+    "Toolots Available": "拓拉思库存",
+    "Merchant Available": "商家库存",
 
     "Quantity": "数量",
     "Special Price": "特价",
@@ -231,7 +234,7 @@
     "Video": "视频",
     "Videos": "视频",
     "Youtube URL": "链接",
-    
+
     "Image": "图片",
     "Images": "图片",
     "Base Image": "基本图片",
@@ -241,7 +244,7 @@
     "Title (Optional)":"标题选填",
     "Multiple Images": "批量上传",
     "Upload Images":"上传图片",
-    "Upload":"上传",    
+    "Upload":"上传",
     "No files selected":"无选中文件夹",
     "Remove All Files":"删除所有文件",
 
@@ -270,7 +273,7 @@
     "Inbound Shipment Lines": "发货信息",
     "Carton": "外包装",
     "Shipping Instruction": "装载指示",
-    "Shipping ": "发货",    
+    "Shipping ": "发货",
 
     "Transaction Date": "录入日期",
     "Shipment Date": "发货日期",
@@ -286,7 +289,7 @@
     "Box":"盒子序号",
     "No. of Labels":"标签数量",
     "Carton Number":"外包装编号",
-    "No. of Units":"单品数量",    
+    "No. of Units":"单品数量",
     "Carton Line":"具体装箱信息",
     "Carton Lines":"具体装箱信息",
     "L":"长",
@@ -390,7 +393,7 @@
     "Sub-Total":"小结",
     "Shipped Quantity":"发货数量",
     "Order Details":"订单详情",
-    "Order Items":"订单物品",    
+    "Order Items":"订单物品",
 
     "Member":"用户管理",
     "Members":"用户管理",
@@ -421,10 +424,13 @@
     "Confirm Password":"确认密码",
     "Current Vendor":"现有供应商",
 
-    "Pending": "待定",    
+    "Pending": "待定",
     "Processing": "处理中",
     "Received": "已收到",
     "Approved":"审核通过",
+    "Not Approved": "审核未通过",
+    "Not Submitted": "未提交审核",
 
-    "Vendor": "供应商"
+    "Vendor": "供应商",
+    "ItemType": "产品类型"
 }
