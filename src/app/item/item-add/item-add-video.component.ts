@@ -25,7 +25,7 @@ export class ItemAddVideoComponent implements OnInit {
     formDirty = false;
     canAdd = false;
 
-    constructor(private itemService: ItemService) { }
+    constructor(private itemService: ItemService, private route: ActivatedRoute) { }
 
     ngOnInit(): void {
         this.item = this.itemService.currentItemInsert;
@@ -45,9 +45,9 @@ export class ItemAddVideoComponent implements OnInit {
     }
 
     onAddItemVideo(itemVideo: ItemVideoInsert) {
-        if (this.isRequirementValid(itemVideo)) {      
-
-            const videoID = this.getQueryString('v', itemVideo.URL);
+        if (this.isRequirementValid(itemVideo)) {    
+            const videoID = this.getYoutubeQueryString(itemVideo.URL);
+            if (!videoID) return this.itemService.sendNotification({ type: 'error', title: 'Error', content: "Incorrect Youtube URL" });
 
             const existVideo = this.item.ItemVideos.find(x => x.Value === videoID);
             if (existVideo) {
@@ -85,7 +85,7 @@ export class ItemAddVideoComponent implements OnInit {
             }            
         }
         else {
-            this.itemService.sendNotification({ type: 'error', title: 'Error', content: "Please select an Video" });
+            this.itemService.sendNotification({ type: 'error', title: 'Error', content: "Please select a Video" });
         }
     }
 
@@ -99,11 +99,23 @@ export class ItemAddVideoComponent implements OnInit {
         }
     }
 
-    getQueryString(field: string, url: string) {
-        const reg = new RegExp( '[?&]' + field + '=([^&#]*)', 'i' );
-        const value = reg.exec(url);
-        return value[1];
+    getYoutubeQueryString(url: string) {
+        if (url.includes('?v=')) {
+            const reg = new RegExp( '[?&]' + 'v' + '=([^&#]*)', 'i' );
+            const value = reg.exec(url);
+            return value[1];
+        }
+        else if (url.includes('/embed/')){
+            const value = url.split('/embed/')[1].split('?')[0];
+            return value;
+        }
     }
+
+    // getQueryString(field: string, url: string) {
+    //     const reg = new RegExp( '[?&]' + field + '=([^&#]*)', 'i' );
+    //     const value = reg.exec(url);
+    //     return value[1];
+    // }
 
     isRequirementValid(itemVideo: ItemVideoInsert): boolean {
         if (itemVideo
