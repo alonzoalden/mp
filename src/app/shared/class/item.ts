@@ -1,5 +1,6 @@
 // import { ItemOption } from "./item-option";
 
+
 export class Item {
     constructor(
         public ItemID: number,
@@ -85,6 +86,7 @@ export class Item {
         public ItemVideos: Array<ItemVideo>,
         public ItemImages: Array<ItemImage>,
         public ItemParts: Array<ItemPart>,
+        public ItemVariations: Array<ItemVariation>,
 
         public QtyOnHand: number,
         public QtyAvailable: number,
@@ -167,7 +169,7 @@ export class ItemInsert {
         public ItemAttachments: Array<ItemAttachmentInsert>,
         public ItemVideos: Array<ItemVideoInsert>,
         public ItemImages: Array<ItemImageInsert>,
-        public ItemParts: Array<ItemPartInsert>
+        public ItemParts: Array<ItemPartInsert>,
     ) {}
 }
 
@@ -240,7 +242,8 @@ export class ItemUpdate {
         public ItemCrossSells: Array<ItemCrossSell>,
         public ItemAttachments: Array<ItemAttachment>,
         public ItemVideos: Array<ItemVideo>,
-        public ItemImages: Array<ItemImage>
+        public ItemImages: Array<ItemImage>,
+        public ItemParts: Array<ItemPartInsert>,
     ) {}
 }
 
@@ -251,7 +254,8 @@ export class ItemList {
         public FOBPrice: number,
         public ItemName: string,
         public TPIN: string,
-        public VendorSKU: string
+        public VendorSKU: string,
+        public ImagePath: string
     ) {}
 }
 
@@ -641,3 +645,104 @@ export class ItemPartInsert {
         public isNew: boolean
     ) {}
 }
+
+
+
+
+export class ItemGlobalAttribute {
+    constructor(
+        public ItemGlobalAttributeID: number,
+        public Name: string,        
+        public UpdatedOn: string,
+        public CreatedOn: string,
+        public ItemGlobalAttributeVariations: Array<ItemGlobalAttributeVariation>
+    ) {}
+}
+
+export class ItemGlobalAttributeVariation {
+    constructor(
+        public ItemGlobalAttributeVariationID: number,
+        public ItemGlobalAttributeID: number,
+        public Name: string,        
+        public UpdatedOn: string,
+        public CreatedOn: string,
+    ) {}
+}
+
+
+export class ItemAttribute {
+    constructor(
+        public ItemAttributeID: number,
+        public Name: string,        
+        public UpdatedOn: string,
+        public CreatedOn: string,
+        public ItemAttributeVariations: Array<ItemAttributeVariation>,
+        public SelectedItemAttributeVariations: Array<ItemAttributeVariation>,
+    ) {}
+}
+
+export class ItemAttributeVariation {
+    constructor(
+        public ItemAttributeVariationID: number,
+        public ItemAttributeID: number,
+        public Name: string,        
+        public UpdatedOn: string,
+        public CreatedOn: string,    
+    ) {}
+}
+
+export class ItemVariationListing {
+    constructor(
+        public ItemVariationListingID: number,
+        public Name: string,
+        public PrimaryItemID: number,        
+
+        public ItemName: string,        
+        public ItemVendorSKU: string,        
+        public ItemTPIN: string,        
+        public ItemURLKey: string,        
+        public ItemImagePath: string,  
+
+        public UpdatedOn: string,
+        public CreatedOn: string,
+
+        public ItemVariations: Array<ItemVariation>
+    ) {}
+}
+
+export class ItemVariation {
+    constructor(
+        public ItemVariationID: number,
+        public ItemVariationListingID: number,
+        public ItemVariationListingName: string,
+        public ItemID: number,
+
+        public ItemName: string,        
+        public ItemVendorSKU: string,        
+        public ItemTPIN: string,        
+        public ItemURLKey: string,        
+        public ItemImagePath: string,        
+
+        public UpdatedOn: string,
+        public CreatedOn: string,
+        public ItemVariationLines: Array<ItemVariationLine>,
+        
+        public IsPrimary: boolean,
+    ) {}
+}
+
+export class ItemVariationLine {
+    constructor(
+        public ItemVariationLineID: number,
+        public ItemVariationID: number,
+        public ItemAttributeVariationID: number,
+        public ItemAttributeID: number,
+        public ItemAttributeName: string,
+        public ItemAttributeVariationName: string,
+        public UpdatedOn: string,
+        public CreatedOn: string,
+    ) {}
+}
+
+
+

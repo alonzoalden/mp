@@ -70,7 +70,7 @@ export class ItemAddPartComponent implements OnInit {
         this.itemService.getPartItemList().subscribe(
             (itemlist: ItemList[]) => {
                 this.itemlist = itemlist;
-                const _temp = new ItemList(null, 'New Item', null, null, null, null);
+                const _temp = new ItemList(null, 'New Item', null, null, null, null, null);
                 this.itemlist.splice(0,0,_temp);
 
                 this.refreshDataSource(this.item.ItemParts);

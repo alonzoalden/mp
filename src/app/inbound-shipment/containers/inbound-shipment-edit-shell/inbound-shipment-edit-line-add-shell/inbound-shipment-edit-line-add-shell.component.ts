@@ -3,13 +3,13 @@ import { Router, ActivatedRoute } from '@angular/router';
 import { NgForm, FormGroup, FormControl, Validators, FormArray, FormBuilder } from '@angular/forms';
 import { Subscription } from 'rxjs';
 
-import { PurchaseOrderLineInsert, PurchaseOrderLine } from '../../shared/class/purchase-order';
+import { PurchaseOrderLineInsert, PurchaseOrderLine } from '../../../../shared/class/purchase-order';
 
 //import { PurchaseOrderLineInsert, PurchaseOrderLine } from '../../shared/class/purchase-order-line';
-import { ItemList } from '../../shared/class/item';
-import { Item } from '../../shared/class/item';
+import { ItemList } from '../../../../shared/class/item';
+import { Item } from '../../../../shared/class/item';
 
-import { PurchaseOrderService } from '../purchase-order.service';
+import { PurchaseOrderService } from '../../../purchase-order.service';
 
 @Component({
     selector: 'o-inbound-shipment-edit-line-add',

@@ -1,15 +1,14 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { Router } from '@angular/router';
 import { MatMenuModule, MatPaginator, MatSort, MatTableDataSource, MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material';
-import { PurchaseOrder } from '../../shared/class/purchase-order';
-import { PurchaseOrderService } from '../purchase-order.service';
+import { PurchaseOrder } from '../../../shared/class/purchase-order';
+import { PurchaseOrderService } from '../../purchase-order.service';
 import { MatMenu } from '@angular/material/menu';
-import { AppService } from '../../app.service';
+import { AppService } from '../../../app.service';
 
 @Component({
   selector: 'o-inbound-shipment-list',
   templateUrl: './inbound-shipment-list.component.html',
-  styleUrls: ['./inbound-shipment-list.component.css']
 })
 
 export class InboundShipmentListComponent implements OnInit {

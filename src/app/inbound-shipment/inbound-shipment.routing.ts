@@ -1,23 +1,26 @@
 import { Routes, RouterModule } from '@angular/router';
 
-import { InboundShipmentComponent } from './inbound-shipment.component';
-import { InboundShipmentListComponent } from './inbound-shipment-list/inbound-shipment-list.component';
-import { InboundShipmentEditComponent } from './inbound-shipment-edit/inbound-shipment-edit.component';
-import { InboundShipmentEditLineComponent } from './inbound-shipment-edit/inbound-shipment-edit-line.component';
-import { InboundShipmentEditLineListComponent } from './inbound-shipment-edit/inbound-shipment-edit-line-list.component';
-import { InboundShipmentEditLineEditComponent } from './inbound-shipment-edit/inbound-shipment-edit-line-edit.component';
-import { InboundShipmentEditLineAddComponent } from './inbound-shipment-edit/inbound-shipment-edit-line-add.component';
-import { InboundShipmentEditCartonComponent } from './inbound-shipment-edit/inbound-shipment-edit-carton.component';
-import { InboundShipmentEditCartonListComponent } from './inbound-shipment-edit/inbound-shipment-edit-carton-list.component';
-import { InboundShipmentEditCartonAddComponent } from './inbound-shipment-edit/inbound-shipment-edit-carton-add.component';
-import { InboundShipmentEditCartonEditComponent } from './inbound-shipment-edit/inbound-shipment-edit-carton-edit.component';
-import { InboundShipmentEditCartonLineListComponent } from './inbound-shipment-edit/inbound-shipment-edit-carton-line-list.component';
-import { InboundShipmentEditCartonLineEditComponent } from './inbound-shipment-edit/inbound-shipment-edit-carton-line-edit.component';
-import { InboundShipmentEditCartonLineAddComponent } from './inbound-shipment-edit/inbound-shipment-edit-carton-line-add.component';
-import { InboundShipmentEditShippingInstructionComponent } from './inbound-shipment-edit/inbound-shipment-edit-shipping-instruction.component';
-import { InboundShipmentEditShippingComponent } from './inbound-shipment-edit/inbound-shipment-edit-shipping.component';
 
-import { InboundShipmentEditGuard } from './inbound-shipment-edit/inbound-shipment-edit-guard';
+import { InboundShipmentComponent } from './inbound-shipment.component';
+
+
+import { InboundShipmentListComponent } from './containers/inbound-shipment-list-shell/inbound-shipment-list-shell.component';
+import { InboundShipmentEditComponent } from './containers/inbound-shipment-edit-shell/inbound-shipment-edit-shell/inbound-shipment-edit-shell.component';
+import { InboundShipmentEditLineComponent } from './containers/inbound-shipment-edit-shell/inbound-shipment-edit-line-shell/inbound-shipment-edit-line-shell.component';
+import { InboundShipmentEditLineListComponent } from './containers/inbound-shipment-edit-shell/inbound-shipment-edit-line-list-shell/inbound-shipment-edit-line-list-shell.component';
+import { InboundShipmentEditLineEditComponent } from './containers/inbound-shipment-edit-shell/inbound-shipment-edit-line-edit-shell/inbound-shipment-edit-line-edit-shell.component';
+import { InboundShipmentEditLineAddComponent } from './containers/inbound-shipment-edit-shell/inbound-shipment-edit-line-add-shell/inbound-shipment-edit-line-add-shell.component';
+import { InboundShipmentEditCartonComponent } from './containers/inbound-shipment-edit-shell/inbound-shipment-edit-carton-shell/inbound-shipment-edit-carton-shell.component';
+import { InboundShipmentEditCartonListComponent } from './containers/inbound-shipment-edit-shell/inbound-shipment-edit-carton-list-shell/inbound-shipment-edit-carton-list-shell.component';
+import { InboundShipmentEditCartonAddComponent } from './containers/inbound-shipment-edit-shell/inbound-shipment-edit-carton-add-shell/inbound-shipment-edit-carton-add-shell.component';
+import { InboundShipmentEditCartonEditComponent } from './containers/inbound-shipment-edit-shell/inbound-shipment-edit-carton-edit-shell/inbound-shipment-edit-carton-edit-shell.component';
+import { InboundShipmentEditCartonLineListComponent } from './containers/inbound-shipment-edit-shell/inbound-shipment-edit-carton-line-list-shell/inbound-shipment-edit-carton-line-list-shell.component';
+import { InboundShipmentEditCartonLineEditComponent } from './containers/inbound-shipment-edit-shell/inbound-shipment-edit-carton-line-edit-shell/inbound-shipment-edit-carton-line-edit-shell.component';
+import { InboundShipmentEditCartonLineAddComponent } from './containers/inbound-shipment-edit-shell/inbound-shipment-edit-carton-line-add-shell/inbound-shipment-edit-carton-line-add-shell.component';
+import { InboundShipmentEditShippingInstructionComponent } from './containers/inbound-shipment-edit-shell/inbound-shipment-edit-shipping-instruction-shell/inbound-shipment-edit-shipping-instruction-shell.component';
+import { InboundShipmentEditShippingComponent } from './containers/inbound-shipment-edit-shell/inbound-shipment-edit-shipping-shell/inbound-shipment-edit-shipping-shell.component';
+
+import { InboundShipmentEditGuard } from './components/inbound-shipment-edit/inbound-shipment-edit-guard';
 
 const INBOUNDSHIPMENT_ROUTES: Routes = [
     {

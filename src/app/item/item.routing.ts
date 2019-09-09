@@ -46,6 +46,8 @@ import { ItemEditVideoShellComponent } from './containers/item-edit-shell/item-e
 import { ItemEditImageShellComponent } from './containers/item-edit-shell/item-edit-image-shell/item-edit-image-shell.component';
 import { ItemEditInventoryShellComponent } from './containers/item-edit-shell/item-edit-inventory-shell/item-edit-inventory-shell.component';
 
+import { ItemEditVariationComponent } from './item-edit/item-edit-variation.component';
+
 //  UNUSED and DELETED
 // import { ItemImageComponent } from './item-image/item-image.component';
 // import { ItemVideoComponent } from './item-video/item-video.component';
@@ -84,6 +86,10 @@ import { ItemPartEditInventoryShellComponent } from './containers/item-part-edit
 
 import { PageNotFoundComponent } from './page-not-found.component';
 
+import { ItemVariationListComponent } from './item-variation/item-variation-list.component';
+
+import { ItemVariationDetailComponent } from './item-variation/item-variation-detail.component';
+
 const ITEM_ROUTES: Routes = [
     {
         path: '',
@@ -91,6 +97,18 @@ const ITEM_ROUTES: Routes = [
         children: [ {
                 path: '',
                 component: ItemListShellComponent
+            },
+            {
+                path: 'variation-listing',
+                component: ItemVariationListComponent
+            },
+            {
+                path: 'variation-listing/detail',
+                component: ItemVariationDetailComponent
+            },
+            {
+                path: 'variation-listing/detail/:id',
+                component: ItemVariationDetailComponent
             },
             {
                 path: 'printlabel',
@@ -241,7 +259,12 @@ const ITEM_ROUTES: Routes = [
                     {
                         path: 'part',
                         component: ItemEditPartShellComponent
+                    },
+                    {
+                        path: 'variation',
+                        component: ItemEditVariationComponent
                     }
+                    
                 ]
             },
             {

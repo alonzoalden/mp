@@ -149,6 +149,11 @@ export class InboundShipmentEditCartonLineListComponent implements OnInit {
             this.purchaseOrderService.sendNotification({ type: 'error', title: 'Error', content: "Item already exists" });
         }
     }
+    overflowFix(bool: Boolean):void {
+        console.log('z')
+        let container = document.getElementsByClassName('ibox-content')[0];
+        bool ? container.classList.add("overflow-visible") : container.classList.remove("overflow-visible");
+    }
 
     existItem(purchaseorderlineID: number, isNew: boolean = false){
         var counter: number = 0;
@@ -314,5 +319,8 @@ export class InboundShipmentEditCartonLineListComponent implements OnInit {
         (error: any) => {
             this.purchaseOrderService.sendNotification({ type: 'error', title: 'Error', content: error });
         });
+    }
+    scrollToElement($element): void {
+        $element.scrollIntoView({behavior: "smooth", block: "start", inline: "nearest"});
     }
 }

@@ -4,7 +4,7 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { TranslateModule } from '@ngx-translate/core';
 
 import { CommonModule } from '@angular/common';
-import { MatButtonModule, MatDatepickerModule, MatFormFieldModule, MatInputModule, MatPaginatorModule, MatTableModule, MatTreeModule, MatSortModule, MatDialogModule, MatSelectModule, MatMenuModule, MatToolbar, MatToolbarModule, MatIconModule, MatListModule, MatCheckboxModule, MatTooltipModule } from '@angular/material';
+import { MatButtonModule, MatDatepickerModule, MatFormFieldModule, MatInputModule, MatPaginatorModule, MatTableModule, MatTreeModule, MatSortModule, MatDialogModule, MatSelectModule, MatMenuModule, MatToolbar, MatToolbarModule, MatIconModule, MatListModule, MatCheckboxModule, MatTooltipModule, MatTabsModule } from '@angular/material';
 import { MatMomentDateModule, MAT_MOMENT_DATE_ADAPTER_OPTIONS } from '@angular/material-moment-adapter';
 
 import { NgSelectModule } from '@ng-select/ng-select';
@@ -173,8 +173,6 @@ import { ItemEffects } from './state/item.effects';
         ItemAddVideoShellComponent,
         ItemAddImageShellComponent,
         ItemAddPartShellComponent,
-
-
         ItemAddDescriptionComponent,
         ItemAddDimensionComponent,
         ItemAddPriceComponent,
@@ -273,6 +271,7 @@ import { ItemEffects } from './state/item.effects';
         
     ],
     entryComponents: [ItemPartListComponentItemPrintDialog, ItemListComponent, ItemListComponentItemPrintDialog, ItemPrintLabelComponentPrintDialog, ItemAddImageComponentUploadDialog, ItemEditImageComponentUploadDialog, ItemListComponentImportDialog],
+    //entryComponents: [ItemListComponent, ItemListComponentItemPrintDialog, ItemPrintLabelComponentPrintDialog, ItemAddImageComponentUploadDialog, ItemEditImageComponentUploadDialog, ItemListComponentImportDialog, ItemVariationComponentDialog, ItemVariationSelectItemComponentDialog],
     imports: [
         TranslateModule,
         ReactiveFormsModule,
@@ -293,6 +292,7 @@ import { ItemEffects } from './state/item.effects';
         MatMenuModule,
         MatButtonModule,
         MatToolbarModule,
+        MatTabsModule,
         MatTreeModule,
         MatIconModule,
         MatListModule,

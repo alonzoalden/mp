@@ -270,4 +270,12 @@ export class ItemAddComponent implements OnInit, OnChanges {
     validateCategory() {
         return true;
     }
+
+    // openDialogItemVariation() {
+    //     const dialogRef = this.printDialog.open(ItemVariationComponentDialog, {
+    //         data: this.attributesVariationsList
+    //     });
+    
+    //     dialogRef.afterClosed().subscribe(result => {});
+    // }
 }

@@ -84,7 +84,7 @@ export class ItemListComponent implements OnInit {
                 this.itemService.sendNotification({ type: 'error', title: 'Error', content: error });
                 //this.errorMessage = <any>error;
             }
-        );
+        );  
     }
 
     refreshDataSource(items: Item[]) {

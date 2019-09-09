@@ -6,9 +6,9 @@ import { Subscription } from 'rxjs';
 //import { PurchaseOrderLineList, PurchaseOrderLine } from '../../shared/class/purchase-order-line';
 
 //import { Carton, CartonInsert } from '../../shared/class/carton';
-import { Carton, CartonInsert, PurchaseOrderLineList, PurchaseOrderLine } from '../../shared/class/purchase-order';
+import { Carton, CartonInsert, PurchaseOrderLineList, PurchaseOrderLine } from '../../../../shared/class/purchase-order';
 
-import { PurchaseOrderService } from '../purchase-order.service';
+import { PurchaseOrderService } from '../../../purchase-order.service';
 
 @Component({
     selector: 'o-inbound-shipment-edit-carton-add',
