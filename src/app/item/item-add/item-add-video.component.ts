@@ -72,6 +72,9 @@ export class ItemAddVideoComponent implements OnInit {
                             itemVideo.Label = URLVideo.items[0].snippet.title;
                         itemVideo.Description = URLVideo.items[0].snippet.description;
                         itemVideo.Position = this.item.ItemVideos.length + 1;
+                        const _temp = new ItemVideoInsert(null, null, null, null, null, null, this.item.ItemVideos.length, null);
+                        this.item.ItemVideos.push(_temp);
+                        this.refreshDataSource(this.item.ItemVideos);
                     },
                     (error: any) => {
                         this.pendingAdd = false;
@@ -79,9 +82,6 @@ export class ItemAddVideoComponent implements OnInit {
                         this.itemService.sendNotification({ type: 'error', title: 'Error', content: this.errorMessage });
                     }
                 );
-                const _temp = new ItemVideoInsert(null, null, null, null, null, null, this.item.ItemVideos.length, null);
-                this.item.ItemVideos.push(_temp);
-                this.refreshDataSource(this.item.ItemVideos);
             }            
         }
         else {
