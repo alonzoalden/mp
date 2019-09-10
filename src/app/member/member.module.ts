@@ -7,11 +7,17 @@ import { CdkTableModule } from '@angular/cdk/table';
 import { ToolModule } from '../shared/tool/tool.module';
 
 import { MemberComponent } from './member.component';
-import { MemberListComponent } from './member-list/member-list.component';
-import { MemberInviteComponent } from './member-invite/member-invite.component';
-import { MemberConfirmComponent } from './member-confirm/member-confirm.component';
-import { MemberRegistrationComponent } from './member-registration/member-registration.component';
-import { MerchantAgreementComponentDialog } from './member-registration/member-registration.component';
+import { MemberListComponent } from './components/member-list/member-list.component';
+import { MemberInviteComponent } from './components/member-invite/member-invite.component';
+import { MemberConfirmComponent } from './components/member-confirm/member-confirm.component';
+import { MemberRegistrationComponent } from './components/member-registration/member-registration.component';
+import { MerchantAgreementComponentDialog } from './components/member-registration/member-registration.component';
+
+import { MemberListShellComponent } from './containers/member-list-shell/member-list-shell.component';
+import { MemberInviteShellComponent } from './containers/member-invite-shell/member-invite-shell.component';
+import { MemberConfirmShellComponent } from './containers/member-confirm-shell/member-confirm-shell.component';
+import { MemberRegistrationShellComponent } from './containers/member-registration-shell/member-registration-shell.component';
+//import { MerchantAgreementComponentShellDialog } from './containers/member-registration-shell/member-registration-shell.component';
 
 import { memberRouting } from './member.routing';
 
@@ -25,7 +31,11 @@ import { TranslateModule } from '@ngx-translate/core';
         MemberConfirmComponent,
         MemberInviteComponent,
         MemberRegistrationComponent,
-        MerchantAgreementComponentDialog
+        MerchantAgreementComponentDialog,
+        MemberListShellComponent,
+        MemberInviteShellComponent,
+        MemberConfirmShellComponent,
+        MemberRegistrationShellComponent
     ],
     entryComponents: [
         MerchantAgreementComponentDialog

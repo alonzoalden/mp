@@ -2,10 +2,10 @@ import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { FormBuilder, Validators, FormGroup, FormControl } from '@angular/forms';
 
-import { MemberInsert } from '../../shared/class/member';
+import { MemberInsert } from '../../../shared/class/member';
 
-import { MemberService } from '../member.service';
-import { AppService } from '../../app.service';
+import { MemberService } from '../../member.service';
+import { AppService } from '../../../app.service';
 
 @Component({
   selector: 'o-member-invite',

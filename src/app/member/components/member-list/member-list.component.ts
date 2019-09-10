@@ -1,12 +1,12 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, OnInit, ViewChild, Input, Output, EventEmitter } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 import { CurrencyPipe } from '@angular/common';
 import { MatMenuModule, MatPaginator, MatSort, MatTableDataSource } from '@angular/material';
 import { MatMenu } from '@angular/material/menu';
 
-import { Member } from '../../shared/class/member';
-import { MemberService } from '../member.service';
-import { AppService } from '../../app.service';
+import { Member } from '../../../shared/class/member';
+import { MemberService } from '../../member.service';
+import { AppService } from '../../../app.service';
 
 @Component({
     selector: 'o-member-list',
@@ -15,10 +15,15 @@ import { AppService } from '../../app.service';
 })
 
 export class MemberListComponent implements OnInit {
-    errorMessage: string;
+    @Input() currentMember: Member;
+    @Input() members: Member[];
+    @Input() errorMessage: string;
+    @Output() editMemberRegistration = new EventEmitter<Member>();
+    
+    //errorMessage: string;
 
-    members: Member[];
-    currentMember: Member;
+    //members: Member[];
+    //currentMember: Member;
 
     displayedColumns = ['Menu', 'Email', 'IsPM', 'IsAdmin', 'IsConfirmed', 'IsActive', 'CreatedOn'];
     dataSource: any = null;

@@ -1,0 +1,9 @@
+<o-member-list
+    [userInfoDefaultPageSize]="userInfoDefaultPageSize$ | async" 
+    [vendorAttachmentsMatTable]="vendorAttachmentsMatTable$ | async"
+    [errorMessage]="errorMessage$ | async"
+    [pendingDelete]="pendingDelete$ | async"
+    (getMemberByInviteGUID)="getVendorAttachments($event)"
+    (editMemberRegistration)="editMemberRegistration($event)"
+    
+></o-member-list>

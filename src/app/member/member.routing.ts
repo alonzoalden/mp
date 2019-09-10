@@ -1,10 +1,10 @@
 import { Routes, RouterModule } from '@angular/router';
 
 import { MemberComponent } from './member.component';
-import { MemberListComponent } from './member-list/member-list.component';
-import { MemberConfirmComponent } from './member-confirm/member-confirm.component';
-import { MemberInviteComponent } from './member-invite/member-invite.component';
-import { MemberRegistrationComponent } from './member-registration/member-registration.component';
+import { MemberListShellComponent } from './containers/member-list-shell/member-list-shell.component';
+import { MemberConfirmShellComponent } from './containers/member-confirm-shell/member-confirm-shell.component';
+import { MemberInviteShellComponent } from './containers/member-invite-shell/member-invite-shell.component';
+import { MemberRegistrationShellComponent } from './containers/member-registration-shell/member-registration-shell.component';
 
 
 import { AuthGuard } from '../auth/auth.guard';
@@ -17,19 +17,19 @@ const MEMBER_ROUTES: Routes = [
         component: MemberComponent,
         children: [ {
                 path: '',
-                component: MemberListComponent
+                component: MemberListShellComponent
             },
             {
                 path: 'invite',
-                component: MemberInviteComponent
+                component: MemberInviteShellComponent
             },
             {
                 path: 'registration',
-                component: MemberRegistrationComponent
+                component: MemberRegistrationShellComponent
             },
             {
                 path: 'confirm',
-                component: MemberConfirmComponent
+                component: MemberConfirmShellComponent
             } ]
     }   
 ];

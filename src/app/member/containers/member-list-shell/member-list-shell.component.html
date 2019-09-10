@@ -1,0 +1,10 @@
+<o-member-list
+    [userInfo]="userInfo$ | async" 
+    [membersMatTable]="membersMatTable$ | async"
+    [errorMessage]="errorMessage$ | async"
+    [pendingDelete]="pendingDelete$ | async"
+    (getMembers)="getMembers($event)"
+    (sendConfirmationMember)="sendConfirmationMember($event)"
+    (deleteMember)="deleteMember($event)"
+    (editMember)="editMember($event)"
+></o-member-list>

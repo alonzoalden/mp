@@ -2,17 +2,16 @@ import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { FormBuilder, Validators, FormGroup, FormControl } from '@angular/forms';
 
-import { Member } from '../../shared/class/member';
+import { Member } from '../../../shared/class/member';
 
-import { MemberService } from '../member.service';
-import { AppService } from '../../app.service';
+import { MemberService } from '../../member.service';
+import { AppService } from '../../../app.service';
 
 @Component({
-    selector: 'o-member-confirm',
-    templateUrl: './member-confirm.component.html'
+    templateUrl: './member-confirm-shell.component.html'
 })
   
-export class MemberConfirmComponent implements OnInit {
+export class MemberConfirmShellComponent implements OnInit {
     memberForm: any;
 
     errorMessage: string;

@@ -1,8 +1,8 @@
-import { Component, OnInit, Inject } from '@angular/core';
+import { Component, OnInit, Inject, Input, Output, EventEmitter } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { FormBuilder, Validators, FormGroup, FormControl } from '@angular/forms';
-import { Member } from '../../shared/class/member';
-import { MemberService } from '../member.service';
+import { Member } from '../../../shared/class/member';
+import { MemberService } from '../../member.service';
 import 'rxjs/add/operator/filter';
 import { MatDialog, MAT_DIALOG_DATA, MatDialogRef } from '@angular/material';
 
@@ -14,8 +14,14 @@ import { MatDialog, MAT_DIALOG_DATA, MatDialogRef } from '@angular/material';
 export class MemberRegistrationComponent implements OnInit {
     memberForm: any;
 
-    errorMessage: string;
-    member: Member;
+    //errorMessage: string;
+    //member: Member;
+    @Input() member: Member;
+    @Input() pendingDelete: boolean;
+    @Input() errorMessage: string;
+    @Output() getMemberByInviteGUID = new EventEmitter<string>();
+    @Output() editMemberRegistration = new EventEmitter<Member>();
+    
     //member: Member = new Member(null, '', '', '', '', true, '', '', true, true, true, true, '', 1, true, '', '', '', '', );
     
     inviteGUID: string;
@@ -48,29 +54,33 @@ export class MemberRegistrationComponent implements OnInit {
             .subscribe(params => {
                 this.inviteGUID = params.inviteGUID;
             });
-        this.memberService.getMemberByInviteGUID(this.inviteGUID).subscribe(
-            (member: Member) => {
-                this.member = member;
-                this.member.Password = '';
-                this.member.ConfirmPassword = '';
+
+        this.getMemberByInviteGUID.emit(this.inviteGUID);
+        // this.memberService.getMemberByInviteGUID(this.inviteGUID).subscribe(
+        //     (member: Member) => {
+        //         this.member = member;
+        //         this.member.Password = '';
+        //         this.member.ConfirmPassword = '';
                 
 
-                if (this.member.IsConfirmed) {
-                    this.router.navigate(['/home']);
-                }
-            },
-            error => {
-                this.errorMessage = <any>error;
-                this.memberService.sendNotification({ type: 'error', title: 'Error', content: this.errorMessage });
-                this.router.navigate(['/home']);
-            }
-        );
+        //         if (this.member.IsConfirmed) {
+        //             this.router.navigate(['/home']);
+        //         }
+        //     },
+        //     error => {
+        //         this.errorMessage = <any>error;
+        //         this.memberService.sendNotification({ type: 'error', title: 'Error', content: this.errorMessage });
+        //         this.router.navigate(['/home']);
+        //     }
+        // );
     }
 
     onRegisterMember() {
         if (this.isValid()) {
-            this.pendingRegister = true;
+            //this.pendingRegister = true;
             this.member.IsConfirmed = true;
+            
+            this.editMemberRegistration.emit(this.member);
             this.memberService.editMemberRegistration(this.member).subscribe(
                 () => {
                     this.pendingRegister = false;
