@@ -23,6 +23,7 @@ import { InboundShipmentEditCartonLineAddComponent } from './inbound-shipment-ed
 import { InboundShipmentEditCartonLineEditComponent } from './inbound-shipment-edit/inbound-shipment-edit-carton-line-edit.component';
 import { InboundShipmentEditShippingInstructionComponent, InboundShipmentEditShippingInstructionComponentCartonPrintDialog } from './inbound-shipment-edit/inbound-shipment-edit-shipping-instruction.component';
 import { InboundShipmentEditShippingComponent } from './inbound-shipment-edit/inbound-shipment-edit-shipping.component';
+import { InboundShipmentSelectItemComponentDialog } from './inbound-shipment-edit/inbound-shipment-edit-carton-list.component-select-dialog';
 
 import { inboundshipmentRouting } from './inbound-shipment.routing';
 
@@ -52,7 +53,8 @@ import { TranslateModule } from '@ngx-translate/core';
         InboundShipmentEditCartonListComponentCartonPrintDialog,
         InboundShipmentEditCartonListComponentCartonLineDialog,
         InboundShipmentEditLineComponentItemPrintDialog,        
-        InboundShipmentEditShippingInstructionComponentCartonPrintDialog     
+        InboundShipmentEditShippingInstructionComponentCartonPrintDialog,
+        InboundShipmentSelectItemComponentDialog
     ],    
     entryComponents: [InboundShipmentEditCartonListComponent
         , InboundShipmentEditLineListComponent
@@ -60,7 +62,8 @@ import { TranslateModule } from '@ngx-translate/core';
         , InboundShipmentEditCartonListComponentCartonPrintDialog
         , InboundShipmentEditCartonListComponentCartonLineDialog
         , InboundShipmentEditLineComponentItemPrintDialog
-        , InboundShipmentEditShippingInstructionComponentCartonPrintDialog],
+        , InboundShipmentEditShippingInstructionComponentCartonPrintDialog
+        , InboundShipmentSelectItemComponentDialog],
     imports: [
         TranslateModule,
         ReactiveFormsModule,

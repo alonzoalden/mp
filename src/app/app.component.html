@@ -9,6 +9,7 @@
                         <ul role="menu" class="dropdown-menu menu-fix" aria-labelledby="dropdownMenu">
                             <li><a [routerLink]="['setting']">{{ 'Change Merchant' | translate }}</a></li>
                             <li><a [routerLink]="['setting','memberpreference']">{{ 'Member Preference' | translate }}</a></li>
+                            <li><a *ngIf="appService.currentMember?.IsDropship" [routerLink]="['setting','merchantagreement']">{{ 'Merchant Agreement' | translate }}</a></li>
                             <li class="divider"></li>
                             <li *ngIf="isLoggedin">                                
                                 <a (click)="logout()">
@@ -59,8 +60,8 @@
                                     <li><a [routerLink]="['item','partadd']">{{ 'New Item Part' | translate }}</a></li>
                                     <li><a [routerLink]="['item','part']" [queryParams]="{init: true}">{{ 'Manage Item Parts' | translate }}</a></li>
                                     <li><a [routerLink]="['item','printlabel']">{{ 'Print Item Labels' | translate }}</a></li>
-                                    <li><a [routerLink]="['item','variation-listing', 'detail']">{{ 'New Variation Listing' | translate }}</a></li>
-                                    <li><a [routerLink]="['item','variation-listing']" [queryParams]="{init: true}">{{ 'Manage Variation Listing' | translate }}</a></li>
+                                    <!-- <li><a [routerLink]="['item','variation-listing', 'detail']">{{ 'New Variation Listing' | translate }}</a></li>
+                                    <li><a [routerLink]="['item','variation-listing']" [queryParams]="{init: true}">{{ 'Manage Variation Listing' | translate }}</a></li> -->
                                     <li><a [routerLink]="['item','batch']" [queryParams]="{init: true}" *ngIf="isPM">{{ 'Batch Approval' | translate }}</a></li>
                                     <li><a [routerLink]="['item','batchupdate']" [queryParams]="{init: true}" *ngIf="isPM">{{ 'Batch Update' | translate }}</a></li>
                                 </ul>
@@ -124,6 +125,7 @@
                                     <ul role="menu" class="dropdown-menu">
                                         <li><a [routerLink]="['setting']">{{ 'Change Merchant' | translate }}</a></li>
                                         <li><a [routerLink]="['setting','memberpreference']">{{ 'Member Preference' | translate }}</a></li>
+                                        <li><a *ngIf="appService.currentMember?.IsDropship" [routerLink]="['setting','merchantagreement']">{{ 'Merchant Agreement' | translate }}</a></li>
                                         <li class="divider"></li>
                                         <li *ngIf="isLoggedin">                                
                                             <a (click)="logout()">

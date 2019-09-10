@@ -27,11 +27,11 @@ export class InboundShipmentEditCartonLineAddComponent implements OnInit, OnDest
     cartonid: number;
     cartonnumber: string;
     purchaseorderlineList: PurchaseOrderLineList[];
+    carton: Carton;
 
-
-    get carton(): Carton | null {
-        return this.purchaseOrderService.currentCarton;
-    }
+    // get carton(): Carton | null {
+    //     return this.purchaseOrderService.currentCarton;
+    // }
 
     constructor(route: ActivatedRoute,
                 private router: Router,
@@ -40,8 +40,18 @@ export class InboundShipmentEditCartonLineAddComponent implements OnInit, OnDest
     }
 
     ngOnInit() {
-        this.cartonid = this.purchaseOrderService.currentCartonID;
-        this.cartonnumber = this.purchaseOrderService.currentCarton.CartonNumber;
+        this.purchaseOrderService.currentCarton.subscribe(
+            (currentcarton: Carton) => {
+                this.carton = currentcarton;
+                this.cartonid = this.carton.CartonID;
+                this.cartonnumber = this.carton.CartonNumber;
+            },
+            (error: any) => this.errorMessage = <any>error
+        );
+
+        // this.cartonid = this.carton.currentCartonID;
+        // this.cartonnumber = this.purchaseOrderService.currentCarton.CartonNumber;
+        
         this.reset();
         this.subscription = this.purchaseOrderService.getPurchaseOrderLineList(this.purchaseorderid).subscribe(
             (purchaseorderlinelist: PurchaseOrderLineList[]) => {

@@ -6,10 +6,10 @@
 export const environment = {
   production: false,
 
-  //imageURL: 'https://s3-us-west-2.amazonaws.com/img.staging.toolots.com/catalog/product',
-  //fileURL: 'https://s3-us-west-2.amazonaws.com/img.staging.toolots.com/attachment/file',
-  imageURL: 'https://staging.toolots.com/media/catalog/product',
-  fileURL: 'https://staging.toolots.com/media/attachment/file',
+  imageURL: 'https://s3-us-west-2.amazonaws.com/img.staging.toolots.com/catalog/product',
+  fileURL: 'https://s3-us-west-2.amazonaws.com/img.staging.toolots.com/attachment/file',
+  //imageURL: 'https://staging.toolots.com/media/catalog/product',
+  //fileURL: 'https://staging.toolots.com/media/attachment/file',
   linkURL: 'https://staging.toolots.com',
   previewURL: 'https://staging.toolots.com/index.php/catalog/product/view/id/',
 

@@ -9,6 +9,7 @@ import { ToolModule } from '../shared/tool/tool.module';
 import { SettingComponent } from './setting.component';
 import { SettingVendorListComponent } from './setting-vendor-list/setting-vendor-list.component';
 import { SettingMemberPreferenceComponent } from './setting-member-preference/setting-member-preference.component';
+import { SettingMerchantAgreementComponent } from './setting-merchant-agreement/setting-merchant-agreement.component';
 
 import { settingRouting } from './setting.routing';
 
@@ -19,7 +20,8 @@ import { TranslateModule } from '@ngx-translate/core';
     declarations: [
         SettingComponent,
         SettingVendorListComponent,
-        SettingMemberPreferenceComponent
+        SettingMemberPreferenceComponent,
+        SettingMerchantAgreementComponent
     ],
     imports: [
         TranslateModule,

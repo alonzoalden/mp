@@ -20,6 +20,9 @@ a:hover {
 .white-bg {
     background-color: #fff !important;
 }
+.underline {
+    text-decoration: underline;
+}
 .m-l-10imp {
     margin-left: 10px !important;
 }
@@ -1612,6 +1615,7 @@ table {
 }
 .img-detail {
     min-width: 90px;
+    overflow: hidden;
 }
 .flex-details > div > img {
     max-height: 70px;
@@ -2197,4 +2201,30 @@ th.mat-header-cell {
 }
 .min-h-300 {
     min-height: 300px;
+}
+
+.agreement {
+    letter-spacing: 0.2px;
+    font-size: 16px;
+    line-height: 24px;
+}
+.agreement .agreement-block {
+    margin-top: 20px;
+}
+.row-height-80 {
+    height: 80px !important;
+}
+.flex-center {
+    display: flex;
+    justify-content: center;
+}
+.dialog-content {
+    background-color: #f3f3f4;
+    padding: 40px !important;
+    overflow: scroll;
+    min-height: 410px;
+}
+.diaglog-content .ibox-content {
+    padding: 40px;
+    height: 100%;
 }

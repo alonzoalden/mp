@@ -30,7 +30,7 @@ export class ItemAddProductRelationUpSellComponent implements OnInit {
         this.item = this.itemService.currentItemInsert;
 
         if(this.item.ItemUpSells.length === 0) {
-            const _temp = new ItemUpSellInsert(0, null, null, null, null, null, null);
+            const _temp = new ItemUpSellInsert(0, null, null, null, null, null, null, null);
             this.item.ItemUpSells.push(_temp);
         }
 
@@ -67,7 +67,7 @@ export class ItemAddProductRelationUpSellComponent implements OnInit {
                     }
                 );
 
-                const _temp = new ItemUpSellInsert(0, null, null, null, null, null, this.item.ItemUpSells.length + 1);
+                const _temp = new ItemUpSellInsert(0, null, null, null, null, null, null, this.item.ItemUpSells.length + 1);
                 this.item.ItemUpSells.push(_temp);
                 this.upSellRefreshDataSource(this.item.ItemUpSells);
             }
@@ -99,6 +99,8 @@ export class ItemAddProductRelationUpSellComponent implements OnInit {
                         this.item.ItemUpSells[index].UpSellItemName = item.Name;
                         this.item.ItemUpSells[index].UpSellItemVendorSKU = item.VendorSKU;
                         this.item.ItemUpSells[index].UpSellTPIN = item.TPIN;
+                        this.item.ItemUpSells[index].ImagePath = item.ImagePath;
+                        this.currentItemUpSellIndex = this.item.ItemUpSells.length - 1;
                     },
                     (error: any) => {
                         this.errorMessage = <any>error;
