@@ -1,15 +1,11 @@
-import { Component, OnInit, OnDestroy, ViewChild, Inject } from '@angular/core';
-import { Router, ActivatedRoute } from '@angular/router';
-import { MatMenuModule, MatPaginator, MatSort, MatTableDataSource, MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material';
-import { MatMenu } from '@angular/material/menu';
+import { Component, OnInit, ViewChild } from '@angular/core';
+import { MatPaginator, MatSort, MatTableDataSource, MatDialog } from '@angular/material';
 import { Subscription } from 'rxjs';
 
 import { ItemVariationListing } from '../../shared/class/item';
 
 import { AppService } from '../../app.service';
 import { ItemService } from '../item.service'
-import { ItemVariationComponentDialog } from '../item-variation/item-variation.component-dialog';
-
 import { environment } from '../../../environments/environment';
 
 @Component({
@@ -20,8 +16,7 @@ import { environment } from '../../../environments/environment';
 export class ItemVariationListComponent implements OnInit {
     subscription: Subscription;
     errorMessage: string;
-    variationListings: any[]; 
-
+    variationListings: ItemVariationListing[]; 
     displayedColumns = ['Menu', 'Title', 'ItemSelection', 'CreatedOn'];
     dataSource: any = null;
     attributesVariationsList: any[] = [];
@@ -30,10 +25,7 @@ export class ItemVariationListComponent implements OnInit {
     @ViewChild(MatSort, { static: true }) sort: MatSort;
     private fileURL = environment.fileURL;
     private imageURL = environment.imageURL;
-    
-    constructor(private route: ActivatedRoute,
-        private router: Router,
-        public printDialog: MatDialog,
+    constructor(public selectDialog: MatDialog,
         private itemService: ItemService,
         private appService: AppService) { }
 
@@ -55,14 +47,11 @@ export class ItemVariationListComponent implements OnInit {
 
         this.subscription = this.itemService.getItemVariationListings().subscribe(
             (variationListings: ItemVariationListing[]) => {
-                console.log(variationListings);
                 this.variationListings = variationListings;
                 this.refreshDataSource(this.variationListings);
             },
             (error: any) => this.errorMessage = <any>error
         );
-
-
     }
 
     refreshDataSource(variationListings: ItemVariationListing[]) {
@@ -71,19 +60,16 @@ export class ItemVariationListComponent implements OnInit {
         this.dataSource.paginator = this.paginator;
     }
 
-
     onDeleteListing(listing: ItemVariationListing) {
         const confirmation = confirm(`Remove ${listing.ItemVariationListingID}: ${listing.Name}?`);
         if (confirmation) {
             this.itemService.deleteItemVariationListing(listing.ItemVariationListingID).subscribe(
                 () => {
                     this.onDeleteComplete(listing, `${listing.ItemVariationListingID} was deleted`);
-
                     const foundIndex = this.variationListings.findIndex(i => i.ItemVariationListingID === listing.ItemVariationListingID);
                     if (foundIndex > -1) {
                         this.variationListings.splice(foundIndex, 1);
                     }
-
                     this.refreshDataSource(this.variationListings);
                 },
                 (error: any) => {
@@ -110,12 +96,5 @@ export class ItemVariationListComponent implements OnInit {
         if (this.dataSource.paginator) {
             this.dataSource.paginator.firstPage();
         }
-    }
-    openDialogItemVariation() {
-        const dialogRef = this.printDialog.open(ItemVariationComponentDialog, {
-            data: this.attributesVariationsList
-        });
-    
-        dialogRef.afterClosed().subscribe(result => {});
     }
 }

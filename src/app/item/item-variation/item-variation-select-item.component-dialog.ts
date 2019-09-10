@@ -21,12 +21,10 @@ export class ItemVariationSelectItemComponentDialog implements OnInit {
         @Inject(MAT_DIALOG_DATA) public data: any) {}
 
     ngOnInit() {
-        console.log(this.data);
-        
-        console.log(this.itemList);
         if (this.data.item) {
-            this.itemList = new ItemList(this.data.item.ItemID, this.data.item.ItemName, null, this.data.item.ItemName, this.data.item.ItemTPIN, this.data.item.ItemVendorSKU, this.data.item.ItemImagePath)
+            this.itemList = this.data.itemLists.find((item) => item.ItemID === this.data.item.ItemID);
         }
+        
         //splice out existing variation items from itemLists
         this.data.variationListing.ItemVariations.forEach((itemvariation) => {
             if (this.data.item && this.data.item.ItemID === itemvariation.ItemID) return;
@@ -42,6 +40,9 @@ export class ItemVariationSelectItemComponentDialog implements OnInit {
     
     onAddItemClick() {
         if (!this.itemList) return;
+        if (this.data.item && this.data.item.IsPrimary) {
+            this.data.variationListing.PrimaryItemID = this.itemList.ItemID;
+        }
         this.dialogRef.close(this.itemList);
     }
 

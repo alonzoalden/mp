@@ -31,7 +31,7 @@
                             <div class="sk-bounce3"></div>
                         </div>
                     </div>
-                    <form class="form-horizontal animated fadeIn" #addVariationGroupForm="ngForm" *ngIf="variationListing && !loading">
+                    <form class="form-horizontal animated fadeIn" #addVariationGroupForm="ngForm" *ngIf="itemVariationListing && !loading">
                         <fieldset>
                             <div class="form-group" [ngClass]="{'has-error': (variationGroupNameVar.touched || 
                                                 variationGroupNameVar.dirty) && 
@@ -39,7 +39,7 @@
                                 <label class="col-md-2 control-label" for="variationGroupNameId">{{ 'Name' | translate }}</label>
                                 <div class="col-md-8">
                                     <input class="form-control" id="variationGroupNameId" type="text" placeholder="{{ 'Name' | translate }} ({{ 'Required' | translate }})" required
-                                        [(ngModel)]=variationListing.Name name="vendorAttachmentTitle" #variationGroupNameVar="ngModel" />
+                                        [(ngModel)]=itemVariationListing.Name name="vendorAttachmentTitle" #variationGroupNameVar="ngModel" />
                                     <span class="help-block" *ngIf="(variationGroupNameVar.touched ||
                                                 variationGroupNameVar.dirty) &&
                                                 variationGroupNameVar.errors">
@@ -53,22 +53,22 @@
                             <div class="form-group">
                                 <label class="col-md-2 control-label" for="variationGroupItemAttributesId">{{ 'Variations' | translate }}</label>
                                 <div class="col-md-2">
-                                    <button (click)="openDialogItemVariation()" [color]="variationListing?.ItemVariations?.length ? '' : ''" mat-raised-button>
-                                        {{ variationListing.ItemVariations?.length ? 'Update' : 'Create'}} Variations
+                                    <button (click)="openDialogItemVariation()" [color]="itemVariationListing?.ItemVariations?.length ? '' : ''" mat-raised-button>
+                                        {{ itemVariationListing.ItemVariations?.length ? 'Update' : 'Create'}} Variations
                                     </button>
                                 </div>
                             </div>
 
-                            <div class="table-responsive m-t-lg" *ngIf="variationListing.ItemVariations?.length">
-                                <h5 class="m-b-md" >Total Variations ({{variationListing.ItemVariations?.length}})</h5>
+                            <div class="table-responsive m-t-lg" *ngIf="itemVariationListing.ItemVariations?.length">
+                                <h5 class="m-b-md" >Total Variations ({{itemVariationListing.ItemVariations?.length}})</h5>
                                 <table mat-table #table [dataSource]="dataSource" matSort>
 
                                     <!-- Primary Selection Column -->
                                     <ng-container matColumnDef="PrimaryItem">
                                         <th mat-header-cell *matHeaderCellDef width="100px">{{ 'Primary Item' | translate }}</th>
                                         <td mat-cell *matCellDef="let row; let i = index">
-                                            <ng-container *ngIf="variationListing.ItemVariations[i]">
-                                                <mat-checkbox type="checkbox" (click)="selectPrimaryItem(row, i)" [(ngModel)]="variationListing.ItemVariations[i].IsPrimary"  [ngModelOptions]="{standalone: true}"></mat-checkbox>
+                                            <ng-container *ngIf="itemVariationListing.ItemVariations[i]">
+                                                <mat-checkbox [disabled]="!itemVariationListing.ItemVariations[i].ItemID" [matTooltip]="!itemVariationListing.ItemVariations[i].ItemID ? ( 'Please select an item' | translate ) : ''" type="checkbox" (click)="selectPrimaryItem(i)" [(ngModel)]="itemVariationListing.ItemVariations[i].IsPrimary"  [ngModelOptions]="{standalone: true}"></mat-checkbox>
                                             </ng-container>
                                         </td>
                                     </ng-container>
@@ -87,30 +87,30 @@
                                         <td mat-cell *matCellDef="let row; let i = index;">
 
                                             <ng-container  *ngIf="itemLists">
-                                                <ng-container *ngIf="!variationListing?.ItemVariations[i]?.ItemID">
+                                                <ng-container *ngIf="!itemVariationListing?.ItemVariations[i]?.ItemID">
                                                     <div class="ibox-tools text-left">
                                                         <a class="sm-strong animated fadeIn" (click)="openDialogSelectItem(row, i)">{{ 'Select Item' | translate }}</a>
                                                     </div>
                                                 </ng-container>
-                                                <ng-container *ngIf="variationListing?.ItemVariations[i]?.ItemID">
+                                                <ng-container *ngIf="itemVariationListing?.ItemVariations[i]?.ItemID">
                                                     <div class="flex-details">
                                                         <div class="img-detail">
-                                                            <img *ngIf='!variationListing?.ItemVariations[i].ItemImagePath' class="opaque" src='https://content-merchantportal.toolots.net/assets/images/no-image-icon.png' matTooltip='Product has no image' matTooltipShowDelay="500">
-                                                            <img class="row-image" *ngIf='variationListing?.ItemVariations[i].ItemImagePath' [src]='imageURL + variationListing?.ItemVariations[i].ItemImagePath' [matTooltip]='variationListing?.ItemVariations[i].ItemName' [alt]='variationListing?.ItemVariations[i].ItemName' matTooltipShowDelay="500">
+                                                            <img *ngIf='!itemVariationListing?.ItemVariations[i].ItemImagePath' class="opaque" src='https://content-merchantportal.toolots.net/assets/images/no-image-icon.png' matTooltip='Product has no image' matTooltipShowDelay="500" (click)="openDialogSelectItem(row, i, itemVariationListing.ItemVariations[i])">
+                                                            <img class="row-image" *ngIf='itemVariationListing?.ItemVariations[i].ItemImagePath' [src]='imageURL + itemVariationListing?.ItemVariations[i].ItemImagePath' [matTooltip]='itemVariationListing?.ItemVariations[i].ItemName' [alt]='itemVariationListing?.ItemVariations[i].ItemName' matTooltipShowDelay="500" (click)="openDialogSelectItem(row, i, itemVariationListing.ItemVariations[i])">
                                                         </div>
                                                         <div>
                                                             <div class="row">
-                                                                <div class="col-xs-12 "><span class="sm-strong"><a [routerLink]="['/item', variationListing.ItemVariations[i].ItemID, 'edit']">{{variationListing.ItemVariations[i].ItemName}}</a></span></div>
+                                                                <div class="col-xs-12 "><span class="sm-strong"><a (click)="openDialogSelectItem(row, i, itemVariationListing.ItemVariations[i])">{{itemVariationListing.ItemVariations[i].ItemName}}</a></span></div>
                                                             </div>
                                                             <div class="row">
-                                                                <div class="col-xs-12 "> <span class="sm-text m-r-xs">SKU: </span> {{variationListing.ItemVariations[i].ItemVendorSKU}}</div> 
+                                                                <div class="col-xs-12 "> <span class="sm-text m-r-xs">SKU: </span> {{itemVariationListing.ItemVariations[i].ItemVendorSKU}}</div> 
                                                             </div>
                                                             <div class="row">
-                                                                <div class="col-xs-12 "><span class="sm-text m-r-xs">TPIN: </span> {{variationListing.ItemVariations[i].ItemTPIN}}</div>                                         
+                                                                <div class="col-xs-12 "><span class="sm-text m-r-xs">TPIN: </span> {{itemVariationListing.ItemVariations[i].ItemTPIN}}</div>                                         
                                                             </div>
                                                         </div>
                                                         <div class="m-l-md ibox-tools">
-                                                            <a><i (click)="openDialogSelectItem(row, i, variationListing.ItemVariations[i])" class="fa fa-edit fs-18 m-l-sm" ></i></a>
+                                                            <a><i (click)="openDialogSelectItem(row, i, itemVariationListing.ItemVariations[i])" matTooltip="Edit item selection" class="fa fa-edit fs-18 m-l-sm" ></i></a>
                                                         </div>
                                                     </div>
                                                 </ng-container> 
@@ -124,37 +124,29 @@
                                     <tr mat-row *matRowDef="let row; columns: displayedColumns;" style="height: 70px;"></tr>
                                 </table>
                             
-                                <mat-paginator #paginator [pageSizeOptions]="[10, 20, 50, 100, 200]" [showFirstLastButtons]="true"></mat-paginator>
+                                <!-- <mat-paginator #paginator (page)="handlePage($event)" [pageSizeOptions]="[20, 50, 100, 200]" [showFirstLastButtons]="true"></mat-paginator> -->
                             </div>
 
                             <div class="form-group m-t-xl">
                                 <div class="col-sm-12">
-                                    <div>
-                                        <span class="m-r-md m-b-sm">
-                                            <button color="primary"
-                                                mat-raised-button
-                                                style="background-color: #1ab394; width: 140px;"
-                                                class=""
-                                                type="button"
-                                                [disabled]="!variationListing.Name || variationListing.ItemVariations.length < 1"
-                                                (click)="updateListing()">
-                                                
-                                                <ng-container *ngIf="pendingSave">
-                                                    <i class="fa fa-spinner fa-spin fs-16"></i>
-                                                </ng-container>
-                                                <ng-container *ngIf="!pendingSave">
-                                                    {{ 'Save' | translate }}
-                                                </ng-container>
-                                            </button>
-                                        </span>
-                                        <span>
-                                            <button 
-                                                mat-raised-button
-                                                type="button"
-                                                [routerLink]="['/item/variation-listing']">{{ 'Cancel' | translate }}
-                                            </button>
-                                        </span>
-                                    </div>
+                                    <span class="m-r-md m-b-sm">
+                                        <button color="primary"
+                                            mat-raised-button
+                                            class="btn-main w-140"
+                                            type="button"
+                                            [disabled]="!itemVariationListing.Name || itemVariationListing.ItemVariations.length < 1"
+                                            (click)="updateListing()">
+                                            <ng-container *ngIf="pendingSave"><i class="fa fa-spinner fa-spin fs-16"></i></ng-container>
+                                            <ng-container *ngIf="!pendingSave">{{ 'Save' | translate }}</ng-container>
+                                        </button>
+                                    </span>
+                                    <span>
+                                        <button 
+                                            mat-raised-button
+                                            type="button"
+                                            [routerLink]="['/item/variation-listing']">{{ 'Cancel' | translate }}
+                                        </button>
+                                    </span>
                                 </div> 
                             </div>
                         </fieldset>
