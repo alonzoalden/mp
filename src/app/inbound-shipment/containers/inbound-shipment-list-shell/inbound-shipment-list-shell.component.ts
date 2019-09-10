@@ -7,11 +7,11 @@ import { MatMenu } from '@angular/material/menu';
 import { AppService } from '../../../app.service';
 
 @Component({
-  selector: 'o-inbound-shipment-list',
-  templateUrl: './inbound-shipment-list.component.html',
+  selector: 'o-inbound-shipment-list-shell',
+  templateUrl: './inbound-shipment-list-shell.component.html',
 })
 
-export class InboundShipmentListComponent implements OnInit {
+export class InboundShipmentListShellComponent implements OnInit {
     purchaseorders: PurchaseOrder[];
     errorMessage: string;
 

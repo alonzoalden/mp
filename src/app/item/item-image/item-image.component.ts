@@ -32,8 +32,8 @@ export class ItemImageComponent implements OnInit, OnDestroy {
     displayedColumns = ['Position', 'Down', 'Up', 'Raw', 'Label', 'IsBaseImage', 'IsSmallImage', 'IsThumbnail', 'IsRotatorImage', 'Exclude', 'Remove'];
     dataSource: any = null;
 
-    @ViewChild(MatSort) sort: MatSort;
-    @ViewChild('fileUpload') fileUploadVar: any;
+    @ViewChild(MatSort, { static: true }) sort: MatSort;
+    @ViewChild('fileUpload', { static: true }) fileUploadVar: any;
 
     constructor(private route: ActivatedRoute,
             private router: Router,

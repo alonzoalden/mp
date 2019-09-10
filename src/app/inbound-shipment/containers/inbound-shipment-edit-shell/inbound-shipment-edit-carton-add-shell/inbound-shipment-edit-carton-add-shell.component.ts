@@ -11,11 +11,10 @@ import { Carton, CartonInsert, PurchaseOrderLineList, PurchaseOrderLine } from '
 import { PurchaseOrderService } from '../../../purchase-order.service';
 
 @Component({
-    selector: 'o-inbound-shipment-edit-carton-add',
-    templateUrl: './inbound-shipment-edit-carton-add.component.html'
+    templateUrl: './inbound-shipment-edit-carton-add-shell.component.html'
 })
 
-export class InboundShipmentEditCartonAddComponent implements OnInit, OnDestroy {
+export class InboundShipmentEditCartonAddShellComponent implements OnInit, OnDestroy {
     errorMessage: string;
 
     cartons: Carton[];

@@ -10,10 +10,10 @@ import { PurchaseOrderService } from '../../../purchase-order.service';
 
 @Component({
   selector: 'o-inbound-shipment-edit-line-edit',
-  templateUrl: './inbound-shipment-edit-line-edit.component.html'
+  templateUrl: './inbound-shipment-edit-line-edit-shell.component.html'
 })
 
-export class InboundShipmentEditLineEditComponent implements OnInit, OnDestroy {
+export class InboundShipmentEditLineEditShellComponent implements OnInit, OnDestroy {
     private originalPurchaseOrderLine: PurchaseOrderLine;
     private currentPurchaseOrderLine: PurchaseOrderLine;
     subscription: Subscription;

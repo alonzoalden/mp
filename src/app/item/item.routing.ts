@@ -26,9 +26,6 @@ import { ItemAddPriceShellComponent } from './containers/item-add-shell/item-add
 import { ItemAddCategoryShellComponent } from './containers/item-add-shell/item-add-category-shell/item-add-category-shell.component';
 import { ItemAddBundleShellComponent } from './containers/item-add-shell/item-add-bundle-shell/item-add-bundle-shell.component';
 import { ItemAddProductRelationShellComponent } from './containers/item-add-shell/item-add-product-relation-shell/item-add-product-relation-shell.component';
-import { ItemAddProductRelationRelatedProductShellComponent } from './containers/item-add-shell/item-add-product-relation-related-product-shell/item-add-product-relation-related-product-shell.component';
-import { ItemAddProductRelationUpSellShellComponent } from './containers/item-add-shell/item-add-product-relation-up-sell-shell/item-add-product-relation-up-sell-shell.component';
-import { ItemAddProductRelationCrossSellShellComponent } from './containers/item-add-shell/item-add-product-relation-cross-sell-shell/item-add-product-relation-cross-sell-shell.component';
 import { ItemAddVendorAttachmentShellComponent } from './containers/item-add-shell/item-add-vendor-attachment-shell/item-add-vendor-attachment-shell.component';
 import { ItemAddVideoShellComponent } from './containers/item-add-shell/item-add-video-shell/item-add-video-shell.component';
 import { ItemAddImageShellComponent } from './containers/item-add-shell/item-add-image-shell/item-add-image-shell.component';

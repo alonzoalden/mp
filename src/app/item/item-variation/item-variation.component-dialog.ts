@@ -22,7 +22,7 @@ export class ItemVariationComponentDialog implements OnInit {
     
     originalData: any;
     
-    @ViewChild('oldDefaultRef') oldDefaultRef: ElementRef;
+    @ViewChild('oldDefaultRef', { static: true }) oldDefaultRef: ElementRef;
 
     constructor(
         public dialogRef: MatDialogRef<ItemVariationComponentDialog>,

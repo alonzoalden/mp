@@ -8,7 +8,7 @@ import * as itemActions from './item.actions';
 import { Router } from '@angular/router';
 import { Member, MemberVendor } from 'app/shared/class/member';
 import { VendorBrand } from 'app/shared/class/vendor-brand';
-import { ItemList } from 'app/shared/class/item';
+import { ItemList, Item, ItemCrossSellInsert, ItemUpSell, ItemUpSellInsert, ItemRelatedProduct, ItemRelatedProductInsert } from 'app/shared/class/item';
 import { Category } from 'app/shared/class/category';
 
 @Injectable()
@@ -72,4 +72,85 @@ export class ItemEffects {
             )
         )
     );
+    @Effect()
+    loadAllItemList$: Observable<Action> = this.actions$.pipe(
+        ofType(itemActions.ItemActionTypes.LoadAllItemList),
+        mergeMap(() =>
+            this.itemService.getAllItemList().pipe(
+                map((itemlist: ItemList[]) => (new itemActions.LoadAllItemListSuccess(itemlist))),
+                catchError(err => {
+                    of(new itemActions.LoadAllItemListFail(err))
+                    return EMPTY;
+                })
+            )
+        )
+    );
+    @Effect()
+    loadAllItemCrossSell$: Observable<Action> = this.actions$.pipe(
+        ofType(itemActions.ItemActionTypes.LoadAllItemCrossSell),
+        map((action: itemActions.LoadAllItemCrossSell) => action.payload),
+        mergeMap((itemcrosssell: ItemCrossSellInsert) =>
+            this.itemService.getAllItem(itemcrosssell.CrossSellItemID).pipe(
+                map((item: Item) => {
+                    itemcrosssell.PrevCrossSellItemID = item.ItemID;
+                    itemcrosssell.CrossSellItemName = item.Name;
+                    itemcrosssell.CrossSellItemVendorSKU = item.VendorSKU;
+                    itemcrosssell.CrossSellTPIN = item.TPIN;
+                    itemcrosssell.ImagePath = item.ImagePath;
+                    return (new itemActions.LoadAllItemCrossSellSuccess(item))
+                }),
+                catchError(err => {
+                    this.itemService.sendNotification({ type: 'error', title: 'Error', content: err });
+                    of(new itemActions.LoadAllItemCrossSellFail(err))
+                    return EMPTY;
+                })
+            )
+        )
+    );
+    @Effect()
+    loadAllItemUpSell$: Observable<Action> = this.actions$.pipe(
+        ofType(itemActions.ItemActionTypes.LoadAllItemUpSell),
+        map((action: itemActions.LoadAllItemUpSell) => action.payload),
+        mergeMap((itemupsell: ItemUpSellInsert) =>
+            this.itemService.getAllItem(itemupsell.UpSellItemID).pipe(
+                map((item: Item) => {
+                    itemupsell.PrevUpSellItemID = item.ItemID;
+                    itemupsell.UpSellItemName = item.Name;
+                    itemupsell.UpSellItemVendorSKU = item.VendorSKU;
+                    itemupsell.UpSellTPIN = item.TPIN;
+                    itemupsell.ImagePath = item.ImagePath;
+                    return (new itemActions.LoadAllItemUpSellSuccess(item))
+                }),
+                catchError(err => {
+                    this.itemService.sendNotification({ type: 'error', title: 'Error', content: err });
+                    of(new itemActions.LoadAllItemUpSellFail(err))
+                    return EMPTY;
+                })
+            )
+        )
+    );
+    @Effect()
+    loadItemRelatedProduct$: Observable<Action> = this.actions$.pipe(
+        ofType(itemActions.ItemActionTypes.LoadItemRelatedProduct),
+        map((action: itemActions.LoadItemRelatedProduct) => action.payload),
+        mergeMap((itemrelatedproduct: ItemRelatedProductInsert) =>
+            this.itemService.getAllItem(itemrelatedproduct.RelatedProductItemID).pipe(
+                map((item: Item) => {
+                    itemrelatedproduct.PrevRelatedProductItemID = item.ItemID;
+                    itemrelatedproduct.RelatedItemName = item.Name;
+                    itemrelatedproduct.RelatedItemVendorSKU = item.VendorSKU;
+                    itemrelatedproduct.RelatedTPIN = item.TPIN;
+                    itemrelatedproduct.ImagePath = item.ImagePath;
+                    
+                    return (new itemActions.LoadItemRelatedProductSuccess(item))
+                }),
+                catchError(err => {
+                    this.itemService.sendNotification({ type: 'error', title: 'Error', content: err });
+                    of(new itemActions.LoadItemRelatedProductFail(err))
+                    return EMPTY;
+                })
+            )
+        )
+    );
+    
 }

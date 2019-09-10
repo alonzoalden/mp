@@ -1,10 +1,11 @@
-import { Component, OnInit, OnDestroy, ViewChild, ElementRef } from '@angular/core';
+import { Component, OnInit, OnDestroy, ViewChild, ElementRef, Input, Output, EventEmitter, SimpleChanges } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 import { MatTableDataSource } from '@angular/material';
 import { Subscription } from 'rxjs';
 
-import { Item, ItemInsert, ItemList, ItemUpSellInsert } from '../../../../shared/class/item';
+import { Item, ItemInsert, ItemList, ItemUpSellInsert, ItemRelatedProductInsert } from '../../../../shared/class/item';
 import { ItemService } from '../../../item.service';
+import { environment } from 'environments/environment';
 
 @Component({
     selector: 'o-item-add-product-relation-up-sell',
@@ -12,41 +13,34 @@ import { ItemService } from '../../../item.service';
   })
 
 export class ItemAddProductRelationUpSellComponent implements OnInit {
-    errorMessage: string;
-    item: ItemInsert;
-
-    upSellItemlist: ItemList[];    
+    @Input() errorMessage: string;
+    @Input() item: ItemInsert;
+    @Input() upSellItemlist: ItemList[];
+    @Input() itemUpSellsMatTable: MatTableDataSource<ItemUpSellInsert>;
+    @Output() getAllItemUpSell = new EventEmitter<ItemUpSellInsert>();
+    
     upSellDisplayedColumns = ['Add', 'Down', 'Position', 'Up', 'ItemName', 'SKU', 'TPIN', 'Remove'];
-    upSellDataSource: any = null;
     upSellPendingAdd: boolean;
     currentItemUpSellIndex: number;
     formDirty = false;
-    
-    @ViewChild('selectionCategoriesRef', { static: false }) selectionCategoriesRef: ElementRef;
+    private imageURL = environment.imageURL;
 
     constructor(private itemService: ItemService) { }
 
-    ngOnInit(): void {
-        this.item = this.itemService.currentItemInsert;
-
-        if(this.item.ItemUpSells.length === 0) {
+    ngOnChanges(changes: SimpleChanges): void {
+        if (changes.item && changes.item.currentValue && changes.item.currentValue.ItemUpSells.length === 0) {
             const _temp = new ItemUpSellInsert(0, null, null, null, null, null, null, null);
             this.item.ItemUpSells.push(_temp);
+            this.currentItemUpSellIndex = this.item.ItemUpSells.length - 1;
         }
-
+    }
+    ngOnInit(): void {
         this.currentItemUpSellIndex = this.item.ItemUpSells.length - 1;
-
-        this.itemService.getAllItemList().subscribe(
-            (itemlist: ItemList[]) => {
-                this.upSellItemlist = itemlist;
-                this.upSellRefreshDataSource(this.item.ItemUpSells);
-            },
-            (error: any) => this.errorMessage = <any>error
-        );
+        
     }
 
     upSellRefreshDataSource(itemUpSells: ItemUpSellInsert[]) { 
-        this.upSellDataSource = new MatTableDataSource<ItemUpSellInsert>(itemUpSells);
+        this.itemUpSellsMatTable = new MatTableDataSource<ItemUpSellInsert>(itemUpSells);
     }
 
     onAddItemUpSell(itemUpSell: ItemUpSellInsert) {
@@ -54,22 +48,10 @@ export class ItemAddProductRelationUpSellComponent implements OnInit {
             if(!this.existUpSell(itemUpSell.UpSellItemID, true)) {        
                 this.upSellPendingAdd = true;
 
-                this.itemService.getAllItem(itemUpSell.UpSellItemID).subscribe(
-                    (item: Item) => {
-                        itemUpSell.PrevUpSellItemID = item.ItemID;
-                        itemUpSell.UpSellItemName = item.Name;
-                        itemUpSell.UpSellItemVendorSKU = item.VendorSKU;
-                        itemUpSell.UpSellTPIN = item.TPIN;
-                    },
-                    (error: any) => {
-                        this.errorMessage = <any>error;
-                        this.itemService.sendNotification({ type: 'error', title: 'Error', content: this.errorMessage });
-                    }
-                );
-
                 const _temp = new ItemUpSellInsert(0, null, null, null, null, null, null, this.item.ItemUpSells.length + 1);
                 this.item.ItemUpSells.push(_temp);
                 this.upSellRefreshDataSource(this.item.ItemUpSells);
+
             }
             else {  
                 this.itemService.sendNotification({ type: 'error', title: 'Error', content: "Up Sell already exists" });
@@ -93,20 +75,9 @@ export class ItemAddProductRelationUpSellComponent implements OnInit {
     onUpSellItemChange(index: number) {  
         if(this.item.ItemUpSells[index].UpSellItemID) {
             if(!this.existUpSell(this.item.ItemUpSells[index].UpSellItemID)) {
-                this.itemService.getAllItem(this.item.ItemUpSells[index].UpSellItemID).subscribe(
-                    (item: Item) => {
-                        this.item.ItemUpSells[index].PrevUpSellItemID = item.ItemID;
-                        this.item.ItemUpSells[index].UpSellItemName = item.Name;
-                        this.item.ItemUpSells[index].UpSellItemVendorSKU = item.VendorSKU;
-                        this.item.ItemUpSells[index].UpSellTPIN = item.TPIN;
-                        this.item.ItemUpSells[index].ImagePath = item.ImagePath;
-                        this.currentItemUpSellIndex = this.item.ItemUpSells.length - 1;
-                    },
-                    (error: any) => {
-                        this.errorMessage = <any>error;
-                        this.itemService.sendNotification({ type: 'error', title: 'Error', content: this.errorMessage });
-                    }
-                );
+
+                this.getAllItemUpSell.emit(this.item.ItemUpSells[index])
+                
             }
             else {
                 this.item.ItemUpSells[index].UpSellItemID = this.item.ItemUpSells[index].PrevUpSellItemID;

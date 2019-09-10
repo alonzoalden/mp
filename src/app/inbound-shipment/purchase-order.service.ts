@@ -495,7 +495,7 @@ export class PurchaseOrderService {
                                 //tap(data => console.log('Add Carton: ' + JSON.stringify(data))),
                                 tap(data => {
                                     this.cartons.push(data);
-                                    this.currentCarton.next(data);
+                                    //this.currentCarton.next(data);
                                 }),
                                 catchError(this.handleError)
                             );

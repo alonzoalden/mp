@@ -35,12 +35,12 @@ export class InboundShipmentEditCartonLineEditComponent implements OnInit, OnDes
     ngOnInit() {
         const cartonlineid = this.route.snapshot.params['lid'];
 
-        this.purchaseOrderService.currentCarton.subscribe(
-            (currentcarton: Carton) => {
-                this.cartonnumber = currentcarton.CartonNumber;
-            },
-            (error: any) => this.errorMessage = <any>error
-        );
+        // this.purchaseOrderService.currentCarton.subscribe(
+        //     (currentcarton: Carton) => {
+        //         this.cartonnumber = currentcarton.CartonNumber;
+        //     },
+        //     (error: any) => this.errorMessage = <any>error
+        // );
         //this.cartonnumber = this.purchaseOrderService.currentCarton.CartonNumber;
         this.purchaseOrderService.getCurrentCartonLine(cartonlineid).subscribe(
             (cartonline: CartonLine) => {

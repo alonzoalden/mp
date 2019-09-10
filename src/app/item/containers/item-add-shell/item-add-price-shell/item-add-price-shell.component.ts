@@ -1,23 +1,28 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { MatTableDataSource, MatSort, MatSortable } from '@angular/material';
 import { Router } from '@angular/router';
-import { Subscription } from 'rxjs';
+import { Subscription, Observable } from 'rxjs';
 
 import { ItemInsert, ItemTierPriceInsert } from '../../../../shared/class/item';
 
 import { ItemService } from '../../../item.service';
 import { AppService } from '../../../../app.service';
-
+import { Member } from 'app/shared/class/member';
+import { Store, select } from '@ngrx/store';
+import * as itemActions from '../../../state/item.actions';
+import * as fromItem from '../../../state';
+import * as fromUser from '../../../../shared/state/user-state.reducer';
 @Component({
     templateUrl: './item-add-price-shell.component.html'
 })
 
-
 export class ItemAddPriceShellComponent implements OnInit {
-    errorMessage: string;
-    item: ItemInsert;
-
-    isDropship: boolean;
+    
+    item$: Observable<ItemInsert>;
+    errorMessage$: Observable<string>;
+    userInfo$: Observable<Member>;
+    itemTierPricesMatTable$: Observable<MatTableDataSource<ItemTierPriceInsert>>;
+    
 
     minDate = new Date(2000, 0, 1);
     maxDate = new Date(2020, 0, 1);
@@ -29,88 +34,14 @@ export class ItemAddPriceShellComponent implements OnInit {
     dataSource: any = null;
     formDirty = false;
     canAdd = false;    
-    constructor(private itemService: ItemService, private appService: AppService) { }
+    constructor(private store: Store<fromItem.State>) { }
 
     @ViewChild(MatSort, { static: false }) sort: MatSort;
 
     ngOnInit(): void {
-        this.item = this.itemService.currentItemInsert;
-
-        this.appService.getCurrentMember()
-                .subscribe(
-                    (data) => {
-                        this.appService.currentMember = data;
-                        this.isDropship = data.IsDropship;
-                    },
-                    (error: any) => {
-                        this.errorMessage = <any>error;
-                    }
-                );
-
-        this.refreshItemTierPriceDataSource(this.item.ItemTierPrices);
-        if(this.item.ItemTierPrices.length === 0) {
-            this.PendingAdd = true;
-            const _temp = new ItemTierPriceInsert(0, 0, 0);
-            this.item.ItemTierPrices.push(_temp);
-            this.refreshItemTierPriceDataSource(this.item.ItemTierPrices);
-        }
-
-        this.currentItemTierPriceIndex = this.item.ItemTierPrices.length - 1;        
-    }
-
-    refreshItemTierPriceDataSource(itemTierPrices: ItemTierPriceInsert[]) 
-    {        
-        this.dataSource = new MatTableDataSource<ItemTierPriceInsert>(itemTierPrices);
-        this.dataSource.sort = this.sort;
-    }
-
-    onAddItemTierPrice(itemTierPrice: ItemTierPriceInsert) {
-        var counter: number = 0;
-        this.item.ItemTierPrices.forEach((p) => {
-            if(p.Quantity === itemTierPrice.Quantity)
-            {
-                counter++;
-            }
-        });
-
-        if (counter > 1) {
-            this.itemService.sendNotification({ type: 'error', title: 'Error', content: "Tier Pricing already exists for this Quantity" });            
-        }
-        else {
-            this.PendingAdd = true;
-            const _temp = new ItemTierPriceInsert(0, 0, 0);
-            this.item.ItemTierPrices.push(_temp);
-            this.refreshItemTierPriceDataSource(this.item.ItemTierPrices);
-        }
-    }
-
-    onEditItemTierPrice(index: number) {
-        if(this.PendingAdd) {
-            this.currentItemTierPriceIndex = this.item.ItemTierPrices.length - 1;
-            this.PendingAdd = false;
-        }
-        else {
-            this.currentItemTierPriceIndex = index;
-        }    
-    }
-
-    onRemoveItemTierPrice(index: number) {
-        this.item.ItemTierPrices.splice(index, 1);
-        this.refreshItemTierPriceDataSource(this.item.ItemTierPrices);
-    }
-
-    onPriceTypeChange() {
-        this.item.Price = null;
-    }
-
-    clearFields(form) {
-        this.formDirty = false;
-        this.canAdd = false;
-        form.Price = 0;
-        form.Quantity = 0;
-    }
-
-    test() {
-        console.log(this.item);
+        this.item$ = this.store.pipe(select(fromItem.getItem));
+        this.itemTierPricesMatTable$ = this.store.pipe(select(fromItem.getItemTierPricesMatTable));
+        this.errorMessage$ = this.store.pipe(select(fromItem.getError));
+        this.userInfo$ = this.store.pipe(select(fromUser.getCurrentUser));
     }
 }

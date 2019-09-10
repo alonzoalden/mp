@@ -12,11 +12,11 @@ import { Item } from '../../../../shared/class/item';
 import { PurchaseOrderService } from '../../../purchase-order.service';
 
 @Component({
-    selector: 'o-inbound-shipment-edit-line-add',
-    templateUrl: './inbound-shipment-edit-line-add.component.html'
+    selector: 'o-inbound-shipment-edit-line-add-shell',
+    templateUrl: './inbound-shipment-edit-line-add-shell.component.html'
 })
 
-export class InboundShipmentEditLineAddComponent implements OnInit, OnDestroy {
+export class InboundShipmentEditLineAddShellComponent implements OnInit, OnDestroy {
     subscription: Subscription;
     errorMessage: string;
     purchaseorderline: PurchaseOrderLineInsert;

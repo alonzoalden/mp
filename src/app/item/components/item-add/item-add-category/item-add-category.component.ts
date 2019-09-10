@@ -33,9 +33,6 @@ export class ItemAddCategoryComponent implements OnInit {
 
     constructor(private itemService: ItemService) { }
 
-    ngOnChanges(changes: SimpleChanges) {
-        console.log(changes)
-    }
     ngOnInit(): void {
         this.getCategories.emit(2);
         if (this.item && this.item.ItemCategoryAssignments.length > 0) {
@@ -62,18 +59,20 @@ export class ItemAddCategoryComponent implements OnInit {
                 this.lastSelectedValue = this.categoriesList[this.categoriesList.length - 1][0].ParentItemCategoryID;
             } else {
                 this.lastSelectedValue = categoryValue;
-                this.getCategories.emit(categoryValue);
-                this.categoriesList = this.categoriesList.slice(0, index + 1);
                 
-                // this.itemService.getCategories(categoryValue).subscribe(
-                //     (categories: Category[]) => {
-                //         this.categoriesList = this.categoriesList.slice(0, index + 1);
-                //         if (categories.length > 0) {
-                //             this.categoriesList.push(categories);
-                //         }
-                //     },
-                //     (error: any) => this.errorMessage = <any>error
-                // );
+                
+                // this.getCategories.emit(categoryValue);
+                // this.categoriesList = this.categoriesList.slice(0, index + 1);
+                
+                this.itemService.getCategories(categoryValue).subscribe(
+                    (categories: Category[]) => {
+                        this.categoriesList = this.categoriesList.slice(0, index + 1);
+                        if (categories.length > 0) {
+                            this.categoriesList.push(categories);
+                        }
+                    },
+                    (error: any) => this.errorMessage = <any>error
+                );
             }
         }
     }
@@ -87,26 +86,28 @@ export class ItemAddCategoryComponent implements OnInit {
     }
 
     onAddCategory() {
-        if (this.lastSelectedValue !== 0) {
-            this.getCategoryBreadCrumbs.emit(this.lastSelectedValue);
-            this.categoriesList.splice(1);
-            this.item.ItemCategoryAssignments.push(new ItemCategoryAssignment(this.lastSelectedValue));
-            this.lastSelectedValue = 0;
-        }
-        //     this.itemService.getCategoryBreadCrumbs(this.lastSelectedValue).subscribe(
-        //         (categories: Category[]) => {
-        //             this.currentResult.push(categories);
-        //             this.categoriesList.splice(1);
-        //             this.item.ItemCategoryAssignments.push(new ItemCategoryAssignment(this.lastSelectedValue));
-        //             this.lastSelectedValue = 0;
-        //             //this.selectionCategoriesRef.nativeElement.value = 0;
-        //             this.refreshDataSource(this.currentResult);
-        //         },
-        //         (error: any) => this.errorMessage = <any>error
-        //     );
-        // } else {
-        //     console.log('nothing selected');
+        // if (this.lastSelectedValue !== 0) {
+        //     this.getCategoryBreadCrumbs.emit(this.lastSelectedValue);
+        //     this.categoriesList.splice(1);
+        //     this.item.ItemCategoryAssignments.push(new ItemCategoryAssignment(this.lastSelectedValue));
+        //     this.lastSelectedValue = 0;
         // }
+        if (this.lastSelectedValue !== 0) {
+            this.itemService.getCategoryBreadCrumbs(this.lastSelectedValue).subscribe(
+                (categories: Category[]) => {
+                    this.currentResult.push(categories);
+                    this.categoriesList.splice(1);
+                    this.item.ItemCategoryAssignments.push(new ItemCategoryAssignment(this.lastSelectedValue));
+                    this.lastSelectedValue = 0;
+                    //this.selectionCategoriesRef.nativeElement.value = 0;
+                    this.refreshDataSource(this.currentResult);
+                },
+                (error: any) => this.errorMessage = <any>error
+            );
+        } else {
+            console.log('nothing selected');
+        }
+    
     }
     clearFields() {
         this.lastSelectedValue = 0;

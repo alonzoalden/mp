@@ -40,14 +40,14 @@ export class InboundShipmentEditCartonLineAddComponent implements OnInit, OnDest
     }
 
     ngOnInit() {
-        this.purchaseOrderService.currentCarton.subscribe(
-            (currentcarton: Carton) => {
-                this.carton = currentcarton;
-                this.cartonid = this.carton.CartonID;
-                this.cartonnumber = this.carton.CartonNumber;
-            },
-            (error: any) => this.errorMessage = <any>error
-        );
+        // this.purchaseOrderService.currentCarton.subscribe(
+        //     (currentcarton: Carton) => {
+        //         this.carton = currentcarton;
+        //         this.cartonid = this.carton.CartonID;
+        //         this.cartonnumber = this.carton.CartonNumber;
+        //     },
+        //     (error: any) => this.errorMessage = <any>error
+        // );
 
         // this.cartonid = this.carton.currentCartonID;
         // this.cartonnumber = this.purchaseOrderService.currentCarton.CartonNumber;

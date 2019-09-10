@@ -64,23 +64,23 @@ export class InboundShipmentEditCartonLineListComponent implements OnInit {
         this.purchaseorderid = this.route.snapshot.parent.parent.params['id'];
         this.purchaseorder = this.purchaseOrderService.currentPurchaseOrderEdit;
         
-        this.purchaseOrderService.currentCarton.subscribe(
-            (currentcarton: Carton) => {
-                this.carton = currentcarton;
-            },
-            (error: any) => this.errorMessage = <any>error
-        );
-        this.purchaseOrderService.currentCartonLines.subscribe(
-            (cartonlines: CartonLine[]) => {
-                this.cartonlines = cartonlines;
-                this.refreshDataSource(cartonlines);
-                if(this.purchaseOrderService.newCartonLineIsSelected) {
-                    this.currentIndex = cartonlines.length - 1;
-                    this.purchaseOrderService.newCartonLineIsSelected = false;
-                }
-            },
-            (error: any) => this.errorMessage = <any>error
-        );
+        // this.purchaseOrderService.currentCarton.subscribe(
+        //     (currentcarton: Carton) => {
+        //         this.carton = currentcarton;
+        //     },
+        //     (error: any) => this.errorMessage = <any>error
+        // );
+        // this.purchaseOrderService.currentCartonLines.subscribe(
+        //     (cartonlines: CartonLine[]) => {
+        //         this.cartonlines = cartonlines;
+        //         this.refreshDataSource(cartonlines);
+        //         if(this.purchaseOrderService.newCartonLineIsSelected) {
+        //             this.currentIndex = cartonlines.length - 1;
+        //             this.purchaseOrderService.newCartonLineIsSelected = false;
+        //         }
+        //     },
+        //     (error: any) => this.errorMessage = <any>error
+        // );
         this.purchaseOrderService.getPurchaseOrder(this.purchaseorderid).subscribe(
             (purchaseorder: PurchaseOrder) => {
                 this.orderStatus  = purchaseorder.Status;

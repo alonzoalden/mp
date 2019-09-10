@@ -7,11 +7,10 @@ import { Carton } from '../../../../shared/class/purchase-order';
 import { PurchaseOrderService } from '../../../purchase-order.service';
 
 @Component({
-  selector: 'o-inbound-shipment-edit-carton-edit.component',
-  templateUrl: './inbound-shipment-edit-carton-edit.component.html'
+  templateUrl: './inbound-shipment-edit-carton-edit-shell.component.html'
 })
 
-export class InboundShipmentEditCartonEditComponent implements OnInit, OnDestroy {
+export class InboundShipmentEditCartonEditShellComponent implements OnInit, OnDestroy {
     carton: Carton;
     subscription: Subscription;
     purchaseorderid: number;
@@ -31,7 +30,7 @@ export class InboundShipmentEditCartonEditComponent implements OnInit, OnDestroy
         this.purchaseOrderService.getCarton(cartonid).subscribe(
             (carton: Carton) => {
                 this.carton = carton;
-                this.purchaseOrderService.currentCarton = carton;
+                //this.purchaseOrderService.currentCarton = carton;
             },
             (error: any) => this.errorMessage = <any>error
         );

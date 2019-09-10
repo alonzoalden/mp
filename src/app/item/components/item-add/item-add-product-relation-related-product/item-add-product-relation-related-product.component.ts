@@ -1,9 +1,6 @@
-import { Component, OnInit, OnDestroy, ViewChild , ElementRef} from '@angular/core';
-import { Router, ActivatedRoute } from '@angular/router';
+import { Component, OnInit, Input, Output, EventEmitter, SimpleChanges} from '@angular/core';
 import { MatTableDataSource } from '@angular/material';
-import { Subscription } from 'rxjs';
-
-import { Item, ItemInsert, ItemList, ItemRelatedProductInsert } from '../../../../shared/class/item';
+import { ItemInsert, ItemList, ItemRelatedProductInsert } from '../../../../shared/class/item';
 import { ItemService } from '../../../item.service';
 import { environment } from 'environments/environment';
 
@@ -13,10 +10,13 @@ import { environment } from 'environments/environment';
 })
 
 export class ItemAddProductRelationRelatedProductComponent implements OnInit {
-    errorMessage: string;
-    item: ItemInsert;
-
-    relatedProductItemlist: ItemList[];
+    @Input() errorMessage: string;
+    @Input() item: ItemInsert;
+    @Input() relatedProductItemlist: ItemList[];
+    @Input() itemRelatedProductsMatTable: MatTableDataSource<ItemRelatedProductInsert>;
+    @Output() getItemRelatedProduct = new EventEmitter<ItemRelatedProductInsert>();
+    @Output() addNewItemRelatedProductRow = new EventEmitter<ItemRelatedProductInsert>();
+    
     relatedProductDisplayedColumns = ['Add', 'Down', 'Position', 'Up', 'ItemName', 'SKU', 'TPIN', 'Remove'];
     relatedProductDataSource: any = null;
     relatedProductPendingAdd: boolean;
@@ -26,52 +26,27 @@ export class ItemAddProductRelationRelatedProductComponent implements OnInit {
     
     private imageURL = environment.imageURL;
 
-    //@ViewChild('selectionCategoriesRef') selectionCategoriesRef: ElementRef;
-
     constructor(private itemService: ItemService) { }
-
-    ngOnInit(): void {
-        this.item = this.itemService.currentItemInsert;
-        
-        if(this.item.ItemRelatedProducts.length === 0) {
+    ngOnChanges(changes: SimpleChanges) {
+        if (changes.item && changes.item.currentValue && changes.item.currentValue.ItemRelatedProducts.length === 0) {
             const _temp = new ItemRelatedProductInsert(0, null, null, null, null, null, null, null);
             this.item.ItemRelatedProducts.push(_temp);
+            this.currentItemRelatedProductIndex = this.item.ItemRelatedProducts.length - 1;
         }
-
+    }
+    ngOnInit(): void {
         this.currentItemRelatedProductIndex = this.item.ItemRelatedProducts.length - 1;
-
-        this.itemService.getItemList().subscribe(
-            (itemlist: ItemList[]) => {
-                this.relatedProductItemlist = itemlist;
-                this.relatedProductRefreshDataSource(this.item.ItemRelatedProducts);                     
-            },
-            (error: any) => this.errorMessage = <any>error
-        );
     }
 
     relatedProductRefreshDataSource(itemRelatedProducts: ItemRelatedProductInsert[]) { 
-        this.relatedProductDataSource = new MatTableDataSource<ItemRelatedProductInsert>(itemRelatedProducts);
+        this.itemRelatedProductsMatTable = new MatTableDataSource<ItemRelatedProductInsert>(itemRelatedProducts);
     }
     onAddItemRelatedProduct(itemRelatedProduct: ItemRelatedProductInsert) {
         if (this.isRelatedProductRequirementValid(itemRelatedProduct)) { 
             if(!this.existRelatedProduct(itemRelatedProduct.RelatedProductItemID, true)) {        
                 this.relatedProductPendingAdd = true;
 
-                this.itemService.getItem(itemRelatedProduct.RelatedProductItemID).subscribe(
-                    (item: Item) => {
-                        itemRelatedProduct.PrevRelatedProductItemID = item.ItemID;
-                        itemRelatedProduct.RelatedItemName = item.Name;
-                        itemRelatedProduct.RelatedItemVendorSKU = item.VendorSKU;
-                        itemRelatedProduct.RelatedTPIN = item.TPIN;
-                        itemRelatedProduct.ImagePath = item.ImagePath;
-                    },
-                    (error: any) => {
-                        this.errorMessage = <any>error;
-                        this.itemService.sendNotification({ type: 'error', title: 'Error', content: this.errorMessage });
-                    }
-                );
-
-                const _temp = new ItemRelatedProductInsert(0, null, null, null, null, null, null, this.item.ItemRelatedProducts.length + 1);
+                const _temp = new ItemRelatedProductInsert(0, null, null, null, null, null, null, null);
                 this.item.ItemRelatedProducts.push(_temp);
                 this.relatedProductRefreshDataSource(this.item.ItemRelatedProducts);
             }
@@ -96,20 +71,8 @@ export class ItemAddProductRelationRelatedProductComponent implements OnInit {
     onRelatedProductItemChange(index: number, ) {
         if(this.item.ItemRelatedProducts[index].RelatedProductItemID) {
             if(!this.existRelatedProduct(this.item.ItemRelatedProducts[index].RelatedProductItemID)) {
-                this.itemService.getItem(this.item.ItemRelatedProducts[index].RelatedProductItemID).subscribe(
-                    (item: Item) => {
-                        this.item.ItemRelatedProducts[index].PrevRelatedProductItemID = item.ItemID;
-                        this.item.ItemRelatedProducts[index].RelatedItemName = item.Name;
-                        this.item.ItemRelatedProducts[index].RelatedItemVendorSKU = item.VendorSKU;
-                        this.item.ItemRelatedProducts[index].RelatedTPIN = item.TPIN;
-                        this.item.ItemRelatedProducts[index].ImagePath = item.ImagePath;
-                        this.currentItemRelatedProductIndex = this.item.ItemRelatedProducts.length - 1;
-                    },
-                    (error: any) => {
-                        this.errorMessage = <any>error;
-                        this.itemService.sendNotification({ type: 'error', title: 'Error', content: this.errorMessage });
-                    }
-                );
+                this.getItemRelatedProduct.emit(this.item.ItemRelatedProducts[index]);
+                this.currentItemRelatedProductIndex = this.item.ItemRelatedProducts.length - 1;
             }
             else {
                 this.item.ItemRelatedProducts[index].RelatedProductItemID = this.item.ItemRelatedProducts[index].PrevRelatedProductItemID;
@@ -156,7 +119,7 @@ export class ItemAddProductRelationRelatedProductComponent implements OnInit {
     relatedProductMoveUpPosition(itemRelatedProduct: ItemRelatedProductInsert) {
         this.positionMove(this.item.ItemRelatedProducts, itemRelatedProduct, -1);
         this.item.ItemRelatedProducts.forEach((value, index) => {
-            value.Position = index + 1;                        
+            value.Position = index + 1;
         });
 
         this.relatedProductRefreshDataSource(this.item.ItemRelatedProducts);
@@ -183,6 +146,5 @@ export class ItemAddProductRelationRelatedProductComponent implements OnInit {
     clearFields(itemRelatedProduct: ItemRelatedProductInsert) {
         itemRelatedProduct.RelatedProductItemID = null;
         this.formDirty = false;
-        //this.selectionCategoriesRef.nativeElement.value = "0: null";
     }
 }

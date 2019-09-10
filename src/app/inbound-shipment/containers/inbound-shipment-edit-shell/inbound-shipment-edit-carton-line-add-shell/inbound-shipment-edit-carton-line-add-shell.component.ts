@@ -13,11 +13,10 @@ import { PurchaseOrderLineList, PurchaseOrderLine, Carton, CartonLineInsert } fr
 import { PurchaseOrderService } from '../../../purchase-order.service';
 
 @Component({
-    selector: 'o-inbound-shipment-edit-carton-line-add',
-    templateUrl: './inbound-shipment-edit-carton-line-add.component.html'
+    templateUrl: './inbound-shipment-edit-carton-line-add-shell.component.html'
 })
 
-export class InboundShipmentEditCartonLineAddComponent implements OnInit, OnDestroy {
+export class InboundShipmentEditCartonLineAddShellComponent implements OnInit, OnDestroy {
     subscription: Subscription;
     errorMessage: string;
     pendingAdd: boolean;
@@ -29,9 +28,9 @@ export class InboundShipmentEditCartonLineAddComponent implements OnInit, OnDest
     purchaseorderlineList: PurchaseOrderLineList[];
 
 
-    get carton(): Carton | null {
-        return this.purchaseOrderService.currentCarton;
-    }
+    // get carton(): Carton | null {
+    //     //return this.purchaseOrderService.currentCarton;
+    // }
 
     constructor(route: ActivatedRoute,
                 private router: Router,

@@ -2,8 +2,8 @@
 <div class="ibox-content">
     <div class="form-group row">
         <div class="col-md-12">                            
-            <div *ngIf="item.ItemUpSells.length && item.ItemUpSells.length > 0">
-                <table mat-table #table [dataSource]="upSellDataSource">
+            <div *ngIf="item?.ItemUpSells.length && item?.ItemUpSells.length > 0">
+                <table mat-table #table [dataSource]="itemUpSellsMatTable">
                     <!-- Add Button -->
                     <ng-container matColumnDef="Add">
                         <th mat-header-cell *matHeaderCellDef width="45px"></th>
@@ -71,7 +71,7 @@
                                             name="itemUpSellItemID"
                                             required
                                             #itemUpSellUpSellItemIDVar="ngModel"
-                                            [loading]="!upSellItemlist"
+                                            [loading]="!upSellItemlist.length"
                                             loadingText="Loading...">
                                     <ng-template ng-option-tmp let-item="item">
                                         <div matTooltip="{{item.Description}}" matTooltipPosition="right" matTooltipShowDelay="400">{{item.Description}}</div>

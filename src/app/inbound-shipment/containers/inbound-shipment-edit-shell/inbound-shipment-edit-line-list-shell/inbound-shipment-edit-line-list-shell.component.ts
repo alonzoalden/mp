@@ -10,12 +10,10 @@ import { THIS_EXPR } from '@angular/compiler/src/output/output_ast';
 
 
 @Component({
-  selector: 'o-inbound-shipment-edit-line-list',
-  templateUrl: './inbound-shipment-edit-line-list.component.html',
-  styleUrls: ['./inbound-shipment-edit-line-list.component.css', './inbound-shipment-edit.component.css']
+  templateUrl: './inbound-shipment-edit-line-list-shell.component.html',
 })
 
-export class InboundShipmentEditLineListComponent implements OnInit {
+export class InboundShipmentEditLineListShellComponent implements OnInit {
     errorMessage: string;
     purchaseorder: PurchaseOrder;
     purchaseorderid: number;

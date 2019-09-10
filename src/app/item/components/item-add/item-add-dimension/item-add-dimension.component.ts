@@ -1,22 +1,15 @@
-import { Component, OnInit } from '@angular/core';
-import { Router } from '@angular/router';
-
+import { Component, Input } from '@angular/core';
 import { ItemInsert } from '../../../../shared/class/item';
 
-import { ItemService } from '../../../item.service';
-
 @Component({
-  selector: 'o-item-add-dimension',
-  templateUrl: './item-add-dimension.component.html'
+    selector: 'o-item-add-dimension',
+    templateUrl: './item-add-dimension.component.html'
 })
 
-export class ItemAddDimensionComponent implements OnInit {
-    errorMessage: string;
-    item: ItemInsert;
+export class ItemAddDimensionComponent {
+    @Input() item: ItemInsert;
+    @Input() errorMessage: string;
 
-    constructor(private itemService: ItemService) { }
+    constructor() { }
 
-    ngOnInit(): void {
-        this.item = this.itemService.currentItemInsert;
-    }
 }

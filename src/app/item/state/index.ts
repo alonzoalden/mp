@@ -5,7 +5,8 @@ import { MatTableDataSource } from '@angular/material';
 import { SalesOrder } from 'app/shared/class/sales-order';
 import { SalesOrderLine } from 'app/shared/class/sales-order-line';
 import { Fulfillment, FulfillmentSalesOrderLine } from 'app/shared/class/fulfillment';
-import { ItemOptionInsert, ItemSelectionInsert } from 'app/shared/class/item';
+import { ItemOptionInsert, ItemSelectionInsert, ItemTierPrice, ItemTierPriceInsert, ItemCrossSellInsert, ItemRelatedProductInsert, ItemUpSell, ItemUpSellInsert } from 'app/shared/class/item';
+import { ItemRelatedProduct } from 'app/shared/class/item-related-product';
 
 // Extends the app state to include the product feature.
 // This is required because products are lazy loaded.
@@ -57,6 +58,17 @@ export const getItemBundleOptionSelectionsMatTable = createSelector(
     state => new MatTableDataSource<ItemSelectionInsert>(state.selectedBundleOptionSelectionList)
 )
 
+export const getItemTierPrices = createSelector(
+    getItemFeatureState, 
+    state => state.item ? state.item.ItemTierPrices : []
+)
+export const getItemTierPricesMatTable = createSelector(
+    getItemFeatureState, 
+    // state => state.item ? new MatTableDataSource<ItemTierPriceInsert>(state.item.ItemTierPrices) : new MatTableDataSource<ItemTierPriceInsert>([])
+    state => new MatTableDataSource<ItemTierPriceInsert>(state.item.ItemTierPrices) 
+)
+
+
 export const getItemCategories = createSelector(
     getItemFeatureState, 
     state => state.itemCategories
@@ -65,6 +77,40 @@ export const getCategoryBreadCrumbs = createSelector(
     getItemFeatureState, 
     state => state.categoryBreadCrumbs
 )
+export const getAllItemList = createSelector(
+    getItemFeatureState, 
+    state => state.allItemList
+)
+export const getAllItem = createSelector(
+    getItemFeatureState, 
+    state => state.allItem
+)
+export const getItemRelatedProducts = createSelector(
+    getItemFeatureState, 
+    state => state.item.ItemRelatedProducts
+)
+export const getItemRelatedProductsMatTable = createSelector(
+    getItemFeatureState, 
+    state => new MatTableDataSource<ItemRelatedProductInsert>(state.item.ItemRelatedProducts) 
+)
+export const getItemCrossSells = createSelector(
+    getItemFeatureState, 
+    state => state.item.ItemCrossSells
+)
+export const getItemCrossSellsMatTable = createSelector(
+    getItemFeatureState, 
+    state => new MatTableDataSource<ItemCrossSellInsert>(state.item.ItemCrossSells) 
+)
+export const getItemUpSells = createSelector(
+    getItemFeatureState, 
+    state => state.item.ItemUpSells
+)
+export const getItemUpSellsMatTable = createSelector(
+    getItemFeatureState, 
+    state => new MatTableDataSource<ItemUpSellInsert>(state.item.ItemUpSells) 
+)
+
+
 
 // export const getSalesOrder = createSelector(
 //     getItemFeatureState,

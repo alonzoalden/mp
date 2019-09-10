@@ -26,8 +26,8 @@ export class ItemVariationListComponent implements OnInit {
     dataSource: any = null;
     attributesVariationsList: any[] = [];
 
-    @ViewChild(MatPaginator) paginator: MatPaginator;
-    @ViewChild(MatSort) sort: MatSort;
+    @ViewChild(MatPaginator, { static: true }) paginator: MatPaginator;
+    @ViewChild(MatSort, { static: true }) sort: MatSort;
     private fileURL = environment.fileURL;
     private imageURL = environment.imageURL;
     

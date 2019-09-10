@@ -5,12 +5,10 @@ import { PurchaseOrderService } from '../../../purchase-order.service';
 import { PurchaseOrder, Carton, CartonInsert, CartonLine, CartonLineInsert } from '../../../../shared/class/purchase-order';
 
 @Component({
-    selector: 'o-inbound-shipment-edit-shipping-instruction',
-    templateUrl: './inbound-shipment-edit-shipping-instruction.component.html',		
-    styleUrls: ['./inbound-shipment-edit.component.css']
+    templateUrl: './inbound-shipment-edit-shipping-instruction-shell.component.html',		
 })
 
-export class InboundShipmentEditShippingInstructionComponent implements OnInit {
+export class InboundShipmentEditShippingInstructionShellComponent implements OnInit {
     errorMessage: string;
     purchaseorder: PurchaseOrder;
     purchaseorderid: number;

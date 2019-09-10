@@ -10,12 +10,10 @@ import { PurchaseOrderService } from '../../../purchase-order.service';
 //import { PurchaseOrderLineList } from '../../shared/class/purchase-order-line';
 
 @Component({
-    selector: 'o-inbound-shipment-edit-carton-line-list',
-    templateUrl: './inbound-shipment-edit-carton-line-list.component.html',
-    styleUrls: ['./inbound-shipment-edit-carton-line-list.component.css']
+    templateUrl: './inbound-shipment-edit-carton-line-list-shell.component.html',
 })
 
-export class InboundShipmentEditCartonLineListComponent implements OnInit {
+export class InboundShipmentEditCartonLineListShellComponent implements OnInit {
     errorMessage: string;
     purchaseorder: PurchaseOrder;
     purchaseorderid: number;

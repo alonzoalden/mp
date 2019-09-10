@@ -31,7 +31,7 @@ import { ItemAddDimensionComponent } from './components/item-add/item-add-dimens
 import { ItemAddPriceComponent } from './components/item-add/item-add-price/item-add-price.component';
 import { ItemAddCategoryComponent } from './components/item-add/item-add-category/item-add-category.component';
 import { ItemAddBundleComponent } from './components/item-add/item-add-bundle/item-add-bundle.component';
-import { ItemAddProductRelationComponent } from './components/item-add/item-add-product-relation/item-add-product-relation.component';
+//import { ItemAddProductRelationComponent } from './components/item-add/item-add-product-relation/item-add-product-relation.component';
 import { ItemAddProductRelationRelatedProductComponent } from './components/item-add/item-add-product-relation-related-product/item-add-product-relation-related-product.component';
 import { ItemAddProductRelationUpSellComponent } from './components/item-add/item-add-product-relation-up-sell/item-add-product-relation-up-sell.component';
 import { ItemAddProductRelationCrossSellComponent } from './components/item-add/item-add-product-relation-cross-sell/item-add-product-relation-cross-sell.component';
@@ -47,9 +47,6 @@ import { ItemAddPriceShellComponent } from './containers/item-add-shell/item-add
 import { ItemAddCategoryShellComponent } from './containers/item-add-shell/item-add-category-shell/item-add-category-shell.component';
 import { ItemAddBundleShellComponent } from './containers/item-add-shell/item-add-bundle-shell/item-add-bundle-shell.component';
 import { ItemAddProductRelationShellComponent } from './containers/item-add-shell/item-add-product-relation-shell/item-add-product-relation-shell.component';
-import { ItemAddProductRelationRelatedProductShellComponent } from './containers/item-add-shell/item-add-product-relation-related-product-shell/item-add-product-relation-related-product-shell.component';
-import { ItemAddProductRelationUpSellShellComponent } from './containers/item-add-shell/item-add-product-relation-up-sell-shell/item-add-product-relation-up-sell-shell.component';
-import { ItemAddProductRelationCrossSellShellComponent } from './containers/item-add-shell/item-add-product-relation-cross-sell-shell/item-add-product-relation-cross-sell-shell.component';
 import { ItemAddVendorAttachmentShellComponent } from './containers/item-add-shell/item-add-vendor-attachment-shell/item-add-vendor-attachment-shell.component';
 import { ItemAddVideoShellComponent } from './containers/item-add-shell/item-add-video-shell/item-add-video-shell.component';
 import { ItemAddImageShellComponent } from './containers/item-add-shell/item-add-image-shell/item-add-image-shell.component';
@@ -141,6 +138,13 @@ import { ItemPartEditImageShellComponent } from './containers/item-part-edit-she
 
 import { ItemPartEditGuard } from './containers/item-part-edit-shell/item-part-edit-shell/item-part-edit-shell.guard';
 
+
+import { ItemVariationSelectItemComponentDialog } from './item-variation/item-variation-select-item.component-dialog';
+import { ItemVariationComponentDialog } from './item-variation/item-variation.component-dialog';
+import { ItemVariationListComponent } from './item-variation/item-variation-list.component';
+import { ItemVariationDetailComponent } from './item-variation/item-variation-detail.component';
+import { ItemEditVariationComponent } from './item-edit/item-edit-variation.component';
+
 // /* NgRx */
 // import { itemreducer } from './item-variation/state/item-variation.reducer';
 // import { ItemVariationEffects } from './item-variation/state/item-variation.effects';
@@ -166,9 +170,6 @@ import { ItemEffects } from './state/item.effects';
         ItemAddCategoryShellComponent, 
         ItemAddBundleShellComponent, 
         ItemAddProductRelationShellComponent,
-        ItemAddProductRelationRelatedProductShellComponent,
-        ItemAddProductRelationUpSellShellComponent,
-        ItemAddProductRelationCrossSellShellComponent,
         ItemAddVendorAttachmentShellComponent,
         ItemAddVideoShellComponent,
         ItemAddImageShellComponent,
@@ -178,7 +179,7 @@ import { ItemEffects } from './state/item.effects';
         ItemAddPriceComponent,
         ItemAddCategoryComponent,
         ItemAddBundleComponent,
-        ItemAddProductRelationComponent,
+        //ItemAddProductRelationComponent,
         ItemAddProductRelationRelatedProductComponent,
         ItemAddProductRelationUpSellComponent,
         ItemAddProductRelationCrossSellComponent,
@@ -266,12 +267,16 @@ import { ItemEffects } from './state/item.effects';
         ItemPrintLabelComponentPrintDialog,
         ItemListComponentImportDialog,
         ItemAddImageComponentUploadDialog,
-        ItemEditImageComponentUploadDialog
-
+        ItemEditImageComponentUploadDialog,
+        ItemVariationListComponent,
+        ItemVariationDetailComponent,
+        ItemEditVariationComponent,
+        ItemVariationComponentDialog,
+        ItemVariationSelectItemComponentDialog
         
     ],
-    entryComponents: [ItemPartListComponentItemPrintDialog, ItemListComponent, ItemListComponentItemPrintDialog, ItemPrintLabelComponentPrintDialog, ItemAddImageComponentUploadDialog, ItemEditImageComponentUploadDialog, ItemListComponentImportDialog],
-    //entryComponents: [ItemListComponent, ItemListComponentItemPrintDialog, ItemPrintLabelComponentPrintDialog, ItemAddImageComponentUploadDialog, ItemEditImageComponentUploadDialog, ItemListComponentImportDialog, ItemVariationComponentDialog, ItemVariationSelectItemComponentDialog],
+    //entryComponents: [ItemPartListComponentItemPrintDialog, ItemListComponent, ItemListComponentItemPrintDialog, ItemPrintLabelComponentPrintDialog, ItemAddImageComponentUploadDialog, ItemEditImageComponentUploadDialog, ItemListComponentImportDialog],
+    entryComponents: [ItemListComponent, ItemListComponentItemPrintDialog, ItemPrintLabelComponentPrintDialog, ItemAddImageComponentUploadDialog, ItemEditImageComponentUploadDialog, ItemListComponentImportDialog, ItemVariationComponentDialog, ItemVariationSelectItemComponentDialog],
     imports: [
         TranslateModule,
         ReactiveFormsModule,

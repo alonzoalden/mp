@@ -7,12 +7,10 @@ import { InboundShippingMethod } from '../../../../shared/class/inbound-shipping
 import { PurchaseOrderService } from '../../../purchase-order.service';
 
 @Component({
-  selector: 'o-inbound-shipment-edit-shipping',
-  templateUrl: './inbound-shipment-edit-shipping.component.html',
-  styleUrls: ['./inbound-shipment-edit.component.css']
+  templateUrl: './inbound-shipment-edit-shipping-shell.component.html',
 })
 
-export class InboundShipmentEditShippingComponent implements OnInit {
+export class InboundShipmentEditShippingShellComponent implements OnInit {
     private purchaseOrderSubscription: Subscription;
 
     errorMessage: string;

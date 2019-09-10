@@ -10,12 +10,12 @@ import { PurchaseOrderService } from '../../../purchase-order.service';
 import { InboundShippingMethod } from '../../../../shared/class/inbound-shipping-method';
 
 @Component({
-  selector: 'o-inbound-shipment-edit',
-  templateUrl: './inbound-shipment-edit.component.html',
-  styleUrls: ['./inbound-shipment-edit.component.css']
+  //selector: 'o-inbound-shipment-edit',
+  templateUrl: './inbound-shipment-edit-shell.component.html',
+  //styleUrls: ['./inbound-shipment-edit.component.css']
 })
 
-export class InboundShipmentEditComponent implements OnInit, AfterViewInit, OnDestroy {
+export class InboundShipmentEditShellComponent implements OnInit, AfterViewInit, OnDestroy {
     private purchaseOrderSubscription: Subscription;
     private inboundShippingMethodSubscription: Subscription;
     private purchaseOrderLineSubscription: Subscription;
@@ -657,7 +657,7 @@ export class LineItemLabelPrintDialog {
 
 @Component({
     selector: 'inbound-shipment-edit.component-item-print-dialog',
-    templateUrl: 'inbound-shipment-edit.component-item-print-dialog.html',
+    //templateUrl: 'inbound-shipment-edit.component-item-print-dialog.html',
   })
 
 export class InboundShipmentEditComponentItemPrintDialog implements OnInit {

@@ -6,13 +6,12 @@ import { PurchaseOrder, PurchaseOrderLine } from '../../shared/class/purchase-or
 import { PurchaseOrderService } from '../purchase-order.service';
 import { environment } from '../../../environments/environment';
 import { ItemList } from '../../shared/class/item';
-import { THIS_EXPR } from '@angular/compiler/src/output/output_ast';
 
 
 @Component({
-  selector: 'o-inbound-shipment-edit-line-list',
-  templateUrl: './inbound-shipment-edit-line-list.component.html',
-  styleUrls: ['./inbound-shipment-edit-line-list.component.css', './inbound-shipment-edit.component.css']
+//   selector: 'o-inbound-shipment-edit-line-list',
+  //templateUrl: './inbound-shipment-edit-line-list.component.html',
+//   styleUrls: ['./inbound-shipment-edit-line-list.component.css', './inbound-shipment-edit.component.css']
 })
 
 export class InboundShipmentEditLineListComponent implements OnInit, OnDestroy {
@@ -383,7 +382,7 @@ export class ItemLabelPrintDialog {
 
 @Component({
 selector: 'inbound-shipment-edit-line-list.component-item-print-dialog',
-templateUrl: 'inbound-shipment-edit-line-list.component-item-print-dialog.html',
+// templateUrl: 'inbound-shipment-edit-line-list.component-item-print-dialog.html',
 })
 
 export class InboundShipmentEditLineComponentItemPrintDialog implements OnInit {

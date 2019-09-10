@@ -3,8 +3,9 @@ import { SalesOrder } from '../../shared/class/sales-order';
 import { SalesOrderLine } from '../../shared/class/sales-order-line';
 import { Fulfillment, FulfillmentSalesOrderLine } from '../../shared/class/fulfillment';
 import { VendorBrand } from '../../shared/class/vendor-brand';
-import { ItemInsert, ItemList, ItemOption, ItemOptionInsert, ItemSelectionInsert } from '../../shared/class/item';
+import { ItemInsert, ItemList, ItemOption, ItemOptionInsert, ItemSelectionInsert, Item, ItemUpSellInsert, ItemCrossSellInsert, ItemRelatedProductInsert } from '../../shared/class/item';
 import { Category } from 'app/shared/class/category';
+import { ItemUpSell } from 'app/shared/class/item-up-sell';
 
 export enum ItemActionTypes {
   LoadVendorBrands = '[Item] Load Vendor Brands',
@@ -22,6 +23,22 @@ export enum ItemActionTypes {
   SetItem = '[Item] Set Item',
   SetSelectedBundleOption = '[Item] Set Selected Bundle Option',
   SetSelectedBundleOptionList = '[Item] Set Selected Bundle Option List',
+  LoadAllItemList = '[Item] Load All Item List',
+  LoadAllItemListSuccess = '[Item] Load All Item List Success',
+  LoadAllItemListFail  = '[Item] Load All Item List Fail',
+  LoadAllItem = '[Item] Load All Item',
+  LoadAllItemSuccess = '[Item] Load All Item Success',
+  LoadAllItemFail  = '[Item] Load All Item Fail',
+  LoadAllItemCrossSell = '[Item] Load All Item Cross Sell',
+  LoadAllItemCrossSellSuccess = '[Item] Load All Item Cross Sell Success',
+  LoadAllItemCrossSellFail  = '[Item] Load All Item Cross Sell Fail',
+  LoadAllItemUpSell = '[Item] Load All Item Up Sell',
+  LoadAllItemUpSellSuccess = '[Item] Load All Item Up Sell Success',
+  LoadAllItemUpSellFail = '[Item] Load All Item Up Sell Fail',
+  LoadItemRelatedProduct = '[Item] Load Item Related Product',
+  LoadItemRelatedProductSuccess = '[Item] Load Item Related Product Success',
+  LoadItemRelatedProductFail = '[Item] Load Item Related Product Fail',
+  AddNewItemRelatedProductRow = '[Item] Add New Item Related Product Row'
 }
 
 // Action Creators
@@ -51,6 +68,74 @@ export class LoadSimpleItemListSuccess implements Action {
 
 export class LoadSimpleItemListFail implements Action {
   readonly type = ItemActionTypes.LoadSimpleItemListFail;
+  constructor(public payload: string) { }
+}
+
+export class LoadAllItemList implements Action {
+  readonly type = ItemActionTypes.LoadAllItemList;
+}
+
+export class LoadAllItemListSuccess implements Action {
+  readonly type = ItemActionTypes.LoadAllItemListSuccess;
+  constructor(public payload: ItemList[]) { }
+}
+
+export class LoadAllItemListFail implements Action {
+  readonly type = ItemActionTypes.LoadAllItemListFail;
+  constructor(public payload: string) { }
+}
+
+export class LoadAllItem implements Action {
+  readonly type = ItemActionTypes.LoadAllItem;
+  constructor(public payload: ItemUpSellInsert | ItemCrossSellInsert) { }
+}
+
+export class LoadAllItemSuccess implements Action {
+  readonly type = ItemActionTypes.LoadAllItemSuccess;
+  constructor(public payload: Item) { }
+}
+export class LoadAllItemFail implements Action {
+  readonly type = ItemActionTypes.LoadAllItemFail;
+  constructor(public payload: string) { }
+}
+
+export class LoadAllItemCrossSell implements Action {
+  readonly type = ItemActionTypes.LoadAllItemCrossSell;
+  constructor(public payload: ItemCrossSellInsert) { }
+}
+
+export class LoadAllItemCrossSellSuccess implements Action {
+  readonly type = ItemActionTypes.LoadAllItemCrossSellSuccess;
+  constructor(public payload: Item) { }
+}
+export class LoadAllItemCrossSellFail implements Action {
+  readonly type = ItemActionTypes.LoadAllItemCrossSellFail;
+  constructor(public payload: string) { }
+}
+
+export class LoadAllItemUpSell implements Action {
+  readonly type = ItemActionTypes.LoadAllItemUpSell;
+  constructor(public payload: ItemUpSellInsert) { }
+}
+export class LoadAllItemUpSellSuccess implements Action {
+  readonly type = ItemActionTypes.LoadAllItemUpSellSuccess;
+  constructor(public payload: Item) { }
+}
+export class LoadAllItemUpSellFail implements Action {
+  readonly type = ItemActionTypes.LoadAllItemUpSellFail;
+  constructor(public payload: string) { }
+}
+
+export class LoadItemRelatedProduct implements Action {
+  readonly type = ItemActionTypes.LoadItemRelatedProduct;
+  constructor(public payload: ItemRelatedProductInsert) { }
+}
+export class LoadItemRelatedProductSuccess implements Action {
+  readonly type = ItemActionTypes.LoadItemRelatedProductSuccess;
+  constructor(public payload: Item) { }
+}
+export class LoadItemRelatedProductFail implements Action {
+  readonly type = ItemActionTypes.LoadItemRelatedProductFail;
   constructor(public payload: string) { }
 }
 
@@ -84,7 +169,10 @@ export class LoadCategoryBreadCrumbsFail implements Action {
   constructor(public payload: string) { }
 }
 
-
+export class AddNewItemRelatedProductRow implements Action {
+  readonly type = ItemActionTypes.AddNewItemRelatedProductRow;
+  constructor(public payload: ItemRelatedProductInsert) { }
+}
 
 export class SetSelectedBundleOption implements Action {
   readonly type = ItemActionTypes.SetSelectedBundleOption;
@@ -96,7 +184,6 @@ export class SetItem implements Action {
   constructor(public payload: ItemInsert) { }
 }
 
-
 // Union the valid types
 export type ItemActions = LoadVendorBrands
 | LoadVendorBrandsSuccess
@@ -104,11 +191,27 @@ export type ItemActions = LoadVendorBrands
 | LoadSimpleItemList
 | LoadSimpleItemListSuccess
 | LoadSimpleItemListFail
+| LoadAllItemList
+| LoadAllItemListSuccess
+| LoadAllItemListFail
+| LoadAllItem
+| LoadAllItemSuccess
+| LoadAllItemFail
+| LoadAllItemCrossSell
+| LoadAllItemCrossSellSuccess
+| LoadAllItemCrossSellFail
+| LoadAllItemUpSell
+| LoadAllItemUpSellSuccess
+| LoadAllItemUpSellFail
 | LoadItemCategories
 | LoadItemCategoriesSuccess
 | LoadItemCategoriesFail
 | LoadCategoryBreadCrumbs
 | LoadCategoryBreadCrumbsSuccess
 | LoadCategoryBreadCrumbsFail
+| LoadItemRelatedProduct
+| LoadItemRelatedProductSuccess
+| LoadItemRelatedProductFail
 | SetItem
-| SetSelectedBundleOption;
+| SetSelectedBundleOption
+| AddNewItemRelatedProductRow;

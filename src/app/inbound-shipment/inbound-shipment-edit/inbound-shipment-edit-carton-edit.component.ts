@@ -32,7 +32,7 @@ export class InboundShipmentEditCartonEditComponent implements OnInit, OnDestroy
             (carton: Carton) => {
                 this.carton = carton;
                 //this.purchaseOrderService.currentCarton = carton;
-                this.purchaseOrderService.currentCarton.next(carton);
+                //this.purchaseOrderService.currentCarton.next(carton);
             },
             (error: any) => this.errorMessage = <any>error
         );

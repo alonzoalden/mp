@@ -82,8 +82,8 @@ export class InboundShipmentEditCartonListComponent implements OnInit {
         }        
 
         this.currentIndex = this.purchaseorder.Cartons.length - 1;
-        this.purchaseOrderService.currentCarton.next(null);
-        this.purchaseOrderService.currentCartonLines.next([]);
+        // this.purchaseOrderService.currentCarton.next(null);
+        // this.purchaseOrderService.currentCartonLines.next([]);
         this.purchaseOrderService.currentCartonID = null;
     }
 
@@ -323,8 +323,8 @@ export class InboundShipmentEditCartonListComponent implements OnInit {
             this.currentIndex = this.purchaseorder.Cartons.length - 1;
             // this.purchaseOrderService.currentCarton = null;
             // this.purchaseOrderService.currentCartonLines = [];
-            this.purchaseOrderService.currentCarton.next(null);
-            this.purchaseOrderService.currentCartonLines.next([]);
+            // this.purchaseOrderService.currentCarton.next(null);
+            // this.purchaseOrderService.currentCartonLines.next([]);
             this.purchaseOrderService.currentCartonID = null;
             
             this.purchaseOrderService.updatePurchaseLineCartonQuantity();            
@@ -419,7 +419,7 @@ export class InboundShipmentEditCartonListComponent implements OnInit {
     }
 
     onShowCartonLine(carton: Carton, index: number) {
-        this.purchaseOrderService.currentCarton.next(null);
+        //this.purchaseOrderService.currentCarton.next(null);
         if(this.pendingAdd) {
             this.currentIndex = this.purchaseorder.Cartons.length - 1;
             this.pendingAdd = false;
@@ -427,7 +427,7 @@ export class InboundShipmentEditCartonListComponent implements OnInit {
         else {
             this.currentIndex = index;
             //this.purchaseOrderService.currentCarton = carton;
-            this.purchaseOrderService.currentCarton.next(carton);
+            //this.purchaseOrderService.currentCarton.next(carton);
 
             if(this.currentIndex != this.purchaseorder.Cartons.length - 1)
             {
@@ -438,7 +438,7 @@ export class InboundShipmentEditCartonListComponent implements OnInit {
             }
 
             //this.purchaseOrderService.currentCartonLines = carton.CartonLines;
-            this.purchaseOrderService.currentCartonLines.next(carton.CartonLines);
+            //this.purchaseOrderService.currentCartonLines.next(carton.CartonLines);
             this.purchaseOrderService.currentCartonID = carton.CartonID;
 
             if(!carton.CartonNumber && this.currentIndex != this.purchaseorder.Cartons.length - 1) {
@@ -544,8 +544,8 @@ export class InboundShipmentEditCartonListComponentCartonLineDialog implements O
         @Inject(MAT_DIALOG_DATA) public data: Carton) {
             //this.purchaseOrderService.currentCarton = data;
             //this.purchaseOrderService.currentCartonLines = data.CartonLines;
-            this.purchaseOrderService.currentCarton.next(data)
-            this.purchaseOrderService.currentCartonLines.next(data.CartonLines)
+            // this.purchaseOrderService.currentCarton.next(data)
+            // this.purchaseOrderService.currentCartonLines.next(data.CartonLines)
             
             this.removePendingLine();
             this.addPendingLine();
@@ -557,21 +557,21 @@ export class InboundShipmentEditCartonListComponentCartonLineDialog implements O
 
     ngOnInit() { 
         
-        this.purchaseOrderService.currentCarton.subscribe(
-            (currentcarton: Carton) => {
-                this.carton = currentcarton;
-            },
-            (error: any) => this.errorMessage = <any>error
-        );
-        this.purchaseOrderService.currentCartonLines.subscribe(
-            (cartonlines: CartonLine[]) => {
-                if(this.purchaseOrderService.newCartonLineIsSelected) {
-                    this.currentIndex = cartonlines.length - 1;
-                    this.purchaseOrderService.newCartonLineIsSelected = false;
-                }
-            },
-            (error: any) => this.errorMessage = <any>error
-        );
+        // this.purchaseOrderService.currentCarton.subscribe(
+        //     (currentcarton: Carton) => {
+        //         this.carton = currentcarton;
+        //     },
+        //     (error: any) => this.errorMessage = <any>error
+        // );
+        // this.purchaseOrderService.currentCartonLines.subscribe(
+        //     (cartonlines: CartonLine[]) => {
+        //         if(this.purchaseOrderService.newCartonLineIsSelected) {
+        //             this.currentIndex = cartonlines.length - 1;
+        //             this.purchaseOrderService.newCartonLineIsSelected = false;
+        //         }
+        //     },
+        //     (error: any) => this.errorMessage = <any>error
+        // );
         //this.currentIndex = this.purchaseOrderService.currentCarton.CartonLines.length -1;
         
         this.purchaseOrderService.getPurchaseOrderLineList(this.purchaseorderid).subscribe(

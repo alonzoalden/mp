@@ -26,7 +26,6 @@ export class ItemAddCategoryShellComponent implements OnInit {
         this.errorMessage$ = this.store.pipe(select(fromItem.getError));
     }
     getCategories(value: number) {
-        console.log(value);
         this.store.dispatch(new itemActions.LoadItemCategories(value));
     }
     getCategoryBreadCrumbs(id: number) {

@@ -100,7 +100,7 @@
                                 <tr mat-header-row *matHeaderRowDef="optionDisplayedColumns"></tr>
                                 <tr mat-row 
                                     *matRowDef="let option; let i = index; columns: optionDisplayedColumns" 
-                                    [ngStyle]="{'background-color': itemService.rowColorConditions(i, item.ItemOptions, currentOptionIndex, formBundleDirty)}"
+                                    [ngStyle]="{'background-color': itemService.rowColorConditions(i, item?.ItemOptions, currentOptionIndex, formBundleDirty)}"
                                     (click)='onSelectOption(option, i);'></tr>
                             </table>
                         </div>

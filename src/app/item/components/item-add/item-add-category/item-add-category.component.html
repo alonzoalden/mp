@@ -5,7 +5,7 @@
             <div class="ibox-content">
                 <div class="row p-lg">
                     <div class="item-add-category-layout">
-                        <div class="col-md-12 p-w-none" *ngIf="currentResult.length > 0">
+                        <div class="col-md-12 p-w-none" *ngIf="dataSource?.data.length > 0">
                             <table mat-table #table [dataSource]="dataSource" matSort width="100%;">                        
                                 <!-- Selected Category Column -->
                                 <ng-container matColumnDef="SelectedCategory">

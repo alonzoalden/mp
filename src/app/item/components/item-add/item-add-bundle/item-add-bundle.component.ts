@@ -1,4 +1,4 @@
-import { Component, OnInit, EventEmitter } from '@angular/core';
+import { Component, OnInit, EventEmitter, OnChanges } from '@angular/core';
 import { MatTableDataSource } from '@angular/material';
 
 import { ItemInsert, ItemList, ItemOptionInsert, ItemSelectionInsert } from '../../../../shared/class/item';
@@ -14,7 +14,7 @@ declare var $ :any;
   templateUrl: './item-add-bundle.component.html'
 })
 
-export class ItemAddBundleComponent implements OnInit {
+export class ItemAddBundleComponent implements OnInit, OnChanges {
     @Input() errorMessage: string;
     @Input() item: ItemInsert;
     @Input() itemList: ItemList[];
@@ -85,7 +85,7 @@ export class ItemAddBundleComponent implements OnInit {
         if (changes.item && changes.item.currentValue && changes.item.currentValue.ItemOptions.length === 0) {
             const _temp = new ItemOptionInsert(true, null, null, 'select', []);
             this.item.ItemOptions.push(_temp);
-            this.currentOptionIndex = this.item.ItemOptions.length - 1;
+            
         }
         if (changes.selectedOption && changes.selectedOption.currentValue && changes.selectedOption.currentValue.ItemSelections.length === 0) {
             const _temp = new ItemSelectionInsert(null, null, false, 0, 1, false);
@@ -97,6 +97,7 @@ export class ItemAddBundleComponent implements OnInit {
     }
     ngOnInit(): void {
         this.getItemList.emit();
+        this.currentOptionIndex = this.item.ItemOptions.length - 1;
     }
 
     // refreshOptionDataSource(options: ItemOptionInsert[]) {

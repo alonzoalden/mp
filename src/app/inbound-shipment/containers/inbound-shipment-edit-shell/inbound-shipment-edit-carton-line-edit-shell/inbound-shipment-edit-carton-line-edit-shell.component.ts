@@ -9,11 +9,10 @@ import { CartonLine, PurchaseOrderLineList } from '../../../../shared/class/purc
 import { PurchaseOrderService } from '../../../purchase-order.service';
 
 @Component({
-  selector: 'o-inbound-shipment-edit-carton-line-edit',
-  templateUrl: './inbound-shipment-edit-carton-line-edit.component.html'
+  templateUrl: './inbound-shipment-edit-carton-line-edit-shell.component.html'
 })
 
-export class InboundShipmentEditCartonLineEditComponent implements OnInit, OnDestroy {
+export class InboundShipmentEditCartonLineEditShellComponent implements OnInit, OnDestroy {
     originalQuantity: number;
     cartonline: CartonLine;
     cartonnumber: string;

@@ -3,11 +3,11 @@ import { Router } from '@angular/router';
 import { PurchaseOrderService } from '../../../purchase-order.service';
 
 @Component({
-    selector: 'o-inbound-shipment-edit-carton',
-    templateUrl: './inbound-shipment-edit-carton.component.html'
+    selector: 'o-inbound-shipment-edit-carton-shell',
+    templateUrl: './inbound-shipment-edit-carton-shell.component.html'
 })
 
-export class InboundShipmentEditCartonComponent  {
+export class InboundShipmentEditCartonShellComponent  {
     constructor(private router: Router,
         private purchaseOrderService: PurchaseOrderService) { 
         this.purchaseOrderService.currentStep = 2;
