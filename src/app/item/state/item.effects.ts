@@ -8,8 +8,9 @@ import * as itemActions from './item.actions';
 import { Router } from '@angular/router';
 import { Member, MemberVendor } from 'app/shared/class/member';
 import { VendorBrand } from 'app/shared/class/vendor-brand';
-import { ItemList, Item, ItemCrossSellInsert, ItemUpSell, ItemUpSellInsert, ItemRelatedProduct, ItemRelatedProductInsert } from 'app/shared/class/item';
+import { ItemList, Item, ItemCrossSellInsert, ItemUpSell, ItemUpSellInsert, ItemRelatedProduct, ItemRelatedProductInsert, ItemAttachmentInsert } from 'app/shared/class/item';
 import { Category } from 'app/shared/class/category';
+import { VendorAttachment, VendorAttachmentList } from 'app/shared/class/vendor-attachment';
 
 @Injectable()
 export class ItemEffects {
@@ -152,5 +153,42 @@ export class ItemEffects {
             )
         )
     );
+    @Effect()
+    loadVendorAttachmentList$: Observable<Action> = this.actions$.pipe(
+        ofType(itemActions.ItemActionTypes.LoadVendorAttachmentList),
+        mergeMap(() =>
+            this.itemService.getAttachmentList().pipe(
+                map((item: VendorAttachmentList[]) => (new itemActions.LoadVendorAttachmentListSuccess(item))),
+                catchError(err => {
+                    this.itemService.sendNotification({ type: 'error', title: 'Error', content: err });
+                    of(new itemActions.LoadVendorAttachmentListFail(err))
+                    return EMPTY;
+                })
+            )
+        )
+    );
+    @Effect()
+    loadItemAttachment$: Observable<Action> = this.actions$.pipe(
+        ofType(itemActions.ItemActionTypes.LoadItemAttachment),
+        map((action: itemActions.LoadItemAttachment) => action.payload),
+        mergeMap((itemattachment: ItemAttachmentInsert) =>
+            this.itemService.getAttachment(itemattachment.VendorAttachmentID).pipe(
+                map((attachment: VendorAttachment) => {
+                    itemattachment.Title = attachment.Title;
+                    if (attachment.UploadedFile) {
+                        itemattachment.FileName = attachment.UploadedFile.substring(5);
+                    }
+                    itemattachment.UploadedFile = attachment.UploadedFile;
+                    return (new itemActions.LoadItemAttachmentSuccess(attachment))
+                }),
+                catchError(err => {
+                    this.itemService.sendNotification({ type: 'error', title: 'Error', content: err });
+                    of(new itemActions.LoadItemAttachmentFail(err))
+                    return EMPTY;
+                })
+            )
+        )
+    );
+    
     
 }

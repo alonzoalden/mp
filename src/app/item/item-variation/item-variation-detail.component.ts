@@ -3,7 +3,7 @@ import { Component, OnInit, ViewContainerRef, ViewChild, Inject, ElementRef, Inp
 import { Router, ActivatedRoute } from '@angular/router';
 import { ItemInsert, ItemList, ItemVariationListing, ItemAttribute, ItemTierPriceInsert, ItemRelatedProductInsert, ItemUpSellInsert, ItemCrossSellInsert, ItemAttachmentInsert, ItemVideoInsert, ItemVariation } from '../../shared/class/item';
 import { VendorBrand } from '../../shared/class/vendor-brand';
-import { MatDialog, MatPaginator, MatSort, MatDialogRef, MAT_DIALOG_DATA, MatTableDataSource, MatTabGroupBase } from '@angular/material';
+import { MatDialog, MatPaginator, MatSort, MatDialogRef, MAT_DIALOG_DATA, MatTableDataSource } from '@angular/material';
 import { ItemService } from '../item.service';
 import { Observable, Subscription } from 'rxjs';
 import { ItemVariationSelectItemComponentDialog } from '../item-variation/item-variation-select-item.component-dialog';
@@ -11,7 +11,6 @@ import { ItemVariationComponentDialog } from '../item-variation/item-variation.c
 
 import { utf8Encode } from '@angular/compiler/src/util';
 import { environment } from '../../../environments/environment';
-import { and } from '@angular/router/src/utils/collection';
 
 @Component({
   selector: 'item-variation-detail',

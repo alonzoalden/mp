@@ -3,9 +3,10 @@ import { SalesOrder } from '../../shared/class/sales-order';
 import { SalesOrderLine } from '../../shared/class/sales-order-line';
 import { Fulfillment, FulfillmentSalesOrderLine } from '../../shared/class/fulfillment';
 import { VendorBrand } from '../../shared/class/vendor-brand';
-import { ItemInsert, ItemList, ItemOption, ItemOptionInsert, ItemSelectionInsert, Item, ItemUpSellInsert, ItemCrossSellInsert, ItemRelatedProductInsert } from '../../shared/class/item';
+import { ItemInsert, ItemList, ItemOption, ItemOptionInsert, ItemSelectionInsert, Item, ItemUpSellInsert, ItemCrossSellInsert, ItemRelatedProductInsert, ItemAttachmentInsert } from '../../shared/class/item';
 import { Category } from 'app/shared/class/category';
 import { ItemUpSell } from 'app/shared/class/item-up-sell';
+import { VendorAttachment, VendorAttachmentList } from 'app/shared/class/vendor-attachment';
 
 export enum ItemActionTypes {
   LoadVendorBrands = '[Item] Load Vendor Brands',
@@ -38,7 +39,15 @@ export enum ItemActionTypes {
   LoadItemRelatedProduct = '[Item] Load Item Related Product',
   LoadItemRelatedProductSuccess = '[Item] Load Item Related Product Success',
   LoadItemRelatedProductFail = '[Item] Load Item Related Product Fail',
-  AddNewItemRelatedProductRow = '[Item] Add New Item Related Product Row'
+  LoadVendorAttachmentList = '[Item] Load Vendor Attachment List',
+  LoadVendorAttachmentListSuccess = '[Item] Load Vendor Attachment List Success',
+  LoadVendorAttachmentListFail = '[Item] Load Vendor Attachment List Fail',
+  LoadItemAttachment = '[Item] Load Item Attachment',
+  LoadItemAttachmentSuccess = '[Item] Load Item Attachment Success',
+  LoadItemAttachmentFail = '[Item] Load Item Attachment Fail',
+
+  AddNewItemRelatedProductRow = '[Item] Add New Item Related Product Row',
+  
 }
 
 // Action Creators
@@ -168,6 +177,35 @@ export class LoadCategoryBreadCrumbsFail implements Action {
   readonly type = ItemActionTypes.LoadCategoryBreadCrumbsFail;
   constructor(public payload: string) { }
 }
+export class LoadVendorAttachmentList implements Action {
+  readonly type = ItemActionTypes.LoadVendorAttachmentList;
+}
+
+export class LoadVendorAttachmentListSuccess implements Action {
+  readonly type = ItemActionTypes.LoadVendorAttachmentListSuccess;
+  constructor(public payload: VendorAttachmentList[]) { }
+}
+
+export class LoadVendorAttachmentListFail implements Action {
+  readonly type = ItemActionTypes.LoadVendorAttachmentListFail;
+  constructor(public payload: string) { }
+}
+export class LoadItemAttachment implements Action {
+  readonly type = ItemActionTypes.LoadItemAttachment;
+  constructor(public payload: ItemAttachmentInsert) { }
+}
+
+export class LoadItemAttachmentSuccess implements Action {
+  readonly type = ItemActionTypes.LoadItemAttachmentSuccess;
+  constructor(public payload: VendorAttachment) { }
+}
+
+export class LoadItemAttachmentFail implements Action {
+  readonly type = ItemActionTypes.LoadItemAttachmentFail;
+  constructor(public payload: string) { }
+}
+
+
 
 export class AddNewItemRelatedProductRow implements Action {
   readonly type = ItemActionTypes.AddNewItemRelatedProductRow;
@@ -212,6 +250,12 @@ export type ItemActions = LoadVendorBrands
 | LoadItemRelatedProduct
 | LoadItemRelatedProductSuccess
 | LoadItemRelatedProductFail
+| LoadVendorAttachmentList
+| LoadVendorAttachmentListSuccess
+| LoadVendorAttachmentListFail
+| LoadItemAttachment
+| LoadItemAttachmentSuccess
+| LoadItemAttachmentFail
 | SetItem
 | SetSelectedBundleOption
 | AddNewItemRelatedProductRow;

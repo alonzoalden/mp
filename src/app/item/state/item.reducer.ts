@@ -5,6 +5,7 @@ import { Fulfillment, FulfillmentSalesOrderLine } from '../../shared/class/fulfi
 import { ItemInsert, ItemList, ItemOption, ItemOptionInsert, ItemSelectionInsert, ItemCategoryAssignment, Item, ItemCrossSellInsert, ItemUpSellInsert, ItemRelatedProductInsert } from '../../shared/class/item';
 import { VendorBrand } from '../../shared/class/vendor-brand';
 import { Category } from 'app/shared/class/category';
+import { VendorAttachment, VendorAttachmentList } from 'app/shared/class/vendor-attachment';
 
 // State for this feature (Item Variation)
 export interface ItemState {
@@ -17,6 +18,7 @@ export interface ItemState {
     categoryBreadCrumbs: Array<Category[]>,
     allItemList: ItemList[];
     allItem: Item;
+    vendorAttachmentsList: VendorAttachmentList[];
     isLoading: boolean;
     pendingDelete: boolean,
     pendingSave: boolean,
@@ -34,6 +36,7 @@ const initialState: ItemState = {
     categoryBreadCrumbs: [],
     allItemList: [],
     allItem: null,
+    vendorAttachmentsList: [],
     isLoading: true,
     pendingDelete: false,
     pendingSave: false,
@@ -113,6 +116,21 @@ export function itemReducer(state = initialState, action: ItemActions): ItemStat
                 allItemList: [],
                 error: action.payload,
             };
+
+        case ItemActionTypes.LoadVendorAttachmentListSuccess:
+            return {
+                ...state,
+                vendorAttachmentsList: action.payload,
+                error: '',
+            };
+        case ItemActionTypes.LoadVendorAttachmentListFail:
+            return {
+                ...state,
+                vendorAttachmentsList: [],
+                error: action.payload,
+            };
+
+            
         case ItemActionTypes.AddNewItemRelatedProductRow:
             state.item.ItemRelatedProducts.push(action.payload);
         return {
