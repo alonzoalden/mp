@@ -32,10 +32,13 @@ export class ItemAddVendorAttachmentComponent implements OnInit {
             const _temp = new ItemAttachmentInsert(null, null, null, null, null, null);
             this.item.ItemAttachments.push(_temp);
         }
+        if (changes.vendorAttachmentsList && changes.vendorAttachmentsList.currentValue && changes.vendorAttachmentsList.currentValue.length === 0) {
+            this.getVendorAttachmentList.emit();
+        }
     }
     ngOnInit(): void {
         this.currentIndex = this.item.ItemAttachments.length - 1;
-        this.getVendorAttachmentList.emit();
+        
     }
 
     refreshDataSource(itemAttachments: ItemAttachmentInsert[]) { 
@@ -47,8 +50,6 @@ export class ItemAddVendorAttachmentComponent implements OnInit {
             if(!this.existAttachment(itemAttachment.VendorAttachmentID, true)) {        
                 this.pendingAdd = true;
 
-
-                
                 this.getAttachment.emit(itemAttachment)
                 
                 const _temp = new ItemAttachmentInsert(null, null, null, null, null, null);

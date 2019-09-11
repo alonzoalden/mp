@@ -3,10 +3,11 @@ import { SalesOrder } from '../../shared/class/sales-order';
 import { SalesOrderLine } from '../../shared/class/sales-order-line';
 import { Fulfillment, FulfillmentSalesOrderLine } from '../../shared/class/fulfillment';
 import { VendorBrand } from '../../shared/class/vendor-brand';
-import { ItemInsert, ItemList, ItemOption, ItemOptionInsert, ItemSelectionInsert, Item, ItemUpSellInsert, ItemCrossSellInsert, ItemRelatedProductInsert, ItemAttachmentInsert } from '../../shared/class/item';
+import { ItemInsert, ItemList, ItemOption, ItemOptionInsert, ItemSelectionInsert, Item, ItemUpSellInsert, ItemCrossSellInsert, ItemRelatedProductInsert, ItemAttachmentInsert, ItemVideoInsert } from '../../shared/class/item';
 import { Category } from 'app/shared/class/category';
 import { ItemUpSell } from 'app/shared/class/item-up-sell';
 import { VendorAttachment, VendorAttachmentList } from 'app/shared/class/vendor-attachment';
+import { URLVideo } from 'app/shared/class/item-video';
 
 export enum ItemActionTypes {
   LoadVendorBrands = '[Item] Load Vendor Brands',
@@ -45,7 +46,9 @@ export enum ItemActionTypes {
   LoadItemAttachment = '[Item] Load Item Attachment',
   LoadItemAttachmentSuccess = '[Item] Load Item Attachment Success',
   LoadItemAttachmentFail = '[Item] Load Item Attachment Fail',
-
+  LoadVideoURLDetail = '[Item] Load Video URL Detail',
+  LoadVideoURLDetailSuccess = '[Item] Load Video URL Detail Success',
+  LoadVideoURLDetailFail  = '[Item] Load Video URL Detail Fail',
   AddNewItemRelatedProductRow = '[Item] Add New Item Related Product Row',
   
 }
@@ -205,6 +208,21 @@ export class LoadItemAttachmentFail implements Action {
   constructor(public payload: string) { }
 }
 
+export class LoadVideoURLDetail implements Action {
+  readonly type = ItemActionTypes.LoadVideoURLDetail;
+  constructor(public payload: ItemVideoInsert) { }
+}
+
+export class LoadVideoURLDetailSuccess implements Action {
+  readonly type = ItemActionTypes.LoadVideoURLDetailSuccess;
+  constructor(public payload: URLVideo) { }
+}
+
+export class LoadVideoURLDetailFail implements Action {
+  readonly type = ItemActionTypes.LoadVideoURLDetailFail;
+  constructor(public payload: string) { }
+}
+
 
 
 export class AddNewItemRelatedProductRow implements Action {
@@ -256,6 +274,9 @@ export type ItemActions = LoadVendorBrands
 | LoadItemAttachment
 | LoadItemAttachmentSuccess
 | LoadItemAttachmentFail
+| LoadVideoURLDetail
+| LoadVideoURLDetailSuccess
+| LoadVideoURLDetailFail
 | SetItem
 | SetSelectedBundleOption
 | AddNewItemRelatedProductRow;

@@ -6,7 +6,7 @@
                 <fieldset>
                     <div class="ibox-title"><h5>{{ 'Item Parts' | translate }}</h5></div>                  
                     <div class="ibox-content x-scroll">  
-                        <div class="form-group row">
+                        <div *ngIf="item" class="form-group row">
                             <div class="col-md-2">
                                 <button *ngIf="!partPendingUpload" type="button" class="m-t-md btn btn-primary" (click)="partFileUpload.click()"> <i class="fa fa-files-o"></i> {{ 'Upload Part Image' | translate }}</button> 
                                 <div *ngIf="partPendingUpload" class="m-t-md pt-5 w165">

@@ -8,8 +8,8 @@
                     <div class="ibox-content">
                         <div class="form-group row">
                             <div class="col-md-12">                            
-                                <div *ngIf="item.ItemVideos.length && item.ItemVideos.length > 0">
-                                    <table mat-table #table [dataSource]="dataSource">
+                                <div *ngIf="item?.ItemVideos.length && item?.ItemVideos.length > 0">
+                                    <table mat-table #table [dataSource]="itemVideosMatTable">
                                         <!-- Add Button -->
                                         <ng-container matColumnDef="Add">
                                             <th mat-header-cell *matHeaderCellDef width="45px"></th>

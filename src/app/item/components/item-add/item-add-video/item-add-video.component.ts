@@ -1,13 +1,9 @@
-import { Component, OnInit, OnDestroy, ViewChild } from '@angular/core';
-import { Router, ActivatedRoute } from '@angular/router';
+import { Component, OnInit, Input, Output, EventEmitter, SimpleChanges } from '@angular/core';
+import { ActivatedRoute } from '@angular/router';
 import { MatTableDataSource } from '@angular/material';
-import { Subscription } from 'rxjs';
-
-import { Item, ItemInsert, ItemList, ItemVideoInsert } from '../../../../shared/class/item';
+import { ItemInsert, ItemVideoInsert } from '../../../../shared/class/item';
 import { ItemService } from '../../../item.service';
-
-import { URLVideo, URLVideoItems, URLVideoItemsSnippet, URLVideoItemsSnippetThumbnails, URLVideoItemsSnippetThumbnailsStandard } from '../../../../shared/class/item-video';
-declare var $ :any;
+import { URLVideo } from '../../../../shared/class/item-video';
 
 @Component({
     selector: 'o-item-add-video',
@@ -15,33 +11,32 @@ declare var $ :any;
 })
 
 export class ItemAddVideoComponent implements OnInit {
-    errorMessage: string;
-    item: ItemInsert;
+    @Input() errorMessage: string;
+    @Input() item: ItemInsert;
+    @Input() itemVideosMatTable: MatTableDataSource<ItemVideoInsert>;
+    @Output() getVideoURLDetail = new EventEmitter<ItemVideoInsert>();
 
     displayedColumns = ['Add', 'Down', 'Position', 'Up', 'Thumbnail', 'Label', 'Description', 'Exclude', 'Remove'];
-    dataSource: any = null;
     pendingAdd: boolean;
     currentIndex: number;
     formDirty = false;
     canAdd = false;
 
-    constructor(private itemService: ItemService, private route: ActivatedRoute) { }
+    constructor(private itemService: ItemService) { }
 
-    ngOnInit(): void {
-        this.item = this.itemService.currentItemInsert;
-
-        if(this.item.ItemVideos.length === 0) {
+    ngOnChanges(changes: SimpleChanges) {
+        if (changes.item && changes.item.currentValue && changes.item.currentValue.ItemVideos.length === 0) {
             const _temp = new ItemVideoInsert(null, null, null, null, null, null, null, null);
             this.item.ItemVideos.push(_temp);
+            this.currentIndex = this.item.ItemVideos.length - 1;
         }
-
+    }
+    ngOnInit(): void {
         this.currentIndex = this.item.ItemVideos.length - 1;
-
-        this.refreshDataSource(this.item.ItemVideos);
     }
 
     refreshDataSource(itemVideos: ItemVideoInsert[]) {
-        this.dataSource = new MatTableDataSource<ItemVideoInsert>(itemVideos);
+        this.itemVideosMatTable = new MatTableDataSource<ItemVideoInsert>(itemVideos);
     }
 
     onAddItemVideo(itemVideo: ItemVideoInsert) {
@@ -56,7 +51,9 @@ export class ItemAddVideoComponent implements OnInit {
             }
             else {
                 this.pendingAdd = true;
-
+                itemVideo.Value = videoID;
+                itemVideo.Position = this.item.ItemVideos.length + 1;
+                this.getVideoURLDetail.emit(itemVideo);
                 this.itemService.getVideoURLDetail(videoID).subscribe(
                     (URLVideo: URLVideo) => {
                         if(URLVideo.items[0].snippet.thumbnails.standard) {
@@ -66,12 +63,12 @@ export class ItemAddVideoComponent implements OnInit {
                             itemVideo.Thumbnail = URLVideo.items[0].snippet.thumbnails.medium.url;
                         }
 
-                        itemVideo.Value = videoID;
+                        
                         itemVideo.Provider = 'youtube';
                         if(!itemVideo.Label || itemVideo.Label == '')
                             itemVideo.Label = URLVideo.items[0].snippet.title;
                         itemVideo.Description = URLVideo.items[0].snippet.description;
-                        itemVideo.Position = this.item.ItemVideos.length + 1;
+                        
                         const _temp = new ItemVideoInsert(null, null, null, null, null, null, this.item.ItemVideos.length, null);
                         this.item.ItemVideos.push(_temp);
                         this.refreshDataSource(this.item.ItemVideos);

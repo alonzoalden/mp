@@ -5,9 +5,8 @@ import { MatTableDataSource } from '@angular/material';
 import { SalesOrder } from 'app/shared/class/sales-order';
 import { SalesOrderLine } from 'app/shared/class/sales-order-line';
 import { Fulfillment, FulfillmentSalesOrderLine } from 'app/shared/class/fulfillment';
-import { ItemOptionInsert, ItemSelectionInsert, ItemTierPrice, ItemTierPriceInsert, ItemCrossSellInsert, ItemRelatedProductInsert, ItemUpSell, ItemUpSellInsert, ItemAttachmentInsert } from 'app/shared/class/item';
+import { ItemOptionInsert, ItemSelectionInsert, ItemTierPrice, ItemTierPriceInsert, ItemCrossSellInsert, ItemRelatedProductInsert, ItemUpSell, ItemUpSellInsert, ItemAttachmentInsert, ItemImageInsert, ItemVideoInsert } from 'app/shared/class/item';
 import { ItemRelatedProduct } from 'app/shared/class/item-related-product';
-import {  } from 'app/shared/class/item-attachment';
 
 // Extends the app state to include the product feature.
 // This is required because products are lazy loaded.
@@ -117,6 +116,14 @@ export const getVendorAttachmentList = createSelector(
 export const getItemAttachmentsMatTable = createSelector(
     getItemFeatureState, 
     state => new MatTableDataSource<ItemAttachmentInsert>(state.item.ItemAttachments) 
+)
+export const getItemImagesMatTable = createSelector(
+    getItemFeatureState, 
+    state => new MatTableDataSource<ItemImageInsert>(state.item.ItemImages) 
+)
+export const getItemVideosMatTable = createSelector(
+    getItemFeatureState, 
+    state => new MatTableDataSource<ItemVideoInsert>(state.item.ItemVideos) 
 )
 
 

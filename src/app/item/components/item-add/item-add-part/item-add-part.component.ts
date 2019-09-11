@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy, ViewChild, ElementRef, ViewChildren } from '@angular/core';
+import { Component, OnInit, OnDestroy, ViewChild, ElementRef, ViewChildren, Input, SimpleChanges } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 import { MatTableDataSource } from '@angular/material';
 import { Subscription } from 'rxjs';
@@ -20,8 +20,8 @@ export class ItemAddPartComponent implements OnInit {
     private imageURL = environment.imageURL;
     isPM: boolean;
     
-    errorMessage: string;
-    item: ItemInsert;
+    @Input() errorMessage: string;
+    @Input() item: ItemInsert;
 
     itemlist: ItemList[];    
     //displayedColumns = ['Add', 'Down', 'Position', 'Up', 'New', 'Select', 'ItemName', 'SKU', 'TPIN', 'Price', 'Remove'];
@@ -45,7 +45,12 @@ export class ItemAddPartComponent implements OnInit {
     @ViewChildren('selectionCategoriesRef') selectionCategoriesRef: any;
 
     constructor(private router: Router, private itemService: ItemService, private appService: AppService) { }
-
+    ngOnChanges(changes: SimpleChanges) {
+        if (changes.item && changes.item.currentValue && changes.item.currentValue.ItemParts.length === 0) {
+            const _temp = new ItemPartInsert(null, null, null, null, null, null, null, null, null, null,  null, true, null, true);
+            this.item.ItemParts.push(_temp);
+        }
+    }
     ngOnInit() {
         this.appService.getCurrentMember()
                 .subscribe(
@@ -58,12 +63,12 @@ export class ItemAddPartComponent implements OnInit {
                     }
                 );
 
-        this.item = this.itemService.currentItemInsert;
+        //this.item = this.itemService.currentItemInsert;
 
-        if(this.item.ItemParts.length === 0) {
-            const _temp = new ItemPartInsert(null, null, null, null, null, null, null, null, null, null,  null, true, null, true);
-            this.item.ItemParts.push(_temp);
-        }
+        // if(this.item.ItemParts.length === 0) {
+        //     const _temp = new ItemPartInsert(null, null, null, null, null, null, null, null, null, null,  null, true, null, true);
+        //     this.item.ItemParts.push(_temp);
+        // }
 
         this.currentIndex = this.item.ItemParts.length - 1;
 

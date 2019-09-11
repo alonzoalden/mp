@@ -1,14 +1,8 @@
-import { Component, OnInit, OnDestroy, ViewChild, Inject } from '@angular/core';
-import { Router, ActivatedRoute } from '@angular/router';
+import { Component, OnInit, OnDestroy, ViewChild, Inject, Input, Output, EventEmitter, OnChanges, SimpleChanges } from '@angular/core';
 import { MatTableDataSource, MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material';
-import { Subscription } from 'rxjs';
-
 import { Item, ItemInsert, ItemImageInsert } from '../../../../shared/class/item';
 import { ItemService } from '../../../item.service';
-import { NgForm } from '@angular/forms';
-
 import { environment } from '../../../../../environments/environment';
-
 declare var $ :any;
 
 @Component({
@@ -16,14 +10,15 @@ declare var $ :any;
     templateUrl: './item-add-image.component.html'
 })
 
-export class ItemAddImageComponent implements OnInit {
+export class ItemAddImageComponent implements OnInit, OnChanges {
     private imageURL = environment.imageURL;
-    
-    errorMessage: string;
-    item: ItemInsert;
-    
+
+    @Input() errorMessage: string;
+    @Input() item: ItemInsert;
+    @Input() itemImagesMatTable: MatTableDataSource<ItemImageInsert>;
+
     displayedColumns = ['Add', 'Down', 'Position', 'Up', 'Thumbnail', 'Label', 'IsBaseImage', 'IsSmallImage', 'IsThumbnail', 'IsRotatorImage', 'Exclude', 'Remove'];
-    dataSource: any = null;
+    //dataSource: any = null;
     pendingAdd: boolean;
     currentIndex: number;
     formDirty = false;
@@ -37,25 +32,24 @@ export class ItemAddImageComponent implements OnInit {
     public isLoadingMultipleData: Boolean = false;
 
     constructor(private itemService: ItemService, public itemUploadDialog: MatDialog) { }
-
-    ngOnInit(): void {
-        this.item = this.itemService.currentItemInsert;
-
-        if(this.item.ItemImages.length === 0) {
-            // const _temp = new ItemImageInsert(null, null, null, null, null, false, false, false, false, false, false, true);
-            // this.item.ItemImages.push(_temp);
-
+    ngOnChanges(changes: SimpleChanges) {
+        if (changes.item && changes.item.currentValue && changes.item.currentValue.ItemImages.length === 0) {
             this.addPendingLine();
         }
+    }
+    ngOnInit(): void {
+        
+
+        
 
         this.currentIndex = this.item.ItemImages.length - 1;
 
-        this.refreshDataSource(this.item.ItemImages);
+        //this.refreshDataSource(this.item.ItemImages);
 
     }
     
     refreshDataSource(itemImages: ItemImageInsert[]) {
-        this.dataSource = new MatTableDataSource<ItemImageInsert>(itemImages);
+        this.itemImagesMatTable = new MatTableDataSource<ItemImageInsert>(itemImages);
     }
 
     onAddItemImage(itemImage: ItemImageInsert) {

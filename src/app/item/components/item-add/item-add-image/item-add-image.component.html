@@ -25,9 +25,9 @@
                         <div class="form-group row">
                             <div class="col-md-12">
                                     
-                                <div *ngIf="item.ItemImages.length && item.ItemImages.length > 0">
+                                <div *ngIf="item?.ItemImages.length && item?.ItemImages.length > 0">
                                     
-                                    <table class="animated fadeIn" mat-table #table [dataSource]="dataSource">
+                                    <table class="animated fadeIn" mat-table #table [dataSource]="itemImagesMatTable">
                                         <!-- Add Button -->
                                         <ng-container matColumnDef="Add">
                                             <th mat-header-cell *matHeaderCellDef width="45px"></th>

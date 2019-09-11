@@ -8,9 +8,10 @@ import * as itemActions from './item.actions';
 import { Router } from '@angular/router';
 import { Member, MemberVendor } from 'app/shared/class/member';
 import { VendorBrand } from 'app/shared/class/vendor-brand';
-import { ItemList, Item, ItemCrossSellInsert, ItemUpSell, ItemUpSellInsert, ItemRelatedProduct, ItemRelatedProductInsert, ItemAttachmentInsert } from 'app/shared/class/item';
+import { ItemList, Item, ItemCrossSellInsert, ItemUpSell, ItemUpSellInsert, ItemRelatedProduct, ItemRelatedProductInsert, ItemAttachmentInsert, ItemVideoInsert } from 'app/shared/class/item';
 import { Category } from 'app/shared/class/category';
 import { VendorAttachment, VendorAttachmentList } from 'app/shared/class/vendor-attachment';
+import { URLVideo } from 'app/shared/class/item-video';
 
 @Injectable()
 export class ItemEffects {
@@ -184,6 +185,35 @@ export class ItemEffects {
                 catchError(err => {
                     this.itemService.sendNotification({ type: 'error', title: 'Error', content: err });
                     of(new itemActions.LoadItemAttachmentFail(err))
+                    return EMPTY;
+                })
+            )
+        )
+    );
+    @Effect()
+    loadVideoURLDetail$: Observable<Action> = this.actions$.pipe(
+        ofType(itemActions.ItemActionTypes.LoadVideoURLDetail),
+        map((action: itemActions.LoadVideoURLDetail) => action.payload),
+        mergeMap((itemvideo: ItemVideoInsert) =>
+            this.itemService.getVideoURLDetail(itemvideo.Value).pipe(
+                map((urlvideo: URLVideo) => {
+                    if(urlvideo.items[0].snippet.thumbnails.standard) {
+                        itemvideo.Thumbnail = urlvideo.items[0].snippet.thumbnails.standard.url;
+                    }
+                    else if(urlvideo.items[0].snippet.thumbnails.medium) {
+                        itemvideo.Thumbnail = urlvideo.items[0].snippet.thumbnails.medium.url;
+                    }
+                    itemvideo.Provider = 'youtube';
+                    if(!itemvideo.Label || itemvideo.Label == '') {
+                        itemvideo.Label = urlvideo.items[0].snippet.title;
+                    }
+                    itemvideo.Description = urlvideo.items[0].snippet.description;
+                    
+                    return (new itemActions.LoadVideoURLDetailSuccess(urlvideo))
+                }),
+                catchError(err => {
+                    this.itemService.sendNotification({ type: 'error', title: 'Error', content: err });
+                    of(new itemActions.LoadVideoURLDetailFail(err))
                     return EMPTY;
                 })
             )
