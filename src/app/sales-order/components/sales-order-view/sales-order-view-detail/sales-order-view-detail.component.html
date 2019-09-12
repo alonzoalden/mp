@@ -35,14 +35,28 @@
                     </div> -->
                     <div class="col-xs-12 center-block">
                         <div class="sales-order-details" [ngClass]="!isMerchant ? 'details-max-width' : ''">
-                            <form class="form-horizontal">
+                            <form class="form-horizontal" *ngIf="salesorder">
                                 <div class="form-group">
                                     <label class="col-md-2 control-label">{{ 'Ship By' | translate }}</label>
                                     <div class="col-md-8 grey-highlight pt7">{{salesOrder?.ShipByDate | date}}</div>
                                 </div>
                                 <div class="form-group">
                                     <label class="col-md-2 control-label">{{ 'Ship To' | translate }}</label>
-                                    <div class="col-md-8 p-w-none"><pre class="pre-regular">{{deliveryDetail}}</pre></div>
+                                    <div class="col-md-8 p-w-none">
+                                        <pre class="pre-regular" *ngIf="!isMerchant">{{salesorder.ShipAddressCity}}{{', ' + salesorder.ShipAddressState}}</pre>
+                                        <!-- <pre class="pre-regular" *ngIf="isMerchant">{{deliveryDetail}}</pre> -->
+                                        <div class="pre-regular" *ngIf="isMerchant">
+                                            <span class="block">{{salesorder.CustomerName}}</span>
+                                            <span class="block">{{salesorder.ShipAddressAddressLine1}}</span>
+                                            <span class="block">{{salesorder.ShipAddressAddressLine2}}</span>
+                                            <span class="block">
+                                                <span>{{salesorder.ShipAddressCity}}</span>
+                                                <span>, {{salesorder.ShipAddressState}}</span>
+                                                <span> {{salesorder.ShipAddressPostalCode}}</span>
+                                            </span>
+                                            <span class="block">{{formatPhoneNumber(salesorder.ShipAddressPhoneNumber)}}</span>
+                                        </div>
+                                    </div>
                                 </div>
                                 <div class="form-group">
                                     <label class="col-md-2 control-label">{{ 'Purchase Date' | translate }}</label>

@@ -20,8 +20,16 @@ export class SalesOrder {
         public ItemImage: string,
         public URLKey: string,
 
+
         public ShipByDate: Date,
         public CustomerName: string,
+        public ShipAddressAddressLine1: string,
+        public ShipAddressAddressLine2: string,
+        public ShipAddressCity: string,
+        public ShipAddressState: string,
+        public ShipAddressPostalCode: string,
+        public ShipAddressCountry: string,
+        public ShipAddressPhoneNumber: string,
         public CreatedOn: Date,
 
         public MerchantStatus: string
