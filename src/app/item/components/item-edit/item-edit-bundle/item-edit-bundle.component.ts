@@ -1,27 +1,32 @@
-import { Component, OnInit, OnDestroy, ViewChild } from '@angular/core';
+import { Component, OnInit, EventEmitter, OnChanges, Input, Output, SimpleChanges } from '@angular/core';
 import { MatTableDataSource } from '@angular/material';
-import { Router, ActivatedRoute } from '@angular/router';
-import { Subscription } from 'rxjs';
-
 import { Item, ItemList, ItemOption, ItemSelection } from '../../../../shared/class/item';
-
-import { Category } from '../../../../shared/class/category';
-
 import { ItemService } from '../../../item.service';
+import { ActivatedRoute } from '@angular/router';
+
 
 @Component({
   selector: 'o-item-edit-bundle',
   templateUrl: './item-edit-bundle.component.html'
 })
 
-export class ItemEditBundleComponent implements OnInit, OnDestroy {
-    subscription: Subscription;
-    errorMessage: string;
-    itemid: number;
-    itemList: ItemList[];
-    _options: ItemOption[] = [];
-    selections: ItemSelection[] = [];
-    selectedOption: ItemOption;
+export class ItemEditBundleComponent implements OnInit {
+    //subscription: Subscription;
+    //itemid: number;
+    //_options: ItemOption[] = [];
+    //selections: ItemSelection[] = [];
+
+    @Input() errorMessage: string;
+    @Input() item: Item;
+    @Input() itemList: ItemList[];
+    @Input() selectedOption: ItemOption;
+    @Input() selectionsMatTable: MatTableDataSource<ItemSelection>;
+    @Input() itemBundleOptionsMatTable: MatTableDataSource<ItemOption>;
+    @Input() itemBundleOptionSelectionsMatTable: MatTableDataSource<ItemSelection>;
+    
+    @Output() getItemList = new EventEmitter<void>();
+    @Output() setSelectedBundleOption = new EventEmitter<number>();
+
     selectedOptionLabel: string;
 
     optionTypes: any = [
@@ -49,7 +54,7 @@ export class ItemEditBundleComponent implements OnInit, OnDestroy {
     selectionDataSource: any = null;
 
     pendingOptionAdd: boolean;
-    currentOptionIndex: number;
+    currentOptionIndex: number = 0;
 
     formBundleDirty = false;
 
@@ -62,17 +67,17 @@ export class ItemEditBundleComponent implements OnInit, OnDestroy {
             private route: ActivatedRoute,
             private itemService: ItemService) { }
 
-    get options(): ItemOption[] {
-        return this._options;
-    }
-    set options(value: ItemOption[]) {
-        this._options = value;
-        this.itemService.currentItemEdit.ItemOptions = value;
-    }
+    // get options(): ItemOption[] {
+    //     return this._options;
+    // }
+    // set options(value: ItemOption[]) {
+    //     this._options = value;
+    //     this.itemService.currentItemEdit.ItemOptions = value;
+    // }
 
     get hasEmptySelection(): boolean {
         let result = false;
-        this.options.forEach(option => {
+        this.item.ItemOptions.forEach(option => {
             option.ItemSelections.forEach((selection, index) => {
                 if (
                     (selection.ItemID === 0 || String(selection.ItemID) === '0') 
@@ -86,23 +91,28 @@ export class ItemEditBundleComponent implements OnInit, OnDestroy {
 
     get hasEmptyTitle(): boolean {
         let result = false;
-        this.options.forEach((option, index) => {
-            if (!option.Title && index != this.options.length - 1) {
+        this.item.ItemOptions.forEach((option, index) => {
+            if (!option.Title && index != this.item.ItemOptions.length - 1) {
                 result = true;
             }
         });
         return result;
     }
 
+    ngOnChanges(changes: SimpleChanges) {
+    }
+
     ngOnInit(): void {
-        this.itemid = this.route.parent.snapshot.params['id'];
-        this.itemService.getCurrentItemEdit(this.itemid).subscribe(
-            (item: Item) => {
-                this.itemService.currentItemEdit = item;
-                this.initialize();
-            },
-            (error: any) => this.errorMessage = <any>error
-        );
+        this.initialize();
+        // const itemid = this.route.parent.snapshot.params['id'];
+        // this.itemService.getCurrentItemEdit(itemid).subscribe(
+        //     (item: Item) => {
+        //         this.itemService.currentItemEdit = item;
+        //         this.initialize();
+        //     },
+        //     (error: any) => this.errorMessage = <any>error
+        // );
+        this.currentOptionIndex = this.item.ItemOptions.length - 1;
     }
     
     refreshOptionDataSource(options: ItemOption[]) {
@@ -110,32 +120,32 @@ export class ItemEditBundleComponent implements OnInit, OnDestroy {
     }
 
     refreshSelectionDataSource(selections: ItemSelection[]) {
-        this.selectionDataSource = new MatTableDataSource<ItemSelection>(selections);
+        this.itemBundleOptionSelectionsMatTable = new MatTableDataSource<ItemSelection>(selections);
     }
 
     initialize() {
-        if (this.itemService.currentItemEdit.ItemOptions === null) {
-            this.itemService.getItemOptions(this.itemid).subscribe(
+        if (this.item.ItemOptions === null) {
+            this.itemService.getItemOptions(this.item.ItemID).subscribe(
                 (itemOption: ItemOption[]) => {
-                    this.options = itemOption;
-                    this.options.forEach(value => {
-                        const _temp = new ItemSelection(null, null, 0, null, null, null, this.selections.length + 1, false, 0, 0, false, null, null, true);
-                        if (this.selections.length === 0) {
+                    this.item.ItemOptions = itemOption;
+                    this.item.ItemOptions.forEach(value => {
+                        const _temp = new ItemSelection(null, null, 0, null, null, null, this.selectedOption.ItemSelections.length + 1, false, 0, 0, false, null, null, true);
+                        if (this.selectedOption.ItemSelections.length === 0) {
                             _temp.IsDefault = true;
                         }
                         value.ItemSelections.push(_temp);  
                     });                    
                     this.addOptionPendingLine();
-                    this.refreshOptionDataSource(this.options);
+                    this.refreshOptionDataSource(this.item.ItemOptions);
                 },
                 (error: any) => this.errorMessage = <any>error
             );
         } else {
-            this.options = this.itemService.currentItemEdit.ItemOptions;
+            //this.item.ItemOptions = this.itemService.currentItemEdit.ItemOptions;
             
-            // this.options.forEach(value => {
-            //     const _temp = new ItemSelection(null, null, 0, null, null, null, this.selections.length + 1, false, 0, 0, false, null, null, true);
-            //     if (this.selections.length === 0) {
+            // this.item.ItemOptions.forEach(value => {
+            //     const _temp = new ItemSelection(null, null, 0, null, null, null, this.selectedOption.ItemSelections.length + 1, false, 0, 0, false, null, null, true);
+            //     if (this.selectedOption.ItemSelections.length === 0) {
             //         _temp.IsDefault = true;
             //     }
             //     value.ItemSelections.push(_temp);  
@@ -144,25 +154,26 @@ export class ItemEditBundleComponent implements OnInit, OnDestroy {
 
             this.removeOptionPendingLine();
             this.addOptionPendingLine();
-            this.refreshOptionDataSource(this.options);
+            this.refreshOptionDataSource(this.item.ItemOptions);
         }
-        this.subscription = this.itemService.getSimpleItemList().subscribe(
-            (itemlist: ItemList[]) => {
-                this.itemList = itemlist;
-            },
-            (error: any) => this.errorMessage = <any>error
-        );
+        this.getItemList.emit();
+        // this.itemService.getSimpleItemList().subscribe(
+        //     (itemlist: ItemList[]) => {
+        //         this.itemList = itemlist;
+        //     },
+        //     (error: any) => this.errorMessage = <any>error
+        // );
     }
 
     addOptionPendingLine() {
-        const _temp = new ItemOption(null, this.itemid, true, this.options.length + 1, null, 'select', null, null, [], true);
-        this.options.push(_temp);   
+        const _temp = new ItemOption(null, this.item.ItemID, true, this.item.ItemOptions.length + 1, null, 'select', null, null, [], true);
+        this.item.ItemOptions.push(_temp);   
     }
 
     removeOptionPendingLine() {
-        const foundIndex = this.options.findIndex(i => i.pendingAdd === true);
+        const foundIndex = this.item.ItemOptions.findIndex(i => i.pendingAdd === true);
         if (foundIndex > -1) {
-            this.options.splice(foundIndex, 1);
+            this.item.ItemOptions.splice(foundIndex, 1);
         }
     }
 
@@ -170,10 +181,10 @@ export class ItemEditBundleComponent implements OnInit, OnDestroy {
     addOption(itemOption: ItemOption) {
         if (this.isOptionRequirementValid(itemOption)) {      
             this.pendingOptionAdd = true;
-            itemOption.Position = this.options.length;
+            itemOption.Position = this.item.ItemOptions.length;
             itemOption.pendingAdd = false;
             this.addOptionPendingLine(); 
-            this.refreshOptionDataSource(this.options);
+            this.refreshOptionDataSource(this.item.ItemOptions);
         }
         else {
             this.itemService.sendNotification({ type: 'error', title: 'Error', content: "Title is required" });
@@ -194,22 +205,23 @@ export class ItemEditBundleComponent implements OnInit, OnDestroy {
     //     if (this.hasEmptySelection) {
     //         alert ('You must have all "Item" selected for all selections');
     //     } else {
-    //         const _temp = new ItemSelection(null, null, 0, null, null, null, this.selections.length + 1, false, 0, 0, false, null, null, true);
-    //         if (this.selections.length === 0) {
+    //         const _temp = new ItemSelection(null, null, 0, null, null, null, this.selectedOption.ItemSelections.length + 1, false, 0, 0, false, null, null, true);
+    //         if (this.selectedOption.ItemSelections.length === 0) {
     //             _temp.IsDefault = true;
     //         }
-    //         this.selections.push(_temp);
-    //         this.refreshSelectionDataSource(this.selections);
+    //         this.selectedOption.ItemSelections.push(_temp);
+    //         this.refreshSelectionDataSource(this.selectedOption.ItemSelections);
     //     }
     // }
 
     addSelection(itemSelection: ItemSelection) {
         if (this.isSelectionRequirementValid(itemSelection)) {      
             this.pendingSelectionAdd = true;
-            itemSelection.Position = this.selections.length;
+            itemSelection.Position = this.selectedOption.ItemSelections.length;
             itemSelection.pendingAdd = false;
             this.addSelectionPendingLine();
-            this.refreshSelectionDataSource(this.selections);
+            this.currentSelectionIndex = this.selectedOption.ItemSelections.length - 1;
+            this.setSelectedBundleOption.emit(this.currentOptionIndex);
         }
         else {
             this.itemService.sendNotification({ type: 'error', title: 'Error', content: "Item is required" });
@@ -228,62 +240,64 @@ export class ItemEditBundleComponent implements OnInit, OnDestroy {
 
 
     moveDownOption(option: ItemOption) {
-        this.move(this.options, option, 1);
-        this.options.forEach((value, i) => value.Position = i + 1);
-        this.refreshOptionDataSource(this.options);
+        this.move(this.item.ItemOptions, option, 1);
+        this.item.ItemOptions.forEach((value, i) => value.Position = i + 1);
+        this.refreshOptionDataSource(this.item.ItemOptions);
     }
 
     moveUpOption(option: ItemOption) {
-        this.move(this.options, option, -1);
-        this.options.forEach((value, i) => value.Position = i + 1);
-        this.refreshOptionDataSource(this.options);
+        this.move(this.item.ItemOptions, option, -1);
+        this.item.ItemOptions.forEach((value, i) => value.Position = i + 1);
+        this.refreshOptionDataSource(this.item.ItemOptions);
     }
 
     removeOption(index: number) {
-        this.options.splice(index, 1);
-        this.options.forEach((value, i) => value.Position = i + 1);
+        this.item.ItemOptions.splice(index, 1);
+        this.item.ItemOptions.forEach((value, i) => value.Position = i + 1);
         this.selectedOption = null;
-        this.refreshOptionDataSource(this.options);
+        this.refreshOptionDataSource(this.item.ItemOptions);
     }
 
     onOptionTypeChange() {
-        this.selections.forEach((value) => {
+        this.selectedOption.ItemSelections.forEach((value) => {
             value.IsDefault = false;          
             value.CanChangeQty = false;  
         });
-        this.refreshSelectionDataSource(this.selections);
+        this.refreshSelectionDataSource(this.selectedOption.ItemSelections);
     }
 
     onSelectOption(option: ItemOption, index: number) {
         this.currentOptionIndex = index;
 
         this.selectedOption = option;
-        this.selections =  option.ItemSelections;
+        this.selectedOption.ItemSelections =  option.ItemSelections;
         this.selectedOptionLabel = this.optionTypes[this.optionTypes.findIndex(type => type.value === option.Type)].label;
 
-        if(this.selections.length === 0 && this.currentOptionIndex !== this.options.length - 1) {
+        if(this.selectedOption.ItemSelections.length === 0 && this.currentOptionIndex !== this.item.ItemOptions.length - 1) {
             this.addSelectionPendingLine();
         }        
 
         this.removeSelectionPendingLine();
         this.addSelectionPendingLine();
 
-        this.currentSelectionIndex = this.selections.length -1;
+        this.currentSelectionIndex = this.selectedOption.ItemSelections.length -1;
 
-        this.refreshSelectionDataSource(this.selections);
+        //this.refreshSelectionDataSource(this.selectedOption.ItemSelections);
+        this.setSelectedBundleOption.emit(this.currentOptionIndex);
     }
 
     addSelectionPendingLine() {
-        const _temp = new ItemSelection(null, null, 0, null, null, null, this.selections.length + 1, false, 0, 0, false, null, null, true);
-        if (this.selections.length === 0) {
+        const _temp = new ItemSelection(null, this.selectedOption.ItemOptionID, null, this.item.Name, this.item.VendorSKU, this.item.TPIN, this.selectedOption.ItemSelections.length + 1, false, 0, 0, false, null, null, true);
+        if (this.selectedOption.ItemSelections.length === 0) {
             _temp.IsDefault = true;
         }
-        this.selections.push(_temp);   
+        this.selectedOption.ItemSelections.push(_temp);
+        this.setSelectedBundleOption.emit(this.currentOptionIndex);
     }
     removeSelectionPendingLine() {
-        const foundIndex = this.selections.findIndex(i => i.pendingAdd === true);
+        const foundIndex = this.selectedOption.ItemSelections.findIndex(i => i.pendingAdd === true);
         if (foundIndex > -1) {
-            this.selections.splice(foundIndex, 1);
+            this.selectedOption.ItemSelections.splice(foundIndex, 1);
         }
     }
 
@@ -292,32 +306,36 @@ export class ItemEditBundleComponent implements OnInit, OnDestroy {
     }
 
     moveDownSelection(selection: ItemSelection) {
-        this.move(this.selections, selection, 1);
-        this.selections.forEach((value, i) => value.Position = i + 1);
-        this.refreshSelectionDataSource(this.selections);
+        this.move(this.selectedOption.ItemSelections, selection, 1);
+        this.selectedOption.ItemSelections.forEach((value, i) => value.Position = i + 1);
+        //this.refreshSelectionDataSource(this.selectedOption.ItemSelections);
+        this.setSelectedBundleOption.emit(this.currentOptionIndex);
     }
 
     moveUpSelection(selection: ItemSelection) {
-        this.move(this.selections, selection, -1);
-        this.selections.forEach((value, i) => value.Position = i + 1);
-        this.refreshSelectionDataSource(this.selections);
+        this.move(this.selectedOption.ItemSelections, selection, -1);
+        this.selectedOption.ItemSelections.forEach((value, i) => value.Position = i + 1);
+        //this.refreshSelectionDataSource(this.selectedOption.ItemSelections);
+        this.setSelectedBundleOption.emit(this.currentOptionIndex);
     }
 
     removeSelection(index: number) {
-        this.selections.splice(index, 1);
-        this.selections.forEach((value, i) => value.Position = i + 1);
-        this.refreshSelectionDataSource(this.selections);
+        this.selectedOption.ItemSelections.splice(index, 1);
+        this.selectedOption.ItemSelections.forEach((value, i) => value.Position = i + 1);
+        //this.refreshSelectionDataSource(this.selectedOption.ItemSelections);
+        this.setSelectedBundleOption.emit(this.currentOptionIndex);
     }
 
     isDefaultClick(selection: ItemSelection, index: number) {
         if(this.selectedOption.Type == "radio" || this.selectedOption.Type == "select")
         {
-            this.selections.forEach((value, i) => {
+            this.selectedOption.ItemSelections.forEach((value, i) => {
                 if(i != index) {
                     value.IsDefault = false;
                 }
             });
-            this.refreshSelectionDataSource(this.selections);
+            //this.refreshSelectionDataSource(this.selectedOption.ItemSelections);
+            this.setSelectedBundleOption.emit(this.currentOptionIndex);
         }        
     }
 
@@ -339,10 +357,6 @@ export class ItemEditBundleComponent implements OnInit, OnDestroy {
         if (newIndex < 0  || newIndex === array.length) { return; } // Already at the top or bottom.
         const indexes = [index, newIndex].sort((a,b)=>a-b); // Sort the indixes
         array.splice(indexes[0], 2, array[indexes[1]], array[indexes[0]]); // Replace from lowest index, two elements, reverting the order
-    }
-
-    ngOnDestroy() {
-        this.subscription.unsubscribe();
     }
 
     clearBundleFields(form) {

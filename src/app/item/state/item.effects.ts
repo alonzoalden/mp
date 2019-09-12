@@ -1,22 +1,24 @@
 import { Injectable } from '@angular/core';
 import { Observable, of, EMPTY } from 'rxjs';
 import { mergeMap, map, catchError, take } from 'rxjs/operators';
-import { Action } from '@ngrx/store';
+import { Action, Store } from '@ngrx/store';
 import { Actions, Effect, ofType } from '@ngrx/effects';
 import { ItemService } from '../item.service';
 import * as itemActions from './item.actions';
 import { Router } from '@angular/router';
 import { Member, MemberVendor } from 'app/shared/class/member';
 import { VendorBrand } from 'app/shared/class/vendor-brand';
-import { ItemList, Item, ItemCrossSellInsert, ItemUpSell, ItemUpSellInsert, ItemRelatedProduct, ItemRelatedProductInsert, ItemAttachmentInsert, ItemVideoInsert } from 'app/shared/class/item';
+import { ItemList, Item, ItemCrossSellInsert, ItemUpSell, ItemUpSellInsert, ItemRelatedProduct, ItemRelatedProductInsert, ItemAttachmentInsert, ItemVideoInsert, ItemCategoryAssignment } from 'app/shared/class/item';
 import { Category } from 'app/shared/class/category';
 import { VendorAttachment, VendorAttachmentList } from 'app/shared/class/vendor-attachment';
 import { URLVideo } from 'app/shared/class/item-video';
+import { environment } from 'environments/environment';
+import * as fromItem from '../state';
 
 @Injectable()
 export class ItemEffects {
     constructor(
-        private router: Router,
+        private store: Store<fromItem.State>,
         private itemService: ItemService,
         private actions$: Actions) { }
 
@@ -85,7 +87,8 @@ export class ItemEffects {
                     return EMPTY;
                 })
             )
-        )
+        ),
+        take(1)
     );
     @Effect()
     loadAllItemCrossSell$: Observable<Action> = this.actions$.pipe(
@@ -219,6 +222,106 @@ export class ItemEffects {
             )
         )
     );
+
     
+    @Effect()
+    loadItemCategoryAssignments$: Observable<Action> = this.actions$.pipe(
+        ofType(itemActions.ItemActionTypes.LoadItemCategoryAssignments),
+        map((action: itemActions.LoadItemCategoryAssignments) => action.payload),
+        mergeMap((id: number) =>
+            this.itemService.getItemCategoryAssignments(id).pipe(
+                map((categoryassignments: ItemCategoryAssignment[]) =>  (new itemActions.LoadItemCategoryAssignmentsSuccess(categoryassignments))),
+                catchError(err => {
+                    this.itemService.sendNotification({ type: 'error', title: 'Error', content: err });
+                    of(new itemActions.LoadItemCategoryAssignmentsFail(err))
+                    return EMPTY;
+                })
+            )
+        )
+    );
+    @Effect()
+    loadItem$: Observable<Action> = this.actions$.pipe(
+        ofType(itemActions.ItemActionTypes.LoadItem),
+        map((action: itemActions.LoadItem) => action.payload),
+        mergeMap((id: number) =>
+            this.itemService.getItem(id).pipe(
+                map((item: Item) =>  (new itemActions.LoadItemSuccess(item))),
+                catchError(err => {
+                    this.itemService.sendNotification({ type: 'error', title: 'Error', content: err });
+                    of(new itemActions.LoadItemFail(err))
+                    return EMPTY;
+                })
+            )
+        )
+    );
+
+    @Effect()
+    editItem$: Observable<Action> = this.actions$.pipe(
+        ofType(itemActions.ItemActionTypes.EditItem),
+        map((action: itemActions.EditItem) => action.payload),
+        mergeMap((payload: any) =>
+            this.itemService.editItem(payload.item.ItemID).pipe(
+                map((item: Item) => {
+                    this.itemService.sendNotification({ type: 'success', title: 'Successfully Updated', content: `${item.Name} was saved` });
+                    if(payload.displayPreview) {
+                        window.open(environment.previewURL + item.ItemID + "/options/portal", "_blank");
+                    }
+                    if(payload.printLabel) {
+                        this.store.dispatch(new itemActions.DownloadItemLabel(item));
+                    }
+                    return (new itemActions.EditItemSuccess(item))
+                }),
+                catchError(err => {
+                    this.itemService.sendNotification({ type: 'error', title: 'Error', content: err });
+                    of(new itemActions.EditItemFail(err))
+                    return EMPTY;
+                })
+            )
+        )
+    );
+    @Effect()
+    downloadItemLabel$: Observable<Action> = this.actions$.pipe(
+        ofType(itemActions.ItemActionTypes.DownloadItemLabel),
+        map((action: itemActions.DownloadItemLabel) => action.payload),
+        mergeMap((item: Item) =>
+            this.itemService.downloadItemLabel(item.ItemID).pipe(
+                map((data: Blob) => {
+                    const blob = new Blob([data], {type: 'application/pdf'});
+                    const blobUrl = URL.createObjectURL(blob);
+                    if (window.navigator.msSaveOrOpenBlob) {
+                        const fileName = item.TPIN;
+                        window.navigator.msSaveOrOpenBlob(data, fileName + '.pdf'); // IE is the worst!!!
+                    } else {
+                        // const iframe = document.createElement('iframe');
+                        // iframe.style.display = 'none';
+                        // iframe.src = blobUrl;
+                        // document.body.appendChild(iframe);
+
+                        // iframe.onload = (function() {
+                        //     iframe.contentWindow.focus();
+                        //     iframe.contentWindow.print();
+                        // });
+                        const fileURL = window.URL.createObjectURL(blob);
+                        const a: HTMLAnchorElement = document.createElement('a') as HTMLAnchorElement;
+                        a.href = fileURL;
+                        a.download = item.TPIN;
+                        document.body.appendChild(a);
+                        a.target = '_blank';
+                        a.click();
+
+                        document.body.removeChild(a);
+                        URL.revokeObjectURL(fileURL);
+                    }
+
+                    return (new itemActions.DownloadItemLabelSuccess(data))
+                }),
+                catchError(err => {
+                    this.itemService.sendNotification({ type: 'error', title: 'Error', content: err });
+                    of(new itemActions.DownloadItemLabelFail(err))
+                    return EMPTY;
+                })
+            )
+        )
+    );
     
 }

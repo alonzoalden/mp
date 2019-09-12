@@ -17,7 +17,6 @@ export class ItemAddBundleShellComponent implements OnInit {
     selectedBundleOption$: Observable<ItemOptionInsert>;
     itemBundleOptionsMatTable$: Observable<MatTableDataSource<ItemOptionInsert>>;
     itemBundleOptionSelectionsMatTable$: Observable<MatTableDataSource<ItemSelectionInsert>>;
-    
     errorMessage$: Observable<string>;
 
     constructor(private store: Store<fromItem.State>) { }
@@ -26,7 +25,6 @@ export class ItemAddBundleShellComponent implements OnInit {
         this.item$ = this.store.pipe(select(fromItem.getItem));
         this.itemList$ = this.store.pipe(select(fromItem.getItemList));
         this.selectedBundleOption$ = this.store.pipe(select(fromItem.getSelectedBundleOption));
-        
         this.itemBundleOptionsMatTable$ = this.store.pipe(select(fromItem.getItemBundleOptionsMatTable));
         this.itemBundleOptionSelectionsMatTable$ = this.store.pipe(select(fromItem.getItemBundleOptionSelectionsMatTable));
         this.errorMessage$ = this.store.pipe(select(fromItem.getError));

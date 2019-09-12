@@ -3,7 +3,7 @@ import { SalesOrder } from '../../shared/class/sales-order';
 import { SalesOrderLine } from '../../shared/class/sales-order-line';
 import { Fulfillment, FulfillmentSalesOrderLine } from '../../shared/class/fulfillment';
 import { VendorBrand } from '../../shared/class/vendor-brand';
-import { ItemInsert, ItemList, ItemOption, ItemOptionInsert, ItemSelectionInsert, Item, ItemUpSellInsert, ItemCrossSellInsert, ItemRelatedProductInsert, ItemAttachmentInsert, ItemVideoInsert } from '../../shared/class/item';
+import { ItemInsert, ItemList, ItemOption, ItemOptionInsert, ItemSelectionInsert, Item, ItemUpSellInsert, ItemCrossSellInsert, ItemRelatedProductInsert, ItemAttachmentInsert, ItemVideoInsert, ItemCategoryAssignment } from '../../shared/class/item';
 import { Category } from 'app/shared/class/category';
 import { ItemUpSell } from 'app/shared/class/item-up-sell';
 import { VendorAttachment, VendorAttachmentList } from 'app/shared/class/vendor-attachment';
@@ -49,6 +49,18 @@ export enum ItemActionTypes {
   LoadVideoURLDetail = '[Item] Load Video URL Detail',
   LoadVideoURLDetailSuccess = '[Item] Load Video URL Detail Success',
   LoadVideoURLDetailFail  = '[Item] Load Video URL Detail Fail',
+  LoadItem = '[Item] Load Item',
+  LoadItemSuccess = '[Item] Load Item Success',
+  LoadItemFail = '[Item] Load Item Fail',
+  EditItem = '[Item] Edit Item',
+  EditItemSuccess = '[Item] Edit Item Success',
+  EditItemFail = '[Item] Edit Item Fail',
+  DownloadItemLabel = '[Item] Download Item Label',
+  DownloadItemLabelSuccess = '[Item] Download Item Label',
+  DownloadItemLabelFail = '[Item] Download Item Label',
+  LoadItemCategoryAssignments = '[Item] Load Item Category Assignments',
+  LoadItemCategoryAssignmentsSuccess = '[Item] Load Item Category Assignments Success',
+  LoadItemCategoryAssignmentsFail = '[Item] Load Item Category Assignments Fail',
   AddNewItemRelatedProductRow = '[Item] Add New Item Related Product Row',
   
 }
@@ -225,6 +237,52 @@ export class LoadVideoURLDetailFail implements Action {
 
 
 
+export class LoadItemCategoryAssignments implements Action {
+  readonly type = ItemActionTypes.LoadItemCategoryAssignments;
+  constructor(public payload: number) { }
+}
+
+export class LoadItemCategoryAssignmentsSuccess implements Action {
+  readonly type = ItemActionTypes.LoadItemCategoryAssignmentsSuccess;
+  constructor(public payload: ItemCategoryAssignment[]) { }
+}
+
+export class LoadItemCategoryAssignmentsFail implements Action {
+  readonly type = ItemActionTypes.LoadItemCategoryAssignmentsFail;
+  constructor(public payload: string) { }
+}
+
+export class LoadItem implements Action {
+  readonly type = ItemActionTypes.LoadItem;
+  constructor(public payload: number) { }
+}
+
+export class LoadItemSuccess implements Action {
+  readonly type = ItemActionTypes.LoadItemSuccess;
+  constructor(public payload: Item) { }
+}
+
+export class LoadItemFail implements Action {
+  readonly type = ItemActionTypes.LoadItemFail;
+  constructor(public payload: string) { }
+}
+
+export class EditItem implements Action {
+  readonly type = ItemActionTypes.EditItem;
+  constructor(public payload: {item: Item, displayPreview: boolean, printLabel: boolean}) { }
+}
+
+export class EditItemSuccess implements Action {
+  readonly type = ItemActionTypes.EditItemSuccess;
+  constructor(public payload: Item) { }
+}
+
+export class EditItemFail implements Action {
+  readonly type = ItemActionTypes.EditItemFail;
+  constructor(public payload: string) { }
+}
+
+
 export class AddNewItemRelatedProductRow implements Action {
   readonly type = ItemActionTypes.AddNewItemRelatedProductRow;
   constructor(public payload: ItemRelatedProductInsert) { }
@@ -239,7 +297,18 @@ export class SetItem implements Action {
   readonly type = ItemActionTypes.SetItem;
   constructor(public payload: ItemInsert) { }
 }
-
+export class DownloadItemLabel implements Action {
+  readonly type = ItemActionTypes.DownloadItemLabel;
+  constructor(public payload: Item) { }
+}
+export class DownloadItemLabelSuccess implements Action {
+  readonly type = ItemActionTypes.DownloadItemLabelSuccess;
+  constructor(public payload: Blob) { }
+}
+export class DownloadItemLabelFail implements Action {
+  readonly type = ItemActionTypes.DownloadItemLabelFail;
+  constructor(public payload: string) { }
+}
 // Union the valid types
 export type ItemActions = LoadVendorBrands
 | LoadVendorBrandsSuccess
@@ -277,6 +346,18 @@ export type ItemActions = LoadVendorBrands
 | LoadVideoURLDetail
 | LoadVideoURLDetailSuccess
 | LoadVideoURLDetailFail
+| LoadItem
+| LoadItemSuccess
+| LoadItemFail
+| EditItem
+| EditItemSuccess
+| EditItemFail
 | SetItem
 | SetSelectedBundleOption
+| DownloadItemLabel
+| DownloadItemLabelSuccess
+| DownloadItemLabelFail
+| LoadItemCategoryAssignments
+| LoadItemCategoryAssignmentsSuccess
+| LoadItemCategoryAssignmentsFail
 | AddNewItemRelatedProductRow;

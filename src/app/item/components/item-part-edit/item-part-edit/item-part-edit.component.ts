@@ -11,7 +11,7 @@ import { AppService } from '../../../../app.service';
 import { environment } from '../../../../../environments/environment';
 
 @Component({
-  selector: 'o-item-edit',
+  selector: 'o-item-part-edit',
   templateUrl: './item-part-edit.component.html',
   styleUrls: ['./item-part-edit.component.css']
 })

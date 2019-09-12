@@ -21,10 +21,7 @@ export class ItemAddCategoryComponent implements OnInit {
     @Output() getCategories = new EventEmitter<number>();
     @Output() getCategoryBreadCrumbs = new EventEmitter<number>();
     
-
-
     lastSelectedValue: number = 0;
-
     displayedColumns = ['SelectedCategory', 'Remove'];
     dataSource: any = null;
     formDirty = false;
@@ -32,20 +29,30 @@ export class ItemAddCategoryComponent implements OnInit {
     @ViewChild('selectionCategories', { static: false }) selectionCategoriesRef: ElementRef;
 
     constructor(private itemService: ItemService) { }
-
-    ngOnInit(): void {
-        this.getCategories.emit(2);
-        if (this.item && this.item.ItemCategoryAssignments.length > 0) {
-            this.item.ItemCategoryAssignments.forEach((value, index) => {
-                this.getCategoryBreadCrumbs.emit(value.ItemCategoryID);
-                // this.itemService.getCategoryBreadCrumbs(value.ItemCategoryID).subscribe(
-                //     (categories: Category[]) => {
-                //         this.currentResult.push(categories);
-                //         this.refreshDataSource(this.currentResult);
-                //     }
-                // );
-            });
+    
+    ngOnChanges(changes: SimpleChanges) {
+        if (changes.categoriesList && changes.categoriesList.currentValue && changes.categoriesList.currentValue.length === 0) {
+            this.getCategories.emit(2);
         }
+        if (changes.currentResult && changes.currentResult.currentValue) {
+            this.refreshDataSource(this.currentResult);
+        }
+        
+    }
+    
+    ngOnInit(): void {
+        
+        // if (this.item && this.item.ItemCategoryAssignments.length > 0) {
+        //     this.item.ItemCategoryAssignments.forEach((value, index) => {
+        //         //this.getCategoryBreadCrumbs.emit(value.ItemCategoryID);
+        //         this.itemService.getCategoryBreadCrumbs(value.ItemCategoryID).subscribe(
+        //             (categories: Category[]) => {
+        //                 //this.currentResult.push(categories);
+        //                 this.refreshDataSource(this.currentResult);
+        //             }
+        //         );
+        //     });
+        // }
     }
 
     refreshDataSource(resultCategories: Array<Category[]>) {

@@ -1,13 +1,7 @@
-import { Component, OnInit, EventEmitter, OnChanges } from '@angular/core';
+import { Component, OnInit, EventEmitter, OnChanges, Input, Output, SimpleChanges } from '@angular/core';
 import { MatTableDataSource } from '@angular/material';
-
 import { ItemInsert, ItemList, ItemOptionInsert, ItemSelectionInsert } from '../../../../shared/class/item';
-
 import { ItemService } from '../../../item.service';
-import { Input } from '@angular/core';
-import { Output } from '@angular/core';
-import { SimpleChanges } from '@angular/core';
-declare var $ :any;
 
 @Component({
   selector: 'o-item-add-bundle',

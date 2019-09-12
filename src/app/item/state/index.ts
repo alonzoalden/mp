@@ -125,7 +125,10 @@ export const getItemVideosMatTable = createSelector(
     getItemFeatureState, 
     state => new MatTableDataSource<ItemVideoInsert>(state.item.ItemVideos) 
 )
-
+export const getCategoryAssignments = createSelector(
+    getItemFeatureState, 
+    state => state.categoryAssignments
+)
 
 
 // export const getSalesOrder = createSelector(

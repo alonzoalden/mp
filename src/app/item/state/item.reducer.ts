@@ -11,7 +11,7 @@ import { VendorAttachment, VendorAttachmentList } from 'app/shared/class/vendor-
 export interface ItemState {
     vendorBrandList: VendorBrand[];
     itemList: ItemList[];
-    item: ItemInsert;
+    item: ItemInsert | Item;
     selectedBundleOption: ItemOptionInsert;
     selectedBundleOptionSelectionList: ItemSelectionInsert[],
     itemCategories: Array<Category[]>,
@@ -19,6 +19,7 @@ export interface ItemState {
     allItemList: ItemList[];
     allItem: Item;
     vendorAttachmentsList: VendorAttachmentList[];
+    categoryAssignments: ItemCategoryAssignment[];
     isLoading: boolean;
     pendingDelete: boolean,
     pendingSave: boolean,
@@ -37,6 +38,7 @@ const initialState: ItemState = {
     allItemList: [],
     allItem: null,
     vendorAttachmentsList: [],
+    categoryAssignments: [],
     isLoading: true,
     pendingDelete: false,
     pendingSave: false,
@@ -129,10 +131,56 @@ export function itemReducer(state = initialState, action: ItemActions): ItemStat
                 vendorAttachmentsList: [],
                 error: action.payload,
             };
+            
+        case ItemActionTypes.LoadItemCategoryAssignmentsSuccess:
+            return {
+                ...state,
+                categoryAssignments: action.payload,
+                error: '',
+            };
+        case ItemActionTypes.LoadItemCategoryAssignmentsFail:
+            return {
+                ...state,
+                categoryAssignments: [],
+                error: action.payload,
+            };
+        case ItemActionTypes.LoadItemSuccess:
+            return {
+                ...state,
+                item: action.payload,
+                error: '',
+            };
+        case ItemActionTypes.LoadItemFail:
+            return {
+                ...state,
+                item: null,
+                error: action.payload,
+            };
+        case ItemActionTypes.EditItem:
+            return {
+                ...state,
+                pendingSave: true,
+            };
+        case ItemActionTypes.EditItemSuccess:
+            return {
+                ...state,
+                item: action.payload,
+                pendingSave: false,
+                error: '',
+            };
+        case ItemActionTypes.EditItemFail:
+            return {
+                ...state,
+                item: null,
+                pendingSave: false,
+                error: action.payload,
+            };
+        
+        
 
             
-        case ItemActionTypes.AddNewItemRelatedProductRow:
-            state.item.ItemRelatedProducts.push(action.payload);
+        // case ItemActionTypes.AddNewItemRelatedProductRow:
+        //     state.item.ItemRelatedProducts.push(action.payload);
         return {
                 ...state,
                 item: state.item
