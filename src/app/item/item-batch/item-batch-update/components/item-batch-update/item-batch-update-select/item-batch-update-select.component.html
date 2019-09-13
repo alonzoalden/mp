@@ -12,7 +12,7 @@
                         <div class="toolbar-search-1 no-padding">
                             <div class="filter">
                                 <input (keyup)="applyFilter($event.target.value)" placeholder="{{ 'Filter By' | translate }}" class="form-control" #FilterBy>
-                                <i class="fa fa-search batch" aria-label="Icon for Filter By Input Bar" [ngClass]="this.dataSource?.filter ? 'selected' : ''" (click)="FilterBy.select()"></i> 
+                                <i class="fa fa-search batch" aria-label="Icon for Filter By Input Bar" [ngClass]="this.itemBatchItemsMatTable?.filter ? 'selected' : ''" (click)="FilterBy.select()"></i> 
                                 <div>
                                     <button mat-button type="button" class="m-t-xs btn button-primary-sm1 m-l-xl" (click)="SelectFiltered()">
                                         Select Filtered
@@ -35,15 +35,15 @@
                             </div>
                         </div>
                         <div class="ibox-content" style="min-height: 40vh;">
-                            <div *ngIf="loading" class="spinner-container">
+                            <div *ngIf="isLoading" class="spinner-container">
                                 <div class="sk-spinner sk-spinner-three-bounce big-spinner">
                                     <div class="sk-bounce1"></div>
                                     <div class="sk-bounce2"></div>
                                     <div class="sk-bounce3"></div>
                                 </div>
                             </div>
-                            <div class="table-responsive" [hidden]="loading">
-                                <table mat-table #table [dataSource]="dataSource" class="table" matSort>
+                            <div class="table-responsive" [hidden]="isLoading">
+                                <table mat-table #table [dataSource]="itemBatchItemsMatTable" class="table" matSort>
                                     <!-- Select Checkbox Column -->
                                     <ng-container matColumnDef="Select">
                                         <th mat-header-cell *matHeaderCellDef width="100px">

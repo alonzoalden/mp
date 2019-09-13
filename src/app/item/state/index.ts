@@ -5,7 +5,7 @@ import { MatTableDataSource } from '@angular/material';
 import { SalesOrder } from 'app/shared/class/sales-order';
 import { SalesOrderLine } from 'app/shared/class/sales-order-line';
 import { Fulfillment, FulfillmentSalesOrderLine } from 'app/shared/class/fulfillment';
-import { ItemOptionInsert, ItemSelectionInsert, ItemTierPrice, ItemTierPriceInsert, ItemCrossSellInsert, ItemRelatedProductInsert, ItemUpSell, ItemUpSellInsert, ItemAttachmentInsert, ItemImageInsert, ItemVideoInsert } from 'app/shared/class/item';
+import { ItemOptionInsert, ItemSelectionInsert, ItemTierPrice, ItemTierPriceInsert, ItemCrossSellInsert, ItemRelatedProductInsert, ItemUpSell, ItemUpSellInsert, ItemAttachmentInsert, ItemImageInsert, ItemVideoInsert, ItemBatch, Item } from 'app/shared/class/item';
 import { ItemRelatedProduct } from 'app/shared/class/item-related-product';
 
 // Extends the app state to include the product feature.
@@ -129,64 +129,27 @@ export const getCategoryAssignments = createSelector(
     getItemFeatureState, 
     state => state.categoryAssignments
 )
+export const getItemBatch = createSelector(
+    getItemFeatureState, 
+    state => state.itemBatch
+)
+export const getItemBatchMatTable = createSelector(
+    getItemFeatureState, 
+    state => new MatTableDataSource<ItemBatch>(state.itemBatch) 
+)
 
-
-// export const getSalesOrder = createSelector(
-//     getItemFeatureState,
-//     state => state.salesOrders.find(item => item.OrderID === state.currentSalesOrderID)
-// );
-
-// // export const getCurrentSalesOrderID = createSelector(
-// //     getItemFeatureState,
-// //     state => state.currentSalesOrderID
-// // );
-// // export const getSalesOrder = createSelector(
-// //     getItemFeatureState,
-// //     getCurrentSalesOrderID, 
-// //     (state, currentSalesOrderID) => state.salesOrders.find(item => item.OrderID === currentSalesOrderID)
-// // );
-// export const getSalesOrderLines = createSelector(
-//     getItemFeatureState,
-//     state => state.salesOrderLines
-// );
-// export const getSalesOrderLinesMatTable = createSelector(
-//     getItemFeatureState,
-//     state => new MatTableDataSource<SalesOrderLine>(state.salesOrderLines)
-// );
-
-
-
-// export const getFulfillmentSalesOrderLines = createSelector(
-//     getItemFeatureState,
-//     state => state.fulfillmentSalesOrderLines
-// );
-// export const getFulfillmentSalesOrderLinesMatTable = createSelector(
-//     getItemFeatureState,
-//     state => new MatTableDataSource<FulfillmentSalesOrderLine>(state.fulfillmentSalesOrderLines)
-// );
-
-
-// export const getDeliveryDetail = createSelector(
-//     getItemFeatureState,
-//     state => state.deliveryDetail
-// );
-// export const getSalesOrderDeliveryDetail = createSelector(
-//     getItemFeatureState,
-//     state => state.salesOrderDeliveryDetail
-// );
-
-// export const getFulfilledByFulfillments = createSelector(
-//     getItemFeatureState,
-//     state => state.fulfillments
-// );
-// export const getFulfilledByFulfillmentsMatTable = createSelector(
-//     getItemFeatureState,
-//     state => new MatTableDataSource<Fulfillment>(state.fulfillments)
-// );
-// export const getFulfilledByFulfillment = createSelector(
-//     getItemFeatureState,
-//     state => state.fulfillment
-// );
+export const getItemBatchItems = createSelector(
+    getItemFeatureState, 
+    state => state.itemBatchItems
+)
+export const getItemBatchItemsMatTable = createSelector(
+    getItemFeatureState, 
+    state => new MatTableDataSource<Item>(state.itemBatchItems) 
+)
+export const getItemBatchUpdates = createSelector(
+    getItemFeatureState, 
+    state => state.itemBatchUpdates
+)
 
 export const getIsLoading = createSelector(
     getItemFeatureState,

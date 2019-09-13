@@ -8,16 +8,18 @@ import * as itemActions from './item.actions';
 import { Router } from '@angular/router';
 import { Member, MemberVendor } from 'app/shared/class/member';
 import { VendorBrand } from 'app/shared/class/vendor-brand';
-import { ItemList, Item, ItemCrossSellInsert, ItemUpSell, ItemUpSellInsert, ItemRelatedProduct, ItemRelatedProductInsert, ItemAttachmentInsert, ItemVideoInsert, ItemCategoryAssignment, ItemTierPrice } from 'app/shared/class/item';
+import { ItemList, Item, ItemCrossSellInsert, ItemUpSell, ItemUpSellInsert, ItemRelatedProduct, ItemRelatedProductInsert, ItemAttachmentInsert, ItemVideoInsert, ItemCategoryAssignment, ItemTierPrice, ItemBatch } from 'app/shared/class/item';
 import { Category } from 'app/shared/class/category';
 import { VendorAttachment, VendorAttachmentList } from 'app/shared/class/vendor-attachment';
 import { URLVideo } from 'app/shared/class/item-video';
 import { environment } from 'environments/environment';
 import * as fromItem from '../state';
+import { BatchUpdate, BatchUpdateValue } from 'app/shared/class/batch-update';
 
 @Injectable()
 export class ItemEffects {
     constructor(
+        private router: Router,
         private store: Store<fromItem.State>,
         private itemService: ItemService,
         private actions$: Actions) { }
@@ -255,6 +257,21 @@ export class ItemEffects {
         )
     );
 
+    @Effect()
+    loadItemPendingItems$: Observable<Action> = this.actions$.pipe(
+        ofType(itemActions.ItemActionTypes.LoadPendingItems),
+        mergeMap(() =>
+            this.itemService.getPendingItems().pipe(
+                map((itembatch: ItemBatch[]) =>  (new itemActions.LoadPendingItemsSuccess(itembatch))),
+                catchError(err => {
+                    this.itemService.sendNotification({ type: 'error', title: 'Error', content: err });
+                    of(new itemActions.LoadItemTierPricesFail(err))
+                    return EMPTY;
+                })
+            )
+        )
+    );
+
     
 
     @Effect()
@@ -267,6 +284,73 @@ export class ItemEffects {
                 catchError(err => {
                     this.itemService.sendNotification({ type: 'error', title: 'Error', content: err });
                     of(new itemActions.LoadItemFail(err))
+                    return EMPTY;
+                })
+            )
+        )
+    );
+
+    @Effect()
+    loadItemBatchItems$: Observable<Action> = this.actions$.pipe(
+        ofType(itemActions.ItemActionTypes.LoadItemBatchItems),
+        mergeMap((id: number) =>
+            this.itemService.getItems().pipe(
+                map((item: Item[]) =>  (new itemActions.LoadItemBatchItemsSuccess(item))),
+                catchError(err => {
+                    this.itemService.sendNotification({ type: 'error', title: 'Error', content: err });
+                    of(new itemActions.LoadItemBatchItemsFail(err))
+                    return EMPTY;
+                })
+            )
+        )
+    );
+    
+    @Effect()
+    loadItemBatchUpdate$: Observable<Action> = this.actions$.pipe(
+        ofType(itemActions.ItemActionTypes.LoadItemBatchUpdate),
+        mergeMap((id: number) =>
+            this.itemService.getItemBatchUpdate().pipe(
+                map((batchupdates: BatchUpdate[]) =>  (new itemActions.LoadItemBatchUpdateSuccess(batchupdates))),
+                catchError(err => {
+                    this.itemService.sendNotification({ type: 'error', title: 'Error', content: err });
+                    of(new itemActions.LoadItemBatchUpdateFail(err))
+                    return EMPTY;
+                })
+            )
+        )
+    );
+    
+
+    @Effect()
+    editItemBatch$: Observable<Action> = this.actions$.pipe(
+        ofType(itemActions.ItemActionTypes.EditItemBatch),
+        map((action: itemActions.EditItemBatch) => action.payload),
+        mergeMap((payload: ItemBatch[]) =>
+            this.itemService.editItemBatch(payload).pipe(
+                map((item: ItemBatch[]) => (new itemActions.EditItemBatchSuccess(item))),
+                catchError(err => {
+                    this.itemService.sendNotification({ type: 'error', title: 'Error', content: err });
+                    of(new itemActions.EditItemBatchFail(err))
+                    return EMPTY;
+                })
+            )
+        )
+    );
+
+    @Effect()
+    editItemBatchUpdate$: Observable<Action> = this.actions$.pipe(
+        ofType(itemActions.ItemActionTypes.EditItemBatchUpdate),
+        map((action: itemActions.EditItemBatchUpdate) => action.payload),
+        mergeMap((payload: BatchUpdateValue[]) =>
+            this.itemService.editItemBatchUpdate(payload).pipe(
+                map((item: BatchUpdateValue[]) => {
+                    this.itemService.sendNotification({ type: 'success', title: 'Successfully Updated', content: '' });
+                    this.router.navigate(['item','batchupdate','select']);
+                    return (new itemActions.EditItemBatchUpdateSuccess(item))
+                }),
+                catchError(err => {
+                    this.itemService.sendNotification({ type: 'error', title: 'Error', content: err });
+                    of(new itemActions.EditItemBatchUpdateFail(err))
                     return EMPTY;
                 })
             )

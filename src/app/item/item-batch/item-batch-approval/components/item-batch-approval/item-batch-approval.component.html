@@ -33,15 +33,15 @@
                     </div>
                 </div>
                 <div class="ibox-content" style="min-height: 40vh;">
-                    <div *ngIf="loading" class="spinner-container">
+                    <div *ngIf="isLoading" class="spinner-container">
                         <div class="sk-spinner sk-spinner-three-bounce big-spinner">
                             <div class="sk-bounce1"></div>
                             <div class="sk-bounce2"></div>
                             <div class="sk-bounce3"></div>
                         </div>
                     </div>
-                    <div class="table-responsive" [hidden]="loading">
-                        <table mat-table #table [dataSource]="dataSource" class="table" matSort>
+                    <div class="table-responsive">
+                        <table mat-table #table [dataSource]="itemBatchMatTable" class="table" matSort>
                             <!-- Approve Checkbox Column -->
                             <ng-container matColumnDef="Approve">
                                 <th mat-header-cell *matHeaderCellDef width="100px">

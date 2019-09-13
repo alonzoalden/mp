@@ -2,10 +2,11 @@ import { ItemActionTypes, ItemActions } from './item.actions';
 import { SalesOrder } from '../../shared/class/sales-order';
 import { SalesOrderLine } from '../../shared/class/sales-order-line';
 import { Fulfillment, FulfillmentSalesOrderLine } from '../../shared/class/fulfillment';
-import { ItemInsert, ItemList, ItemOption, ItemOptionInsert, ItemSelectionInsert, ItemCategoryAssignment, Item, ItemCrossSellInsert, ItemUpSellInsert, ItemRelatedProductInsert } from '../../shared/class/item';
+import { ItemInsert, ItemList, ItemOption, ItemOptionInsert, ItemSelectionInsert, ItemCategoryAssignment, Item, ItemCrossSellInsert, ItemUpSellInsert, ItemRelatedProductInsert, ItemBatch } from '../../shared/class/item';
 import { VendorBrand } from '../../shared/class/vendor-brand';
 import { Category } from 'app/shared/class/category';
 import { VendorAttachment, VendorAttachmentList } from 'app/shared/class/vendor-attachment';
+import { BatchUpdate } from 'app/shared/class/batch-update';
 
 // State for this feature (Item Variation)
 export interface ItemState {
@@ -20,6 +21,9 @@ export interface ItemState {
     allItem: Item;
     vendorAttachmentsList: VendorAttachmentList[];
     categoryAssignments: ItemCategoryAssignment[];
+    itemBatch: ItemBatch[];
+    itemBatchItems: Item[];
+    itemBatchUpdates: BatchUpdate[];
     isLoading: boolean;
     pendingDelete: boolean,
     pendingSave: boolean,
@@ -39,6 +43,9 @@ const initialState: ItemState = {
     allItem: null,
     vendorAttachmentsList: [],
     categoryAssignments: [],
+    itemBatch: [],
+    itemBatchItems: [],
+    itemBatchUpdates: [],
     isLoading: true,
     pendingDelete: false,
     pendingSave: false,
@@ -190,16 +197,94 @@ export function itemReducer(state = initialState, action: ItemActions): ItemStat
                 pendingSave: false,
                 error: action.payload,
             };
+        case ItemActionTypes.LoadPendingItems:
+            return {
+                ...state,
+                isLoading: true,
+            };
+        case ItemActionTypes.LoadPendingItemsSuccess:
+            return {
+                ...state,
+                itemBatch: action.payload,
+                isLoading: false,
+                error: '',
+            };
+        case ItemActionTypes.LoadPendingItemsFail:
+            return {
+                ...state,
+                itemBatch: null,
+                isLoading: false,
+                error: action.payload,
+            };
+        case ItemActionTypes.EditItemBatchSuccess:
+            return {
+                ...state,
+                itemBatch: action.payload,
+                pendingSave: false,
+                error: '',
+            };
+        case ItemActionTypes.EditItemBatchFail:
+            return {
+                ...state,
+                itemBatch: null,
+                pendingSave: false,
+                error: action.payload,
+            };
+        case ItemActionTypes.LoadItemBatchItems:
+            return {
+                ...state,
+                isLoading: true,
+            };
+        case ItemActionTypes.LoadItemBatchItemsSuccess:
+            return {
+                ...state,
+                itemBatchItems: action.payload,
+                isLoading: false,
+                error: '',
+            };
+        case ItemActionTypes.LoadItemBatchItemsFail:
+            return {
+                ...state,
+                itemBatchItems: [],
+                isLoading: false,
+                error: action.payload,
+            };
+
+        case ItemActionTypes.LoadItemBatchUpdateSuccess:
+            return {
+                ...state,
+                itemBatchUpdates: action.payload,
+                isLoading: false,
+                error: '',
+            };
+        case ItemActionTypes.LoadItemBatchUpdateFail:
+            return {
+                ...state,
+                itemBatchUpdates: [],
+                isLoading: false,
+                error: action.payload,
+            };
+        case ItemActionTypes.EditItemBatchUpdateSuccess:
+            state.itemBatchItems.forEach( (item) => item.isSelected = false );
+            return {
+                ...state,
+            };
+        case ItemActionTypes.EditItemBatchUpdateFail:
+            return {
+                ...state,
+                error: action.payload,
+            };
+        
         
         
 
             
         // case ItemActionTypes.AddNewItemRelatedProductRow:
         //     state.item.ItemRelatedProducts.push(action.payload);
-        return {
-                ...state,
-                item: state.item
-            };
+        // return {
+        //         ...state,
+        //         item: state.item
+        //     };
         default:
             return state;
     }

@@ -60,10 +60,10 @@ import { ItemEditBundleGuard } from './item-edit/components/item-edit-bundle/ite
 import { ItemPartEditGuard } from './item-part-edit/item-part-edit/item-part-edit.guard';
 
 
-import { ItemBatchApprovalShellComponent } from './item-batch-approval-shell/item-batch-approval-shell.component';
-import { ItemBatchUpdateShellComponent } from './item-batch-update-shell/item-batch-update-shell.component';
-import { ItemBatchUpdateSelectShellComponent } from './item-batch-update-shell/item-batch-update-select-shell.component';
-import { ItemBatchUpdateUpdateShellComponent } from './item-batch-update-shell/item-batch-update-update-shell.component';
+import { ItemBatchApprovalShellComponent } from './item-batch/item-batch-approval/containers/item-batch-approval-shell/item-batch-approval-shell.component';
+import { ItemBatchUpdateShellComponent } from './item-batch/item-batch-update/containers/item-batch-update-shell/item-batch-update-shell.component';
+import { ItemBatchUpdateSelectShellComponent } from './item-batch/item-batch-update/containers/item-batch-update-shell/item-batch-update-select-shell/item-batch-update-select-shell.component';
+import { ItemBatchUpdateUpdateShellComponent } from './item-batch/item-batch-update/containers/item-batch-update-shell/item-batch-update-update-shell/item-batch-update-update-shell.component';
 import { ItemAddPartShellComponent } from './item-add/containers/item-add-part-shell/item-add-part-shell.component';
 import { ItemEditPartShellComponent } from './item-edit/containers/item-edit-part-shell/item-edit-part-shell.component';
 

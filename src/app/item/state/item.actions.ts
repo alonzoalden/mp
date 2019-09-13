@@ -3,11 +3,12 @@ import { SalesOrder } from '../../shared/class/sales-order';
 import { SalesOrderLine } from '../../shared/class/sales-order-line';
 import { Fulfillment, FulfillmentSalesOrderLine } from '../../shared/class/fulfillment';
 import { VendorBrand } from '../../shared/class/vendor-brand';
-import { ItemInsert, ItemList, ItemOption, ItemOptionInsert, ItemSelectionInsert, Item, ItemUpSellInsert, ItemCrossSellInsert, ItemRelatedProductInsert, ItemAttachmentInsert, ItemVideoInsert, ItemCategoryAssignment, ItemTierPrice } from '../../shared/class/item';
+import { ItemInsert, ItemList, ItemOption, ItemOptionInsert, ItemSelectionInsert, Item, ItemUpSellInsert, ItemCrossSellInsert, ItemRelatedProductInsert, ItemAttachmentInsert, ItemVideoInsert, ItemCategoryAssignment, ItemTierPrice, ItemBatch } from '../../shared/class/item';
 import { Category } from 'app/shared/class/category';
 import { ItemUpSell } from 'app/shared/class/item-up-sell';
 import { VendorAttachment, VendorAttachmentList } from 'app/shared/class/vendor-attachment';
 import { URLVideo } from 'app/shared/class/item-video';
+import { BatchUpdate, BatchUpdateValue } from 'app/shared/class/batch-update';
 
 export enum ItemActionTypes {
   LoadVendorBrands = '[Item] Load Vendor Brands',
@@ -64,7 +65,21 @@ export enum ItemActionTypes {
   LoadItemTierPrices = '[Item] Load Item Tier Prices',
   LoadItemTierPricesSuccess = '[Item] Load Item Tier Prices Success',
   LoadItemTierPricesFail = '[Item] Load Item Tier Prices Fail',
-  
+  LoadPendingItems = '[Item Batch] Load Pending Items',
+  LoadPendingItemsSuccess = '[Item Batch] Load Pending Items Success',
+  LoadPendingItemsFail = '[Item Batch] Load Pending Items Fail',
+  EditItemBatch = '[Item Batch] Edit Item Batch',
+  EditItemBatchSuccess = '[Item Batch] Edit Item Batch Success',
+  EditItemBatchFail = '[Item Batch] Edit Item Batch Fail',
+  LoadItemBatchItems = '[Item Batch] Load Item Batch Items',
+  LoadItemBatchItemsSuccess = '[Item Batch] Load Item Batch Items Success',
+  LoadItemBatchItemsFail = '[Item Batch] Load Item Batch Items Fail',
+  LoadItemBatchUpdate = '[Item Batch] Load Item Batch Update',
+  LoadItemBatchUpdateSuccess = '[Item Batch] Load Item Batch Update Success',
+  LoadItemBatchUpdateFail = '[Item Batch] Load Item Batch Update Fail',
+  EditItemBatchUpdate = '[Item Batch] Edit Item Batch Update',
+  EditItemBatchUpdateSuccess = '[Item Batch] Edit Item Batch Update Success',
+  EditItemBatchUpdateFail = '[Item Batch] Edit Item Batch Update Fail',
   AddNewItemRelatedProductRow = '[Item] Add New Item Related Product Row',
   
 }
@@ -286,6 +301,79 @@ export class LoadItemTierPricesFail implements Action {
   constructor(public payload: string) { }
 }
 
+export class LoadPendingItems implements Action {
+  readonly type = ItemActionTypes.LoadPendingItems;
+}
+
+export class LoadPendingItemsSuccess implements Action {
+  readonly type = ItemActionTypes.LoadPendingItemsSuccess;
+  constructor(public payload: ItemBatch[]) { }
+}
+
+export class LoadPendingItemsFail implements Action {
+  readonly type = ItemActionTypes.LoadPendingItemsFail;
+  constructor(public payload: string) { }
+}
+
+export class LoadItemBatchItems implements Action {
+  readonly type = ItemActionTypes.LoadItemBatchItems;
+}
+
+export class LoadItemBatchItemsSuccess implements Action {
+  readonly type = ItemActionTypes.LoadItemBatchItemsSuccess;
+  constructor(public payload: Item[]) { }
+}
+
+export class LoadItemBatchItemsFail implements Action {
+  readonly type = ItemActionTypes.LoadItemBatchItemsFail;
+  constructor(public payload: string) { }
+}
+
+export class LoadItemBatchUpdate implements Action {
+  readonly type = ItemActionTypes.LoadItemBatchUpdate;
+}
+
+export class LoadItemBatchUpdateSuccess implements Action {
+  readonly type = ItemActionTypes.LoadItemBatchUpdateSuccess;
+  constructor(public payload: BatchUpdate[]) { }
+}
+
+export class LoadItemBatchUpdateFail implements Action {
+  readonly type = ItemActionTypes.LoadItemBatchUpdateFail;
+  constructor(public payload: string) { }
+}
+
+export class EditItemBatch implements Action {
+  readonly type = ItemActionTypes.EditItemBatch;
+  constructor(public payload: ItemBatch[]) { }
+}
+
+export class EditItemBatchSuccess implements Action {
+  readonly type = ItemActionTypes.EditItemBatchSuccess;
+  constructor(public payload: ItemBatch[]) { }
+}
+
+export class EditItemBatchFail implements Action {
+  readonly type = ItemActionTypes.EditItemBatchFail;
+  constructor(public payload: string) { }
+}
+export class EditItemBatchUpdate implements Action {
+  readonly type = ItemActionTypes.EditItemBatchUpdate;
+  constructor(public payload: BatchUpdateValue[]) { }
+}
+
+export class EditItemBatchUpdateSuccess implements Action {
+  readonly type = ItemActionTypes.EditItemBatchUpdateSuccess;
+  constructor(public payload: BatchUpdateValue[]) { }
+}
+
+export class EditItemBatchUpdateFail implements Action {
+  readonly type = ItemActionTypes.EditItemBatchUpdateFail;
+  constructor(public payload: string) { }
+}
+
+
+
 export class EditItem implements Action {
   readonly type = ItemActionTypes.EditItem;
   constructor(public payload: {item: Item, displayPreview: boolean, printLabel: boolean}) { }
@@ -300,6 +388,7 @@ export class EditItemFail implements Action {
   readonly type = ItemActionTypes.EditItemFail;
   constructor(public payload: string) { }
 }
+
 
 
 export class AddNewItemRelatedProductRow implements Action {
@@ -384,4 +473,19 @@ export type ItemActions = LoadVendorBrands
 | LoadItemTierPrices
 | LoadItemTierPricesSuccess
 | LoadItemTierPricesFail
+| LoadPendingItems
+| LoadPendingItemsSuccess
+| LoadPendingItemsFail
+| EditItemBatch
+| EditItemBatchSuccess
+| EditItemBatchFail
+| LoadItemBatchItems
+| LoadItemBatchItemsSuccess
+| LoadItemBatchItemsFail
+| LoadItemBatchUpdate
+| LoadItemBatchUpdateSuccess
+| LoadItemBatchUpdateFail
+| EditItemBatchUpdate
+| EditItemBatchUpdateSuccess
+| EditItemBatchUpdateFail
 | AddNewItemRelatedProductRow;

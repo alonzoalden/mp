@@ -51,7 +51,7 @@
                             </div>
                         </div>
                         <div class="table-responsive" [hidden]="loading">
-                            <table mat-table #table [dataSource]="dataSource" class="table" matSort>
+                            <table mat-table #table [dataSource]="itemBatchItemsMatTable" class="table" matSort>
                                 <!-- Product Details Column -->
                                 <ng-container matColumnDef="ProductDetails">
                                     <th mat-header-cell *matHeaderCellDef width="300px">{{ 'Product Details' | translate }}</th>
