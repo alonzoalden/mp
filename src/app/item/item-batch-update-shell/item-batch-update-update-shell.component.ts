@@ -2,20 +2,19 @@ import { Component, OnInit, ViewContainerRef, ViewChild, Inject, ElementRef } fr
 import { Router } from '@angular/router';
 import { CurrencyPipe } from '@angular/common';
 import { MatMenuModule, MatPaginator, MatSort, MatTableDataSource, MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material';
-import { Item } from '../../../shared/class/item';
-import { BatchUpdate, FieldDropDown, FieldType, BatchUpdateValue } from '../../../shared/class/batch-update';
-import { ItemService } from '../../item.service';
-import { AppService } from '../../../app.service';
+import { Item } from '../../shared/class/item';
+import { BatchUpdate, FieldDropDown, FieldType, BatchUpdateValue } from '../../shared/class/batch-update';
+import { ItemService } from '../item.service';
+import { AppService } from '../../app.service';
 
-import { environment } from '../../../../environments/environment';
+import { environment } from '../../../environments/environment';
 
 @Component({
-    selector: 'o-item-batch-update-update',
-    templateUrl: './item-batch-update-update.component.html'
+    templateUrl: './item-batch-update-update-shell.component.html'
 })
 
 
-export class ItemBatchUpdateUpdateComponent implements OnInit {
+export class ItemBatchUpdateUpdateShellComponent implements OnInit {
     errorMessage: string;
     items: Item[];
 
