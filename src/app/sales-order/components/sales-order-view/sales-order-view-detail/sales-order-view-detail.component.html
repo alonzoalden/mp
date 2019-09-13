@@ -35,7 +35,7 @@
                     </div> -->
                     <div class="col-xs-12 center-block">
                         <div class="sales-order-details" [ngClass]="!isMerchant ? 'details-max-width' : ''">
-                            <form class="form-horizontal" *ngIf="salesorder">
+                            <form class="form-horizontal">
                                 <div class="form-group">
                                     <label class="col-md-2 control-label">{{ 'Ship By' | translate }}</label>
                                     <div class="col-md-8 grey-highlight pt7">{{salesOrder?.ShipByDate | date}}</div>
@@ -43,18 +43,18 @@
                                 <div class="form-group">
                                     <label class="col-md-2 control-label">{{ 'Ship To' | translate }}</label>
                                     <div class="col-md-8 p-w-none">
-                                        <pre class="pre-regular" *ngIf="!isMerchant">{{salesorder.ShipAddressCity}}{{', ' + salesorder.ShipAddressState}}</pre>
+                                        <pre class="pre-regular" *ngIf="!isMerchant">{{salesOrder.ShipAddressCity}}{{', ' + salesOrder.ShipAddressState}}</pre>
                                         <!-- <pre class="pre-regular" *ngIf="isMerchant">{{deliveryDetail}}</pre> -->
                                         <div class="pre-regular" *ngIf="isMerchant">
-                                            <span class="block">{{salesorder.CustomerName}}</span>
-                                            <span class="block">{{salesorder.ShipAddressAddressLine1}}</span>
-                                            <span class="block">{{salesorder.ShipAddressAddressLine2}}</span>
+                                            <span class="block">{{salesOrder.CustomerName}}</span>
+                                            <span class="block">{{salesOrder.ShipAddressAddressLine1}}</span>
+                                            <span class="block">{{salesOrder.ShipAddressAddressLine2}}</span>
                                             <span class="block">
-                                                <span>{{salesorder.ShipAddressCity}}</span>
-                                                <span>, {{salesorder.ShipAddressState}}</span>
-                                                <span> {{salesorder.ShipAddressPostalCode}}</span>
+                                                <span>{{salesOrder.ShipAddressCity}}</span>
+                                                <span>, {{salesOrder.ShipAddressState}}</span>
+                                                <span> {{salesOrder.ShipAddressPostalCode}}</span>
                                             </span>
-                                            <span class="block">{{formatPhoneNumber(salesorder.ShipAddressPhoneNumber)}}</span>
+                                            <span class="block">{{formatPhoneNumber(salesOrder.ShipAddressPhoneNumber)}}</span>
                                         </div>
                                     </div>
                                 </div>

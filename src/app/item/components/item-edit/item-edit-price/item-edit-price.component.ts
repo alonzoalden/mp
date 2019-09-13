@@ -1,11 +1,12 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, OnInit, ViewChild, Input, SimpleChanges, Output, EventEmitter } from '@angular/core';
 import { MatTableDataSource } from '@angular/material';
 import { Router, ActivatedRoute } from '@angular/router';
 
-import { Item, ItemTierPrice } from '../../../../shared/class/item';
+import { Item, ItemTierPrice, ItemInsert, ItemTierPriceInsert } from '../../../../shared/class/item';
 
 import { ItemService } from '../../../item.service';
 import { AppService } from '../../../../app.service';
+import { Member } from 'app/shared/class/member';
 
 @Component({
     selector: 'o-item-edit-price',
@@ -13,11 +14,15 @@ import { AppService } from '../../../../app.service';
 })
 
 export class ItemEditPriceComponent implements OnInit {
-    errorMessage: string;
-    item: Item;
-    itemid: number;
-
-    isDropship: boolean;
+    // errorMessage: string;
+    // item: Item;
+    // itemid: number;
+    @Input() userInfo: Member;
+    @Input() errorMessage: string;
+    @Input() item: Item;
+    @Input() itemTierPricesMatTable: MatTableDataSource<ItemTierPrice>;
+    @Output() getItemTierPrices = new EventEmitter<number>();
+    //isDropship: boolean;
     
     _itemTierPrices: ItemTierPrice[] = [];
 
@@ -40,34 +45,57 @@ export class ItemEditPriceComponent implements OnInit {
                 private itemService: ItemService, 
                 private appService: AppService) { }
     
+    ngOnChanges(changes: SimpleChanges) {
+        console.log(changes);
+        // if (changes.item && changes.item.currentValue ) {
+        //     this.PendingAdd = true;
+        //     this.addPendingLine();
+            
+        // }
+        if (changes.itemTierPricesMatTable && !changes.itemTierPricesMatTable.currentValue.data.length) {
+            this.addPendingLine();
+        }
+        this.currentItemTierPriceIndex = this.item.ItemTierPrices.length - 1;
+        // this.dataSource.sort = this.sort;
+    }
+    
     ngOnInit(): void {
-        this.itemid = this.route.parent.snapshot.params['id'];
+        //this.itemid = this.route.parent.snapshot.params['id'];
+        console.log(this.item);
 
-        this.appService.getCurrentMember()
-                .subscribe(
-                    (data) => {
-                        this.appService.currentMember = data;
-                        this.isDropship = data.IsDropship;
-                    },
-                    (error: any) => {
-                        this.errorMessage = <any>error;
-                    }
-                );
+        
+        if (!this.item.ItemTierPrices.length) {
+            this.getItemTierPrices.emit(this.item.ItemID);
+            //this.addPendingLine();
+        }
+        if (this.item.ItemTierPrices[this.item.ItemTierPrices.length-1].ItemTierPriceID) {
+            this.addPendingLine();
+        }
+        // this.appService.getCurrentMember()
+        //         .subscribe(
+        //             (data) => {
+        //                 this.appService.currentMember = data;
+        //                 this.isDropship = data.IsDropship;
+        //             },
+        //             (error: any) => {
+        //                 this.errorMessage = <any>error;
+        //             }
+        //         );
 
-        this.itemService.getCurrentItemEdit(this.itemid).subscribe(
-            (item: Item) => {
-                this.itemService.currentItemEdit = item;
-                this.item = this.itemService.currentItemEdit;
-                this.initialize();
-            },
-            (error: any) => this.errorMessage = <any>error
-        );
+        // this.itemService.getCurrentItemEdit(this.itemid).subscribe(
+        //     (item: Item) => {
+        //         this.itemService.currentItemEdit = item;
+        //         this.item = this.itemService.currentItemEdit;
+        //         this.initialize();
+        //     },
+        //     (error: any) => this.errorMessage = <any>error
+        // );
 
     }
 
     initialize() {
         if (this.itemService.currentItemEdit.ItemTierPrices === null) {
-            this.itemService.getItemTierPrices(this.itemid).subscribe(
+            this.itemService.getItemTierPrices(this.item.ItemID).subscribe(
                 (itemTierPrice: ItemTierPrice[]) => {
                     this.item.ItemTierPrices = itemTierPrice;                    
                     this.addPendingLine();                    
@@ -78,7 +106,7 @@ export class ItemEditPriceComponent implements OnInit {
             );
         } else {
             this.removePendingLine();
-            this.addPendingLine();            
+            this.addPendingLine();
             this.currentItemTierPriceIndex = this.item.ItemTierPrices.length - 1;
             this.refreshItemTierPriceDataSource(this.item.ItemTierPrices);
         }
@@ -97,7 +125,7 @@ export class ItemEditPriceComponent implements OnInit {
     }
 
     refreshItemTierPriceDataSource(itemTierPrices: ItemTierPrice[]) {        
-        this.dataSource = new MatTableDataSource<ItemTierPrice>(itemTierPrices);
+        this.itemTierPricesMatTable = new MatTableDataSource<ItemTierPrice>(itemTierPrices);
     }
 
     onAddItemTierPrice(itemTierPrice: ItemTierPrice) {

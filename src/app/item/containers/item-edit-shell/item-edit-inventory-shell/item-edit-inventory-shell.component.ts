@@ -1,29 +1,25 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Input } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 
-import { Item } from '../../../../shared/class/item';
+import { Item, ItemInsert } from '../../../../shared/class/item';
 
-import { ItemService } from '../../../item.service';
+import { Observable } from 'rxjs';
+import { Store, select } from '@ngrx/store';
+import * as itemActions from '../../../state/item.actions';
+import * as fromItem from '../../../state';
 
 @Component({
   templateUrl: './item-edit-inventory-shell.component.html'
 })
 
 export class ItemEditInventoryShellComponent implements OnInit {
-    errorMessage: string;
-    item: Item;
+    item$: Observable<ItemInsert>;
+    errorMessage$: Observable<string>;
 
-    constructor(private route: ActivatedRoute,
-                private itemService: ItemService) { }
+    constructor(private store: Store<fromItem.State>) { }
 
     ngOnInit(): void {
-        const itemid = this.route.parent.snapshot.params['id'];
-        this.itemService.getCurrentItemEdit(itemid).subscribe(
-            (item: Item) => {
-                this.itemService.currentItemEdit = item;
-                this.item = item;
-            },
-            (error: any) => this.errorMessage = <any>error
-        );
+        this.item$ = this.store.pipe(select(fromItem.getItem));
+        this.errorMessage$ = this.store.pipe(select(fromItem.getError));
     }
 }

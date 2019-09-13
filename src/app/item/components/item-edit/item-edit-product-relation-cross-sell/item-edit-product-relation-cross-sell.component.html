@@ -3,7 +3,7 @@
     <div class="form-group row">
         <div class="col-md-12">                            
             <div *ngIf="item.ItemCrossSells && item.ItemCrossSells.length && item.ItemCrossSells.length > 0">
-                <table mat-table #table [dataSource]="crossSellDataSource" style="width: 100%;">
+                <table mat-table #table [dataSource]="crossSellMatTable" style="width: 100%;">
                     <!-- Add Button -->
                     <ng-container matColumnDef="Add">
                         <th mat-header-cell *matHeaderCellDef width="45px"></th>
@@ -72,7 +72,7 @@
                                             name="itemUpSellItemID"
                                             required
                                             #itemCrossSellCrossSellItemIDVar="ngModel"
-                                            [loading]="!crossSellItemlist"
+                                            [loading]="!crossSellItemlist.length"
                                             loadingText="Loading...">
                                     <ng-template ng-option-tmp let-item="item">
                                         <div matTooltip="{{item.Description}}" matTooltipPosition="right" matTooltipShowDelay="400">{{item.Description}}</div>

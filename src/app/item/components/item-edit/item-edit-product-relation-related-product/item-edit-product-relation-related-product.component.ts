@@ -1,10 +1,11 @@
-import { Component, OnInit, OnDestroy, ViewChild, ElementRef } from '@angular/core';
+import { Component, OnInit, OnDestroy, ViewChild, ElementRef, Input, Output, EventEmitter, SimpleChanges } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 import { MatTableDataSource } from '@angular/material';
 import { Subscription } from 'rxjs';
 
 import { Item, ItemList, ItemRelatedProduct, ItemRelatedProductInsert } from '../../../../shared/class/item';
 import { ItemService } from '../../../item.service';
+import { environment } from 'environments/environment';
 
 @Component({
   selector: 'o-item-edit-product-relation-related-product',
@@ -12,65 +13,62 @@ import { ItemService } from '../../../item.service';
 })
 
 export class ItemEditProductRelationRelatedProductComponent implements OnInit {
-    errorMessage: string;
-    item: Item;
-    itemid: number;
+    @Input() errorMessage: string;
+    @Input() item: Item;
+    @Input() relatedProductItemlist: ItemList[];
+    @Input() itemRelatedProductsMatTable: MatTableDataSource<ItemRelatedProduct>;
+    @Output() getItemRelatedProduct = new EventEmitter<ItemRelatedProduct>();
+    @Output() addNewItemRelatedProductRow = new EventEmitter<ItemRelatedProduct>();
 
-    relatedProductItemlist: ItemList[];    
     relatedProductDisplayedColumns = ['Add', 'Down', 'Position', 'Up', 'ItemName', 'SKU', 'TPIN', 'Remove'];
-    relatedProductDataSource: any = null;
+    //relatedProductDataSource: any = null;
     relatedProductPendingAdd: boolean;
     currentItemRelatedProductIndex: number;
     formDirty = false;
     canAdd = false;
 
-    @ViewChild('selectionCategoriesRef', { static: false }) selectionCategoriesRef: ElementRef;
+    private imageURL = environment.imageURL;
 
     constructor(private route: ActivatedRoute,
         private itemService: ItemService) { }
-
-    ngOnInit(): void {
-        this.itemid = this.route.parent.snapshot.params['id'];
-        this.itemService.getCurrentItemEdit(this.itemid).subscribe(
-            (item: Item) => {
-                this.itemService.currentItemEdit = item;
-                this.item = this.itemService.currentItemEdit;
-
-                this.initialize();
-            },
-            (error: any) => this.errorMessage = <any>error
-        );
-
-        this.itemService.getItemList().subscribe(
-            (itemlist: ItemList[]) => {
-                this.relatedProductItemlist = itemlist;
-                this.relatedProductRefreshDataSource(this.item.ItemRelatedProducts);
-            },
-            (error: any) => this.errorMessage = <any>error
-        );
-    }        
-
-    initialize() {
-        if (this.itemService.currentItemEdit.ItemRelatedProducts === null) {
-            this.itemService.getItemRelatedProducts(this.itemid).subscribe(
-                (itemRelatedProducts: ItemRelatedProduct[]) => {
-                    this.item.ItemRelatedProducts = itemRelatedProducts;                    
-                    this.relatedProductAddPendingLine();         
-                    this.currentItemRelatedProductIndex = this.item.ItemRelatedProducts.length - 1;
-                    this.relatedProductRefreshDataSource(this.item.ItemRelatedProducts);
-                },
-                (error: any) => this.errorMessage = <any>error
-            );
-        } else {
-            this.relatedProductRemovePendingLine();
-            this.relatedProductAddPendingLine();           
-            this.currentItemRelatedProductIndex = this.item.ItemRelatedProducts.length - 1;    
-            this.relatedProductRefreshDataSource(this.item.ItemRelatedProducts);
+    ngOnChanges(changes: SimpleChanges) {
+        if (changes.item && changes.item.currentValue && changes.item.currentValue.ItemRelatedProducts.length === 0) {
+            this.relatedProductAddPendingLine();
+            this.currentItemRelatedProductIndex = this.item.ItemRelatedProducts.length - 1;
         }
+        if(changes.item && changes.item.currentValue && changes.item.currentValue.ItemRelatedProducts.length) {
+            if (this.item.ItemRelatedProducts[this.item.ItemRelatedProducts.length - 1].ItemRelatedProductID) {
+                this.relatedProductAddPendingLine();
+            }
+        }
+
     }
 
+    ngOnInit(): void {
+        this.currentItemRelatedProductIndex = this.item.ItemRelatedProducts.length - 1;
+    }        
+
+    // initialize() {
+    //     if (this.itemService.currentItemEdit.ItemRelatedProducts === null) {
+    //         this.itemService.getItemRelatedProducts(this.itemid).subscribe(
+    //             (itemRelatedProducts: ItemRelatedProduct[]) => {
+    //                 this.item.ItemRelatedProducts = itemRelatedProducts;                    
+    //                 this.relatedProductAddPendingLine();         
+    //                 this.currentItemRelatedProductIndex = this.item.ItemRelatedProducts.length - 1;
+    //                 this.relatedProductRefreshDataSource(this.item.ItemRelatedProducts);
+    //             },
+    //             (error: any) => this.errorMessage = <any>error
+    //         );
+    //     } else {
+    //         this.relatedProductRemovePendingLine();
+    //         this.relatedProductAddPendingLine();           
+    //         this.currentItemRelatedProductIndex = this.item.ItemRelatedProducts.length - 1;    
+    //         this.relatedProductRefreshDataSource(this.item.ItemRelatedProducts);
+    //     }
+    // }
+
     relatedProductAddPendingLine() {
-        const _temp = new ItemRelatedProduct(0, this.itemid, null, null, null, null, null, this.item.ItemRelatedProducts.length + 1, null, null, null, true);
+        const _temp = new ItemRelatedProduct(0, this.item.ItemID, null, null, null, null, null, this.item.ItemRelatedProducts.length + 1, null, null, null, true);
         this.item.ItemRelatedProducts.push(_temp);   
     }
 
@@ -82,7 +80,7 @@ export class ItemEditProductRelationRelatedProductComponent implements OnInit {
     }
 
     relatedProductRefreshDataSource(itemRelatedProducts: ItemRelatedProduct[]) { 
-        this.relatedProductDataSource = new MatTableDataSource<ItemRelatedProduct>(itemRelatedProducts);
+        this.itemRelatedProductsMatTable = new MatTableDataSource<ItemRelatedProduct>(itemRelatedProducts);
     }
 
     onAddItemRelatedProduct(itemRelatedProduct: ItemRelatedProduct) {
@@ -90,19 +88,19 @@ export class ItemEditProductRelationRelatedProductComponent implements OnInit {
             if(!this.existRelatedProduct(itemRelatedProduct.RelatedProductItemID, true)) {    
                 this.relatedProductPendingAdd = true; 
 
-                this.itemService.getItem(itemRelatedProduct.RelatedProductItemID).subscribe(
-                    (item: Item) => {
-                        itemRelatedProduct.PrevRelatedProductItemID = item.ItemID;
-                        itemRelatedProduct.RelatedItemName = item.Name;
-                        itemRelatedProduct.RelatedItemVendorSKU = item.VendorSKU;
-                        itemRelatedProduct.RelatedTPIN = item.TPIN;
-                        itemRelatedProduct.pendingAdd = false;                            
-                    },
-                    (error: any) => {
-                        this.errorMessage = <any>error;
-                        this.itemService.sendNotification({ type: 'error', title: 'Error', content: this.errorMessage });
-                    }
-                );
+                // this.itemService.getItem(itemRelatedProduct.RelatedProductItemID).subscribe(
+                //     (item: Item) => {
+                //         itemRelatedProduct.PrevRelatedProductItemID = item.ItemID;
+                //         itemRelatedProduct.RelatedItemName = item.Name;
+                //         itemRelatedProduct.RelatedItemVendorSKU = item.VendorSKU;
+                //         itemRelatedProduct.RelatedTPIN = item.TPIN;
+                //         itemRelatedProduct.pendingAdd = false;                            
+                //     },
+                //     (error: any) => {
+                //         this.errorMessage = <any>error;
+                //         this.itemService.sendNotification({ type: 'error', title: 'Error', content: this.errorMessage });
+                //     }
+                // );
 
                 this.relatedProductAddPendingLine();  
                 this.relatedProductRefreshDataSource(this.item.ItemRelatedProducts);
@@ -152,20 +150,22 @@ export class ItemEditProductRelationRelatedProductComponent implements OnInit {
 
     onRelatedProductItemChange(index: number) {      
         if(!this.existRelatedProduct(this.item.ItemRelatedProducts[index].RelatedProductItemID)) {
-            this.itemService.getItem(this.item.ItemRelatedProducts[index].RelatedProductItemID).subscribe(
-                (item: Item) => {
-                    this.item.ItemRelatedProducts[index].PrevRelatedProductItemID = item.ItemID;
-                    this.item.ItemRelatedProducts[index].RelatedItemName = item.Name;
-                    this.item.ItemRelatedProducts[index].RelatedItemVendorSKU = item.VendorSKU;
-                    this.item.ItemRelatedProducts[index].RelatedTPIN = item.TPIN;
-                    this.item.ItemRelatedProducts[index].ImagePath = item.ImagePath;
-                    this.currentItemRelatedProductIndex = this.item.ItemRelatedProducts.length - 1;
-                },
-                (error: any) => {
-                    this.errorMessage = <any>error;
-                    this.itemService.sendNotification({ type: 'error', title: 'Error', content: this.errorMessage });
-                }
-            );
+            
+            this.getItemRelatedProduct.emit(this.item.ItemRelatedProducts[index]);
+            // this.itemService.getItem(this.item.ItemRelatedProducts[index].RelatedProductItemID).subscribe(
+            //     (item: Item) => {
+            //         this.item.ItemRelatedProducts[index].PrevRelatedProductItemID = item.ItemID;
+            //         this.item.ItemRelatedProducts[index].RelatedItemName = item.Name;
+            //         this.item.ItemRelatedProducts[index].RelatedItemVendorSKU = item.VendorSKU;
+            //         this.item.ItemRelatedProducts[index].RelatedTPIN = item.TPIN;
+            //         this.item.ItemRelatedProducts[index].ImagePath = item.ImagePath;
+            //         this.currentItemRelatedProductIndex = this.item.ItemRelatedProducts.length - 1;
+            //     },
+            //     (error: any) => {
+            //         this.errorMessage = <any>error;
+            //         this.itemService.sendNotification({ type: 'error', title: 'Error', content: this.errorMessage });
+            //     }
+            // );
         }
         else {
             this.item.ItemRelatedProducts[index].RelatedProductItemID = this.item.ItemRelatedProducts[index].PrevRelatedProductItemID;

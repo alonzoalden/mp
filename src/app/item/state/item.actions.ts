@@ -3,7 +3,7 @@ import { SalesOrder } from '../../shared/class/sales-order';
 import { SalesOrderLine } from '../../shared/class/sales-order-line';
 import { Fulfillment, FulfillmentSalesOrderLine } from '../../shared/class/fulfillment';
 import { VendorBrand } from '../../shared/class/vendor-brand';
-import { ItemInsert, ItemList, ItemOption, ItemOptionInsert, ItemSelectionInsert, Item, ItemUpSellInsert, ItemCrossSellInsert, ItemRelatedProductInsert, ItemAttachmentInsert, ItemVideoInsert, ItemCategoryAssignment } from '../../shared/class/item';
+import { ItemInsert, ItemList, ItemOption, ItemOptionInsert, ItemSelectionInsert, Item, ItemUpSellInsert, ItemCrossSellInsert, ItemRelatedProductInsert, ItemAttachmentInsert, ItemVideoInsert, ItemCategoryAssignment, ItemTierPrice } from '../../shared/class/item';
 import { Category } from 'app/shared/class/category';
 import { ItemUpSell } from 'app/shared/class/item-up-sell';
 import { VendorAttachment, VendorAttachmentList } from 'app/shared/class/vendor-attachment';
@@ -61,6 +61,10 @@ export enum ItemActionTypes {
   LoadItemCategoryAssignments = '[Item] Load Item Category Assignments',
   LoadItemCategoryAssignmentsSuccess = '[Item] Load Item Category Assignments Success',
   LoadItemCategoryAssignmentsFail = '[Item] Load Item Category Assignments Fail',
+  LoadItemTierPrices = '[Item] Load Item Tier Prices',
+  LoadItemTierPricesSuccess = '[Item] Load Item Tier Prices Success',
+  LoadItemTierPricesFail = '[Item] Load Item Tier Prices Fail',
+  
   AddNewItemRelatedProductRow = '[Item] Add New Item Related Product Row',
   
 }
@@ -267,6 +271,21 @@ export class LoadItemFail implements Action {
   constructor(public payload: string) { }
 }
 
+export class LoadItemTierPrices implements Action {
+  readonly type = ItemActionTypes.LoadItemTierPrices;
+  constructor(public payload: number) { }
+}
+
+export class LoadItemTierPricesSuccess implements Action {
+  readonly type = ItemActionTypes.LoadItemTierPricesSuccess;
+  constructor(public payload: ItemTierPrice[]) { }
+}
+
+export class LoadItemTierPricesFail implements Action {
+  readonly type = ItemActionTypes.LoadItemTierPricesFail;
+  constructor(public payload: string) { }
+}
+
 export class EditItem implements Action {
   readonly type = ItemActionTypes.EditItem;
   constructor(public payload: {item: Item, displayPreview: boolean, printLabel: boolean}) { }
@@ -309,6 +328,8 @@ export class DownloadItemLabelFail implements Action {
   readonly type = ItemActionTypes.DownloadItemLabelFail;
   constructor(public payload: string) { }
 }
+
+
 // Union the valid types
 export type ItemActions = LoadVendorBrands
 | LoadVendorBrandsSuccess
@@ -360,4 +381,7 @@ export type ItemActions = LoadVendorBrands
 | LoadItemCategoryAssignments
 | LoadItemCategoryAssignmentsSuccess
 | LoadItemCategoryAssignmentsFail
+| LoadItemTierPrices
+| LoadItemTierPricesSuccess
+| LoadItemTierPricesFail
 | AddNewItemRelatedProductRow;

@@ -37,15 +37,15 @@ export class SalesOrderListComponent implements OnInit, OnChanges {
             this.salesOrdersMatTable.paginator = this.paginator;
             this.salesOrdersMatTable.sort = this.sort;
         }
-        
     }
     ngOnInit() {
-        this.route.params.subscribe(() => {
-            this.fulfilledby = this.route.snapshot.params['fulfilledby'];
-            this.status = this.route.snapshot.params['status'];
-            if (!this.salesOrdersMatTable.data.length) {
-                this.getSalesOrdersByVendor(this.fulfilledby, this.status);
+        
+        this.route.params.subscribe((route) => {
+            if (route.fulfilledby !== this.fulfilledby) {
+                this.getSalesOrdersByVendor(route.fulfilledby, route.status);
             }
+            this.fulfilledby = route.fulfilledby;
+            this.status = route.status;
         }
         );
         if(this.FilterBy.nativeElement.value) {

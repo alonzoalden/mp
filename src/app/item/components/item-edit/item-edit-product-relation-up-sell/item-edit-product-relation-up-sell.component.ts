@@ -1,10 +1,8 @@
-import { Component, OnInit, OnDestroy, ViewChild, ElementRef } from '@angular/core';
-import { Router, ActivatedRoute } from '@angular/router';
+import { Component, OnInit, OnDestroy, ViewChild, ElementRef, EventEmitter, Input, Output, SimpleChanges } from '@angular/core';
 import { MatTableDataSource } from '@angular/material';
-import { Subscription } from 'rxjs';
-
 import { Item, ItemList, ItemUpSell, ItemUpSellInsert } from '../../../../shared/class/item';
 import { ItemService } from '../../../item.service';
+import { environment } from 'environments/environment';
 
 @Component({
     selector: 'o-item-edit-product-relation-up-sell',
@@ -12,64 +10,36 @@ import { ItemService } from '../../../item.service';
 })
 
 export class ItemEditProductRelationUpSellComponent implements OnInit {
-    errorMessage: string;
-    item: Item;
-    itemid: number;
+    @Input() errorMessage: string;
+    @Input() item: Item;
+    @Input() upSellItemlist: ItemList[];
+    @Input() itemUpSellsMatTable: MatTableDataSource<ItemUpSell>;
+    @Output() getAllItemUpSell = new EventEmitter<ItemUpSell>();
 
-    upSellItemlist: ItemList[];    
     upSellDisplayedColumns = ['Add', 'Down', 'Position', 'Up', 'ItemName', 'SKU', 'TPIN', 'Remove'];
-    upSellDataSource: any = null;
     upSellPendingAdd: boolean;
     currentItemUpSellIndex: number;
     formDirty = false;
 
-    @ViewChild('selectionCategoriesRef', { static: false }) selectionCategoriesRef: ElementRef;
+    private imageURL = environment.imageURL;
 
-    constructor(private route: ActivatedRoute,
-        private itemService: ItemService) { }
+    constructor(private itemService: ItemService) { }
     
-    ngOnInit(): void {
-        this.itemid = this.route.parent.snapshot.params['id'];
-        this.itemService.getCurrentItemEdit(this.itemid).subscribe(
-            (item: Item) => {
-                this.itemService.currentItemEdit = item;
-                this.item = this.itemService.currentItemEdit;
-
-                this.initialize();
-            },
-            (error: any) => this.errorMessage = <any>error
-        );
-
-        this.itemService.getAllItemList().subscribe(
-            (itemlist: ItemList[]) => {
-                this.upSellItemlist = itemlist;
-                this.upSellRefreshDataSource(this.item.ItemUpSells);
-            },
-            (error: any) => this.errorMessage = <any>error
-        );
-    }
-
-    initialize() {
-        if (this.itemService.currentItemEdit.ItemUpSells === null) {
-            this.itemService.getItemUpSells(this.itemid).subscribe(
-                (itemUpSells: ItemUpSell[]) => {
-                    this.item.ItemUpSells = itemUpSells;                    
-                    this.upSellAddPendingLine();         
-                    this.currentItemUpSellIndex = this.item.ItemUpSells.length - 1;
-                    this.upSellRefreshDataSource(this.item.ItemUpSells);
-                },
-                (error: any) => this.errorMessage = <any>error
-            );
-        } else {
-            this.upSellRemovePendingLine();
-            this.upSellAddPendingLine();               
+    ngOnChanges(changes: SimpleChanges): void {
+        
+        if (changes.item && changes.item.currentValue && changes.item.currentValue.ItemUpSells.length === 0) {
+            this.upSellAddPendingLine();
             this.currentItemUpSellIndex = this.item.ItemUpSells.length - 1;
-            this.upSellRefreshDataSource(this.item.ItemUpSells);
         }
+    }
+    ngOnInit(): void {
+        this.upSellRemovePendingLine();
+        this.upSellAddPendingLine();
+        this.currentItemUpSellIndex = this.item.ItemUpSells.length - 1;
     }
 
     upSellAddPendingLine() {
-        const _temp = new ItemUpSell(0, this.itemid, null, null, null, null, null, this.item.ItemUpSells.length + 1, null, null, null, true);
+        const _temp = new ItemUpSell(0, this.item.ItemID, null, null, null, null, null, this.item.ItemUpSells.length + 1, null, null, null, true);
         this.item.ItemUpSells.push(_temp);   
     }
 
@@ -81,7 +51,7 @@ export class ItemEditProductRelationUpSellComponent implements OnInit {
     }
 
     upSellRefreshDataSource(itemUpSells: ItemUpSell[]) { 
-        this.upSellDataSource = new MatTableDataSource<ItemUpSell>(itemUpSells);
+        this.itemUpSellsMatTable = new MatTableDataSource<ItemUpSell>(itemUpSells);
     }
 
     onAddItemUpSell(itemUpSell: ItemUpSell) {
@@ -89,19 +59,19 @@ export class ItemEditProductRelationUpSellComponent implements OnInit {
             if(!this.existUpSell(itemUpSell.UpSellItemID, true)) {    
                 this.upSellPendingAdd = true; 
 
-                this.itemService.getAllItem(itemUpSell.UpSellItemID).subscribe(
-                    (item: Item) => {
-                        itemUpSell.PrevUpSellItemID = item.ItemID;
-                        itemUpSell.UpSellItemName = item.Name;
-                        itemUpSell.UpSellItemVendorSKU = item.VendorSKU;
-                        itemUpSell.UpSellTPIN = item.TPIN;
-                        itemUpSell.pendingAdd = false;                            
-                    },
-                    (error: any) => {
-                        this.errorMessage = <any>error;
-                        this.itemService.sendNotification({ type: 'error', title: 'Error', content: this.errorMessage });
-                    }
-                );
+                // this.itemService.getAllItem(itemUpSell.UpSellItemID).subscribe(
+                //     (item: Item) => {
+                //         itemUpSell.PrevUpSellItemID = item.ItemID;
+                //         itemUpSell.UpSellItemName = item.Name;
+                //         itemUpSell.UpSellItemVendorSKU = item.VendorSKU;
+                //         itemUpSell.UpSellTPIN = item.TPIN;
+                //         itemUpSell.pendingAdd = false;                            
+                //     },
+                //     (error: any) => {
+                //         this.errorMessage = <any>error;
+                //         this.itemService.sendNotification({ type: 'error', title: 'Error', content: this.errorMessage });
+                //     }
+                // );
 
                 this.upSellAddPendingLine();  
                 this.upSellRefreshDataSource(this.item.ItemUpSells);
@@ -152,20 +122,21 @@ export class ItemEditProductRelationUpSellComponent implements OnInit {
     onUpSellItemChange(index: number) {
         if(this.item.ItemUpSells[index].UpSellItemID) {
             if(!this.existUpSell(this.item.ItemUpSells[index].UpSellItemID)) {
-                this.itemService.getAllItem(this.item.ItemUpSells[index].UpSellItemID).subscribe(
-                    (item: Item) => {
-                        this.item.ItemUpSells[index].PrevUpSellItemID = item.ItemID;
-                        this.item.ItemUpSells[index].UpSellItemName = item.Name;
-                        this.item.ItemUpSells[index].UpSellItemVendorSKU = item.VendorSKU;
-                        this.item.ItemUpSells[index].UpSellTPIN = item.TPIN;
-                        this.item.ItemUpSells[index].ImagePath = item.ImagePath;
-                        this.currentItemUpSellIndex = this.item.ItemUpSells.length - 1;
-                    },
-                    (error: any) => {
-                        this.errorMessage = <any>error;
-                        this.itemService.sendNotification({ type: 'error', title: 'Error', content: this.errorMessage });
-                    }
-                );
+                this.getAllItemUpSell.emit(this.item.ItemUpSells[index]);
+                // this.itemService.getAllItem(this.item.ItemUpSells[index].UpSellItemID).subscribe(
+                //     (item: Item) => {
+                //         this.item.ItemUpSells[index].PrevUpSellItemID = item.ItemID;
+                //         this.item.ItemUpSells[index].UpSellItemName = item.Name;
+                //         this.item.ItemUpSells[index].UpSellItemVendorSKU = item.VendorSKU;
+                //         this.item.ItemUpSells[index].UpSellTPIN = item.TPIN;
+                //         this.item.ItemUpSells[index].ImagePath = item.ImagePath;
+                //         this.currentItemUpSellIndex = this.item.ItemUpSells.length - 1;
+                //     },
+                //     (error: any) => {
+                //         this.errorMessage = <any>error;
+                //         this.itemService.sendNotification({ type: 'error', title: 'Error', content: this.errorMessage });
+                //     }
+                // );
             }
             else {
                 this.item.ItemUpSells[index].UpSellItemID = this.item.ItemUpSells[index].PrevUpSellItemID;

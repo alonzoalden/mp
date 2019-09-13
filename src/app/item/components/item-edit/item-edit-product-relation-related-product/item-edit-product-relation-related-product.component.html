@@ -3,7 +3,7 @@
     <div class="form-group row">
         <div class="col-md-12">                            
             <div *ngIf="item.ItemRelatedProducts && item.ItemRelatedProducts.length && item.ItemRelatedProducts.length > 0">
-                <table mat-table #table [dataSource]="relatedProductDataSource">
+                <table mat-table #table [dataSource]="itemRelatedProductsMatTable">
                     <!-- Add Button -->
                     <ng-container matColumnDef="Add">
                         <th mat-header-cell *matHeaderCellDef width="45px"></th>
@@ -71,7 +71,7 @@
                                             name="itemRelatedProductItemID"
                                             required
                                             #itemRelatedProductRelatedProductItemIDVar="ngModel"
-                                            [loading]="!relatedProductItemlist"
+                                            [loading]="!relatedProductItemlist.length"
                                             loadingText="Loading...">
                                             
                                     <ng-template ng-option-tmp let-item="item">

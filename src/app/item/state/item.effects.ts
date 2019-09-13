@@ -8,7 +8,7 @@ import * as itemActions from './item.actions';
 import { Router } from '@angular/router';
 import { Member, MemberVendor } from 'app/shared/class/member';
 import { VendorBrand } from 'app/shared/class/vendor-brand';
-import { ItemList, Item, ItemCrossSellInsert, ItemUpSell, ItemUpSellInsert, ItemRelatedProduct, ItemRelatedProductInsert, ItemAttachmentInsert, ItemVideoInsert, ItemCategoryAssignment } from 'app/shared/class/item';
+import { ItemList, Item, ItemCrossSellInsert, ItemUpSell, ItemUpSellInsert, ItemRelatedProduct, ItemRelatedProductInsert, ItemAttachmentInsert, ItemVideoInsert, ItemCategoryAssignment, ItemTierPrice } from 'app/shared/class/item';
 import { Category } from 'app/shared/class/category';
 import { VendorAttachment, VendorAttachmentList } from 'app/shared/class/vendor-attachment';
 import { URLVideo } from 'app/shared/class/item-video';
@@ -222,7 +222,6 @@ export class ItemEffects {
             )
         )
     );
-
     
     @Effect()
     loadItemCategoryAssignments$: Observable<Action> = this.actions$.pipe(
@@ -239,6 +238,25 @@ export class ItemEffects {
             )
         )
     );
+
+    @Effect()
+    loadItemTierPrices$: Observable<Action> = this.actions$.pipe(
+        ofType(itemActions.ItemActionTypes.LoadItemTierPrices),
+        map((action: itemActions.LoadItemTierPrices) => action.payload),
+        mergeMap((id: number) =>
+            this.itemService.getItemTierPrices(id).pipe(
+                map((tierprices: ItemTierPrice[]) =>  (new itemActions.LoadItemTierPricesSuccess(tierprices))),
+                catchError(err => {
+                    this.itemService.sendNotification({ type: 'error', title: 'Error', content: err });
+                    of(new itemActions.LoadItemTierPricesFail(err))
+                    return EMPTY;
+                })
+            )
+        )
+    );
+
+    
+
     @Effect()
     loadItem$: Observable<Action> = this.actions$.pipe(
         ofType(itemActions.ItemActionTypes.LoadItem),

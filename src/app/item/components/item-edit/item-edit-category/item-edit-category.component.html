@@ -27,7 +27,7 @@
                                     <a (click)='onAddCategory(); formDirty = false; canAdd = false;'><span [matTooltip]="lastSelectedValue > 0 ? ( 'Add' | translate ) : ( 'Required fields must be complete' | translate )" class="glyphicon glyphicon-plus fs-20" [ngClass]="lastSelectedValue > 0 ? 'green' : 'gray'"></span></a>
                                 </div>
                             </div>
-                            <div class="col-md-3 pb6" *ngFor="let categories of categoryiesList; let i = index">
+                            <div class="col-md-3 pb6" *ngFor="let categories of categoriesList; let i = index">
                                 <div class="flex-row">
                                     <span class="greater-separater" *ngIf="i > 0"> > </span>
                                     <ng-select  [items]="categories"

@@ -59,7 +59,7 @@ export class SalesOrderDetailComponent implements OnInit {
             this.salesOrderLinesMatTable.sort = this.sort;
         }
         if (changes.deliveryDetail && changes.deliveryDetail.currentValue) {
-            this.deliveryDetail = changes.deliveryDetail.currentValue.trim().replace(new RegExp('<br />', 'g'), '\n');
+            //this.deliveryDetail = changes.deliveryDetail.currentValue.trim().replace(new RegExp('<br />', 'g'), '\n');
         }
         if (changes.salesOrder && !changes.salesOrder.currentValue && changes.salesOrder.firstChange) {
             this.getFulfilledBySalesOrder.emit({orderid: this.route.parent.snapshot.params['id'], fulfilledby: this.route.parent.snapshot.params['fulfilledby']});
@@ -90,6 +90,15 @@ export class SalesOrderDetailComponent implements OnInit {
         });
     
         dialogRef.afterClosed().subscribe(() => window.location.reload());
+    }
+    formatPhoneNumber(phoneNumberString) {
+        if (!phoneNumberString) return;
+        const cleaned = ('' + phoneNumberString).replace(/\D/g, '');
+        const match = cleaned.match(/^(\d{3})(\d{3})(\d{4})$/);
+        if (match) {
+          return '(' + match[1] + ') ' + match[2] + '-' + match[3];
+        }
+        return null;
     }
 }
 

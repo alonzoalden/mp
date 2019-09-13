@@ -144,6 +144,21 @@ export function itemReducer(state = initialState, action: ItemActions): ItemStat
                 categoryAssignments: [],
                 error: action.payload,
             };
+        case ItemActionTypes.LoadItemTierPricesSuccess:
+            state.item.ItemTierPrices = action.payload;
+            return {
+                ...state,
+                item: state.item,
+                error: '',
+            };
+        case ItemActionTypes.LoadItemTierPricesFail:
+            state.item.ItemTierPrices = [];
+            return {
+                ...state,
+                item: state.item,
+                error: action.payload,
+            };
+            
         case ItemActionTypes.LoadItemSuccess:
             return {
                 ...state,

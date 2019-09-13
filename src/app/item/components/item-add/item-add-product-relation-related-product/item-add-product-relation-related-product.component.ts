@@ -18,7 +18,7 @@ export class ItemAddProductRelationRelatedProductComponent implements OnInit {
     @Output() addNewItemRelatedProductRow = new EventEmitter<ItemRelatedProductInsert>();
     
     relatedProductDisplayedColumns = ['Add', 'Down', 'Position', 'Up', 'ItemName', 'SKU', 'TPIN', 'Remove'];
-    relatedProductDataSource: any = null;
+    //relatedProductDataSource: any = null;
     relatedProductPendingAdd: boolean;
     relatedProductPendingImage: boolean;
     currentItemRelatedProductIndex: number;

@@ -59,7 +59,7 @@ import { ItemEditDimensionComponent } from './components/item-edit/item-edit-dim
 import { ItemEditPriceComponent } from './components/item-edit/item-edit-price/item-edit-price.component';
 import { ItemEditCategoryComponent } from './components/item-edit/item-edit-category/item-edit-category.component';
 import { ItemEditBundleComponent } from './components/item-edit/item-edit-bundle/item-edit-bundle.component';
-import { ItemEditProductRelationComponent } from './components/item-edit/item-edit-product-relation/item-edit-product-relation.component';
+//import { ItemEditProductRelationComponent } from './components/item-edit/item-edit-product-relation/item-edit-product-relation.component';
 import { ItemEditProductRelationRelatedProductComponent } from './components/item-edit/item-edit-product-relation-related-product/item-edit-product-relation-related-product.component';
 import { ItemEditProductRelationUpSellComponent } from './components/item-edit/item-edit-product-relation-up-sell/item-edit-product-relation-up-sell.component';
 import { ItemEditProductRelationCrossSellComponent } from './components/item-edit/item-edit-product-relation-cross-sell/item-edit-product-relation-cross-sell.component';
@@ -76,9 +76,9 @@ import { ItemEditPriceShellComponent } from './containers/item-edit-shell/item-e
 import { ItemEditCategoryShellComponent } from './containers/item-edit-shell/item-edit-category-shell/item-edit-category-shell.component';
 import { ItemEditBundleShellComponent } from './containers/item-edit-shell/item-edit-bundle-shell/item-edit-bundle-shell.component';
 import { ItemEditProductRelationShellComponent } from './containers/item-edit-shell/item-edit-product-relation-shell/item-edit-product-relation-shell.component';
-import { ItemEditProductRelationRelatedProductShellComponent } from './containers/item-edit-shell/item-edit-product-relation-shell/item-edit-product-relation-related-product-shell/item-edit-product-relation-related-product-shell.component';
-import { ItemEditProductRelationUpSellShellComponent } from './containers/item-edit-shell/item-edit-product-relation-shell/item-edit-product-relation-up-sell-shell/item-edit-product-relation-up-sell-shell.component';
-import { ItemEditProductRelationCrossSellShellComponent } from './containers/item-edit-shell/item-edit-product-relation-shell/item-edit-product-relation-cross-sell-shell/item-edit-product-relation-cross-sell-shell.component';
+//import { ItemEditProductRelationRelatedProductShellComponent } from './containers/item-edit-shell/item-edit-product-relation-shell/item-edit-product-relation-related-product-shell/item-edit-product-relation-related-product-shell.component';
+//import { ItemEditProductRelationUpSellShellComponent } from './containers/item-edit-shell/item-edit-product-relation-shell/item-edit-product-relation-up-sell-shell/item-edit-product-relation-up-sell-shell.component';
+//import { ItemEditProductRelationCrossSellShellComponent } from './containers/item-edit-shell/item-edit-product-relation-shell/item-edit-product-relation-cross-sell-shell/item-edit-product-relation-cross-sell-shell.component';
 import { ItemEditVendorAttachmentShellComponent } from './containers/item-edit-shell/item-edit-vendor-attachment-shell/item-edit-vendor-attachment-shell.component';
 import { ItemEditVideoShellComponent } from './containers/item-edit-shell/item-edit-video-shell/item-edit-video-shell.component';
 import { ItemEditImageShellComponent } from './containers/item-edit-shell/item-edit-image-shell/item-edit-image-shell.component';
@@ -193,7 +193,7 @@ import { ItemEffects } from './state/item.effects';
         ItemEditPriceComponent,
         ItemEditCategoryComponent,
         ItemEditBundleComponent,
-        ItemEditProductRelationComponent,
+        //ItemEditProductRelationComponent,
         ItemEditProductRelationRelatedProductComponent,
         ItemEditProductRelationUpSellComponent,
         ItemEditProductRelationCrossSellComponent,
@@ -211,9 +211,9 @@ import { ItemEffects } from './state/item.effects';
         ItemEditCategoryShellComponent,
         ItemEditBundleShellComponent,
         ItemEditProductRelationShellComponent,
-        ItemEditProductRelationRelatedProductShellComponent,
-        ItemEditProductRelationUpSellShellComponent,
-        ItemEditProductRelationCrossSellShellComponent,
+        // ItemEditProductRelationRelatedProductShellComponent,
+        // ItemEditProductRelationUpSellShellComponent,
+        // ItemEditProductRelationCrossSellShellComponent,
         ItemEditVendorAttachmentShellComponent,
         ItemEditVideoShellComponent,
         ItemEditImageShellComponent,

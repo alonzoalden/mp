@@ -10,8 +10,6 @@ import { Store, select } from '@ngrx/store';
 import * as itemActions from '../../../state/item.actions';
 import * as fromItem from '../../../state';
 
-import { environment } from '../../../../../environments/environment';
-
 @Component({
     templateUrl: './item-add-vendor-attachment-shell.component.html'
   })

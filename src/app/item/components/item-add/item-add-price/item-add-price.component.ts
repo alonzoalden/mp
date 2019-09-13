@@ -16,8 +16,6 @@ import { Member } from 'app/shared/class/member';
 
 
 export class ItemAddPriceComponent implements OnInit, OnChanges {
-    // errorMessage: string;
-    // item: ItemInsert;
     @Input() userInfo: Member;
     @Input() errorMessage: string;
     @Input() item: ItemInsert;

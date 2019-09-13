@@ -17,7 +17,6 @@ import * as fromUser from '../../../../shared/state/user-state.reducer';
 })
 
 export class ItemAddProductRelationShellComponent implements OnInit, OnDestroy {
-    //errorMessage: string;
     componentActive: boolean = true;
     currentMember: Member;
 

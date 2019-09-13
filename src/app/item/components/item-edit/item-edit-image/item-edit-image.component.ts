@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy, ViewChild, Inject } from '@angular/core';
+import { Component, OnInit, OnDestroy, ViewChild, Inject, Input, SimpleChanges } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 import { MatTableDataSource, MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material';
 import { Subscription } from 'rxjs';
@@ -18,17 +18,17 @@ declare var $ :any;
 export class ItemEditImageComponent implements OnInit {
     private imageURL = environment.imageURL;
 
-    errorMessage: string;
-    item: Item;
-    itemid: number;
+    @Input() errorMessage: string;
+    @Input() item: Item;
+    @Input() itemImagesMatTable: MatTableDataSource<ItemImage>;
+
 
     displayedColumns = ['Add', 'Down', 'Position', 'Up', 'Thumbnail', 'Label', 'IsBaseImage', 'IsSmallImage', 'IsThumbnail', 'IsRotatorImage', 'Exclude', 'Remove'];
-    dataSource: any = null;
+    //dataSource: any = null;
     pendingAdd: boolean;
     currentIndex: number;
-
     formDirty = false;
-
+    itemid: number;
     filesToUpload: Array<File> = [];
     selectedFileNames: string[] = [];
     res: Array<string>;
@@ -39,23 +39,30 @@ export class ItemEditImageComponent implements OnInit {
     
     constructor(private route: ActivatedRoute,
         private itemService: ItemService, public itemUploadDialog: MatDialog) { }
-
+    
+    
     guid: string;
 
+    ngOnChanges(changes: SimpleChanges): void {
+        if (changes.item && changes.item.currentValue && changes.item.currentValue.ItemImages.length === 0) {
+            this.removePendingLine();
+            this.addPendingLine();
+        }
+    }
     ngOnInit(): void {
         this.guid = this.newGuid();
-
+        this.currentIndex = this.item.ItemImages.length - 1;
         this.itemid = this.route.parent.snapshot.params['id'];
 
-        this.itemService.getCurrentItemEdit(this.itemid).subscribe(
-            (item: Item) => {
+        // this.itemService.getCurrentItemEdit(this.itemid).subscribe(
+        //     (item: Item) => {
                 
-                this.itemService.currentItemEdit = item;
-                this.item = this.itemService.currentItemEdit;
-                this.initialize();
-            },
-            (error: any) => this.errorMessage = <any>error
-        );
+        //         this.itemService.currentItemEdit = item;
+        //         this.item = this.itemService.currentItemEdit;
+        //         this.initialize();
+        //     },
+        //     (error: any) => this.errorMessage = <any>error
+        // );
     }
 
     initialize() {
@@ -102,7 +109,7 @@ export class ItemEditImageComponent implements OnInit {
     }
 
     refreshDataSource(itemImages: ItemImage[]) { 
-        this.dataSource = new MatTableDataSource<ItemImage>(itemImages);
+        this.itemImagesMatTable = new MatTableDataSource<ItemImage>(itemImages);
     }
 
     onAddItemImage(itemImage: ItemImage) {

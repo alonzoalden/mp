@@ -1,9 +1,6 @@
-import { Component, OnInit, OnDestroy, ViewChild, ElementRef } from '@angular/core';
-import { Router, ActivatedRoute } from '@angular/router';
+import { Component, OnInit, OnChanges, Input, Output, EventEmitter, SimpleChanges } from '@angular/core';
 import { MatTableDataSource } from '@angular/material';
-import { Subscription } from 'rxjs';
-
-import { Item, ItemList, ItemAttachment } from '../../../../shared/class/item';
+import { Item, ItemList, ItemAttachment, ItemInsert, ItemAttachmentInsert } from '../../../../shared/class/item';
 import { ItemService } from '../../../item.service';
 import { VendorAttachmentList, VendorAttachment } from '../../../../shared/class/vendor-attachment';
 
@@ -14,67 +11,40 @@ import { environment } from '../../../../../environments/environment';
     templateUrl: './item-edit-vendor-attachment.component.html'
 })
 
-export class ItemEditVendorAttachmentComponent implements OnInit {
-    errorMessage: string;
-    item: Item;
-    itemid: number;
+export class ItemEditVendorAttachmentComponent implements OnInit, OnChanges {
     private fileURL = environment.fileURL;
-
-    vendorattachmentlist: VendorAttachmentList[];    
+    @Input() errorMessage: string;
+    @Input() item: Item;
+    @Input() itemAttachmentsMatTable: MatTableDataSource<ItemAttachment>;
+    @Input() vendorAttachmentsList: VendorAttachmentList[];
+    @Output() getVendorAttachmentList = new EventEmitter<void>();
+    @Output() getAttachment = new EventEmitter<ItemAttachment>();   
+    
     displayedColumns = ['Add', 'Down', 'Position', 'Up', 'View', 'AttachmentID', 'Title', 'FileName', 'Remove'];
-    dataSource: any = null;
     pendingAdd: boolean;
     currentIndex: number;
-
     formDirty = false;
     canAdd = false;
 
-    @ViewChild('selectionCategoriesRef', { static: false }) selectionCategoriesRef: ElementRef;
+    constructor(private itemService: ItemService) { }
 
-    constructor(private route: ActivatedRoute,
-        private itemService: ItemService) { }
-
-    ngOnInit(): void {
-        this.itemid = this.route.parent.snapshot.params['id'];
-        this.itemService.getCurrentItemEdit(this.itemid).subscribe(
-            (item: Item) => {
-                this.itemService.currentItemEdit = item;
-                this.item = this.itemService.currentItemEdit;
-                this.initialize();
-            },
-            (error: any) => this.errorMessage = <any>error
-        );
-
-        this.itemService.getAttachmentList().subscribe(
-            (vendorattachmentlist: VendorAttachmentList[]) => {
-                this.vendorattachmentlist = vendorattachmentlist;
-                this.refreshDataSource(this.item.ItemAttachments);
-            },
-            (error: any) => this.errorMessage = <any>error
-        );
-    }
-
-    initialize() {
-        if (this.itemService.currentItemEdit.ItemAttachments === null) {
-            this.itemService.getItemAttachments(this.itemid).subscribe(
-                (itemAttachments: ItemAttachment[]) => {
-                    this.item.ItemAttachments = itemAttachments;                    
-                    this.addPendingLine();      
-                    this.currentIndex = this.item.ItemAttachments.length - 1;   
-                    this.refreshDataSource(this.item.ItemAttachments);
-                },
-                (error: any) => this.errorMessage = <any>error
-            );
-        } else {
-            this.removePendingLine();
-            this.addPendingLine();        
-            this.currentIndex = this.item.ItemAttachments.length - 1;       
-            this.refreshDataSource(this.item.ItemAttachments);
+    ngOnChanges(changes: SimpleChanges) {
+        if (changes.item && changes.item.currentValue) {
+            if (changes.item.currentValue.ItemAttachments.length === 0 || this.item.ItemAttachments[this.item.ItemAttachments.length-1].VendorAttachmentID) {
+                this.addPendingLine();
+            }
+        }
+        if (changes.vendorAttachmentsList && changes.vendorAttachmentsList.currentValue && changes.vendorAttachmentsList.currentValue.length === 0) {
+            this.getVendorAttachmentList.emit();
         }
     }
 
+    ngOnInit(): void {
+        this.currentIndex = this.item.ItemAttachments.length - 1;
+    }
+
     addPendingLine() {
-        const _temp = new ItemAttachment(0, null, null, null, null, this.itemid, this.item.ItemAttachments.length + 1, null, null, true);
+        const _temp = new ItemAttachment(0, null, null, null, null, this.item.ItemID, this.item.ItemAttachments.length + 1, null, null, true);
         this.item.ItemAttachments.push(_temp);   
     }
 
@@ -86,28 +56,28 @@ export class ItemEditVendorAttachmentComponent implements OnInit {
     }
 
     refreshDataSource(itemAttachments: ItemAttachment[]) { 
-        this.dataSource = new MatTableDataSource<ItemAttachment>(itemAttachments);
+        this.itemAttachmentsMatTable = new MatTableDataSource<ItemAttachment>(itemAttachments);
     }
 
     onAddItemAttachment(itemAttachment: ItemAttachment) {
         if (this.isRequirementValid(itemAttachment)) { 
             if(!this.existAttachment(itemAttachment.VendorAttachmentID, true)) {        
                 this.pendingAdd = true;
-
-                this.itemService.getAttachment(itemAttachment.VendorAttachmentID).subscribe(
-                    (attachment: VendorAttachment) => {
-                        itemAttachment.Title = attachment.Title;
-                        if(attachment.UploadedFile) {
-                            itemAttachment.FileName = attachment.UploadedFile.substring(5);
-                        }
-                        itemAttachment.UploadedFile = attachment.UploadedFile;
-                        itemAttachment.pendingAdd = false; 
-                    },
-                    (error: any) => {
-                        this.errorMessage = <any>error;
-                        this.itemService.sendNotification({ type: 'error', title: 'Error', content: this.errorMessage });
-                    }
-                );
+                this.getAttachment.emit(itemAttachment);
+                // this.itemService.getAttachment(itemAttachment.VendorAttachmentID).subscribe(
+                //     (attachment: VendorAttachment) => {
+                //         itemAttachment.Title = attachment.Title;
+                //         if(attachment.UploadedFile) {
+                //             itemAttachment.FileName = attachment.UploadedFile.substring(5);
+                //         }
+                //         itemAttachment.UploadedFile = attachment.UploadedFile;
+                //         itemAttachment.pendingAdd = false; 
+                //     },
+                //     (error: any) => {
+                //         this.errorMessage = <any>error;
+                //         this.itemService.sendNotification({ type: 'error', title: 'Error', content: this.errorMessage });
+                //     }
+                // );
 
                 this.addPendingLine(); 
                 this.refreshDataSource(this.item.ItemAttachments);
@@ -186,12 +156,12 @@ export class ItemEditVendorAttachmentComponent implements OnInit {
                 this.item.ItemAttachments.splice(foundIndex, 1);
             }            
             this.refreshDataSource(this.item.ItemAttachments);
+            this.currentIndex = this.item.ItemAttachments.length-1;
         }
     }
     clearFields(itemAttachment: ItemAttachment) {
         itemAttachment.VendorAttachmentID = null;
         this.formDirty = false;
-        //this.selectionCategoriesRef.nativeElement.value = "0: null";
     }
 }
   

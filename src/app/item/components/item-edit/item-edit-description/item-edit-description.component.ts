@@ -24,8 +24,7 @@ export class ItemEditDescriptionComponent implements OnInit, AfterViewInit {
     @Input() errorMessage: string;
     @Input() pendingSave: boolean;
 
-    constructor(private route: ActivatedRoute,
-                private itemService: ItemService) { }
+    constructor(private route: ActivatedRoute) { }
 
     ngOnChanges(changes: SimpleChanges) {
         if (changes.userInfo && changes.userInfo.currentValue) {
@@ -34,7 +33,7 @@ export class ItemEditDescriptionComponent implements OnInit, AfterViewInit {
     }
 
     ngOnInit(): void {
-        const itemid = this.route.parent.snapshot.params['id'];
+        //const itemid = this.route.parent.snapshot.params['id'];
         
         // this.itemService.getVendorBrands().subscribe(
         //     (vendorBrands: VendorBrand[]) => {

@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy, ViewChild } from '@angular/core';
+import { Component, OnInit, OnDestroy, ViewChild, Input, Output, EventEmitter, SimpleChanges } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 import { MatTableDataSource } from '@angular/material';
 import { Subscription } from 'rxjs';
@@ -16,57 +16,56 @@ import { environment } from '../../../../../environments/environment';
 })
 
 export class ItemEditVideoComponent implements OnInit {
-    errorMessage: string;
-    item: Item;
-    itemid: number;
+    @Input() errorMessage: string;
+    @Input() item: Item;
+    @Input() itemVideosMatTable: MatTableDataSource<ItemVideo>;
+    @Output() getVideoURLDetail = new EventEmitter<ItemVideo>();
 
     private imageURL = environment.imageURL;
 
     displayedColumns = ['Add', 'Down', 'Position', 'Up', 'Thumbnail', 'Label', 'Description', 'Exclude', 'Remove'];
-    dataSource: any = null;
     pendingAdd: boolean;
     currentIndex: number;
-
     formDirty = false;
     canAdd = false;
 
-    constructor(private route: ActivatedRoute,
-        private itemService: ItemService) { }
+    constructor(private itemService: ItemService) { }
 
-    ngOnInit(): void {
-        this.itemid = this.route.parent.snapshot.params['id'];
-
-        this.itemService.getCurrentItemEdit(this.itemid).subscribe(
-            (item: Item) => {
-                this.itemService.currentItemEdit = item;
-                this.item = this.itemService.currentItemEdit;
-                this.initialize();
-            },
-            (error: any) => this.errorMessage = <any>error
-        );
-    }
-
-    initialize() {
-        if (this.itemService.currentItemEdit.ItemVideos === null) {
-            this.itemService.getItemVideos(this.itemid).subscribe(
-                (itemVideos: ItemVideo[]) => {
-                    this.item.ItemVideos = itemVideos;                    
-                    this.addPendingLine();         
-                    this.currentIndex = this.item.ItemVideos.length - 1;
-                    this.refreshDataSource(this.item.ItemVideos);
-                },
-                (error: any) => this.errorMessage = <any>error
-            );
-        } else {
-            this.removePendingLine();
-            this.addPendingLine();              
-            this.currentIndex = this.item.ItemVideos.length - 1; 
-            this.refreshDataSource(this.item.ItemVideos);
+    ngOnChanges(changes: SimpleChanges) {
+        if (changes.item && changes.item.currentValue) {
+            if (this.item.ItemAttachments.length === 0 || this.item.ItemVideos[this.item.ItemVideos.length-1].ItemVideoID) {
+                this.addPendingLine();
+            }
+            this.addPendingLine();
+            this.currentIndex = this.item.ItemVideos.length - 1;
         }
     }
 
+    ngOnInit(): void {
+        this.currentIndex = this.item.ItemVideos.length - 1;
+    }
+
+    // initialize() {
+    //     if (this.itemService.currentItemEdit.ItemVideos === null) {
+    //         this.itemService.getItemVideos(this.itemid).subscribe(
+    //             (itemVideos: ItemVideo[]) => {
+    //                 this.item.ItemVideos = itemVideos;                    
+    //                 this.addPendingLine();         
+    //                 this.currentIndex = this.item.ItemVideos.length - 1;
+    //                 this.refreshDataSource(this.item.ItemVideos);
+    //             },
+    //             (error: any) => this.errorMessage = <any>error
+    //         );
+    //     } else {
+    //         this.removePendingLine();
+    //         this.addPendingLine();              
+    //         this.currentIndex = this.item.ItemVideos.length - 1; 
+    //         this.refreshDataSource(this.item.ItemVideos);
+    //     }
+    // }
+
     addPendingLine() {
-        const _temp = new ItemVideo(0, this.itemid, null, null, null, null, null, this.item.ItemVideos.length + 1, false, false, null, null, null, true, true);
+        const _temp = new ItemVideo(0, this.item.ItemID , null, null, null, null, null, this.item.ItemVideos.length + 1, false, false, null, null, null, true, true);
         this.item.ItemVideos.push(_temp);   
     }
 
@@ -78,7 +77,7 @@ export class ItemEditVideoComponent implements OnInit {
     }
 
     refreshDataSource(itemVideos: ItemVideo[]) { 
-        this.dataSource = new MatTableDataSource<ItemVideo>(itemVideos);
+        this.itemVideosMatTable = new MatTableDataSource<ItemVideo>(itemVideos);
     }
 
     onAddItemVideo(itemVideo: ItemVideo) {

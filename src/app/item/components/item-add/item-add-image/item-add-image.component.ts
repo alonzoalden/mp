@@ -32,18 +32,14 @@ export class ItemAddImageComponent implements OnInit, OnChanges {
     public isLoadingMultipleData: Boolean = false;
 
     constructor(private itemService: ItemService, public itemUploadDialog: MatDialog) { }
+    
     ngOnChanges(changes: SimpleChanges) {
         if (changes.item && changes.item.currentValue && changes.item.currentValue.ItemImages.length === 0) {
             this.addPendingLine();
         }
     }
     ngOnInit(): void {
-        
-
-        
-
         this.currentIndex = this.item.ItemImages.length - 1;
-
         //this.refreshDataSource(this.item.ItemImages);
 
     }

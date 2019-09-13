@@ -50,17 +50,18 @@ export class ItemEditCategoryComponent implements OnInit {
 
     ngOnInit(): void {
         const itemid = this.route.parent.snapshot.params['id'];
-        this.itemService.getCurrentItemEdit(itemid).subscribe(
-            (item: Item) => {
-                this.itemService.currentItemEdit = item;
-                this.initialize(itemid);
-            },
-            (error: any) => this.errorMessage = <any>error
-        );
+        this.getItemCategoryAssignments.emit(itemid);
+        // this.itemService.getCurrentItemEdit(itemid).subscribe(
+        //     (item: Item) => {
+        //         this.itemService.currentItemEdit = item;
+        //         this.initialize(itemid);
+        //     },
+        //     (error: any) => this.errorMessage = <any>error
+        // );
     }
 
     initialize(itemid: number) {
-        this.getItemCategoryAssignments.emit(itemid)
+        
         // if (this.itemService.currentItemEdit.ItemCategoryAssignments === null) {
         //     this.itemService.getItemCategoryAssignments(itemid).subscribe(
         //         (itemCategoryAssignments: ItemCategoryAssignment[]) => {

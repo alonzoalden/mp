@@ -1,9 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { MatTableDataSource } from '@angular/material';
+import { ItemInsert, ItemImageInsert } from '../../../../shared/class/item';
 import { Observable } from 'rxjs';
-
-import { ItemInsert, ItemAttachmentInsert, ItemImageInsert } from '../../../../shared/class/item';
-
 import { Store, select } from '@ngrx/store';
 import * as itemActions from '../../../state/item.actions';
 import * as fromItem from '../../../state';
@@ -18,6 +16,7 @@ export class ItemAddImageShellComponent implements OnInit {
     errorMessage$: Observable<string>;
     item$: Observable<ItemInsert>;
     itemImagesMatTable$: Observable<MatTableDataSource<ItemImageInsert>>;
+    
     constructor(private store: Store<fromItem.State>) { }
 
     ngOnInit(): void {

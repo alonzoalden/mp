@@ -9,7 +9,7 @@
                         <div class="form-group row">
                             <div class="col-md-12">                            
                                 <div *ngIf="item.ItemAttachments && item.ItemAttachments.length && item.ItemAttachments.length > 0">
-                                    <table mat-table #table [dataSource]="dataSource">
+                                    <table mat-table #table [dataSource]="itemAttachmentsMatTable">
                                         <!-- Add Button -->
                                         <ng-container matColumnDef="Add">
                                             <th mat-header-cell *matHeaderCellDef width="45px"></th>
@@ -74,7 +74,7 @@
                                                     {{itemAttachment.Title}}
                                                 </div>         
                                                 <div *ngIf="i === item.ItemAttachments.length-1">
-                                                    <ng-select  [items]="vendorattachmentlist"
+                                                    <ng-select  [items]="vendorAttachmentsList"
                                                                 [virtualScroll]="true"
                                                                 bindLabel="Label"
                                                                 bindValue="Value"
@@ -86,7 +86,7 @@
                                                                 name="itemAttachmentID"
                                                                 required
                                                                 #itemAttachmentIDVar="ngModel"
-                                                                [loading]="!vendorattachmentlist"
+                                                                [loading]="!vendorAttachmentsList.length"
                                                                 loadingText="Loading..."
                                                                 >
                                                         <ng-template ng-option-tmp let-item="item">

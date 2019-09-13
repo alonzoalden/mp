@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, SimpleChanges, Output, EventEmitter } from '@angular/core';
+import { Component, OnInit, OnChanges, Input, SimpleChanges, Output, EventEmitter } from '@angular/core';
 import { MatTableDataSource } from '@angular/material';
 import { ItemInsert, ItemAttachmentInsert } from '../../../../shared/class/item';
 import { ItemService } from '../../../item.service';
@@ -10,7 +10,7 @@ import { environment } from '../../../../../environments/environment';
     templateUrl: './item-add-vendor-attachment.component.html'
   })
 
-export class ItemAddVendorAttachmentComponent implements OnInit {
+export class ItemAddVendorAttachmentComponent implements OnInit, OnChanges {
     private fileURL = environment.fileURL;
     @Input() errorMessage: string;
     @Input() item: ItemInsert;
