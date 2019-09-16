@@ -2,7 +2,7 @@ import { ItemActionTypes, ItemActions } from './item.actions';
 import { SalesOrder } from '../../shared/class/sales-order';
 import { SalesOrderLine } from '../../shared/class/sales-order-line';
 import { Fulfillment, FulfillmentSalesOrderLine } from '../../shared/class/fulfillment';
-import { ItemInsert, ItemList, ItemOption, ItemOptionInsert, ItemSelectionInsert, ItemCategoryAssignment, Item, ItemCrossSellInsert, ItemUpSellInsert, ItemRelatedProductInsert, ItemBatch } from '../../shared/class/item';
+import { ItemInsert, ItemList, ItemOption, ItemOptionInsert, ItemSelectionInsert, ItemCategoryAssignment, Item, ItemCrossSellInsert, ItemUpSellInsert, ItemRelatedProductInsert, ItemBatch, ItemPrintLabel } from '../../shared/class/item';
 import { VendorBrand } from '../../shared/class/vendor-brand';
 import { Category } from 'app/shared/class/category';
 import { VendorAttachment, VendorAttachmentList } from 'app/shared/class/vendor-attachment';
@@ -12,7 +12,9 @@ import { BatchUpdate } from 'app/shared/class/batch-update';
 export interface ItemState {
     vendorBrandList: VendorBrand[];
     itemList: ItemList[];
+    simpleItemList: ItemList[];
     item: ItemInsert | Item;
+    items: Item[];
     selectedBundleOption: ItemOptionInsert;
     selectedBundleOptionSelectionList: ItemSelectionInsert[],
     itemCategories: Array<Category[]>,
@@ -24,6 +26,7 @@ export interface ItemState {
     itemBatch: ItemBatch[];
     itemBatchItems: Item[];
     itemBatchUpdates: BatchUpdate[];
+    itemPrintLabels: ItemPrintLabel[];
     isLoading: boolean;
     pendingDelete: boolean,
     pendingSave: boolean,
@@ -34,7 +37,9 @@ export interface ItemState {
 const initialState: ItemState = {
     vendorBrandList: [],
     itemList: [],
+    simpleItemList: [],
     item: null,
+    items: [],
     selectedBundleOption: null,
     selectedBundleOptionSelectionList: [],
     itemCategories: [],
@@ -46,6 +51,7 @@ const initialState: ItemState = {
     itemBatch: [],
     itemBatchItems: [],
     itemBatchUpdates: [],
+    itemPrintLabels: [],
     isLoading: true,
     pendingDelete: false,
     pendingSave: false,
@@ -81,16 +87,29 @@ export function itemReducer(state = initialState, action: ItemActions): ItemStat
                 vendorBrandList: [],
                 error: action.payload,
             };
-        case ItemActionTypes.LoadSimpleItemListSuccess:
+            
+        case ItemActionTypes.LoadItemListSuccess:
             return {
                 ...state,
                 itemList: action.payload,
                 error: '',
             };
+        case ItemActionTypes.LoadItemListFail:
+            return {
+                ...state,
+                itemList: [],
+                error: action.payload,
+            };
+        case ItemActionTypes.LoadSimpleItemListSuccess:
+            return {
+                ...state,
+                simpleItemList: action.payload,
+                error: '',
+            };
         case ItemActionTypes.LoadSimpleItemListFail:
             return {
                 ...state,
-                vendorBrandList: [],
+                simpleItemList: [],
                 error: action.payload,
             };
         case ItemActionTypes.LoadItemCategoriesSuccess:
@@ -197,6 +216,29 @@ export function itemReducer(state = initialState, action: ItemActions): ItemStat
                 pendingSave: false,
                 error: action.payload,
             };
+
+        case ItemActionTypes.DeleteItem:
+            return {
+                ...state,
+                pendingDelete: true,
+            };
+        case ItemActionTypes.DeleteItemSuccess:
+                const _updatedItems = state.items.filter(item => item.ItemID !== action.payload);
+            return {
+                ...state,
+                items: _updatedItems,
+                pendingDelete: false,
+                error: '',
+            };
+        case ItemActionTypes.DeleteItemFail:
+            return {
+                ...state,
+                items: null,
+                pendingDelete: false,
+                error: action.payload,
+            };
+
+            
         case ItemActionTypes.LoadPendingItems:
             return {
                 ...state,
@@ -238,6 +280,7 @@ export function itemReducer(state = initialState, action: ItemActions): ItemStat
         case ItemActionTypes.LoadItemBatchItemsSuccess:
             return {
                 ...state,
+                items: action.payload,
                 itemBatchItems: action.payload,
                 isLoading: false,
                 error: '',
@@ -245,10 +288,27 @@ export function itemReducer(state = initialState, action: ItemActions): ItemStat
         case ItemActionTypes.LoadItemBatchItemsFail:
             return {
                 ...state,
+                items: [],
                 itemBatchItems: [],
                 isLoading: false,
                 error: action.payload,
             };
+
+        case ItemActionTypes.LoadRefreshItemsSuccess:
+            return {
+                ...state,
+                items: action.payload,
+                isLoading: false,
+                error: '',
+            };
+        case ItemActionTypes.LoadRefreshItemsFail:
+            return {
+                ...state,
+                items: [],
+                isLoading: false,
+                error: action.payload,
+            };
+            
 
         case ItemActionTypes.LoadItemBatchUpdateSuccess:
             return {

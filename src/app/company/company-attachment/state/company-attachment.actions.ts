@@ -47,7 +47,6 @@ export class DeleteVendorAttachment implements Action {
 }
 export class DeleteVendorAttachmentSuccess implements Action {
   readonly type = CompanyAttachmentActionTypes.DeleteVendorAttachmentSuccess;
-
   constructor(public payload: number) { }
 }
 export class DeleteVendorAttachmentFail implements Action {

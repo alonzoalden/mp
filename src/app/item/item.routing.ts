@@ -2,8 +2,8 @@ import { Routes, RouterModule } from '@angular/router';
 
 import { ItemComponent } from './item.component';
 
-import { ItemListShellComponent } from './item-list-shell/item-list-shell.component';
-import { ItemPrintLabelShellComponent } from './item-print-label-shell/item-print-label-shell.component';
+import { ItemListShellComponent } from './item-list/containers/item-list-shell/item-list-shell.component';
+import { ItemPrintLabelShellComponent } from './item-print-label/containers/item-print-label-shell.component';
 
 //import { ItemListComponent } from './components/item-list/item-list.component';
 //import { ItemPrintLabelComponent } from './components/item-print-label/item-print-label.component';

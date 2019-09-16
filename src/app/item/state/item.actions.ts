@@ -3,7 +3,7 @@ import { SalesOrder } from '../../shared/class/sales-order';
 import { SalesOrderLine } from '../../shared/class/sales-order-line';
 import { Fulfillment, FulfillmentSalesOrderLine } from '../../shared/class/fulfillment';
 import { VendorBrand } from '../../shared/class/vendor-brand';
-import { ItemInsert, ItemList, ItemOption, ItemOptionInsert, ItemSelectionInsert, Item, ItemUpSellInsert, ItemCrossSellInsert, ItemRelatedProductInsert, ItemAttachmentInsert, ItemVideoInsert, ItemCategoryAssignment, ItemTierPrice, ItemBatch } from '../../shared/class/item';
+import { ItemInsert, ItemList, ItemOption, ItemOptionInsert, ItemSelectionInsert, Item, ItemUpSellInsert, ItemCrossSellInsert, ItemRelatedProductInsert, ItemAttachmentInsert, ItemVideoInsert, ItemCategoryAssignment, ItemTierPrice, ItemBatch, ItemPrintLabel } from '../../shared/class/item';
 import { Category } from 'app/shared/class/category';
 import { ItemUpSell } from 'app/shared/class/item-up-sell';
 import { VendorAttachment, VendorAttachmentList } from 'app/shared/class/vendor-attachment';
@@ -14,6 +14,9 @@ export enum ItemActionTypes {
   LoadVendorBrands = '[Item] Load Vendor Brands',
   LoadVendorBrandsSuccess = '[Item] Load Vendor Brands Success',
   LoadVendorBrandsFail = '[Item] Load Vendor Brands Fail',
+  LoadItemList = '[Item Print Label] Load Item List',
+  LoadItemListSuccess = '[Item Print Label] Load Item List Success',
+  LoadItemListFail = '[Item Print Label] Load Item List Fail',
   LoadSimpleItemList = '[Item] Load Simple Item List',
   LoadSimpleItemListSuccess = '[Item] Load Simple Item List Success',
   LoadSimpleItemListFail = '[Item] Load Simple Item List Fail',
@@ -53,12 +56,24 @@ export enum ItemActionTypes {
   LoadItem = '[Item] Load Item',
   LoadItemSuccess = '[Item] Load Item Success',
   LoadItemFail = '[Item] Load Item Fail',
+  LoadItems = '[Item] Load Items',
+  LoadItemsSuccess = '[Item] Load Items Success',
+  LoadItemsFail = '[Item] Load Items Fail',
+  LoadRefreshItems = '[Item] Load Refresh Items',
+  LoadRefreshItemsSuccess = '[Item] Load Refresh Items Success',
+  LoadRefreshItemsFail = '[Item] Load Refresh Items Fail',
   EditItem = '[Item] Edit Item',
   EditItemSuccess = '[Item] Edit Item Success',
   EditItemFail = '[Item] Edit Item Fail',
+  DeleteItem = '[Item] Delete Item',
+  DeleteItemSuccess = '[Item] Delete Item Success',
+  DeleteItemFail = '[Item] Delete Item Fail',
   DownloadItemLabel = '[Item] Download Item Label',
   DownloadItemLabelSuccess = '[Item] Download Item Label',
   DownloadItemLabelFail = '[Item] Download Item Label',
+  DownloadItemTemplate = '[Item] Download Item Template',
+  DownloadItemTemplateSuccess = '[Item] Download Item Template Success',
+  DownloadItemTemplateFail = '[Item] Download Item Template Fail',
   LoadItemCategoryAssignments = '[Item] Load Item Category Assignments',
   LoadItemCategoryAssignmentsSuccess = '[Item] Load Item Category Assignments Success',
   LoadItemCategoryAssignmentsFail = '[Item] Load Item Category Assignments Fail',
@@ -81,6 +96,18 @@ export enum ItemActionTypes {
   EditItemBatchUpdateSuccess = '[Item Batch] Edit Item Batch Update Success',
   EditItemBatchUpdateFail = '[Item Batch] Edit Item Batch Update Fail',
   AddNewItemRelatedProductRow = '[Item] Add New Item Related Product Row',
+  DownloadItemLabelCount = '[Item] Download Item Label Count',
+  DownloadItemLabelCountSuccess = '[Item] Download Item Label Count Success',
+  DownloadItemLabelCountFail = '[Item] Download Item Label Count Fail',
+  DownloadItemLargeLabelCount = '[Item] Download Item Large Label Count',
+  DownloadItemLargeLabelCountSuccess = '[Item] Download Item Large Label Count Success',
+  DownloadItemLargeLabelCountFail = '[Item] Download Item Large Label Count Fail',
+  DownloadItemPrintLabel = '[Item Print Label] Download Item Print Label',
+  DownloadItemPrintLabelSuccess = '[Item Print Label] Download Item Print Label Success',
+  DownloadItemPrintLabelFail = '[Item Print Label] Download Item Print Label Fail',
+  DownloadPrintItemLargeLabels = '[Item Print Label] Download Print Item Large Labels',
+  DownloadPrintItemLargeLabelsSuccess = '[Item Print Label] Download Print Item Large Labels Success',
+  DownloadPrintItemLargeLabelsFail = '[Item Print Label] Download Print Item Large Labels Fail',
   
 }
 
@@ -99,6 +126,47 @@ export class LoadVendorBrandsFail implements Action {
   constructor(public payload: string) { }
 }
 
+export class LoadItems implements Action {
+  readonly type = ItemActionTypes.LoadItems;
+}
+
+export class LoadItemsSuccess implements Action {
+  readonly type = ItemActionTypes.LoadItemsSuccess;
+  constructor(public payload: ItemList[]) { }
+}
+
+export class LoadItemsFail implements Action {
+  readonly type = ItemActionTypes.LoadItemsFail;
+  constructor(public payload: string) { }
+}
+
+export class LoadRefreshItems implements Action {
+  readonly type = ItemActionTypes.LoadRefreshItems;
+}
+
+export class LoadRefreshItemsSuccess implements Action {
+  readonly type = ItemActionTypes.LoadRefreshItemsSuccess;
+  constructor(public payload: Item[]) { }
+}
+
+export class LoadRefreshItemsFail implements Action {
+  readonly type = ItemActionTypes.LoadRefreshItemsFail;
+  constructor(public payload: string) { }
+}
+
+export class LoadItemList implements Action {
+  readonly type = ItemActionTypes.LoadItemList;
+}
+
+export class LoadItemListSuccess implements Action {
+  readonly type = ItemActionTypes.LoadItemListSuccess;
+  constructor(public payload: ItemList[]) { }
+}
+
+export class LoadItemListFail implements Action {
+  readonly type = ItemActionTypes.LoadItemListFail;
+  constructor(public payload: string) { }
+}
 
 export class LoadSimpleItemList implements Action {
   readonly type = ItemActionTypes.LoadSimpleItemList;
@@ -375,6 +443,7 @@ export class EditItemBatchUpdateFail implements Action {
 
 
 export class EditItem implements Action {
+  
   readonly type = ItemActionTypes.EditItem;
   constructor(public payload: {item: Item, displayPreview: boolean, printLabel: boolean}) { }
 }
@@ -386,6 +455,22 @@ export class EditItemSuccess implements Action {
 
 export class EditItemFail implements Action {
   readonly type = ItemActionTypes.EditItemFail;
+  constructor(public payload: string) { }
+}
+
+
+export class DeleteItem implements Action {
+  readonly type = ItemActionTypes.DeleteItem;
+  constructor(public payload: number) { }
+}
+
+export class DeleteItemSuccess implements Action {
+  readonly type = ItemActionTypes.DeleteItemSuccess;
+  constructor(public payload: number) { }
+}
+
+export class DeleteItemFail implements Action {
+  readonly type = ItemActionTypes.DeleteItemFail;
   constructor(public payload: string) { }
 }
 
@@ -418,11 +503,82 @@ export class DownloadItemLabelFail implements Action {
   constructor(public payload: string) { }
 }
 
+export class DownloadItemLabelCount implements Action {
+  readonly type = ItemActionTypes.DownloadItemLabelCount;
+  constructor(public payload: {item: Item, count: number, border: string}) { }
+}
+export class DownloadItemLabelCountSuccess implements Action {
+  readonly type = ItemActionTypes.DownloadItemLabelCountSuccess;
+  constructor(public payload: Blob) { }
+}
+export class DownloadItemLabelCountFail implements Action {
+  readonly type = ItemActionTypes.DownloadItemLabelCountFail;
+  constructor(public payload: string) { }
+}
+
+export class DownloadItemLargeLabelCount implements Action {
+  readonly type = ItemActionTypes.DownloadItemLargeLabelCount;
+  constructor(public payload: {item: Item, count: number, border: string}) { }
+}
+export class DownloadItemLargeLabelCountSuccess implements Action {
+  readonly type = ItemActionTypes.DownloadItemLargeLabelCountSuccess;
+  constructor(public payload: Blob) { }
+}
+export class DownloadItemLargeLabelCountFail implements Action {
+  readonly type = ItemActionTypes.DownloadItemLargeLabelCountFail;
+  constructor(public payload: string) { }
+}
+
+export class DownloadItemTemplate implements Action {
+  readonly type = ItemActionTypes.DownloadItemTemplate;
+}
+export class DownloadItemTemplateSuccess implements Action {
+  readonly type = ItemActionTypes.DownloadItemTemplateSuccess;
+  constructor(public payload: Blob) { }
+}
+export class DownloadItemTemplateFail implements Action {
+  readonly type = ItemActionTypes.DownloadItemTemplateFail;
+  constructor(public payload: string) { }
+}
+
+export class DownloadItemPrintLabel implements Action {
+  readonly type = ItemActionTypes.DownloadItemPrintLabel;
+  constructor(public payload: { labels: ItemPrintLabel[], border: string}) { }
+}
+export class DownloadItemPrintLabelSuccess implements Action {
+  readonly type = ItemActionTypes.DownloadItemPrintLabelSuccess;
+  constructor(public payload: Blob) { }
+}
+export class DownloadItemPrintLabelFail implements Action {
+  readonly type = ItemActionTypes.DownloadItemPrintLabelFail;
+  constructor(public payload: string) { }
+}
+export class DownloadPrintItemLargeLabels implements Action {
+  readonly type = ItemActionTypes.DownloadPrintItemLargeLabels;
+  constructor(public payload: { labels: ItemPrintLabel[], border: string}) { }
+}
+export class DownloadPrintItemLargeLabelsSuccess implements Action {
+  readonly type = ItemActionTypes.DownloadPrintItemLargeLabelsSuccess;
+  constructor(public payload: Blob) { }
+}
+export class DownloadPrintItemLargeLabelsFail implements Action {
+  readonly type = ItemActionTypes.DownloadPrintItemLargeLabelsFail;
+  constructor(public payload: string) { }
+}
+
+
+
+
+
+
 
 // Union the valid types
 export type ItemActions = LoadVendorBrands
 | LoadVendorBrandsSuccess
 | LoadVendorBrandsFail
+| LoadItemList
+| LoadItemListSuccess
+| LoadItemListFail
 | LoadSimpleItemList
 | LoadSimpleItemListSuccess
 | LoadSimpleItemListFail
@@ -459,14 +615,38 @@ export type ItemActions = LoadVendorBrands
 | LoadItem
 | LoadItemSuccess
 | LoadItemFail
+| LoadItems
+| LoadItemsSuccess
+| LoadItemsFail
+| LoadRefreshItems
+| LoadRefreshItemsSuccess
+| LoadRefreshItemsFail
 | EditItem
 | EditItemSuccess
 | EditItemFail
+| DeleteItem
+| DeleteItemSuccess
+| DeleteItemFail
 | SetItem
 | SetSelectedBundleOption
 | DownloadItemLabel
 | DownloadItemLabelSuccess
 | DownloadItemLabelFail
+| DownloadItemLabelCount
+| DownloadItemLabelCountSuccess
+| DownloadItemLabelCountFail
+| DownloadItemLargeLabelCount
+| DownloadItemLargeLabelCountSuccess
+| DownloadItemLargeLabelCountFail
+| DownloadItemTemplate
+| DownloadItemTemplateSuccess
+| DownloadItemTemplateFail
+| DownloadItemPrintLabel
+| DownloadItemPrintLabelSuccess
+| DownloadItemPrintLabelFail
+| DownloadPrintItemLargeLabels
+| DownloadPrintItemLargeLabelsSuccess
+| DownloadPrintItemLargeLabelsFail
 | LoadItemCategoryAssignments
 | LoadItemCategoryAssignmentsSuccess
 | LoadItemCategoryAssignmentsFail

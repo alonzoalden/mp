@@ -16,7 +16,7 @@ export class ItemBatchUpdateComponent implements OnChanges {
     ngOnChanges(changes: SimpleChanges) {
         if (changes.userInfo && changes.userInfo.currentValue) {
             if (!this.userInfo.IsPM) {
-             this.router.navigate(['dashboard']);
+                this.router.navigate(['dashboard']);
             }
         }
     }

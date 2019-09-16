@@ -1,13 +1,10 @@
-import { Component, OnInit, ViewContainerRef, ViewChild, Inject, ElementRef } from '@angular/core';
+import { Component, OnInit, ViewChild, Inject, Input, Output, EventEmitter, SimpleChanges } from '@angular/core';
 import { Router } from '@angular/router';
-import { CurrencyPipe } from '@angular/common';
-import { MatMenuModule, MatPaginator, MatSort, MatTableDataSource, MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material';
-import { Item, ItemInsert, ItemCategoryAssignment, ItemOption, ItemSelection, ItemTierPrice, ItemRelatedProduct, ItemUpSell, ItemCrossSell, ItemAttachment, ItemVideo } from '../../shared/class/item';
-import { ItemService } from '../item.service';
-import { AppService } from '../../app.service';
-import { MatMenu } from '@angular/material/menu';
-
-import { environment } from '../../../environments/environment';
+import { MatPaginator, MatSort, MatTableDataSource, MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material';
+import { Item, ItemInsert, ItemCategoryAssignment, ItemOption, ItemSelection, ItemTierPrice, ItemRelatedProduct, ItemUpSell, ItemCrossSell, ItemAttachment, ItemVideo } from '../../../shared/class/item';
+import { ItemService } from '../../item.service';
+import { environment } from '../../../../environments/environment';
+import { Member } from 'app/shared/class/member';
 
 @Component({
     selector: 'o-item-list',
@@ -15,13 +12,21 @@ import { environment } from '../../../environments/environment';
 })
 
 export class ItemListComponent implements OnInit {
-    errorMessage: string;
-    items: Item[];
-
-    selectedItem: Item;
-
     private imageURL = environment.imageURL;
     private linkURL = environment.linkURL;
+    @Input() userInfo: Member;
+    @Input() itemsMatTable: MatTableDataSource<Item>;
+    @Input() errorMessage: string;
+    @Input() isLoading: boolean;
+    @Input() pendingDelete: boolean;
+    @Output() getItems = new EventEmitter<void>();
+    @Output() refreshItems = new EventEmitter<void>();
+    @Output() deleteItem = new EventEmitter<number>();
+    @Output() downloadItemLabelCount = new EventEmitter<{item: Item, count: number, border: string}>();
+    @Output() downloadItemLargeLabelCount = new EventEmitter<{item: Item, count: number, border: string}>();
+    @Output() downloadItemTemplate = new EventEmitter<void>();
+
+    selectedItem: Item;
 
     duplicateItemInsert: ItemInsert;
     duplicateItemCategoryAssignments: ItemCategoryAssignment[];
@@ -33,9 +38,7 @@ export class ItemListComponent implements OnInit {
     duplicateItemAttachments: ItemAttachment[];
     duplicateItemVideos: ItemVideo[];
 
-    //displayedColumns = ['Menu', 'ImagePath', 'VendorSKU', 'Name', 'TPIN', 'FulfilledBy', 'Price', 'Quantity', 'MerchantQuantity'];
     displayedColumns = ['Menu','ItemID','ProductDetails','FulfilledBy','Price','Quantity','MerchantQuantity','Approval','Visibility','UpdatedOn'];
-    dataSource: any = null;
 
     @ViewChild(MatPaginator, { static: true }) paginator: MatPaginator;
     @ViewChild(MatSort, { static: true }) sort: MatSort;
@@ -44,53 +47,35 @@ export class ItemListComponent implements OnInit {
 
     constructor(private router: Router,
         private itemService: ItemService,
-        private appService: AppService,
         public itemPrintDialog: MatDialog,
-        public itemImportDialog: MatDialog) { 
-            
+        public itemImportDialog: MatDialog) { }
+
+    ngOnChanges(changes: SimpleChanges): void {
+        if (changes.itemsMatTable && changes.itemsMatTable.currentValue.data) {
+            this.itemsMatTable.paginator = this.paginator;
+            this.itemsMatTable.sort = this.sort;
         }
+        if (changes.itemsMatTable && !changes.itemsMatTable.currentValue.data.length && changes.itemsMatTable.firstChange) {
+            this.getItems.emit();
+        }
+        if (changes.userInfo && changes.userInfo.currentValue) {
+            if (this.userInfo.DefaultPageSize) {
+                this.paginator.pageSize = this.userInfo.DefaultPageSize;
+            }
+            else {
+                this.paginator.pageSize = 100;
+            }
+        }
+    }
 
     ngOnInit() {
 
-        // console.log('here init');
-        // console.log(this.appService.isMemberAdmin());
-        // console.log(this.appService.getVendorID());
-
-        this.loading = true;
-
-        this.appService.getCurrentMember()
-            .subscribe(
-                (data) => {
-                    if (data.DefaultPageSize) {
-                        this.paginator.pageSize = data.DefaultPageSize;
-                    }
-                    else {
-                        this.paginator.pageSize = 100;
-                    }
-                },
-                (error: any) => {
-                    this.itemService.sendNotification({ type: 'error', title: 'Error', content: error });
-                }
-            );
-
-        this.itemService.getItems().subscribe(
-            (items: Item[]) => {
-                this.items = items;
-                this.loading = false;
-                this.refreshDataSource(items);
-            },
-            (error: any) => {
-                this.loading = false;
-                this.itemService.sendNotification({ type: 'error', title: 'Error', content: error });
-                //this.errorMessage = <any>error;
-            }
-        );  
     }
 
     refreshDataSource(items: Item[]) {
-        this.dataSource = new MatTableDataSource<Item>(items);
-        this.dataSource.sort = this.sort;
-        this.dataSource.paginator = this.paginator;
+        this.itemsMatTable = new MatTableDataSource<Item>(items);
+        this.itemsMatTable.sort = this.sort;
+        this.itemsMatTable.paginator = this.paginator;
     }
 
     openDialogPrintItemLabel(item: Item) {
@@ -113,118 +98,33 @@ export class ItemListComponent implements OnInit {
 
     openDialogImport() {
         const dialogRef = this.itemPrintDialog.open(ItemListComponentImportDialog, {
-            width: '320px'
+            width: '320px', 
+            data: this.downloadItemLabelCount
           });
 
           dialogRef.afterClosed().subscribe(result => {
-
             if(result)
             {
                 this.loading = true;
-                this.itemService.refreshItems().subscribe(
-                
-                    (items: Item[]) => {
-                        this.items = items;
-                        this.loading = false;
-                        this.refreshDataSource(items);
-                    },
-                    (error: any) => {
-                        this.loading = false;
-                        this.itemService.sendNotification({ type: 'error', title: 'Error', content: error });
-                        //this.errorMessage = <any>error;
-                    }
-                );
+                this.refreshItems.emit();
             }
             
           });
     }
 
     onPrintLabel(item: Item, count: number, border: string) {
-        this.itemService.downloadItemLabelCount(item.ItemID, count, border).subscribe(
-            (data) => {
-                const blob = new Blob([data], {type: 'application/pdf'});
-                const blobUrl = URL.createObjectURL(blob);
-                if (window.navigator.msSaveOrOpenBlob) {
-                    const fileName = item.TPIN;
-                    window.navigator.msSaveOrOpenBlob(data, fileName + '.pdf'); // IE is the worst!!!
-                } else {
-                    // const iframe = document.createElement('iframe');
-                    // iframe.style.display = 'none';
-                    // iframe.src = blobUrl;
-                    // document.body.appendChild(iframe);
-
-                    // iframe.onload = (function() {
-                    //     iframe.contentWindow.focus();
-                    //     iframe.contentWindow.print();
-                    // });
-                    const fileURL = window.URL.createObjectURL(blob);
-                    const a: HTMLAnchorElement = document.createElement('a') as HTMLAnchorElement;
-                    a.href = fileURL;
-                    a.download = item.TPIN;
-                    document.body.appendChild(a);
-                    a.target = '_blank';
-                    a.click();
-
-                    document.body.removeChild(a);
-                    URL.revokeObjectURL(fileURL);
-                }
-            }
-        );
+        this.downloadItemLabelCount.emit({item: item, count: count, border: border});
+        
     }
 
     onPrintLargeLabel(item: Item, count: number, border: string) {
-        this.itemService.downloadItemLargeLabelCount(item.ItemID, count, border).subscribe(
-            (data) => {
-                const blob = new Blob([data], {type: 'application/pdf'});
-                const blobUrl = URL.createObjectURL(blob);
-                if (window.navigator.msSaveOrOpenBlob) {
-                    const fileName = item.TPIN + '_Large';
-                    window.navigator.msSaveOrOpenBlob(data, fileName + '.pdf'); // IE is the worst!!!
-                } else {
-                    // const iframe = document.createElement('iframe');
-                    // iframe.style.display = 'none';
-                    // iframe.src = blobUrl;
-                    // document.body.appendChild(iframe);
-
-                    // iframe.onload = (function() {
-                    //     iframe.contentWindow.focus();
-                    //     iframe.contentWindow.print();
-                    // });
-                    const fileURL = window.URL.createObjectURL(blob);
-                    const a: HTMLAnchorElement = document.createElement('a') as HTMLAnchorElement;
-                    a.href = fileURL;
-                    a.download = item.TPIN + '_Large';
-                    document.body.appendChild(a);
-                    a.target = '_blank';
-                    a.click();
-
-                    document.body.removeChild(a);
-                    URL.revokeObjectURL(fileURL);
-                }
-            }
-        );
+        this.downloadItemLargeLabelCount.emit({item: item, count: count, border: border});
     }
 
     onRemove(item: Item) {
         const confirmation = confirm(`Remove ${item.ItemID}: ${item.Name}?`);        
         if (confirmation) {
-            
-            this.loading = true;
-
-            this.itemService.deleteItem(item.ItemID).subscribe(
-                () => {
-                    this.loading = false;
-                    this.onDeleteComplete(item, `${item.Name} was deleted`);
-                },
-                (error: any) => {
-                    this.loading = false;
-                    // this.errorMessage = <any>error
-                    this.refresh();
-                    this.errorMessage = <any>error;
-                    this.itemService.sendNotification({ type: 'error', title: 'Error', content: this.errorMessage });
-                    //window.location.reload();
-                }
-            );
+            this.deleteItem.emit(item.ItemID);
         }
     }
 
@@ -275,7 +175,6 @@ export class ItemListComponent implements OnInit {
     }
 
     isValidPart(item: Item) : boolean {
-        console.log(item);
         if(item.ItemType != 'simple') {
             this.itemService.sendNotification({ type: 'error', title: 'Error', content: "Item must be a 'Simple' item" });
             return false;
@@ -352,25 +251,26 @@ export class ItemListComponent implements OnInit {
         window.open(environment.previewURL + itemid + "/options/portal/", "_blank");
     }
 
-    onDeleteComplete(item: Item, message?: string): void {
-        this.refreshDataSource(this.items);
-        this.itemService.sendNotification({ type: 'success', title: 'Successfully Deleted', content: message });
-    }
+    // onDeleteComplete(item: Item, message?: string): void {
+    //     this.refreshDataSource(this.itemsMatTable.data);
+    //     this.itemService.sendNotification({ type: 'success', title: 'Successfully Deleted', content: message });
+    // }
 
     refresh() {
-        this.itemService.refreshItems().subscribe(
-            (items: Item[]) => {
-                this.items = items;
-                this.refreshDataSource(this.items);
-            },
-            (error: any) => this.errorMessage = <any>error
-        );
+        this.refreshItems.emit();
+        // this.itemService.refreshItems().subscribe(
+        //     (items: Item[]) => {
+        //         this.items = items;
+        //         this.refreshDataSource(this.items);
+        //     },
+        //     (error: any) => this.errorMessage = <any>error
+        // );
     }
 
     applyFilter(filterValue: string) {
-        this.dataSource.filter = filterValue.trim().toLowerCase();
-        if (this.dataSource.paginator) {
-            this.dataSource.paginator.firstPage();
+        this.itemsMatTable.filter = filterValue.trim().toLowerCase();
+        if (this.itemsMatTable.paginator) {
+            this.itemsMatTable.paginator.firstPage();
         }
     }
 }
@@ -422,8 +322,10 @@ export class ItemListComponentImportDialog implements OnInit {
 
     @ViewChild('fileUpload', { static: true }) fileUploadVar: any;
 
-    constructor( public dialogRef: MatDialogRef<ItemListComponentImportDialog>, private itemService: ItemService ) {        
-    }
+    constructor(
+        public dialogRef: MatDialogRef<ItemListComponentImportDialog>,
+        private itemService: ItemService,
+        @Inject(MAT_DIALOG_DATA) public data: any) {}
 
     ngOnInit() {
         this.updated = false;
@@ -467,6 +369,8 @@ export class ItemListComponentImportDialog implements OnInit {
     }
 
     onTemplateClick() {
+        //this.downloadItemTemplate.emit();
+
         this.itemService.downloadItemTemplate().subscribe(
             (data) => {
                 const blob = new Blob([data], {type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'});

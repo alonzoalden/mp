@@ -78,6 +78,22 @@ export class ItemEffects {
             )
         )
     );
+    
+    @Effect()
+    loadItemList$: Observable<Action> = this.actions$.pipe(
+        ofType(itemActions.ItemActionTypes.LoadItemList),
+        mergeMap(() =>
+            this.itemService.getItemList().pipe(
+                map((itemlist: ItemList[]) => (new itemActions.LoadItemListSuccess(itemlist))),
+                catchError(err => {
+                    of(new itemActions.LoadItemListFail(err))
+                    return EMPTY;
+                })
+            )
+        ),
+        take(1)
+    );
+
     @Effect()
     loadAllItemList$: Observable<Action> = this.actions$.pipe(
         ofType(itemActions.ItemActionTypes.LoadAllItemList),
@@ -291,6 +307,24 @@ export class ItemEffects {
     );
 
     @Effect()
+    loadRefreshItem$: Observable<Action> = this.actions$.pipe(
+        ofType(itemActions.ItemActionTypes.LoadRefreshItems),
+        mergeMap(() =>
+            this.itemService.refreshItems().pipe(
+                map((items: Item[]) =>  (new itemActions.LoadRefreshItemsSuccess(items))),
+                catchError(err => {
+                    this.itemService.sendNotification({ type: 'error', title: 'Error', content: err });
+                    of(new itemActions.LoadRefreshItemsFail(err))
+                    return EMPTY;
+                })
+            )
+        )
+    );
+
+    
+    
+
+    @Effect()
     loadItemBatchItems$: Observable<Action> = this.actions$.pipe(
         ofType(itemActions.ItemActionTypes.LoadItemBatchItems),
         mergeMap((id: number) =>
@@ -381,6 +415,26 @@ export class ItemEffects {
             )
         )
     );
+
+    @Effect()
+    deleteItem$: Observable<Action> = this.actions$.pipe(
+        ofType(itemActions.ItemActionTypes.DeleteItem),
+        map((action: itemActions.DeleteItem) => action.payload),
+        mergeMap((id: number) =>
+            this.itemService.deleteItem(id).pipe(
+                map((item: Item) => {
+                    this.itemService.sendNotification({ type: 'success', title: 'Successfully Deleted', content: `${item.Name} was deleted` });
+                    return (new itemActions.DeleteItemSuccess(id))
+                }),
+                catchError(err => {
+                    this.itemService.sendNotification({ type: 'error', title: 'Error', content: err });
+                    of(new itemActions.DeleteItemFail(err))
+                    return EMPTY;
+                })
+            )
+        )
+    );
+
     @Effect()
     downloadItemLabel$: Observable<Action> = this.actions$.pipe(
         ofType(itemActions.ItemActionTypes.DownloadItemLabel),
@@ -425,5 +479,228 @@ export class ItemEffects {
             )
         )
     );
+
+    @Effect()
+    downloadItemLabelCount$: Observable<Action> = this.actions$.pipe(
+        ofType(itemActions.ItemActionTypes.DownloadItemLabelCount),
+        map((action: itemActions.DownloadItemLabelCount) => action.payload),
+        mergeMap((payload) =>
+            this.itemService.downloadItemLabelCount(payload.item.ItemID, payload.count, payload.border).pipe(
+                map((data: Blob) => {
+                    const blob = new Blob([data], {type: 'application/pdf'});
+                    const blobUrl = URL.createObjectURL(blob);
+                    if (window.navigator.msSaveOrOpenBlob) {
+                        const fileName = payload.item.TPIN;
+                        window.navigator.msSaveOrOpenBlob(data, fileName + '.pdf'); // IE is the worst!!!
+                    } else {
+                        // const iframe = document.createElement('iframe');
+                        // iframe.style.display = 'none';
+                        // iframe.src = blobUrl;
+                        // document.body.appendChild(iframe);
+
+                        // iframe.onload = (function() {
+                        //     iframe.contentWindow.focus();
+                        //     iframe.contentWindow.print();
+                        // });
+                        const fileURL = window.URL.createObjectURL(blob);
+                        const a: HTMLAnchorElement = document.createElement('a') as HTMLAnchorElement;
+                        a.href = fileURL;
+                        a.download = payload.item.TPIN;
+                        document.body.appendChild(a);
+                        a.target = '_blank';
+                        a.click();
+
+                        document.body.removeChild(a);
+                        URL.revokeObjectURL(fileURL);
+
+                    }
+                    return (new itemActions.DownloadItemLabelCountSuccess(data))
+                }),
+                catchError(err => {
+                    this.itemService.sendNotification({ type: 'error', title: 'Error', content: err });
+                    of(new itemActions.DownloadItemLabelCountFail(err))
+                    return EMPTY;
+                })
+            )
+        )
+    );
+
+    @Effect()
+    downloadItemLargeLabelCount$: Observable<Action> = this.actions$.pipe(
+        ofType(itemActions.ItemActionTypes.DownloadItemLargeLabelCount),
+        map((action: itemActions.DownloadItemLargeLabelCount) => action.payload),
+        mergeMap((payload) =>
+            this.itemService.downloadItemLabelCount(payload.item.ItemID, payload.count, payload.border).pipe(
+                map((data: Blob) => {
+                    const blob = new Blob([data], {type: 'application/pdf'});
+                    const blobUrl = URL.createObjectURL(blob);
+                    if (window.navigator.msSaveOrOpenBlob) {
+                        const fileName = payload.item.TPIN;
+                        window.navigator.msSaveOrOpenBlob(data, fileName + '.pdf'); // IE is the worst!!!
+                    } else {
+                        // const iframe = document.createElement('iframe');
+                        // iframe.style.display = 'none';
+                        // iframe.src = blobUrl;
+                        // document.body.appendChild(iframe);
+
+                        // iframe.onload = (function() {
+                        //     iframe.contentWindow.focus();
+                        //     iframe.contentWindow.print();
+                        // });
+                        const fileURL = window.URL.createObjectURL(blob);
+                        const a: HTMLAnchorElement = document.createElement('a') as HTMLAnchorElement;
+                        a.href = fileURL;
+                        a.download = payload.item.TPIN;
+                        document.body.appendChild(a);
+                        a.target = '_blank';
+                        a.click();
+
+                        document.body.removeChild(a);
+                        URL.revokeObjectURL(fileURL);
+
+                    }
+                    return (new itemActions.DownloadItemLargeLabelCountSuccess(data))
+                }),
+                catchError(err => {
+                    this.itemService.sendNotification({ type: 'error', title: 'Error', content: err });
+                    of(new itemActions.DownloadItemLargeLabelCountFail(err))
+                    return EMPTY;
+                })
+            )
+        )
+    );
+
+    @Effect()
+    downloadItemTemplate$: Observable<Action> = this.actions$.pipe(
+        ofType(itemActions.ItemActionTypes.DownloadItemTemplate),
+        mergeMap(() =>
+            this.itemService.downloadItemTemplate().pipe(
+                map((data: Blob) => {
+                    const blob = new Blob([data], {type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'});
+                    const blobUrl = URL.createObjectURL(blob);
+                    if (window.navigator.msSaveOrOpenBlob) {
+                        const fileName = 'Item_Template';
+                        window.navigator.msSaveOrOpenBlob(data, fileName + '.xlsx'); // IE is the worst!!!
+                    } else {
+                        // const iframe = document.createElement('iframe');
+                        // iframe.style.display = 'none';
+                        // iframe.src = blobUrl;
+                        // document.body.appendChild(iframe);
+
+                        // iframe.onload = (function() {
+                        //     iframe.contentWindow.focus();
+                        //     iframe.contentWindow.print();
+                        // });
+                        const fileURL = window.URL.createObjectURL(blob);
+                        const a: HTMLAnchorElement = document.createElement('a') as HTMLAnchorElement;
+                        a.href = fileURL;
+                        a.download = 'Item_Template';
+                        document.body.appendChild(a);
+                        a.target = '_blank';
+                        a.click();
+
+                        document.body.removeChild(a);
+                        URL.revokeObjectURL(fileURL);
+                    }
+                    return (new itemActions.DownloadItemLargeLabelCountSuccess(data))
+                }),
+                catchError(err => {
+                    this.itemService.sendNotification({ type: 'error', title: 'Error', content: err });
+                    of(new itemActions.DownloadItemLargeLabelCountFail(err))
+                    return EMPTY;
+                })
+            )
+        )
+    );
+    @Effect()
+    downloadPrintItemLabels$: Observable<Action> = this.actions$.pipe(
+        ofType(itemActions.ItemActionTypes.DownloadItemPrintLabel),
+        map((action: itemActions.DownloadItemPrintLabel) => action.payload),
+        mergeMap((payload) =>
+            this.itemService.downloadPrintItemLabels(payload.labels, payload.border).pipe(
+                map((data: Blob) => {
+                    const blob = new Blob([data], {type: 'application/pdf'});
+                    const blobUrl = URL.createObjectURL(blob);
+                    if (window.navigator.msSaveOrOpenBlob) {
+                        const fileName = String(Date.now());
+                        window.navigator.msSaveOrOpenBlob(data, fileName + '.pdf'); // IE is the worst!!!
+                    } else {
+                        // const iframe = document.createElement('iframe');
+                        // iframe.style.display = 'none';
+                        // iframe.src = blobUrl;
+                        // document.body.appendChild(iframe);
+
+                        // iframe.onload = (function() {
+                        //     iframe.contentWindow.focus();
+                        //     iframe.contentWindow.print();
+                        // });
+                        const fileURL = window.URL.createObjectURL(blob);
+                        const a: HTMLAnchorElement = document.createElement('a') as HTMLAnchorElement;
+                        a.href = fileURL;
+                        a.download = String(Date.now());//this.datepipe.transform(date, 'yyyyMMddhhmmss');
+                        document.body.appendChild(a);
+                        a.target = '_blank';
+                        a.click();
+
+                        document.body.removeChild(a);
+                        URL.revokeObjectURL(fileURL);
+                    }
+                    return (new itemActions.DownloadItemLargeLabelCountSuccess(data))
+                }),
+                catchError(err => {
+                    this.itemService.sendNotification({ type: 'error', title: 'Error', content: err });
+                    of(new itemActions.DownloadItemLargeLabelCountFail(err))
+                    return EMPTY;
+                })
+            )
+        )
+    );
+    @Effect()
+    downloadPrintItemLargeLabels$: Observable<Action> = this.actions$.pipe(
+        ofType(itemActions.ItemActionTypes.DownloadPrintItemLargeLabels),
+        map((action: itemActions.DownloadPrintItemLargeLabels) => action.payload),
+        mergeMap((payload) =>
+            this.itemService.downloadPrintItemLargeLabels(payload.labels, payload.border).pipe(
+                map((data: Blob) => {
+                    const blob = new Blob([data], {type: 'application/pdf'});
+                    const blobUrl = URL.createObjectURL(blob);
+                    if (window.navigator.msSaveOrOpenBlob) {
+                        const fileName = String(Date.now());
+                        window.navigator.msSaveOrOpenBlob(data, fileName + '.pdf'); // IE is the worst!!!
+                    } else {
+                        // const iframe = document.createElement('iframe');
+                        // iframe.style.display = 'none';
+                        // iframe.src = blobUrl;
+                        // document.body.appendChild(iframe);
+
+                        // iframe.onload = (function() {
+                        //     iframe.contentWindow.focus();
+                        //     iframe.contentWindow.print();
+                        // });
+                        const fileURL = window.URL.createObjectURL(blob);
+                        const a: HTMLAnchorElement = document.createElement('a') as HTMLAnchorElement;
+                        a.href = fileURL;
+                        a.download = String(Date.now());//this.datepipe.transform(date, 'yyyyMMddhhmmss');
+                        document.body.appendChild(a);
+                        a.target = '_blank';
+                        a.click();
+
+                        document.body.removeChild(a);
+                        URL.revokeObjectURL(fileURL);
+                    }
+                    return (new itemActions.DownloadItemLargeLabelCountSuccess(data))
+                }),
+                catchError(err => {
+                    this.itemService.sendNotification({ type: 'error', title: 'Error', content: err });
+                    of(new itemActions.DownloadItemLargeLabelCountFail(err))
+                    return EMPTY;
+                })
+            )
+        )
+    );
     
+    
+
+
+
 }

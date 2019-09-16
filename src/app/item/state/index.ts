@@ -5,7 +5,7 @@ import { MatTableDataSource } from '@angular/material';
 import { SalesOrder } from 'app/shared/class/sales-order';
 import { SalesOrderLine } from 'app/shared/class/sales-order-line';
 import { Fulfillment, FulfillmentSalesOrderLine } from 'app/shared/class/fulfillment';
-import { ItemOptionInsert, ItemSelectionInsert, ItemTierPrice, ItemTierPriceInsert, ItemCrossSellInsert, ItemRelatedProductInsert, ItemUpSell, ItemUpSellInsert, ItemAttachmentInsert, ItemImageInsert, ItemVideoInsert, ItemBatch, Item } from 'app/shared/class/item';
+import { ItemOptionInsert, ItemSelectionInsert, ItemTierPrice, ItemTierPriceInsert, ItemCrossSellInsert, ItemRelatedProductInsert, ItemUpSell, ItemUpSellInsert, ItemAttachmentInsert, ItemImageInsert, ItemVideoInsert, ItemBatch, Item, ItemPrintLabel } from 'app/shared/class/item';
 import { ItemRelatedProduct } from 'app/shared/class/item-related-product';
 
 // Extends the app state to include the product feature.
@@ -25,7 +25,7 @@ export const getVendorBrandList = createSelector(
 );
 export const getSimpleItemList = createSelector(
     getItemFeatureState,
-    state => state.itemList 
+    state => state.simpleItemList 
 );
 // export const getSalesOrdersListMatTable = createSelector(
 //     getItemFeatureState,
@@ -35,6 +35,14 @@ export const getSimpleItemList = createSelector(
 export const getItem = createSelector(
     getItemFeatureState,
     state => state.item
+);
+export const getItems = createSelector(
+    getItemFeatureState,
+    state => state.items
+);
+export const getItemsMatTable = createSelector(
+    getItemFeatureState,
+    state => new MatTableDataSource<Item>(state.items)
 );
 export const getItemList = createSelector(
     getItemFeatureState,
@@ -149,6 +157,10 @@ export const getItemBatchItemsMatTable = createSelector(
 export const getItemBatchUpdates = createSelector(
     getItemFeatureState, 
     state => state.itemBatchUpdates
+)
+export const getItemPrintLabelsMatTable = createSelector(
+    getItemFeatureState, 
+    state => new MatTableDataSource<ItemPrintLabel>(state.itemPrintLabels) 
 )
 
 export const getIsLoading = createSelector(

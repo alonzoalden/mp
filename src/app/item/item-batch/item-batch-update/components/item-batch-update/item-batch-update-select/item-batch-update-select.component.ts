@@ -43,8 +43,6 @@ export class ItemBatchUpdateSelectComponent implements OnInit, OnChanges {
     }
 
     ngOnChanges(changes: SimpleChanges): void {
-        
-        
         if (changes.itemBatchItemsMatTable && changes.itemBatchItemsMatTable.currentValue.data) {
             this.itemBatchItemsMatTable.paginator = this.paginator;
             this.itemBatchItemsMatTable.sort = this.sort;

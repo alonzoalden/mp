@@ -17,12 +17,12 @@ import { ToolModule } from '../shared/tool/tool.module';
 
 import { ItemComponent } from './item.component';
 
-import { ItemListComponent, ItemListComponentItemPrintDialog, ItemListComponentImportDialog } from './item-list/item-list.component';
-import { ItemPrintLabelComponent, ItemPrintLabelComponentPrintDialog} from './item-print-label/item-print-label.component';
+import { ItemListComponent, ItemListComponentItemPrintDialog, ItemListComponentImportDialog } from './item-list/components/item-list.component';
+import { ItemPrintLabelComponent, ItemPrintLabelComponentPrintDialog} from './item-print-label/components/item-print-label.component';
 import { ItemPartListComponent, ItemPartListComponentItemPrintDialog } from './item-part-list/item-part-list.component';
 
-import { ItemListShellComponent } from './item-list-shell/item-list-shell.component';
-import { ItemPrintLabelShellComponent } from './item-print-label-shell/item-print-label-shell.component';
+import { ItemListShellComponent } from './item-list/containers/item-list-shell/item-list-shell.component';
+import { ItemPrintLabelShellComponent } from './item-print-label/containers/item-print-label-shell.component';
 import { ItemPartListShellComponent } from './item-part-list-shell/item-part-list-shell.component';
 
 import { ItemAddComponent } from './item-add/components/item-add/item-add.component';
