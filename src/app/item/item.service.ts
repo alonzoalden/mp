@@ -1,12 +1,12 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpErrorResponse, HttpHeaders } from '@angular/common/http';
 
-import { Observable, Subject, of, throwError } from 'rxjs';
+import { Observable, Subject, of, throwError, BehaviorSubject } from 'rxjs';
 import { catchError, tap } from 'rxjs/operators';
 
 import { Item, ItemInsert, ItemOption, ItemOptionInsert, ItemSelection, ItemSelectionInsert, ItemTierPrice, ItemTierPriceInsert
     , ItemCategoryAssignment, ItemRelatedProduct, ItemRelatedProductInsert, ItemUpSell, ItemUpSellInsert, ItemCrossSell, ItemCrossSellInsert
-    , ItemAttachment, ItemAttachmentInsert, ItemVideo, ItemVideoInsert, ItemImage, ItemImageInsert, ItemPrintLabel, ItemBatch, ItemPart, ItemPartInsert, ItemSectionInsert, ItemSection } from '../shared/class/item';
+    , ItemAttachment, ItemAttachmentInsert, ItemVideo, ItemVideoInsert, ItemImage, ItemImageInsert, ItemPrintLabel, ItemBatch, ItemPart, ItemPartInsert, ItemSectionInsert, ItemSection, ItemGlobalAttribute, ItemGlobalAttributeVariation, ItemAttribute, ItemVariation, ItemVariationListing, ItemVariationLine } from '../shared/class/item';
 //import { ItemImage } from '../shared/class/item-image';
 import { URLVideo, URLVideoItems, URLVideoItemsSnippet, URLVideoItemsSnippetThumbnails, URLVideoItemsSnippetThumbnailsStandard } from '../shared/class/item-video';
 
@@ -51,6 +51,8 @@ export class ItemService {
     public subject = new Subject<string>();
 
     batchUpdateItems: Item[];
+
+    public currentProductItemInsert: BehaviorSubject<any>;
 
     constructor(private http: HttpClient,
                 private oauthService: OAuthService,
@@ -970,4 +972,166 @@ export class ItemService {
         else if (currentItemIndex === i) return '#F5F5F5';
         else return '#FFFFFF';
     }
+
+    //Global Attribute/Variation
+    //SP
+    getItemGlobalAttributes(): Observable<ItemGlobalAttribute[]> {
+        return this.http.get<ItemGlobalAttribute[]>(this.apiURL + '/variationlisting/globalattribute')
+                        .pipe(
+                            //tap(data => console.log(JSON.stringify(data))),
+                            //tap(data => this.items = data),
+                            catchError(this.handleError)
+                        );
+    }//SP
+    getItemGlobalAttributeVariations(id: number): Observable<ItemGlobalAttributeVariation[]> {
+        return this.http.get<ItemGlobalAttributeVariation[]>(this.apiURL + '/variationlisting/globalattribute/' + id + '/variation')
+                        .pipe(
+                            //tap(data => console.log(JSON.stringify(data))),
+                            //tap(data => this.items = data),
+                            catchError(this.handleError)
+                        );
+    }
+
+    getItemAttributes(): Observable<ItemAttribute[]> {
+        const headers = new HttpHeaders({
+            'Content-Type': 'application/json',
+            'Access-Control-Allow-Origin': '*',
+        });
+        return this.http.get<ItemAttribute[]>(this.apiURL + '/variationlisting/attribute', { headers: headers })
+                        .pipe(
+                            //tap(data => console.log(JSON.stringify(data))),
+                            //tap(data => this.items = data),
+                            catchError(this.handleError)
+                        );
+    }
+    getItemAttributeVariations(id: number): Observable<ItemVariation[]> {
+        return this.http.get<ItemVariation[]>(this.apiURL + '/variationlisting/attribute/' + id + '/variation')
+                        .pipe(
+                            //tap(data => console.log(JSON.stringify(data))),
+                            //tap(data => this.items = data),
+                            catchError(this.handleError)
+                        );
+    }
+
+    //VariationListing
+    getItemVariationListings(): Observable<ItemVariationListing[]> {
+        return this.http.get<ItemVariationListing[]>(this.apiURL + '/variationlisting')
+                        .pipe(
+                            //tap(data => console.log(JSON.stringify(data))),
+                            //tap(data => this.items = data),
+                            catchError(this.handleError)
+                        );
+    }
+    getItemVariationListing(id: number): Observable<ItemVariationListing> {
+        return this.http.get<ItemVariationListing>(this.apiURL + '/variationlisting/' + id)
+                        .pipe(
+                            //tap(data => console.log(JSON.stringify(data))),
+                            //tap(data => this.items = data),
+                            catchError(this.handleError)
+                        );
+    }
+    //SP
+    addItemVariationListing(itemVariationListing: ItemVariationListing): Observable<ItemVariationListing> {
+        const headers = new HttpHeaders({
+            'Content-Type': 'application/json'
+        });
+        return this.http.post<ItemVariationListing>(this.apiURL + '/variationlisting', itemVariationListing, { headers: headers } )
+                            .pipe(
+                                tap(data => {
+                                    if(this.itemVariationListings)
+                                    {
+                                        this.itemVariationListings.splice(0,0,data);
+                                    }
+                                }),
+                                catchError(this.handleError)
+                            );
+    }
+    editItemVariationListing(itemVariationListing: ItemVariationListing): Observable<ItemVariationListing>  {
+        const headers = new HttpHeaders({
+            'Content-Type': 'application/json'
+        });
+        return this.http.put<ItemVariationListing>(this.apiURL + '/variationlisting/' + itemVariationListing.ItemVariationListingID, itemVariationListing, { headers: headers } )
+                            .pipe(
+                                //tap(data => console.log('Update Item Video: ' + itemVideos[0].ItemID)),
+                                catchError(this.handleError)
+                            );
+    }
+    //SP
+    deleteItemVariationListing(id: number): Observable<ItemVariationListing>  {
+        console.log(id);
+        return this.http.delete<ItemVariationListing>(this.apiURL + '/variationlisting/' + id )
+                            .pipe(
+                                //tap(data => console.log('Delete Item: ' + id)),
+                                catchError(this.handleError)
+                            );
+    }
+    
+    addItemVariation(itemVariationListing: ItemVariationListing, itemAttributes: ItemAttribute[]) {
+        
+        let itemInsertList = this.createProductVariations(itemVariationListing, itemAttributes);
+
+        let oldItemInsertList = itemVariationListing.ItemVariations;
+        let oldDefaults: ItemVariationLine[] = itemAttributes.filter((itemattribute) => itemattribute.OldDefault)
+                                                             .map((item) => new ItemVariationLine(null, null, item.OldDefault.ItemAttributeVariationID, item.OldDefault.ItemAttributeID, null, item.OldDefault.Name, null, null));
+        
+        this.updateItemVariationsWithOriginalInfo(oldItemInsertList, itemInsertList, oldDefaults);
+        itemVariationListing.ItemVariations = itemInsertList;
+        return itemVariationListing;
+    }
+
+    createProductVariations(itemVariationListing: ItemVariationListing, itemAttributes: ItemAttribute[]): ItemVariation[] {
+        const selectedItemAttributeVariations = itemAttributes.map((item) => item.SelectedItemAttributeVariations);
+        const possibleVariationLineCombos = this.cartesian(selectedItemAttributeVariations);
+
+        return possibleVariationLineCombos.map((itemVariationLines: any[]) => {
+            const variationLines = itemVariationLines.map((variationline) => new ItemVariationLine(variationline.ItemVariationLineID, null, variationline.ItemAttributeVariationID, variationline.ItemAttributeID, null, variationline.Name, variationline.UpdatedOn, variationline.CreatedOn ))
+            return new ItemVariation(null, itemVariationListing.ItemVariationListingID, itemVariationListing.Name, null, null, null, null, null, null, null, null, variationLines, false);
+        });
+    }
+
+    updateItemVariationsWithOriginalInfo(originalItemVariations: ItemVariation[], newItemVariations: ItemVariation[], defaultTo: ItemVariationLine[]): void {
+        newItemVariations.forEach((newItemVariation, i) => {
+            originalItemVariations.forEach((oldItemVariation) => {
+                const variationLinesToCompare = oldItemVariation.ItemVariationLines.concat(defaultTo);
+                const oldMatch = variationLinesToCompare.every((oldItemVariationLine) => {
+                    return !!newItemVariation.ItemVariationLines.find((newItemVariationLine) => newItemVariationLine.ItemAttributeVariationID === oldItemVariationLine.ItemAttributeVariationID)
+                });
+                
+                if (defaultTo.length) {
+                    if (oldMatch) {
+                        newItemVariations[i] = oldItemVariation;
+                        newItemVariations[i].ItemVariationLines = [...newItemVariation.ItemVariationLines];
+                        newItemVariations[i].ItemVariationLines.forEach((itemvariationline) => {
+                            itemvariationline.ItemVariationID = oldItemVariation.ItemVariationID
+                        });
+                        newItemVariations[i].IsPrimary = false;
+                    }
+                }
+                else if (oldMatch && !defaultTo.length) {
+                    newItemVariations[i] = oldItemVariation;
+                    newItemVariations[i].IsPrimary = false;                    
+                }
+            })
+        });
+    }
+    defaultVariationListingInsert() {
+        return new ItemVariationListing(null, null, null, null, null, null, null, null, null, null, []);
+    }
+
+    private cartesian(args) {
+        var r = [], arg = args, max = arg.length-1;
+        function helper(arr, i) {
+            for (var j=0, l=arg[i].length; j<l; j++) {
+                var a = arr.slice(0); // clone arr
+                a.push(arg[i][j]);
+                if (i==max)
+                    r.push(a);
+                else
+                    helper(a, i+1);
+            }
+        }
+        helper([], 0);
+        return r;
+    }
+
 }

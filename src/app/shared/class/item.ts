@@ -707,6 +707,7 @@ export class ItemAttribute {
         public CreatedOn: string,
         public ItemAttributeVariations: Array<ItemAttributeVariation>,
         public SelectedItemAttributeVariations: Array<ItemAttributeVariation>,
+        public OldDefault: ItemAttributeVariation,
     ) {}
 }
 
