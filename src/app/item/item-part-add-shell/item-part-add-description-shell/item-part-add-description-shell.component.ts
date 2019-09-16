@@ -44,7 +44,7 @@ export class ItemPartAddDescriptionShellComponent implements OnInit, AfterViewIn
             }
         );
     }
-    
+
     ngAfterViewInit() {
         var self = this;
 

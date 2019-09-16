@@ -193,15 +193,28 @@ export class ItemPartEditShellComponent implements OnInit, OnDestroy {
                     });
                 }
 
-                if(newItem.ItemParts) {
-                    const pendingItemPartIndex = newItem.ItemParts.findIndex(i => i.pendingAdd === true);
-                    if (pendingItemPartIndex > -1) {
-                        newItem.ItemParts.splice(pendingItemPartIndex, 1);
+                if(newItem.ItemSections) {
+                    const pendingItemSectionIndex = newItem.ItemSections.findIndex(i => i.pendingAdd === true);
+                    if (pendingItemSectionIndex > -1) {
+                        newItem.ItemSections.splice(pendingItemSectionIndex, 1);
                     }
-                    newItem.ItemParts.forEach((value, i) => {
-                        value.Position = i + 1;
-                    });
+                    if (newItem.ItemSections) {
+                        newItem.ItemSections.forEach((value, i) => {
+                            value.Position = i + 1;
+                            
+                            if (value.ItemParts) {
+                                const pendingItemPartIndex = value.ItemParts.findIndex(i => i.pendingAdd === true);
+                                if (pendingItemPartIndex > -1) {
+                                    value.ItemParts.splice(pendingItemPartIndex, 1);
+                                }
+                                value.ItemParts.forEach((value2, i) => {
+                                    value2.Position = i + 1;
+                                });
+                            }
+                        });
+                    }
                 }
+
 
                 if (newItem.FulfilledBy === 'Toolots') {
                     newItem.MerchantQuantity = 0;                    

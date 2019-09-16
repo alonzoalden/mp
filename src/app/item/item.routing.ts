@@ -83,10 +83,6 @@ import { ItemPartEditInventoryShellComponent } from './item-part-edit-shell/item
 
 import { PageNotFoundComponent } from './page-not-found.component';
 
-import { ItemVariationListComponent } from './item-variation/item-variation-list.component';
-
-import { ItemVariationDetailComponent } from './item-variation/item-variation-detail.component';
-
 const ITEM_ROUTES: Routes = [
     {
         path: '',
@@ -94,18 +90,6 @@ const ITEM_ROUTES: Routes = [
         children: [ {
                 path: '',
                 component: ItemListShellComponent
-            },
-            {
-                path: 'variation-listing',
-                component: ItemVariationListComponent
-            },
-            {
-                path: 'variation-listing/detail',
-                component: ItemVariationDetailComponent
-            },
-            {
-                path: 'variation-listing/detail/:id',
-                component: ItemVariationDetailComponent
             },
             {
                 path: 'printlabel',
@@ -261,7 +245,6 @@ const ITEM_ROUTES: Routes = [
                         path: 'variation',
                         component: ItemEditVariationComponent
                     }
-                    
                 ]
             },
             {

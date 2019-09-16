@@ -4,7 +4,7 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { TranslateModule } from '@ngx-translate/core';
 
 import { CommonModule } from '@angular/common';
-import { MatButtonModule, MatDatepickerModule, MatFormFieldModule, MatInputModule, MatPaginatorModule, MatTableModule, MatTreeModule, MatSortModule, MatDialogModule, MatSelectModule, MatMenuModule, MatToolbar, MatToolbarModule, MatIconModule, MatListModule, MatCheckboxModule, MatTooltipModule, MatTabsModule } from '@angular/material';
+import { MatButtonModule, MatDatepickerModule, MatFormFieldModule, MatInputModule, MatPaginatorModule, MatTableModule, MatTreeModule, MatSortModule, MatDialogModule, MatSelectModule, MatMenuModule, MatToolbar, MatToolbarModule, MatIconModule, MatListModule, MatCheckboxModule, MatTooltipModule } from '@angular/material';
 import { MatMomentDateModule, MAT_MOMENT_DATE_ADAPTER_OPTIONS } from '@angular/material-moment-adapter';
 
 import { NgSelectModule } from '@ng-select/ng-select';
@@ -51,6 +51,42 @@ import { ItemAddVendorAttachmentShellComponent } from './item-add/containers/ite
 import { ItemAddVideoShellComponent } from './item-add/containers/item-add-video-shell/item-add-video-shell.component';
 import { ItemAddImageShellComponent } from './item-add/containers/item-add-image-shell/item-add-image-shell.component';
 import { ItemAddPartShellComponent } from './item-add/containers/item-add-part-shell/item-add-part-shell.component';
+//import { ItemAddComponent } from './item-add/item-add.component';
+//import { ItemAddDescriptionComponent } from './item-add/item-add-description.component';
+//import { ItemAddDimensionComponent } from './item-add/item-add-dimension.component';
+//import { ItemAddPriceComponent } from './item-add/item-add-price.component';
+//import { ItemAddCategoryComponent } from './item-add/item-add-category.component';
+//import { ItemAddBundleComponent } from './item-add/item-add-bundle.component';
+//import { ItemAddProductRelationComponent } from './item-add/item-add-product-relation.component';
+//import { ItemAddProductRelationRelatedProductComponent } from './item-add/item-add-product-relation-related-product.component';
+//import { ItemAddProductRelationUpSellComponent } from './item-add/item-add-product-relation-up-sell.component';
+//import { ItemAddProductRelationCrossSellComponent } from './item-add/item-add-product-relation-cross-sell.component';
+//import { ItemAddVendorAttachmentComponent } from './item-add/item-add-vendor-attachment.component';
+//import { ItemAddVideoComponent } from './item-add/item-add-video.component';
+//import { ItemAddImageComponent, ItemAddImageComponentUploadDialog } from './item-add/item-add-image.component';
+//import { ItemAddPartComponent } from './item-add/item-add-part.component';
+import { ItemAddPartSectionPartComponent } from './item-add/item-add-part-section-part.component';
+import { ItemAddPartSectionComponent } from './item-add/item-add-part-section.component';
+
+
+
+// import { ItemEditComponent } from './item-edit/item-edit.component';
+// import { ItemEditDescriptionComponent } from './item-edit/item-edit-description.component';
+// import { ItemEditInventoryComponent } from './item-edit/item-edit-inventory.component';
+// import { ItemEditDimensionComponent } from './item-edit/item-edit-dimension.component';
+// import { ItemEditPriceComponent } from './item-edit/item-edit-price.component';
+// import { ItemEditCategoryComponent } from './item-edit/item-edit-category.component';
+// import { ItemEditBundleComponent } from './item-edit/item-edit-bundle.component';
+// import { ItemEditProductRelationComponent } from './item-edit/item-edit-product-relation.component';
+// import { ItemEditProductRelationRelatedProductComponent } from './item-edit/item-edit-product-relation-related-product.component';
+// import { ItemEditProductRelationUpSellComponent } from './item-edit/item-edit-product-relation-up-sell.component';
+// import { ItemEditProductRelationCrossSellComponent } from './item-edit/item-edit-product-relation-cross-sell.component';
+// import { ItemEditVendorAttachmentComponent } from './item-edit/item-edit-vendor-attachment.component';
+// import { ItemEditVideoComponent } from './item-edit/item-edit-video.component';
+// import { ItemEditImageComponent, ItemEditImageComponentUploadDialog } from './item-edit/item-edit-image.component';
+// import { ItemEditPartComponent } from './item-edit/item-edit-part.component';
+import { ItemEditPartSectionPartComponent } from './item-edit/item-edit-part-section-part.component';
+import { ItemEditPartSectionComponent } from './item-edit/item-edit-part-section.component';
 
 import { ItemEditComponent } from './item-edit/components/item-edit/item-edit.component';
 import { ItemEditDescriptionComponent } from './item-edit/components/item-edit-description/item-edit-description.component';
@@ -186,6 +222,8 @@ import { ItemEffects } from './state/item.effects';
         ItemAddVideoComponent,
         ItemAddImageComponent,
         ItemAddPartComponent,
+        ItemAddPartSectionPartComponent,
+        ItemAddPartSectionComponent,
         ItemEditComponent,
         ItemEditDescriptionComponent,
         ItemEditDimensionComponent,
@@ -296,7 +334,6 @@ import { ItemEffects } from './state/item.effects';
         MatMenuModule,
         MatButtonModule,
         MatToolbarModule,
-        MatTabsModule,
         MatTreeModule,
         MatIconModule,
         MatListModule,

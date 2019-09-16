@@ -31,7 +31,7 @@
             </div>
             <div *ngIf="!loading">
                 <div class="tabs-container">
-                    <ul class="nav nav-tabs flex">
+                    <ul class="nav nav-tabs">
                         <li routerLinkActive="active">
                             <a [routerLink]="['description']">
                                 {{ 'Product Description' | translate }}
@@ -87,11 +87,6 @@
                                 {{ 'Part' | translate }} 
                             </a>
                         </li>
-                        <!-- <li style="margin-left: auto;">
-                                <a class="hov-underline" href="/item/variation-listing" style="color: #555 !important;">
-                                    <i class="fa fa-plus m-r-xs"></i> {{ 'Variation' | translate }}
-                                </a>
-                        </li> -->
                     </ul>
                     <router-outlet></router-outlet>
                 </div>
@@ -104,7 +99,7 @@
         <button mat-button
                 type="button"
                 class="btn button-cancel"
-                [routerLink]="['/item']"><i class="fa fa-remove"></i> {{ 'Save' | translate }}
+                [routerLink]="['/item']"><i class="fa fa-remove"></i> {{ 'Cancel' | translate }}
         </button>
         <button mat-button
                 type="button"

@@ -9,6 +9,7 @@ import * as fromItem from '../../../state';
 import * as fromUser from '../../../../shared/state/user-state.reducer';
 import { Observable } from 'rxjs';
 
+import { ItemService } from '../item.service';
 
 @Component({
   selector: 'o-item-add',
@@ -79,12 +80,18 @@ export class ItemAddComponent implements OnInit, OnChanges {
                     value.ItemSelections.splice(value.ItemSelections.length-1, 1);
                     value.ItemSelections.forEach((value, i) => {
                         value.Position = i + 1;
-                    })
+                    });
                 });            
 
-                newItem.ItemParts.splice(newItem.ItemParts.length-1, 1);
-                newItem.ItemParts.forEach((value, i) => {
+                newItem.ItemSections.splice(newItem.ItemSections.length-1, 1);
+                newItem.ItemSections.forEach((value, i) => {
                     value.Position = i + 1;
+
+                    value.ItemParts.splice(value.ItemParts.length-1, 1);
+                    value.ItemParts.forEach((value, i) => {
+                        value.Position = i + 1;
+                    });
+
                 });
 
                 //this.loading = true; 

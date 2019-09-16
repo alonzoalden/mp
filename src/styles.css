@@ -1793,15 +1793,6 @@ table {
     background-color: #1ab394;
     color: #FFF !important;
 }
-
-.inside-ibox {
-    width: 100%;
-    display: initial;
-}
-.inside-ibox .button-add-display {
-    width: 200px !important;
-}
-
 .flex-va-center {
     display: flex;
     align-items: center;
