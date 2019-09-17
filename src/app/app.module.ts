@@ -43,7 +43,7 @@ import {
     MatToolbarModule,
     MatTooltipModule,
     MatFormFieldModule,
-    MatMenuTrigger,
+    MatMenuTrigger
 } from '@angular/material';
 
 import { CdkTableModule } from '@angular/cdk/table';

@@ -425,15 +425,12 @@ export class ItemService {
                             .pipe(
                                 //tap(data => console.log('Delete Item: ' + id)),
                                 tap(data => {
-                                    console.log(this.items);
                                     if(this.items && this.items.length > 0)
                                     {
-                                        console.log(this.items);
                                         const foundIndex = this.items.findIndex(i => i.ItemID === id);
-                                        console.log(foundIndex);
                                         if (foundIndex > -1) {
                                             this.items.splice(foundIndex, 1);
-                                            this.currentItem = null;
+                                            //this.currentItem = null;
                                         }    
                                     }
                                 }),
@@ -1038,10 +1035,10 @@ export class ItemService {
         return this.http.post<ItemVariationListing>(this.apiURL + '/variationlisting', itemVariationListing, { headers: headers } )
                             .pipe(
                                 tap(data => {
-                                    if(this.itemVariationListings)
-                                    {
-                                        this.itemVariationListings.splice(0,0,data);
-                                    }
+                                    // if(this.itemVariationListings)
+                                    // {
+                                    //     this.itemVariationListings.splice(0,0,data);
+                                    // }
                                 }),
                                 catchError(this.handleError)
                             );

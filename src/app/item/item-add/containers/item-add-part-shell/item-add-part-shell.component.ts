@@ -19,4 +19,3 @@ export class ItemAddPartShellComponent implements OnInit {
         this.errorMessage$ = this.store.pipe(select(fromItem.getError));
     }
 }
-

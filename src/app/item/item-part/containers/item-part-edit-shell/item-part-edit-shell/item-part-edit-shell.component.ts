@@ -1,23 +1,20 @@
-import { Component, ViewChild, OnInit, OnDestroy, Input, SimpleChanges, Output, EventEmitter } from '@angular/core';
+import { Component, ViewChild, OnInit, OnDestroy } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Subscription } from 'rxjs';
 
-import { Item, ItemSelection, ItemInsert } from '../../../../shared/class/item';
-import { VendorBrand } from '../../../../shared/class/vendor-brand';
+import { Item, ItemSelection } from '../../../../../shared/class/item';
+import { VendorBrand } from '../../../../../shared/class/vendor-brand';
 
-import { ItemService } from '../../../item.service';
-import { AppService } from '../../../../app.service';
+import { ItemService } from '../../../../item.service';
+import { AppService } from '../../../../../app.service';
 
-import { environment } from '../../../../../environments/environment';
-import { Member } from 'app/shared/class/member';
+import { environment } from '../../../../../../environments/environment';
 
 @Component({
-  selector: 'o-item-edit',
-  templateUrl: './item-edit.component.html',
-  styleUrls: ['./item-edit.component.css']
+  templateUrl: './item-part-edit-shell.component.html',
 })
 
-export class ItemEditComponent implements OnInit {
+export class ItemPartEditShellComponent implements OnInit, OnDestroy {
     private subscription: Subscription;
     
     private originalItem: Item;
@@ -25,23 +22,12 @@ export class ItemEditComponent implements OnInit {
     itemName: string;
     isPM: boolean;
     
-
-    @Input() vendorBrandList: VendorBrand[];
-    @Input() isLoading: boolean = true;
-    @Input() item: Item;
-    @Input() userInfo: Member;
-    @Input() errorMessage: string;
-    @Input() pendingSave: boolean;
-    @Output() getItem = new EventEmitter<number>();
-    @Output() editItem = new EventEmitter<{item: Item, displayPreview: boolean, printLabel: boolean}>();
-    @Output() downloadItemLabel = new EventEmitter<Item>();
-    @Output() getVendorBrands = new EventEmitter<void>();
-    //errorMessage: string;
-    //pendingSave: boolean;
+    errorMessage: string;
+    pendingSave: boolean;
     
     loading: boolean;
 
-    //vendorBrandList: VendorBrand[]; 
+    vendorBrandList: VendorBrand[]; 
     
     private dataIsValid: { [key: string]: boolean } = {};
 
@@ -49,68 +35,55 @@ export class ItemEditComponent implements OnInit {
         private router: Router,
         private itemService: ItemService,
         private appService: AppService) { }
-        
-    ngOnChanges(changes: SimpleChanges) {
-        if (changes.item && changes.item.currentValue) {
-            this.originalItem = this.item;
-            this.itemName = this.item.Name;
-        }
-        if (changes.userInfo && changes.userInfo.currentValue) {
-            this.isPM = this.userInfo.IsPM;
-        }
-    }
 
     ngOnInit() {
-        this.getVendorBrands.emit();
         const param = this.route.snapshot.params['id'];
-        this.getItem.emit(param);
         
-        //this.loading = true;
+        this.loading = true;
 
-        // this.subscription = this.itemService.getItem(param).subscribe(
-        //     (item: Item) => {
-        //         this.itemService.currentItemEdit = item;
-        //         this.itemName = item.Name;
-        //         this.item = this.itemService.currentItemEdit;
+        this.subscription = this.itemService.getItem(param).subscribe(
+            (item: Item) => {
+                this.itemService.currentItemEdit = item;
+                this.itemName = item.Name;
+                this.item = this.itemService.currentItemEdit;
 
-        //         this.loading = false;
-        //     },
-        //     error => {
-        //         //this.errorMessage = <any>error;
-        //         this.loading = false;
-        //         this.itemService.sendNotification({ type: 'error', title: 'Error', content: this.errorMessage });
-        //         this.router.navigate(['/item']);                
-        //     }
-        // );
+                this.loading = false;
+            },
+            error => {
+                this.loading = false;
+                this.itemService.sendNotification({ type: 'error', title: 'Error', content: this.errorMessage });
+                this.router.navigate(['/item']);                
+            }
+        );
 
-        // this.itemService.getVendorBrands().subscribe(
-        //     (vendorBrands: VendorBrand[]) => {
-        //         this.vendorBrandList = vendorBrands;
-        //     },
-        //     (error: any) => {
-        //         this.errorMessage = <any>error;                
-        //     }
-        // ); 
+        this.itemService.getVendorBrands().subscribe(
+            (vendorBrands: VendorBrand[]) => {
+                this.vendorBrandList = vendorBrands;
+            },
+            (error: any) => {
+                this.errorMessage = <any>error;                
+            }
+        ); 
 
-        // this.appService.getCurrentMember().subscribe(
-        //     (data) => {
-        //         this.appService.currentMember = data;
-        //         this.isPM = data.IsPM;
-        //     },
-        //     (error: any) => {
-        //         this.errorMessage = <any>error;
-        //     }
-        // );
+        this.appService.getCurrentMember().subscribe(
+            (data) => {
+                this.appService.currentMember = data;
+                this.isPM = data.IsPM;
+            },
+            (error: any) => {
+                this.errorMessage = <any>error;
+            }
+        );
     }
 
-    // get item(): Item {
-    //     return this.currentItem;
-    // }
-    // set item(value: Item) {
-    //     this.currentItem = value;
-    //     // Clone the object to retain a copy
-    //     this.originalItem = Object.assign({}, value);
-    // }
+    get item(): Item {
+        return this.currentItem;
+    }
+    set item(value: Item) {
+        this.currentItem = value;
+        // Clone the object to retain a copy
+        this.originalItem = Object.assign({}, value);
+    }
 
     get hasChange(): boolean {
         return JSON.stringify(this.originalItem) !== JSON.stringify(this.currentItem);
@@ -221,35 +194,27 @@ export class ItemEditComponent implements OnInit {
                 }
 
                 if(newItem.ItemSections) {
-                    const pendingItemPartIndex = newItem.ItemSections.findIndex(i => i.pendingAdd === true);
-                    if (pendingItemPartIndex > -1) {
-                        newItem.ItemSections.splice(pendingItemPartIndex, 1);
+                    const pendingItemSectionIndex = newItem.ItemSections.findIndex(i => i.pendingAdd === true);
+                    if (pendingItemSectionIndex > -1) {
+                        newItem.ItemSections.splice(pendingItemSectionIndex, 1);
                     }
-                    newItem.ItemSections.forEach((value, i) => {
-                        value.Position = i + 1;
-
-                        if(value.ItemParts) {
-                            const pendingItemSelectionIndex = value.ItemParts.findIndex(i => i.pendingAdd === true);
-                            if (pendingItemSelectionIndex > -1) {
-                                value.ItemParts.splice(pendingItemSelectionIndex, 1);
+                    if (newItem.ItemSections) {
+                        newItem.ItemSections.forEach((value, i) => {
+                            value.Position = i + 1;
+                            
+                            if (value.ItemParts) {
+                                const pendingItemPartIndex = value.ItemParts.findIndex(i => i.pendingAdd === true);
+                                if (pendingItemPartIndex > -1) {
+                                    value.ItemParts.splice(pendingItemPartIndex, 1);
+                                }
+                                value.ItemParts.forEach((value2, i) => {
+                                    value2.Position = i + 1;
+                                });
                             }
-                            value.ItemParts.forEach((value2, i) => {
-                                value2.Position = i + 1;
-                            });
-                        }
-                    });
+                        });
+                    }
                 }
 
-                newItem.ItemSections.splice(newItem.ItemSections.length-1, 1);
-                newItem.ItemSections.forEach((value, i) => {
-                    value.Position = i + 1;
-
-                    value.ItemParts.splice(value.ItemParts.length-1, 1);
-                    value.ItemParts.forEach((value, i) => {
-                        value.Position = i + 1;
-                    });
-
-                });
 
                 if (newItem.FulfilledBy === 'Toolots') {
                     newItem.MerchantQuantity = 0;                    
@@ -261,47 +226,43 @@ export class ItemEditComponent implements OnInit {
                     newItem.Approval = "Approved";
                 }
 
-                //this.loading = true;
+                this.loading = true;            
+                this.itemService.editItem(newItem).subscribe(
+                    (updatedItem: Item) => {
+                        this.pendingSave = false;
+                        this.loading = false;
 
-                this.editItem.emit({item: newItem, displayPreview: displayPreview, printLabel: printLabel});
-                this.onSaveComplete(`${this.item.Name} was saved`);
-                // this.itemService.editItem(newItem).subscribe(
-                //     (updatedItem: Item) => {
-                //         this.pendingSave = false;
-                //         this.loading = false;
+                        this.item.MerchantQuantity = updatedItem.MerchantQuantity;
+                        this.item.Approval = updatedItem.Approval;
 
-                //         this.item.FulfilledBy = updatedItem.FulfilledBy;
-                //         this.item.MerchantQuantity = updatedItem.MerchantQuantity;
-                //         this.item.Approval = updatedItem.Approval;
+                        this.item.ItemImages = updatedItem.ItemImages;
 
-                //         this.item.ItemImages = updatedItem.ItemImages;
+                        this.item.QtyOnHand = updatedItem.QtyOnHand;
+                        this.item.QtyAvailable = updatedItem.QtyAvailable;
+                        this.item.QtyOnOrder = updatedItem.QtyOnOrder;
+                        this.item.QtyBackOrdered = updatedItem.QtyBackOrdered;
+                        this.item.MerchantQtyOnHand = updatedItem.MerchantQtyOnHand;
+                        this.item.MerchantQtyAvailable = updatedItem.MerchantQtyAvailable;
+                        this.item.MerchantQtyOnOrder = updatedItem.MerchantQtyOnOrder;
 
-                //         this.item.QtyOnHand = updatedItem.QtyOnHand;
-                //         this.item.QtyAvailable = updatedItem.QtyAvailable;
-                //         this.item.QtyOnOrder = updatedItem.QtyOnOrder;
-                //         this.item.QtyBackOrdered = updatedItem.QtyBackOrdered;
-                //         this.item.MerchantQtyOnHand = updatedItem.MerchantQtyOnHand;
-                //         this.item.MerchantQtyAvailable = updatedItem.MerchantQtyAvailable;
-                //         this.item.MerchantQtyOnOrder = updatedItem.MerchantQtyOnOrder;
-
-                //         this.originalItem = this.item;
+                        this.originalItem = this.item;
                         
-                //         this.onSaveComplete(`${this.item.Name} was saved`);                                               
+                        this.onSaveComplete(`${this.item.Name} was saved`);                                               
 
-                //         if(displayPreview) {
-                //             window.open(environment.previewURL + this.item.ItemID + "/options/portal", "_blank");
-                //         }
+                        if(displayPreview) {
+                            window.open(environment.previewURL + this.item.ItemID + "/options/portal", "_blank");
+                        }
 
-                //         if(printLabel) {
-                //             this.onPrintLabel();
-                //         }
-                //     },
-                //     (error: any) => {
-                //         this.pendingSave = false;
-                //         this.loading = false;
-                //         this.itemService.sendNotification({ type: 'error', title: 'Error', content: <any>error });
-                //     }
-                // );
+                        if(printLabel) {
+                            this.onPrintLabel();
+                        }
+                    },
+                    (error: any) => {
+                        this.pendingSave = false;
+                        this.loading = false;
+                        this.itemService.sendNotification({ type: 'error', title: 'Error', content: <any>error });
+                    }
+                );
             } else {
                 this.itemService.sendNotification({ type: 'error', title: 'Invalid Entry', content: 'Please enter all required fields' });
             }
@@ -309,28 +270,6 @@ export class ItemEditComponent implements OnInit {
     }
 
     onSaveComplete(message?: string): void {
-        // if(this.item.ItemImages)
-        // {
-        //     const newImagePath = this.item.ItemImages.find(img => img.IsThumbnail && !img.Exclude && !img.Remove);        
-        //     // this.itemService.getItem(this.item.ItemID).subscribe(
-        //     //     (item: Item) => {                
-        //     //         const _item = item;
-        //     //         _item.ImagePath = newImagePath ? newImagePath.Raw : null;
-        //     //         this.itemService.replaceItem(this.item.ItemID, _item);
-        //     //     },
-        //     //     (error: any) => {
-        //     //         // this.errorMessage = <any>error
-        //     //         this.itemService.sendNotification({ type: 'error', title: 'Error', content: '' });
-        //     //     }
-        //     // );
-
-        //     if(this.itemService.getCurrentItems()){
-        //         const foundItem = this.itemService.getCurrentItems().find(i => i.ItemID === this.item.ItemID);
-        //         foundItem.ImagePath = newImagePath ? newImagePath.FilePath : null;                
-        //         this.itemService.replaceItem(this.item.ItemID, foundItem);
-        //     }
-        // }
-
         if(this.itemService.getCurrentItems()){
             const foundItem = this.itemService.getCurrentItems().find(i => i.ItemID === this.item.ItemID);
 
@@ -375,13 +314,12 @@ export class ItemEditComponent implements OnInit {
             
             foundItem.Name = this.item.Name;
             foundItem.VendorSKU = this.item.VendorSKU;
-            foundItem.FulfilledBy = this.item.FulfilledBy;
             
             this.itemService.replaceItem(this.item.ItemID, foundItem);
         }
 
         //this.reset();
-        //this.itemService.sendNotification({ type: 'success', title: 'Successfully Updated', content: message });
+        this.itemService.sendNotification({ type: 'success', title: 'Successfully Updated', content: message });
         // Navigate back to the item list
         //this.router.navigate(['/item']);
     }
@@ -444,10 +382,6 @@ export class ItemEditComponent implements OnInit {
         }
     }
     isSubmitValid(): boolean {      
-        // console.log(this.originalItem.Approval);
-        // console.log(this.item.Approval);
-        // console.log(this.item.ItemImages.filter(x => !x.pendingAdd));
-
         if(this.originalItem.Approval != "Pending" && this.item.Approval == "Pending" && this.item.ItemImages.filter(x => !x.pendingAdd).length < 1) {
             this.itemService.sendNotification({ type: 'error', title: 'Invalid Entry', content: 'An image is required' });
             return false;    
@@ -485,7 +419,6 @@ export class ItemEditComponent implements OnInit {
         this.dataIsValid = {};
 
         // 'description' tab
-        //if (this.item && this.validateDescription() && this.isShippingFeeValid() && this.isShipWithinDaysValid()) {
         if (this.item && this.validateDescription() && this.isShipWithinDaysValid()) {
             this.dataIsValid['description'] = true;
         } else {
@@ -551,7 +484,6 @@ export class ItemEditComponent implements OnInit {
 
     validatePrice() {
         return (this.item.PriceType === 'Dynamic' || this.item.Price) && (this.item.FOBPrice || this.item.DropshipPrice);
-        //return (this.item.Price && this.item.FOBPrice);
     }
 
     validateCategory() {
@@ -559,66 +491,30 @@ export class ItemEditComponent implements OnInit {
     }
 
     onPrintLabel() {
+        this.itemService.downloadItemLabel(this.item.ItemID).subscribe(
+            (data) => {
+                const blob = new Blob([data], {type: 'application/pdf'});
+                const blobUrl = URL.createObjectURL(blob);
+                if (window.navigator.msSaveOrOpenBlob) {
+                    const fileName = this.item.TPIN;
+                    window.navigator.msSaveOrOpenBlob(data, fileName + '.pdf'); // IE is the worst!!!
+                } else {
+                    const fileURL = window.URL.createObjectURL(blob);
+                    const a: HTMLAnchorElement = document.createElement('a') as HTMLAnchorElement;
+                    a.href = fileURL;
+                    a.download = this.item.TPIN;
+                    document.body.appendChild(a);
+                    a.target = '_blank';
+                    a.click();
 
-        this.downloadItemLabel.emit(this.item)
-        // this.itemService.downloadItemLabel(this.item).subscribe(
-        //     (data) => {
-        //         const blob = new Blob([data], {type: 'application/pdf'});
-        //         const blobUrl = URL.createObjectURL(blob);
-        //         if (window.navigator.msSaveOrOpenBlob) {
-        //             const fileName = this.item.TPIN;
-        //             window.navigator.msSaveOrOpenBlob(data, fileName + '.pdf'); // IE is the worst!!!
-        //         } else {
-        //             // const iframe = document.createElement('iframe');
-        //             // iframe.style.display = 'none';
-        //             // iframe.src = blobUrl;
-        //             // document.body.appendChild(iframe);
-
-        //             // iframe.onload = (function() {
-        //             //     iframe.contentWindow.focus();
-        //             //     iframe.contentWindow.print();
-        //             // });
-        //             const fileURL = window.URL.createObjectURL(blob);
-        //             const a: HTMLAnchorElement = document.createElement('a') as HTMLAnchorElement;
-        //             a.href = fileURL;
-        //             a.download = this.item.TPIN;
-        //             document.body.appendChild(a);
-        //             a.target = '_blank';
-        //             a.click();
-
-        //             document.body.removeChild(a);
-        //             URL.revokeObjectURL(fileURL);
-        //         }
-        //     }
-        // );
+                    document.body.removeChild(a);
+                    URL.revokeObjectURL(fileURL);
+                }
+            }
+        );
     }
 
-    requestActive() {
-        this.item.RequestApproval = true;
-        this.saveItem();
-    }
-
-    submitApproval() {
-        // console.log(this.item.ItemImages);
-        // console.log(this.item.ItemImages.filter(x => !x.pendingAdd));
-
-        if(this.item.ItemImages.filter(x => !x.pendingAdd).length < 1) {
-            this.itemService.sendNotification({ type: 'error', title: 'Image Required', content: 'An image is required' });
-        }
-        else
-        {
-            this.item.Approval = "Pending";
-            this.saveItem();    
-        }
-    }
-
-    approveItem() {
-        this.item.Approval = "Approved";
-        this.saveItem();
-    }
-
-    notApproveItem() {
-        this.item.Approval = "NotApproved";
-        this.saveItem();
+    ngOnDestroy() {
+        this.subscription.unsubscribe();
     }
 }

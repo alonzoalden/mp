@@ -38,7 +38,7 @@ export class ItemListShellComponent implements OnInit {
     downloadItemTemplate() {
         this.store.dispatch(new itemActions.DownloadItemTemplate());
     }
-    deleteItem(id: number): void {
-        this.store.dispatch(new itemActions.DeleteItem(id));
+    deleteItem(item: Item): void {
+        this.store.dispatch(new itemActions.DeleteItem(item));
     }
 }

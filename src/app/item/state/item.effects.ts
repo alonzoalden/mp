@@ -396,7 +396,7 @@ export class ItemEffects {
         ofType(itemActions.ItemActionTypes.EditItem),
         map((action: itemActions.EditItem) => action.payload),
         mergeMap((payload: any) =>
-            this.itemService.editItem(payload.item.ItemID).pipe(
+            this.itemService.editItem(payload.item).pipe(
                 map((item: Item) => {
                     this.itemService.sendNotification({ type: 'success', title: 'Successfully Updated', content: `${item.Name} was saved` });
                     if(payload.displayPreview) {
@@ -405,6 +405,7 @@ export class ItemEffects {
                     if(payload.printLabel) {
                         this.store.dispatch(new itemActions.DownloadItemLabel(item));
                     }
+                    this.router.navigate(['/item']);
                     return (new itemActions.EditItemSuccess(item))
                 }),
                 catchError(err => {
@@ -420,13 +421,14 @@ export class ItemEffects {
     deleteItem$: Observable<Action> = this.actions$.pipe(
         ofType(itemActions.ItemActionTypes.DeleteItem),
         map((action: itemActions.DeleteItem) => action.payload),
-        mergeMap((id: number) =>
-            this.itemService.deleteItem(id).pipe(
+        mergeMap((item: Item) =>
+            this.itemService.deleteItem(item.ItemID).pipe(
                 map((item: Item) => {
                     this.itemService.sendNotification({ type: 'success', title: 'Successfully Deleted', content: `${item.Name} was deleted` });
-                    return (new itemActions.DeleteItemSuccess(id))
+                    return (new itemActions.DeleteItemSuccess(item.ItemID))
                 }),
                 catchError(err => {
+                    console.log(err);
                     this.itemService.sendNotification({ type: 'error', title: 'Error', content: err });
                     of(new itemActions.DeleteItemFail(err))
                     return EMPTY;

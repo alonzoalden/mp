@@ -21,7 +21,7 @@ export class ItemListComponent implements OnInit {
     @Input() pendingDelete: boolean;
     @Output() getItems = new EventEmitter<void>();
     @Output() refreshItems = new EventEmitter<void>();
-    @Output() deleteItem = new EventEmitter<number>();
+    @Output() deleteItem = new EventEmitter<Item>();
     @Output() downloadItemLabelCount = new EventEmitter<{item: Item, count: number, border: string}>();
     @Output() downloadItemLargeLabelCount = new EventEmitter<{item: Item, count: number, border: string}>();
     @Output() downloadItemTemplate = new EventEmitter<void>();
@@ -124,7 +124,7 @@ export class ItemListComponent implements OnInit {
     onRemove(item: Item) {
         const confirmation = confirm(`Remove ${item.ItemID}: ${item.Name}?`);        
         if (confirmation) {
-            this.deleteItem.emit(item.ItemID);
+            this.deleteItem.emit(item);
         }
     }
 

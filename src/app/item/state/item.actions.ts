@@ -461,7 +461,7 @@ export class EditItemFail implements Action {
 
 export class DeleteItem implements Action {
   readonly type = ItemActionTypes.DeleteItem;
-  constructor(public payload: number) { }
+  constructor(public payload: Item) { }
 }
 
 export class DeleteItemSuccess implements Action {

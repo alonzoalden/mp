@@ -4,7 +4,8 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { TranslateModule } from '@ngx-translate/core';
 
 import { CommonModule } from '@angular/common';
-import { MatButtonModule, MatDatepickerModule, MatFormFieldModule, MatInputModule, MatPaginatorModule, MatTableModule, MatTreeModule, MatSortModule, MatDialogModule, MatSelectModule, MatMenuModule, MatToolbar, MatToolbarModule, MatIconModule, MatListModule, MatCheckboxModule, MatTooltipModule } from '@angular/material';
+import { MatButtonModule, MatDatepickerModule, MatFormFieldModule, MatInputModule, MatPaginatorModule, MatTableModule, MatTreeModule, MatSortModule, MatDialogModule, MatSelectModule, MatMenuModule, MatToolbar, MatToolbarModule, MatIconModule, MatListModule, MatCheckboxModule, MatTooltipModule, MatTabsModule } from '@angular/material';
+
 import { MatMomentDateModule, MAT_MOMENT_DATE_ADAPTER_OPTIONS } from '@angular/material-moment-adapter';
 
 import { NgSelectModule } from '@ng-select/ng-select';
@@ -19,11 +20,11 @@ import { ItemComponent } from './item.component';
 
 import { ItemListComponent, ItemListComponentItemPrintDialog, ItemListComponentImportDialog } from './item-list/components/item-list.component';
 import { ItemPrintLabelComponent, ItemPrintLabelComponentPrintDialog} from './item-print-label/components/item-print-label.component';
-import { ItemPartListComponent, ItemPartListComponentItemPrintDialog } from './item-part-list/item-part-list.component';
+import { ItemPartListComponent, ItemPartListComponentItemPrintDialog } from './item-part/components/item-part-list/item-part-list.component';
 
 import { ItemListShellComponent } from './item-list/containers/item-list-shell/item-list-shell.component';
 import { ItemPrintLabelShellComponent } from './item-print-label/containers/item-print-label-shell.component';
-import { ItemPartListShellComponent } from './item-part-list-shell/item-part-list-shell.component';
+import { ItemPartListShellComponent } from './item-part/containers/item-part-list-shell/item-part-list-shell.component';
 
 import { ItemAddComponent } from './item-add/components/item-add/item-add.component';
 import { ItemAddDescriptionComponent } from './item-add/components/item-add-description/item-add-description.component';
@@ -38,7 +39,7 @@ import { ItemAddProductRelationCrossSellComponent } from './item-add/components/
 import { ItemAddVendorAttachmentComponent } from './item-add/components/item-add-vendor-attachment/item-add-vendor-attachment.component';
 import { ItemAddVideoComponent } from './item-add/components/item-add-video/item-add-video.component';
 import { ItemAddImageComponent, ItemAddImageComponentUploadDialog } from './item-add/components/item-add-image/item-add-image.component';
-import { ItemAddPartComponent } from './item-add/components/item-add-part/item-add-part.component';
+//import { ItemAddPartComponent } from './item-add/components/item-add-part/item-add-part.component';
 
 import { ItemAddShellComponent } from './item-add/containers/item-add-shell/item-add-shell.component';
 import { ItemAddDescriptionShellComponent } from './item-add/containers/item-add-description-shell/item-add-description-shell.component';
@@ -65,8 +66,8 @@ import { ItemAddPartShellComponent } from './item-add/containers/item-add-part-s
 //import { ItemAddVideoComponent } from './item-add/item-add-video.component';
 //import { ItemAddImageComponent, ItemAddImageComponentUploadDialog } from './item-add/item-add-image.component';
 //import { ItemAddPartComponent } from './item-add/item-add-part.component';
-import { ItemAddPartSectionPartComponent } from './item-add/item-add-part-section-part.component';
-import { ItemAddPartSectionComponent } from './item-add/item-add-part-section.component';
+import { ItemAddPartSectionPartComponent } from './item-add/components/item-add-part/item-add-part-section-part/item-add-part-section-part.component';
+import { ItemAddPartSectionComponent } from './item-add/components/item-add-part/item-add-part-section/item-add-part-section.component';
 
 
 
@@ -85,8 +86,8 @@ import { ItemAddPartSectionComponent } from './item-add/item-add-part-section.co
 // import { ItemEditVideoComponent } from './item-edit/item-edit-video.component';
 // import { ItemEditImageComponent, ItemEditImageComponentUploadDialog } from './item-edit/item-edit-image.component';
 // import { ItemEditPartComponent } from './item-edit/item-edit-part.component';
-import { ItemEditPartSectionPartComponent } from './item-edit/item-edit-part-section-part.component';
-import { ItemEditPartSectionComponent } from './item-edit/item-edit-part-section.component';
+import { ItemEditPartSectionPartComponent } from './item-edit/components/item-edit-part/item-edit-part-section-part/item-edit-part-section-part.component';
+import { ItemEditPartSectionComponent } from './item-edit/components/item-edit-part/item-edit-part-section/item-edit-part-section.component';
 
 import { ItemEditComponent } from './item-edit/components/item-edit/item-edit.component';
 import { ItemEditDescriptionComponent } from './item-edit/components/item-edit-description/item-edit-description.component';
@@ -102,7 +103,7 @@ import { ItemEditProductRelationCrossSellComponent } from './item-edit/component
 import { ItemEditVendorAttachmentComponent } from './item-edit/components/item-edit-vendor-attachment/item-edit-vendor-attachment.component';
 import { ItemEditVideoComponent } from './item-edit/components/item-edit-video/item-edit-video.component';
 import { ItemEditImageComponent, ItemEditImageComponentUploadDialog } from './item-edit/components/item-edit-image/item-edit-image.component';
-import { ItemEditPartComponent } from './item-edit/components/item-edit-part/item-edit-part.component';
+//import { ItemEditPartComponent } from './item-edit/components/item-edit-part/item-edit-part.component';
 
 import { ItemEditShellComponent } from './item-edit/containers/item-edit-shell/item-edit-shell.component';
 import { ItemEditDescriptionShellComponent } from './item-edit/containers/item-edit-description-shell/item-edit-description-shell.component';
@@ -147,32 +148,31 @@ import { ItemBatchUpdateShellComponent } from './item-batch/item-batch-update/co
 import { ItemBatchUpdateSelectShellComponent } from './item-batch/item-batch-update/containers/item-batch-update-shell/item-batch-update-select-shell/item-batch-update-select-shell.component';
 import { ItemBatchUpdateUpdateShellComponent } from './item-batch/item-batch-update/containers/item-batch-update-shell/item-batch-update-update-shell/item-batch-update-update-shell.component';
 
-import { ItemPartAddComponent } from './item-part-add/item-part-add/item-part-add.component';
-import { ItemPartAddDescriptionComponent } from './item-part-add/item-part-add-description/item-part-add-description.component';
-import { ItemPartAddDimensionComponent } from './item-part-add/item-part-add-dimension/item-part-add-dimension.component';
-import { ItemPartAddPriceComponent } from './item-part-add/item-part-add-price/item-part-add-price.component';
-import { ItemPartAddImageComponent } from './item-part-add/item-part-add-image/item-part-add-image.component';
-import { ItemPartEditComponent } from './item-part-edit/item-part-edit/item-part-edit.component';
-import { ItemPartEditDescriptionComponent } from './item-part-edit/item-part-edit-description/item-part-edit-description.component';
-import { ItemPartEditInventoryComponent } from './item-part-edit/item-part-edit-inventory/item-part-edit-inventory.component';
-import { ItemPartEditDimensionComponent } from './item-part-edit/item-part-edit-dimension/item-part-edit-dimension.component';
-import { ItemPartEditPriceComponent } from './item-part-edit/item-part-edit-price/item-part-edit-price.component';
-import { ItemPartEditImageComponent } from './item-part-edit/item-part-edit-image/item-part-edit-image.component';
+import { ItemPartAddComponent } from './item-part/components/item-part-add/item-part-add.component';
+import { ItemPartAddDescriptionComponent } from './item-part/components/item-part-add/item-part-add-description/item-part-add-description.component';
+import { ItemPartAddDimensionComponent } from './item-part/components/item-part-add/item-part-add-dimension/item-part-add-dimension.component';
+import { ItemPartAddPriceComponent } from './item-part/components/item-part-add/item-part-add-price/item-part-add-price.component';
+import { ItemPartAddImageComponent } from './item-part/components/item-part-add/item-part-add-image/item-part-add-image.component';
+import { ItemPartEditComponent } from './item-part/components/item-part-edit/item-part-edit.component';
+import { ItemPartEditDescriptionComponent } from './item-part/components/item-part-edit/item-part-edit-description/item-part-edit-description.component';
+import { ItemPartEditInventoryComponent } from './item-part/components/item-part-edit/item-part-edit-inventory/item-part-edit-inventory.component';
+import { ItemPartEditDimensionComponent } from './item-part/components/item-part-edit/item-part-edit-dimension/item-part-edit-dimension.component';
+import { ItemPartEditPriceComponent } from './item-part/components/item-part-edit/item-part-edit-price/item-part-edit-price.component';
+import { ItemPartEditImageComponent } from './item-part/components/item-part-edit/item-part-edit-image/item-part-edit-image.component';
 
-import { ItemPartAddShellComponent } from './item-part-add-shell/item-part-add-shell/item-part-add-shell.component';
-import { ItemPartAddDescriptionShellComponent } from './item-part-add-shell/item-part-add-description-shell/item-part-add-description-shell.component';
-import { ItemPartAddDimensionShellComponent } from './item-part-add-shell/item-part-add-dimension-shell/item-part-add-dimension-shell.component';
-import { ItemPartAddPriceShellComponent } from './item-part-add-shell/item-part-add-price-shell/item-part-add-price-shell.component';
-import { ItemPartAddImageShellComponent } from './item-part-add-shell/item-part-add-image-shell/item-part-add-image-shell.component';
-import { ItemPartEditShellComponent } from './item-part-edit-shell/item-part-edit-shell/item-part-edit-shell.component';
-import { ItemPartEditDescriptionShellComponent } from './item-part-edit-shell/item-part-edit-description-shell/item-part-edit-description-shell.component';
-import { ItemPartEditInventoryShellComponent } from './item-part-edit-shell/item-part-edit-inventory-shell/item-part-edit-inventory-shell.component';
-import { ItemPartEditDimensionShellComponent } from './item-part-edit-shell/item-part-edit-dimension-shell/item-part-edit-dimension-shell.component';
-import { ItemPartEditPriceShellComponent } from './item-part-edit-shell/item-part-edit-price-shell/item-part-edit-price-shell.component';
-import { ItemPartEditImageShellComponent } from './item-part-edit-shell/item-part-edit-image-shell/item-part-edit-image-shell.component';
+import { ItemPartAddShellComponent } from './item-part/containers/item-part-add-shell/item-part-add-shell/item-part-add-shell.component';
+import { ItemPartAddDescriptionShellComponent } from './item-part/containers/item-part-add-shell/item-part-add-description-shell/item-part-add-description-shell.component';
+import { ItemPartAddDimensionShellComponent } from './item-part/containers/item-part-add-shell/item-part-add-dimension-shell/item-part-add-dimension-shell.component';
+import { ItemPartAddPriceShellComponent } from './item-part/containers/item-part-add-shell/item-part-add-price-shell/item-part-add-price-shell.component';
+import { ItemPartAddImageShellComponent } from './item-part/containers/item-part-add-shell/item-part-add-image-shell/item-part-add-image-shell.component';
+import { ItemPartEditShellComponent } from './item-part/containers/item-part-edit-shell/item-part-edit-shell/item-part-edit-shell.component';
+import { ItemPartEditDescriptionShellComponent } from './item-part/containers/item-part-edit-shell/item-part-edit-description-shell/item-part-edit-description-shell.component';
+import { ItemPartEditInventoryShellComponent } from './item-part/containers/item-part-edit-shell/item-part-edit-inventory-shell/item-part-edit-inventory-shell.component';
+import { ItemPartEditDimensionShellComponent } from './item-part/containers/item-part-edit-shell/item-part-edit-dimension-shell/item-part-edit-dimension-shell.component';
+import { ItemPartEditPriceShellComponent } from './item-part/containers/item-part-edit-shell/item-part-edit-price-shell/item-part-edit-price-shell.component';
+import { ItemPartEditImageShellComponent } from './item-part/containers/item-part-edit-shell/item-part-edit-image-shell/item-part-edit-image-shell.component';
 
-import { ItemPartEditGuard } from './item-part-edit-shell/item-part-edit-shell/item-part-edit-shell.guard';
-
+import { ItemPartEditGuard } from './item-part/components/item-part-edit/item-part-edit.guard';
 
 import { ItemVariationSelectItemComponentDialog } from './item-variation/item-variation-select-item.component-dialog';
 import { ItemVariationComponentDialog } from './item-variation/item-variation.component-dialog';
@@ -221,9 +221,11 @@ import { ItemEffects } from './state/item.effects';
         ItemAddVendorAttachmentComponent,
         ItemAddVideoComponent,
         ItemAddImageComponent,
-        ItemAddPartComponent,
+        //ItemAddPartComponent,
         ItemAddPartSectionPartComponent,
         ItemAddPartSectionComponent,
+        ItemEditPartSectionComponent,
+        ItemEditPartSectionPartComponent,
         ItemEditComponent,
         ItemEditDescriptionComponent,
         ItemEditDimensionComponent,
@@ -238,7 +240,7 @@ import { ItemEffects } from './state/item.effects';
         ItemEditVideoComponent,
         ItemEditImageComponent,
         ItemEditInventoryComponent,
-        ItemEditPartComponent,
+        //ItemEditPartComponent,
 
         ItemEditShellComponent,
         ItemEditDescriptionShellComponent,
@@ -338,6 +340,7 @@ import { ItemEffects } from './state/item.effects';
         MatIconModule,
         MatListModule,
         MatTooltipModule,
+        MatTabsModule,
         ToolModule,
         itemRouting,
         NgSelectModule,

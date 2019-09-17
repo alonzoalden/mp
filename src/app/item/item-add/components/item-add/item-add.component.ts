@@ -6,10 +6,8 @@ import { ItemService } from '../../../item.service';
 import { Store, select } from '@ngrx/store';
 import * as itemActions from '../../../state';
 import * as fromItem from '../../../state';
-import * as fromUser from '../../../../shared/state/user-state.reducer';
+//import * as fromUser from '../../../../shared/state/user-state.reducer';
 import { Observable } from 'rxjs';
-
-import { ItemService } from '../item.service';
 
 @Component({
   selector: 'o-item-add',
