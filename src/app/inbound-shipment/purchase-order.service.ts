@@ -31,13 +31,13 @@ export class PurchaseOrderService {
     currentPurchaseOrderLine: PurchaseOrderLine;
 
     private cartons: Carton[];
-    currentCarton: Carton;
-    //currentCarton = new Subject<Carton>()
+    //currentCarton: Carton;
+    currentCarton = new Subject<Carton>()
     currentPurchaseOrderID: number;
 
     private cartonlines: CartonLine[];
-    currentCartonLines: CartonLine[];
-    //currentCartonLines = new Subject<CartonLine[]>()
+    //currentCartonLines: CartonLine[];
+    currentCartonLines = new Subject<CartonLine[]>()
     currentCartonLine: CartonLine;
     currentCartonID: number;
 
