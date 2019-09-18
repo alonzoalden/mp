@@ -24,7 +24,7 @@ export class ItemListShellComponent implements OnInit {
         this.userInfo$ = this.store.pipe(select(fromUser.getCurrentUser));
         this.itemsMatTable$ = this.store.pipe(select(fromItem.getItemsMatTable));
         this.isLoading$ = this.store.pipe(select(fromItem.getIsLoading));
-        this.errorMessage$ = this.store.pipe(select(fromItem.getError));   
+        this.errorMessage$ = this.store.pipe(select(fromItem.getError));
     }
     getItems(): void {
         this.store.dispatch(new itemActions.LoadItemBatchItems());

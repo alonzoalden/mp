@@ -31,7 +31,6 @@ export class ItemAddComponent implements OnInit, OnChanges {
                 private itemService: ItemService) {
     }
     ngOnChanges(changes: SimpleChanges) {
-        //console.log(changes)
     }
     ngOnInit() {
         this.getVendorBrands.emit();

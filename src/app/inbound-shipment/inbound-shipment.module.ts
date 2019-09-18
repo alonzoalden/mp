@@ -11,17 +11,17 @@ import { InboundShipmentComponent } from './inbound-shipment.component';
 
 import { InboundShipmentListComponent } from './inbound-shipment-list/components/inbound-shipment-list.component';
 import { InboundShipmentEditComponent, InboundShipmentEditComponentItemPrintDialog } from './inbound-shipment-edit/inbound-shipment-edit.component';
-import { InboundShipmentEditLineComponent } from './inbound-shipment-edit/inbound-shipment-edit-line/inbound-shipment-edit-line.component';
+//import { InboundShipmentEditLineComponent } from './inbound-shipment-edit/inbound-shipment-edit-line/inbound-shipment-edit-line.component';
 import { InboundShipmentEditLineListComponent, InboundShipmentEditLineComponentItemPrintDialog } from './inbound-shipment-edit/inbound-shipment-edit-line/inbound-shipment-edit-line-list/components/inbound-shipment-edit-line-list.component';
-import { InboundShipmentEditLineEditComponent } from './inbound-shipment-edit/inbound-shipment-edit-line/inbound-shipment-edit-line-edit/components/inbound-shipment-edit-line-edit.component';
-import { InboundShipmentEditLineAddComponent } from './inbound-shipment-edit/inbound-shipment-edit-line/inbound-shipment-edit-line-add/components/inbound-shipment-edit-line-add.component';
-import { InboundShipmentEditCartonComponent } from './inbound-shipment-edit/inbound-shipment-edit-carton/inbound-shipment-edit-carton.component';
+//import { InboundShipmentEditLineEditComponent } from './inbound-shipment-edit/inbound-shipment-edit-line/inbound-shipment-edit-line-edit/components/inbound-shipment-edit-line-edit.component';
+//import { InboundShipmentEditLineAddComponent } from './inbound-shipment-edit/inbound-shipment-edit-line/inbound-shipment-edit-line-add/components/inbound-shipment-edit-line-add.component';
+//import { InboundShipmentEditCartonComponent } from './inbound-shipment-edit/inbound-shipment-edit-carton/inbound-shipment-edit-carton.component';
 import { InboundShipmentEditCartonListComponent, InboundShipmentEditCartonListComponentCartonPrintDialog, InboundShipmentEditCartonListComponentCartonLineDialog } from './inbound-shipment-edit/inbound-shipment-edit-carton/inbound-shipment-edit-carton-list/components/inbound-shipment-edit-carton-list.component';
-import { InboundShipmentEditCartonAddComponent } from './inbound-shipment-edit/inbound-shipment-edit-carton/inbound-shipment-edit-carton-add/components/inbound-shipment-edit-carton-add.component';
-import { InboundShipmentEditCartonEditComponent } from './inbound-shipment-edit/inbound-shipment-edit-carton/inbound-shipment-edit-carton-edit/components/inbound-shipment-edit-carton-edit.component';
+//import { InboundShipmentEditCartonAddComponent } from './inbound-shipment-edit/inbound-shipment-edit-carton/inbound-shipment-edit-carton-add/components/inbound-shipment-edit-carton-add.component';
+//import { InboundShipmentEditCartonEditComponent } from './inbound-shipment-edit/inbound-shipment-edit-carton/inbound-shipment-edit-carton-edit/components/inbound-shipment-edit-carton-edit.component';
 import { InboundShipmentEditCartonLineListComponent } from './inbound-shipment-edit/inbound-shipment-edit-carton/inbound-shipment-edit-carton-line-list/components/inbound-shipment-edit-carton-line-list.component';
-import { InboundShipmentEditCartonLineAddComponent } from './inbound-shipment-edit/inbound-shipment-edit-carton/inbound-shipment-edit-carton-line-add/components/inbound-shipment-edit-carton-line-add.component';
-import { InboundShipmentEditCartonLineEditComponent } from './inbound-shipment-edit/inbound-shipment-edit-carton/inbound-shipment-edit-carton-line-edit/components/inbound-shipment-edit-carton-line-edit.component';
+//import { InboundShipmentEditCartonLineAddComponent } from './inbound-shipment-edit/inbound-shipment-edit-carton/inbound-shipment-edit-carton-line-add/components/inbound-shipment-edit-carton-line-add.component';
+//import { InboundShipmentEditCartonLineEditComponent } from './inbound-shipment-edit/inbound-shipment-edit-carton/inbound-shipment-edit-carton-line-edit/components/inbound-shipment-edit-carton-line-edit.component';
 import { InboundShipmentEditShippingInstructionComponent, InboundShipmentEditShippingInstructionComponentCartonPrintDialog } from './inbound-shipment-edit/inbound-shipment-edit-shipping-instruction/components/inbound-shipment-edit-shipping-instruction.component';
 import { InboundShipmentEditShippingComponent } from './inbound-shipment-edit/inbound-shipment-edit-shipping/components/inbound-shipment-edit-shipping.component';
 //import { InboundShipmentSelectItemComponentDialog } from './components/inbound-shipment-edit/inbound-shipment-edit-
@@ -31,15 +31,15 @@ import { InboundShipmentListShellComponent } from './inbound-shipment-list/conta
 import { InboundShipmentEditShellComponent } from './inbound-shipment-edit/inbound-shipment-edit-shell.component';
 import { InboundShipmentEditLineShellComponent } from './inbound-shipment-edit/inbound-shipment-edit-line/inbound-shipment-edit-line-shell.component';
 import { InboundShipmentEditLineListShellComponent } from './inbound-shipment-edit/inbound-shipment-edit-line/inbound-shipment-edit-line-list/containers/inbound-shipment-edit-line-list-shell.component';
-import { InboundShipmentEditLineEditShellComponent } from './inbound-shipment-edit/inbound-shipment-edit-line/inbound-shipment-edit-line-edit/containers/inbound-shipment-edit-line-edit-shell.component';
-import { InboundShipmentEditLineAddShellComponent } from './inbound-shipment-edit/inbound-shipment-edit-line/inbound-shipment-edit-line-add/containers/inbound-shipment-edit-line-add-shell.component';
+// import { InboundShipmentEditLineEditShellComponent } from './inbound-shipment-edit/inbound-shipment-edit-line/inbound-shipment-edit-line-edit/containers/inbound-shipment-edit-line-edit-shell.component';
+// import { InboundShipmentEditLineAddShellComponent } from './inbound-shipment-edit/inbound-shipment-edit-line/inbound-shipment-edit-line-add/containers/inbound-shipment-edit-line-add-shell.component';
 import { InboundShipmentEditCartonShellComponent } from './inbound-shipment-edit/inbound-shipment-edit-carton/inbound-shipment-edit-carton-shell.component';
 import { InboundShipmentEditCartonListShellComponent } from './inbound-shipment-edit/inbound-shipment-edit-carton/inbound-shipment-edit-carton-list/containers/inbound-shipment-edit-carton-list-shell.component';
-import { InboundShipmentEditCartonAddShellComponent } from './inbound-shipment-edit/inbound-shipment-edit-carton/inbound-shipment-edit-carton-add/containers/inbound-shipment-edit-carton-add-shell.component';
-import { InboundShipmentEditCartonEditShellComponent } from './inbound-shipment-edit/inbound-shipment-edit-carton/inbound-shipment-edit-carton-edit/containers/inbound-shipment-edit-carton-edit-shell.component';
+// import { InboundShipmentEditCartonAddShellComponent } from './inbound-shipment-edit/inbound-shipment-edit-carton/inbound-shipment-edit-carton-add/containers/inbound-shipment-edit-carton-add-shell.component';
+// import { InboundShipmentEditCartonEditShellComponent } from './inbound-shipment-edit/inbound-shipment-edit-carton/inbound-shipment-edit-carton-edit/containers/inbound-shipment-edit-carton-edit-shell.component';
 import { InboundShipmentEditCartonLineListShellComponent } from './inbound-shipment-edit/inbound-shipment-edit-carton/inbound-shipment-edit-carton-line-list/containers/inbound-shipment-edit-carton-line-list-shell.component';
-import { InboundShipmentEditCartonLineAddShellComponent } from './inbound-shipment-edit/inbound-shipment-edit-carton/inbound-shipment-edit-carton-line-add/containers/inbound-shipment-edit-carton-line-add-shell.component';
-import { InboundShipmentEditCartonLineEditShellComponent } from './inbound-shipment-edit/inbound-shipment-edit-carton/inbound-shipment-edit-carton-line-edit/containers/inbound-shipment-edit-carton-line-edit-shell.component';
+// import { InboundShipmentEditCartonLineAddShellComponent } from './inbound-shipment-edit/inbound-shipment-edit-carton/inbound-shipment-edit-carton-line-add/containers/inbound-shipment-edit-carton-line-add-shell.component';
+// import { InboundShipmentEditCartonLineEditShellComponent } from './inbound-shipment-edit/inbound-shipment-edit-carton/inbound-shipment-edit-carton-line-edit/containers/inbound-shipment-edit-carton-line-edit-shell.component';
 import { InboundShipmentEditShippingInstructionShellComponent } from './inbound-shipment-edit/inbound-shipment-edit-shipping-instruction/containers/inbound-shipment-edit-shipping-instruction-shell.component';
 import { InboundShipmentEditShippingShellComponent } from './inbound-shipment-edit/inbound-shipment-edit-shipping/containers/inbound-shipment-edit-shipping-shell.component';
 import { inboundshipmentRouting } from './inbound-shipment.routing';
@@ -48,22 +48,30 @@ import { PurchaseOrderService } from './purchase-order.service';
 import { InboundShipmentEditGuard } from './inbound-shipment-edit/inbound-shipment-edit-guard';
 import { TranslateModule } from '@ngx-translate/core';
 
+// /* NgRx */
+// import { itemreducer } from './item-variation/state/item-variation.reducer';
+// import { ItemVariationEffects } from './item-variation/state/item-variation.effects';
+import { StoreModule } from '@ngrx/store';
+import { EffectsModule } from '@ngrx/effects';
+import { inboundShipmentReducer } from './state/inbound-shipment.reducer';
+import { InboundShipmentEffects } from './state/inbound-shipment.effects';
+
 @NgModule({
     declarations: [
         InboundShipmentComponent,
         InboundShipmentListComponent,
         InboundShipmentEditComponent,
-        InboundShipmentEditLineComponent,
+        //InboundShipmentEditLineComponent,
         InboundShipmentEditLineListComponent,
-        InboundShipmentEditLineEditComponent,
-        InboundShipmentEditLineAddComponent,
-        InboundShipmentEditCartonComponent,        
+        // InboundShipmentEditLineEditComponent,
+        // InboundShipmentEditLineAddComponent,
+        //InboundShipmentEditCartonComponent,        
         InboundShipmentEditCartonListComponent,
-        InboundShipmentEditCartonAddComponent,
-        InboundShipmentEditCartonEditComponent,
+        // InboundShipmentEditCartonAddComponent,
+        // InboundShipmentEditCartonEditComponent,
         InboundShipmentEditCartonLineListComponent,
-        InboundShipmentEditCartonLineEditComponent,
-        InboundShipmentEditCartonLineAddComponent,
+        // InboundShipmentEditCartonLineEditComponent,
+        // InboundShipmentEditCartonLineAddComponent,
         InboundShipmentEditShippingInstructionComponent,
         InboundShipmentEditShippingComponent,
         InboundShipmentEditComponentItemPrintDialog,
@@ -79,15 +87,15 @@ import { TranslateModule } from '@ngx-translate/core';
         InboundShipmentEditShellComponent,
         InboundShipmentEditLineShellComponent,
         InboundShipmentEditLineListShellComponent,
-        InboundShipmentEditLineEditShellComponent,
-        InboundShipmentEditLineAddShellComponent,
+        // InboundShipmentEditLineEditShellComponent,
+        // InboundShipmentEditLineAddShellComponent,
         InboundShipmentEditCartonShellComponent,
         InboundShipmentEditCartonListShellComponent,
-        InboundShipmentEditCartonAddShellComponent,
-        InboundShipmentEditCartonEditShellComponent,
+        // InboundShipmentEditCartonAddShellComponent,
+        // InboundShipmentEditCartonEditShellComponent,
         InboundShipmentEditCartonLineListShellComponent,
-        InboundShipmentEditCartonLineAddShellComponent,
-        InboundShipmentEditCartonLineEditShellComponent,
+        // InboundShipmentEditCartonLineAddShellComponent,
+        // InboundShipmentEditCartonLineEditShellComponent,
         InboundShipmentEditShippingInstructionShellComponent,
         InboundShipmentEditShippingShellComponent,
 
@@ -125,7 +133,9 @@ import { TranslateModule } from '@ngx-translate/core';
         MatTooltipModule,
         ToolModule,
         inboundshipmentRouting,
-        NgSelectModule
+        NgSelectModule,
+        StoreModule.forFeature('InboundShipment', inboundShipmentReducer),
+        EffectsModule.forFeature([InboundShipmentEffects])
     ],
     providers: [
         PurchaseOrderService,

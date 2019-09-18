@@ -7,6 +7,7 @@ import { PurchaseOrderService } from '../../../../purchase-order.service';
 import { TranslateService } from '@ngx-translate/core';
 
 @Component({
+    selector: 'o-inbound-shipment-edit-carton-list-shell',
     templateUrl: './inbound-shipment-edit-carton-list-shell.component.html'
 })
 
