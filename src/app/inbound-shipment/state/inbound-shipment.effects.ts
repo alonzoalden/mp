@@ -65,7 +65,7 @@ export class InboundShipmentEffects {
         mergeMap((purchaseOrder: PurchaseOrder) =>
             this.inboundShipmentService.deletePurchaseOrder(purchaseOrder.PurchaseOrderID).pipe(
                 map(() => {
-                    this.inboundShipmentService.sendNotification({ type: 'success', title: 'Successfully Added', content: `${purchaseOrder.PurchaseOrderID} was deleted` });
+                    this.inboundShipmentService.sendNotification({ type: 'success', title: 'Successfully Deleted', content: `${purchaseOrder.PackingSlipNumber} was deleted` });
                     return (new inboundShipmentActions.DeletePurchaseOrderSuccess(purchaseOrder.PurchaseOrderID));
                 }),
                 catchError(err => {

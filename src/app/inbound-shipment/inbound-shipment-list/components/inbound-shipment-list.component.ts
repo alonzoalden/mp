@@ -28,8 +28,8 @@ export class InboundShipmentListComponent implements OnInit, OnChanges {
 
     @ViewChild(MatPaginator, { static: true }) paginator: MatPaginator;
     @ViewChild(MatSort, { static: true }) sort: MatSort;
-    
-    constructor(private purchaseOrderService: PurchaseOrderService) { }
+
+    constructor() { }
 
     ngOnChanges(changes: SimpleChanges) {
         if (changes.purchaseOrdersMatTable && changes.purchaseOrdersMatTable.currentValue.data) {
@@ -61,10 +61,6 @@ export class InboundShipmentListComponent implements OnInit, OnChanges {
         if (confirmation) {
             this.deletePurchaseOrder.emit(purchaseorder);
         }
-    }
-    onDeleteComplete(purchaseorder: PurchaseOrder, message?: string): void {
-        this.refreshDataSource(this.purchaseOrdersMatTable.data);
-        this.purchaseOrderService.sendNotification({ type: 'success', title: 'Successfully Deleted', content: message });
     }
     addPurchaseOrder() {
         this.addNewPurchaseOrder.emit();
