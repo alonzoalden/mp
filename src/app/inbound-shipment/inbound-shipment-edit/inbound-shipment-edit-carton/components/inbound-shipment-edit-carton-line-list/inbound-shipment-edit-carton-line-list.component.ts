@@ -61,9 +61,8 @@ export class InboundShipmentEditCartonLineListComponent implements OnInit {
     ngOnInit() {        
         
         
-        this.purchaseorderid = this.route.snapshot.parent.parent.params['id'];
+        this.purchaseorderid = this.route.snapshot.parent.params['id'];
         this.purchaseorder = this.purchaseOrderService.currentPurchaseOrderEdit;
-        
         this.purchaseOrderService.currentCarton.subscribe(
             (currentcarton: Carton) => {
                 this.carton = currentcarton;
@@ -81,6 +80,7 @@ export class InboundShipmentEditCartonLineListComponent implements OnInit {
             },
             (error: any) => this.errorMessage = <any>error
         );
+
         this.purchaseOrderService.getPurchaseOrder(this.purchaseorderid).subscribe(
             (purchaseorder: PurchaseOrder) => {
                 this.orderStatus  = purchaseorder.Status;
@@ -227,8 +227,7 @@ export class InboundShipmentEditCartonLineListComponent implements OnInit {
         }
     }
 
-    isRequirementValid(cartonline: CartonLine)
-    {
+    isRequirementValid(cartonline: CartonLine) {
         if (cartonline && cartonline.PurchaseOrderLineID) {
             if(cartonline.Quantity > 0 && this.isValidQuantity(cartonline, true)) {
                 return true;

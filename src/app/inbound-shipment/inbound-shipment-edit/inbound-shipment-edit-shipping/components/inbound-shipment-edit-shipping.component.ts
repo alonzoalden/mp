@@ -9,7 +9,7 @@ import { PurchaseOrderService } from '../../../purchase-order.service';
 @Component({
   selector: 'o-inbound-shipment-edit-shipping',
   templateUrl: './inbound-shipment-edit-shipping.component.html',
-  styleUrls: ['../../inbound-shipment-edit.component.css']
+  styleUrls: ['../../components/inbound-shipment-edit.component.css']
 })
 
 export class InboundShipmentEditShippingComponent implements OnInit {
@@ -42,6 +42,7 @@ export class InboundShipmentEditShippingComponent implements OnInit {
         
 
         const param = this.route.parent.snapshot.params['id'];
+
         this.purchaseOrderSubscription = this.purchaseOrderService.getCurrentPurchaseOrderEdit(param).subscribe(
             (purchaseorder) => {
                 this.purchaseOrderService.currentPurchaseOrderEdit = purchaseorder;

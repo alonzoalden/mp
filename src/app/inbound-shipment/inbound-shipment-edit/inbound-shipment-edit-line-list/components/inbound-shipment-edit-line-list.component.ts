@@ -2,10 +2,10 @@ import { Component, OnInit, OnDestroy, ViewChild, Inject, ElementRef } from '@an
 import { ActivatedRoute } from '@angular/router';
 import { MatPaginator, MatSort, MatTableDataSource, MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material';
 // import { PurchaseOrderLine } from '../../shared/class/purchase-order-line';
-import { PurchaseOrder, PurchaseOrderLine } from '../../../../../shared/class/purchase-order';
-import { PurchaseOrderService } from '../../../../purchase-order.service';
-import { environment } from '../../../../../../environments/environment';
-import { ItemList } from '../../../../../shared/class/item';
+import { PurchaseOrder, PurchaseOrderLine } from '../../../../shared/class/purchase-order';
+import { PurchaseOrderService } from '../../../purchase-order.service';
+import { environment } from '../../../../../environments/environment';
+import { ItemList } from '../../../../shared/class/item';
 
 
 @Component({
@@ -47,7 +47,7 @@ export class InboundShipmentEditLineListComponent implements OnInit, OnDestroy {
     }
 
     ngOnInit() {
-        this.purchaseorderid = this.route.parent.parent.snapshot.params['id'];
+        this.purchaseorderid = this.route.parent.snapshot.params['id'];
 
         this.purchaseOrderService.getCurrentPurchaseOrderEdit(this.purchaseorderid).subscribe(
             (purchaseorder: PurchaseOrder) => {

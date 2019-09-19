@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import { Router } from '@angular/router';
-import { PurchaseOrderService } from '../../purchase-order.service';
+import { PurchaseOrderService } from '../../../purchase-order.service';
 
 @Component({
     selector: 'o-inbound-shipment-edit-carton-shell',

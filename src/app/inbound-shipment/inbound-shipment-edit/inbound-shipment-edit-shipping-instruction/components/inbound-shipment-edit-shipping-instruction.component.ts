@@ -7,7 +7,7 @@ import { PurchaseOrder, Carton, CartonInsert, CartonLine, CartonLineInsert } fro
 @Component({
     selector: 'o-inbound-shipment-edit-shipping-instruction',
     templateUrl: './inbound-shipment-edit-shipping-instruction.component.html',		
-    styleUrls: ['../../inbound-shipment-edit.component.css']
+    styleUrls: ['../../components/inbound-shipment-edit.component.css']
 })
 
 export class InboundShipmentEditShippingInstructionComponent implements OnInit {
