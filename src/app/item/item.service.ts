@@ -32,6 +32,7 @@ export class ItemService {
     private simpleItemList: ItemList[];
     private allItemList: ItemList[];
     private allSimpleItemList: ItemList[];
+    private itemVariationListings: ItemVariationListing[];
     private partItemList: ItemList[];
     
     currentMember: Member;

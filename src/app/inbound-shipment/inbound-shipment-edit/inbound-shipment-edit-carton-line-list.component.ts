@@ -150,7 +150,6 @@ export class InboundShipmentEditCartonLineListComponent implements OnInit {
         }
     }
     overflowFix(bool: Boolean):void {
-        console.log('z')
         let container = document.getElementsByClassName('ibox-content')[0];
         bool ? container.classList.add("overflow-visible") : container.classList.remove("overflow-visible");
     }
@@ -314,7 +313,6 @@ export class InboundShipmentEditCartonLineListComponent implements OnInit {
         });
     
         dialogRef.afterClosed().subscribe(result => {
-            console.log(result);
         },
         (error: any) => {
             this.purchaseOrderService.sendNotification({ type: 'error', title: 'Error', content: error });
