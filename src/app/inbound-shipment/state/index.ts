@@ -18,7 +18,10 @@ export const purchaseOrdersMatTable = createSelector(
     getInboundShipmentFeatureState,
     state => new MatTableDataSource<PurchaseOrder>(state.purchaseOrders)
 );
-
+export const getPurchaseOrder = createSelector(
+    getInboundShipmentFeatureState,
+    state => state.currentPurchaseOrder
+);
 export const getIsLoading = createSelector(
     getInboundShipmentFeatureState,
     state => state.isLoading

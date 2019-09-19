@@ -19,6 +19,19 @@ export enum InboundShipmentActionTypes {
   EditPurchaseOrder = '[InboundShipment] Edit Purchase Order',
   EditPurchaseOrderSuccess = '[InboundShipment] Edit Purchase Order Success',
   EditPurchaseOrderFail = '[InboundShipment] Edit Purchase Order Fail',
+
+
+  
+  AddInboundShippingMethod = '[InboundShipment] Add Inbound Shipping Method',
+  AddInboundShippingMethodSuccess = '[InboundShipment] Add Inbound Shipping Method Success',
+  AddInboundShippingMethodFail = '[InboundShipment] Add Inbound Shipping Method Fail',
+
+  EditInboundShippingMethod = '[InboundShipment] Edit Inbound Shipping Method',
+  EditInboundShippingMethodSuccess = '[InboundShipment] Edit Inbound Shipping Method Success',
+  EditInboundShippingMethodFail = '[InboundShipment] Edit Inbound Shipping Method Fail',
+
+  
+
   DeletePurchaseOrder = '[InboundShipment] Delete Purchase Order',
   DeletePurchaseOrderSuccess = '[InboundShipment] Delete Purchase Order Success',
   DeletePurchaseOrderFail = '[InboundShipment] Delete Purchase Order Fail',
@@ -113,6 +126,39 @@ export class EditPurchaseOrderFail implements Action {
   readonly type = InboundShipmentActionTypes.EditPurchaseOrderFail;
   constructor(public payload: string) { }
 }
+
+export class AddInboundShippingMethod implements Action {
+  readonly type = InboundShipmentActionTypes.AddInboundShippingMethod;
+  constructor(public payload: InboundShippingMethod) { }
+}
+
+export class AddInboundShippingMethodSuccess implements Action {
+  readonly type = InboundShipmentActionTypes.AddInboundShippingMethodSuccess;
+  constructor(public payload: InboundShippingMethod) { }
+}
+
+export class AddInboundShippingMethodFail implements Action {
+  readonly type = InboundShipmentActionTypes.AddInboundShippingMethodFail;
+  constructor(public payload: string) { }
+}
+
+
+
+export class EditInboundShippingMethod implements Action {
+  readonly type = InboundShipmentActionTypes.EditInboundShippingMethod;
+  constructor(public payload: InboundShippingMethod) { }
+}
+
+export class EditInboundShippingMethodSuccess implements Action {
+  readonly type = InboundShipmentActionTypes.EditInboundShippingMethodSuccess;
+  constructor(public payload: InboundShippingMethod) { }
+}
+
+export class EditInboundShippingMethodFail implements Action {
+  readonly type = InboundShipmentActionTypes.EditInboundShippingMethodFail;
+  constructor(public payload: string) { }
+}
+
 
 export class DeletePurchaseOrder implements Action {
   readonly type = InboundShipmentActionTypes.DeletePurchaseOrder;
@@ -361,6 +407,12 @@ export type InboundShipmentActions = LoadPurchaseOrder
 | EditPurchaseOrder
 | EditPurchaseOrderSuccess
 | EditPurchaseOrderFail
+| AddInboundShippingMethod
+| AddInboundShippingMethodSuccess
+| AddInboundShippingMethodFail
+| EditInboundShippingMethod
+| EditInboundShippingMethodSuccess
+| EditInboundShippingMethodFail
 | DownloadPurchaseOrderLabel
 | DownloadPurchaseOrderLabelSuccess
 | DownloadPurchaseOrderLabelFail

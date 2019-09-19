@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { MatTableDataSource } from '@angular/material';
 import { PurchaseOrder } from '../../../shared/class/purchase-order';
 import { Observable } from 'rxjs';
-import { Member } from 'app/shared/class/member';
+import { Member } from '../../../shared/class/member';
 import { Store, select } from '@ngrx/store';
 import * as inboundShipmentActions from '../../state/inbound-shipment.actions';
 import * as fromInboundShipment from '../../state';

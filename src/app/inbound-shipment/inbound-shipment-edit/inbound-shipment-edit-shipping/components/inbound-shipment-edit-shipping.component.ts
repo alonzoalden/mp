@@ -39,8 +39,6 @@ export class InboundShipmentEditShippingComponent implements OnInit {
     }
 
     ngOnInit(): void {
-        
-
         const param = this.route.parent.snapshot.params['id'];
 
         this.purchaseOrderSubscription = this.purchaseOrderService.getCurrentPurchaseOrderEdit(param).subscribe(

@@ -79,7 +79,11 @@ export class InboundShipmentEffects {
         map((action: inboundShipmentActions.LoadPurchaseOrderLines) => action.payload),
         mergeMap((id: number) =>
             this.inboundShipmentService.getPurchaseOrderLines(id).pipe(
-                map((purchaseOrder: PurchaseOrderLine[]) => (new inboundShipmentActions.LoadPurchaseOrderLinesSuccess(purchaseOrder))),
+                map((purchaseorderlines: PurchaseOrderLine[]) => {
+                    this.inboundShipmentService.currentPurchaseOrderLines = purchaseorderlines;
+                    return (new inboundShipmentActions.LoadPurchaseOrderLinesSuccess(purchaseorderlines))
+            }),
+
                 catchError(err => {
                     of(new inboundShipmentActions.LoadPurchaseOrderLinesFail(err))
                     return EMPTY;
@@ -109,7 +113,17 @@ export class InboundShipmentEffects {
         map((action: inboundShipmentActions.LoadInboundShippingMethods) => action.payload),
         mergeMap((id: number) =>
             this.inboundShipmentService.getInboundShippingMethods(id).pipe(
-                map((purchaseOrder: InboundShippingMethod[]) => (new inboundShipmentActions.LoadInboundShippingMethodsSuccess(purchaseOrder))),
+                map((inboundshippingmethods: InboundShippingMethod[]) => {
+                    this.inboundShipmentService.currentInboundShippingMethods = inboundshippingmethods;
+                    if (inboundshippingmethods && inboundshippingmethods[0]) {
+                        this.inboundShipmentService.currentInboundShippingMethod = inboundshippingmethods[0];
+                    } else {
+                        const _inboundShippingMethod = new InboundShippingMethod(null, id, '', '', '', null, null);
+                        this.inboundShipmentService.currentInboundShippingMethod = _inboundShippingMethod;
+                        this.inboundShipmentService.currentInboundShippingMethods.push(_inboundShippingMethod);
+                    }
+                    return (new inboundShipmentActions.LoadInboundShippingMethodsSuccess(inboundshippingmethods))
+                }),
                 catchError(err => {
                     of(new inboundShipmentActions.LoadInboundShippingMethodsFail(err))
                     return EMPTY;
@@ -117,7 +131,7 @@ export class InboundShipmentEffects {
             )
         )
     );
-
+    
     @Effect()
     loadCartons$: Observable<Action> = this.actions$.pipe(
         ofType(inboundShipmentActions.InboundShipmentActionTypes.LoadCartons),
@@ -171,6 +185,45 @@ export class InboundShipmentEffects {
                 catchError(err => {
                     this.inboundShipmentService.sendNotification({ type: 'error', title: 'Error', content: err });
                     of(new inboundShipmentActions.EditPurchaseOrderFail(err))
+                    return EMPTY;
+                })
+            )
+        )
+    );
+
+    AddInboundShippingMethodSuccess
+    @Effect()
+    addInboundShippingMethod$: Observable<Action> = this.actions$.pipe(
+        ofType(inboundShipmentActions.InboundShipmentActionTypes.AddInboundShippingMethod),
+        map((action: inboundShipmentActions.AddInboundShippingMethod) => action.payload),
+        mergeMap((inboundshippingmethod: InboundShippingMethod) =>
+            this.inboundShipmentService.editInboundShippingMethod(inboundshippingmethod).pipe(
+                map((inboundshippingmethod: InboundShippingMethod) => {
+                    this.inboundShipmentService.sendNotification({ type: 'success', title: 'Successfully Added', content: `${inboundshippingmethod.PurchaseOrderID} was saved` });
+                    return (new inboundShipmentActions.AddInboundShippingMethodSuccess(inboundshippingmethod));
+                }),
+                catchError(err => {
+                    this.inboundShipmentService.sendNotification({ type: 'error', title: 'Error', content: err });
+                    of(new inboundShipmentActions.AddInboundShippingMethodFail(err))
+                    return EMPTY;
+                })
+            )
+        )
+    );
+
+    @Effect()
+    editInboundShippingMethod$: Observable<Action> = this.actions$.pipe(
+        ofType(inboundShipmentActions.InboundShipmentActionTypes.EditInboundShippingMethod),
+        map((action: inboundShipmentActions.EditInboundShippingMethod) => action.payload),
+        mergeMap((inboundshippingmethod: InboundShippingMethod) =>
+            this.inboundShipmentService.editInboundShippingMethod(inboundshippingmethod).pipe(
+                map((inboundshippingmethod: InboundShippingMethod) => {
+                    this.inboundShipmentService.sendNotification({ type: 'success', title: 'Successfully Updated', content: `${inboundshippingmethod.PurchaseOrderID} was saved` });
+                    return (new inboundShipmentActions.EditInboundShippingMethodSuccess(inboundshippingmethod));
+                }),
+                catchError(err => {
+                    this.inboundShipmentService.sendNotification({ type: 'error', title: 'Error', content: err });
+                    of(new inboundShipmentActions.EditInboundShippingMethodFail(err))
                     return EMPTY;
                 })
             )
