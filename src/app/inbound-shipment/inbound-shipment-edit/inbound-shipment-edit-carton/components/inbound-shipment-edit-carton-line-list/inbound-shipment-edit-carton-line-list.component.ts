@@ -35,8 +35,6 @@ export class InboundShipmentEditCartonLineListComponent implements OnInit {
     cartonlines: CartonLine[];
     carton: Carton;
 
-    //@ViewChild('linePurchaseOrderIDRef') linePurchaseOrderIDRef: ElementRef;
-
     @ViewChild(MatSort, { static: false }) sort: MatSort;
 
     constructor(private route: ActivatedRoute,

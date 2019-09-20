@@ -44,24 +44,24 @@
                                     <label class="col-md-2 control-label">{{ 'Ship To' | translate }}</label>
                                     <div class="col-md-8 p-w-none">
                                         <div class="pre-regular" *ngIf="!isMerchant">
-                                            <span class="block">{{salesorder.ShipAddressName}}</span>
+                                            <span class="block">{{salesOrder.ShipAddressName}}</span>
                                             <span class="block">
-                                                <span>{{salesorder.ShipAddressCity}}</span>
-                                                <span>, {{salesorder.ShipAddressState}}</span>
-                                                <span>, {{salesorder.ShipAddressCountry}}</span>
-                                                <span> {{salesorder.ShipAddressPostalCode}}</span>
+                                                <span>{{salesOrder.ShipAddressCity}}</span>
+                                                <span>, {{salesOrder.ShipAddressState}}</span>
+                                                <span>, {{salesOrder.ShipAddressCountry}}</span>
+                                                <span> {{salesOrder.ShipAddressPostalCode}}</span>
                                             </span>
                                         </div>
                                         <div class="pre-regular" *ngIf="isMerchant">
-                                            <span class="block">{{salesorder.ShipAddressCompanyName}}</span>
-                                            <span class="block">{{salesorder.ShipAddressName}}</span>
-                                            <span class="block">{{salesorder.ShipAddressAddressLine1}}</span>
-                                            <span class="block">{{salesorder.ShipAddressAddressLine2}}</span>
+                                            <span class="block">{{salesOrder.ShipAddressCompanyName}}</span>
+                                            <span class="block">{{salesOrder.ShipAddressName}}</span>
+                                            <span class="block">{{salesOrder.ShipAddressAddressLine1}}</span>
+                                            <span class="block">{{salesOrder.ShipAddressAddressLine2}}</span>
                                             <span class="block">
-                                                <span>{{salesorder.ShipAddressCity}}</span>
-                                                <span>, {{salesorder.ShipAddressState}}</span>
-                                                <span>, {{salesorder.ShipAddressCountry}}</span>
-                                                <span> {{salesorder.ShipAddressPostalCode}}</span>
+                                                <span>{{salesOrder.ShipAddressCity}}</span>
+                                                <span>, {{salesOrder.ShipAddressState}}</span>
+                                                <span>, {{salesOrder.ShipAddressCountry}}</span>
+                                                <span> {{salesOrder.ShipAddressPostalCode}}</span>
                                             </span>
                                             <span class="block">{{formatPhoneNumber(salesOrder.ShipAddressPhoneNumber)}}</span>
                                         </div>

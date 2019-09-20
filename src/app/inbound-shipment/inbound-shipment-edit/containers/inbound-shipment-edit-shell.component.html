@@ -1,7 +1,10 @@
 <o-inbound-shipment-edit
     [purchaseOrder]="purchaseOrder$ | async"
-    [isLoading]="isLoading$ | async"
+    [loading]="isLoading$ | async"
     [errorMessage]="errorMessage$ | async"
     (getPurchaseOrder)="getPurchaseOrder($event)"
+    (editPurchaseOrder)="editPurchaseOrder($event)"
+    (editPurchaseOrderThenPrintItemLabels)="editPurchaseOrderThenPrintItemLabels($event)"
+    (downloadPurchaseOrderLabel)="downloadPurchaseOrderLabel($event)"
 ></o-inbound-shipment-edit>
 

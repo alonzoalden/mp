@@ -20,6 +20,10 @@ export enum InboundShipmentActionTypes {
   EditPurchaseOrderSuccess = '[InboundShipment] Edit Purchase Order Success',
   EditPurchaseOrderFail = '[InboundShipment] Edit Purchase Order Fail',
 
+  EditPurchaseOrderThenPrintItemLabels = '[InboundShipment] Edit Purchase Order Then Print Item Labels',
+  EditPurchaseOrderThenPrintItemLabelsSuccess = '[InboundShipment] Edit Purchase Order Then Print Item Labels Success',
+  EditPurchaseOrderThenPrintItemLabelsFail = '[InboundShipment] Edit Purchase Order Then Print Item Labels Fail',
+  
 
   
   AddInboundShippingMethod = '[InboundShipment] Add Inbound Shipping Method',
@@ -114,7 +118,7 @@ export class AddNewPurchaseOrderFail implements Action {
 
 export class EditPurchaseOrder implements Action {
   readonly type = InboundShipmentActionTypes.EditPurchaseOrder;
-  constructor(public payload: PurchaseOrder) { }
+  constructor(public payload: { purchaseOrder: PurchaseOrder, printLabel: boolean }) { }
 }
 
 export class EditPurchaseOrderSuccess implements Action {
@@ -126,6 +130,21 @@ export class EditPurchaseOrderFail implements Action {
   readonly type = InboundShipmentActionTypes.EditPurchaseOrderFail;
   constructor(public payload: string) { }
 }
+export class EditPurchaseOrderThenPrintItemLabels implements Action {
+  readonly type = InboundShipmentActionTypes.EditPurchaseOrderThenPrintItemLabels;
+  constructor(public payload: { purchaseOrder: PurchaseOrder, size: string, border: string }) { }
+}
+
+export class EditPurchaseOrderThenPrintItemLabelsSuccess implements Action {
+  readonly type = InboundShipmentActionTypes.EditPurchaseOrderThenPrintItemLabelsSuccess;
+  constructor(public payload: PurchaseOrder) { }
+}
+
+export class EditPurchaseOrderThenPrintItemLabelsFail implements Action {
+  readonly type = InboundShipmentActionTypes.EditPurchaseOrderThenPrintItemLabelsFail;
+  constructor(public payload: string) { }
+}
+
 
 export class AddInboundShippingMethod implements Action {
   readonly type = InboundShipmentActionTypes.AddInboundShippingMethod;
@@ -407,6 +426,9 @@ export type InboundShipmentActions = LoadPurchaseOrder
 | EditPurchaseOrder
 | EditPurchaseOrderSuccess
 | EditPurchaseOrderFail
+| EditPurchaseOrderThenPrintItemLabels
+| EditPurchaseOrderThenPrintItemLabelsSuccess
+| EditPurchaseOrderThenPrintItemLabelsFail
 | AddInboundShippingMethod
 | AddInboundShippingMethodSuccess
 | AddInboundShippingMethodFail

@@ -647,13 +647,13 @@ export class PurchaseOrderService {
     validatePurchaseOrderLines() {
         // return (this.currentPurchaseOrderLines
         //     && this.currentPurchaseOrderLines.length > 0);
-        return (this.currentPurchaseOrderEdit.PurchaseOrderLines
+        return (this.currentPurchaseOrderEdit && this.currentPurchaseOrderEdit.PurchaseOrderLines
             && this.currentPurchaseOrderEdit.PurchaseOrderLines.length > 0);
     }
 
     validateCarton() {
         // return (this.currentPurchaseOrderLines && !this.currentPurchaseOrderLines.find(x => x.CartonQuantity !== x.Quantity));
-        return (this.currentPurchaseOrderEdit.PurchaseOrderLines 
+        return (this.currentPurchaseOrderEdit && this.currentPurchaseOrderEdit.PurchaseOrderLines 
             && !this.currentPurchaseOrderEdit.PurchaseOrderLines.find(x => x.CartonQuantity !== x.Quantity && !x.pendingAdd));
     }
 

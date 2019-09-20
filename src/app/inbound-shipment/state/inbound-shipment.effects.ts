@@ -173,13 +173,16 @@ export class InboundShipmentEffects {
     editPurchaseOrder$: Observable<Action> = this.actions$.pipe(
         ofType(inboundShipmentActions.InboundShipmentActionTypes.EditPurchaseOrder),
         map((action: inboundShipmentActions.EditPurchaseOrder) => action.payload),
-        mergeMap((purchaseorder) =>
-            this.inboundShipmentService.editPurchaseOrder(purchaseorder).pipe(
+        mergeMap((payload) =>
+            this.inboundShipmentService.editPurchaseOrder(payload.purchaseOrder).pipe(
                 map((purchaseOrder: PurchaseOrder) => {
-                    this.inboundShipmentService.replacePurchaseOrder(purchaseorder.PurchaseOrderID, purchaseorder);
-                    this.inboundShipmentService.currentPurchaseOrderEdit = purchaseorder;
+                    this.inboundShipmentService.replacePurchaseOrder(payload.purchaseOrder.PurchaseOrderID, payload.purchaseOrder);
+                    this.inboundShipmentService.currentPurchaseOrderEdit = payload.purchaseOrder;
                     this.inboundShipmentService.currentPurchaseLineIsUpdated = false;
                     this.inboundShipmentService.sendNotification({ type: 'success', title: 'Successfully Updated', content: `${purchaseOrder.PurchaseOrderID} was saved` });
+                    if (payload.printLabel) {
+                        this.store.dispatch(new inboundShipmentActions.DownloadPurchaseOrderLabel(payload.purchaseOrder));
+                    }
                     return (new inboundShipmentActions.EditPurchaseOrderSuccess(purchaseOrder));
                 }),
                 catchError(err => {
@@ -190,8 +193,36 @@ export class InboundShipmentEffects {
             )
         )
     );
+    
+    @Effect()
+    editPurchaseOrderThenPrintItemLabels$: Observable<Action> = this.actions$.pipe(
+        ofType(inboundShipmentActions.InboundShipmentActionTypes.EditPurchaseOrderThenPrintItemLabels),
+        map((action: inboundShipmentActions.EditPurchaseOrderThenPrintItemLabels) => action.payload),
+        mergeMap((payload) =>
+            this.inboundShipmentService.editPurchaseOrder(payload.purchaseOrder).pipe(
+                map((purchaseOrder: PurchaseOrder) => {
+                    this.inboundShipmentService.replacePurchaseOrder(payload.purchaseOrder.PurchaseOrderID, payload.purchaseOrder);
+                    this.inboundShipmentService.currentPurchaseOrderEdit = payload.purchaseOrder;
+                    this.inboundShipmentService.currentPurchaseLineIsUpdated = false;
+                    this.inboundShipmentService.sendNotification({ type: 'success', title: 'Successfully Updated', content: `${purchaseOrder.PurchaseOrderID} was saved` });
+                    if(payload.size == "small") {
+                        this.store.dispatch(new inboundShipmentActions.DownloadAllItemLabel({purchaseOrder: purchaseOrder, border: payload.border}));
+                    }
+                    else {
+                        this.store.dispatch(new inboundShipmentActions.DownloadAllItemLargeLabel({purchaseOrder: purchaseOrder, border: payload.border}));
+                    }
+                    return (new inboundShipmentActions.EditPurchaseOrderThenPrintItemLabelsSuccess(purchaseOrder));
+                }),
+                catchError(err => {
+                    this.inboundShipmentService.sendNotification({ type: 'error', title: 'Error', content: err });
+                    of(new inboundShipmentActions.EditPurchaseOrderThenPrintItemLabelsFail(err))
+                    return EMPTY;
+                })
+            )
+        )
+    );
 
-    AddInboundShippingMethodSuccess
+    
     @Effect()
     addInboundShippingMethod$: Observable<Action> = this.actions$.pipe(
         ofType(inboundShipmentActions.InboundShipmentActionTypes.AddInboundShippingMethod),

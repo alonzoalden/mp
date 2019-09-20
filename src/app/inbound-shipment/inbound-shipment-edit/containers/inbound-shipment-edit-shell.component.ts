@@ -31,4 +31,15 @@ export class InboundShipmentEditShellComponent implements OnInit {
     getPurchaseOrder(id: number) {
         this.store.dispatch(new inboundShipmentActions.LoadPurchaseOrder(id));
     }
+    editPurchaseOrder(payload: { purchaseOrder: PurchaseOrder, printLabel: boolean }) {
+        this.store.dispatch(new inboundShipmentActions.EditPurchaseOrder(payload));
+    }
+    editPurchaseOrderThenPrintItemLabels(payload: { purchaseOrder: PurchaseOrder, size: string, border: string }) {
+        this.store.dispatch(new inboundShipmentActions.EditPurchaseOrderThenPrintItemLabels(payload));
+    }
+    downloadPurchaseOrderLabel(purchaseorder: PurchaseOrder) {
+        this.store.dispatch(new inboundShipmentActions.DownloadPurchaseOrderLabel(purchaseorder));
+    }
+    
+    
 }

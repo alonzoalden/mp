@@ -684,7 +684,6 @@ export class InboundShipmentEditCartonListComponentCartonLineDialog implements O
             return true;
         }        
     }
-
     onAddCartonLine(cartonline: CartonLine) {
         if (this.isRequirementValid(cartonline)) {   
             if(!this.existItem(cartonline.PurchaseOrderLineID, true)) {                
@@ -701,9 +700,7 @@ export class InboundShipmentEditCartonListComponentCartonLineDialog implements O
 
         }
     }
-
-    isRequirementValid(cartonline: CartonLine)
-    {
+    isRequirementValid(cartonline: CartonLine) {
         if (cartonline && cartonline.PurchaseOrderLineID) {
             if(cartonline.Quantity > 0 && this.isValidQuantity(cartonline, true)) {
                 return true;
@@ -718,7 +715,6 @@ export class InboundShipmentEditCartonListComponentCartonLineDialog implements O
             return false;
         }
     }
-
     onRemoveCartonLine(cartonline: CartonLine, index: number) {
         const confirmation = confirm(`Remove ${cartonline.ItemVendorSKU}?`);
         if (confirmation) {
@@ -729,7 +725,6 @@ export class InboundShipmentEditCartonListComponentCartonLineDialog implements O
             this.purchaseOrderService.updatePurchaseLineCartonQuantity();
         }
     }
-
     onDeleteComplete(cartonline: CartonLine, message?: string): void {
         const purchaseorderline = this.purchaseOrderService.currentPurchaseOrderLines.find(x => x.PurchaseOrderLineID === cartonline.PurchaseOrderLineID);
         purchaseorderline.CartonQuantity -= cartonline.Quantity;
@@ -738,7 +733,6 @@ export class InboundShipmentEditCartonListComponentCartonLineDialog implements O
         this.purchaseOrderService.sendNotification({ type: 'success', title: 'Successfully Deleted', content: message });
         this.refreshDataSource(this.cartonlines);
     }
-
     onEditCartonLine(index: number) {
         if(this.pendingAdd) {
             this.currentIndex = this.cartonlines.length - 1;
@@ -749,14 +743,12 @@ export class InboundShipmentEditCartonListComponentCartonLineDialog implements O
             this.currentIndex = index;
         } 
     }
-
     clearFields(form) {
         this.formDirty = false;
         this.canAdd = false;
         this.removePendingLine();
         this.addPendingLine();
     }
-
     onBackClick(): void {
         this.dialogRef.close();
     }
