@@ -4,7 +4,7 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { TranslateModule } from '@ngx-translate/core';
 
 import { CommonModule } from '@angular/common';
-import { MatButtonModule, MatDatepickerModule, MatFormFieldModule, MatInputModule, MatPaginatorModule, MatTableModule, MatTreeModule, MatSortModule, MatDialogModule, MatSelectModule, MatMenuModule, MatToolbar, MatToolbarModule, MatIconModule, MatListModule, MatCheckboxModule, MatTooltipModule } from '@angular/material';
+import { MatButtonModule, MatDatepickerModule, MatFormFieldModule, MatInputModule, MatPaginatorModule, MatTableModule, MatTreeModule, MatSortModule, MatDialogModule, MatSelectModule, MatMenuModule, MatToolbar, MatToolbarModule, MatIconModule, MatListModule, MatCheckboxModule, MatTooltipModule, MatTabsModule } from '@angular/material';
 import { MatMomentDateModule, MAT_MOMENT_DATE_ADAPTER_OPTIONS } from '@angular/material-moment-adapter';
 
 import { NgSelectModule } from '@ng-select/ng-select';
@@ -93,9 +93,20 @@ import { ItemPartEditPriceComponent } from './item-part-edit/item-part-edit-pric
 import { ItemPartEditImageComponent } from './item-part-edit/item-part-edit-image.component';
 import { ItemPartEditGuard } from './item-part-edit/item-part-edit.guard';
 
+import { ItemVariationSelectItemComponentDialog } from './item-variation/item-variation-select-item.component-dialog';
+import { ItemVariationComponentDialog } from './item-variation/item-variation.component-dialog';
+import { ItemVariationListComponent } from './item-variation/item-variation-list.component';
+import { ItemVariationDetailComponent } from './item-variation/item-variation-detail.component';
+import { ItemEditVariationComponent } from './item-edit/item-edit-variation.component';
+
 
 @NgModule({
     declarations: [
+        ItemVariationSelectItemComponentDialog,
+        ItemVariationComponentDialog,
+        ItemVariationListComponent,
+        ItemVariationDetailComponent,
+        ItemEditVariationComponent,
         ItemComponent,
         ItemListComponent,
         ItemAddComponent,
@@ -181,6 +192,7 @@ import { ItemPartEditGuard } from './item-part-edit/item-part-edit.guard';
         MatDialogModule,
         CdkTableModule,
         MatTableModule,
+        MatTabsModule,
         MatPaginatorModule,
         MatSortModule,
         MatMenuModule,
