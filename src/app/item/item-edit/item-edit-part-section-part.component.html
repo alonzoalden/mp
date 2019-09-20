@@ -86,11 +86,12 @@
                                                     #fileUpload>
 
                                                 <div *ngIf="(i === currentItemPartSelection.ItemParts.length-1 && !itemPart.ImageRaw && !itemPart.PartItemID && !pendingUpload)
-                                                            || (i === currentItemPartSelection.ItemParts.length-1 && i !== currentIndex && pendingUpload)">
+                                                            || (i === currentItemPartSelection.ItemParts.length-1 && i !== currentIndex && pendingUpload)
+                                                            || i === currentItemPartSelection.ItemParts.length-1 && itemPart.PartItemID && !itemPart.ImageRaw && !itemPart.ImageFilePath">
                                                     <button [disabled]="pendingUpload || pendingLoad && currentIndex === i" type="button" class="btn btn-primary" (click)="fileUpload.click();"><i class="fa fa-file-image-o"></i>  {{ 'Browse' | translate }}</button>
                                                 </div>    
                                                 <!-- <div *ngIf="(itemPart.ImageRaw || itemPart.PartItemID) && ( !pendingUpload || i != currentIndex )" class="thumbnail-container">                                                         -->
-                                                <div *ngIf="(i != currentItemPartSelection.ItemParts.length-1 || itemPart.PartItemID) && ( !pendingUpload || i != currentIndex )" class="thumbnail-container flex-va-center">
+                                                <div *ngIf="(i != currentItemPartSelection.ItemParts.length-1 || itemPart.ImageRaw || itemPart.ImageFilePath) && ( !pendingUpload || i != currentIndex )" class="thumbnail-container flex-va-center">
                                                     <a (click)="fileUpload.click()">
                                                         <!-- <img src="{{itemPart.ImageRaw}}" [title]='itemPart.PartItemName'> -->
                                                         <img src="{{imageURL + itemPart.ImageFilePath}}" [title]='itemPart.PartItemName' *ngIf="!itemPart.IsNewImage && itemPart.ImageFilePath"> 
