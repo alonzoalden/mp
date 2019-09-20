@@ -130,6 +130,7 @@ export function inboundShipmentReducer(state = initialState, action: InboundShip
                 error: action.payload,
             };
         case InboundShipmentActionTypes.LoadPurchaseOrderLinesSuccess:
+            state.currentPurchaseOrder.PurchaseOrderLines = action.payload;
             return {
                 ...state,
                 purchaseOrdersLines: action.payload,

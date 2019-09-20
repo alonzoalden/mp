@@ -28,7 +28,7 @@
                     <input (keyup)="applyFilter($event.target.value)" placeholder="{{ 'Filter By' | translate }}" class="form-control">
                 </div>
                 <div class="ibox-content min-h-300">
-                    <div *ngIf="isLoading" class="spinner-container">
+                    <div *ngIf="" class="spinner-container">
                         <div class="sk-spinner sk-spinner-three-bounce big-spinner">
                             <div class="sk-bounce1"></div>
                             <div class="sk-bounce2"></div>
@@ -36,7 +36,7 @@
                         </div>
                     </div>
                     <div class="table-responsive" >
-                        <table mat-table #table [dataSource]="purchaseOrdersMatTable" class="table" matSort *ngIf="!isLoading"> 
+                        <table mat-table #table [dataSource]="purchaseOrdersMatTable" class="table" matSort *ngIf="purchaseOrdersMatTable.data"> 
                             <!-- Menu Column -->
                             <ng-container matColumnDef="Menu">
                                 <th mat-header-cell *matHeaderCellDef width="100px"></th>

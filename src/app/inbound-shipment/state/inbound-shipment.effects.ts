@@ -80,6 +80,9 @@ export class InboundShipmentEffects {
         mergeMap((id: number) =>
             this.inboundShipmentService.getPurchaseOrderLines(id).pipe(
                 map((purchaseorderlines: PurchaseOrderLine[]) => {
+                    purchaseorderlines.forEach((value) => {
+                        value.PrevItemID = value.ItemID;
+                    });
                     this.inboundShipmentService.currentPurchaseOrderLines = purchaseorderlines;
                     return (new inboundShipmentActions.LoadPurchaseOrderLinesSuccess(purchaseorderlines))
             }),

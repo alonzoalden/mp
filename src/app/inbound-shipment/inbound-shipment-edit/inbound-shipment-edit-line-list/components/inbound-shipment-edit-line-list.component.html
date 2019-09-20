@@ -5,14 +5,14 @@
         <div class="ibox-content no-border-top wiz-content animated fadeIn" style="height: 300px;">
             <div class="form-group row">
                 <div class="col-md-12">
-                    <div *ngIf="purchaseorder && purchaseorder.PurchaseOrderLines && purchaseorder.PurchaseOrderLines.length > 0">
+                    <div *ngIf="purchaseOrder && purchaseOrder.PurchaseOrderLines && purchaseOrder.PurchaseOrderLines.length > 0">
                         <table mat-table #table [dataSource]="dataSource" >
 
                             <!-- Add Button -->
                             <ng-container matColumnDef="Add">
                                 <th mat-header-cell *matHeaderCellDef width="45px"></th>
                                 <td mat-cell *matCellDef="let purchaseorderline; let i = index">                                                 
-                                    <div *ngIf="i === purchaseorder.PurchaseOrderLines.length-1 && purchaseorder.Status === 'Pending'">                               
+                                    <div *ngIf="i === purchaseOrder.PurchaseOrderLines.length-1 && purchaseOrder.Status === 'Pending'">                               
                                         <a (click)='onAddPurchaseOrderLine(purchaseorderline); formDirty = false;'><span [matTooltip]="purchaseorderline.ItemID ? ( 'Add' | translate ) : ( 'Required fields must be complete' | translate )" attr.aria-label="{{ 'Add' | translate}}" class="glyphicon glyphicon-plus fs-20" [ngClass]="purchaseorderline.ItemID ? 'green' : 'gray'"></span></a>
                                     </div>
                                 </td>
@@ -21,7 +21,7 @@
                             <ng-container matColumnDef="Incomplete">
                                 <th mat-header-cell *matHeaderCellDef width="25px"></th>
                                 <td mat-cell *matCellDef="let purchaseorderline; let i = index">
-                                    <span class="glyphicon glyphicon-info-sign" *ngIf="purchaseorderline.Quantity !== purchaseorderline.CartonQuantity && i !== purchaseorder.PurchaseOrderLines.length-1" 
+                                    <span class="glyphicon glyphicon-info-sign" *ngIf="purchaseorderline.Quantity !== purchaseorderline.CartonQuantity && i !== purchaseOrder.PurchaseOrderLines.length-1" 
                                         matTooltip="{{ 'Requires Carton' | translate }}"
                                         attr.aria-label="{{ 'Requires Carton' | translate}}"></span>
                                 </td>
@@ -31,7 +31,7 @@
                             <ng-container matColumnDef="ProductDetails">
                                 <th mat-header-cell *matHeaderCellDef width="300px">{{ 'Product Details' | translate }}</th>
                                 <td mat-cell *matCellDef="let purchaseorderline; let i = index" class="wrap">
-                                    <div class="row" *ngIf="currentIndex !== i && i !== purchaseorder.PurchaseOrderLines.length-1">
+                                    <div class="row" *ngIf="currentIndex !== i && i !== purchaseOrder.PurchaseOrderLines.length-1">
                                         <div class="col-xs-3 p-l-none" *ngIf='purchaseorderline.ItemImage'>
                                             <img style="max-height:70px" [src]='imageURL + purchaseorderline.ItemImage' [title]='purchaseorderline.ItemName'>
                                         </div>
@@ -47,9 +47,9 @@
                                             </div>
                                         </div>
                                     </div>
-                                    <div (click)="i > purchaseorder.PurchaseOrderLines.length-2 && scrollToElement(endOfPage)">
+                                    <div (click)="i > purchaseOrder.PurchaseOrderLines.length-2 && scrollToElement(endOfPage)">
                                         <div #topOfRow></div>
-                                        <div *ngIf="currentIndex === i || i === purchaseorder.PurchaseOrderLines.length-1">
+                                        <div *ngIf="currentIndex === i || i === purchaseOrder.PurchaseOrderLines.length-1">
                                             <ng-select  [items]="itemList"
                                                         [virtualScroll]="true"
                                                         bindLabel="Description"
@@ -63,7 +63,7 @@
                                                         #lineItemIDRef
                                                         name="purchaseorderlineItemID"
                                                         required
-                                                        [disabled]="purchaseorder.Status != 'Pending'"
+                                                        [disabled]="purchaseOrder.Status != 'Pending'"
                                                         [loading]="!itemList"
                                                         loadingText="Loading..."
                                                         class="inbound-line"
@@ -74,8 +74,8 @@
                                             </ng-select>
                                             <!-- <select class="form-control" name="purchaseorderlineItemID" required
                                                 (focus)="formDirty = true;" #lineItemIDRef
-                                                [disabled]="purchaseorder.Status != 'Pending'"
-                                                [(ngModel)]=purchaseorderline.ItemID (change)="onItemChange(purchaseorderline, i); i === purchaseorder.PurchaseOrderLines.length-1 && canAdd = true;" [ngModelOptions]="{standalone: true}">
+                                                [disabled]="purchaseOrder.Status != 'Pending'"
+                                                [(ngModel)]=purchaseorderline.ItemID (change)="onItemChange(purchaseorderline, i); i === purchaseOrder.PurchaseOrderLines.length-1 && canAdd = true;" [ngModelOptions]="{standalone: true}">
                                                 <option [ngValue]="null" style="font-style: italic" disabled selected>--Select an item--</option>
                                                 <option [value]="item.ItemID" *ngFor="let item of itemList">{{item.Description}}</option>
                                             </select> -->
@@ -87,13 +87,13 @@
                             <ng-container matColumnDef="ItemName">
                                 <th mat-header-cell *matHeaderCellDef width="180px">{{ 'Item Name' | translate }}</th>
                                 <td mat-cell *matCellDef="let purchaseorderline; let i = index">
-                                    <div class="pr6" *ngIf="currentIndex !== i && i !== purchaseorder.PurchaseOrderLines.length-1">
+                                    <div class="pr6" *ngIf="currentIndex !== i && i !== purchaseOrder.PurchaseOrderLines.length-1">
                                        <a [href]="linkURL + '/' + purchaseorderline.URLKey + '.html'" target="_blank"> {{purchaseorderline.ItemName}} </a>
                                     </div>
-                                    <div *ngIf="currentIndex === i || i === purchaseorder.PurchaseOrderLines.length-1">
+                                    <div *ngIf="currentIndex === i || i === purchaseOrder.PurchaseOrderLines.length-1">
                                         <select class="form-control" name="purchaseorderlineItemID" required
                                             (focus)="formDirty = true;" #lineItemIDRef
-                                            [disabled]="purchaseorder.Status != 'Pending'"
+                                            [disabled]="purchaseOrder.Status != 'Pending'"
                                             [(ngModel)]=purchaseorderline.ItemID (change)="onItemChange(purchaseorderline, i);" [ngModelOptions]="{standalone: true}">
                                             <option [ngValue]="null" style="font-style: italic" disabled selected>--{{ 'Select an item' | translate }}--</option>
                                             <option [value]="item.ItemID" *ngFor="let item of itemList">{{item.Description}}</option>
@@ -105,7 +105,7 @@
                             <ng-container matColumnDef="ItemVendorSKU">
                                 <th mat-header-cell *matHeaderCellDef width="100px">{{ 'SKU' | translate }}</th>
                                 <td mat-cell *matCellDef="let purchaseorderline; let i = index" >
-                                    <div *ngIf="currentIndex !== i && i !== purchaseorder.PurchaseOrderLines.length-1">
+                                    <div *ngIf="currentIndex !== i && i !== purchaseOrder.PurchaseOrderLines.length-1">
                                         {{purchaseorderline.ItemVendorSKU}}
                                     </div>
                                 </td>
@@ -114,7 +114,7 @@
                             <ng-container matColumnDef="TPIN">
                                 <th mat-header-cell *matHeaderCellDef width="100px">{{ 'TPIN' | translate }}</th>
                                 <td mat-cell *matCellDef="let purchaseorderline; let i = index" >
-                                    <div *ngIf="currentIndex !== i && i !== purchaseorder.PurchaseOrderLines.length-1">
+                                    <div *ngIf="currentIndex !== i && i !== purchaseOrder.PurchaseOrderLines.length-1">
                                         {{purchaseorderline.TPIN}}
                                     </div>
                                 </td>
@@ -123,14 +123,14 @@
                             <ng-container matColumnDef="FOBPrice">
                                 <th mat-header-cell *matHeaderCellDef width="100px">{{ 'FOB Price' | translate }}</th>
                                 <td mat-cell *matCellDef="let purchaseorderline; let i = index" >
-                                    <div *ngIf="currentIndex !== i && i !== purchaseorder.PurchaseOrderLines.length-1">
+                                    <div *ngIf="currentIndex !== i && i !== purchaseOrder.PurchaseOrderLines.length-1">
                                         {{purchaseorderline.FOBPrice | currency}}
                                     </div>
-                                    <div *ngIf="currentIndex === i || i === purchaseorder.PurchaseOrderLines.length-1">
+                                    <div *ngIf="currentIndex === i || i === purchaseOrder.PurchaseOrderLines.length-1">
                                         <input class="form-control" id="purchaseorderlineFOBPrice" type="number" placeholder="{{ 'FOB Price' | translate }}"
                                             (focus)="formDirty = true;"
                                             step="0.01" onchange="this.value = parseFloat(this.value).toFixed(2);" onkeydown="return event.keyCode == 69 || event.keyCode == 189 ? false : true" min="0"
-                                            [disabled]="purchaseorder.Status != 'Pending'"
+                                            [disabled]="purchaseOrder.Status != 'Pending'"
                                             [(ngModel)]=purchaseorderline.FOBPrice [ngModelOptions]="{standalone: true}" />
                                     </div>
                                 </td>
@@ -139,14 +139,14 @@
                             <ng-container matColumnDef="Quantity">
                                 <th mat-header-cell *matHeaderCellDef width="80px">{{ 'Quantity' | translate }}</th>
                                 <td mat-cell *matCellDef="let purchaseorderline; let i = index" >
-                                    <div *ngIf="currentIndex !== i && i !== purchaseorder.PurchaseOrderLines.length-1">
+                                    <div *ngIf="currentIndex !== i && i !== purchaseOrder.PurchaseOrderLines.length-1">
                                         {{purchaseorderline.Quantity}}
                                     </div>
-                                    <div *ngIf="currentIndex === i || i === purchaseorder.PurchaseOrderLines.length-1">
+                                    <div *ngIf="currentIndex === i || i === purchaseOrder.PurchaseOrderLines.length-1">
                                         <input class="form-control" id="purchaseorderlineQuantity" type="number" placeholder="{{ 'Quantity' | translate }}"
                                             (focus)="formDirty = true;"
                                             onkeydown="return event.keyCode == 69 || event.keyCode == 189 || event.keyCode == 190 ? false : true" min="0"
-                                            [disabled]="purchaseorder.Status != 'Pending'"
+                                            [disabled]="purchaseOrder.Status != 'Pending'"
                                             [(ngModel)]=purchaseorderline.Quantity [ngModelOptions]="{standalone: true}" />
                                     </div>
                                 </td>
@@ -156,7 +156,7 @@
                             <ng-container matColumnDef="CartonQuantity">
                                 <th mat-header-cell *matHeaderCellDef  width="80px">{{ 'Carton Quantity' | translate }}</th>
                                 <td mat-cell *matCellDef="let purchaseorderline" >
-                                    <div *ngIf="i != purchaseorder.PurchaseOrderLines.length-1">
+                                    <div *ngIf="i != purchaseOrder.PurchaseOrderLines.length-1">
                                         {{purchaseorderline.CartonQuantity}}
                                     </div>
                                 </td>
@@ -171,22 +171,22 @@
                             <ng-container matColumnDef="Actions">
                                 <th mat-header-cell *matHeaderCellDef  width="80px">{{ 'Actions' | translate }}</th>
                                 <td class="action-column" mat-cell *matCellDef="let purchaseorderline;  let i = index" >
-                                    <span *ngIf="i !== purchaseorder.PurchaseOrderLines.length-1">
+                                    <span *ngIf="i !== purchaseOrder.PurchaseOrderLines.length-1">
                                         <a (click)="openDialogPrintItemLabel(purchaseorderline)"
                                             matTooltip="{{ 'Print Product Label' | translate }}"
                                             attr.aria-label="{{ 'Print Product Label' | translate}}">
                                             <span class="glyphicon glyphicon-print"></span>
                                         </a>
                                     </span>
-                                    <span *ngIf="purchaseorder.Status === 'Pending' && purchaseorderline.CartonQuantity === 0 && i !== purchaseorder.PurchaseOrderLines.length-1"> 
+                                    <span *ngIf="purchaseOrder.Status === 'Pending' && purchaseorderline.CartonQuantity === 0 && i !== purchaseOrder.PurchaseOrderLines.length-1"> 
                                         <a (click)="onRemovePurchaseOrderLine(purchaseorderline, i)"
                                             matTooltip="{{ 'Remove' | translate }}"
                                             attr.aria-label="{{ 'Remove' | translate}}">
                                             <span class="glyphicon glyphicon-trash"></span>
                                         </a>
                                     </span>
-                                    <span [hidden]="!formDirty && i === purchaseorder.PurchaseOrderLines.length-1">
-                                        <a (click)="clearFields(purchaseorderline);"><i *ngIf="i === purchaseorder.PurchaseOrderLines.length-1" class="fa fa-eraser" matTooltip="{{ 'Clear' | translate }}"
+                                    <span [hidden]="!formDirty && i === purchaseOrder.PurchaseOrderLines.length-1">
+                                        <a (click)="clearFields(purchaseorderline);"><i *ngIf="i === purchaseOrder.PurchaseOrderLines.length-1" class="fa fa-eraser" matTooltip="{{ 'Clear' | translate }}"
                                             attr.aria-label="{{ 'Clear' | translate}}"></i></a>
                                     </span>
                                 </td>
@@ -196,7 +196,7 @@
                             <ng-container matColumnDef="Label">
                                 <th mat-header-cell *matHeaderCellDef width="80px">{{ 'Label' | translate }}</th>
                                 <td mat-cell *matCellDef="let purchaseorderline; let i = index">
-                                    <div *ngIf="i !== purchaseorder.PurchaseOrderLines.length-1">
+                                    <div *ngIf="i !== purchaseOrder.PurchaseOrderLines.length-1">
                                         <a (click)="openDialogPrintItemLabel(purchaseorderline)">
                                             <span class="glyphicon glyphicon-print"></span>
                                         </a>
@@ -207,23 +207,23 @@
                             <ng-container matColumnDef="Delete">
                                 <th mat-header-cell *matHeaderCellDef width="80px">{{ 'Remove' | translate }}</th>
                                 <td mat-cell *matCellDef="let purchaseorderline; let i = index" width="50px">
-                                    <div *ngIf="purchaseorder.Status === 'Pending' && purchaseorderline.CartonQuantity === 0 && i !== purchaseorder.PurchaseOrderLines.length-1"> 
+                                    <div *ngIf="purchaseOrder.Status === 'Pending' && purchaseorderline.CartonQuantity === 0 && i !== purchaseOrder.PurchaseOrderLines.length-1"> 
                                         <a (click)="onRemovePurchaseOrderLine(purchaseorderline, i)">
                                             <span class="glyphicon glyphicon-trash"></span>
                                         </a>
                                     </div>
-                                    <div [hidden]="!formDirty && i === purchaseorder.PurchaseOrderLines.length-1">
-                                        <a (click)="clearFields(purchaseorderline);"><i *ngIf="i === purchaseorder.PurchaseOrderLines.length-1" class="fa fa-eraser"></i></a>
+                                    <div [hidden]="!formDirty && i === purchaseOrder.PurchaseOrderLines.length-1">
+                                        <a (click)="clearFields(purchaseorderline);"><i *ngIf="i === purchaseOrder.PurchaseOrderLines.length-1" class="fa fa-eraser"></i></a>
                                     </div>
                                 </td>
                             </ng-container>
                     
                             <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
                             <!-- <tr mat-row *matRowDef="let purchaseorderline; let i = index; columns: displayedColumns"
-                                [ngStyle]="{'background-color': i === purchaseorder.PurchaseOrderLines.length-1 ? '#99CCFF' : currentIndex === i ? '#FF9933' : '#FFFFFF' }" 
+                                [ngStyle]="{'background-color': i === purchaseOrder.PurchaseOrderLines.length-1 ? '#99CCFF' : currentIndex === i ? '#FF9933' : '#FFFFFF' }" 
                                 (click)="onEditPurchaseOrderLine(i)"></tr> -->
                             <tr mat-row class="selected-row" *matRowDef="let purchaseorderline; let i = index; columns: displayedColumns;"
-                                [ngStyle]="{'background-color': purchaseOrderService.rowColorConditions(i, purchaseorder.PurchaseOrderLines, currentIndex, formDirty)}"
+                                [ngStyle]="{'background-color': purchaseOrderService.rowColorConditions(i, purchaseOrder.PurchaseOrderLines, currentIndex, formDirty)}"
                                 (click)="onEditPurchaseOrderLine(i)"></tr>
                             </table>
                         </div>

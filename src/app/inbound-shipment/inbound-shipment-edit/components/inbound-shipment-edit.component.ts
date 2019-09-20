@@ -1,4 +1,4 @@
-import { Component, OnInit, AfterViewInit, ChangeDetectorRef, Inject, enableProdMode, Input, Output, EventEmitter, SimpleChanges } from '@angular/core';
+import { Component, OnInit, AfterViewInit, OnChanges, ChangeDetectorRef, Inject, enableProdMode, Input, Output, EventEmitter, SimpleChanges } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material';
 import { Subscription } from 'rxjs';
@@ -15,10 +15,10 @@ import { InboundShippingMethod } from '../../../shared/class/inbound-shipping-me
   styleUrls: ['./inbound-shipment-edit.component.css']
 })
 
-export class InboundShipmentEditComponent implements OnInit, AfterViewInit {
+export class InboundShipmentEditComponent implements OnInit, OnChanges, AfterViewInit {
     @Input() purchaseOrder: PurchaseOrder;
     @Input() errorMessage: string;
-    @Input() loading: boolean = true;
+    @Input() loading: boolean;
     @Output() getPurchaseOrder = new EventEmitter<number>();
     @Output() editPurchaseOrder = new EventEmitter<{ purchaseOrder: PurchaseOrder, printLabel: boolean }>();
     @Output() editPurchaseOrderThenPrintItemLabels = new EventEmitter<{ purchaseOrder: PurchaseOrder, size: string, border: string }>();
@@ -379,7 +379,7 @@ export class InboundShipmentEditComponent implements OnInit, AfterViewInit {
             }
         }
 
-        this.loading = true;
+        //this.loading = true;
 
 
         this.editPurchaseOrder.emit({purchaseOrder: newPurchaseOrder, printLabel: printLabel});

@@ -2,11 +2,6 @@ import { Component, OnInit, OnDestroy, ViewChild, Inject, ElementRef } from '@an
 import { ActivatedRoute } from '@angular/router';
 import { MatPaginator, MatSort, MatTableDataSource, MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material';
 // import { PurchaseOrderLine } from '../../shared/class/purchase-order-line';
-import { PurchaseOrder, PurchaseOrderLine } from '../../../../shared/class/purchase-order';
-import { PurchaseOrderService } from '../../../purchase-order.service';
-import { environment } from '../../../../../environments/environment';
-import { ItemList } from '../../../../shared/class/item';
-import { THIS_EXPR } from '@angular/compiler/src/output/output_ast';
 
 
 @Component({

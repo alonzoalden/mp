@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
+import { Component, OnInit, ViewChild, Input, Output, EventEmitter } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 import { MatSort, MatTableDataSource, MatDialog } from '@angular/material';
 
@@ -16,13 +16,16 @@ import { PurchaseOrderService } from '../../../../purchase-order.service';
 })
 
 export class InboundShipmentEditCartonLineListComponent implements OnInit {
-    errorMessage: string;
-    purchaseorder: PurchaseOrder;
+    //errorMessage: string;
+    //purchaseOrder: purchaseOrder;
     purchaseorderid: number;
+
+    @Input() purchaseOrder: PurchaseOrder;
+    @Input() errorMessage: string;
 
     purchaseorderlineList: PurchaseOrderLineList[];
 
-    orderStatus: string;
+    //orderStatus: string;
     pendingAdd: boolean;
     currentIndex: number;
 
@@ -60,7 +63,7 @@ export class InboundShipmentEditCartonLineListComponent implements OnInit {
         
         
         this.purchaseorderid = this.route.snapshot.parent.params['id'];
-        this.purchaseorder = this.purchaseOrderService.currentPurchaseOrderEdit;
+        this.purchaseOrder = this.purchaseOrderService.currentPurchaseOrderEdit;
         this.purchaseOrderService.currentCarton.subscribe(
             (currentcarton: Carton) => {
                 this.carton = currentcarton;
@@ -79,12 +82,12 @@ export class InboundShipmentEditCartonLineListComponent implements OnInit {
             (error: any) => this.errorMessage = <any>error
         );
 
-        this.purchaseOrderService.getPurchaseOrder(this.purchaseorderid).subscribe(
-            (purchaseorder: PurchaseOrder) => {
-                this.orderStatus  = purchaseorder.Status;
-            },
-            (error: any) => this.errorMessage = <any>error
-        );        
+        // this.purchaseOrderService.getPurchaseOrder(this.purchaseorderid).subscribe(
+        //     (purchaseOrder: PurchaseOrder) => {
+        //         //this.orderStatus  = purchaseOrder.Status;
+        //     },
+        //     (error: any) => this.errorMessage = <any>error
+        // );        
         this.purchaseOrderService.getPurchaseOrderLineList(this.purchaseorderid).subscribe(
             (purchaseorderlinelist: PurchaseOrderLineList[]) => {
                 this.purchaseorderlineList = purchaseorderlinelist;

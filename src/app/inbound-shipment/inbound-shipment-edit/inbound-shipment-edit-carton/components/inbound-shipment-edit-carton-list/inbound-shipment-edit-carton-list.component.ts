@@ -39,6 +39,8 @@ export class InboundShipmentEditCartonListComponent implements OnInit {
 
     ngOnInit() {
         this.purchaseorderid = this.route.parent.snapshot.params['id'];
+
+        
         this.purchaseOrderService.getCurrentPurchaseOrderEdit(this.purchaseorderid).subscribe(
             (purchaseorder: PurchaseOrder) => {
                 this.purchaseOrderService.currentPurchaseOrderEdit = purchaseorder;
