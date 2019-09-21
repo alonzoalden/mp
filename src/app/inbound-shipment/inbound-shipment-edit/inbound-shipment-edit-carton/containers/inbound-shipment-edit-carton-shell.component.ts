@@ -1,27 +1,30 @@
-import { Component } from '@angular/core';
-import { Router } from '@angular/router';
-import { PurchaseOrderService } from '../../../purchase-order.service';
+import { Component, OnInit } from '@angular/core';
+import { Store, select } from '@ngrx/store';
+import * as inboundShipmentActions from '../../../state/inbound-shipment.actions';
+import * as fromInboundShipment from '../../../state';
+import { Observable } from 'rxjs';
+import { PurchaseOrder } from '../../../../shared/class/purchase-order';
 
 @Component({
     selector: 'o-inbound-shipment-edit-carton-shell',
     templateUrl: './inbound-shipment-edit-carton-shell.component.html'
 })
 
-export class InboundShipmentEditCartonShellComponent  {
-    constructor(private router: Router,
-        private purchaseOrderService: PurchaseOrderService) { 
-        this.purchaseOrderService.currentStep = 2;
-    }
+export class InboundShipmentEditCartonShellComponent  implements OnInit {
 
-    // private isCartonHeaderVisible: boolean;
+    purchaseOrder$: Observable<PurchaseOrder>;
+    isLoading$: Observable<boolean>;
+    errorMessage$: Observable<string>;
     
-    get isCartonAdd(): Boolean {
-        return this.router.url.endsWith('edit/carton/list/add');
-    }
+    constructor(private store: Store<fromInboundShipment.State>) {}
 
-    get isCartonEdit(): Boolean {        
-        return ( this.router.url.indexOf('/edit/carton/list/') > 0 
-            && this.router.url.endsWith('edit')
-            && this.router.url.indexOf('/edit/carton/list/line') === -1) ;
+
+    ngOnInit() {
+        this.purchaseOrder$ = this.store.pipe(select(fromInboundShipment.getPurchaseOrder));
+        this.isLoading$ = this.store.pipe(select(fromInboundShipment.getIsLoading));
+        this.errorMessage$ = this.store.pipe(select(fromInboundShipment.getError));
+    }
+    getCartons(id: number): void {
+        this.store.dispatch(new inboundShipmentActions.LoadCartons(id));
     }
 }

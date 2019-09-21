@@ -1,5 +1,6 @@
 import { Action } from '@ngrx/store';
 import { PurchaseOrder, PurchaseOrderLine, InboundShippingMethod, PurchaseOrderLineList, Carton } from '../../shared/class/purchase-order';
+import { ItemList } from '../../shared/class/item';
 
 export enum InboundShipmentActionTypes {
   LoadPurchaseOrder = '[InboundShipment] Load Purchase Order',
@@ -24,8 +25,6 @@ export enum InboundShipmentActionTypes {
   EditPurchaseOrderThenPrintItemLabelsSuccess = '[InboundShipment] Edit Purchase Order Then Print Item Labels Success',
   EditPurchaseOrderThenPrintItemLabelsFail = '[InboundShipment] Edit Purchase Order Then Print Item Labels Fail',
   
-
-  
   AddInboundShippingMethod = '[InboundShipment] Add Inbound Shipping Method',
   AddInboundShippingMethodSuccess = '[InboundShipment] Add Inbound Shipping Method Success',
   AddInboundShippingMethodFail = '[InboundShipment] Add Inbound Shipping Method Fail',
@@ -33,8 +32,6 @@ export enum InboundShipmentActionTypes {
   EditInboundShippingMethod = '[InboundShipment] Edit Inbound Shipping Method',
   EditInboundShippingMethodSuccess = '[InboundShipment] Edit Inbound Shipping Method Success',
   EditInboundShippingMethodFail = '[InboundShipment] Edit Inbound Shipping Method Fail',
-
-  
 
   DeletePurchaseOrder = '[InboundShipment] Delete Purchase Order',
   DeletePurchaseOrderSuccess = '[InboundShipment] Delete Purchase Order Success',
@@ -84,6 +81,9 @@ export enum InboundShipmentActionTypes {
   LoadInboundShippingMethods = '[InboundShipment] Load Inbound Shipping Methods',
   LoadInboundShippingMethodsSuccess = '[InboundShipment] Load Inbound Shipping Methods Success',
   LoadInboundShippingMethodsFail = '[InboundShipment] Load Inbound Shipping Methods Fail',
+  LoadSimpleItemList = '[Item] Load Simple Item List',
+  LoadSimpleItemListSuccess = '[Item] Load Simple Item List Success',
+  LoadSimpleItemListFail = '[Item] Load Simple Item List Fail',
 }
 
 // Action Creators
@@ -274,7 +274,7 @@ export class DownloadCartonLabelCountFail implements Action {
 
 export class DownloadItemLabelCount implements Action {
   readonly type = InboundShipmentActionTypes.DownloadItemLabelCount;
-  constructor(public payload: { purchaseorderline: PurchaseOrderLine, count: number, border: string}) { }
+  constructor(public payload: { purchaseorderline: PurchaseOrderLine, count: number, border: string }) { }
 }
 
 export class DownloadItemLabelCountSuccess implements Action {
@@ -289,7 +289,7 @@ export class DownloadItemLabelCountFail implements Action {
 
 export class DownloadItemLargeLabelCount implements Action {
   readonly type = InboundShipmentActionTypes.DownloadItemLargeLabelCount;
-  constructor(public payload: { purchaseorderline: PurchaseOrderLine, count: number, border: string}) { }
+  constructor(public payload: { purchaseorderline: PurchaseOrderLine, count: number, border: string }) { }
 }
 
 export class DownloadItemLargeLabelCountSuccess implements Action {
@@ -398,6 +398,20 @@ export class LoadInboundShippingMethodsFail implements Action {
   constructor(public payload: string) { }
 }
 
+export class LoadSimpleItemList implements Action {
+  readonly type = InboundShipmentActionTypes.LoadSimpleItemList;
+}
+
+export class LoadSimpleItemListSuccess implements Action {
+  readonly type = InboundShipmentActionTypes.LoadSimpleItemListSuccess;
+  constructor(public payload: ItemList[]) { }
+}
+
+export class LoadSimpleItemListFail implements Action {
+  readonly type = InboundShipmentActionTypes.LoadSimpleItemListFail;
+  constructor(public payload: string) { }
+}
+
 // Union the valid types
 export type InboundShipmentActions = LoadPurchaseOrder
 | LoadPurchaseOrderSuccess
@@ -458,4 +472,7 @@ export type InboundShipmentActions = LoadPurchaseOrder
 | DownloadItemLargeLabelCountFail
 | DeletePurchaseOrder
 | DeletePurchaseOrderSuccess
-| DeletePurchaseOrderFail;
+| DeletePurchaseOrderFail
+| LoadSimpleItemList
+| LoadSimpleItemListSuccess
+| LoadSimpleItemListFail;

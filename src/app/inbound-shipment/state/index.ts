@@ -2,7 +2,7 @@ import { createSelector, createFeatureSelector, select } from '@ngrx/store';
 import * as fromRoot from '../../state/app.state';
 import * as fromInboundShipment from './inbound-shipment.reducer';
 import { MatTableDataSource } from '@angular/material';
-import { PurchaseOrder } from 'app/shared/class/purchase-order';
+import { PurchaseOrder } from '../..//shared/class/purchase-order';
 
 // Extends the app state to include the product feature.
 // This is required because products are lazy loaded.
@@ -21,6 +21,10 @@ export const purchaseOrdersMatTable = createSelector(
 export const getPurchaseOrder = createSelector(
     getInboundShipmentFeatureState,
     state => state.currentPurchaseOrder
+);
+export const getSimpleItemList = createSelector(
+    getInboundShipmentFeatureState,
+    state => state.simpleItemList 
 );
 export const getIsLoading = createSelector(
     getInboundShipmentFeatureState,

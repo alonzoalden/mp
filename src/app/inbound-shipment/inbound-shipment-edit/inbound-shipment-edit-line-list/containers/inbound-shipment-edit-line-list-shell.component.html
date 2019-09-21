@@ -4,7 +4,13 @@
         <div class="tab-pane active">
             <div class="panel-body p-w-none">
                     <o-inbound-shipment-edit-line-list
-                    
+                        [purchaseOrder]="purchaseOrder$ | async"
+                        [errorMessage]="errorMessage$ | async"
+                        [itemList]="itemList$ | async"
+                        (getSimpleItemList)="getSimpleItemList($event)"
+                        (getPurchaseOrderLines)="getPurchaseOrderLines($event)"
+                        (downloadItemLabelCount)="downloadItemLabelCount($event)"
+                        (downloadItemLargeLabelCount)="downloadItemLargeLabelCount($event)"
                     ></o-inbound-shipment-edit-line-list>
             </div>
         </div>

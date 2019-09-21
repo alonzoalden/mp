@@ -55,6 +55,7 @@ import { StoreModule } from '@ngrx/store';
 import { EffectsModule } from '@ngrx/effects';
 import { inboundShipmentReducer } from './state/inbound-shipment.reducer';
 import { InboundShipmentEffects } from './state/inbound-shipment.effects';
+import { ItemService } from '../item/item.service';
 
 @NgModule({
     declarations: [
@@ -139,6 +140,7 @@ import { InboundShipmentEffects } from './state/inbound-shipment.effects';
     ],
     providers: [
         PurchaseOrderService,
+        ItemService,
         InboundShipmentEditGuard,
         { provide: MAT_MOMENT_DATE_ADAPTER_OPTIONS, useValue: { useUtc: true } }
     ]

@@ -15,7 +15,7 @@
                                     <ng-container matColumnDef="Add">
                                         <th mat-header-cell *matHeaderCellDef width="45px"></th>
                                         <td mat-cell *matCellDef="let cartonline; let i = index">
-                                            <div *ngIf="purchaseOrder.Status === 'Pending' && i === cartonlines.length-1">                               
+                                            <div *ngIf="purchaseOrder?.Status === 'Pending' && i === cartonlines.length-1">                               
                                                 <a (click)='onAddCartonLine(cartonline, i); canAdd = false; formDirty = false;'><span [matTooltip]="canAdd ? ( 'Add' | translate ) : ( 'Required fields must be complete' | translate )" attr.aria-label="{{ 'Add' | translate}}" 
                                                     class="glyphicon glyphicon-plus green fs-20" [ngClass]="(i === cartonlines.length-1 && cartonlines[i].PurchaseOrderLineID && cartonlines[i].Quantity > 0)  ? 'green' : 'gray'"></span></a>
                                             </div>
@@ -92,7 +92,7 @@
                                                             id="purchaseorderlineidID"
                                                             name="purchaseorderlineID"
                                                             required
-                                                            [disabled]="purchaseOrder.Status != 'Pending'"
+                                                            [disabled]="purchaseOrder?.Status != 'Pending'"
                                                             [loading]="!purchaseorderlineList"
                                                             loadingText="Loading..."
                                                             class="inbound-line"
@@ -118,7 +118,7 @@
                                             </div>
                                             <div *ngIf="currentIndex === i || i === cartonlines.length-1">
                                                 <select class="form-control" id="purchaseorderlineidID" name="purchaseorderlineID"  required 
-                                                    [disabled]="purchaseOrder.Status != 'Pending'"
+                                                    [disabled]="purchaseOrder?.Status != 'Pending'"
                                                     (focus)="formDirty = true;" #linePurchaseOrderIDRef
                                                     [(ngModel)]="cartonline.PurchaseOrderLineID" (change)="onItemChange(cartonline, i); canAdd = true;" #purchaseorderlineIDVar="ngModel">
                                                     <option [ngValue]="null" style="font-style: italic" disabled selected>--{{ 'Select an item' | translate }}--</option>
@@ -165,7 +165,7 @@
                                                 <input (focus)="formDirty = true;" id="cartonlineQuantity" type="number" placeholder="{{ 'Quantity' | translate }}" class="form-control"
                                                     onkeydown="return event.keyCode == 69 || event.keyCode == 189 || event.keyCode == 190 ? false : true" min="0"
                                                     (input)="quantityChange(cartonline)"
-                                                    [disabled]="purchaseOrder.Status != 'Pending'"
+                                                    [disabled]="purchaseOrder?.Status != 'Pending'"
                                                     [(ngModel)]=cartonline.Quantity [ngModelOptions]="{standalone: true}" />
                                             </div>
                                         </td>
@@ -181,7 +181,7 @@
                                                 <input (focus)="formDirty = true;" class="form-control" id="cartonlineQuantity" type="number" placeholder="{{ 'Quantity' | translate }}" 
                                                     onkeydown="return event.keyCode == 69 || event.keyCode == 189 || event.keyCode == 190 ? false : true" min="0"
                                                     (input)="quantityChange(cartonline)"
-                                                    [disabled]="purchaseOrder.Status != 'Pending'"
+                                                    [disabled]="purchaseOrder?.Status != 'Pending'"
                                                     [(ngModel)]=cartonline.Quantity [ngModelOptions]="{standalone: true}" />
                                             </div>
                                         </td>
@@ -190,7 +190,7 @@
                                     <ng-container matColumnDef="Delete">
                                         <th mat-header-cell *matHeaderCellDef width="100px">{{ 'Remove' | translate }}</th>
                                         <td mat-cell *matCellDef="let cartonline; let i = index">
-                                            <div *ngIf="purchaseOrder.Status === 'Pending' && i !== cartonlines.length-1">    
+                                            <div *ngIf="purchaseOrder?.Status === 'Pending' && i !== cartonlines.length-1">    
                                                 <a (click)='onRemoveCartonLine(cartonline, i)'><span matTooltip="{{ 'Remove' | translate }}" attr.aria-label="{{ 'Remove' | translate}}" class="glyphicon glyphicon-trash"></span></a>
                                             </div>
                                             <div [hidden]="!formDirty && i === cartonlines.length-1"> 

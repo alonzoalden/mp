@@ -64,7 +64,7 @@
                                                         name="purchaseorderlineItemID"
                                                         required
                                                         [disabled]="purchaseOrder.Status != 'Pending'"
-                                                        [loading]="!itemList"
+                                                        [loading]="!itemList?.length"
                                                         loadingText="Loading..."
                                                         class="inbound-line"
                                                         >

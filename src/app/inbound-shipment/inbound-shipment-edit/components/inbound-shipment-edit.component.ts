@@ -350,10 +350,9 @@ export class InboundShipmentEditComponent implements OnInit, OnChanges, AfterVie
     }
 
     save(printLabel: boolean = false) {
-        this.pendingSave = true;        
-
+        //this.pendingSave = true;        
         const newPurchaseOrder = this.purchaseOrderService.copyPurchaseOrder(this.purchaseOrder);
-
+        console.log(newPurchaseOrder);
         if (newPurchaseOrder.PurchaseOrderLines) {
             const pendingPurchaseOrderLineIndex = newPurchaseOrder.PurchaseOrderLines.findIndex(i => i.pendingAdd === true);
             if (pendingPurchaseOrderLineIndex > -1) {
@@ -380,7 +379,6 @@ export class InboundShipmentEditComponent implements OnInit, OnChanges, AfterVie
         }
 
         //this.loading = true;
-
 
         this.editPurchaseOrder.emit({purchaseOrder: newPurchaseOrder, printLabel: printLabel});
         // this.purchaseOrderService.editPurchaseOrder(newPurchaseOrder).subscribe(
@@ -494,7 +492,7 @@ export class InboundShipmentEditComponent implements OnInit, OnChanges, AfterVie
             if(this.isInboundShipmentPending()) {
                 //this.save();
 
-                this.pendingSave = true;        
+                //this.pendingSave = true;        
                 const newPurchaseOrder = this.purchaseOrderService.copyPurchaseOrder(this.purchaseOrder);
                 if (newPurchaseOrder.PurchaseOrderLines) {
                     const pendingPurchaseOrderLineIndex = newPurchaseOrder.PurchaseOrderLines.findIndex(i => i.pendingAdd === true);

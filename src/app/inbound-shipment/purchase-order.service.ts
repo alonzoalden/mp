@@ -120,13 +120,14 @@ export class PurchaseOrderService {
         purchaseorder.Cartons.forEach((carton) => {
             const newCarton = new Carton(carton.CartonID, carton.PurchaseOrderID, carton.PackingSlipNumber, carton.CartonNumber, carton.Position,
                 carton.Length, carton.Width, carton.Height, carton.Weight, carton.LabelQty, carton.UpdatedOn, carton.CreatedOn, [], carton.pendingAdd);
-
-            carton.CartonLines.forEach((cartonline) => {
-                const newCartonLine = new CartonLine(cartonline.CartonLineID, cartonline.CartonID, cartonline.PurchaseOrderID, cartonline.PurchaseOrderLineID, cartonline.ItemName,
-                    cartonline.ItemVendorSKU, cartonline.TPIN, cartonline.URLKey, cartonline.Quantity, cartonline.RemainingQuantity, cartonline.UpdatedOn, cartonline.CreatedOn, cartonline.PrevPurchaseOrderLineID, cartonline.pendingAdd);
-                
-                newCarton.CartonLines.push(newCartonLine);
-            });
+            if (carton.CartonLines) {
+                carton.CartonLines.forEach((cartonline) => {
+                    const newCartonLine = new CartonLine(cartonline.CartonLineID, cartonline.CartonID, cartonline.PurchaseOrderID, cartonline.PurchaseOrderLineID, cartonline.ItemName,
+                        cartonline.ItemVendorSKU, cartonline.TPIN, cartonline.URLKey, cartonline.Quantity, cartonline.RemainingQuantity, cartonline.UpdatedOn, cartonline.CreatedOn, cartonline.PrevPurchaseOrderLineID, cartonline.pendingAdd);
+                    
+                    newCarton.CartonLines.push(newCartonLine);
+                });
+            }
 
             newPurchaseOrder.Cartons.push(newCarton);
         });
@@ -386,7 +387,8 @@ export class PurchaseOrderService {
                                 catchError(this.handleError)
                             );
     }
-    updatePurchaseLineCartonQuantity() {        
+    updatePurchaseLineCartonQuantity() {
+        if (!this.currentPurchaseOrderEdit) return;             
         this.currentPurchaseOrderEdit.PurchaseOrderLines.forEach((purchaseorderline) => {
             purchaseorderline.CartonQuantity = 0;
         });
@@ -408,7 +410,8 @@ export class PurchaseOrderService {
         })
     };
 
-    updateCartonLineRemainingQuantity(cartonline: CartonLine) {        
+    updateCartonLineRemainingQuantity(cartonline: CartonLine) {
+        if (!this.currentPurchaseOrderEdit) return;     
         const foundPurchaseOrderLine = this.currentPurchaseOrderEdit.PurchaseOrderLines.find(x => x.PurchaseOrderLineID === cartonline.PurchaseOrderLineID);
 
         if(foundPurchaseOrderLine)

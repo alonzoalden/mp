@@ -3,10 +3,15 @@
         <div class="panel-body p-w-none">
             <div *ngIf='!(isCartonAdd || isCartonEdit)'>
                 <o-inbound-shipment-edit-carton-list
+                    [purchaseOrder]="purchaseOrder$ | async"
+                    [errorMessage]="errorMessage$ | async"
+                    (getCartons)="getCartons($event)"
                 ></o-inbound-shipment-edit-carton-list>
             </div>
             <div>
                 <o-inbound-shipment-edit-carton-line-list
+                    [purchaseOrder]="purchaseOrder$ | async"
+                    [errorMessage]="errorMessage$ | async"
                 ></o-inbound-shipment-edit-carton-line-list>
                 <!-- <router-outlet></router-outlet> -->
             </div>

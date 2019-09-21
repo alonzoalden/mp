@@ -40,6 +40,4 @@ export class InboundShipmentEditShellComponent implements OnInit {
     downloadPurchaseOrderLabel(purchaseorder: PurchaseOrder) {
         this.store.dispatch(new inboundShipmentActions.DownloadPurchaseOrderLabel(purchaseorder));
     }
-    
-    
 }

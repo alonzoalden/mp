@@ -16,6 +16,7 @@ import * as inboundShipmentActions from './inbound-shipment.actions';
 import * as fromInboundShipment from '.';
 import { BatchUpdate, BatchUpdateValue } from '../../shared/class/batch-update';
 import { PurchaseOrder, PurchaseOrderLine, InboundShippingMethod, PurchaseOrderLineList, Carton } from '../../shared/class/purchase-order';
+import { ItemService } from '../../item/item.service';
 
 @Injectable()
 export class InboundShipmentEffects {
@@ -23,6 +24,7 @@ export class InboundShipmentEffects {
         private router: Router,
         private store: Store<fromInboundShipment.State>,
         private inboundShipmentService: PurchaseOrderService,
+        private itemService: ItemService, 
         private actions$: Actions) { }
     
     
@@ -83,6 +85,7 @@ export class InboundShipmentEffects {
                     purchaseorderlines.forEach((value) => {
                         value.PrevItemID = value.ItemID;
                     });
+                    this.inboundShipmentService.updatePurchaseLineCartonQuantity();
                     this.inboundShipmentService.currentPurchaseOrderLines = purchaseorderlines;
                     return (new inboundShipmentActions.LoadPurchaseOrderLinesSuccess(purchaseorderlines))
             }),
@@ -586,6 +589,19 @@ export class InboundShipmentEffects {
         )
     );
     
+    @Effect()
+    loadSimpleItemList$: Observable<Action> = this.actions$.pipe(
+        ofType(inboundShipmentActions.InboundShipmentActionTypes.LoadSimpleItemList),
+        mergeMap(() =>
+            this.itemService.getSimpleItemList().pipe(
+                map((itemlists: ItemList[]) => (new inboundShipmentActions.LoadSimpleItemListSuccess(itemlists))),
+                catchError(err => {
+                    of(new inboundShipmentActions.LoadSimpleItemListFail(err))
+                    return EMPTY;
+                })
+            )
+        )
+    );
     
 
     
