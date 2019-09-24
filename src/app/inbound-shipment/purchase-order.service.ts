@@ -417,18 +417,16 @@ export class PurchaseOrderService {
         
     };
 
-    updateCartonLineRemainingQuantity(cartonline: CartonLine) {
-        if (!this.currentPurchaseOrderEdit) return;     
-        const foundPurchaseOrderLine = this.currentPurchaseOrderEdit.PurchaseOrderLines.find(x => x.PurchaseOrderLineID === cartonline.PurchaseOrderLineID);
+    updateCartonLineRemainingQuantity(cartonline: CartonLine, purchaseorder: PurchaseOrder) {
+        //if (!this.currentPurchaseOrderEdit) return;     
+        const foundPurchaseOrderLine = purchaseorder.PurchaseOrderLines.find(x => x.PurchaseOrderLineID === cartonline.PurchaseOrderLineID);
 
-        if(foundPurchaseOrderLine)
-        {
+        if(foundPurchaseOrderLine) {
             cartonline.RemainingQuantity = foundPurchaseOrderLine.Quantity;
             
-            this.currentPurchaseOrderEdit.Cartons.forEach((carton, ci) => {
+            purchaseorder.Cartons.forEach((carton, ci) => {
                 carton.CartonLines.forEach((cartonline2, cli) => {
-                    if(!cartonline2.pendingAdd)
-                    {
+                    if(!cartonline2.pendingAdd) {
                         if(cartonline2.PurchaseOrderLineID == cartonline.PurchaseOrderLineID) {
                             cartonline.RemainingQuantity = cartonline.RemainingQuantity - cartonline2.Quantity;
                         }
@@ -436,6 +434,7 @@ export class PurchaseOrderService {
                 });
             })
         }
+        this.store.dispatch(new inboundShipmentActions.SetSelectedPurchaseOrder(purchaseorder));
     };
 
     getSimpleItemList(): Observable<ItemList[]>  {

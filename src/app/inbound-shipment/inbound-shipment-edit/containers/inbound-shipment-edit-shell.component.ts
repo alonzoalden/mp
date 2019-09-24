@@ -3,7 +3,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material';
 import { Subscription, Observable } from 'rxjs';
 
-import { PurchaseOrder, PurchaseOrderLine } from '../../../shared/class/purchase-order';
+import { PurchaseOrder, PurchaseOrderLine, Carton } from '../../../shared/class/purchase-order';
 //import { PurchaseOrderLine } from '../../shared/class/purchase-order-line';
 
 import { InboundShippingMethod } from '../../../shared/class/inbound-shipping-method';
@@ -19,6 +19,7 @@ import * as fromUser from '../../../shared/state/user-state.reducer';
 export class InboundShipmentEditShellComponent implements OnInit {
     purchaseOrder$: Observable<PurchaseOrder>;
     isLoading$: Observable<boolean>;
+    pendingSave$: Observable<boolean>;
     errorMessage$: Observable<string>;
 
     constructor(private store: Store<fromInboundShipment.State>) {}
@@ -26,6 +27,7 @@ export class InboundShipmentEditShellComponent implements OnInit {
     ngOnInit() {
         this.purchaseOrder$ = this.store.pipe(select(fromInboundShipment.getPurchaseOrder));
         this.isLoading$ = this.store.pipe(select(fromInboundShipment.getIsLoading));
+        this.pendingSave$ = this.store.pipe(select(fromInboundShipment.getPendingSave));
         this.errorMessage$ = this.store.pipe(select(fromInboundShipment.getError));
     }
     getPurchaseOrder(id: number) {
@@ -43,5 +45,9 @@ export class InboundShipmentEditShellComponent implements OnInit {
     setSelectedPurchaseOrder(purchaseorder: PurchaseOrder) {
         this.store.dispatch(new inboundShipmentActions.SetSelectedPurchaseOrder(purchaseorder));
     }
+    setSelectedCarton(carton: Carton) {
+        this.store.dispatch(new inboundShipmentActions.SetSelectedCarton(carton));
+    }
+    
     
 }

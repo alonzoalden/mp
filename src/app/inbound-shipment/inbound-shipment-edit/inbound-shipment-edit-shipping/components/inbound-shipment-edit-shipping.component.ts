@@ -59,28 +59,28 @@ export class InboundShipmentEditShippingComponent implements OnInit, OnChanges {
     ngOnInit(): void {
         const param = this.route.parent.snapshot.params['id'];
 
-        this.purchaseOrderSubscription = this.purchaseOrderService.getCurrentPurchaseOrderEdit(param).subscribe(
-            (purchaseorder) => {
-                this.purchaseOrderService.currentPurchaseOrderEdit = purchaseorder;
-                this.purchaseorder = this.purchaseOrderService.currentPurchaseOrderEdit;
-                this.origStatus = this.purchaseorder.Status;
-                if (this.purchaseorder.InboundShippingMethods && this.purchaseorder.InboundShippingMethods[0]) {
-                    this.inboundShippingMethod = this.purchaseorder.InboundShippingMethods[0];
-                    //this.purchaseOrderService.currentInboundShippingMethod = this.inboundShippingMethod;
-                } else {
-                    if(!this.purchaseorder.InboundShippingMethods)
-                    {
-                        this.purchaseorder.InboundShippingMethods = [];
-                    }
-                    const _temp = new InboundShippingMethod(null, param, '', '', '', null, null);
-                    this.purchaseorder.InboundShippingMethods.push(_temp);
-                    this.inboundShippingMethod = this.purchaseorder.InboundShippingMethods[0];
-                    //this.purchaseOrderService.currentInboundShippingMethod = this.inboundShippingMethod;                    
-                    //this.purchaseOrderService.currentInboundShippingMethods.push(this.inboundShippingMethod);
-                }
-            },
-            error => this.errorMessage = <any>error
-        );        
+        // this.purchaseOrderSubscription = this.purchaseOrderService.getCurrentPurchaseOrderEdit(param).subscribe(
+        //     (purchaseorder) => {
+        //         this.purchaseOrderService.currentPurchaseOrderEdit = purchaseorder;
+        //         this.purchaseorder = this.purchaseOrderService.currentPurchaseOrderEdit;
+        //         this.origStatus = this.purchaseorder.Status;
+        //         if (this.purchaseorder.InboundShippingMethods && this.purchaseorder.InboundShippingMethods[0]) {
+        //             this.inboundShippingMethod = this.purchaseorder.InboundShippingMethods[0];
+        //             //this.purchaseOrderService.currentInboundShippingMethod = this.inboundShippingMethod;
+        //         } else {
+        //             if(!this.purchaseorder.InboundShippingMethods)
+        //             {
+        //                 this.purchaseorder.InboundShippingMethods = [];
+        //             }
+        //             const _temp = new InboundShippingMethod(null, param, '', '', '', null, null);
+        //             this.purchaseorder.InboundShippingMethods.push(_temp);
+        //             this.inboundShippingMethod = this.purchaseorder.InboundShippingMethods[0];
+        //             //this.purchaseOrderService.currentInboundShippingMethod = this.inboundShippingMethod;                    
+        //             //this.purchaseOrderService.currentInboundShippingMethods.push(this.inboundShippingMethod);
+        //         }
+        //     },
+        //     error => this.errorMessage = <any>error
+        // );        
 
         // this.purchaseOrderService.getInboundShippingMethods(param).subscribe(
         //     (inboundshippingmethods: InboundShippingMethod[]) => {
