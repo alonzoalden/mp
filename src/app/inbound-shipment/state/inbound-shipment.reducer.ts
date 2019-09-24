@@ -215,6 +215,7 @@ export function inboundShipmentReducer(state = initialState, action: InboundShip
         case InboundShipmentActionTypes.AddNewPurchaseOrderSuccess:
             return {
                 ...state,
+                isLoading: false,
                 currentPurchaseOrder: action.payload,
                 error: '',
             };
@@ -223,6 +224,7 @@ export function inboundShipmentReducer(state = initialState, action: InboundShip
             return {
                 ...state,
                 currentPurchaseOrder: null,
+                isLoading: false,
                 error: action.payload,
             };
         

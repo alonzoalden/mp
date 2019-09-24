@@ -29,8 +29,6 @@ import { ItemEditVideoShellComponent } from './item-edit/containers/item-edit-vi
 import { ItemEditImageShellComponent } from './item-edit/containers/item-edit-image-shell/item-edit-image-shell.component';
 import { ItemEditInventoryShellComponent } from './item-edit/containers/item-edit-inventory-shell/item-edit-inventory-shell.component';
 
-import { ItemEditVariationComponent } from './item-edit/item-edit-variation.component';
-
 import { ItemAddBundleGuard } from './item-add/components/item-add-bundle/item-add-bundle.guard';
 import { ItemEditGuard } from './item-edit/components/item-edit/item-edit.guard';
 import { ItemEditBundleGuard } from './item-edit/components/item-edit-bundle/item-edit-bundle.guard';
@@ -59,6 +57,13 @@ import { ItemPartEditImageShellComponent } from './item-part/containers/item-par
 import { ItemPartEditInventoryShellComponent } from './item-part/containers/item-part-edit-shell/item-part-edit-inventory-shell/item-part-edit-inventory-shell.component';
 
 import { PageNotFoundComponent } from './page-not-found.component';
+
+import { ItemVariationSelectItemComponentDialog } from './item-variation/item-variation-select-item.component-dialog';
+import { ItemVariationComponentDialog } from './item-variation/item-variation.component-dialog';
+import { ItemVariationListComponent } from './item-variation/item-variation-list.component';
+import { ItemVariationDetailComponent } from './item-variation/item-variation-detail.component';
+import { ItemEditVariationComponent } from './item-edit/item-edit-variation.component';
+
 
 const ITEM_ROUTES: Routes = [
     {
@@ -128,7 +133,6 @@ const ITEM_ROUTES: Routes = [
                     }
                 ]
             },
-            //UNSED AND DELETED
             // {
             //     path: ':id/detail',
             //     component: ItemDetailComponent,
@@ -310,6 +314,25 @@ const ITEM_ROUTES: Routes = [
                     },
                 ]
             },
+            {
+                path: 'variation-listing',
+                component: ItemVariationListComponent,
+                // children: [
+                //     {
+                //         path: 'detail/:id',
+                //         component: ItemVariationDetailComponent
+                //     },
+                // ]
+            },
+            {
+                path: 'variation-listing/detail',
+                component: ItemVariationDetailComponent
+            },
+            {
+                path: 'variation-listing/detail/:id',
+                component: ItemVariationDetailComponent
+            },
+            
         ]
     },
     {
@@ -317,5 +340,4 @@ const ITEM_ROUTES: Routes = [
         component: PageNotFoundComponent
     }
 ];
-
 export const itemRouting = RouterModule.forChild(ITEM_ROUTES);

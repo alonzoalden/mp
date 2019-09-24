@@ -67,13 +67,14 @@ a:hover {
     transition: all 100ms ease;
 }
 .skinny1 {
-    font-weight: 300;
+    font-weight: 300 !important;
 }
 .skinny-label {
     font-weight: 200;
     text-transform: uppercase;
     font-size: 13px;
 }
+
 .w165 {
     width: 165px;
 }
@@ -2058,11 +2059,7 @@ th.mat-header-cell {
     }
 }
 
-
 /* Material Tab */
-.mat-tab-list {
-    /* background-color: #eee; */
-}
 .mat-tab-labels {
     
     border-right: 0;
@@ -2153,6 +2150,7 @@ th.mat-header-cell {
     margin-bottom: 10px;
 }
 .border-list.flex-details {
+    height: 72px;
     border-bottom: 1px solid #e0e0e0;
 }
 
@@ -2182,6 +2180,9 @@ th.mat-header-cell {
 .p-v-5 {
     padding: 5px 0;
 }
+.row-height {
+    height: 72px !important;
+}
 .row-image-lg {
     max-width: 120px;
     max-height: 120px;
@@ -2195,7 +2196,6 @@ th.mat-header-cell {
 .min-h-300 {
     min-height: 300px;
 }
-
 .agreement {
     letter-spacing: 0.2px;
     font-size: 16px;

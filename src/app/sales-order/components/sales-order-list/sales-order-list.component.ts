@@ -1,10 +1,9 @@
-import { Component, OnInit, OnChanges, ViewChild, ElementRef, AfterViewInit, Input, Output, EventEmitter, SimpleChanges } from '@angular/core';
+import { Component, OnInit, OnChanges, ViewChild, ElementRef, Input, Output, EventEmitter, SimpleChanges } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { MatPaginator, MatSort, MatTableDataSource} from '@angular/material';
 import { SalesOrder } from '../../../shared/class/sales-order';
 import { environment } from '../../../../environments/environment';
-import { Member } from 'app/shared/class/member';
-import { SetSalesOrderID } from 'app/sales-order/state/sales-order.actions';
+import { Member } from '../../../shared/class/member';
 
 @Component({
   selector: 'o-sales-order-list',

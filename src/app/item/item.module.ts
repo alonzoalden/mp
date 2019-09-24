@@ -190,6 +190,11 @@ import { ItemEffects } from './state/item.effects';
 
 @NgModule({
     declarations: [
+        ItemVariationSelectItemComponentDialog,
+        ItemVariationComponentDialog,
+        ItemVariationListComponent,
+        ItemVariationDetailComponent,
+        ItemEditVariationComponent,
         ItemComponent,
         ItemListComponent,
         ItemAddComponent,
@@ -331,6 +336,7 @@ import { ItemEffects } from './state/item.effects';
         MatDialogModule,
         CdkTableModule,
         MatTableModule,
+        MatTabsModule,
         MatPaginatorModule,
         MatSortModule,
         MatMenuModule,
