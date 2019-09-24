@@ -77,6 +77,12 @@ export enum InboundShipmentActionTypes {
   LoadCartonsSuccess = '[InboundShipment] Load Cartons Success',
   LoadCartonsFail = '[InboundShipment] Load Cartons Fail',
   
+  
+  SetSelectedCarton = '[InboundShipment] Set Selected Carton',
+  SetSelectedPurchaseOrder = '[InboundShipment] Set Selected Purchase Order',
+  UpdatePurchaseLineCartonQuantity = '[InboundShipment] Update Purchase Line Carton Quantity',
+  // LoadSelectedCartonSuccess = '[InboundShipment] Load Selected Carton Success',
+  // LoadSelectedCartonFail = '[InboundShipment] Load Selected Carton Fail',
 
   LoadInboundShippingMethods = '[InboundShipment] Load Inbound Shipping Methods',
   LoadInboundShippingMethodsSuccess = '[InboundShipment] Load Inbound Shipping Methods Success',
@@ -88,6 +94,10 @@ export enum InboundShipmentActionTypes {
 
 // Action Creators
 
+
+export class UpdatePurchaseLineCartonQuantity implements Action {
+  readonly type = InboundShipmentActionTypes.UpdatePurchaseLineCartonQuantity;
+}
 export class LoadPurchaseOrderOverview implements Action {
   readonly type = InboundShipmentActionTypes.LoadPurchaseOrderOverview;
 }
@@ -367,6 +377,30 @@ export class LoadCartonsFail implements Action {
   constructor(public payload: string) { }
 }
 
+export class SetSelectedCarton implements Action {
+  readonly type = InboundShipmentActionTypes.SetSelectedCarton;
+  constructor(public payload: Carton) { }
+}
+
+export class SetSelectedPurchaseOrder implements Action {
+  readonly type = InboundShipmentActionTypes.SetSelectedPurchaseOrder;
+  constructor(public payload: PurchaseOrder) { }
+}
+
+
+
+// export class LoadSelectedCartonSuccess implements Action {
+//   readonly type = InboundShipmentActionTypes.LoadSelectedCartonSuccess;
+//   constructor(public payload: Carton) { }
+// }
+
+// export class LoadSelectedCartonFail implements Action {
+//   readonly type = InboundShipmentActionTypes.LoadSelectedCartonFail;
+//   constructor(public payload: string) { }
+// }
+
+
+
 export class LoadPurchaseOrderLineList implements Action {
   readonly type = InboundShipmentActionTypes.LoadPurchaseOrderLineList;
   constructor(public payload: number) { }
@@ -434,6 +468,8 @@ export type InboundShipmentActions = LoadPurchaseOrder
 | LoadCartons
 | LoadCartonsSuccess
 | LoadCartonsFail
+| SetSelectedCarton
+| SetSelectedPurchaseOrder
 | AddNewPurchaseOrder
 | AddNewPurchaseOrderSuccess
 | AddNewPurchaseOrderFail
@@ -475,4 +511,5 @@ export type InboundShipmentActions = LoadPurchaseOrder
 | DeletePurchaseOrderFail
 | LoadSimpleItemList
 | LoadSimpleItemListSuccess
-| LoadSimpleItemListFail;
+| LoadSimpleItemListFail
+| UpdatePurchaseLineCartonQuantity;

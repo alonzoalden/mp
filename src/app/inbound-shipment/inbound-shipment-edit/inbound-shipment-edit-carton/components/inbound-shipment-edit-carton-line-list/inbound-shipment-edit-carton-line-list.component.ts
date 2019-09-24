@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild, Input, Output, EventEmitter } from '@angular/core';
+import { Component, OnInit, OnChanges, ViewChild, Input, Output, EventEmitter, SimpleChange, SimpleChanges } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 import { MatSort, MatTableDataSource, MatDialog } from '@angular/material';
 
@@ -15,15 +15,18 @@ import { PurchaseOrderService } from '../../../../purchase-order.service';
     styleUrls: ['./inbound-shipment-edit-carton-line-list.component.css']
 })
 
-export class InboundShipmentEditCartonLineListComponent implements OnInit {
+export class InboundShipmentEditCartonLineListComponent implements OnInit, OnChanges {
     //errorMessage: string;
     //purchaseOrder: purchaseOrder;
     purchaseorderid: number;
 
     @Input() purchaseOrder: PurchaseOrder;
+    @Input() purchaseOrderLineList: PurchaseOrderLineList[];
+    @Input() carton: Carton;
     @Input() errorMessage: string;
+    @Output() getPurchaseOrderLineList = new EventEmitter<number>();
 
-    purchaseorderlineList: PurchaseOrderLineList[];
+    //purchaseOrderLineList: PurchaseOrderLineList[];
 
     //orderStatus: string;
     pendingAdd: boolean;
@@ -36,7 +39,7 @@ export class InboundShipmentEditCartonLineListComponent implements OnInit {
     formDirty = false;
     canAdd = false;
     cartonlines: CartonLine[];
-    carton: Carton;
+    //carton: Carton;
 
     @ViewChild(MatSort, { static: false }) sort: MatSort;
 
@@ -58,42 +61,54 @@ export class InboundShipmentEditCartonLineListComponent implements OnInit {
     //     }
     //     return this.purchaseOrderService.currentCartonLines;
     // }
+    ngOnChanges(changes: SimpleChanges) {
+        if (changes.carton && changes.carton.currentValue && !changes.carton.currentValue.CartonLines) {
+            this.addPendingLine();
+        }
+        if (changes.carton && changes.carton.currentValue && changes.carton.currentValue.CartonLines.length > 0) {
+            this.refreshDataSource(changes.carton.currentValue.CartonLines);
+            this.currentIndex = changes.carton.currentValue.CartonLines.length - 1;
+            this.cartonlines = changes.carton.currentValue.CartonLines;
+        }
+    }
 
     ngOnInit() {        
-        
-        
         this.purchaseorderid = this.route.snapshot.parent.params['id'];
-        this.purchaseOrder = this.purchaseOrderService.currentPurchaseOrderEdit;
-        this.purchaseOrderService.currentCarton.subscribe(
-            (currentcarton: Carton) => {
-                this.carton = currentcarton;
-            },
-            (error: any) => this.errorMessage = <any>error
-        );
-        this.purchaseOrderService.currentCartonLines.subscribe(
-            (cartonlines: CartonLine[]) => {
-                this.cartonlines = cartonlines;
-                this.refreshDataSource(cartonlines);
-                this.currentIndex = cartonlines.length - 1;
-                if(this.purchaseOrderService.newCartonLineIsSelected) {
-                    this.purchaseOrderService.newCartonLineIsSelected = false;
-                }
-            },
-            (error: any) => this.errorMessage = <any>error
-        );
+        //this.purchaseOrder = this.purchaseOrderService.currentPurchaseOrderEdit;
+        // this.purchaseOrderService.currentCarton.subscribe(
+        //     (currentcarton: Carton) => {
+        //         this.carton = currentcarton;
+        //     },
+        //     (error: any) => this.errorMessage = <any>error
+        // );
+
+        // this.purchaseOrderService.currentCartonLines.subscribe(
+        //     (cartonlines: CartonLine[]) => {
+        //         this.cartonlines = cartonlines;
+        //         this.refreshDataSource(cartonlines);
+        //         this.currentIndex = cartonlines.length - 1;
+        //         if(this.purchaseOrderService.newCartonLineIsSelected) {
+        //             this.purchaseOrderService.newCartonLineIsSelected = false;
+        //         }
+        //     },
+        //     (error: any) => this.errorMessage = <any>error
+        // );
 
         // this.purchaseOrderService.getPurchaseOrder(this.purchaseorderid).subscribe(
         //     (purchaseOrder: PurchaseOrder) => {
         //         //this.orderStatus  = purchaseOrder.Status;
         //     },
         //     (error: any) => this.errorMessage = <any>error
-        // );        
-        this.purchaseOrderService.getPurchaseOrderLineList(this.purchaseorderid).subscribe(
-            (purchaseorderlinelist: PurchaseOrderLineList[]) => {
-                this.purchaseorderlineList = purchaseorderlinelist;
-            },
-            (error: any) => this.errorMessage = <any>error
-        );       
+        // );
+        
+        
+        this.getPurchaseOrderLineList.emit(this.purchaseorderid);
+        // this.purchaseOrderService.getPurchaseOrderLineList(this.purchaseorderid).subscribe(
+        //     (purchaseorderlinelist: PurchaseOrderLineList[]) => {
+        //         this.purchaseOrderLineList = purchaseorderlinelist;
+        //     },
+        //     (error: any) => this.errorMessage = <any>error
+        // ); 
     }
 
     addPendingLine() {
@@ -117,7 +132,7 @@ export class InboundShipmentEditCartonLineListComponent implements OnInit {
 
     // onItemChange(newValue: number, cartonline: CartonLine) {
     //     if(!this.existItem(newValue)) {
-    //         const selectedItem = this.purchaseorderlineList.find(x => x.Value === newValue);
+    //         const selectedItem = this.purchaseOrderLineList.find(x => x.Value === newValue);
     //         if (selectedItem) {
     //             cartonline.ItemName = selectedItem.ItemName;
     //             cartonline.ItemVendorSKU = selectedItem.VendorSKU;
@@ -131,14 +146,13 @@ export class InboundShipmentEditCartonLineListComponent implements OnInit {
             this.canAdd = true;
         }
         if(!this.existItem(cartonline.PurchaseOrderLineID)) {
-            const selectedItem = this.purchaseorderlineList.find(x => x.Value === cartonline.PurchaseOrderLineID);
+            const selectedItem = this.purchaseOrderLineList.find(x => x.Value === cartonline.PurchaseOrderLineID);
             if (selectedItem) {
                 cartonline.ItemName = selectedItem.ItemName;
                 cartonline.ItemVendorSKU = selectedItem.VendorSKU;
                 cartonline.TPIN = selectedItem.TPIN;
-                if(this.isValidQuantity(cartonline))
-                {
-                    this.purchaseOrderService.updatePurchaseLineCartonQuantity();
+                if(this.isValidQuantity(cartonline)) {
+                    this.purchaseOrderService.updatePurchaseLineCartonQuantity(this.purchaseOrder);
                     this.purchaseOrderService.updateCartonLineRemainingQuantity(cartonline);
                 }
             }
@@ -157,7 +171,7 @@ export class InboundShipmentEditCartonLineListComponent implements OnInit {
 
     existItem(purchaseorderlineID: number, isNew: boolean = false){
         var counter: number = 0;
-        this.cartonlines.forEach((value, index) => {
+        this.carton.CartonLines.forEach((value, index) => {
                 if(value.PurchaseOrderLineID === purchaseorderlineID) {
                     if(isNew || index != this.cartonlines.length - 1) {
                         counter += 1; 
@@ -171,19 +185,17 @@ export class InboundShipmentEditCartonLineListComponent implements OnInit {
 
     quantityChange(cartonline: CartonLine) {
         if(this.isValidQuantity(cartonline)) {
-            this.purchaseOrderService.updatePurchaseLineCartonQuantity();
+            this.purchaseOrderService.updatePurchaseLineCartonQuantity(this.purchaseOrder);
         }
     }
 
     isValidQuantity(cartonline: CartonLine, isPendingAdd: boolean = false) {
+        const foundPurchaseOrderLine = this.purchaseOrder.PurchaseOrderLines.find(x => x.PurchaseOrderLineID === cartonline.PurchaseOrderLineID);
 
-        const foundPurchaseOrderLine = this.purchaseOrderService.currentPurchaseOrderEdit.PurchaseOrderLines.find(x => x.PurchaseOrderLineID === cartonline.PurchaseOrderLineID);
-
-        if(foundPurchaseOrderLine)
-        {
+        if(foundPurchaseOrderLine) {
             var RemainingQuantity : number = foundPurchaseOrderLine.Quantity;
             
-            this.purchaseOrderService.currentPurchaseOrderEdit.Cartons.forEach((carton, ci) => {
+            this.purchaseOrder.Cartons.forEach((carton, ci) => {
                 carton.CartonLines.forEach((cartonline2, cli) => {
                     if(isPendingAdd) {
                         if(cartonline2.PurchaseOrderLineID == cartonline.PurchaseOrderLineID) {
@@ -220,7 +232,7 @@ export class InboundShipmentEditCartonLineListComponent implements OnInit {
                 
                 this.addPendingLine();
                 this.refreshDataSource(this.cartonlines);
-                this.purchaseOrderService.updatePurchaseLineCartonQuantity();
+                this.purchaseOrderService.updatePurchaseLineCartonQuantity(this.purchaseOrder);
             } else {
                 this.purchaseOrderService.sendNotification({ type: 'error', title: 'Error', content: "Product already exists" });
             }
@@ -250,7 +262,7 @@ export class InboundShipmentEditCartonLineListComponent implements OnInit {
             this.cartonlines.splice(index, 1);
             this.refreshDataSource(this.cartonlines);
 
-            this.purchaseOrderService.updatePurchaseLineCartonQuantity();
+            this.purchaseOrderService.updatePurchaseLineCartonQuantity(this.purchaseOrder);
 
             // this.purchaseOrderService.deleteCartonLine(cartonline.CartonLineID).subscribe(
             //     (data) => {
@@ -285,7 +297,7 @@ export class InboundShipmentEditCartonLineListComponent implements OnInit {
             this.pendingAdd = false;
         }
         else {
-            this.purchaseOrderService.updatePurchaseLineCartonQuantity();
+            this.purchaseOrderService.updatePurchaseLineCartonQuantity(this.purchaseOrder);
             this.currentIndex = index;
         } 
     }
@@ -304,7 +316,7 @@ export class InboundShipmentEditCartonLineListComponent implements OnInit {
     //     // const variationTitle = item.ItemVariationLines.map((attribute) => attribute.ItemAttributeVariationName).join(' / ');
         
     //     const data = {
-    //         items: this.purchaseorderlineList,
+    //         items: this.purchaseOrderLineList,
     //         item: item
     //     }
     //     const dialogRef = this.inboundShipmentDialog.open(InboundShipmentSelectItemComponentDialog, {

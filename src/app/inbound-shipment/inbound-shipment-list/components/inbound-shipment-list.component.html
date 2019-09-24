@@ -53,7 +53,7 @@
                                         <button mat-button [matMenuTriggerFor]="menu" matTooltip=""
                                         attr.aria-label="{{ 'Menu Button' | translate}}"><i class="fa fa-bars fa-2x"></i></button>
                                         <mat-menu #menu="matMenu">
-                                            <button mat-menu-item [routerLink]="[purchaseorder.PurchaseOrderID, 'edit']">{{ 'Edit' | translate }}</button> 
+                                            <button mat-menu-item (click)="setSelectedPurchaseOrder.emit(purchaseorder)" [routerLink]="[purchaseorder.PurchaseOrderID, 'edit']">{{ 'Edit' | translate }}</button> 
                                             <button mat-menu-item (click)="onPrintLabel(purchaseorder)">{{ 'Print Packing Slip' | translate }}</button>                                                               
                                             <button mat-menu-item *ngIf='purchaseorder.Status === "Pending"' (click)="onRemovePurchaseOrder(purchaseorder)" >{{ 'Delete' | translate }}</button>          
                                         </mat-menu>
@@ -63,7 +63,7 @@
                             <!-- Packing Slip Number Column -->
                             <ng-container matColumnDef="PackingSlipNumber">
                                 <th mat-header-cell *matHeaderCellDef mat-sort-header width="140px">{{ 'Packing Slip Number' | translate }}</th>
-                                <td mat-cell *matCellDef="let purchaseorder"><a [routerLink]="[purchaseorder.PurchaseOrderID, 'edit']" class="sm-strong">{{purchaseorder.PackingSlipNumber}}</a></td>
+                                <td mat-cell *matCellDef="let purchaseorder"><a (click)="setSelectedPurchaseOrder.emit(purchaseorder)" [routerLink]="[purchaseorder.PurchaseOrderID, 'edit']" class="sm-strong">{{purchaseorder.PackingSlipNumber}}</a></td>
                             </ng-container>
                             <!--Transaction Date Column -->
                             <ng-container matColumnDef="TransactionDate">

@@ -4,7 +4,7 @@
         <div class="col-md-12">
             <div *ngIf="purchaseOrder && purchaseOrder.Cartons && purchaseOrder.Cartons.length > 0">
                 <div class="table-responsinve">
-                    <table mat-table #table [dataSource]="dataSource" *ngIf='purchaseOrder.Cartons && purchaseOrder.Cartons.length > 0'>
+                    <table mat-table #table [dataSource]="dataSource">
                         <!-- Add Button -->
                         <ng-container matColumnDef="Add">
                             <th mat-header-cell *matHeaderCellDef width="45px"></th>
@@ -210,7 +210,7 @@
                         </ng-container>
                         <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
                         <tr mat-row class="selected-row" *matRowDef="let carton; let i = index; columns: displayedColumns;"
-                            [ngStyle]="{'background-color': purchaseOrderService.rowColorConditions(i, purchaseOrder.Cartons, currentIndex, formDirty)}"
+                            [ngStyle]="{'background-color': purchaseOrderService.rowColorConditions(i, purchaseOrder?.Cartons, currentIndex, formDirty)}"
                             (click)="onShowCartonLine(carton, i)"></tr>
                         <!-- <tr mat-row *matRowDef="let carton; let i = index; columns: displayedColumns"
                             [ngStyle]="{'background-color': i === purchaseOrder.Cartons.length-1 ? '#99CCFF' : currentIndex === i ? '#FF9933' : '#FFFFFF' }" 

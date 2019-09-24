@@ -1,2 +1,4 @@
 <o-inbound-shipment-edit-shipping
+    [purchaseorder]="purchaseOrder$ | async"
+    [errorMessage]="errorMessage$ | async"
 ></o-inbound-shipment-edit-shipping>

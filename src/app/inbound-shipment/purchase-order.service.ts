@@ -12,6 +12,10 @@ import { OAuthService } from 'angular-oauth2-oidc';
 import { InboundShippingMethod, InboundShippingMethodInsert } from '../shared/class/inbound-shipping-method';
 
 import { environment } from '../../environments/environment';
+import { Store, select } from '@ngrx/store';
+import * as inboundShipmentActions from './state/inbound-shipment.actions';
+import * as fromInboundShipment from './state';
+
 
 @Injectable()
 export class PurchaseOrderService {
@@ -52,7 +56,8 @@ export class PurchaseOrderService {
 
     constructor(
         private http: HttpClient,
-        private oauthService: OAuthService ) { }
+        private oauthService: OAuthService,
+        private store: Store<fromInboundShipment.State>) { }
 
     sendNotification(notification: any) {
         this.subject.next(notification);
@@ -387,27 +392,29 @@ export class PurchaseOrderService {
                                 catchError(this.handleError)
                             );
     }
-    updatePurchaseLineCartonQuantity() {
-        if (!this.currentPurchaseOrderEdit) return;             
-        this.currentPurchaseOrderEdit.PurchaseOrderLines.forEach((purchaseorderline) => {
+    updatePurchaseLineCartonQuantity(purchaseorder: PurchaseOrder) {
+        //if (!this.currentPurchaseOrderEdit) return;          
+        purchaseorder.PurchaseOrderLines.forEach((purchaseorderline) => {
             purchaseorderline.CartonQuantity = 0;
         });
         
-        this.currentPurchaseOrderEdit.Cartons.forEach((carton, ci) => {
+        purchaseorder.Cartons.forEach((carton, ci) => {
             carton.CartonLines.forEach((cartonline, cli) => {
                 if(!cartonline.pendingAdd)
                 {
-                    const purchaseorderline = this.currentPurchaseOrderEdit.PurchaseOrderLines.find(x => x.PurchaseOrderLineID === cartonline.PurchaseOrderLineID);
+                    const purchaseorderline = purchaseorder.PurchaseOrderLines.find(x => x.PurchaseOrderLineID === cartonline.PurchaseOrderLineID);
                     if(purchaseorderline)
                     {
                         purchaseorderline.CartonQuantity += cartonline.Quantity;
                         this.replacePurchaseOrderLine(cartonline.PurchaseOrderLineID, purchaseorderline);
 
-                        this.currentPurchaseOrderEdit.PurchaseOrderLines[this.currentPurchaseOrderEdit.PurchaseOrderLines.findIndex(i => i.PurchaseOrderLineID === cartonline.PurchaseOrderLineID)] = purchaseorderline;
+                        purchaseorder.PurchaseOrderLines[purchaseorder.PurchaseOrderLines.findIndex(i => i.PurchaseOrderLineID === cartonline.PurchaseOrderLineID)] = purchaseorderline;
                     }
                 }
             });
         })
+        this.store.dispatch(new inboundShipmentActions.SetSelectedPurchaseOrder(purchaseorder));
+        
     };
 
     updateCartonLineRemainingQuantity(cartonline: CartonLine) {

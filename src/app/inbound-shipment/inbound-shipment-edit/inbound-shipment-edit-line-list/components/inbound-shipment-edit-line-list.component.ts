@@ -24,7 +24,7 @@ export class InboundShipmentEditLineListComponent implements OnInit, OnChanges, 
     @Output() getPurchaseOrderLines = new EventEmitter<number>();
     @Output() downloadItemLabelCount = new EventEmitter<{purchaseorderline: PurchaseOrderLine, count: number, border: string}>();
     @Output() downloadItemLargeLabelCount = new EventEmitter<{purchaseorderline: PurchaseOrderLine, count: number, border: string}>();
-    
+    //@Output() c: PurchaseOrder;
 
 
     //errorMessage: string;
@@ -58,13 +58,18 @@ export class InboundShipmentEditLineListComponent implements OnInit, OnChanges, 
         public itemPrintDialog: MatDialog) {
     }
     ngOnChanges(changes: SimpleChanges) {
+        if (changes.purchaseOrder && changes.purchaseOrder.currentValue && (!changes.purchaseOrder.currentValue.PurchaseOrderLines.length
+                || changes.purchaseOrder.currentValue.PurchaseOrderLines[changes.purchaseOrder.currentValue.PurchaseOrderLines.length-1].PurchaseOrderLineID)) {
+            this.addPendingLine();
+            this.currentIndex = this.purchaseOrder.PurchaseOrderLines.length - 1;
+            this.refreshDataSource(this.purchaseOrder.PurchaseOrderLines);
+        }
         if (changes.purchaseOrder && changes.purchaseOrder.currentValue) {
-            //this.purchaseOrderService.updatePurchaseLineCartonQuantity();
+            
             if (!this.purchaseOrder.PurchaseOrderLines || !this.purchaseOrder.PurchaseOrderLines.length) {
                 this.getPurchaseOrderLines.emit(this.route.parent.snapshot.params['id']);
             }
             if (!this.purchaseOrder.PurchaseOrderLines.length || this.purchaseOrder.PurchaseOrderLines[this.purchaseOrder.PurchaseOrderLines.length-1].PurchaseOrderID) {
-                this.addPendingLine();
                 this.refreshDataSource(this.purchaseOrder.PurchaseOrderLines);
                 this.currentIndex = this.purchaseOrder.PurchaseOrderLines.length - 1;
             }
@@ -76,6 +81,7 @@ export class InboundShipmentEditLineListComponent implements OnInit, OnChanges, 
     ngOnInit() {
         //this.currentIndex = this.purchaseOrder.PurchaseOrderLines.length - 1;  
         this.purchaseorderid = this.route.parent.snapshot.params['id'];
+        this.purchaseOrderService.updatePurchaseLineCartonQuantity(this.purchaseOrder);
         //this.getPurchaseOrderLines.emit(this.purchaseorderid);
         //this.purchaseOrderService.updatePurchaseLineCartonQuantity();
 
@@ -157,6 +163,7 @@ export class InboundShipmentEditLineListComponent implements OnInit, OnChanges, 
         
         const _temp = new PurchaseOrderLine(null, this.purchaseorderid, null, null, null, null, null, null, 1, 0, null, null, null, null, true);
         this.purchaseOrder.PurchaseOrderLines.push(_temp);
+        this.refreshDataSource(this.purchaseOrder.PurchaseOrderLines);
         
 
     }

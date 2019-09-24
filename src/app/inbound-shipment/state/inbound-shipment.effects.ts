@@ -85,7 +85,7 @@ export class InboundShipmentEffects {
                     purchaseorderlines.forEach((value) => {
                         value.PrevItemID = value.ItemID;
                     });
-                    this.inboundShipmentService.updatePurchaseLineCartonQuantity();
+                    //this.inboundShipmentService.updatePurchaseLineCartonQuantity(this.purchaseOrder);
                     this.inboundShipmentService.currentPurchaseOrderLines = purchaseorderlines;
                     return (new inboundShipmentActions.LoadPurchaseOrderLinesSuccess(purchaseorderlines))
             }),
@@ -602,6 +602,22 @@ export class InboundShipmentEffects {
             )
         )
     );
+
+    // @Effect()
+    // updatePurchaseLineCartonQuantity$: Observable<Action> = this.actions$.pipe(
+    //     ofType(inboundShipmentActions.InboundShipmentActionTypes.UpdatePurchaseLineCartonQuantity),
+    //     mergeMap(() =>
+    //         this.itemService.getSimpleItemList().pipe(
+    //             map((itemlists: ItemList[]) => (new inboundShipmentActions.LoadSimpleItemListSuccess(itemlists))),
+    //             catchError(err => {
+    //                 of(new inboundShipmentActions.LoadSimpleItemListFail(err))
+    //                 return EMPTY;
+    //             })
+    //         )
+    //     )
+    // );
+
+    
     
 
     

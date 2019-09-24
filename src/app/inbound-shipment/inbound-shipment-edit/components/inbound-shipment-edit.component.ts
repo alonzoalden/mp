@@ -23,6 +23,7 @@ export class InboundShipmentEditComponent implements OnInit, OnChanges, AfterVie
     @Output() editPurchaseOrder = new EventEmitter<{ purchaseOrder: PurchaseOrder, printLabel: boolean }>();
     @Output() editPurchaseOrderThenPrintItemLabels = new EventEmitter<{ purchaseOrder: PurchaseOrder, size: string, border: string }>();
     @Output() downloadPurchaseOrderLabel = new EventEmitter<PurchaseOrder>();
+    @Output() setSelectedPurchaseOrder = new EventEmitter<PurchaseOrder>();
     
     private originalPurchaseOrder: PurchaseOrder;
     private currentPurchaseOrder: PurchaseOrder;
@@ -51,9 +52,9 @@ export class InboundShipmentEditComponent implements OnInit, OnChanges, AfterVie
     }
 
     get isValidShipment() {
-        return (this.purchaseOrderService.validatePurchaseOrderLines() 
-            && this.purchaseOrderService.validateCarton()
-            && this.purchaseOrderService.validateShipping()) 
+        return (this.validatePurchaseOrderLines() 
+            && this.validateCarton()
+            && this.validateShipping()) 
     }
 
     get currentStep() {
@@ -61,7 +62,8 @@ export class InboundShipmentEditComponent implements OnInit, OnChanges, AfterVie
     }
 
     get qtyUpdated() {
-        return (this.purchaseOrderService.currentPurchaseLineIsUpdated);
+        return false;
+        //return (this.purchaseOrderService.currentPurchaseLineIsUpdated);
     }
 
     ngOnChanges(changes: SimpleChanges) {
@@ -73,6 +75,7 @@ export class InboundShipmentEditComponent implements OnInit, OnChanges, AfterVie
     ngOnInit() {
         this.purchaseorderid = this.route.snapshot.params['id'];
         this.getPurchaseOrder.emit(this.purchaseorderid);
+        this.setSelectedPurchaseOrder.emit(null);
         // route.params.subscribe(val => {
         //     this.purchaseorderid = this.route.snapshot.params['id'];
 
@@ -225,7 +228,7 @@ export class InboundShipmentEditComponent implements OnInit, OnChanges, AfterVie
     }
 
     isValid(path: string): boolean {
-        //this.validate();
+        this.validate();
         if (path) {
             return this.dataIsValid[path];
         }
@@ -242,25 +245,52 @@ export class InboundShipmentEditComponent implements OnInit, OnChanges, AfterVie
         this.dataIsValid = {};
 
         // 'Line' tab
-        if (this.purchaseOrder && this.purchaseOrderService.validatePurchaseOrderLines()) {
-            this.dataIsValid['line'] = true;
+        // if (this.purchaseOrder && this.purchaseOrderService.validatePurchaseOrderLines()) {
+        if (this.purchaseOrder && this.validatePurchaseOrderLines()) {
+            this.dataIsValid['line/list'] = true;
         } else {
-            this.dataIsValid['line'] = false;
+            this.dataIsValid['line/list'] = false;
         }
 
         // 'Carton' tab
-        if (this.purchaseOrder && this.purchaseOrderService.validateCarton()) {
-            this.dataIsValid['carton'] = true;
+        if (this.purchaseOrder && this.validateCarton()) {
+            this.dataIsValid['carton/list/line'] = true;
         } else {
-            this.dataIsValid['carton'] = false;
+            this.dataIsValid['carton/list/line'] = false;
         }
 
         // 'Shipping' tab
-        if (this.purchaseOrder && this.purchaseOrderService.validateShipping()) {
+        // if (this.purchaseOrder && this.purchaseOrderService.validateShipping()) {
+        if (this.purchaseOrder && this.validateShipping()) {
             this.dataIsValid['shipping'] = true;
         } else {
             this.dataIsValid['shipping'] = false;
         }
+    }
+
+    validatePurchaseOrderLines() {
+        // return (this.currentPurchaseOrderLines
+        //     && this.currentPurchaseOrderLines.length > 0);
+        return (this.purchaseOrder && this.purchaseOrder.PurchaseOrderLines
+            && this.purchaseOrder.PurchaseOrderLines.length > 0
+            && this.purchaseOrder.PurchaseOrderLines[0].ItemName);
+    }
+
+    validateCarton() {
+        // return (this.currentPurchaseOrderLines && !this.currentPurchaseOrderLines.find(x => x.CartonQuantity !== x.Quantity));
+        return (this.purchaseOrder && this.purchaseOrder.PurchaseOrderLines 
+            && !this.purchaseOrder.PurchaseOrderLines.find(x => x.CartonQuantity !== x.Quantity && !x.pendingAdd));
+    }
+
+    validateShipping() {
+        // return (this.currentPurchaseOrderEdit.ShipmentDate &&
+        //     this.currentInboundShippingMethod &&
+        //     this.currentInboundShippingMethod.BillingOfLading &&
+        //     this.currentInboundShippingMethod.ContainerNumber);
+        return (this.purchaseOrder.ShipmentDate &&
+            this.purchaseOrder.InboundShippingMethods[0] &&
+            this.purchaseOrder.InboundShippingMethods[0].BillingOfLading &&
+            this.purchaseOrder.InboundShippingMethods[0].ContainerNumber);
     }
 
     // validatePurchaseOrderLines() {
@@ -352,7 +382,6 @@ export class InboundShipmentEditComponent implements OnInit, OnChanges, AfterVie
     save(printLabel: boolean = false) {
         //this.pendingSave = true;        
         const newPurchaseOrder = this.purchaseOrderService.copyPurchaseOrder(this.purchaseOrder);
-        console.log(newPurchaseOrder);
         if (newPurchaseOrder.PurchaseOrderLines) {
             const pendingPurchaseOrderLineIndex = newPurchaseOrder.PurchaseOrderLines.findIndex(i => i.pendingAdd === true);
             if (pendingPurchaseOrderLineIndex > -1) {

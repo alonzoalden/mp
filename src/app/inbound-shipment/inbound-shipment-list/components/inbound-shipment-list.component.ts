@@ -22,6 +22,8 @@ export class InboundShipmentListComponent implements OnInit, OnChanges {
     @Output() deletePurchaseOrder = new EventEmitter<PurchaseOrder>();
     @Output() downloadPurchaseOrderLabel = new EventEmitter<PurchaseOrder>();
     @Output() getPurchaseOrderOverview = new EventEmitter<void>();
+    @Output() setSelectedPurchaseOrder = new EventEmitter<PurchaseOrder>();
+
 
     displayedColumns = ['Menu', 'PackingSlipNumber', 'TransactionDate', 'ShipmentDate', 'Status', 'CreatedOn'];
     currentIndex: number;
@@ -41,6 +43,7 @@ export class InboundShipmentListComponent implements OnInit, OnChanges {
         }
         if (changes.userInfo && changes.userInfo.currentValue) {
             if (this.userInfo.DefaultPageSize) {
+                this.purchaseOrdersMatTable.paginator.pageSize = this.userInfo.DefaultPageSize;
                 this.paginator.pageSize = this.userInfo.DefaultPageSize;
             }
             else {

@@ -5,7 +5,8 @@
         <div class="ibox-content no-border-top wiz-content animated fadeIn" style="height: 300px;">
             <div class="form-group row">
                 <div class="col-md-12">
-                    <div *ngIf="purchaseOrder && purchaseOrder.PurchaseOrderLines && purchaseOrder.PurchaseOrderLines.length > 0">
+                    <!-- <div *ngIf="purchaseOrder && purchaseOrder.PurchaseOrderLines && purchaseOrder.PurchaseOrderLines.length > 0"> -->
+                        <div *ngIf="purchaseOrder">
                         <table mat-table #table [dataSource]="dataSource" >
 
                             <!-- Add Button -->

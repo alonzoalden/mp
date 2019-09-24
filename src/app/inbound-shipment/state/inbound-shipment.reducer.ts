@@ -18,6 +18,7 @@ export interface InboundShipmentState {
     inboundShippingMethods: InboundShippingMethod[];
     simpleItemList: ItemList[];
     cartons: Carton[];
+    selectedCarton: Carton;
     isLoading: boolean;
     pendingDelete: boolean,
     pendingSave: boolean,
@@ -32,6 +33,7 @@ const initialState: InboundShipmentState = {
     purchaseOrderLineList: [],
     inboundShippingMethods: [],
     cartons: [],
+    selectedCarton: null,
     simpleItemList: [],
     isLoading: true,
     pendingDelete: false,
@@ -94,6 +96,31 @@ export function inboundShipmentReducer(state = initialState, action: InboundShip
                 isLoading: true,
                 error: '',
             };
+        case InboundShipmentActionTypes.LoadCartonsSuccess:
+            state.currentPurchaseOrder.Cartons = action.payload;
+            return {
+                ...state,
+                cartons: action.payload,
+                isLoading: false,
+                error: '',
+            };
+
+        case InboundShipmentActionTypes.LoadCartonsFail:
+            return {
+                ...state,
+                cartons: [],
+                isLoading: false,
+                error: action.payload,
+            };
+
+
+        case InboundShipmentActionTypes.SetSelectedCarton:
+            return {
+                ...state,
+                selectedCarton: action.payload,
+                error: '',
+            };
+
         case InboundShipmentActionTypes.LoadCartonsSuccess:
             state.currentPurchaseOrder.Cartons = action.payload;
             return {
@@ -250,7 +277,30 @@ export function inboundShipmentReducer(state = initialState, action: InboundShip
                 simpleItemList: [],
                 error: action.payload,
             };
+
+        case InboundShipmentActionTypes.UpdatePurchaseLineCartonQuantity:
+                state.currentPurchaseOrder.PurchaseOrderLines.forEach((purchaseorderline) => {
+                    purchaseorderline.CartonQuantity = 0;
+                });
+                
+                state.currentPurchaseOrder.Cartons.forEach((carton, ci) => {
+                    carton.CartonLines.forEach((cartonline, cli) => {
+                        if (!cartonline.pendingAdd) {
+                            const purchaseorderline = state.currentPurchaseOrder.PurchaseOrderLines.find(x => x.PurchaseOrderLineID === cartonline.PurchaseOrderLineID);
+                            if (purchaseorderline) {
+                                purchaseorderline.CartonQuantity += cartonline.Quantity;
+                                this.replacePurchaseOrderLine(cartonline.PurchaseOrderLineID, purchaseorderline);
         
+                                state.currentPurchaseOrder.PurchaseOrderLines[state.currentPurchaseOrder.PurchaseOrderLines.findIndex(i => i.PurchaseOrderLineID === cartonline.PurchaseOrderLineID)] = purchaseorderline;
+                            }
+                        }
+                    });
+                })
+
+        return {
+                ...state,
+            };
+            
         default:
             return state;
     }
