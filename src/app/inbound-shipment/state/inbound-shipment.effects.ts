@@ -603,19 +603,44 @@ export class InboundShipmentEffects {
         )
     );
 
-    // @Effect()
-    // updatePurchaseLineCartonQuantity$: Observable<Action> = this.actions$.pipe(
-    //     ofType(inboundShipmentActions.InboundShipmentActionTypes.UpdatePurchaseLineCartonQuantity),
-    //     mergeMap(() =>
-    //         this.itemService.getSimpleItemList().pipe(
-    //             map((itemlists: ItemList[]) => (new inboundShipmentActions.LoadSimpleItemListSuccess(itemlists))),
-    //             catchError(err => {
-    //                 of(new inboundShipmentActions.LoadSimpleItemListFail(err))
-    //                 return EMPTY;
-    //             })
-    //         )
-    //     )
-    // );
+    @Effect()
+    updatePurchaseLineCartonQuantity$: Observable<Action> = this.actions$.pipe(
+        ofType(inboundShipmentActions.InboundShipmentActionTypes.UpdatePurchaseLineCartonQuantity),
+        map((action: inboundShipmentActions.UpdatePurchaseLineCartonQuantity) => {
+            console.log(action.payload)
+            // state.currentPurchaseOrder.PurchaseOrderLines.forEach((purchaseorderline) => {
+            //     purchaseorderline.CartonQuantity = 0;
+            // });
+            
+            // state.currentPurchaseOrder.Cartons.forEach((carton, ci) => {
+            //     carton.CartonLines.forEach((cartonline, cli) => {
+            //         if (!cartonline.pendingAdd) {
+            //             const purchaseorderline = state.currentPurchaseOrder.PurchaseOrderLines.find(x => x.PurchaseOrderLineID === cartonline.PurchaseOrderLineID);
+            //             if (purchaseorderline) {
+            //                 purchaseorderline.CartonQuantity += cartonline.Quantity;
+            //                 this.replacePurchaseOrderLine(cartonline.PurchaseOrderLineID, purchaseorderline);
+    
+            //                 state.currentPurchaseOrder.PurchaseOrderLines[state.currentPurchaseOrder.PurchaseOrderLines.findIndex(i => i.PurchaseOrderLineID === cartonline.PurchaseOrderLineID)] = purchaseorderline;
+            //             }
+            //         }
+            //     });
+            // })
+            return (new inboundShipmentActions.UpdatePurchaseLineCartonQuantity(action.payload))
+        }),
+        // mergeMap((purchaseorder) => 
+            
+        //     (new inboundShipmentActions.UpdatePurchaseLineCartonQuantity(purchaseorder))
+        
+            
+        //     // this.itemService.getSimpleItemList().pipe(
+        //     //     map((itemlists: ItemList[]) => (new inboundShipmentActions.UpdatePurchaseLineCartonQuantitySuccess(itemlists))),
+        //     //     catchError(err => {
+        //     //         of(new inboundShipmentActions.LoadSimpleItemListFail(err))
+        //     //         return EMPTY;
+        //     //     })
+        //     // )
+        // )
+    );
 
     
     

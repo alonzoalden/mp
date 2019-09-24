@@ -24,7 +24,7 @@ export class InboundShipmentEditLineListComponent implements OnInit, OnChanges, 
     @Output() getPurchaseOrderLines = new EventEmitter<number>();
     @Output() downloadItemLabelCount = new EventEmitter<{purchaseorderline: PurchaseOrderLine, count: number, border: string}>();
     @Output() downloadItemLargeLabelCount = new EventEmitter<{purchaseorderline: PurchaseOrderLine, count: number, border: string}>();
-    //@Output() c: PurchaseOrder;
+    //@Output() updatePurchaseLineCartonQuantity = new EventEmitter<PurchaseOrder>();
 
 
     //errorMessage: string;
@@ -81,7 +81,8 @@ export class InboundShipmentEditLineListComponent implements OnInit, OnChanges, 
     ngOnInit() {
         //this.currentIndex = this.purchaseOrder.PurchaseOrderLines.length - 1;  
         this.purchaseorderid = this.route.parent.snapshot.params['id'];
-        this.purchaseOrderService.updatePurchaseLineCartonQuantity(this.purchaseOrder);
+        //this.updatePurchaseLineCartonQuantity.emit(this.purchaseOrder);
+        //this.purchaseOrderService.updatePurchaseLineCartonQuantity(this.purchaseOrder);
         //this.getPurchaseOrderLines.emit(this.purchaseorderid);
         //this.purchaseOrderService.updatePurchaseLineCartonQuantity();
 

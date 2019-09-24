@@ -81,6 +81,7 @@ export enum InboundShipmentActionTypes {
   SetSelectedCarton = '[InboundShipment] Set Selected Carton',
   SetSelectedPurchaseOrder = '[InboundShipment] Set Selected Purchase Order',
   UpdatePurchaseLineCartonQuantity = '[InboundShipment] Update Purchase Line Carton Quantity',
+  
   // LoadSelectedCartonSuccess = '[InboundShipment] Load Selected Carton Success',
   // LoadSelectedCartonFail = '[InboundShipment] Load Selected Carton Fail',
 
@@ -97,6 +98,7 @@ export enum InboundShipmentActionTypes {
 
 export class UpdatePurchaseLineCartonQuantity implements Action {
   readonly type = InboundShipmentActionTypes.UpdatePurchaseLineCartonQuantity;
+  constructor(public payload: PurchaseOrder) { }
 }
 export class LoadPurchaseOrderOverview implements Action {
   readonly type = InboundShipmentActionTypes.LoadPurchaseOrderOverview;

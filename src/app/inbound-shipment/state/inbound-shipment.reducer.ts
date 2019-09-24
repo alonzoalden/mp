@@ -279,24 +279,7 @@ export function inboundShipmentReducer(state = initialState, action: InboundShip
             };
 
         case InboundShipmentActionTypes.UpdatePurchaseLineCartonQuantity:
-                state.currentPurchaseOrder.PurchaseOrderLines.forEach((purchaseorderline) => {
-                    purchaseorderline.CartonQuantity = 0;
-                });
-                
-                state.currentPurchaseOrder.Cartons.forEach((carton, ci) => {
-                    carton.CartonLines.forEach((cartonline, cli) => {
-                        if (!cartonline.pendingAdd) {
-                            const purchaseorderline = state.currentPurchaseOrder.PurchaseOrderLines.find(x => x.PurchaseOrderLineID === cartonline.PurchaseOrderLineID);
-                            if (purchaseorderline) {
-                                purchaseorderline.CartonQuantity += cartonline.Quantity;
-                                this.replacePurchaseOrderLine(cartonline.PurchaseOrderLineID, purchaseorderline);
-        
-                                state.currentPurchaseOrder.PurchaseOrderLines[state.currentPurchaseOrder.PurchaseOrderLines.findIndex(i => i.PurchaseOrderLineID === cartonline.PurchaseOrderLineID)] = purchaseorderline;
-                            }
-                        }
-                    });
-                })
-
+            //console.log(action.payload);
         return {
                 ...state,
             };
