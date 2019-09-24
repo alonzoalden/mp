@@ -15,6 +15,7 @@ import { environment } from '../../environments/environment';
 import { Store, select } from '@ngrx/store';
 import * as inboundShipmentActions from './state/inbound-shipment.actions';
 import * as fromInboundShipment from './state';
+import { NotificationComponent } from '../shared/tool/notification/notification.component';
 
 
 @Injectable()
@@ -57,10 +58,11 @@ export class PurchaseOrderService {
     constructor(
         private http: HttpClient,
         private oauthService: OAuthService,
+        private notificationComponent: NotificationComponent,
         private store: Store<fromInboundShipment.State>) { }
 
     sendNotification(notification: any) {
-        this.subject.next(notification);
+        this.notificationComponent.notify(notification);
     }
 
     resetPurchaseOrders() {
@@ -169,7 +171,7 @@ export class PurchaseOrderService {
                                 //tap(data => console.log('Add Purchase Order: ' + JSON.stringify(data))),
                                 tap(data => {
                                     //this.purchaseorders.push(data);
-                                    this.purchaseorders.splice(0,0,data);
+                                    //this.purchaseorders.splice(0,0,data);
                                     this.currentPurchaseOrder = data;
                                 }),
                                 catchError(this.handleError)
@@ -413,8 +415,6 @@ export class PurchaseOrderService {
                 }
             });
         })
-        this.store.dispatch(new inboundShipmentActions.SetSelectedPurchaseOrder(purchaseorder));
-        
     };
 
     updateCartonLineRemainingQuantity(cartonline: CartonLine, purchaseorder: PurchaseOrder) {
@@ -434,7 +434,6 @@ export class PurchaseOrderService {
                 });
             })
         }
-        this.store.dispatch(new inboundShipmentActions.SetSelectedPurchaseOrder(purchaseorder));
     };
 
     getSimpleItemList(): Observable<ItemList[]>  {
@@ -685,12 +684,12 @@ export class PurchaseOrderService {
         if (err.error instanceof Error) {
             // A client-side or network error occurred. Handle it accordingly.
             // errorMessage = `An error occurred: ${err.error.message}`;
-            errorMessage = `Network error: ${err.error.message}`;
+            errorMessage = `Network error: ${err.message}`;
         } else {
             // The backend returned an unsuccessful response code.
             // The response body may contain clues as to what went wrong,
             // errorMessage = `Backend returned code ${err.status}, body was: ${err.error.Message}`;
-            errorMessage = `Response error: ${err.error.Message}`;
+            errorMessage = `Response error: ${err.message}`;
         }
         console.error(err);
         return throwError(errorMessage);

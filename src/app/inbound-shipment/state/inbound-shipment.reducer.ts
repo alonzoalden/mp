@@ -20,6 +20,7 @@ export interface InboundShipmentState {
     cartons: Carton[];
     selectedCarton: Carton;
     isLoading: boolean;
+    isListLoading: boolean;
     pendingDelete: boolean,
     pendingSave: boolean,
     pendingAdd: boolean,
@@ -36,6 +37,7 @@ const initialState: InboundShipmentState = {
     selectedCarton: null,
     simpleItemList: [],
     isLoading: true,
+    isListLoading: true,
     pendingDelete: false,
     pendingSave: false,
     pendingAdd: false,
@@ -48,6 +50,7 @@ export function inboundShipmentReducer(state = initialState, action: InboundShip
         case InboundShipmentActionTypes.LoadPurchaseOrder:
             return {
                 ...state,
+                // currentPurchaseOrder: null,
                 isLoading: true,
                 error: '',
             };
@@ -141,14 +144,14 @@ export function inboundShipmentReducer(state = initialState, action: InboundShip
         case InboundShipmentActionTypes.LoadPurchaseOrderOverview:
             return {
                 ...state,
-                isLoading: true,
+                isListLoading: true,
                 error: '',
             };
         case InboundShipmentActionTypes.LoadPurchaseOrderOverviewSuccess:
             return {
                 ...state,
                 purchaseOrders: action.payload,
-                isLoading: false,
+                isListLoading: false,
                 error: '',
             };
 
@@ -156,7 +159,7 @@ export function inboundShipmentReducer(state = initialState, action: InboundShip
             return {
                 ...state,
                 purchaseOrders: [],
-                isLoading: false,
+                isListLoading: false,
                 error: action.payload,
             };
         case InboundShipmentActionTypes.LoadPurchaseOrderLinesSuccess:

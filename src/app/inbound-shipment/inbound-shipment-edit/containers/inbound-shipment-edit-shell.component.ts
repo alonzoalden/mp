@@ -30,6 +30,10 @@ export class InboundShipmentEditShellComponent implements OnInit {
         this.pendingSave$ = this.store.pipe(select(fromInboundShipment.getPendingSave));
         this.errorMessage$ = this.store.pipe(select(fromInboundShipment.getError));
     }
+    
+    addNewPurchaseOrder() {
+        this.store.dispatch(new inboundShipmentActions.AddNewPurchaseOrder());
+    }
     getPurchaseOrder(id: number) {
         this.store.dispatch(new inboundShipmentActions.LoadPurchaseOrder(id));
     }
@@ -42,6 +46,14 @@ export class InboundShipmentEditShellComponent implements OnInit {
     downloadPurchaseOrderLabel(purchaseorder: PurchaseOrder) {
         this.store.dispatch(new inboundShipmentActions.DownloadPurchaseOrderLabel(purchaseorder));
     }
+    downloadAllItemLabel(payload: { purchaseOrder: PurchaseOrder, border: string }) {
+        this.store.dispatch(new inboundShipmentActions.DownloadAllItemLabel(payload));
+    }
+    downloadAllItemLargeLabel(payload: { purchaseOrder: PurchaseOrder, border: string }) {
+        this.store.dispatch(new inboundShipmentActions.DownloadAllItemLargeLabel(payload));
+    }
+    
+
     setSelectedPurchaseOrder(purchaseorder: PurchaseOrder) {
         this.store.dispatch(new inboundShipmentActions.SetSelectedPurchaseOrder(purchaseorder));
     }

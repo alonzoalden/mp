@@ -1,14 +1,15 @@
 <o-inbound-shipment-edit
     [purchaseOrder]="purchaseOrder$ | async"
-    
     [pendingSave]="pendingSave$ | async"
     [errorMessage]="errorMessage$ | async"
     (getPurchaseOrder)="getPurchaseOrder($event)"
+    (addNewPurchaseOrder)="addNewPurchaseOrder($event)"
     (editPurchaseOrder)="editPurchaseOrder($event)"
     (editPurchaseOrderThenPrintItemLabels)="editPurchaseOrderThenPrintItemLabels($event)"
     (downloadPurchaseOrderLabel)="downloadPurchaseOrderLabel($event)"
+    (downloadAllItemLabel)="downloadAllItemLabel($event)"
+    (downloadAllItemLargeLabel)="downloadAllItemLargeLabel($event)"
     (setSelectedPurchaseOrder)="setSelectedPurchaseOrder($event)"
     (setSelectedCarton)="setSelectedCarton($event)"
-    
 ></o-inbound-shipment-edit>
 

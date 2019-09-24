@@ -18,9 +18,7 @@ export class InboundShipmentEditCartonShellComponent  implements OnInit {
     errorMessage$: Observable<string>;
     selectedCarton$: Observable<Carton>;
     
-    
     constructor(private store: Store<fromInboundShipment.State>) {}
-
 
     ngOnInit() {
         this.purchaseOrder$ = this.store.pipe(select(fromInboundShipment.getPurchaseOrder));
@@ -28,8 +26,6 @@ export class InboundShipmentEditCartonShellComponent  implements OnInit {
         this.selectedCarton$ = this.store.pipe(select(fromInboundShipment.getSelectedCarton));
         this.isLoading$ = this.store.pipe(select(fromInboundShipment.getIsLoading));
         this.errorMessage$ = this.store.pipe(select(fromInboundShipment.getError));
-        console.log(this.selectedCarton$)
-
     }
     getCartons(id: number): void {
         this.store.dispatch(new inboundShipmentActions.LoadCartons(id));
@@ -40,4 +36,13 @@ export class InboundShipmentEditCartonShellComponent  implements OnInit {
     getPurchaseOrderLineList(id: number): void {
         this.store.dispatch(new inboundShipmentActions.LoadPurchaseOrderLineList(id));
     }
+    downloadAllCartonLabel(purchaseorder: PurchaseOrder): void {
+        this.store.dispatch(new inboundShipmentActions.DownloadAllCartonLabel(purchaseorder));
+    }
+    downloadCartonLabelCount(payload: { carton: Carton, count: number, border: string}): void {
+        this.store.dispatch(new inboundShipmentActions.DownloadCartonLabelCount(payload));
+    }
+    
+    
+    
 }

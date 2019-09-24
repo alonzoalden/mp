@@ -16,6 +16,7 @@ export class ItemListShellComponent implements OnInit {
     itemsMatTable$: Observable<MatTableDataSource<Item>>;
     userInfo$: Observable<Member>;
     isLoading$: Observable<Boolean>;
+    pendingDelete$: Observable<Boolean>;
     errorMessage$: Observable<string>;
 
     constructor(private store: Store<fromItem.State>) {}
@@ -24,6 +25,7 @@ export class ItemListShellComponent implements OnInit {
         this.userInfo$ = this.store.pipe(select(fromUser.getCurrentUser));
         this.itemsMatTable$ = this.store.pipe(select(fromItem.getItemsMatTable));
         this.isLoading$ = this.store.pipe(select(fromItem.getIsLoading));
+        this.pendingDelete$ = this.store.pipe(select(fromItem.getPendingDelete));
         this.errorMessage$ = this.store.pipe(select(fromItem.getError));
     }
     getItems(): void {

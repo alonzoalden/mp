@@ -50,7 +50,7 @@ export class InboundShipmentEffects {
             this.inboundShipmentService.getPurchaseOrder(id).pipe(
                 map((purchaseOrder: PurchaseOrder) => (new inboundShipmentActions.LoadPurchaseOrderSuccess(purchaseOrder))),
                 catchError(err => {
-                    this.router.navigate(['/inbound-shipment']);
+                    //this.router.navigate(['/inbound-shipment']);
                     of(new inboundShipmentActions.LoadPurchaseOrderFail(err))
                     return EMPTY;
                 })
@@ -168,6 +168,7 @@ export class InboundShipmentEffects {
                     return (new inboundShipmentActions.AddNewPurchaseOrderSuccess(purchaseOrder));
                 }),
                 catchError(err => {
+                    console.log(err)
                     of(new inboundShipmentActions.AddNewPurchaseOrderFail(err))
                     return EMPTY;
                 })
@@ -377,7 +378,7 @@ export class InboundShipmentEffects {
     downloadAllItemLabel$: Observable<Action> = this.actions$.pipe(
         ofType(inboundShipmentActions.InboundShipmentActionTypes.DownloadAllItemLabel),
         map((action: inboundShipmentActions.DownloadAllItemLabel) => action.payload),
-        mergeMap((payload: { purchaseOrder: PurchaseOrder, border: string}) =>
+        mergeMap((payload: { purchaseOrder: PurchaseOrder, border: string }) =>
             this.inboundShipmentService.downloadAllItemLabel(payload.purchaseOrder.PurchaseOrderID, payload.border).pipe(
                 map((data: Blob) => {
                     const blob = new Blob([data], {type: 'application/pdf'});

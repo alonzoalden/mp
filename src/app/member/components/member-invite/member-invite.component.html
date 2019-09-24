@@ -31,7 +31,7 @@
                                 (!member.Email || !memberForm.controls['memberData'].controls['memberEmail'].valid ) }">
                             <label class="col-md-2 control-label" for="memberEmail">{{ 'Email' | translate }}</label>
                             <input class="col-md-8 form-control" type="text" id="memberEmailID" formControlName="memberEmail" placeholder="{{ 'Email' | translate }} ({{ 'Required' | translate }})" 
-                                [(ngModel)]="member.Email">
+                                [(ngModel)]="member.Email" >
                             <span class="col-md-2 help-block" 
                                 *ngIf="(memberForm.controls['memberData'].controls['memberEmail'].touched || 
                                         memberForm.controls['memberData'].controls['memberEmail'].dirty) && 

@@ -7,6 +7,10 @@
                     [errorMessage]="errorMessage$ | async"
                     (getCartons)="getCartons($event)"
                     (setSelectedCarton)="setSelectedCarton($event)"
+                    (downloadAllCartonLabel)="downloadAllCartonLabel($event)"
+                    (downloadCartonLabelCount)="downloadCartonLabelCount($event)"
+                    
+                    
                 ></o-inbound-shipment-edit-carton-list>
             </div>
             <div>
