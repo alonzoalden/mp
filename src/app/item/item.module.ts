@@ -18,11 +18,6 @@ import { ItemListComponent, ItemListComponentItemPrintDialog, ItemListComponentI
 import { ItemPrintLabelComponent, ItemPrintLabelComponentPrintDialog} from './item-print-label/item-print-label.component';
 import { ItemPartListComponent, ItemPartListComponentItemPrintDialog } from './item-part-list/item-part-list.component';
 
-import { ItemVariationSelectItemComponentDialog } from './item-variation/item-variation-select-item.component-dialog';
-import { ItemVariationComponentDialog } from './item-variation/item-variation.component-dialog';
-import { ItemVariationListComponent } from './item-variation/item-variation-list.component';
-import { ItemVariationDetailComponent } from './item-variation/item-variation-detail.component';
-
 import { ItemAddComponent } from './item-add/item-add.component';
 import { ItemAddDescriptionComponent } from './item-add/item-add-description.component';
 import { ItemAddDimensionComponent } from './item-add/item-add-dimension.component';
@@ -37,6 +32,10 @@ import { ItemAddVendorAttachmentComponent } from './item-add/item-add-vendor-att
 import { ItemAddVideoComponent } from './item-add/item-add-video.component';
 import { ItemAddImageComponent, ItemAddImageComponentUploadDialog } from './item-add/item-add-image.component';
 import { ItemAddPartComponent } from './item-add/item-add-part.component';
+import { ItemAddPartSectionPartComponent } from './item-add/item-add-part-section-part.component';
+import { ItemAddPartSectionComponent } from './item-add/item-add-part-section.component';
+
+
 
 import { ItemEditComponent } from './item-edit/item-edit.component';
 import { ItemEditDescriptionComponent } from './item-edit/item-edit-description.component';
@@ -53,9 +52,8 @@ import { ItemEditVendorAttachmentComponent } from './item-edit/item-edit-vendor-
 import { ItemEditVideoComponent } from './item-edit/item-edit-video.component';
 import { ItemEditImageComponent, ItemEditImageComponentUploadDialog } from './item-edit/item-edit-image.component';
 import { ItemEditPartComponent } from './item-edit/item-edit-part.component';
-import { ItemEditVariationComponent } from './item-edit/item-edit-variation.component';
-
-
+import { ItemEditPartSectionPartComponent } from './item-edit/item-edit-part-section-part.component';
+import { ItemEditPartSectionComponent } from './item-edit/item-edit-part-section.component';
 
 import { ItemDetailComponent } from './item-detail/item-detail.component';
 
@@ -74,7 +72,8 @@ import { ItemEditGuard } from './item-edit/item-edit.guard';
 import { ItemEditBundleGuard } from './item-edit/item-edit-bundle.guard';
 import { ItemAddBundleGuard } from './item-add/item-add-bundle.guard';
 
-import { PageNotFoundComponent } from './page-not-found.component';;
+import { PageNotFoundComponent } from './page-not-found.component';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { ItemBatchApprovalComponent } from './item-batch-approval/item-batch-approval.component';
 import { ItemBatchUpdateComponent } from './item-batch-update/item-batch-update.component';
 import { ItemBatchUpdateSelectComponent } from './item-batch-update/item-batch-update-select.component';
@@ -85,6 +84,7 @@ import { ItemPartAddDescriptionComponent } from './item-part-add/item-part-add-d
 import { ItemPartAddDimensionComponent } from './item-part-add/item-part-add-dimension.component';
 import { ItemPartAddPriceComponent } from './item-part-add/item-part-add-price.component';
 import { ItemPartAddImageComponent } from './item-part-add/item-part-add-image.component';
+
 import { ItemPartEditComponent } from './item-part-edit/item-part-edit.component';
 import { ItemPartEditDescriptionComponent } from './item-part-edit/item-part-edit-description.component';
 import { ItemPartEditInventoryComponent } from './item-part-edit/item-part-edit-inventory.component';
@@ -93,16 +93,23 @@ import { ItemPartEditPriceComponent } from './item-part-edit/item-part-edit-pric
 import { ItemPartEditImageComponent } from './item-part-edit/item-part-edit-image.component';
 import { ItemPartEditGuard } from './item-part-edit/item-part-edit.guard';
 
+import { ItemVariationSelectItemComponentDialog } from './item-variation/item-variation-select-item.component-dialog';
+import { ItemVariationComponentDialog } from './item-variation/item-variation.component-dialog';
+import { ItemVariationListComponent } from './item-variation/item-variation-list.component';
+import { ItemVariationDetailComponent } from './item-variation/item-variation-detail.component';
+import { ItemEditVariationComponent } from './item-edit/item-edit-variation.component';
+
 
 @NgModule({
     declarations: [
-        ItemComponent,
-        ItemListComponent,
-        ItemAddComponent,
         ItemVariationSelectItemComponentDialog,
         ItemVariationComponentDialog,
         ItemVariationListComponent,
         ItemVariationDetailComponent,
+        ItemEditVariationComponent,
+        ItemComponent,
+        ItemListComponent,
+        ItemAddComponent,
         ItemAddDescriptionComponent,
         ItemAddDimensionComponent,
         ItemAddPriceComponent,
@@ -116,6 +123,8 @@ import { ItemPartEditGuard } from './item-part-edit/item-part-edit.guard';
         ItemAddVideoComponent,
         ItemAddImageComponent,
         ItemAddPartComponent,
+        ItemAddPartSectionPartComponent,
+        ItemAddPartSectionComponent,
         ItemEditComponent,
         ItemEditDescriptionComponent,
         ItemEditDimensionComponent,
@@ -131,7 +140,8 @@ import { ItemPartEditGuard } from './item-part-edit/item-part-edit.guard';
         ItemEditImageComponent,
         ItemEditInventoryComponent,
         ItemEditPartComponent,
-        ItemEditVariationComponent,
+        ItemEditPartSectionPartComponent,
+        ItemEditPartSectionComponent,
         ItemDetailComponent,
         ItemImageComponent,
         ItemVideoComponent,
@@ -166,7 +176,7 @@ import { ItemPartEditGuard } from './item-part-edit/item-part-edit.guard';
         ItemAddImageComponentUploadDialog,
         ItemEditImageComponentUploadDialog
     ],
-    entryComponents: [ItemListComponent, ItemListComponentItemPrintDialog, ItemPrintLabelComponentPrintDialog, ItemAddImageComponentUploadDialog, ItemEditImageComponentUploadDialog, ItemListComponentImportDialog, ItemVariationComponentDialog, ItemVariationSelectItemComponentDialog],
+    entryComponents: [ItemListComponent, ItemListComponentItemPrintDialog, ItemPrintLabelComponentPrintDialog, ItemAddImageComponentUploadDialog, ItemEditImageComponentUploadDialog, ItemListComponentImportDialog],
     imports: [
         TranslateModule,
         ReactiveFormsModule,
@@ -182,12 +192,12 @@ import { ItemPartEditGuard } from './item-part-edit/item-part-edit.guard';
         MatDialogModule,
         CdkTableModule,
         MatTableModule,
+        MatTabsModule,
         MatPaginatorModule,
         MatSortModule,
         MatMenuModule,
         MatButtonModule,
         MatToolbarModule,
-        MatTabsModule,
         MatTreeModule,
         MatIconModule,
         MatListModule,

@@ -1792,15 +1792,6 @@ table {
     background-color: #1ab394;
     color: #FFF !important;
 }
-
-.inside-ibox {
-    width: 100%;
-    display: initial;
-}
-.inside-ibox .button-add-display {
-    width: 200px !important;
-}
-
 .flex-va-center {
     display: flex;
     align-items: center;
@@ -2214,13 +2205,17 @@ th.mat-header-cell {
 .row-height-80 {
     height: 80px !important;
 }
-.z-under {
-    z-index: -1;
-}
-.cdk-overlay-pane {
-    overflow: scroll;
-}
 .flex-center {
     display: flex;
     justify-content: center;
+}
+.dialog-content {
+    background-color: #f3f3f4;
+    padding: 40px !important;
+    overflow: scroll;
+    min-height: 410px;
+}
+.diaglog-content .ibox-content {
+    padding: 40px;
+    height: 100%;
 }

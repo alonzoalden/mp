@@ -31,11 +31,13 @@ export class PurchaseOrderService {
     currentPurchaseOrderLine: PurchaseOrderLine;
 
     private cartons: Carton[];
-    currentCarton: Carton;
+    //currentCarton: Carton;
+    currentCarton = new Subject<Carton>()
     currentPurchaseOrderID: number;
 
     private cartonlines: CartonLine[];
-    currentCartonLines: CartonLine[];
+    //currentCartonLines: CartonLine[];
+    currentCartonLines = new Subject<CartonLine[]>()
     currentCartonLine: CartonLine;
     currentCartonID: number;
 
@@ -493,7 +495,7 @@ export class PurchaseOrderService {
                                 //tap(data => console.log('Add Carton: ' + JSON.stringify(data))),
                                 tap(data => {
                                     this.cartons.push(data);
-                                    this.currentCarton = data;
+                                    this.currentCarton.next(data);
                                 }),
                                 catchError(this.handleError)
                             );

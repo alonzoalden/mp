@@ -27,8 +27,6 @@ import { ItemEditVideoComponent } from './item-edit/item-edit-video.component';
 import { ItemEditImageComponent } from './item-edit/item-edit-image.component';
 import { ItemEditInventoryComponent } from './item-edit/item-edit-inventory.component';
 
-import { ItemEditVariationComponent } from './item-edit/item-edit-variation.component';
-
 import { ItemImageComponent } from './item-image/item-image.component';
 import { ItemVideoComponent } from './item-video/item-video.component';
 import { ItemAttachmentComponent } from './item-attachment/item-attachment.component';
@@ -41,7 +39,6 @@ import { ItemDetailComponent } from './item-detail/item-detail.component';
 import { ItemAddBundleGuard } from './item-add/item-add-bundle.guard';
 import { ItemEditGuard } from './item-edit/item-edit.guard';
 import { ItemEditBundleGuard } from './item-edit/item-edit-bundle.guard';
-import { componentFactoryName } from '@angular/compiler';
 
 import { PageNotFoundComponent } from './page-not-found.component';
 import { ItemBatchApprovalComponent } from './item-batch-approval/item-batch-approval.component';
@@ -65,9 +62,12 @@ import { ItemPartEditImageComponent } from './item-part-edit/item-part-edit-imag
 import { ItemPartEditGuard } from './item-part-edit/item-part-edit.guard';
 import { ItemPartEditInventoryComponent } from './item-part-edit/item-part-edit-inventory.component';
 
+import { ItemVariationSelectItemComponentDialog } from './item-variation/item-variation-select-item.component-dialog';
+import { ItemVariationComponentDialog } from './item-variation/item-variation.component-dialog';
 import { ItemVariationListComponent } from './item-variation/item-variation-list.component';
-
 import { ItemVariationDetailComponent } from './item-variation/item-variation-detail.component';
+import { ItemEditVariationComponent } from './item-edit/item-edit-variation.component';
+
 
 const ITEM_ROUTES: Routes = [
     {
@@ -78,21 +78,9 @@ const ITEM_ROUTES: Routes = [
                 component: ItemListComponent
             },
             {
-                path: 'variation-listing',
-                component: ItemVariationListComponent
-            },
-            {
-                path: 'variation-listing/detail',
-                component: ItemVariationDetailComponent
-            },
-            {
-                path: 'variation-listing/detail/:id',
-                component: ItemVariationDetailComponent
-            },
-            {
                 path: 'printlabel',
                 component: ItemPrintLabelComponent
-            },
+            },            
             {
                 path: 'printlabel',
                 component: ItemPartListComponentItemPrintDialog
@@ -237,12 +225,7 @@ const ITEM_ROUTES: Routes = [
                     {
                         path: 'part',
                         component: ItemEditPartComponent
-                    },
-                    {
-                        path: 'variation',
-                        component: ItemEditVariationComponent
                     }
-                    
                 ]
             },
             {
@@ -331,6 +314,17 @@ const ITEM_ROUTES: Routes = [
                     },
                 ]
             },
+            {
+                path: 'variation',
+                component: ItemVariationListComponent,
+                children: [
+                    {
+                        path: 'detail',
+                        component: ItemVariationDetailComponent
+                    },
+                ]
+            },
+            
         ]
     },
     {
@@ -338,5 +332,3 @@ const ITEM_ROUTES: Routes = [
         component: PageNotFoundComponent
     }
 ];
-
-export const itemRouting = RouterModule.forChild(ITEM_ROUTES);

@@ -170,7 +170,7 @@ export class ItemRelatedProductComponent implements OnInit, OnDestroy  {
         if (confirmation) {
             this.itemService.deleteItemRelatedProduct(itemRelatedProduct.ItemRelatedProductID).subscribe(
                 () => {                
-                    const itemlist = new ItemList(itemRelatedProduct.RelatedProductItemID, itemRelatedProduct.RelatedItemVendorSKU + ' - ' + itemRelatedProduct.RelatedItemName + ' - ' + itemRelatedProduct.RelatedTPIN, 0, null, null, null, null);
+                    const itemlist = new ItemList(itemRelatedProduct.RelatedProductItemID, itemRelatedProduct.RelatedItemVendorSKU + ' - ' + itemRelatedProduct.RelatedItemName + ' - ' + itemRelatedProduct.RelatedTPIN, 0, null, null, null, itemRelatedProduct.ImagePath);
                     this.itemlist.push(itemlist);
                     
                     const foundIndex = this.itemRelatedProducts.findIndex(i => i.ItemRelatedProductID === itemRelatedProduct.ItemRelatedProductID);

@@ -170,7 +170,7 @@ export class ItemCrossSellComponent implements OnInit, OnDestroy  {
         if (confirmation) {
             this.itemService.deleteItemCrossSell(itemCrossSell.ItemCrossSellID).subscribe(
                 () => {                
-                    const itemlist = new ItemList(itemCrossSell.CrossSellItemID, itemCrossSell.CrossSellItemVendorSKU + ' - ' + itemCrossSell.CrossSellItemName + ' - ' + itemCrossSell.CrossSellTPIN, 0, null, null, null, null);
+                    const itemlist = new ItemList(itemCrossSell.CrossSellItemID, itemCrossSell.CrossSellItemVendorSKU + ' - ' + itemCrossSell.CrossSellItemName + ' - ' + itemCrossSell.CrossSellTPIN, 0, null, null, null, itemCrossSell.ImagePath);
                     this.itemlist.push(itemlist);
                     
                     const foundIndex = this.itemCrossSells.findIndex(i => i.ItemCrossSellID === itemCrossSell.ItemCrossSellID);

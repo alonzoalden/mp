@@ -45,7 +45,7 @@ export class ItemAddDescriptionComponent implements OnInit, AfterViewInit {
             }
         );
     }
-    
+
     ngAfterViewInit() {
         var self = this;
 

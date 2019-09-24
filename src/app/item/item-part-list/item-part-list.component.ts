@@ -7,8 +7,6 @@ import { ItemService } from '../item.service';
 import { AppService } from '../../app.service';
 import { MatMenu } from '@angular/material/menu';
 
-import { ItemGlobalAttribute, ItemGlobalAttributeVariation, ItemAttribute, ItemAttributeVariation, ItemVariationListing, ItemVariation, ItemVariationLine } from '../../shared/class/item';
-
 import { environment } from '../../../environments/environment';
 
 @Component({

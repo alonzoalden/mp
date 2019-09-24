@@ -1,15 +1,12 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpErrorResponse, HttpHeaders } from '@angular/common/http';
 
-import { Observable, BehaviorSubject, Subject, of, throwError } from 'rxjs';
+import { Observable, Subject, of, throwError, BehaviorSubject } from 'rxjs';
 import { catchError, tap } from 'rxjs/operators';
 
 import { Item, ItemInsert, ItemOption, ItemOptionInsert, ItemSelection, ItemSelectionInsert, ItemTierPrice, ItemTierPriceInsert
     , ItemCategoryAssignment, ItemRelatedProduct, ItemRelatedProductInsert, ItemUpSell, ItemUpSellInsert, ItemCrossSell, ItemCrossSellInsert
-    , ItemAttachment, ItemAttachmentInsert, ItemVideo, ItemVideoInsert, ItemImage, ItemImageInsert, ItemPrintLabel, ItemBatch
-    , ItemPart, ItemPartInsert
-    , ItemGlobalAttribute, ItemGlobalAttributeVariation, ItemAttribute, ItemAttributeVariation, ItemVariation, ItemVariationLine, ItemVariationListing } from '../shared/class/item';
-    
+    , ItemAttachment, ItemAttachmentInsert, ItemVideo, ItemVideoInsert, ItemImage, ItemImageInsert, ItemPrintLabel, ItemBatch, ItemPart, ItemPartInsert, ItemSectionInsert, ItemSection, ItemGlobalAttribute, ItemGlobalAttributeVariation, ItemAttribute, ItemVariation, ItemVariationListing, ItemVariationLine } from '../shared/class/item';
 //import { ItemImage } from '../shared/class/item-image';
 import { URLVideo, URLVideoItems, URLVideoItemsSnippet, URLVideoItemsSnippetThumbnails, URLVideoItemsSnippetThumbnailsStandard } from '../shared/class/item-video';
 
@@ -31,18 +28,22 @@ import { ResponseContentType } from '@angular/http';
 export class ItemService {
     private apiURL = environment.webapiURL;
     private items: Item[];
-    private itemVariationListings: ItemVariationListing[];
     private itemList: ItemList[];
     private simpleItemList: ItemList[];
     private allItemList: ItemList[];
     private allSimpleItemList: ItemList[];
+    private itemVariationListings: ItemVariationListing[];
     private partItemList: ItemList[];
     
     currentMember: Member;
 
     currentItem: Item;
+    
     currentItemInsert: ItemInsert;
     currentItemEdit: Item;
+
+    public currentItemPartSelectionInsert: Subject<ItemSectionInsert> = new Subject<ItemSectionInsert>();
+    public currentItemPartSelection: Subject<ItemSection> = new Subject<ItemSection>();
 
     duplicateItemInsert: ItemInsert;
 
@@ -51,6 +52,8 @@ export class ItemService {
     public subject = new Subject<string>();
 
     batchUpdateItems: Item[];
+
+    public currentProductItemInsert: BehaviorSubject<any>;
 
     constructor(private http: HttpClient,
                 private oauthService: OAuthService,
@@ -127,7 +130,7 @@ export class ItemService {
                             catchError(this.handleError)
                         );
     }
-    
+
     getCurrentItems() {
         return this.items;
     }
@@ -272,16 +275,25 @@ export class ItemService {
         });
 
         
+        item.ItemSections.forEach((itemsection) => {
 
-        item.ItemParts.forEach((itemPart) => {
+            const newItemSection = new ItemSection(itemsection.ItemSectionID, itemsection.ItemID, itemsection.Name, itemsection.ImageRaw, itemsection.ImageFilePath, itemsection.Position
+                , itemsection.UpdatedOn, itemsection.CreatedOn, [], itemsection.pendingAdd, itemsection.isNew);
 
-            const newItemPart = new ItemPart(itemPart.ItemPartID, itemPart.ItemID
-                , itemPart.PartLabel, itemPart.PartItemID, itemPart.PrevPartItemID, itemPart.PartItemName
-                , itemPart.PartItemVendorSKU, itemPart.PartTPIN, itemPart.PartFOBPrice, itemPart.PartPrice, itemPart.ImageRaw, itemPart.ImageFilePath, itemPart.IsNewImage
-                ,  itemPart.Position, itemPart.UpdatedOn
-                , itemPart.CreatedOn, itemPart.pendingAdd, itemPart.isNew);
 
-            newItem.ItemParts.push(newItemPart);
+            itemsection.ItemParts.forEach((itemPart) => {
+
+                const newItemPart = new ItemPart(itemPart.ItemPartID, itemPart.ItemSectionID
+                    , itemPart.PartLabel, itemPart.PartItemID, itemPart.PrevPartItemID, itemPart.PartItemName
+                    , itemPart.PartItemVendorSKU, itemPart.PartTPIN, itemPart.PartFOBPrice, itemPart.PartPrice, itemPart.ImageRaw, itemPart.ImageFilePath, itemPart.IsNewImage
+                    , itemPart.Position, itemPart.UpdatedOn
+                    , itemPart.CreatedOn, itemPart.pendingAdd, itemPart.isNew);
+
+                newItemSection.ItemParts.push(newItemPart);
+            });
+
+            newItem.ItemSections.push(newItemSection);
+            
         });
 
         return newItem;
@@ -356,14 +368,20 @@ export class ItemService {
             newItemInsert.ItemImages.push(newItemImage);
         });
 
-        item.ItemParts.forEach((itemPart) => {
-            const newItemPart = new ItemPartInsert(itemPart.ItemID , itemPart.PartLabel, itemPart.PartItemID, itemPart.PrevPartItemID, itemPart.PartItemName
-                , itemPart.PartItemVendorSKU, itemPart.PartTPIN, itemPart.PartFOBPrice, itemPart.PartPrice
-                ,  itemPart.ImageRaw, itemPart.ImageFilePath, itemPart.IsNewImage, itemPart.Position, itemPart.isNew);
+        item.ItemSections.forEach((itemsection) => {
+            const newItemSection = new ItemSectionInsert(itemsection.ItemID, itemsection.Name, itemsection.ImageRaw
+                , itemsection.ImageFilePath, itemsection.Position, []);
+                
+                itemsection.ItemParts.forEach((itemPart) => {
+                    const newItemPart = new ItemPartInsert(itemPart.ItemSectionID
+                        , itemPart.PartLabel, itemPart.PartItemID, itemPart.PrevPartItemID, itemPart.PartItemName
+                        , itemPart.PartItemVendorSKU, itemPart.PartTPIN, itemPart.PartFOBPrice, itemPart.PartPrice, itemPart.ImageRaw, itemPart.ImageFilePath
+                        , itemPart.IsNewImage, itemPart.Position, itemPart.isNew);
+                        newItemSection.ItemParts.push(newItemPart);
+                });
 
-            newItemInsert.ItemParts.push(newItemPart);
+            newItemInsert.ItemSections.push(newItemSection);
         });
-
         return newItemInsert;
     }
 
@@ -1048,6 +1066,55 @@ export class ItemService {
                                 catchError(this.handleError)
                             );
     }
+    
+    // addItemVariation(itemVariationListing: ItemVariationListing, itemAttributes: ItemAttribute[]) {
+        
+    //     let itemInsertList = this.createProductVariations(itemVariationListing, itemAttributes);
+
+    //     let oldItemInsertList = itemVariationListing.ItemVariations;
+    //     let oldDefaults: ItemVariationLine[] = itemAttributes.filter((itemattribute) => itemattribute.OldDefault)
+    //                                                          .map((item) => new ItemVariationLine(null, null, item.OldDefault.ItemAttributeVariationID, item.OldDefault.ItemAttributeID, null, item.OldDefault.Name, null, null));
+        
+    //     this.updateItemVariationsWithOriginalInfo(oldItemInsertList, itemInsertList, oldDefaults);
+    //     itemVariationListing.ItemVariations = itemInsertList;
+    //     return itemVariationListing;
+    // }
+
+    // createProductVariations(itemVariationListing: ItemVariationListing, itemAttributes: ItemAttribute[]): ItemVariation[] {
+    //     const selectedItemAttributeVariations = itemAttributes.map((item) => item.SelectedItemAttributeVariations);
+    //     const possibleVariationLineCombos = this.cartesian(selectedItemAttributeVariations);
+
+    //     return possibleVariationLineCombos.map((itemVariationLines: any[]) => {
+    //         const variationLines = itemVariationLines.map((variationline) => new ItemVariationLine(variationline.ItemVariationLineID, null, variationline.ItemAttributeVariationID, variationline.ItemAttributeID, null, variationline.Name, variationline.UpdatedOn, variationline.CreatedOn ))
+    //         return new ItemVariation(null, itemVariationListing.ItemVariationListingID, itemVariationListing.Name, null, null, null, null, null, null, null, null, variationLines, false);
+    //     });
+    // }
+
+    // updateItemVariationsWithOriginalInfo(originalItemVariations: ItemVariation[], newItemVariations: ItemVariation[], defaultTo: ItemVariationLine[]): void {
+    //     newItemVariations.forEach((newItemVariation, i) => {
+    //         originalItemVariations.forEach((oldItemVariation) => {
+    //             const variationLinesToCompare = oldItemVariation.ItemVariationLines.concat(defaultTo);
+    //             const oldMatch = variationLinesToCompare.every((oldItemVariationLine) => {
+    //                 return !!newItemVariation.ItemVariationLines.find((newItemVariationLine) => newItemVariationLine.ItemAttributeVariationID === oldItemVariationLine.ItemAttributeVariationID)
+    //             });
+                
+    //             if (defaultTo.length) {
+    //                 if (oldMatch) {
+    //                     newItemVariations[i] = oldItemVariation;
+    //                     newItemVariations[i].ItemVariationLines = [...newItemVariation.ItemVariationLines];
+    //                     newItemVariations[i].ItemVariationLines.forEach((itemvariationline) => {
+    //                         itemvariationline.ItemVariationID = oldItemVariation.ItemVariationID
+    //                     });
+    //                     newItemVariations[i].IsPrimary = false;
+    //                 }
+    //             }
+    //             else if (oldMatch && !defaultTo.length) {
+    //                 newItemVariations[i] = oldItemVariation;
+    //                 newItemVariations[i].IsPrimary = false;                    
+    //             }
+    //         })
+    //     });
+    // }
     defaultVariationListingInsert() {
         return new ItemVariationListing(null, null, null, null, null, null, null, null, null, null, []);
     }

@@ -1,12 +1,9 @@
-import { Component, OnInit, ViewChild, ElementRef, Inject } from '@angular/core';
+import { Component } from '@angular/core';
 import { Router } from '@angular/router';
-import { ItemInsert, ItemTierPriceInsert, ItemRelatedProductInsert, ItemUpSellInsert, ItemCrossSellInsert, ItemAttachmentInsert, ItemVideoInsert, ItemAttribute } from '../../shared/class/item';
+import { ItemInsert, ItemTierPriceInsert, ItemRelatedProductInsert, ItemUpSellInsert, ItemCrossSellInsert, ItemAttachmentInsert, ItemVideoInsert } from '../../shared/class/item';
 import { VendorBrand } from '../../shared/class/vendor-brand';
-import { MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material';
-import { ItemService } from '../item.service';
-import { Observable, Subscription } from 'rxjs';
-import { ItemVariationComponentDialog } from '../item-variation/item-variation.component-dialog';
 
+import { ItemService } from '../item.service';
 
 @Component({
   selector: 'o-item-add',
@@ -21,29 +18,13 @@ export class ItemAddComponent {
 
     loading: boolean;
 
-    vendorBrandList: VendorBrand[];
-    
-    //product: ItemInsert[];
-    attributesVariationsList: ItemAttribute[] = [];
+    vendorBrandList: VendorBrand[]; 
 
     private dataIsValid: { [key: string]: boolean } = {};
 
     constructor(private router: Router,
-                private itemService: ItemService,
-                public printDialog: MatDialog) {
-
-                    
+                private itemService: ItemService) {
         this.item = this.itemService.defaultCurrentItemInsert();
-
-
-
-        //this.itemService.setProduct([this.item]);
-        //this.itemService.setProductItem(this.item);
-
-        //this.itemService.setProduct();
-
-        //this.itemService.product.subscribe((product) => this.product = product);
-        //this.itemService.getItemAttributes().subscribe((itemAttributes) => this.attributesVariationsListData = itemAttributes);
 
         this.itemService.getVendorBrands().subscribe(
             (vendorBrands: VendorBrand[]) => {
@@ -72,9 +53,8 @@ export class ItemAddComponent {
     onAddItem() {
         if(this.isItemNameValid() && this.isSKUValid()) {
             //if (this.isValid(null) && this.isShippingFeeValid() && this.isShipWithinDaysValid() && this.isBundleValid()) {
-                if (this.isValid(null) && this.isShipWithinDaysValid() && this.isBundleValid()) {
-                    this.pendingAdd = true;
-                            
+            if (this.isValid(null) && this.isShipWithinDaysValid() && this.isBundleValid()) {
+                this.pendingAdd = true;
                 const newItem = this.itemService.copyItemInsert(this.item);
 
                 newItem.ItemTierPrices.splice(newItem.ItemTierPrices.length-1, 1);
@@ -109,12 +89,18 @@ export class ItemAddComponent {
                     value.ItemSelections.splice(value.ItemSelections.length-1, 1);
                     value.ItemSelections.forEach((value, i) => {
                         value.Position = i + 1;
-                    })
+                    });
                 });            
 
-                newItem.ItemParts.splice(newItem.ItemParts.length-1, 1);
-                newItem.ItemParts.forEach((value, i) => {
+                newItem.ItemSections.splice(newItem.ItemSections.length-1, 1);
+                newItem.ItemSections.forEach((value, i) => {
                     value.Position = i + 1;
+
+                    value.ItemParts.splice(value.ItemParts.length-1, 1);
+                    value.ItemParts.forEach((value, i) => {
+                        value.Position = i + 1;
+                    });
+
                 });
 
                 this.loading = true; 
@@ -299,13 +285,5 @@ export class ItemAddComponent {
 
     validateCategory() {
         return true;
-    }
-
-    openDialogItemVariation() {
-        const dialogRef = this.printDialog.open(ItemVariationComponentDialog, {
-            data: this.attributesVariationsList
-        });
-    
-        dialogRef.afterClosed().subscribe(result => {});
     }
 }

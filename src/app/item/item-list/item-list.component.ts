@@ -2,8 +2,7 @@ import { Component, OnInit, ViewContainerRef, ViewChild, Inject, ElementRef } fr
 import { Router } from '@angular/router';
 import { CurrencyPipe } from '@angular/common';
 import { MatMenuModule, MatPaginator, MatSort, MatTableDataSource, MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material';
-import { Item, ItemInsert, ItemCategoryAssignment, ItemOption, ItemSelection, ItemTierPrice
-    , ItemRelatedProduct, ItemUpSell, ItemCrossSell, ItemAttachment, ItemVideo } from '../../shared/class/item';
+import { Item, ItemInsert, ItemCategoryAssignment, ItemOption, ItemSelection, ItemTierPrice, ItemRelatedProduct, ItemUpSell, ItemCrossSell, ItemAttachment, ItemVideo } from '../../shared/class/item';
 import { ItemService } from '../item.service';
 import { AppService } from '../../app.service';
 import { MatMenu } from '@angular/material/menu';
@@ -85,7 +84,7 @@ export class ItemListComponent implements OnInit {
                 this.itemService.sendNotification({ type: 'error', title: 'Error', content: error });
                 //this.errorMessage = <any>error;
             }
-        );  
+        );
     }
 
     refreshDataSource(items: Item[]) {

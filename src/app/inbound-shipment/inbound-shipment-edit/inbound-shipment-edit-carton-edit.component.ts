@@ -31,7 +31,8 @@ export class InboundShipmentEditCartonEditComponent implements OnInit, OnDestroy
         this.purchaseOrderService.getCarton(cartonid).subscribe(
             (carton: Carton) => {
                 this.carton = carton;
-                this.purchaseOrderService.currentCarton = carton;
+                //this.purchaseOrderService.currentCarton = carton;
+                this.purchaseOrderService.currentCarton.next(carton);
             },
             (error: any) => this.errorMessage = <any>error
         );

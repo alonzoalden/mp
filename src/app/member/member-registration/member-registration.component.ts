@@ -51,6 +51,8 @@ export class MemberRegistrationComponent implements OnInit {
         this.memberService.getMemberByInviteGUID(this.inviteGUID).subscribe(
             (member: Member) => {
                 this.member = member;
+                this.member.Password = '';
+                this.member.ConfirmPassword = '';
                 
 
                 if (this.member.IsConfirmed) {
@@ -95,11 +97,12 @@ export class MemberRegistrationComponent implements OnInit {
             && this.member.Password
             && this.member.ConfirmPassword
             && this.memberForm.valid) {
-            return true;
+                if (this.member.IsDropship && !this.merchantAgreement) {
+                    this.memberService.sendNotification({ type: 'error', title: 'You must accept the Merchant Agreement', content: '' });
+                    return false;
+                }
+                return true;
         } else {
-            if (this.member.IsDropship && !this.merchantAgreement) {
-                this.memberService.sendNotification({ type: 'error', title: 'You must accept the Merchant Agreement', content: '' });
-            }
             if (!this.member.FirstName || !this.member.LastName || !this.member.Password) {
                 //alert('Please enter all required fields');
                 this.memberService.sendNotification({ type: 'error', title: 'Invalid Data', content: 'Please enter all required fields' });

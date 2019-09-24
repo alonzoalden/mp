@@ -1,6 +1,3 @@
-// import { ItemOption } from "./item-option";
-
-
 export class Item {
     constructor(
         public ItemID: number,
@@ -16,7 +13,7 @@ export class Item {
 
         public ShipWithinDays: number,
         public PriceType: string,
-        
+       
         public Price: number,
         public FOBPrice: number,
         public DropshipPrice: number,
@@ -50,7 +47,7 @@ export class Item {
         public AddProtectionPlan: boolean,
         public URLKey: string,
         public Visibility: string,
-        
+       
         public Description: string,
         public ShortDescription: string,
         public TechnicalDetail: string,
@@ -63,7 +60,7 @@ export class Item {
         public Status: boolean,
 
         public Approval: string,
-        
+       
         public ImagePath: string,
 
         public IsPartItem: boolean,
@@ -85,7 +82,7 @@ export class Item {
         public ItemAttachments: Array<ItemAttachment>,
         public ItemVideos: Array<ItemVideo>,
         public ItemImages: Array<ItemImage>,
-        public ItemParts: Array<ItemPart>,
+        public ItemSections: Array<ItemSection>,
         public ItemVariations: Array<ItemVariation>,
 
         public QtyOnHand: number,
@@ -169,7 +166,7 @@ export class ItemInsert {
         public ItemAttachments: Array<ItemAttachmentInsert>,
         public ItemVideos: Array<ItemVideoInsert>,
         public ItemImages: Array<ItemImageInsert>,
-        public ItemParts: Array<ItemPartInsert>,
+        public ItemSections: Array<ItemSectionInsert>
     ) {}
 }
 
@@ -231,9 +228,9 @@ export class ItemUpdate {
         public PartImageRaw: string,
         public PartImageFilePath: string,
         public PartIsNewImage: boolean,
-        
+       
         public ExcludeGoogleShopping: boolean,
-        
+       
         public ItemCategoryAssignments: Array<ItemCategoryAssignment>,
         public ItemOptions: Array<ItemOption>,
         public ItemTierPrices: Array<ItemTierPrice>,
@@ -243,7 +240,7 @@ export class ItemUpdate {
         public ItemAttachments: Array<ItemAttachment>,
         public ItemVideos: Array<ItemVideo>,
         public ItemImages: Array<ItemImage>,
-        public ItemParts: Array<ItemPartInsert>,
+        public ItemSections: Array<ItemSection>,
     ) {}
 }
 
@@ -312,7 +309,7 @@ export class ItemRelatedProductInsert {
     constructor(
         public ItemID: number,
         public RelatedProductItemID: number,
-        
+       
         public PrevRelatedProductItemID: number,
         public RelatedItemName: string,
         public RelatedItemVendorSKU: string,
@@ -339,7 +336,7 @@ export class ItemUpSell {
         public UpdatedOn: string,
         public CreatedOn: string,
         public ImagePath: string,
-        
+       
         public pendingAdd: boolean
     ) {}
 }
@@ -348,7 +345,7 @@ export class ItemUpSellInsert {
     constructor(
         public ItemID: number,
         public UpSellItemID: number,
-        
+       
         public PrevUpSellItemID: number,
         public UpSellItemName: string,
         public UpSellItemVendorSKU: string,
@@ -383,7 +380,7 @@ export class ItemCrossSellInsert {
     constructor(
         public ItemID: number,
         public CrossSellItemID: number,
-        
+       
         public PrevCrossSellItemID: number,
         public CrossSellItemName: string,
         public CrossSellItemVendorSKU: string,
@@ -442,7 +439,7 @@ export class ItemVideo {
         public Remove: boolean,
         public UpdatedOn: string,
         public CreatedOn: string,
-        
+       
         public URL: string,
         public pendingImage: boolean,
         public pendingAdd: boolean
@@ -595,11 +592,43 @@ export class ItemBatch {
     ) {}
 }
 
+//ItemSection
+export class ItemSection {
+    constructor(
+        public ItemSectionID: number,
+        public ItemID: number,
+        public Name: string,
+        public ImageRaw: string,
+        public ImageFilePath: string,        
+        public Position: number,
+        public UpdatedOn: string,
+        public CreatedOn: string,
+
+        public ItemParts: Array<ItemPart>,
+
+        public pendingAdd: boolean,
+        public isNew: boolean
+    ) {}
+}
+
+export class ItemSectionInsert {
+    constructor(
+        public ItemID: number,
+        public Name: string,
+        public ImageRaw: string,
+        public ImageFilePath: string,    
+        public Position: number,
+
+        public ItemParts: Array<ItemPartInsert>
+    ) {}
+}
+
+
 //Item Part
 export class ItemPart {
     constructor(
         public ItemPartID: number,
-        public ItemID: number,
+        public ItemSectionID: number,
         public PartLabel: string,
         public PartItemID: number,
 
@@ -613,7 +642,7 @@ export class ItemPart {
         public ImageRaw: string,
         public ImageFilePath: string,
         public IsNewImage: boolean,
-        
+       
         public Position: number,
         public UpdatedOn: string,
         public CreatedOn: string,
@@ -625,10 +654,10 @@ export class ItemPart {
 
 export class ItemPartInsert {
     constructor(
-        public ItemID: number,
+        public ItemSectionID: number,
         public PartLabel: string,
         public PartItemID: number,
-        
+       
         public PrevPartItemID: number,
         public PartItemName: string,
         public PartItemVendorSKU: string,
@@ -639,7 +668,7 @@ export class ItemPartInsert {
         public ImageRaw: string,
         public ImageFilePath: string,
         public IsNewImage: boolean,
-        
+       
         public Position: number,
 
         public isNew: boolean
@@ -727,7 +756,7 @@ export class ItemVariation {
         public UpdatedOn: string,
         public CreatedOn: string,
         public ItemVariationLines: Array<ItemVariationLine>,
-        
+       
         public IsPrimary: boolean,
     ) {}
 }
@@ -744,6 +773,3 @@ export class ItemVariationLine {
         public CreatedOn: string,
     ) {}
 }
-
-
-
