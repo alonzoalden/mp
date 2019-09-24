@@ -137,12 +137,12 @@ const ITEM_ROUTES: Routes = [
                     }
                 ]
             },
-            {
-                path: ':id/detail',
-                component: ItemDetailComponent,
-                children: [
-                ]
-            },
+            // {
+            //     path: ':id/detail',
+            //     component: ItemDetailComponent,
+            //     children: [
+            //     ]
+            // },
             {
                 path: ':id/image',
                 component: ItemImageComponent,
@@ -315,14 +315,22 @@ const ITEM_ROUTES: Routes = [
                 ]
             },
             {
-                path: 'variation',
+                path: 'variation-listing',
                 component: ItemVariationListComponent,
-                children: [
-                    {
-                        path: 'detail',
-                        component: ItemVariationDetailComponent
-                    },
-                ]
+                // children: [
+                //     {
+                //         path: 'detail/:id',
+                //         component: ItemVariationDetailComponent
+                //     },
+                // ]
+            },
+            {
+                path: 'variation-listing/detail',
+                component: ItemVariationDetailComponent
+            },
+            {
+                path: 'variation-listing/detail/:id',
+                component: ItemVariationDetailComponent
             },
             
         ]
@@ -332,3 +340,4 @@ const ITEM_ROUTES: Routes = [
         component: PageNotFoundComponent
     }
 ];
+export const itemRouting = RouterModule.forChild(ITEM_ROUTES);

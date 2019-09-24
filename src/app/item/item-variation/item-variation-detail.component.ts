@@ -1,4 +1,3 @@
-
 import { Component, OnInit, ViewChild} from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 import { ItemList, ItemVariationListing, ItemAttribute, ItemVariation } from '../../shared/class/item';
@@ -177,32 +176,8 @@ export class ItemVariationDetailComponent implements OnInit {
     
         dialogRef.afterClosed().subscribe((listing: ItemVariationListing) => {
             if (!listing) return this.selectedItemAttributes = this.originalItemAttributes;
-            
-            this.itemVariationListing.ItemVariations = listing.ItemVariations;
-            
-            this.displayedColumns = listing.ItemVariations[0].ItemVariationLines.map((line) => {
-                if (line.ItemAttributeName) return line.ItemAttributeName;
-                else {
-                    const attribute = this.itemAttributes.find((item) => item.ItemAttributeID === line.ItemAttributeID);
-                    return attribute.Name;
-                }
-            });
-            
-            this.columns = listing.ItemVariations[0].ItemVariationLines.map((line) => { 
-                return {
-                    Name: this.itemAttributes.find((item) => item.ItemAttributeID === line.ItemAttributeID).Name,
-                    ItemAttributeID: line.ItemAttributeID,
-                    cell: (row, column) => {
-                        const item = row.filter((i)=> i.ItemAttributeID === column.ItemAttributeID)[0];
-                        return item.ItemAttributeVariationName || item.Name;
-                    }
-                }
-            });
-            this.displayedColumns.unshift('PrimaryItem');
-            this.displayedColumns.push('ItemSelection');
-            let data = this.itemVariationListing.ItemVariations.map((itemvariation) => itemvariation.ItemVariationLines);
-            
-            this.refreshDataSource(data);
+            this.itemVariationListing = listing;
+            this.createAttributesVariationsColumns(this.itemVariationListing);
         });
     }
     selectPrimaryItem(itemVariation) {

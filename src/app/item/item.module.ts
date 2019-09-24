@@ -176,7 +176,7 @@ import { ItemEditVariationComponent } from './item-edit/item-edit-variation.comp
         ItemAddImageComponentUploadDialog,
         ItemEditImageComponentUploadDialog
     ],
-    entryComponents: [ItemListComponent, ItemListComponentItemPrintDialog, ItemPrintLabelComponentPrintDialog, ItemAddImageComponentUploadDialog, ItemEditImageComponentUploadDialog, ItemListComponentImportDialog],
+    entryComponents: [ItemListComponent, ItemListComponentItemPrintDialog, ItemPrintLabelComponentPrintDialog, ItemAddImageComponentUploadDialog, ItemEditImageComponentUploadDialog, ItemListComponentImportDialog, ItemVariationComponentDialog, ItemVariationSelectItemComponentDialog],
     imports: [
         TranslateModule,
         ReactiveFormsModule,
