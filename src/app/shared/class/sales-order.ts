@@ -23,6 +23,8 @@ export class SalesOrder {
 
         public ShipByDate: Date,
         public CustomerName: string,
+        public ShipAddressCompanyName: string,
+        public ShipAddressName: string,
         public ShipAddressAddressLine1: string,
         public ShipAddressAddressLine2: string,
         public ShipAddressCity: string,

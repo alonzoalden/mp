@@ -1,0 +1,26 @@
+<div class="tab-content border">
+    <div class="tab-pane active">
+        <div class="panel-body p-w-none">
+            <div *ngIf='!(isCartonAdd || isCartonEdit)'>
+                <o-inbound-shipment-edit-carton-list
+                    [purchaseOrder]="purchaseOrder$ | async"
+                    [errorMessage]="errorMessage$ | async"
+                    (getCartons)="getCartons($event)"
+                    (setSelectedCarton)="setSelectedCarton($event)"
+                ></o-inbound-shipment-edit-carton-list>
+            </div>
+            <div>
+                <o-inbound-shipment-edit-carton-line-list
+                    [carton]="selectedCarton$ | async"
+                    [purchaseOrder]="purchaseOrder$ | async"
+                    [purchaseOrderLineList]="purchaseOrderLineList$ | async"
+                    
+                    [errorMessage]="errorMessage$ | async"
+                    (getPurchaseOrderLineList)="getPurchaseOrderLineList($event)"
+                    
+                ></o-inbound-shipment-edit-carton-line-list>
+                <!-- <router-outlet></router-outlet> -->
+            </div>
+        </div>
+    </div>
+</div>

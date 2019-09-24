@@ -22,14 +22,16 @@ export class InboundShipmentListComponent implements OnInit, OnChanges {
     @Output() deletePurchaseOrder = new EventEmitter<PurchaseOrder>();
     @Output() downloadPurchaseOrderLabel = new EventEmitter<PurchaseOrder>();
     @Output() getPurchaseOrderOverview = new EventEmitter<void>();
+    @Output() setSelectedPurchaseOrder = new EventEmitter<PurchaseOrder>();
+
 
     displayedColumns = ['Menu', 'PackingSlipNumber', 'TransactionDate', 'ShipmentDate', 'Status', 'CreatedOn'];
     currentIndex: number;
 
     @ViewChild(MatPaginator, { static: true }) paginator: MatPaginator;
     @ViewChild(MatSort, { static: true }) sort: MatSort;
-    
-    constructor(private purchaseOrderService: PurchaseOrderService) { }
+
+    constructor() { }
 
     ngOnChanges(changes: SimpleChanges) {
         if (changes.purchaseOrdersMatTable && changes.purchaseOrdersMatTable.currentValue.data) {
@@ -41,6 +43,7 @@ export class InboundShipmentListComponent implements OnInit, OnChanges {
         }
         if (changes.userInfo && changes.userInfo.currentValue) {
             if (this.userInfo.DefaultPageSize) {
+                this.purchaseOrdersMatTable.paginator.pageSize = this.userInfo.DefaultPageSize;
                 this.paginator.pageSize = this.userInfo.DefaultPageSize;
             }
             else {
@@ -61,10 +64,6 @@ export class InboundShipmentListComponent implements OnInit, OnChanges {
         if (confirmation) {
             this.deletePurchaseOrder.emit(purchaseorder);
         }
-    }
-    onDeleteComplete(purchaseorder: PurchaseOrder, message?: string): void {
-        this.refreshDataSource(this.purchaseOrdersMatTable.data);
-        this.purchaseOrderService.sendNotification({ type: 'success', title: 'Successfully Deleted', content: message });
     }
     addPurchaseOrder() {
         this.addNewPurchaseOrder.emit();

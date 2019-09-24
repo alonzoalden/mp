@@ -1,11 +1,12 @@
-import { Component, OnInit, OnDestroy, ViewChild, Inject, ElementRef } from '@angular/core';
+import { Component, OnInit, OnDestroy, OnChanges, ViewChild, Inject, ElementRef, Input, Output, EventEmitter} from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { MatPaginator, MatSort, MatTableDataSource, MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material';
 // import { PurchaseOrderLine } from '../../shared/class/purchase-order-line';
-import { PurchaseOrder, PurchaseOrderLine } from '../../../../../shared/class/purchase-order';
-import { PurchaseOrderService } from '../../../../purchase-order.service';
-import { environment } from '../../../../../../environments/environment';
-import { ItemList } from '../../../../../shared/class/item';
+import { PurchaseOrder, PurchaseOrderLine } from '../../../../shared/class/purchase-order';
+import { PurchaseOrderService } from '../../../purchase-order.service';
+import { environment } from '../../../../../environments/environment';
+import { ItemList } from '../../../../shared/class/item';
+import { SimpleChanges } from '@angular/core';
 
 
 @Component({
@@ -14,12 +15,23 @@ templateUrl: './inbound-shipment-edit-line-list.component.html',
 //   styleUrls: ['./inbound-shipment-edit-line-list.component.css', './inbound-shipment-edit.component.css']
 })
 
-export class InboundShipmentEditLineListComponent implements OnInit, OnDestroy {
-    errorMessage: string;
-    purchaseorder: PurchaseOrder;
+export class InboundShipmentEditLineListComponent implements OnInit, OnChanges, OnDestroy {
+    
+    @Input() purchaseOrder: PurchaseOrder;
+    @Input() errorMessage: string;
+    @Input() itemList: ItemList[];
+    @Output() getSimpleItemList = new EventEmitter<void>();
+    @Output() getPurchaseOrderLines = new EventEmitter<number>();
+    @Output() downloadItemLabelCount = new EventEmitter<{purchaseorderline: PurchaseOrderLine, count: number, border: string}>();
+    @Output() downloadItemLargeLabelCount = new EventEmitter<{purchaseorderline: PurchaseOrderLine, count: number, border: string}>();
+    //@Output() c: PurchaseOrder;
+
+
+    //errorMessage: string;
+    //purchaseOrder: PurchaseOrder;
     purchaseorderid: number;
     //purchaseorderlines: PurchaseOrderLine[];
-    orderStatus: string;
+    //orderStatus: string;
     
     private linkURL = environment.linkURL;
 
@@ -32,7 +44,7 @@ export class InboundShipmentEditLineListComponent implements OnInit, OnDestroy {
     PendingAdd: boolean;
     currentIndex: number;
 
-    itemList: ItemList[];
+    //itemList: ItemList[];
 
     formDirty = false;
     
@@ -45,18 +57,47 @@ export class InboundShipmentEditLineListComponent implements OnInit, OnDestroy {
         private purchaseOrderService: PurchaseOrderService,
         public itemPrintDialog: MatDialog) {
     }
-
+    ngOnChanges(changes: SimpleChanges) {
+        if (changes.purchaseOrder && changes.purchaseOrder.currentValue && (!changes.purchaseOrder.currentValue.PurchaseOrderLines.length
+                || changes.purchaseOrder.currentValue.PurchaseOrderLines[changes.purchaseOrder.currentValue.PurchaseOrderLines.length-1].PurchaseOrderLineID)) {
+            this.addPendingLine();
+            this.currentIndex = this.purchaseOrder.PurchaseOrderLines.length - 1;
+            this.refreshDataSource(this.purchaseOrder.PurchaseOrderLines);
+        }
+        if (changes.purchaseOrder && changes.purchaseOrder.currentValue) {
+            
+            if (!this.purchaseOrder.PurchaseOrderLines || !this.purchaseOrder.PurchaseOrderLines.length) {
+                this.getPurchaseOrderLines.emit(this.route.parent.snapshot.params['id']);
+            }
+            if (!this.purchaseOrder.PurchaseOrderLines.length || this.purchaseOrder.PurchaseOrderLines[this.purchaseOrder.PurchaseOrderLines.length-1].PurchaseOrderID) {
+                this.refreshDataSource(this.purchaseOrder.PurchaseOrderLines);
+                this.currentIndex = this.purchaseOrder.PurchaseOrderLines.length - 1;
+            }
+        }
+        if (changes.itemList && !this.itemList.length) {
+            this.getSimpleItemList.emit();
+        }
+    }
     ngOnInit() {
-        this.purchaseorderid = this.route.parent.parent.snapshot.params['id'];
+        //this.currentIndex = this.purchaseOrder.PurchaseOrderLines.length - 1;  
+        this.purchaseorderid = this.route.parent.snapshot.params['id'];
+        this.purchaseOrderService.updatePurchaseLineCartonQuantity(this.purchaseOrder);
+        //this.getPurchaseOrderLines.emit(this.purchaseorderid);
+        //this.purchaseOrderService.updatePurchaseLineCartonQuantity();
 
-        this.purchaseOrderService.getCurrentPurchaseOrderEdit(this.purchaseorderid).subscribe(
-            (purchaseorder: PurchaseOrder) => {
-                this.purchaseOrderService.currentPurchaseOrderEdit = purchaseorder;
-                this.purchaseorder = this.purchaseOrderService.currentPurchaseOrderEdit;
-                this.initialize();
-            },
-            (error: any) => this.errorMessage = <any>error
-        );
+
+        // this.removePendingLine();
+        // this.addPendingLine();
+        
+        //this.refreshDataSource(this.purchaseOrder.PurchaseOrderLines);
+        // this.purchaseOrderService.getCurrentPurchaseOrderEdit(this.purchaseorderid).subscribe(
+        //     (purchaseOrder: PurchaseOrder) => {
+        //         this.purchaseOrderService.currentPurchaseOrderEdit = purchaseOrder;
+        //         this.purchaseOrder = this.purchaseOrderService.currentPurchaseOrderEdit;
+        //         this.initialize();
+        //     },
+        //     (error: any) => this.errorMessage = <any>error
+        // );
 
         // this.purchaseOrderService.getPurchaseOrderLines(this.purchaseorderid).subscribe(
         //     (purchaseorderlines: PurchaseOrderLine[]) => {
@@ -66,66 +107,71 @@ export class InboundShipmentEditLineListComponent implements OnInit, OnDestroy {
         //     (error: any) => this.errorMessage = <any>error
         // );
         // this.purchaseOrderService.getPurchaseOrder(this.purchaseorderid).subscribe(
-        //     (purchaseorder: PurchaseOrder) => {
-        //         this.orderStatus  = purchaseorder.Status;
+        //     (purchaseOrder: PurchaseOrder) => {
+        //         this.orderStatus  = purchaseOrder.Status;
         //     },
         //     (error: any) => this.errorMessage = <any>error
         // );
     }
-
     ngOnDestroy() {
     }
-    initialize() {
-        this.purchaseOrderService.getPurchaseOrder(this.purchaseorderid).subscribe(
-            (purchaseorder: PurchaseOrder) => {
-                this.orderStatus  = purchaseorder.Status;
-            },
-            (error: any) => this.errorMessage = <any>error
-        );
+    // initialize() {
+    //     this.purchaseOrderService.getPurchaseOrder(this.purchaseorderid).subscribe(
+    //         (purchaseOrder: PurchaseOrder) => {
+    //             //this.orderStatus  = purchaseOrder.Status;
+    //         },
+    //         (error: any) => this.errorMessage = <any>error
+    //     );
 
-        this.purchaseOrderService.getSimpleItemList().subscribe(
-            (itemlist: ItemList[]) => {
-                this.itemList = itemlist;
-            },
-            (error: any) => this.errorMessage = <any>error
-        );
-        if (this.purchaseOrderService.currentPurchaseOrderEdit.PurchaseOrderLines === null) {
-            this.purchaseOrderService.getPurchaseOrderLines(this.purchaseorderid).subscribe(
-                (purchaseorderlines: PurchaseOrderLine[]) => {
-                    this.purchaseorder.PurchaseOrderLines = purchaseorderlines;  
+        // this.purchaseOrderService.getSimpleItemList().subscribe(
+        //     (itemlist: ItemList[]) => {
+        //         this.itemList = itemlist;
+        //     },
+        //     (error: any) => this.errorMessage = <any>error
+        // );
+        //if (this.purchaseOrderService.currentPurchaseOrderEdit.PurchaseOrderLines === null) {
+            
+            
+            // this.purchaseOrderService.getPurchaseOrderLines(this.purchaseorderid).subscribe(
+            //     (purchaseorderlines: PurchaseOrderLine[]) => {
+            //         this.purchaseOrder.PurchaseOrderLines = purchaseorderlines;  
                     
-                    this.purchaseorder.PurchaseOrderLines.forEach((value) => {
-                        value.PrevItemID = value.ItemID;
-                    });
+            //         this.purchaseOrder.PurchaseOrderLines.forEach((value) => {
+            //             value.PrevItemID = value.ItemID;
+            //         });
                     
-                    this.addPendingLine();      
-                    this.currentIndex = this.purchaseorder.PurchaseOrderLines.length - 1;              
-                    this.refreshDataSource(this.purchaseorder.PurchaseOrderLines);                    
-                },
-                (error: any) => this.errorMessage = <any>error
-            );
-        } else {
-            this.purchaseOrderService.updatePurchaseLineCartonQuantity();
-            this.purchaseorder.PurchaseOrderLines.forEach((value) => {
-                value.PrevItemID = value.ItemID;
-            });
+            //         this.addPendingLine();      
+            //         this.currentIndex = this.purchaseOrder.PurchaseOrderLines.length - 1;              
+            //         this.refreshDataSource(this.purchaseOrder.PurchaseOrderLines);                    
+            //     },
+            //     (error: any) => this.errorMessage = <any>error
+            // );
+        // } else {
+        //     this.purchaseOrderService.updatePurchaseLineCartonQuantity();
+        //     this.purchaseOrder.PurchaseOrderLines.forEach((value) => {
+        //         value.PrevItemID = value.ItemID;
+        //     });
 
-            this.removePendingLine();
-            this.addPendingLine();          
-            this.currentIndex = this.purchaseorder.PurchaseOrderLines.length - 1;  
-            this.refreshDataSource(this.purchaseorder.PurchaseOrderLines);
-        }        
-    }
+        //     this.removePendingLine();
+        //     this.addPendingLine();          
+        //     this.currentIndex = this.purchaseOrder.PurchaseOrderLines.length - 1;  
+        //     this.refreshDataSource(this.purchaseOrder.PurchaseOrderLines);
+        //}        
+    //}
 
     addPendingLine() {
+        
         const _temp = new PurchaseOrderLine(null, this.purchaseorderid, null, null, null, null, null, null, 1, 0, null, null, null, null, true);
-        this.purchaseorder.PurchaseOrderLines.push(_temp);   
+        this.purchaseOrder.PurchaseOrderLines.push(_temp);
+        this.refreshDataSource(this.purchaseOrder.PurchaseOrderLines);
+        
+
     }
 
     removePendingLine() {
-        const foundIndex = this.purchaseorder.PurchaseOrderLines.findIndex(i => i.pendingAdd === true);
+        const foundIndex = this.purchaseOrder.PurchaseOrderLines.findIndex(i => i.pendingAdd === true);
         if (foundIndex > -1) {
-            this.purchaseorder.PurchaseOrderLines.splice(foundIndex, 1);
+            this.purchaseOrder.PurchaseOrderLines.splice(foundIndex, 1);
         }
     }
 
@@ -137,7 +183,7 @@ export class InboundShipmentEditLineListComponent implements OnInit, OnDestroy {
                 PurchaseOrderLine.PrevItemID = PurchaseOrderLine.ItemID;
                 
                 this.addPendingLine();
-                this.refreshDataSource(this.purchaseorder.PurchaseOrderLines);
+                this.refreshDataSource(this.purchaseOrder.PurchaseOrderLines);
 
                 this.purchaseOrderService.currentPurchaseLineIsUpdated = true;
             }
@@ -165,7 +211,7 @@ export class InboundShipmentEditLineListComponent implements OnInit, OnDestroy {
 
     onEditPurchaseOrderLine(index: number) {
         if(this.PendingAdd) {
-            this.currentIndex = this.purchaseorder.PurchaseOrderLines.length - 1;
+            this.currentIndex = this.purchaseOrder.PurchaseOrderLines.length - 1;
             this.PendingAdd = false;
         }
         else {
@@ -198,7 +244,7 @@ export class InboundShipmentEditLineListComponent implements OnInit, OnDestroy {
                 purchaseorderline.TPIN = selectedItem.TPIN;
                 purchaseorderline.FOBPrice = selectedItem.FOBPrice;
                 
-                if(index != this.purchaseorder.PurchaseOrderLines.length - 1) {
+                if(index != this.purchaseOrder.PurchaseOrderLines.length - 1) {
                     this.purchaseOrderService.currentPurchaseLineIsUpdated = true;
                 }
             }
@@ -213,17 +259,17 @@ export class InboundShipmentEditLineListComponent implements OnInit, OnDestroy {
             //     purchaseorderline.FOBPrice = selectedItem.FOBPrice;
             // }                
 
-            this.currentIndex = this.purchaseorder.PurchaseOrderLines.length - 1;
-            this.refreshDataSource(this.purchaseorder.PurchaseOrderLines);
+            this.currentIndex = this.purchaseOrder.PurchaseOrderLines.length - 1;
+            this.refreshDataSource(this.purchaseOrder.PurchaseOrderLines);
             this.purchaseOrderService.sendNotification({ type: 'error', title: 'Error', content: "Item already exists" });
         }
     }
 
     existItem(itemID: number, isNew: boolean = false){
         var counter: number = 0;
-        this.purchaseorder.PurchaseOrderLines.forEach((value, index) => {
+        this.purchaseOrder.PurchaseOrderLines.forEach((value, index) => {
                 if(value.ItemID === itemID) {
-                    if(isNew || index != this.purchaseorder.PurchaseOrderLines.length - 1) {
+                    if(isNew || index != this.purchaseOrder.PurchaseOrderLines.length - 1) {
                         counter += 1; 
                     }
                 }
@@ -252,69 +298,74 @@ export class InboundShipmentEditLineListComponent implements OnInit, OnDestroy {
     }
 
     onPrintLabel(purchaseorderline: PurchaseOrderLine, count: number, border: string) {
-        this.purchaseOrderService.downloadItemLabelCount(purchaseorderline.ItemID, count, border).subscribe(
-            (data) => {
-                const blob = new Blob([data], {type: 'application/pdf'});
-                const blobUrl = URL.createObjectURL(blob);
-                if (window.navigator.msSaveOrOpenBlob) {
-                    const fileName = purchaseorderline.TPIN;
-                    window.navigator.msSaveOrOpenBlob(data, fileName + '.pdf'); // IE is the worst!!!
-                } else {
-                    // const iframe = document.createElement('iframe');
-                    // iframe.style.display = 'none';
-                    // iframe.src = blobUrl;
-                    // document.body.appendChild(iframe);
 
-                    // iframe.onload = (function() {
-                    //     iframe.contentWindow.focus();
-                    //     iframe.contentWindow.print();
-                    // });
-                    const fileURL = window.URL.createObjectURL(blob);
-                    const a: HTMLAnchorElement = document.createElement('a') as HTMLAnchorElement;
-                    a.href = fileURL;
-                    a.download = purchaseorderline.TPIN;
-                    document.body.appendChild(a);
-                    a.target = '_blank';
-                    a.click();
+        this.downloadItemLabelCount.emit({purchaseorderline, count, border});
 
-                    document.body.removeChild(a);
-                    URL.revokeObjectURL(fileURL);
-                }
-            }
-        );
+        // this.purchaseOrderService.downloadItemLabelCount(purchaseorderline.ItemID, count, border).subscribe(
+        //     (data) => {
+        //         const blob = new Blob([data], {type: 'application/pdf'});
+        //         const blobUrl = URL.createObjectURL(blob);
+        //         if (window.navigator.msSaveOrOpenBlob) {
+        //             const fileName = purchaseorderline.TPIN;
+        //             window.navigator.msSaveOrOpenBlob(data, fileName + '.pdf'); // IE is the worst!!!
+        //         } else {
+        //             // const iframe = document.createElement('iframe');
+        //             // iframe.style.display = 'none';
+        //             // iframe.src = blobUrl;
+        //             // document.body.appendChild(iframe);
+
+        //             // iframe.onload = (function() {
+        //             //     iframe.contentWindow.focus();
+        //             //     iframe.contentWindow.print();
+        //             // });
+        //             const fileURL = window.URL.createObjectURL(blob);
+        //             const a: HTMLAnchorElement = document.createElement('a') as HTMLAnchorElement;
+        //             a.href = fileURL;
+        //             a.download = purchaseorderline.TPIN;
+        //             document.body.appendChild(a);
+        //             a.target = '_blank';
+        //             a.click();
+
+        //             document.body.removeChild(a);
+        //             URL.revokeObjectURL(fileURL);
+        //         }
+        //     }
+        // );
     }
 
     onPrintLargeLabel(purchaseorderline: PurchaseOrderLine, count: number, border: string) {
-        this.purchaseOrderService.downloadItemLargeLabelCount(purchaseorderline.ItemID, count, border).subscribe(
-            (data) => {
-                const blob = new Blob([data], {type: 'application/pdf'});
-                const blobUrl = URL.createObjectURL(blob);
-                if (window.navigator.msSaveOrOpenBlob) {
-                    const fileName = purchaseorderline.TPIN;
-                    window.navigator.msSaveOrOpenBlob(data, fileName + '.pdf'); // IE is the worst!!!
-                } else {
-                    // const iframe = document.createElement('iframe');
-                    // iframe.style.display = 'none';
-                    // iframe.src = blobUrl;
-                    // document.body.appendChild(iframe);
+        this.downloadItemLargeLabelCount.emit({purchaseorderline, count, border});
 
-                    // iframe.onload = (function() {
-                    //     iframe.contentWindow.focus();
-                    //     iframe.contentWindow.print();
-                    // });
-                    const fileURL = window.URL.createObjectURL(blob);
-                    const a: HTMLAnchorElement = document.createElement('a') as HTMLAnchorElement;
-                    a.href = fileURL;
-                    a.download = purchaseorderline.TPIN;
-                    document.body.appendChild(a);
-                    a.target = '_blank';
-                    a.click();
+        // this.purchaseOrderService.downloadItemLargeLabelCount(purchaseorderline.ItemID, count, border).subscribe(
+        //     (data) => {
+        //         const blob = new Blob([data], {type: 'application/pdf'});
+        //         const blobUrl = URL.createObjectURL(blob);
+        //         if (window.navigator.msSaveOrOpenBlob) {
+        //             const fileName = purchaseorderline.TPIN;
+        //             window.navigator.msSaveOrOpenBlob(data, fileName + '.pdf'); // IE is the worst!!!
+        //         } else {
+        //             // const iframe = document.createElement('iframe');
+        //             // iframe.style.display = 'none';
+        //             // iframe.src = blobUrl;
+        //             // document.body.appendChild(iframe);
 
-                    document.body.removeChild(a);
-                    URL.revokeObjectURL(fileURL);
-                }
-            }
-        );
+        //             // iframe.onload = (function() {
+        //             //     iframe.contentWindow.focus();
+        //             //     iframe.contentWindow.print();
+        //             // });
+        //             const fileURL = window.URL.createObjectURL(blob);
+        //             const a: HTMLAnchorElement = document.createElement('a') as HTMLAnchorElement;
+        //             a.href = fileURL;
+        //             a.download = purchaseorderline.TPIN;
+        //             document.body.appendChild(a);
+        //             a.target = '_blank';
+        //             a.click();
+
+        //             document.body.removeChild(a);
+        //             URL.revokeObjectURL(fileURL);
+        //         }
+        //     }
+        // );
     }
     scrollToElement($element): void {
         $element.scrollIntoView({behavior: "smooth", block: "start", inline: "nearest"});
@@ -338,8 +389,8 @@ export class InboundShipmentEditLineListComponent implements OnInit, OnDestroy {
     onRemovePurchaseOrderLine(purchaseorderline: PurchaseOrderLine, index: number) {
         const confirmation = confirm(`Remove ${purchaseorderline.ItemName}?`);
         if (confirmation) {
-            this.purchaseorder.PurchaseOrderLines.splice(index, 1);
-            this.refreshDataSource(this.purchaseorder.PurchaseOrderLines);
+            this.purchaseOrder.PurchaseOrderLines.splice(index, 1);
+            this.refreshDataSource(this.purchaseOrder.PurchaseOrderLines);
 
             this.purchaseOrderService.currentPurchaseLineIsUpdated = true;
         }        
@@ -347,7 +398,7 @@ export class InboundShipmentEditLineListComponent implements OnInit, OnDestroy {
 
     // onDeleteComplete(purchaseorderline: PurchaseOrderLine, message?: string): void {
     //     // this.purchaseorderlines.splice(this.purchaseorderlines.indexOf(purchaseorderline), 1);
-    //     this.refreshDataSource(this.purchaseorder.PurchaseOrderLines);
+    //     this.refreshDataSource(this.purchaseOrder.PurchaseOrderLines);
     //     this.purchaseOrderService.sendNotification({ type: 'success', title: 'Successfully Deleted', content: message });
     // }
 

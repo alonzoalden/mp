@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnChanges, Input, SimpleChanges } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Subscription } from 'rxjs';
 
@@ -9,16 +9,19 @@ import { PurchaseOrderService } from '../../../purchase-order.service';
 @Component({
   selector: 'o-inbound-shipment-edit-shipping',
   templateUrl: './inbound-shipment-edit-shipping.component.html',
-  styleUrls: ['../../inbound-shipment-edit.component.css']
+  styleUrls: ['../../components/inbound-shipment-edit.component.css']
 })
 
-export class InboundShipmentEditShippingComponent implements OnInit {
+export class InboundShipmentEditShippingComponent implements OnInit, OnChanges {
     private purchaseOrderSubscription: Subscription;
 
-    errorMessage: string;
-    purchaseorder: PurchaseOrder;
+    //errorMessage: string;
+    //purchaseorder: PurchaseOrder;
     inboundShippingMethod: InboundShippingMethod;
     origStatus: string;
+
+    @Input() purchaseorder: PurchaseOrder;
+    @Input() errorMessage: string;
 
     constructor(private route: ActivatedRoute,
         private router: Router,
@@ -37,17 +40,30 @@ export class InboundShipmentEditShippingComponent implements OnInit {
             return false;
         }
     }
+    ngOnChanges(changes: SimpleChanges): void {
+        console.log(changes);
+        if (changes.purchaseorder.currentValue) {
+            if (changes.purchaseorder.currentValue.InboundShippingMethods.length) {
+                this.inboundShippingMethod = changes.purchaseorder.currentValue.InboundShippingMethods[0];
+            }
+            if (!changes.purchaseorder.currentValue.InboundShippingMethods.length) {
+                const param = this.route.parent.snapshot.params['id'];
+                const _temp = new InboundShippingMethod(null, param, '', '', '', null, null);
+                this.purchaseorder.InboundShippingMethods.push(_temp);
+                this.inboundShippingMethod = this.purchaseorder.InboundShippingMethods[0];
+            }
+
+        }
+    }
 
     ngOnInit(): void {
-        
-
         const param = this.route.parent.snapshot.params['id'];
+
         this.purchaseOrderSubscription = this.purchaseOrderService.getCurrentPurchaseOrderEdit(param).subscribe(
             (purchaseorder) => {
                 this.purchaseOrderService.currentPurchaseOrderEdit = purchaseorder;
                 this.purchaseorder = this.purchaseOrderService.currentPurchaseOrderEdit;
                 this.origStatus = this.purchaseorder.Status;
-                
                 if (this.purchaseorder.InboundShippingMethods && this.purchaseorder.InboundShippingMethods[0]) {
                     this.inboundShippingMethod = this.purchaseorder.InboundShippingMethods[0];
                     //this.purchaseOrderService.currentInboundShippingMethod = this.inboundShippingMethod;

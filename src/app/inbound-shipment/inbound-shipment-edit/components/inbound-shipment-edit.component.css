@@ -36,9 +36,7 @@
     color: #bbb;
     white-space: nowrap;
 }
-.wizard li {
-    /* width: 220px; */
-}
+
 .wizard a:hover {
     cursor: pointer;
     text-decoration: underline;
@@ -186,9 +184,6 @@
 .inbound-shipment-details > div > div {
     width: 150px;
     margin: 0 auto;
-}
-.inbound-shipment-details > div:nth-of-type(3) {
-    /* border-right: 0px; */
 }
 @media (max-width: 630px) {
     .inbound-shipment-details {

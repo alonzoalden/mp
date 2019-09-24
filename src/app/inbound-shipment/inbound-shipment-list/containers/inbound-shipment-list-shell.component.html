@@ -1,11 +1,11 @@
 <o-inbound-shipment-list
     [userInfo]="userInfo$ | async"
     [purchaseOrdersMatTable]="purchaseOrdersMatTable$ | async"
-    [isLoading]="isLoading$ | async"
     [pendingDelete]="pendingDelete$ | async"
     [errorMessage]="errorMessage$ | async"
     (addNewPurchaseOrder)="addNewPurchaseOrder()"
     (getPurchaseOrderOverview)="getPurchaseOrderOverview()"
     (deletePurchaseOrder)="deletePurchaseOrder($event)"
     (downloadPurchaseOrderLabel)="downloadPurchaseOrderLabel($event)"
+    (setSelectedPurchaseOrder)="setSelectedPurchaseOrder($event)"
 ></o-inbound-shipment-list>

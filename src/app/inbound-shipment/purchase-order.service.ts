@@ -12,6 +12,10 @@ import { OAuthService } from 'angular-oauth2-oidc';
 import { InboundShippingMethod, InboundShippingMethodInsert } from '../shared/class/inbound-shipping-method';
 
 import { environment } from '../../environments/environment';
+import { Store, select } from '@ngrx/store';
+import * as inboundShipmentActions from './state/inbound-shipment.actions';
+import * as fromInboundShipment from './state';
+
 
 @Injectable()
 export class PurchaseOrderService {
@@ -52,7 +56,8 @@ export class PurchaseOrderService {
 
     constructor(
         private http: HttpClient,
-        private oauthService: OAuthService ) { }
+        private oauthService: OAuthService,
+        private store: Store<fromInboundShipment.State>) { }
 
     sendNotification(notification: any) {
         this.subject.next(notification);
@@ -120,13 +125,14 @@ export class PurchaseOrderService {
         purchaseorder.Cartons.forEach((carton) => {
             const newCarton = new Carton(carton.CartonID, carton.PurchaseOrderID, carton.PackingSlipNumber, carton.CartonNumber, carton.Position,
                 carton.Length, carton.Width, carton.Height, carton.Weight, carton.LabelQty, carton.UpdatedOn, carton.CreatedOn, [], carton.pendingAdd);
-
-            carton.CartonLines.forEach((cartonline) => {
-                const newCartonLine = new CartonLine(cartonline.CartonLineID, cartonline.CartonID, cartonline.PurchaseOrderID, cartonline.PurchaseOrderLineID, cartonline.ItemName,
-                    cartonline.ItemVendorSKU, cartonline.TPIN, cartonline.URLKey, cartonline.Quantity, cartonline.RemainingQuantity, cartonline.UpdatedOn, cartonline.CreatedOn, cartonline.PrevPurchaseOrderLineID, cartonline.pendingAdd);
-                
-                newCarton.CartonLines.push(newCartonLine);
-            });
+            if (carton.CartonLines) {
+                carton.CartonLines.forEach((cartonline) => {
+                    const newCartonLine = new CartonLine(cartonline.CartonLineID, cartonline.CartonID, cartonline.PurchaseOrderID, cartonline.PurchaseOrderLineID, cartonline.ItemName,
+                        cartonline.ItemVendorSKU, cartonline.TPIN, cartonline.URLKey, cartonline.Quantity, cartonline.RemainingQuantity, cartonline.UpdatedOn, cartonline.CreatedOn, cartonline.PrevPurchaseOrderLineID, cartonline.pendingAdd);
+                    
+                    newCarton.CartonLines.push(newCartonLine);
+                });
+            }
 
             newPurchaseOrder.Cartons.push(newCarton);
         });
@@ -386,29 +392,33 @@ export class PurchaseOrderService {
                                 catchError(this.handleError)
                             );
     }
-    updatePurchaseLineCartonQuantity() {        
-        this.currentPurchaseOrderEdit.PurchaseOrderLines.forEach((purchaseorderline) => {
+    updatePurchaseLineCartonQuantity(purchaseorder: PurchaseOrder) {
+        //if (!this.currentPurchaseOrderEdit) return;          
+        purchaseorder.PurchaseOrderLines.forEach((purchaseorderline) => {
             purchaseorderline.CartonQuantity = 0;
         });
         
-        this.currentPurchaseOrderEdit.Cartons.forEach((carton, ci) => {
+        purchaseorder.Cartons.forEach((carton, ci) => {
             carton.CartonLines.forEach((cartonline, cli) => {
                 if(!cartonline.pendingAdd)
                 {
-                    const purchaseorderline = this.currentPurchaseOrderEdit.PurchaseOrderLines.find(x => x.PurchaseOrderLineID === cartonline.PurchaseOrderLineID);
+                    const purchaseorderline = purchaseorder.PurchaseOrderLines.find(x => x.PurchaseOrderLineID === cartonline.PurchaseOrderLineID);
                     if(purchaseorderline)
                     {
                         purchaseorderline.CartonQuantity += cartonline.Quantity;
                         this.replacePurchaseOrderLine(cartonline.PurchaseOrderLineID, purchaseorderline);
 
-                        this.currentPurchaseOrderEdit.PurchaseOrderLines[this.currentPurchaseOrderEdit.PurchaseOrderLines.findIndex(i => i.PurchaseOrderLineID === cartonline.PurchaseOrderLineID)] = purchaseorderline;
+                        purchaseorder.PurchaseOrderLines[purchaseorder.PurchaseOrderLines.findIndex(i => i.PurchaseOrderLineID === cartonline.PurchaseOrderLineID)] = purchaseorderline;
                     }
                 }
             });
         })
+        this.store.dispatch(new inboundShipmentActions.SetSelectedPurchaseOrder(purchaseorder));
+        
     };
 
-    updateCartonLineRemainingQuantity(cartonline: CartonLine) {        
+    updateCartonLineRemainingQuantity(cartonline: CartonLine) {
+        if (!this.currentPurchaseOrderEdit) return;     
         const foundPurchaseOrderLine = this.currentPurchaseOrderEdit.PurchaseOrderLines.find(x => x.PurchaseOrderLineID === cartonline.PurchaseOrderLineID);
 
         if(foundPurchaseOrderLine)
@@ -647,13 +657,13 @@ export class PurchaseOrderService {
     validatePurchaseOrderLines() {
         // return (this.currentPurchaseOrderLines
         //     && this.currentPurchaseOrderLines.length > 0);
-        return (this.currentPurchaseOrderEdit.PurchaseOrderLines
+        return (this.currentPurchaseOrderEdit && this.currentPurchaseOrderEdit.PurchaseOrderLines
             && this.currentPurchaseOrderEdit.PurchaseOrderLines.length > 0);
     }
 
     validateCarton() {
         // return (this.currentPurchaseOrderLines && !this.currentPurchaseOrderLines.find(x => x.CartonQuantity !== x.Quantity));
-        return (this.currentPurchaseOrderEdit.PurchaseOrderLines 
+        return (this.currentPurchaseOrderEdit && this.currentPurchaseOrderEdit.PurchaseOrderLines 
             && !this.currentPurchaseOrderEdit.PurchaseOrderLines.find(x => x.CartonQuantity !== x.Quantity && !x.pendingAdd));
     }
 

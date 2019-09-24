@@ -1,7 +1,7 @@
 <div class="row wrapper border-bottom white-bg page-heading">
     <div class="col-lg-12">
         <h2>
-            {{ 'Inbound Shipment' | translate }}: {{headerLabel}}
+            {{ 'Inbound Shipment' | translate }}: {{purchaseOrder?.PackingSlipNumber}}
         </h2>
         <ol class="breadcrumb">
             <li>
@@ -16,7 +16,7 @@
         </ol>
     </div>
 </div>
-<div class="wrapper wrapper-content animated fadeIn" *ngIf='purchaseorder'>
+<div class="wrapper wrapper-content animated fadeIn" *ngIf='purchaseOrder'>
     <div class="row m-b-md">
         <div class="col-lg-12">
             <div class="nav">
@@ -29,36 +29,36 @@
                                         <div>
                                             <div>
                                                 <strong class="">{{ 'Transaction Date' | translate }}</strong>
-                                                <p class="no-margins">{{purchaseorder?.TransactionDate | date}}</p>
+                                                <p class="no-margins">{{purchaseOrder?.TransactionDate | date}}</p>
                                             </div>
                                         </div>
                                         <div>
                                             <div>
                                                 <strong class="">{{ 'Status' | translate }}</strong>
-                                                <p class="no-margins">{{ purchaseorder?.Status | translate }}</p>
+                                                <p class="no-margins">{{ purchaseOrder?.Status | translate }}</p>
                                             </div>
                                         </div>
-                                        <div *ngIf="purchaseorder?.ShipmentDate">
+                                        <div *ngIf="purchaseOrder?.ShipmentDate">
                                             <div>
                                                 <strong class="">{{ 'Shipment Date' | translate }}</strong>
-                                                <p class="no-margins ">{{purchaseorder?.ShipmentDate | date}}</p>
+                                                <p class="no-margins ">{{purchaseOrder?.ShipmentDate | date}}</p>
                                             </div>
                                         </div>
-                                    <!-- <div class="col-xs-12 col-lg-2" [ngClass]="purchaseorder?.ShipmentDate ? 'col-sm-4' : 'col-sm-6'">
+                                    <!-- <div class="col-xs-12 col-lg-2" [ngClass]="purchaseOrder?.ShipmentDate ? 'col-sm-4' : 'col-sm-6'">
                                         <div>
-                                            <p class="no-margins text-lg">{{purchaseorder?.TransactionDate | date}}</p>
+                                            <p class="no-margins text-lg">{{purchaseOrder?.TransactionDate | date}}</p>
                                             <strong class="m-b-xs">Transaction Date</strong>
                                         </div>
                                     </div>
-                                    <div class="col-xs-12 col-lg-2 m-xs-resp" [ngClass]="purchaseorder?.ShipmentDate ? 'col-sm-4' : 'col-sm-6'">
+                                    <div class="col-xs-12 col-lg-2 m-xs-resp" [ngClass]="purchaseOrder?.ShipmentDate ? 'col-sm-4' : 'col-sm-6'">
                                         <div>
-                                            <p class="no-margins text-lg">{{purchaseorder?.Status}}</p>
+                                            <p class="no-margins text-lg">{{purchaseOrder?.Status}}</p>
                                             <strong class="m-b-xs">Status</strong>
                                         </div>
                                     </div>
-                                    <div class="col-xs-12 col-lg-2 col-sm-4 m-xs-resp" *ngIf="purchaseorder?.ShipmentDate">
+                                    <div class="col-xs-12 col-lg-2 col-sm-4 m-xs-resp" *ngIf="purchaseOrder?.ShipmentDate">
                                         <div>
-                                            <p class="no-margins text-lg">{{purchaseorder?.ShipmentDate | date}}</p>
+                                            <p class="no-margins text-lg">{{purchaseOrder?.ShipmentDate | date}}</p>
                                             <strong class="m-b-xs">Shipment Date</strong>
                                         </div>
                                     </div> -->
@@ -76,25 +76,25 @@
                 <div class="steps animated fadeIn">
                     <ul>
                         <li routerLinkActive="active" class="first done">
-                            <a [routerLink]="['line']" 
+                            <a [routerLink]="['line/list']" 
                                 [ngClass]="{'complete':!isInboundShipmentPending() || !isLineList()}" 
                                 routerLinkActive="active">
                                 <span class="wiz-title"><span class="m-r-xs">1.</span>{{ 'Inbound Shipment Lines' | translate }}</span> 
                                 <span [ngClass]="{'glyphicon glyphicon-exclamation-sign': qtyUpdated}"  matTooltip="{{ 'Save to Update Carton' | translate }}"></span>
-                                <span [ngClass]="{'glyphicon glyphicon-exclamation-sign': !qtyUpdated && !isValid('line') }" matTooltip="{{ 'Missing Products' | translate }}"></span>
-                                <!-- <span class="glyphicon glyphicon-exclamation-sign" *ngIf="!isValid('line')" title="Missing products"></span> -->
+                                <span [ngClass]="{'glyphicon glyphicon-exclamation-sign': !qtyUpdated && !isValid('line/list') }" matTooltip="{{ 'Missing Products' | translate }}"></span>
+                                <!-- <span class="glyphicon glyphicon-exclamation-sign" *ngIf="!isValid('line/list')" title="Missing products"></span> -->
                             </a>
                         </li>
                         <li routerLinkActive="active" >
-                            <a [routerLink]="['carton']" routerLinkActive="active" 
+                            <a [routerLink]="['carton/list/line']" routerLinkActive="active" 
                                 [ngClass]="{
                                     'complete':!isInboundShipmentPending() || ( isInboundShipmentPending() && (isShippingInstruction() || isShipping()) ),
                                     'disabled':isInboundShipmentPending() && isLineList()
                                 }" 
                                 [ngStyle]="{'pointer-events': isInboundShipmentPending() && isLineList() ? 'none' : 'auto'}">
                                 <span class="wiz-title"><span class="number m-r-xs">2.</span>{{ 'Carton' | translate }}</span>
-                                <span [ngClass]="{'glyphicon glyphicon-exclamation-sign': !isValid('carton') }" matTooltip="{{ 'Must Include All Products' | translate }}" attr.aria-label="{{ 'Must Include All Products' | translate}}" ></span>
-                                <!-- <span class="glyphicon glyphicon-exclamation-sign" *ngIf="!isValid('carton')" title="Must include all products"></span> -->
+                                <span [ngClass]="{'glyphicon glyphicon-exclamation-sign': !isValid('carton/list/line') }" matTooltip="{{ 'Must Include All Products' | translate }}" attr.aria-label="{{ 'Must Include All Products' | translate}}" ></span>
+                                <!-- <span class="glyphicon glyphicon-exclamation-sign" *ngIf="!isValid('carton/list/line')" title="Must include all products"></span> -->
                             </a>
                         </li>
                         <li routerLinkActive="active">
@@ -131,7 +131,7 @@
                     </div>
                     <ng-container *ngIf="!loading">
                         <router-outlet></router-outlet>
-                    </ng-container  >
+                    </ng-container>
                 </div>
             </div>
         </div>        
@@ -143,7 +143,7 @@
                 <mat-menu #saveMenu="matMenu" width="250px">
                     <button mat-menu-item (click)="openDialogPrintAllItemLabel()">{{ 'Print All Item Labels' | translate }}</button>
                     <button mat-menu-item (click)="saveInboundShipment(true)">{{ 'Print Packing Slip' | translate }}</button>
-                    <button mat-menu-item [disabled]="purchaseorder.Status != 'Shipping'" (click)="cancelPurchaseOrder()">{{ 'Cancel Shipping' | translate }}
+                    <button mat-menu-item [disabled]="purchaseOrder.Status != 'Shipping'" (click)="cancelPurchaseOrder()">{{ 'Cancel Shipping' | translate }}
             </button>
                 </mat-menu>
                 <button type="button"
@@ -172,7 +172,7 @@
                         class="btn btn-primary"
                         style="width: 100px !important;"
                         *ngIf="isShipping()"
-                        [disabled]="pendingSave || !(purchaseorder.Status === 'Pending' && isValidShipment)"
+                        [disabled]="pendingSave || !(purchaseOrder.Status === 'Pending' && isValidShipment)"
                         (click)="saveAndShipInboundShipment()">{{ 'Save & Ship' | translate }}
                 </button>                            
             </div>
@@ -189,7 +189,7 @@
         <div class="col-md-2">  
             <!-- <button type="button"
                 class="btn btn-danger max"
-                *ngIf="purchaseorder.Status == 'Shipping'"
+                *ngIf="purchaseOrder.Status == 'Shipping'"
                 (click)="cancelPurchaseOrder()">Cancel Shipping
             </button> -->
         </div>

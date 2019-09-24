@@ -1,8 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { MatTableDataSource } from '@angular/material';
-import { PurchaseOrder } from '../../../shared/class/purchase-order';
+import { PurchaseOrder, Carton } from '../../../shared/class/purchase-order';
 import { Observable } from 'rxjs';
-import { Member } from 'app/shared/class/member';
+import { Member } from '../../../shared/class/member';
 import { Store, select } from '@ngrx/store';
 import * as inboundShipmentActions from '../../state/inbound-shipment.actions';
 import * as fromInboundShipment from '../../state';
@@ -31,13 +31,17 @@ export class InboundShipmentListShellComponent implements OnInit {
     addNewPurchaseOrder(): void {
         this.store.dispatch(new inboundShipmentActions.AddNewPurchaseOrder());
     }
+    setSelectedPurchaseOrder(purchaseorder: PurchaseOrder): void {
+        this.store.dispatch(new inboundShipmentActions.SetSelectedPurchaseOrder(purchaseorder));
+    }
     getPurchaseOrderOverview(): void {
         this.store.dispatch(new inboundShipmentActions.LoadPurchaseOrderOverview());
     }
-    downloadPurchaseOrderLabel(purchaseOrder: PurchaseOrder): void {
-        this.store.dispatch(new inboundShipmentActions.DownloadPurchaseOrderLabel(purchaseOrder));
+    downloadPurchaseOrderLabel(purchaseorder: PurchaseOrder): void {
+        this.store.dispatch(new inboundShipmentActions.DownloadPurchaseOrderLabel(purchaseorder));
     }
-    deletePurchaseOrder(purchaseOrder: PurchaseOrder): void {
-        this.store.dispatch(new inboundShipmentActions.DeletePurchaseOrder(purchaseOrder));
+    deletePurchaseOrder(purchaseorder: PurchaseOrder): void {
+        this.store.dispatch(new inboundShipmentActions.DeletePurchaseOrder(purchaseorder));
     }
+    
 }
