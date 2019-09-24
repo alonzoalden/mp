@@ -9,7 +9,7 @@
                             <label class="col-md-2 control-label" for="purchaseOrderShipmentDateId">{{ 'Shipment Date' | translate }}</label>
                             <div class="col-md-8">
                                 <mat-form-field class="example-full-width">
-                                        <input  matInput [min]="minDate" [max]="maxDate" [matDatepicker]="picker" placeholder="{{ 'Shipment Date' | translate }}"
+                                        <input matInput [min]="minDate" [max]="maxDate" [matDatepicker]="picker" placeholder="{{ 'Shipment Date' | translate }}"
                                             class="form-control" 
                                             [disabled]="purchaseorder.Status !== 'Pending'" 
                                             id="purchaseorderShipmentDate"

@@ -45,7 +45,8 @@ export class InboundShipmentEditCartonListComponent implements OnInit, OnChanges
                 private cartonPrintDialog: MatDialog) { }
 
     ngOnChanges(changes: SimpleChanges) {
-        if (changes.purchaseOrder && !changes.purchaseOrder.currentValue.Cartons.length  || changes.purchaseOrder.currentValue.Cartons[changes.purchaseOrder.currentValue.Cartons.length-1].CartonID) {
+        if (changes.purchaseOrder && (!changes.purchaseOrder.currentValue.Cartons.length || changes.purchaseOrder.currentValue.Cartons[changes.purchaseOrder.currentValue.Cartons.length-1].CartonID)) {
+            this.setSelectedCarton.emit(null);
             this.addPendingLine();
             this.refreshDataSource(this.purchaseOrder.Cartons);
             this.currentIndex = this.purchaseOrder.Cartons.length - 1;

@@ -3,7 +3,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material';
 import { Subscription } from 'rxjs';
 
-import { PurchaseOrder, PurchaseOrderLine } from '../../../shared/class/purchase-order';
+import { PurchaseOrder, PurchaseOrderLine, Carton } from '../../../shared/class/purchase-order';
 //import { PurchaseOrderLine } from '../../shared/class/purchase-order-line';
 
 import { PurchaseOrderService } from '../../purchase-order.service';
@@ -19,11 +19,14 @@ export class InboundShipmentEditComponent implements OnInit, OnChanges, AfterVie
     @Input() purchaseOrder: PurchaseOrder;
     @Input() errorMessage: string;
     @Input() loading: boolean;
+    @Input() pendingSave: boolean;
     @Output() getPurchaseOrder = new EventEmitter<number>();
     @Output() editPurchaseOrder = new EventEmitter<{ purchaseOrder: PurchaseOrder, printLabel: boolean }>();
     @Output() editPurchaseOrderThenPrintItemLabels = new EventEmitter<{ purchaseOrder: PurchaseOrder, size: string, border: string }>();
     @Output() downloadPurchaseOrderLabel = new EventEmitter<PurchaseOrder>();
     @Output() setSelectedPurchaseOrder = new EventEmitter<PurchaseOrder>();
+    @Output() setSelectedCarton = new EventEmitter<Carton>();
+    
     
     private originalPurchaseOrder: PurchaseOrder;
     private currentPurchaseOrder: PurchaseOrder;
@@ -37,7 +40,7 @@ export class InboundShipmentEditComponent implements OnInit, OnChanges, AfterVie
     headerLabel: string;
     private dataIsValid: { [key: string]: boolean } = {};
 
-    pendingSave: boolean;
+    //pendingSave: boolean;
 
     origStatus: string;
 
@@ -48,7 +51,6 @@ export class InboundShipmentEditComponent implements OnInit, OnChanges, AfterVie
         private cd: ChangeDetectorRef,
         private purchaseOrderService: PurchaseOrderService,
         public itemPrintDialog: MatDialog) {
-
     }
 
     get isValidShipment() {
@@ -380,6 +382,7 @@ export class InboundShipmentEditComponent implements OnInit, OnChanges, AfterVie
     }
 
     save(printLabel: boolean = false) {
+        this.setSelectedCarton.emit(null);
         //this.pendingSave = true;        
         const newPurchaseOrder = this.purchaseOrderService.copyPurchaseOrder(this.purchaseOrder);
         if (newPurchaseOrder.PurchaseOrderLines) {

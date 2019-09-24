@@ -120,7 +120,7 @@
                             </a>
                         </li>
                     </ul>
-                    <div *ngIf="loading" class="ibox-content border" style="min-height: 332px">
+                    <div *ngIf="pendingSave" class="ibox-content border" style="min-height: 332px">
                         <div class="spinner-container">
                             <div class="sk-spinner sk-spinner-three-bounce big-spinner">
                                 <div class="sk-bounce1"></div>
@@ -129,7 +129,7 @@
                             </div>
                         </div>
                     </div>
-                    <ng-container *ngIf="!loading">
+                    <ng-container *ngIf="!pendingSave">
                         <router-outlet></router-outlet>
                     </ng-container>
                 </div>

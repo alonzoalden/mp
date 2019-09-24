@@ -124,7 +124,7 @@ export class InboundShipmentEditCartonLineListComponent implements OnInit, OnCha
     }
 
     refreshDataSource(cartonlines: CartonLine[]) {
-        cartonlines.forEach((c) => this.purchaseOrderService.updateCartonLineRemainingQuantity(c) );
+        cartonlines.forEach((c) => this.purchaseOrderService.updateCartonLineRemainingQuantity(c, this.purchaseOrder) );
 
         this.dataSource = new MatTableDataSource<CartonLine>(cartonlines);
         this.dataSource.sort = this.sort;
@@ -153,7 +153,7 @@ export class InboundShipmentEditCartonLineListComponent implements OnInit, OnCha
                 cartonline.TPIN = selectedItem.TPIN;
                 if(this.isValidQuantity(cartonline)) {
                     this.purchaseOrderService.updatePurchaseLineCartonQuantity(this.purchaseOrder);
-                    this.purchaseOrderService.updateCartonLineRemainingQuantity(cartonline);
+                    this.purchaseOrderService.updateCartonLineRemainingQuantity(cartonline, this.purchaseOrder);
                 }
             }
         }
@@ -186,6 +186,7 @@ export class InboundShipmentEditCartonLineListComponent implements OnInit, OnCha
     quantityChange(cartonline: CartonLine) {
         if(this.isValidQuantity(cartonline)) {
             this.purchaseOrderService.updatePurchaseLineCartonQuantity(this.purchaseOrder);
+            this.purchaseOrderService.updateCartonLineRemainingQuantity(cartonline, this.purchaseOrder);
         }
     }
 

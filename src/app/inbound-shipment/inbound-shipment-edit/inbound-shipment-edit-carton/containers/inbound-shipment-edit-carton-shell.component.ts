@@ -28,6 +28,7 @@ export class InboundShipmentEditCartonShellComponent  implements OnInit {
         this.selectedCarton$ = this.store.pipe(select(fromInboundShipment.getSelectedCarton));
         this.isLoading$ = this.store.pipe(select(fromInboundShipment.getIsLoading));
         this.errorMessage$ = this.store.pipe(select(fromInboundShipment.getError));
+        console.log(this.selectedCarton$)
 
     }
     getCartons(id: number): void {
