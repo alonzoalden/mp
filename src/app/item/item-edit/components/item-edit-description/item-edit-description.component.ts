@@ -34,15 +34,15 @@ export class ItemEditDescriptionComponent implements OnInit, AfterViewInit {
 
     ngOnInit(): void {
         //const itemid = this.route.parent.snapshot.params['id'];
-        
+
         // this.itemService.getVendorBrands().subscribe(
         //     (vendorBrands: VendorBrand[]) => {
         //         this.vendorBrandList = vendorBrands;
         //     },
         //     (error: any) => {
-        //         this.errorMessage = <any>error;                
+        //         this.errorMessage = <any>error;
         //     }
-        // ); 
+        // );
 
         // this.itemService.getCurrentItemEdit(itemid).subscribe(
         //     (item: Item) => {
@@ -77,11 +77,16 @@ export class ItemEditDescriptionComponent implements OnInit, AfterViewInit {
                     ["para",["ul","ol","paragraph"]],
                     ["table",["table"]],
                     ["insert",["link","picture","video"]],
-                    ["view",["help"]] 
+                    ["view",["help"]]
                 ],
                 callbacks: {
                     onBlur: function() {
                         self.updateTextEditorFields();
+                    },
+                    onPaste: function (e) {
+                      var bufferText = ((e.originalEvent || e).clipboardData ).getData('Text/plain');
+                      e.preventDefault ? e.preventDefault() : (e.returnValue = false);
+                      document.execCommand('insertText', false, bufferText);
                     }
                 }
             });
@@ -89,7 +94,7 @@ export class ItemEditDescriptionComponent implements OnInit, AfterViewInit {
             $('#itemShortDescriptionId').summernote('code', this.item.ShortDescription);
             $('#itemTechnicalDetailId').summernote('code', this.item.TechnicalDetail);
             $('#itemAdditionalInformationId').summernote('code', this.item.AdditionalInformation);
-        
+
     }
 
     updateTextEditorFields() {
