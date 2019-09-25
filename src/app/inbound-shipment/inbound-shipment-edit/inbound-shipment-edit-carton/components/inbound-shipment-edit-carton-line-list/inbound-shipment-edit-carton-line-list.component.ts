@@ -1,13 +1,8 @@
 import { Component, OnInit, OnChanges, ViewChild, Input, Output, EventEmitter, SimpleChange, SimpleChanges } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 import { MatSort, MatTableDataSource, MatDialog } from '@angular/material';
-
-// import { Carton } from '../../shared/class/carton';
-// import { CartonLine, CartonLineInsert } from '../../shared/class/carton-line';
 import { PurchaseOrder, PurchaseOrderLine, PurchaseOrderLineList, Carton, CartonLine} from '../../../../../shared/class/purchase-order';
 import { PurchaseOrderService } from '../../../../purchase-order.service';
-//import { InboundShipmentSelectItemComponentDialog } from '../../../../inbound-shipment-edit/inbound-shipment-edit-carton-list.component-select-dialog';
-//import { PurchaseOrderLineList } from '../../shared/class/purchase-order-line';
 
 @Component({
     selector: 'o-inbound-shipment-edit-carton-line-list',
@@ -16,19 +11,13 @@ import { PurchaseOrderService } from '../../../../purchase-order.service';
 })
 
 export class InboundShipmentEditCartonLineListComponent implements OnInit, OnChanges {
-    //errorMessage: string;
-    //purchaseOrder: purchaseOrder;
     purchaseorderid: number;
-
     @Input() purchaseOrder: PurchaseOrder;
     @Input() purchaseOrderLineList: PurchaseOrderLineList[];
     @Input() carton: Carton;
     @Input() errorMessage: string;
     @Output() getPurchaseOrderLineList = new EventEmitter<number>();
 
-    //purchaseOrderLineList: PurchaseOrderLineList[];
-
-    //orderStatus: string;
     pendingAdd: boolean;
     currentIndex: number;
 
@@ -48,19 +37,6 @@ export class InboundShipmentEditCartonLineListComponent implements OnInit, OnCha
                 private purchaseOrderService: PurchaseOrderService,
                 private inboundShipmentDialog: MatDialog) { }
 
-    // get carton(): Carton | null {
-    //     return this.purchaseOrderService ? this.purchaseOrderService.currentCarton : null;
-    // }
-
-    // get cartonlines(): CartonLine[] | null {
-
-    //     this.refreshDataSource(this.purchaseOrderService.currentCartonLines);
-    //     if(this.purchaseOrderService.newCartonLineIsSelected) {
-    //         this.currentIndex = this.purchaseOrderService.currentCartonLines.length - 1;
-    //         this.purchaseOrderService.newCartonLineIsSelected = false;
-    //     }
-    //     return this.purchaseOrderService.currentCartonLines;
-    // }
     ngOnChanges(changes: SimpleChanges) {
         if (changes.carton && changes.carton.currentValue && !changes.carton.currentValue.CartonLines) {
             this.addPendingLine();
@@ -74,41 +50,10 @@ export class InboundShipmentEditCartonLineListComponent implements OnInit, OnCha
 
     ngOnInit() {        
         this.purchaseorderid = this.route.snapshot.parent.params['id'];
-        //this.purchaseOrder = this.purchaseOrderService.currentPurchaseOrderEdit;
-        // this.purchaseOrderService.currentCarton.subscribe(
-        //     (currentcarton: Carton) => {
-        //         this.carton = currentcarton;
-        //     },
-        //     (error: any) => this.errorMessage = <any>error
-        // );
-
-        // this.purchaseOrderService.currentCartonLines.subscribe(
-        //     (cartonlines: CartonLine[]) => {
-        //         this.cartonlines = cartonlines;
-        //         this.refreshDataSource(cartonlines);
-        //         this.currentIndex = cartonlines.length - 1;
-        //         if(this.purchaseOrderService.newCartonLineIsSelected) {
-        //             this.purchaseOrderService.newCartonLineIsSelected = false;
-        //         }
-        //     },
-        //     (error: any) => this.errorMessage = <any>error
-        // );
-
-        // this.purchaseOrderService.getPurchaseOrder(this.purchaseorderid).subscribe(
-        //     (purchaseOrder: PurchaseOrder) => {
-        //         //this.orderStatus  = purchaseOrder.Status;
-        //     },
-        //     (error: any) => this.errorMessage = <any>error
-        // );
         
         
         this.getPurchaseOrderLineList.emit(this.purchaseorderid);
-        // this.purchaseOrderService.getPurchaseOrderLineList(this.purchaseorderid).subscribe(
-        //     (purchaseorderlinelist: PurchaseOrderLineList[]) => {
-        //         this.purchaseOrderLineList = purchaseorderlinelist;
-        //     },
-        //     (error: any) => this.errorMessage = <any>error
-        // ); 
+        
     }
 
     addPendingLine() {
@@ -129,17 +74,6 @@ export class InboundShipmentEditCartonLineListComponent implements OnInit, OnCha
         this.dataSource = new MatTableDataSource<CartonLine>(cartonlines);
         this.dataSource.sort = this.sort;
     }
-
-    // onItemChange(newValue: number, cartonline: CartonLine) {
-    //     if(!this.existItem(newValue)) {
-    //         const selectedItem = this.purchaseOrderLineList.find(x => x.Value === newValue);
-    //         if (selectedItem) {
-    //             cartonline.ItemName = selectedItem.ItemName;
-    //             cartonline.ItemVendorSKU = selectedItem.VendorSKU;
-    //             cartonline.TPIN = selectedItem.TPIN;
-    //         }
-    //     }
-    // }
 
     onItemChange(cartonline: CartonLine, index: number) {
         if (index === this.cartonlines.length - 1) {
@@ -265,16 +199,6 @@ export class InboundShipmentEditCartonLineListComponent implements OnInit, OnCha
 
             this.purchaseOrderService.updatePurchaseLineCartonQuantity(this.purchaseOrder);
 
-            // this.purchaseOrderService.deleteCartonLine(cartonline.CartonLineID).subscribe(
-            //     (data) => {
-            //         this.onDeleteComplete(cartonline, `${cartonline.CartonLineID} was deleted`);
-            //     },
-            //     (error: any) => {
-            //         this.errorMessage = <any>error;
-            //         this.purchaseOrderService.sendNotification({ type: 'error', title: 'Error', content: this.errorMessage });
-            //         window.location.reload();
-            //     }
-            // );
         }
     }
 
@@ -289,9 +213,6 @@ export class InboundShipmentEditCartonLineListComponent implements OnInit, OnCha
     }
 
     onEditCartonLine(index: number) {
-    //onEditCartonLine(cartonline: CartonLine) {
-        // this.purchaseOrderService.currentCartonLine = cartonline;
-        // this.router.navigate(['/inbound-shipment', this.purchaseorderid, 'edit', 'carton', 'list', 'line', cartonline.CartonLineID, 'edit']);
 
         if(this.pendingAdd) {
             this.currentIndex = this.cartonlines.length - 1;
@@ -313,25 +234,6 @@ export class InboundShipmentEditCartonLineListComponent implements OnInit, OnCha
         this.addPendingLine();
     }
 
-    // openDialogSelectItem(item: PurchaseOrder, index: number) {
-    //     // const variationTitle = item.ItemVariationLines.map((attribute) => attribute.ItemAttributeVariationName).join(' / ');
-        
-    //     const data = {
-    //         items: this.purchaseOrderLineList,
-    //         item: item
-    //     }
-    //     const dialogRef = this.inboundShipmentDialog.open(InboundShipmentSelectItemComponentDialog, {
-    //         width: '700px',
-    //         data: data
-    //     });
-    
-    //     dialogRef.afterClosed().subscribe(result => {
-    //         console.log(result);
-    //     },
-    //     (error: any) => {
-    //         this.purchaseOrderService.sendNotification({ type: 'error', title: 'Error', content: error });
-    //     });
-    // }
     scrollToElement($element): void {
         $element.scrollIntoView({behavior: "smooth", block: "start", inline: "nearest"});
     }

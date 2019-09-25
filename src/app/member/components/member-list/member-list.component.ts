@@ -16,6 +16,7 @@ import { AppService } from '../../../app.service';
 
 export class MemberListComponent implements OnInit {
     @Input() currentMember: Member;
+    @Input() userInfo: Member;
     @Input() members: Member[];
     @Input() errorMessage: string;
     @Output() editMemberRegistration = new EventEmitter<Member>();

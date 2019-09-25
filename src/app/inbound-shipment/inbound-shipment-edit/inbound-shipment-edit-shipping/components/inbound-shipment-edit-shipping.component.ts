@@ -41,7 +41,6 @@ export class InboundShipmentEditShippingComponent implements OnInit, OnChanges {
         }
     }
     ngOnChanges(changes: SimpleChanges): void {
-        console.log(changes);
         if (changes.purchaseorder.currentValue) {
             if (changes.purchaseorder.currentValue.InboundShippingMethods.length) {
                 this.inboundShippingMethod = changes.purchaseorder.currentValue.InboundShippingMethods[0];

@@ -20,6 +20,7 @@ export interface InboundShipmentState {
     cartons: Carton[];
     selectedCarton: Carton;
     isLoading: boolean;
+    isListLoading: boolean;
     pendingDelete: boolean,
     pendingSave: boolean,
     pendingAdd: boolean,
@@ -36,6 +37,7 @@ const initialState: InboundShipmentState = {
     selectedCarton: null,
     simpleItemList: [],
     isLoading: true,
+    isListLoading: true,
     pendingDelete: false,
     pendingSave: false,
     pendingAdd: false,
@@ -48,6 +50,7 @@ export function inboundShipmentReducer(state = initialState, action: InboundShip
         case InboundShipmentActionTypes.LoadPurchaseOrder:
             return {
                 ...state,
+                // currentPurchaseOrder: null,
                 isLoading: true,
                 error: '',
             };
@@ -141,14 +144,14 @@ export function inboundShipmentReducer(state = initialState, action: InboundShip
         case InboundShipmentActionTypes.LoadPurchaseOrderOverview:
             return {
                 ...state,
-                isLoading: true,
+                isListLoading: true,
                 error: '',
             };
         case InboundShipmentActionTypes.LoadPurchaseOrderOverviewSuccess:
             return {
                 ...state,
                 purchaseOrders: action.payload,
-                isLoading: false,
+                isListLoading: false,
                 error: '',
             };
 
@@ -156,7 +159,7 @@ export function inboundShipmentReducer(state = initialState, action: InboundShip
             return {
                 ...state,
                 purchaseOrders: [],
-                isLoading: false,
+                isListLoading: false,
                 error: action.payload,
             };
         case InboundShipmentActionTypes.LoadPurchaseOrderLinesSuccess:
@@ -212,6 +215,7 @@ export function inboundShipmentReducer(state = initialState, action: InboundShip
         case InboundShipmentActionTypes.AddNewPurchaseOrderSuccess:
             return {
                 ...state,
+                isLoading: false,
                 currentPurchaseOrder: action.payload,
                 error: '',
             };
@@ -220,6 +224,7 @@ export function inboundShipmentReducer(state = initialState, action: InboundShip
             return {
                 ...state,
                 currentPurchaseOrder: null,
+                isLoading: false,
                 error: action.payload,
             };
         
@@ -279,24 +284,7 @@ export function inboundShipmentReducer(state = initialState, action: InboundShip
             };
 
         case InboundShipmentActionTypes.UpdatePurchaseLineCartonQuantity:
-                state.currentPurchaseOrder.PurchaseOrderLines.forEach((purchaseorderline) => {
-                    purchaseorderline.CartonQuantity = 0;
-                });
-                
-                state.currentPurchaseOrder.Cartons.forEach((carton, ci) => {
-                    carton.CartonLines.forEach((cartonline, cli) => {
-                        if (!cartonline.pendingAdd) {
-                            const purchaseorderline = state.currentPurchaseOrder.PurchaseOrderLines.find(x => x.PurchaseOrderLineID === cartonline.PurchaseOrderLineID);
-                            if (purchaseorderline) {
-                                purchaseorderline.CartonQuantity += cartonline.Quantity;
-                                this.replacePurchaseOrderLine(cartonline.PurchaseOrderLineID, purchaseorderline);
-        
-                                state.currentPurchaseOrder.PurchaseOrderLines[state.currentPurchaseOrder.PurchaseOrderLines.findIndex(i => i.PurchaseOrderLineID === cartonline.PurchaseOrderLineID)] = purchaseorderline;
-                            }
-                        }
-                    });
-                })
-
+            //console.log(action.payload);
         return {
                 ...state,
             };

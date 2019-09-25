@@ -9,7 +9,7 @@ import { NotificationComponent } from '../shared/tool/notification/notification.
     selector: 'o-inbound-shipment',
     templateUrl: './inbound-shipment.component.html',
 })
-export class InboundShipmentComponent implements OnInit, OnDestroy  {
+export class InboundShipmentComponent implements OnInit  {
     subscription: Subscription;
 
     @ViewChild(NotificationComponent, { static: true })
@@ -22,16 +22,5 @@ export class InboundShipmentComponent implements OnInit, OnDestroy  {
         if (this.route.snapshot.queryParams['init']) {
             this.purchaseorderService.resetPurchaseOrders();
         }
-        this.subscription = this.purchaseorderService.subject.subscribe(
-            notification => this.doNotification(notification)
-        );
-    }
-
-    ngOnDestroy(): void {
-        this.subscription.unsubscribe();
-    }
-
-    doNotification(notification) {
-        this.notificationComponent.notify(notification);
     }
 }

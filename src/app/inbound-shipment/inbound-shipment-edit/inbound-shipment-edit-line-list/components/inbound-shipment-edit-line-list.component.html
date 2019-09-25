@@ -5,14 +5,14 @@
         <div class="ibox-content no-border-top wiz-content animated fadeIn" style="height: 300px;">
             <div class="form-group row">
                 <div class="col-md-12">
-                    <div *ngIf="!dataSource.data.length" class="spinner-container">
+                    <div *ngIf="isLoading" class="spinner-container">
                             <div class="sk-spinner sk-spinner-three-bounce big-spinner">
                                 <div class="sk-bounce1"></div>
                                 <div class="sk-bounce2"></div>
                                 <div class="sk-bounce3"></div>
                             </div>
                         </div>
-                    <div *ngIf="purchaseOrder && purchaseOrder.PurchaseOrderLines && purchaseOrder.PurchaseOrderLines.length > 0">
+                    <div *ngIf="!isLoading && purchaseOrder && purchaseOrder.PurchaseOrderLines && purchaseOrder.PurchaseOrderLines.length > 0">
                         <!-- <div *ngIf="purchaseOrder"> -->
                         <table mat-table #table [dataSource]="dataSource" >
 

@@ -50,7 +50,7 @@ export class InboundShipmentEffects {
             this.inboundShipmentService.getPurchaseOrder(id).pipe(
                 map((purchaseOrder: PurchaseOrder) => (new inboundShipmentActions.LoadPurchaseOrderSuccess(purchaseOrder))),
                 catchError(err => {
-                    this.router.navigate(['/inbound-shipment']);
+                    //this.router.navigate(['/inbound-shipment']);
                     of(new inboundShipmentActions.LoadPurchaseOrderFail(err))
                     return EMPTY;
                 })
@@ -168,6 +168,7 @@ export class InboundShipmentEffects {
                     return (new inboundShipmentActions.AddNewPurchaseOrderSuccess(purchaseOrder));
                 }),
                 catchError(err => {
+                    console.log(err)
                     of(new inboundShipmentActions.AddNewPurchaseOrderFail(err))
                     return EMPTY;
                 })
@@ -377,7 +378,7 @@ export class InboundShipmentEffects {
     downloadAllItemLabel$: Observable<Action> = this.actions$.pipe(
         ofType(inboundShipmentActions.InboundShipmentActionTypes.DownloadAllItemLabel),
         map((action: inboundShipmentActions.DownloadAllItemLabel) => action.payload),
-        mergeMap((payload: { purchaseOrder: PurchaseOrder, border: string}) =>
+        mergeMap((payload: { purchaseOrder: PurchaseOrder, border: string }) =>
             this.inboundShipmentService.downloadAllItemLabel(payload.purchaseOrder.PurchaseOrderID, payload.border).pipe(
                 map((data: Blob) => {
                     const blob = new Blob([data], {type: 'application/pdf'});
@@ -603,19 +604,44 @@ export class InboundShipmentEffects {
         )
     );
 
-    // @Effect()
-    // updatePurchaseLineCartonQuantity$: Observable<Action> = this.actions$.pipe(
-    //     ofType(inboundShipmentActions.InboundShipmentActionTypes.UpdatePurchaseLineCartonQuantity),
-    //     mergeMap(() =>
-    //         this.itemService.getSimpleItemList().pipe(
-    //             map((itemlists: ItemList[]) => (new inboundShipmentActions.LoadSimpleItemListSuccess(itemlists))),
-    //             catchError(err => {
-    //                 of(new inboundShipmentActions.LoadSimpleItemListFail(err))
-    //                 return EMPTY;
-    //             })
-    //         )
-    //     )
-    // );
+    @Effect()
+    updatePurchaseLineCartonQuantity$: Observable<Action> = this.actions$.pipe(
+        ofType(inboundShipmentActions.InboundShipmentActionTypes.UpdatePurchaseLineCartonQuantity),
+        map((action: inboundShipmentActions.UpdatePurchaseLineCartonQuantity) => {
+            console.log(action.payload)
+            // state.currentPurchaseOrder.PurchaseOrderLines.forEach((purchaseorderline) => {
+            //     purchaseorderline.CartonQuantity = 0;
+            // });
+            
+            // state.currentPurchaseOrder.Cartons.forEach((carton, ci) => {
+            //     carton.CartonLines.forEach((cartonline, cli) => {
+            //         if (!cartonline.pendingAdd) {
+            //             const purchaseorderline = state.currentPurchaseOrder.PurchaseOrderLines.find(x => x.PurchaseOrderLineID === cartonline.PurchaseOrderLineID);
+            //             if (purchaseorderline) {
+            //                 purchaseorderline.CartonQuantity += cartonline.Quantity;
+            //                 this.replacePurchaseOrderLine(cartonline.PurchaseOrderLineID, purchaseorderline);
+    
+            //                 state.currentPurchaseOrder.PurchaseOrderLines[state.currentPurchaseOrder.PurchaseOrderLines.findIndex(i => i.PurchaseOrderLineID === cartonline.PurchaseOrderLineID)] = purchaseorderline;
+            //             }
+            //         }
+            //     });
+            // })
+            return (new inboundShipmentActions.UpdatePurchaseLineCartonQuantity(action.payload))
+        }),
+        // mergeMap((purchaseorder) => 
+            
+        //     (new inboundShipmentActions.UpdatePurchaseLineCartonQuantity(purchaseorder))
+        
+            
+        //     // this.itemService.getSimpleItemList().pipe(
+        //     //     map((itemlists: ItemList[]) => (new inboundShipmentActions.UpdatePurchaseLineCartonQuantitySuccess(itemlists))),
+        //     //     catchError(err => {
+        //     //         of(new inboundShipmentActions.LoadSimpleItemListFail(err))
+        //     //         return EMPTY;
+        //     //     })
+        //     // )
+        // )
+    );
 
     
     

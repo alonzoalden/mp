@@ -46,7 +46,6 @@ export class ItemEditPriceComponent implements OnInit {
                 private appService: AppService) { }
     
     ngOnChanges(changes: SimpleChanges) {
-        console.log(changes);
         // if (changes.item && changes.item.currentValue ) {
         //     this.PendingAdd = true;
         //     this.addPendingLine();

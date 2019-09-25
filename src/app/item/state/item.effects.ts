@@ -423,7 +423,7 @@ export class ItemEffects {
         map((action: itemActions.DeleteItem) => action.payload),
         mergeMap((item: Item) =>
             this.itemService.deleteItem(item.ItemID).pipe(
-                map((item: Item) => {
+                map(() => {
                     this.itemService.sendNotification({ type: 'success', title: 'Successfully Deleted', content: `${item.Name} was deleted` });
                     return (new itemActions.DeleteItemSuccess(item.ItemID))
                 }),

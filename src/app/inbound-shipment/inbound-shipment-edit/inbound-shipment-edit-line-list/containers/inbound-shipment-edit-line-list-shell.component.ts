@@ -46,5 +46,12 @@ export class InboundShipmentEditLineListShellComponent implements OnInit {
     getSimpleItemList(): void {
         this.store.dispatch(new itemActions.LoadSimpleItemList());
     }
+    updatePurchaseLineCartonQuantity(purchaseorder: PurchaseOrder): void {
+        this.store.dispatch(new inboundShipmentActions.UpdatePurchaseLineCartonQuantity(purchaseorder));
+    }
+    setSelectedPurchaseOrder(purchaseorder: PurchaseOrder): void {
+        this.store.dispatch(new inboundShipmentActions.SetSelectedPurchaseOrder(purchaseorder));
+    }
+    
 
 }

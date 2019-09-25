@@ -44,6 +44,6 @@
     </div>
 </div>
 <mat-dialog-actions>
-    <button (click)="onAddItemClick()" [disabled]="!itemList" mat-button class="btn btn-success-xs btn-main" cdkFocusInitial>{{ 'Select' | translate }}</button>
+    <button (click)="onAddItemClick()" [disabled]="!itemList && !data.item.ItemID" mat-button class="btn btn-success-xs btn-main" cdkFocusInitial>{{ 'Select' | translate }}</button>
     <button (click)="onCancelClick()" mat-button class="btn btn-remove-xs">{{ 'Cancel' | translate }}</button>
 </mat-dialog-actions>

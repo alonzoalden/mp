@@ -1,11 +1,7 @@
-import { Component, OnInit, AfterViewInit, OnChanges, ChangeDetectorRef, Inject, enableProdMode, Input, Output, EventEmitter, SimpleChanges } from '@angular/core';
+import { Component, OnInit, OnChanges, ChangeDetectorRef, Inject, Input, Output, EventEmitter, SimpleChanges } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material';
-import { Subscription } from 'rxjs';
-
 import { PurchaseOrder, PurchaseOrderLine, Carton } from '../../../shared/class/purchase-order';
-//import { PurchaseOrderLine } from '../../shared/class/purchase-order-line';
-
 import { PurchaseOrderService } from '../../purchase-order.service';
 import { InboundShippingMethod } from '../../../shared/class/inbound-shipping-method';
 
@@ -15,37 +11,32 @@ import { InboundShippingMethod } from '../../../shared/class/inbound-shipping-me
   styleUrls: ['./inbound-shipment-edit.component.css']
 })
 
-export class InboundShipmentEditComponent implements OnInit, OnChanges, AfterViewInit {
+export class InboundShipmentEditComponent implements OnInit, OnChanges {
     @Input() purchaseOrder: PurchaseOrder;
     @Input() errorMessage: string;
-    @Input() loading: boolean;
+    //@Input() isLoading: boolean;
     @Input() pendingSave: boolean;
     @Output() getPurchaseOrder = new EventEmitter<number>();
+    @Output() addNewPurchaseOrder = new EventEmitter<void>();
     @Output() editPurchaseOrder = new EventEmitter<{ purchaseOrder: PurchaseOrder, printLabel: boolean }>();
     @Output() editPurchaseOrderThenPrintItemLabels = new EventEmitter<{ purchaseOrder: PurchaseOrder, size: string, border: string }>();
     @Output() downloadPurchaseOrderLabel = new EventEmitter<PurchaseOrder>();
+    @Output() downloadAllItemLabel = new EventEmitter<{purchaseOrder: PurchaseOrder, border: string}>();
+    @Output() downloadAllItemLargeLabel = new EventEmitter<{purchaseOrder: PurchaseOrder, border: string}>();
+    
     @Output() setSelectedPurchaseOrder = new EventEmitter<PurchaseOrder>();
     @Output() setSelectedCarton = new EventEmitter<Carton>();
     
-    
     private originalPurchaseOrder: PurchaseOrder;
     private currentPurchaseOrder: PurchaseOrder;
-
     private currentInboundShippingMethod: InboundShippingMethod;
-
     private currentPurchaseOrderLines: PurchaseOrderLine[];
-
-    purchaseorderid: number;
-    //errorMessage: string;
-    headerLabel: string;
     private dataIsValid: { [key: string]: boolean } = {};
-
-    //pendingSave: boolean;
-
+    
+    purchaseorderid: number;
+    headerLabel: string;
     origStatus: string;
-
-    //loading: boolean;
-
+    
     constructor(private route: ActivatedRoute,
         private router: Router,
         private cd: ChangeDetectorRef,
@@ -76,124 +67,13 @@ export class InboundShipmentEditComponent implements OnInit, OnChanges, AfterVie
 
     ngOnInit() {
         this.purchaseorderid = this.route.snapshot.params['id'];
-        this.getPurchaseOrder.emit(this.purchaseorderid);
-        this.setSelectedPurchaseOrder.emit(null);
-        // route.params.subscribe(val => {
-        //     this.purchaseorderid = this.route.snapshot.params['id'];
-
-        //     this.loading = true;
-        //     this.purchaseOrderSubscription = this.purchaseOrderService.getPurchaseOrder(this.purchaseorderid).subscribe(
-        //         (purchaseOrder: PurchaseOrder) => {
-        //             this.purchaseOrderService.currentPurchaseOrderEdit = purchaseOrder;
-        //             //this.purchaseOrder = this.purchaseOrderService.currentPurchaseOrderEdit;
-        //             this.headerLabel = purchaseOrder.PackingSlipNumber;
-        //             this.origStatus = this.purchaseOrder.Status;
-
-        //             this.loading = false;
-        //         },
-        //         error => {
-        //             //this.errorMessage = <any>error;
-        //             this.loading = false;
-        //             this.purchaseOrderService.sendNotification({ type: 'error', title: 'Error', content: this.errorMessage });
-        //             this.router.navigate(['/inbound-shipment']);
-        //         }
-        //     );
-
-        //     this.purchaseOrderLineSubscription = this.purchaseOrderService.getPurchaseOrderLines(this.purchaseorderid).subscribe(
-        //         (purchaseorderlines: PurchaseOrderLine[]) => {
-        //             this.purchaseOrderService.currentPurchaseOrderLines = purchaseorderlines;
-        //             this.purchaseorderlines = purchaseorderlines;
-        //         },
-        //         error => this.errorMessage = <any>error
-        //     );
-
-        //     this.inboundShippingMethodSubscription = this.purchaseOrderService.getInboundShippingMethods(this.purchaseorderid).subscribe(
-        //         (inboundshippingmethods: InboundShippingMethod[]) => {
-        //             this.purchaseOrderService.currentInboundShippingMethods = inboundshippingmethods;
-        //             if (inboundshippingmethods && inboundshippingmethods[0]) {
-        //                 this.inboundShippingMethod = inboundshippingmethods[0];
-        //                 this.purchaseOrderService.currentInboundShippingMethod = inboundshippingmethods[0];
-        //             } else {
-        //                 this.inboundShippingMethod = new InboundShippingMethod(null, this.purchaseorderid, '', '', '', null, null);
-        //                 this.purchaseOrderService.currentInboundShippingMethod = this.inboundShippingMethod;
-        //                 this.purchaseOrderService.currentInboundShippingMethods.push(this.inboundShippingMethod);
-        //             }
-        //         },
-        //         error => this.errorMessage = <any>error
-        //     );
-
-        // });
-        /*
-        //this.cd.detach();
-
-        this.purchaseorderid = this.route.snapshot.params['id'];
-
-        this.loading = true;
-        this.purchaseOrderSubscription = this.purchaseOrderService.getPurchaseOrder(this.purchaseorderid).subscribe(
-            (purchaseOrder: PurchaseOrder) => {
-                this.purchaseOrderService.currentPurchaseOrderEdit = purchaseOrder;
-                this.purchaseOrder = this.purchaseOrderService.currentPurchaseOrderEdit;
-                this.headerLabel = purchaseOrder.PackingSlipNumber;
-                this.origStatus = this.purchaseOrder.Status;
-
-                this.loading = false;
-            },
-            error => {
-                //this.errorMessage = <any>error;
-                this.loading = false;
-                this.purchaseOrderService.sendNotification({ type: 'error', title: 'Error', content: this.errorMessage });
-                this.router.navigate(['/inbound-shipment']);
-            }
-        );
-
-        this.purchaseOrderLineSubscription = this.purchaseOrderService.getPurchaseOrderLines(this.purchaseorderid).subscribe(
-            (purchaseorderlines: PurchaseOrderLine[]) => {
-                this.purchaseOrderService.currentPurchaseOrderLines = purchaseorderlines;
-                this.purchaseorderlines = purchaseorderlines;
-            },
-            error => this.errorMessage = <any>error
-        );
-
-        // this.inboundShippingMethod = new InboundShippingMethod(null, this.purchaseorderid, '', '', '', null, null);
-        // this.purchaseOrderService.currentInboundShippingMethod = this.inboundShippingMethod;
-
-        this.inboundShippingMethodSubscription = this.purchaseOrderService.getInboundShippingMethods(this.purchaseorderid).subscribe(
-            (inboundshippingmethods: InboundShippingMethod[]) => {
-                this.purchaseOrderService.currentInboundShippingMethods = inboundshippingmethods;
-                if (inboundshippingmethods && inboundshippingmethods[0]) {
-                    this.inboundShippingMethod = inboundshippingmethods[0];
-                    this.purchaseOrderService.currentInboundShippingMethod = inboundshippingmethods[0];
-                } else {
-                    this.inboundShippingMethod = new InboundShippingMethod(null, this.purchaseorderid, '', '', '', null, null);
-                    this.purchaseOrderService.currentInboundShippingMethod = this.inboundShippingMethod;
-                    this.purchaseOrderService.currentInboundShippingMethods.push(this.inboundShippingMethod);
-                }
-            },
-            error => this.errorMessage = <any>error
-        );
-
-        // if(!this.purchaseOrderService.currentInboundShippingMethods)
-        // {
-        //     this.inboundShippingMethod = new InboundShippingMethod(null, this.purchaseorderid, '', '', '', null, null);
-        //     this.purchaseOrderService.currentInboundShippingMethod = this.inboundShippingMethod;
-        //     this.purchaseOrderService.currentInboundShippingMethods.push(this.inboundShippingMethod);
-        // }
-        */
+        if (this.purchaseorderid == 0) {
+            this.addNewPurchaseOrder.emit();
+        }
+        else {
+            this.getPurchaseOrder.emit(this.purchaseorderid);
+        }
     }
-
-    ngAfterViewInit() {
-        //this.cd.detectChanges();
-        //setTimeout(() => this.cd.reattach());
-    }
-
-    // get purchaseOrder(): PurchaseOrder {
-    //     return this.currentPurchaseOrder;
-    // }
-    // set purchaseOrder(value: PurchaseOrder) {
-    //     this.currentPurchaseOrder = value;
-    //     // Clone the object to retain a copy
-    //     this.originalPurchaseOrder = Object.assign({}, value);
-    // }
 
     get purchaseorderlines(): PurchaseOrderLine[] {
         return this.currentPurchaseOrderLines;
@@ -271,42 +151,22 @@ export class InboundShipmentEditComponent implements OnInit, OnChanges, AfterVie
     }
 
     validatePurchaseOrderLines() {
-        // return (this.currentPurchaseOrderLines
-        //     && this.currentPurchaseOrderLines.length > 0);
         return (this.purchaseOrder && this.purchaseOrder.PurchaseOrderLines
             && this.purchaseOrder.PurchaseOrderLines.length > 0
             && this.purchaseOrder.PurchaseOrderLines[0].ItemName);
     }
 
     validateCarton() {
-        // return (this.currentPurchaseOrderLines && !this.currentPurchaseOrderLines.find(x => x.CartonQuantity !== x.Quantity));
         return (this.purchaseOrder && this.purchaseOrder.PurchaseOrderLines 
             && !this.purchaseOrder.PurchaseOrderLines.find(x => x.CartonQuantity !== x.Quantity && !x.pendingAdd));
     }
 
     validateShipping() {
-        // return (this.currentPurchaseOrderEdit.ShipmentDate &&
-        //     this.currentInboundShippingMethod &&
-        //     this.currentInboundShippingMethod.BillingOfLading &&
-        //     this.currentInboundShippingMethod.ContainerNumber);
         return (this.purchaseOrder.ShipmentDate &&
             this.purchaseOrder.InboundShippingMethods[0] &&
             this.purchaseOrder.InboundShippingMethods[0].BillingOfLading &&
             this.purchaseOrder.InboundShippingMethods[0].ContainerNumber);
     }
-
-    // validatePurchaseOrderLines() {
-    //     return (this.purchaseorderlines
-    //         && this.purchaseorderlines.length > 0);
-    // }
-
-    // validateCarton() {
-    //     return (this.purchaseorderlines && !this.purchaseorderlines.find(x => x.CartonQuantity !== x.Quantity));
-    // }
-
-    // validateShipping() {
-    //     return this.purchaseOrderService.validateShipping();
-    // }
 
     saveInboundShipment(printLabel: boolean = false): void {
         if (this.purchaseOrder) {      
@@ -409,41 +269,11 @@ export class InboundShipmentEditComponent implements OnInit, OnChanges, AfterVie
                 });
             }
         }
-
-        //this.loading = true;
-
         this.editPurchaseOrder.emit({purchaseOrder: newPurchaseOrder, printLabel: printLabel});
-        // this.purchaseOrderService.editPurchaseOrder(newPurchaseOrder).subscribe(
-        //     (purchaseOrder: PurchaseOrder) => {
-        //         this.purchaseOrderService.replacePurchaseOrder(purchaseOrder.PurchaseOrderID, purchaseOrder);
-        //         this.purchaseOrderService.currentPurchaseOrderEdit = purchaseOrder;
-        //         this.purchaseOrder = this.purchaseOrderService.currentPurchaseOrderEdit;
-
-        //         this.origStatus = this.purchaseOrder.Status;
-        //         this.pendingSave = false;
-        //         this.purchaseOrderService.currentPurchaseLineIsUpdated = false;
-
-        //         this.loading = false;
-
-        //         this.onSaveComplete(`${this.purchaseOrder.PackingSlipNumber} was saved`);
-
-        //         if(printLabel) {
-        //             this.onPrintLabel();
-        //         }
-        //     },
-        //     (error: any) => {
-        //         this.purchaseOrder.Status = this.origStatus;
-        //         this.pendingSave = false;
-        //         this.loading = false;
-        //         //this.errorMessage = <any>error;
-        //         this.purchaseOrderService.sendNotification({ type: 'error', title: 'Error', content: <any>error });
-        //     }
-        // );    
     }
 
     saveAndShipInboundShipment(): void {
         // console.log(this.purchaseOrder);
-        // console.log(this.inboundShippingMethod);
         if (this.purchaseOrder && this.purchaseOrder.ShipmentDate && this.purchaseOrder.InboundShippingMethods[0].BillingOfLading && this.purchaseOrder.InboundShippingMethods[0].ContainerNumber) { // && this.purchaseOrder.ShipmentDate !== '') {
             this.purchaseOrder.Status = 'Shipping';
             this.save();
@@ -451,22 +281,6 @@ export class InboundShipmentEditComponent implements OnInit, OnChanges, AfterVie
             this.purchaseOrderService.sendNotification({ type: 'error', title: 'Invalid Data', content: 'Shipment Date, B/L, and Container Number is required!' });
         }
     }
-
-    // saveAndContinue(): void {
-    //     if(this.currentStep == 1) {
-    //         if(this.purchaseOrderService.validatePurchaseOrderLines) {
-    //             this.save();
-    //             this.router.navigate(['/inbound-shipment', this.purchaseorderid, 'edit', 'carton']);
-    //         }
-    //     }
-    //     else if(this.currentStep == 2) {
-    //         if(this.purchaseOrderService.validateCarton) {
-    //             this.save();
-    //             this.router.navigate(['/inbound-shipment', this.purchaseorderid, 'edit', 'shipping']);
-    //         }
-    //     }
-    // }
-
     cancelPurchaseOrder(): void {
         this.purchaseOrder.Status = 'Canceled';
         this.save();
@@ -552,35 +366,6 @@ export class InboundShipmentEditComponent implements OnInit, OnChanges, AfterVie
                 //this.loading = true;
 
                 this.editPurchaseOrderThenPrintItemLabels.emit({purchaseOrder: newPurchaseOrder, size: result.Size, border: result.Border});
-                // this.purchaseOrderService.editPurchaseOrder(newPurchaseOrder).subscribe(
-                //     (purchaseOrder: PurchaseOrder) => {
-                //         this.purchaseOrderService.replacePurchaseOrder(purchaseOrder.PurchaseOrderID, purchaseOrder);
-                //         this.purchaseOrderService.currentPurchaseOrderEdit = purchaseOrder;
-                //         this.purchaseOrder = this.purchaseOrderService.currentPurchaseOrderEdit;
-
-                //         this.origStatus = this.purchaseOrder.Status;
-                //         this.pendingSave = false;
-                //         this.purchaseOrderService.currentPurchaseLineIsUpdated = false;
-
-                //         this.loading = false;
-
-                //         this.onSaveComplete(`${this.purchaseOrder.PackingSlipNumber} was saved`);
-                    
-                //         if(result.Size == "small") {
-                //             this.onPrintAllItemLabels(result.Border);
-                //         }
-                //         else {
-                //             this.onPrintAllItemLargeLabels(result.Border);
-                //         }
-                //     },
-                //     (error: any) => {
-                //         this.purchaseOrder.Status = this.origStatus;
-                //         this.pendingSave = false;
-                //         this.loading = false;
-                //         //this.errorMessage = <any>error;
-                //         this.purchaseOrderService.sendNotification({ type: 'error', title: 'Error', content: <any>error });
-                //     }
-                // );  
             } else if(result.Size == "small") {
                 this.onPrintAllItemLabels(result.Border);
             }
@@ -592,111 +377,19 @@ export class InboundShipmentEditComponent implements OnInit, OnChanges, AfterVie
     }
 
     onPrintAllItemLabels(border: string) {
-        this.purchaseOrderService.downloadAllItemLabel(this.purchaseOrder.PurchaseOrderID, border).subscribe(
-            (data) => {
-                const blob = new Blob([data], {type: 'application/pdf'});
-                const blobUrl = URL.createObjectURL(blob);
-                if (window.navigator.msSaveOrOpenBlob) {
-                    const fileName = 'Item_' +  this.purchaseOrder.PackingSlipNumber;
-                    window.navigator.msSaveOrOpenBlob(data, fileName + '.pdf'); // IE is the worst!!!
-                } else {
-                    // const iframe = document.createElement('iframe');
-                    // iframe.style.display = 'none';
-                    // iframe.src = blobUrl;
-                    // document.body.appendChild(iframe);
 
-                    // iframe.onload = (function() {
-                    //     iframe.contentWindow.focus();
-                    //     iframe.contentWindow.print();
-                    // });
-                    const fileURL = window.URL.createObjectURL(blob);
-                    const a: HTMLAnchorElement = document.createElement('a') as HTMLAnchorElement;
-                    a.href = fileURL;
-                    a.download = 'Item_' + this.purchaseOrder.PackingSlipNumber;
-                    document.body.appendChild(a);
-                    a.target = '_blank';
-                    a.click();
+        this.downloadAllItemLabel.emit({purchaseOrder: this.purchaseOrder, border: border});
 
-                    document.body.removeChild(a);
-                    URL.revokeObjectURL(fileURL);
-                }
-            }
-        );
     }
 
     onPrintAllItemLargeLabels(border: string) {
-        //this.downloadAllItemLargeLabel.emit(this.purchaseOrder, border);
-        this.purchaseOrderService.downloadAllItemLargeLabel(this.purchaseOrder.PurchaseOrderID, border).subscribe(
-            (data) => {
-                const blob = new Blob([data], {type: 'application/pdf'});
-                const blobUrl = URL.createObjectURL(blob);
-                if (window.navigator.msSaveOrOpenBlob) {
-                    const fileName = 'Item_' + this.purchaseOrder.PackingSlipNumber + '_Large';
-                    window.navigator.msSaveOrOpenBlob(data, fileName + '.pdf'); // IE is the worst!!!
-                } else {
-                    // const iframe = document.createElement('iframe');
-                    // iframe.style.display = 'none';
-                    // iframe.src = blobUrl;
-                    // document.body.appendChild(iframe);
-
-                    // iframe.onload = (function() {
-                    //     iframe.contentWindow.focus();
-                    //     iframe.contentWindow.print();
-                    // });
-                    const fileURL = window.URL.createObjectURL(blob);
-                    const a: HTMLAnchorElement = document.createElement('a') as HTMLAnchorElement;
-                    a.href = fileURL;
-                    a.download = 'Item_' + this.purchaseOrder.PackingSlipNumber + '_Large';
-                    document.body.appendChild(a);
-                    a.target = '_blank';
-                    a.click();
-
-                    document.body.removeChild(a);
-                    URL.revokeObjectURL(fileURL);
-                }
-            }
-        );
+        this.downloadAllItemLargeLabel.emit({purchaseOrder: this.purchaseOrder, border: border});
     }
 
     onPrintLabel() {
         this.downloadPurchaseOrderLabel.emit(this.purchaseOrder);
-        // this.purchaseOrderService.downloadPurchaseOrderLabel(this.purchaseOrder.PurchaseOrderID).subscribe(
-        //     (data) => {
-        //         const blob = new Blob([data], {type: 'application/pdf'});
-        //         const blobUrl = URL.createObjectURL(blob);
-        //         if (window.navigator.msSaveOrOpenBlob) {
-        //             const fileName = this.purchaseOrder.PackingSlipNumber;
-        //             window.navigator.msSaveOrOpenBlob(data, fileName + '.pdf'); // IE is the worst!!!
-        //         } else {
-        //             // const iframe = document.createElement('iframe');
-        //             // iframe.style.display = 'none';
-        //             // iframe.src = blobUrl;
-        //             // document.body.appendChild(iframe);
-
-        //             // iframe.onload = (function() {
-        //             //     iframe.contentWindow.focus();
-        //             //     iframe.contentWindow.print();
-        //             // });
-        //             const fileURL = window.URL.createObjectURL(blob);
-        //             const a: HTMLAnchorElement = document.createElement('a') as HTMLAnchorElement;
-        //             a.href = fileURL;
-        //             a.download = this.purchaseOrder.PackingSlipNumber;
-        //             document.body.appendChild(a);
-        //             a.target = '_blank';
-        //             a.click();
-
-        //             document.body.removeChild(a);
-        //             URL.revokeObjectURL(fileURL);
-        //         }
-        //     }
-        // );
     }
 
-    // ngOnDestroy() {
-    //     this.purchaseOrderSubscription.unsubscribe();
-    //     this.inboundShippingMethodSubscription.unsubscribe();
-    //     this.purchaseOrderLineSubscription.unsubscribe();
-    // }
 }
 
 

@@ -1,5 +1,5 @@
-import { Component, OnInit, Inject, ViewChild, ElementRef } from '@angular/core';
-import { ItemList, Item, ItemInsert, ItemAttribute, ItemVariationListing, ItemTierPriceInsert, ItemRelatedProductInsert, ItemUpSellInsert, ItemCrossSellInsert, ItemAttachmentInsert, ItemVideoInsert } from '../../shared/class/item';
+import { Component, OnInit, Inject } from '@angular/core';
+import { ItemList } from '../../shared/class/item';
 
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material';
 import { ItemService } from '../item.service';
@@ -24,7 +24,21 @@ export class ItemVariationSelectItemComponentDialog implements OnInit {
         if (this.data.item) {
             this.itemList = this.data.itemLists.find((item) => item.ItemID === this.data.item.ItemID);
         }
+        this.removeExistingItems();
         
+    }
+    onCancelClick(): void {
+        this.dialogRef.close('cancel');
+    }
+    
+    onAddItemClick() {
+        if (this.data.item && this.data.item.IsPrimary && this.itemList) {
+            this.data.variationListing.PrimaryItemID = this.itemList.ItemID;
+        }
+        this.dialogRef.close(this.itemList);
+    }
+    
+    removeExistingItems() {
         //splice out existing variation items from itemLists
         this.data.variationListing.ItemVariations.forEach((itemvariation) => {
             if (this.data.item && this.data.item.ItemID === itemvariation.ItemID) return;
@@ -32,30 +46,6 @@ export class ItemVariationSelectItemComponentDialog implements OnInit {
                 const index = this.data.itemLists.findIndex((item) => item.ItemID === itemvariation.ItemID);
                 this.data.itemLists.splice(index, 1);
             }
-        })
-    }
-    onCancelClick(): void {
-        this.dialogRef.close();
-    }
-    
-    onAddItemClick() {
-        if (!this.itemList) return;
-        if (this.data.item && this.data.item.IsPrimary) {
-            this.data.variationListing.PrimaryItemID = this.itemList.ItemID;
-        }
-        this.dialogRef.close(this.itemList);
-    }
-
-    //don't need because we splice out existing items on nginit
-    validateItemSelection(id) {
-        const matchingID = this.data.variationListing.ItemVariations.find((variation) => variation.ItemID === id);
-        if (matchingID) {
-            this.formInvalid = true;
-            this.itemService.sendNotification({ type: 'error', title: 'Choose Another Item', content: 'Item already selected in different variation' });
-        }
-        else {
-            this.formInvalid = false;
-        }
-
+        });
     }
 }

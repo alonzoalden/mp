@@ -50,8 +50,8 @@
                                     </div>
                                     
                                     <ng-container *ngIf="!pendingDelete || i !== currentIndex">
-                                        <button mat-button [matMenuTriggerFor]="menu" matTooltip=""
-                                        attr.aria-label="{{ 'Menu Button' | translate}}"><i class="fa fa-bars fa-2x"></i></button>
+                                        <button mat-button [matMenuTriggerFor]="menu" matTooltip="" [disabled]="pendingDelete"
+                                            attr.aria-label="{{ 'Menu Button' | translate}}"><i class="fa fa-bars fa-2x"></i></button>
                                         <mat-menu #menu="matMenu">
                                             <button mat-menu-item (click)="setSelectedPurchaseOrder.emit(purchaseorder)" [routerLink]="[purchaseorder.PurchaseOrderID, 'edit']">{{ 'Edit' | translate }}</button> 
                                             <button mat-menu-item (click)="onPrintLabel(purchaseorder)">{{ 'Print Packing Slip' | translate }}</button>                                                               

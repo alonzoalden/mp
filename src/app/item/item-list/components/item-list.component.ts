@@ -27,6 +27,7 @@ export class ItemListComponent implements OnInit {
     @Output() downloadItemTemplate = new EventEmitter<void>();
 
     selectedItem: Item;
+    currentIndex: number;
 
     duplicateItemInsert: ItemInsert;
     duplicateItemCategoryAssignments: ItemCategoryAssignment[];
@@ -121,7 +122,9 @@ export class ItemListComponent implements OnInit {
         this.downloadItemLargeLabelCount.emit({item: item, count: count, border: border});
     }
 
-    onRemove(item: Item) {
+    onRemove(item: Item, index: number) {
+        this.currentIndex = index;
+
         const confirmation = confirm(`Remove ${item.ItemID}: ${item.Name}?`);        
         if (confirmation) {
             this.deleteItem.emit(item);

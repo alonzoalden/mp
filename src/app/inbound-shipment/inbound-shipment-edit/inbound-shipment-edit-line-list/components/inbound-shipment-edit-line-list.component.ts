@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy, OnChanges, ViewChild, Inject, ElementRef, Input, Output, EventEmitter} from '@angular/core';
+import { Component, OnInit, OnChanges, ViewChild, Inject, ElementRef, Input, Output, EventEmitter} from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { MatPaginator, MatSort, MatTableDataSource, MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material';
 // import { PurchaseOrderLine } from '../../shared/class/purchase-order-line';
@@ -15,17 +15,19 @@ templateUrl: './inbound-shipment-edit-line-list.component.html',
 //   styleUrls: ['./inbound-shipment-edit-line-list.component.css', './inbound-shipment-edit.component.css']
 })
 
-export class InboundShipmentEditLineListComponent implements OnInit, OnChanges, OnDestroy {
+export class InboundShipmentEditLineListComponent implements OnInit, OnChanges {
     
     @Input() purchaseOrder: PurchaseOrder;
     @Input() errorMessage: string;
+    @Input() isLoading: boolean;
     @Input() itemList: ItemList[];
     @Output() getSimpleItemList = new EventEmitter<void>();
     @Output() getPurchaseOrderLines = new EventEmitter<number>();
     @Output() downloadItemLabelCount = new EventEmitter<{purchaseorderline: PurchaseOrderLine, count: number, border: string}>();
     @Output() downloadItemLargeLabelCount = new EventEmitter<{purchaseorderline: PurchaseOrderLine, count: number, border: string}>();
-    //@Output() c: PurchaseOrder;
-
+    @Output() setSelectedPurchaseOrder = new EventEmitter<PurchaseOrder>();
+    //@Output() updatePurchaseLineCartonQuantity = new EventEmitter<PurchaseOrder>();
+    
 
     //errorMessage: string;
     //purchaseOrder: PurchaseOrder;
@@ -79,86 +81,9 @@ export class InboundShipmentEditLineListComponent implements OnInit, OnChanges, 
         }
     }
     ngOnInit() {
-        //this.currentIndex = this.purchaseOrder.PurchaseOrderLines.length - 1;  
+        this.setSelectedPurchaseOrder.emit(null);
         this.purchaseorderid = this.route.parent.snapshot.params['id'];
-        this.purchaseOrderService.updatePurchaseLineCartonQuantity(this.purchaseOrder);
-        //this.getPurchaseOrderLines.emit(this.purchaseorderid);
-        //this.purchaseOrderService.updatePurchaseLineCartonQuantity();
-
-
-        // this.removePendingLine();
-        // this.addPendingLine();
-        
-        //this.refreshDataSource(this.purchaseOrder.PurchaseOrderLines);
-        // this.purchaseOrderService.getCurrentPurchaseOrderEdit(this.purchaseorderid).subscribe(
-        //     (purchaseOrder: PurchaseOrder) => {
-        //         this.purchaseOrderService.currentPurchaseOrderEdit = purchaseOrder;
-        //         this.purchaseOrder = this.purchaseOrderService.currentPurchaseOrderEdit;
-        //         this.initialize();
-        //     },
-        //     (error: any) => this.errorMessage = <any>error
-        // );
-
-        // this.purchaseOrderService.getPurchaseOrderLines(this.purchaseorderid).subscribe(
-        //     (purchaseorderlines: PurchaseOrderLine[]) => {
-        //         this.purchaseorderlines = purchaseorderlines;
-        //         this.refreshDataSource(this.purchaseorderlines);
-        //     },
-        //     (error: any) => this.errorMessage = <any>error
-        // );
-        // this.purchaseOrderService.getPurchaseOrder(this.purchaseorderid).subscribe(
-        //     (purchaseOrder: PurchaseOrder) => {
-        //         this.orderStatus  = purchaseOrder.Status;
-        //     },
-        //     (error: any) => this.errorMessage = <any>error
-        // );
     }
-    ngOnDestroy() {
-    }
-    // initialize() {
-    //     this.purchaseOrderService.getPurchaseOrder(this.purchaseorderid).subscribe(
-    //         (purchaseOrder: PurchaseOrder) => {
-    //             //this.orderStatus  = purchaseOrder.Status;
-    //         },
-    //         (error: any) => this.errorMessage = <any>error
-    //     );
-
-        // this.purchaseOrderService.getSimpleItemList().subscribe(
-        //     (itemlist: ItemList[]) => {
-        //         this.itemList = itemlist;
-        //     },
-        //     (error: any) => this.errorMessage = <any>error
-        // );
-        //if (this.purchaseOrderService.currentPurchaseOrderEdit.PurchaseOrderLines === null) {
-            
-            
-            // this.purchaseOrderService.getPurchaseOrderLines(this.purchaseorderid).subscribe(
-            //     (purchaseorderlines: PurchaseOrderLine[]) => {
-            //         this.purchaseOrder.PurchaseOrderLines = purchaseorderlines;  
-                    
-            //         this.purchaseOrder.PurchaseOrderLines.forEach((value) => {
-            //             value.PrevItemID = value.ItemID;
-            //         });
-                    
-            //         this.addPendingLine();      
-            //         this.currentIndex = this.purchaseOrder.PurchaseOrderLines.length - 1;              
-            //         this.refreshDataSource(this.purchaseOrder.PurchaseOrderLines);                    
-            //     },
-            //     (error: any) => this.errorMessage = <any>error
-            // );
-        // } else {
-        //     this.purchaseOrderService.updatePurchaseLineCartonQuantity();
-        //     this.purchaseOrder.PurchaseOrderLines.forEach((value) => {
-        //         value.PrevItemID = value.ItemID;
-        //     });
-
-        //     this.removePendingLine();
-        //     this.addPendingLine();          
-        //     this.currentIndex = this.purchaseOrder.PurchaseOrderLines.length - 1;  
-        //     this.refreshDataSource(this.purchaseOrder.PurchaseOrderLines);
-        //}        
-    //}
-
     addPendingLine() {
         
         const _temp = new PurchaseOrderLine(null, this.purchaseorderid, null, null, null, null, null, null, 1, 0, null, null, null, null, true);

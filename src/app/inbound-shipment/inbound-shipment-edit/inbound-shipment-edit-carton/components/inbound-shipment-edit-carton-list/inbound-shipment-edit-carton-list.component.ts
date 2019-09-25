@@ -18,7 +18,9 @@ export class InboundShipmentEditCartonListComponent implements OnInit, OnChanges
     @Input() errorMessage: string;
     @Output() getCartons = new EventEmitter<number>();
     @Output() setSelectedCarton = new EventEmitter<Carton>();
-
+    @Output() downloadAllCartonLabel = new EventEmitter<PurchaseOrder>();
+    @Output() downloadCartonLabelCount = new EventEmitter<{carton: Carton, count: number, border: string}>();
+    
 
     //errorMessage: string;
     //purchaseOrder: PurchaseOrder;
@@ -57,65 +59,14 @@ export class InboundShipmentEditCartonListComponent implements OnInit, OnChanges
             if (!this.purchaseOrder.Cartons || !this.purchaseOrder.Cartons.length) {
                 this.getCartons.emit(this.route.parent.snapshot.params['id']);
             }
-
-            // if (this.purchaseOrder.Cartons) {
-            // }
-        }
-        // if (changes.itemList && !this.itemList.length) {
-            //     this.getSimpleItemList.emit();
-            // }
+          
         }
 
-    ngOnInit() {
-        //this.setSelectedCarton.emit(null);
-        this.purchaseorderid = this.route.parent.snapshot.params['id'];
-        //this.getCartons.emit(this.route.parent.snapshot.params['id']);
-
-        // this.purchaseOrderService.getCurrentPurchaseOrderEdit(this.purchaseorderid).subscribe(
-        //     (purchaseOrder: PurchaseOrder) => {
-        //         this.purchaseOrderService.currentPurchaseOrderEdit = purchaseOrder;
-        //         this.purchaseOrder = this.purchaseOrderService.currentPurchaseOrderEdit;
-        //         this.initialize();
-        //     },
-        //     (error: any) => this.errorMessage = <any>error
-        // );
     }
-    initialize() {
-        // this.purchaseOrderService.getPurchaseOrder(this.purchaseorderid).subscribe(
-        //     (purchaseOrder: PurchaseOrder) => {
-        //         this.orderStatus  = purchaseOrder.Status;
-        //     },
-        //     (error: any) => this.errorMessage = <any>error
-        // );
-
-        // if (this.purchaseOrderService.currentPurchaseOrderEdit.PurchaseOrderLines === null) {
-
-        //     this.purchaseOrderService.getCartons(this.purchaseorderid).subscribe(
-        //         (cartons: Carton[]) => {
-
-        //             cartons.forEach((c) => {
-        //                 c.CartonLines.forEach((cl) => {
-        //                     cl.PrevPurchaseOrderLineID = cl.PurchaseOrderLineID;
-        //                     this.addPendingCartonLine(c);
-        //                 })
-        //             });
-
-        //             this.purchaseOrder.Cartons = cartons;
-        //             this.addPendingLine();
-        //             this.refreshDataSource(this.purchaseOrder.Cartons);
-        //         },
-        //         (error: any) => this.errorMessage = <any>error
-        //     );
-        // } else {
-        //     this.removePendingLine();
-        //     this.addPendingLine();
-        //     this.refreshDataSource(this.purchaseOrder.Cartons);
-        // }
-
-        //this.currentIndex = this.purchaseOrder.Cartons.length - 1;
-        //this.purchaseOrderService.currentCarton.next(null);
-        //this.purchaseOrderService.currentCartonLines.next([]);
-        //this.purchaseOrderService.currentCartonID = null;
+        
+    ngOnInit() {
+        this.purchaseorderid = this.route.parent.snapshot.params['id'];
+        
     }
 
     getTotalQuantity(cartonLines: CartonLine[]) {
@@ -280,69 +231,11 @@ export class InboundShipmentEditCartonListComponent implements OnInit, OnChanges
     }
 
     onPrintAllCartonLabels() {
-        this.purchaseOrderService.downloadAllCartonLabel(this.purchaseorderid, "yes").subscribe(
-            (data) => {
-                const blob = new Blob([data], {type: 'application/pdf'});
-                const blobUrl = URL.createObjectURL(blob);
-                if (window.navigator.msSaveOrOpenBlob) {
-                    const fileName = 'Carton_' +  this.purchaseorderid;
-                    window.navigator.msSaveOrOpenBlob(data, fileName + '.pdf'); // IE is the worst!!!
-                } else {
-                    // const iframe = document.createElement('iframe');
-                    // iframe.style.display = 'none';
-                    // iframe.src = blobUrl;
-                    // document.body.appendChild(iframe);
-
-                    // iframe.onload = (function() {
-                    //     iframe.contentWindow.focus();
-                    //     iframe.contentWindow.print();
-                    // });
-                    const fileURL = window.URL.createObjectURL(blob);
-                    const a: HTMLAnchorElement = document.createElement('a') as HTMLAnchorElement;
-                    a.href = fileURL;
-                    a.download = 'Carton_' +  this.purchaseorderid;
-                    document.body.appendChild(a);
-                    a.target = '_blank';
-                    a.click();
-
-                    document.body.removeChild(a);
-                    URL.revokeObjectURL(fileURL);
-                }
-            }
-        );
+        this.downloadAllCartonLabel.emit(this.purchaseOrder);
     }
 
     onPrintLabel(carton: Carton, count: number, border: string) {
-        this.purchaseOrderService.downloadCartonLabelCount(carton.CartonID, count, border).subscribe(
-            (data) => {
-                const blob = new Blob([data], {type: 'application/pdf'});
-                const blobUrl = URL.createObjectURL(blob);
-                if (window.navigator.msSaveOrOpenBlob) {
-                    const fileName = carton.CartonNumber;
-                    window.navigator.msSaveOrOpenBlob(data, fileName + '.pdf'); // IE is the worst!!!
-                } else {
-                    // const iframe = document.createElement('iframe');
-                    // iframe.style.display = 'none';
-                    // iframe.src = blobUrl;
-                    // document.body.appendChild(iframe);
-
-                    // iframe.onload = (function() {
-                    //     iframe.contentWindow.focus();
-                    //     iframe.contentWindow.print();
-                    // });
-                    const fileURL = window.URL.createObjectURL(blob);
-                    const a: HTMLAnchorElement = document.createElement('a') as HTMLAnchorElement;
-                    a.href = fileURL;
-                    a.download = carton.CartonNumber;
-                    document.body.appendChild(a);
-                    a.target = '_blank';
-                    a.click();
-
-                    document.body.removeChild(a);
-                    URL.revokeObjectURL(fileURL);
-                }
-            }
-        );
+        this.downloadCartonLabelCount.emit({carton, count, border});
     }
 
     onRemoveCarton(carton: Carton, index: number) {
@@ -400,29 +293,7 @@ export class InboundShipmentEditCartonListComponent implements OnInit, OnChanges
 
         this.purchaseOrderService.updatePurchaseLineCartonQuantity(this.purchaseOrder);
         this.pendingCopy = false;
-
-        //const cartonInsert = new CartonInsert(this.purchaseorderid, this.purchaseOrder.Cartons.length + 1, carton.Length, carton.Width, carton.Height, carton.Weight, carton.LabelQty, []);
-
-        // this.purchaseOrderService.addCarton(cartonInsert).subscribe(
-        //     (data: Carton) => {
-        //         this.pendingCopy = false;
-        //         this.purchaseOrderService.currentCartonLines.forEach(cartonline => {
-        //             const cartonLineInsert = new CartonLineInsert(data.CartonID, cartonline.PurchaseOrderLineID, cartonline.Quantity);
-        //             //this.purchaseOrderService.currentCartonID = data.CartonID;
-        //             this.onShowCartonLine(data, index);
-        //             this.purchaseOrderService.addCartonLine(cartonLineInsert).subscribe();
-        //         });
-
-        //         //this.cartons.push(data);
-        //         this.purchaseOrderService.sendNotification({ type: 'success', title: 'Successfully Copied', content: '' });
-        //         //this.onShowCartonLine(carton);
-        //         this.refreshDataSource(this.purchaseOrder.Cartons);
-        //     },
-        //     (error: any) => {
-        //         this.pendingCopy = false;
-        //         this.errorMessage = <any>error;
-        //     }
-        // );
+        
     }
 
     isValidQuantity(cartonline: CartonLine) {
@@ -579,23 +450,9 @@ export class InboundShipmentEditCartonListComponentCartonLineDialog implements O
     canAdd = false;
     cartonlines: CartonLine[] = [];
     carton: Carton;
-    //@ViewChild("linePurchaseOrderIDRef") linePurchaseOrderIDRef: ElementRef;
 
     @ViewChild(MatSort, { static: false }) sort: MatSort;
 
-    // get carton(): Carton | null {
-    //     return this.purchaseOrderService ? this.purchaseOrderService.currentCarton : null;
-    // }
-
-    // get cartonlines(): CartonLine[] | null {
-
-    //     //this.refreshDataSource(this.purchaseOrderService.currentCartonLines);
-    //     if(this.purchaseOrderService.newCartonLineIsSelected) {
-    //         this.currentIndex = this.purchaseOrderService.currentCartonLines.length - 1;
-    //         this.purchaseOrderService.newCartonLineIsSelected = false;
-    //     }
-    //     return this.purchaseOrderService.currentCartonLines;
-    // }
 
     constructor(
         private purchaseOrderService: PurchaseOrderService,

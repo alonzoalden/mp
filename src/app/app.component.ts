@@ -105,7 +105,6 @@ export class AppComponent implements OnInit, OnDestroy {
                 .subscribe(
                     (data) => {
                         this.appService.currentMember = data;
-
                         //Set Default Language
                         this.currentLanguage =this.appService.currentMember.DefaultLanguage;
                         this.translate.setDefaultLang(this.currentLanguage);
@@ -200,26 +199,27 @@ export class AppComponent implements OnInit, OnDestroy {
 
 
     addPurchaseOrder() {
-        this.appService.addPurchaseOrder().subscribe(
-            (data: PurchaseOrder) => this.onAddPurchaseOrderComplete(data, `${data.PurchaseOrderID} was added`),
-            (error: any) => {     
-                //console.log(error);           
-                this.errorMessage = <any>error;                              
-            }
-        );
+        this.router.navigate(['/inbound-shipment', 0, 'edit']);
+        // this.appService.addPurchaseOrder().subscribe(
+        //     (data: PurchaseOrder) => this.onAddPurchaseOrderComplete(data, `${data.PurchaseOrderID} was added`),
+        //     (error: any) => {     
+        //         //console.log(error);           
+        //         this.errorMessage = <any>error;                              
+        //     }
+        // );
     }
 
-    onAddPurchaseOrderComplete(purchaseorder: PurchaseOrder, message?: string) {
-        //this.appService.sendNotification({ type: 'success', title: 'Successfully Added', content: message });
+    // onAddPurchaseOrderComplete(purchaseorder: PurchaseOrder, message?: string) {
+    //     //this.appService.sendNotification({ type: 'success', title: 'Successfully Added', content: message });
         
-        if(this.isInboundShipmentPage()) {
-            this.router.navigate(['/inbound-shipment', purchaseorder.PurchaseOrderID, 'edit']);
-            //window.location.reload();
-        }
-        else {
-            this.router.navigate(['/inbound-shipment', purchaseorder.PurchaseOrderID, 'edit']);
-        }                
-    }
+    //     if(this.isInboundShipmentPage()) {
+    //         this.router.navigate(['/inbound-shipment', purchaseorder.PurchaseOrderID, 'edit']);
+    //         //window.location.reload();
+    //     }
+    //     else {
+    //         this.router.navigate(['/inbound-shipment', purchaseorder.PurchaseOrderID, 'edit']);
+    //     }                
+    // }
 
     isInboundShipmentPage() {
         return this.router.url.indexOf('inbound-shipment/') > 0;

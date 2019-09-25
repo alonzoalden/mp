@@ -25,6 +25,7 @@ export class ItemComponent implements OnInit, OnDestroy {
         this.subscription = this.itemService.subject.subscribe(
             notification => this.doNotification(notification)
         );
+        
     }
 
     ngOnDestroy(): void {
