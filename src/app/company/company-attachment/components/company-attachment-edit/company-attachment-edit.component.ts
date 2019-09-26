@@ -12,7 +12,7 @@ import { VendorAttachment } from '../../../../shared/class/vendor-attachment';
 export class CompanyAttachmentEditComponent implements OnChanges {
     filesToUpload: Array<File> = [];
     selectedFileNames: string[] = [];
-
+    title: string; 
     @Input() vendorAttachmentsMatTable: MatTableDataSource<VendorAttachment>;
     @Input() vendorAttachment: VendorAttachment;
     @Input() pendingUpload: boolean = false;

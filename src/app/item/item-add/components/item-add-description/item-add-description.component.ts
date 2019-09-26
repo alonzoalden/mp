@@ -1,6 +1,7 @@
 import { Component, AfterViewInit, OnChanges, Input } from '@angular/core';
 import { ItemInsert } from '../../../../shared/class/item';
 import { VendorBrand } from '../../../../shared/class/vendor-brand';
+import { Member } from 'app/shared/class/member';
 
 declare var $ :any;
 
@@ -10,7 +11,7 @@ declare var $ :any;
 })
 
 export class ItemAddDescriptionComponent implements AfterViewInit {
-    @Input() userInfo: string;
+    @Input() userInfo: Member;
     @Input() errorMessage: string;
     @Input() item: ItemInsert;
     @Input() vendorBrandList: VendorBrand[];

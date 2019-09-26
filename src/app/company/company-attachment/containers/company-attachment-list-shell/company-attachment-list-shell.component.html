@@ -3,7 +3,7 @@
     [vendorAttachmentsMatTable]="vendorAttachmentsMatTable$ | async"
     [errorMessage]="errorMessage$ | async"
     [pendingDelete]="pendingDelete$ | async"
-    (getVendorAttachments)="getVendorAttachments($event)"
+    (getVendorAttachments)="getVendorAttachments()"
     (deleteVendorAttachment)="deleteVendorAttachment($event)"
     (setVendorAttachmentID)="setVendorAttachmentID($event)"
 ></o-company-attachment-list>

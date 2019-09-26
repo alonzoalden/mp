@@ -84,21 +84,21 @@ export class ItemPartListShellComponent implements OnInit {
     }
 
     openDialogPrintItemLabel(item: Item) {
-        const dialogRef = this.itemPrintDialog.open(ItemPartListComponentItemPrintDialog, {
-          width: '250px',
-          data: item,
-        });
+        // const dialogRef = this.itemPrintDialog.open(ItemPartListComponentItemPrintDialog, {
+        //   width: '250px',
+        //   data: item,
+        // });
     
-        dialogRef.afterClosed().subscribe(result => {
-            if (result && result.Quantity > 0) {
-                if(result.Size === "small") {
-                    this.onPrintLabel(item, result.Quantity, result.Border);
-                }
-                else {
-                    this.onPrintLargeLabel(item, result.Quantity, result.Border);
-                }
-            }
-        });
+        // dialogRef.afterClosed().subscribe(result => {
+        //     if (result && result.Quantity > 0) {
+        //         if(result.Size === "small") {
+        //             this.onPrintLabel(item, result.Quantity, result.Border);
+        //         }
+        //         else {
+        //             this.onPrintLargeLabel(item, result.Quantity, result.Border);
+        //         }
+        //     }
+        // });
     }
 
     onPrintLabel(item: Item, count: number, border: string) {
@@ -266,33 +266,33 @@ export class ItemPartListShellComponent implements OnInit {
     }
 }
 
-export class ItemLabelPrintDialog {
-    constructor(
-        public Size: string,
-        public Quantity: number,
-        public Border: string
-    ) {}
-}
+// export class ItemLabelPrintDialog {
+//     constructor(
+//         public Size: string,
+//         public Quantity: number,
+//         public Border: string
+//     ) {}
+// }
 
-@Component({
-selector: 'item-part-list.component-item-print-dialog',
-templateUrl: 'item-part-list.component-item-print-dialog.html',
-})
+// @Component({
+// selector: 'item-part-list.component-item-print-dialog',
+// templateUrl: 'item-part-list.component-item-print-dialog.html',
+// })
 
-export class ItemPartListComponentItemPrintDialog implements OnInit {
-    itemLabelPrintDialog: ItemLabelPrintDialog;
+// export class ItemPartListComponentItemPrintDialog implements OnInit {
+//     itemLabelPrintDialog: ItemLabelPrintDialog;
 
-    constructor(
-        public dialogRef: MatDialogRef<ItemPartListComponentItemPrintDialog>,
-        @Inject(MAT_DIALOG_DATA) public data: Item) {
+//     constructor(
+//         public dialogRef: MatDialogRef<ItemPartListComponentItemPrintDialog>,
+//         @Inject(MAT_DIALOG_DATA) public data: Item) {
         
-        }
-    ngOnInit() {
-        this.itemLabelPrintDialog = new ItemLabelPrintDialog("small", 1, "yes");
-    }
+//         }
+//     ngOnInit() {
+//         this.itemLabelPrintDialog = new ItemLabelPrintDialog("small", 1, "yes");
+//     }
 
-    onCancelClick(): void {
-        this.dialogRef.close();
-    }
-}
+//     onCancelClick(): void {
+//         this.dialogRef.close();
+//     }
+// }
 

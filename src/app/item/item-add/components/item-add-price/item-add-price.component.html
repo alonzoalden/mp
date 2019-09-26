@@ -32,7 +32,7 @@
                                 </span>
                             </div>
                         </div>
-                        <div class="form-group" *ngIf="!userInfo?.isDropship" [ngClass]="{'has-error': (itemFOBPriceVar.touched || 
+                        <div class="form-group" *ngIf="!userInfo?.IsDropship" [ngClass]="{'has-error': (itemFOBPriceVar.touched || 
                                                                                     itemFOBPriceVar.dirty) && 
                                                                                     !itemFOBPriceVar.valid }">
                             <label class="col-md-2 control-label" for="itemFOBPriceId">{{ 'FOB Price' | translate }}</label>
@@ -49,7 +49,7 @@
                                 </span>
                             </div>
                         </div>
-                        <div class="form-group" *ngIf="userInfo?.isDropship" [ngClass]="{'has-error': (itemDropshipPriceVar.touched || 
+                        <div class="form-group" *ngIf="userInfo?.IsDropship" [ngClass]="{'has-error': (itemDropshipPriceVar.touched || 
                                                                                     itemDropshipPriceVar.dirty) && 
                                                                                     !itemDropshipPriceVar.valid }">
                             <label class="col-md-2 control-label" for="itemDropshipPriceId">{{ 'Drop-ship Price' | translate }}</label>
