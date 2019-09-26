@@ -184,17 +184,45 @@ export function itemReducer(state = initialState, action: ItemActions): ItemStat
                 item: state.item,
                 error: action.payload,
             };
+        case ItemActionTypes.LoadItem:
+            return {
+                ...state,
+                isLoading: true,
+                error: '',
+            };
             
         case ItemActionTypes.LoadItemSuccess:
             return {
                 ...state,
+                isLoading: false,
                 item: action.payload,
                 error: '',
             };
         case ItemActionTypes.LoadItemFail:
             return {
                 ...state,
+                isLoading: false,
                 item: null,
+                error: action.payload,
+            };
+        
+        case ItemActionTypes.AddItem:
+            return {
+                ...state,
+                pendingAdd: true,
+            };
+        case ItemActionTypes.AddItemSuccess:
+            return {
+                ...state,
+                itemBatchItems: [action.payload, ...state.itemBatchItems],
+                pendingAdd: false,
+                error: '',
+            };
+        case ItemActionTypes.AddItemFail:
+            return {
+                ...state,
+                item: null,
+                pendingAdd: false,
                 error: action.payload,
             };
         case ItemActionTypes.EditItem:

@@ -39,6 +39,11 @@ export class ItemEditProductRelationCrossSellComponent implements OnInit {
             this.crossSellAddPendingLine();
             this.currentItemCrossSellIndex = this.item.ItemRelatedProducts.length - 1;
         }
+        if(changes.item && changes.item.currentValue && changes.item.currentValue.ItemCrossSells.length) {
+            if (this.item.ItemCrossSells[this.item.ItemCrossSells.length - 1].CrossSellItemID) {
+                this.crossSellAddPendingLine();
+            }
+        }
     }
     ngOnInit(): void {
         this.currentItemCrossSellIndex = this.item.ItemCrossSells.length - 1;
@@ -83,7 +88,7 @@ export class ItemEditProductRelationCrossSellComponent implements OnInit {
         if (this.isCrossSellRequirementValid(itemCrossSell)) { 
             if(!this.existCrossSell(itemCrossSell.CrossSellItemID, true)) {    
                 this.crossSellPendingAdd = true; 
-
+                //this.getAllItemCrossSell.emit(itemCrossSell);
                 // this.itemService.getAllItem(itemCrossSell.CrossSellItemID).subscribe(
                 //     (item: Item) => {
                 //         itemCrossSell.PrevCrossSellItemID = item.ItemID;
@@ -148,7 +153,6 @@ export class ItemEditProductRelationCrossSellComponent implements OnInit {
         if(this.item.ItemCrossSells[index].CrossSellItemID) {
             if(!this.existCrossSell(this.item.ItemCrossSells[index].CrossSellItemID)) {
                 this.getAllItemCrossSell.emit(this.item.ItemCrossSells[index]);
-                
                 // this.itemService.getAllItem(this.item.ItemCrossSells[index].CrossSellItemID).subscribe(
                 //     (item: Item) => {
                 //         this.item.ItemCrossSells[index].PrevCrossSellItemID = item.ItemID;

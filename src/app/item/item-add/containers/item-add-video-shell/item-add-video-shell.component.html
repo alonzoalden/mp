@@ -2,4 +2,5 @@
     [item]="item$ | async"
     [itemVideosMatTable]="itemVideosMatTable$ | async"
     [errorMessage]="errorMessage$ | async"
+    (getVideoURLDetail)="getVideoURLDetail($event)"
 ></o-item-add-video>

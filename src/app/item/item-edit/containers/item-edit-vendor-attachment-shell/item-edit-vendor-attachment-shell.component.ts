@@ -1,16 +1,12 @@
-import { Component, OnInit, OnDestroy, ViewChild, ElementRef } from '@angular/core';
-import { Router, ActivatedRoute } from '@angular/router';
+import { Component, OnInit } from '@angular/core';
 import { MatTableDataSource } from '@angular/material';
-import { Subscription, Observable } from 'rxjs';
+import { Observable } from 'rxjs';
 
-import { Item, ItemList, ItemAttachment, ItemInsert, ItemAttachmentInsert } from '../../../../shared/class/item';
-import { ItemService } from '../../../item.service';
-import { VendorAttachmentList, VendorAttachment } from '../../../../shared/class/vendor-attachment';
+import { Item, ItemAttachment, ItemInsert, ItemAttachmentInsert } from '../../../../shared/class/item';
+import { VendorAttachmentList } from '../../../../shared/class/vendor-attachment';
 import { Store, select } from '@ngrx/store';
 import * as itemActions from '../../../state/item.actions';
 import * as fromItem from '../../../state';
-
-import { environment } from '../../../../../environments/environment';
 
 @Component({
     templateUrl: './item-edit-vendor-attachment-shell.component.html'

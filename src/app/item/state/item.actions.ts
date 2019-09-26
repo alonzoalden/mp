@@ -62,6 +62,9 @@ export enum ItemActionTypes {
   LoadRefreshItems = '[Item] Load Refresh Items',
   LoadRefreshItemsSuccess = '[Item] Load Refresh Items Success',
   LoadRefreshItemsFail = '[Item] Load Refresh Items Fail',
+  AddItem = '[Item] Add Item',
+  AddItemSuccess = '[Item] Add Item Success',
+  AddItemFail = '[Item] Add Item Fail',
   EditItem = '[Item] Edit Item',
   EditItemSuccess = '[Item] Edit Item Success',
   EditItemFail = '[Item] Edit Item Fail',
@@ -440,6 +443,20 @@ export class EditItemBatchUpdateFail implements Action {
   constructor(public payload: string) { }
 }
 
+export class AddItem implements Action {
+  readonly type = ItemActionTypes.AddItem;
+  constructor(public payload: ItemInsert) { }
+}
+
+export class AddItemSuccess implements Action {
+  readonly type = ItemActionTypes.AddItemSuccess;
+  constructor(public payload: Item) { }
+}
+
+export class AddItemFail implements Action {
+  readonly type = ItemActionTypes.AddItemFail;
+  constructor(public payload: string) { }
+}
 
 
 export class EditItem implements Action {
@@ -621,6 +638,9 @@ export type ItemActions = LoadVendorBrands
 | LoadRefreshItems
 | LoadRefreshItemsSuccess
 | LoadRefreshItemsFail
+| AddItem
+| AddItemSuccess
+| AddItemFail
 | EditItem
 | EditItemSuccess
 | EditItemFail

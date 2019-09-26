@@ -1,13 +1,7 @@
-import { Component, OnInit, OnDestroy, ViewChild, Input, Output, EventEmitter, SimpleChanges } from '@angular/core';
-import { Router, ActivatedRoute } from '@angular/router';
+import { Component, OnInit, Input, Output, EventEmitter, SimpleChanges } from '@angular/core';
 import { MatTableDataSource } from '@angular/material';
-import { Subscription } from 'rxjs';
-
-import { Item, ItemList, ItemVideo } from '../../../../shared/class/item';
+import { Item, ItemVideo } from '../../../../shared/class/item';
 import { ItemService } from '../../../item.service';
-
-import { URLVideo, URLVideoItems, URLVideoItemsSnippet, URLVideoItemsSnippetThumbnails, URLVideoItemsSnippetThumbnailsStandard } from '../../../../shared/class/item-video';
-
 import { environment } from '../../../../../environments/environment';
 
 @Component({
@@ -32,12 +26,13 @@ export class ItemEditVideoComponent implements OnInit {
     constructor(private itemService: ItemService) { }
 
     ngOnChanges(changes: SimpleChanges) {
+
         if (changes.item && changes.item.currentValue) {
-            if (this.item.ItemAttachments.length === 0 || this.item.ItemVideos[this.item.ItemVideos.length-1].ItemVideoID) {
+            if (this.item.ItemVideos.length === 0 || this.item.ItemVideos[this.item.ItemVideos.length-1].ItemVideoID) {
                 this.addPendingLine();
+                this.currentIndex = this.item.ItemVideos.length - 1;
+
             }
-            this.addPendingLine();
-            this.currentIndex = this.item.ItemVideos.length - 1;
         }
     }
 
@@ -82,7 +77,9 @@ export class ItemEditVideoComponent implements OnInit {
 
     onAddItemVideo(itemVideo: ItemVideo) {
         if (this.isRequirementValid(itemVideo)) {                
-            const videoID = this.getQueryString('v', itemVideo.URL);
+            //const videoID = this.getQueryString('v', itemVideo.URL);
+            const videoID = this.getYoutubeQueryString(itemVideo.URL);
+            if (!videoID) return this.itemService.sendNotification({ type: 'error', title: 'Error', content: "Incorrect Youtube URL" });
 
             const existVideo = this.item.ItemVideos.find(x => x.Value === videoID);
             if (existVideo) {
@@ -91,6 +88,8 @@ export class ItemEditVideoComponent implements OnInit {
             }
             else {
                 this.pendingAdd = true;
+                itemVideo.Value = videoID;
+                itemVideo.Position = this.item.ItemVideos.length + 1;
                 this.getVideoURLDetail.emit(itemVideo);
                 // this.itemService.getVideoURLDetail(videoID).subscribe(
                 //     (URLVideo: URLVideo) => {
@@ -125,12 +124,23 @@ export class ItemEditVideoComponent implements OnInit {
             this.itemService.sendNotification({ type: 'error', title: 'Error', content: "Please select an Video" });
         }
     }
-
-    getQueryString(field: string, url: string) {
-        const reg = new RegExp( '[?&]' + field + '=([^&#]*)', 'i' );
-        const value = reg.exec(url);
-        return value[1];
+    getYoutubeQueryString(url: string) {
+        if (url.includes('?v=')) {
+            const reg = new RegExp( '[?&]' + 'v' + '=([^&#]*)', 'i' );
+            const value = reg.exec(url);
+            return value[1];
+        }
+        else if (url.includes('/embed/')){
+            const value = url.split('/embed/')[1].split('?')[0];
+            return value;
+        }
     }
+
+    // getQueryString(field: string, url: string) {
+    //     const reg = new RegExp( '[?&]' + field + '=([^&#]*)', 'i' );
+    //     const value = reg.exec(url);
+    //     return value[1];
+    // }
 
     onEditItemVideo(index: number) {
         if(this.pendingAdd) {

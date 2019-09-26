@@ -33,34 +33,6 @@ export class ItemEditDescriptionComponent implements OnInit, AfterViewInit {
     }
 
     ngOnInit(): void {
-        //const itemid = this.route.parent.snapshot.params['id'];
-        
-        // this.itemService.getVendorBrands().subscribe(
-        //     (vendorBrands: VendorBrand[]) => {
-        //         this.vendorBrandList = vendorBrands;
-        //     },
-        //     (error: any) => {
-        //         this.errorMessage = <any>error;                
-        //     }
-        // ); 
-
-        // this.itemService.getCurrentItemEdit(itemid).subscribe(
-        //     (item: Item) => {
-        //         this.itemService.currentItemEdit = item;
-        //         this.item = this.itemService.currentItemEdit;
-        //     },
-        //     (error: any) => this.errorMessage = <any>error
-        // );
-
-        // this.appService.getCurrentMember().subscribe(
-        //     (data) => {
-        //         this.appService.currentMember = data;
-        //         this.isPM = data.IsPM;
-        //     },
-        //     (error: any) => {
-        //         this.errorMessage = <any>error;
-        //     }
-        // );
     }
 
     ngAfterViewInit() {

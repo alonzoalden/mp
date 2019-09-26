@@ -22,14 +22,14 @@
             <!-- <div *ngIf="loading" style="text-align:center">
                 <img src="../../../assets/images/loader.gif" alt="Loading" />
             </div> -->
-            <div *ngIf="isLoading" class="m-t-xl">
+            <!-- <div *ngIf="isLoading" class="m-t-xl">
                 <div class="sk-spinner sk-spinner-three-bounce big-spinner">
                     <div class="sk-bounce1"></div>
                     <div class="sk-bounce2"></div>
                     <div class="sk-bounce3"></div>
                 </div>
-            </div>
-            <div *ngIf="!isLoading">
+            </div> -->
+            <div>
                 <div class="tabs-container">
                     <ul class="nav nav-tabs">
                         <li routerLinkActive="active">
@@ -95,7 +95,7 @@
     </div>
     <br />
     
-    <div class="button-bottom-row" *ngIf="!isLoading">
+    <div class="button-bottom-row" >
         <button mat-button
                 type="button"
                 class="btn button-cancel"
@@ -105,7 +105,11 @@
                 type="button"
                 class="btn button-add"
                 [disabled]="pendingAdd"
-                (click)="onAddItem()"><i class="fa fa-plus-circle"></i> {{ 'Add' | translate }}
+                (click)="onAddItem()">
+                <span *ngIf="!pendingAdd"><i class="fa fa-plus-circle"></i> {{ 'Add' | translate }}</span>
+                <div *ngIf="pendingAdd">
+                    <i class="fa fa-spinner fa-spin"></i>
+                </div>
         </button>  
     </div>
 </div>

@@ -32,7 +32,7 @@ export class ItemEditProductRelationShellComponent implements OnInit, OnDestroy 
     ) { }
 
     ngOnInit() {
-        this.store.dispatch(new itemActions.LoadAllItemList());
+        //this.store.dispatch(new itemActions.LoadAllItemList());
 
         this.item$ = this.store.pipe(select(fromItem.getItem));
 

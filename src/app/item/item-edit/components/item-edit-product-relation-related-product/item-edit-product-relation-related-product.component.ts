@@ -86,8 +86,8 @@ export class ItemEditProductRelationRelatedProductComponent implements OnInit {
     onAddItemRelatedProduct(itemRelatedProduct: ItemRelatedProduct) {
         if (this.isRelatedProductRequirementValid(itemRelatedProduct)) { 
             if(!this.existRelatedProduct(itemRelatedProduct.RelatedProductItemID, true)) {    
-                this.relatedProductPendingAdd = true; 
-
+                this.relatedProductPendingAdd = true;
+                //this.getItemRelatedProduct.emit(itemRelatedProduct);
                 // this.itemService.getItem(itemRelatedProduct.RelatedProductItemID).subscribe(
                 //     (item: Item) => {
                 //         itemRelatedProduct.PrevRelatedProductItemID = item.ItemID;

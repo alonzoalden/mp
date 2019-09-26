@@ -5,5 +5,6 @@
     [pendingAdd]="pendingAdd$ | async"
     [errorMessage]="errorMessage$ | async"
     (getVendorBrands)="getVendorBrands()"
+    (addItem)="addItem($event)"
     (setItem)="setItem($event)"
 ></o-item-add>

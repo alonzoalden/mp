@@ -46,11 +46,6 @@ export class ItemEditPriceComponent implements OnInit {
                 private appService: AppService) { }
     
     ngOnChanges(changes: SimpleChanges) {
-        // if (changes.item && changes.item.currentValue ) {
-        //     this.PendingAdd = true;
-        //     this.addPendingLine();
-            
-        // }
         if (changes.itemTierPricesMatTable && !changes.itemTierPricesMatTable.currentValue.data.length) {
             this.addPendingLine();
         }
@@ -59,37 +54,12 @@ export class ItemEditPriceComponent implements OnInit {
     }
     
     ngOnInit(): void {
-        //this.itemid = this.route.parent.snapshot.params['id'];
-        console.log(this.item);
-
-        
         if (!this.item.ItemTierPrices.length) {
             this.getItemTierPrices.emit(this.item.ItemID);
-            //this.addPendingLine();
         }
         if (this.item.ItemTierPrices[this.item.ItemTierPrices.length-1].ItemTierPriceID) {
             this.addPendingLine();
         }
-        // this.appService.getCurrentMember()
-        //         .subscribe(
-        //             (data) => {
-        //                 this.appService.currentMember = data;
-        //                 this.isDropship = data.IsDropship;
-        //             },
-        //             (error: any) => {
-        //                 this.errorMessage = <any>error;
-        //             }
-        //         );
-
-        // this.itemService.getCurrentItemEdit(this.itemid).subscribe(
-        //     (item: Item) => {
-        //         this.itemService.currentItemEdit = item;
-        //         this.item = this.itemService.currentItemEdit;
-        //         this.initialize();
-        //     },
-        //     (error: any) => this.errorMessage = <any>error
-        // );
-
     }
 
     initialize() {

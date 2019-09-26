@@ -34,4 +34,8 @@ export class ItemAddShellComponent implements OnInit {
     setItem(payload: ItemInsert) {
         this.store.dispatch(new itemActions.SetItem(payload));
     }
+    addItem(payload: ItemInsert) {
+        this.store.dispatch(new itemActions.AddItem(payload));
+    }
+
 }

@@ -24,4 +24,8 @@ export class ItemAddVideoShellComponent implements OnInit {
         this.errorMessage$ = this.store.pipe(select(fromItem.getError));
         this.itemVideosMatTable$ = this.store.pipe(select(fromItem.getItemVideosMatTable));
     }
+    getVideoURLDetail(payload: ItemVideoInsert): void {
+        this.store.dispatch(new itemActions.LoadVideoURLDetail(payload));
+    }
+
 }

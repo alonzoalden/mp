@@ -17,14 +17,16 @@ import { Observable } from 'rxjs';
 
 export class ItemAddComponent implements OnInit, OnChanges {
     @Input() vendorBrandList: VendorBrand[];
-    @Input() isLoading: boolean = true;
+    @Input() isLoading: boolean;
     @Input() item: ItemInsert;
     @Input() errorMessage: string;
     @Input() pendingAdd: boolean;
+    
 
     @Output() getVendorBrands = new EventEmitter<void>();
+    @Output() addItem = new EventEmitter<ItemInsert>();
     @Output() setItem = new EventEmitter<ItemInsert>();
-
+    
     private dataIsValid: { [key: string]: boolean } = {};
 
     constructor(private router: Router,
@@ -91,34 +93,35 @@ export class ItemAddComponent implements OnInit, OnChanges {
 
                 });
 
-                //this.loading = true; 
-                this.itemService.addItem(newItem)
-                    .subscribe(
-                        () => {
-                            //this.pendingAdd = false;
-                            //this.loading = false;
-                            this.onAddComplete(`${newItem.Name} was saved`);
-                        },
-                        (error: any) => {
-                            //this.pendingAdd = false;
-                            //this.loading = false;
+                this.addItem.emit(newItem);
+                //this.loading = true;
+                // this.itemService.addItem(newItem)
+                //     .subscribe(
+                //         () => {
+                //             //this.pendingAdd = false;
+                //             //this.loading = false;
+                //             this.onAddComplete(`${newItem.Name} was saved`);
+                //         },
+                //         (error: any) => {
+                //             //this.pendingAdd = false;
+                //             //this.loading = false;
 
-                            // const _pendingItemTierPrice = new ItemTierPriceInsert(0, 0, 0);
-                            // this.item.ItemTierPrices.push(_pendingItemTierPrice);
-                            // const _pendingRelatedProduct = new ItemRelatedProductInsert(0, null, null, null, null, null, null);
-                            // this.item.ItemRelatedProducts.push(_pendingRelatedProduct);
-                            // const _pendingUpSell = new ItemUpSellInsert(0, null, null, null, null, null, null);
-                            // this.item.ItemUpSells.push(_pendingUpSell);
-                            // const _pendingCrossSell = new ItemCrossSellInsert(0, null, null, null, null, null, null);
-                            // this.item.ItemCrossSells.push(_pendingCrossSell);
-                            // const _pendingItemAttachment = new ItemAttachmentInsert(null, null, null, null, null, null);
-                            // this.item.ItemAttachments.push(_pendingItemAttachment);
-                            // const _pendingItemVideo = new ItemVideoInsert(null, null, null, null, null, null, null, null);
-                            // this.item.ItemAttachments.push(_pendingItemAttachment);
+                //             // const _pendingItemTierPrice = new ItemTierPriceInsert(0, 0, 0);
+                //             // this.item.ItemTierPrices.push(_pendingItemTierPrice);
+                //             // const _pendingRelatedProduct = new ItemRelatedProductInsert(0, null, null, null, null, null, null);
+                //             // this.item.ItemRelatedProducts.push(_pendingRelatedProduct);
+                //             // const _pendingUpSell = new ItemUpSellInsert(0, null, null, null, null, null, null);
+                //             // this.item.ItemUpSells.push(_pendingUpSell);
+                //             // const _pendingCrossSell = new ItemCrossSellInsert(0, null, null, null, null, null, null);
+                //             // this.item.ItemCrossSells.push(_pendingCrossSell);
+                //             // const _pendingItemAttachment = new ItemAttachmentInsert(null, null, null, null, null, null);
+                //             // this.item.ItemAttachments.push(_pendingItemAttachment);
+                //             // const _pendingItemVideo = new ItemVideoInsert(null, null, null, null, null, null, null, null);
+                //             // this.item.ItemAttachments.push(_pendingItemAttachment);
 
-                            this.itemService.sendNotification({ type: 'error', title: 'Error', content: <any>error });
-                        }
-                    );
+                //             this.itemService.sendNotification({ type: 'error', title: 'Error', content: <any>error });
+                //         }
+                //     );
             } else {
                 //alert('Please enter all required fields');
                 this.itemService.sendNotification({ type: 'error', title: 'Invalid Entry', content: 'Please enter all required fields' });

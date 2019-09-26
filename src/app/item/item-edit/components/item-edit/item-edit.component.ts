@@ -27,7 +27,7 @@ export class ItemEditComponent implements OnInit {
     
 
     @Input() vendorBrandList: VendorBrand[];
-    @Input() isLoading: boolean = true;
+    @Input() isLoading: boolean;
     @Input() item: Item;
     @Input() userInfo: Member;
     @Input() errorMessage: string;
@@ -61,6 +61,7 @@ export class ItemEditComponent implements OnInit {
     }
 
     ngOnInit() {
+        this.isLoading = true;
         this.getVendorBrands.emit();
         const param = this.route.snapshot.params['id'];
         this.getItem.emit(param);
@@ -129,7 +130,6 @@ export class ItemEditComponent implements OnInit {
             //if (this.isValid(null) && this.isShippingFeeValid() && this.isBundleValid()) {
             if (this.isValid(null) && this.isBundleValid()) {
                 this.pendingSave = true;
-
                 const newItem = this.itemService.copyItem(this.item);
 
                 if (newItem.ItemTierPrices) {
@@ -444,10 +444,6 @@ export class ItemEditComponent implements OnInit {
         }
     }
     isSubmitValid(): boolean {      
-        // console.log(this.originalItem.Approval);
-        // console.log(this.item.Approval);
-        // console.log(this.item.ItemImages.filter(x => !x.pendingAdd));
-
         if(this.originalItem.Approval != "Pending" && this.item.Approval == "Pending" && this.item.ItemImages.filter(x => !x.pendingAdd).length < 1) {
             this.itemService.sendNotification({ type: 'error', title: 'Invalid Entry', content: 'An image is required' });
             return false;    

@@ -74,7 +74,7 @@ export class ItemBatchUpdateUpdateComponent implements OnInit, OnChanges {
 
     ngOnInit() {}
 
-    onFieldChange(batchUpdateField: string) {        
+    onFieldChange(batchUpdateField: string) {
         this.selectedBatchUpdate = this.batchUpdates.find(x => x.FieldName === batchUpdateField);
         this.batchUpdateValue = '';
     }
@@ -124,7 +124,7 @@ export class ItemBatchUpdateUpdateComponent implements OnInit, OnChanges {
     }
 
     validate() : boolean {
-        if (this.selectedBatchUpdate.FieldType.Type == "number" && isNaN(Number(this.batchUpdateValue)) ) {
+        if (this.selectedBatchUpdate && this.selectedBatchUpdate.FieldType && this.selectedBatchUpdate.FieldType.Type == "number" && isNaN(Number(this.batchUpdateValue)) ) {
             this.itemService.sendNotification({ type: 'error', title: 'Error', content: 'Invalid Format' });
             return false;
         }

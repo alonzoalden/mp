@@ -1,7 +1,7 @@
 <div class="row wrapper border-bottom white-bg page-heading">
     <div class="col-lg-12">
         <h2>
-            {{ 'Edit Item' | translate }}: {{itemName}}
+            {{ 'Edit Item' | translate }}: {{!isLoading ? itemName : ''}}
         </h2>
         <ol class="breadcrumb">
             <li>
@@ -16,8 +16,15 @@
         </ol>
     </div>
 </div>
+<div *ngIf="isLoading" class="m-t-xl">
+    <div class="sk-spinner sk-spinner-three-bounce big-spinner">
+        <div class="sk-bounce1"></div>
+        <div class="sk-bounce2"></div>
+        <div class="sk-bounce3"></div>
+    </div>
+</div>
 
-<div class="alert-container animated fadeIn" *ngIf="item">
+<div class="alert-container animated fadeIn" *ngIf="!isLoading && item">
     <!-- <div class="alert alert-danger" *ngIf="!item.Status && !item.RequestApproval">
         <span>{{ 'This item is currently Inactive.' | translate }}</span>
         <span *ngIf="item.RejectionReason && RejectionReason != ''"> &#60; {{ 'Reason:' | translate }} {{ item.RejectionReason }} &#62; </span>
@@ -42,24 +49,11 @@
         <span> {{ 'This item has approved' | translate }} </span>
     </div>
 </div>
-<div *ngIf="!item" class="m-t-xl">
-    <div class="sk-spinner sk-spinner-three-bounce big-spinner">
-        <div class="sk-bounce1"></div>
-        <div class="sk-bounce2"></div>
-        <div class="sk-bounce3"></div>
-    </div>
-</div>
-<div class="wrapper wrapper-content animated fadeIn pt10" *ngIf='item'>
+
+<div class="wrapper wrapper-content animated fadeIn pt10" *ngIf="!isLoading && item">
     <div class="row">
         <div class="col-lg-12">
-            <div *ngIf="loading" class="m-t-xl">
-                <div class="sk-spinner sk-spinner-three-bounce big-spinner">
-                    <div class="sk-bounce1"></div>
-                    <div class="sk-bounce2"></div>
-                    <div class="sk-bounce3"></div>
-                </div>
-            </div>
-            <div *ngIf="!loading">
+            <div>
                 <div class="tabs-container">
                     <ul class="nav nav-tabs">
                         <li routerLinkActive="active">
@@ -129,7 +123,7 @@
         </div>
     </div>
     <br />
-    <div *ngIf="!loading">
+    <div *ngIf="!isLoading">
         <div class="button-bottom-row">
             <button mat-button
                     type="button"
@@ -145,7 +139,11 @@
                         type="button"
                         class="btn button-add button-add-display"
                         [disabled]="pendingSave"
-                        (click)="saveItem()"> <i class="fa fa-plus-circle"></i> {{ 'Save' | translate }}
+                        (click)="saveItem()"> 
+                        <span *ngIf="!pendingSave"><i class="fa fa-plus-circle"></i> {{ 'Save' | translate }}</span>
+                        <div *ngIf="pendingSave">
+                            <i class="fa fa-spinner fa-spin"></i>
+                        </div>
                 </button>
                 <button mat-button
                         type="button"
@@ -156,31 +154,4 @@
             </div>
         </div>
     </div>
-    
-    <!-- <div class="row" *ngIf="!loading">
-        <div class="col-md-2">
-            <button type="button"
-                    class="btn btn-remove"
-                    (click)="cancelEdit()">{{ 'Back' | translate }}
-            </button> 
-        </div>
-        <div class="col-md-2">
-            <mat-menu #saveMenu="matMenu" width="250px">
-                <button mat-menu-item (click)="saveItem()">{{ 'Save' | translate }}</button>
-                <button mat-menu-item (click)="saveItem(true)">{{ 'Save and Preview' | translate }}</button>
-            </mat-menu>
-            <button type="button"
-                    class="btn btn-primary max"
-                    [disabled]="pendingSave"
-                    [matMenuTriggerFor]="saveMenu">{{ 'Save' | translate }} <span class="caret"></span>
-            </button> 
-        </div>        
-        <div class="col-md-2">
-        </div>
-        <div class="col-md-4">
-             
-        </div>
-        <div class="col-md-2">
-        </div>
-    </div> -->
 </div>    

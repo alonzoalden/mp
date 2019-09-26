@@ -8,7 +8,7 @@ import * as itemActions from './item.actions';
 import { Router } from '@angular/router';
 import { Member, MemberVendor } from 'app/shared/class/member';
 import { VendorBrand } from 'app/shared/class/vendor-brand';
-import { ItemList, Item, ItemCrossSellInsert, ItemUpSell, ItemUpSellInsert, ItemRelatedProduct, ItemRelatedProductInsert, ItemAttachmentInsert, ItemVideoInsert, ItemCategoryAssignment, ItemTierPrice, ItemBatch } from 'app/shared/class/item';
+import { ItemList, Item, ItemCrossSellInsert, ItemUpSell, ItemUpSellInsert, ItemRelatedProduct, ItemRelatedProductInsert, ItemAttachmentInsert, ItemVideoInsert, ItemCategoryAssignment, ItemTierPrice, ItemBatch, ItemInsert, ItemCrossSell, ItemAttachment } from 'app/shared/class/item';
 import { Category } from 'app/shared/class/category';
 import { VendorAttachment, VendorAttachmentList } from 'app/shared/class/vendor-attachment';
 import { URLVideo } from 'app/shared/class/item-video';
@@ -35,7 +35,8 @@ export class ItemEffects {
                     return EMPTY;
                 })
             )
-        )
+        ),
+        take(1)
     );
     @Effect()
     loadSimpleItemList$: Observable<Action> = this.actions$.pipe(
@@ -112,7 +113,7 @@ export class ItemEffects {
     loadAllItemCrossSell$: Observable<Action> = this.actions$.pipe(
         ofType(itemActions.ItemActionTypes.LoadAllItemCrossSell),
         map((action: itemActions.LoadAllItemCrossSell) => action.payload),
-        mergeMap((itemcrosssell: ItemCrossSellInsert) =>
+        mergeMap((itemcrosssell: ItemCrossSell) =>
             this.itemService.getAllItem(itemcrosssell.CrossSellItemID).pipe(
                 map((item: Item) => {
                     itemcrosssell.PrevCrossSellItemID = item.ItemID;
@@ -120,6 +121,7 @@ export class ItemEffects {
                     itemcrosssell.CrossSellItemVendorSKU = item.VendorSKU;
                     itemcrosssell.CrossSellTPIN = item.TPIN;
                     itemcrosssell.ImagePath = item.ImagePath;
+                    itemcrosssell.pendingAdd = false;
                     return (new itemActions.LoadAllItemCrossSellSuccess(item))
                 }),
                 catchError(err => {
@@ -134,7 +136,7 @@ export class ItemEffects {
     loadAllItemUpSell$: Observable<Action> = this.actions$.pipe(
         ofType(itemActions.ItemActionTypes.LoadAllItemUpSell),
         map((action: itemActions.LoadAllItemUpSell) => action.payload),
-        mergeMap((itemupsell: ItemUpSellInsert) =>
+        mergeMap((itemupsell: ItemUpSell) =>
             this.itemService.getAllItem(itemupsell.UpSellItemID).pipe(
                 map((item: Item) => {
                     itemupsell.PrevUpSellItemID = item.ItemID;
@@ -142,6 +144,7 @@ export class ItemEffects {
                     itemupsell.UpSellItemVendorSKU = item.VendorSKU;
                     itemupsell.UpSellTPIN = item.TPIN;
                     itemupsell.ImagePath = item.ImagePath;
+                    itemupsell.pendingAdd = false;
                     return (new itemActions.LoadAllItemUpSellSuccess(item))
                 }),
                 catchError(err => {
@@ -156,7 +159,7 @@ export class ItemEffects {
     loadItemRelatedProduct$: Observable<Action> = this.actions$.pipe(
         ofType(itemActions.ItemActionTypes.LoadItemRelatedProduct),
         map((action: itemActions.LoadItemRelatedProduct) => action.payload),
-        mergeMap((itemrelatedproduct: ItemRelatedProductInsert) =>
+        mergeMap((itemrelatedproduct: ItemRelatedProduct) =>
             this.itemService.getAllItem(itemrelatedproduct.RelatedProductItemID).pipe(
                 map((item: Item) => {
                     itemrelatedproduct.PrevRelatedProductItemID = item.ItemID;
@@ -164,7 +167,7 @@ export class ItemEffects {
                     itemrelatedproduct.RelatedItemVendorSKU = item.VendorSKU;
                     itemrelatedproduct.RelatedTPIN = item.TPIN;
                     itemrelatedproduct.ImagePath = item.ImagePath;
-                    
+                    itemrelatedproduct.pendingAdd = false;
                     return (new itemActions.LoadItemRelatedProductSuccess(item))
                 }),
                 catchError(err => {
@@ -193,7 +196,7 @@ export class ItemEffects {
     loadItemAttachment$: Observable<Action> = this.actions$.pipe(
         ofType(itemActions.ItemActionTypes.LoadItemAttachment),
         map((action: itemActions.LoadItemAttachment) => action.payload),
-        mergeMap((itemattachment: ItemAttachmentInsert) =>
+        mergeMap((itemattachment: ItemAttachment) =>
             this.itemService.getAttachment(itemattachment.VendorAttachmentID).pipe(
                 map((attachment: VendorAttachment) => {
                     itemattachment.Title = attachment.Title;
@@ -201,6 +204,7 @@ export class ItemEffects {
                         itemattachment.FileName = attachment.UploadedFile.substring(5);
                     }
                     itemattachment.UploadedFile = attachment.UploadedFile;
+                    itemattachment.pendingAdd = false;
                     return (new itemActions.LoadItemAttachmentSuccess(attachment))
                 }),
                 catchError(err => {
@@ -229,10 +233,13 @@ export class ItemEffects {
                         itemvideo.Label = urlvideo.items[0].snippet.title;
                     }
                     itemvideo.Description = urlvideo.items[0].snippet.description;
-                    
                     return (new itemActions.LoadVideoURLDetailSuccess(urlvideo))
                 }),
                 catchError(err => {
+                    itemvideo.Value = "";
+                    itemvideo.URL = "";
+                    itemvideo.Description = "";
+                    itemvideo.Thumbnail = "";
                     this.itemService.sendNotification({ type: 'error', title: 'Error', content: err });
                     of(new itemActions.LoadVideoURLDetailFail(err))
                     return EMPTY;
@@ -380,6 +387,8 @@ export class ItemEffects {
                 map((item: BatchUpdateValue[]) => {
                     this.itemService.sendNotification({ type: 'success', title: 'Successfully Updated', content: '' });
                     this.router.navigate(['item','batchupdate','select']);
+                    this.itemService.resetItems()
+                    this.store.dispatch(new itemActions.LoadItemBatchItems());
                     return (new itemActions.EditItemBatchUpdateSuccess(item))
                 }),
                 catchError(err => {
@@ -391,6 +400,28 @@ export class ItemEffects {
         )
     );
 
+    
+    @Effect()
+    addItem$: Observable<Action> = this.actions$.pipe(
+        ofType(itemActions.ItemActionTypes.AddItem),
+        map((action: itemActions.AddItem) => action.payload),
+        mergeMap((item: ItemInsert) =>
+            this.itemService.addItem(item).pipe(
+                map((item: Item) => {
+                    this.itemService.sendNotification({ type: 'success', title: 'Successfully Updated', content: `${item.Name} was saved` });
+                    this.router.navigate(['/item']);
+                    return (new itemActions.AddItemSuccess(item))
+                }),
+                catchError(err => {
+                    this.itemService.sendNotification({ type: 'error', title: 'Error', content: err });
+                    of(new itemActions.AddItemFail(err))
+                    return EMPTY;
+                })
+            )
+        )
+    );
+
+
     @Effect()
     editItem$: Observable<Action> = this.actions$.pipe(
         ofType(itemActions.ItemActionTypes.EditItem),
@@ -399,10 +430,10 @@ export class ItemEffects {
             this.itemService.editItem(payload.item).pipe(
                 map((item: Item) => {
                     this.itemService.sendNotification({ type: 'success', title: 'Successfully Updated', content: `${item.Name} was saved` });
-                    if(payload.displayPreview) {
+                    if (payload.displayPreview) {
                         window.open(environment.previewURL + item.ItemID + "/options/portal", "_blank");
                     }
-                    if(payload.printLabel) {
+                    if (payload.printLabel) {
                         this.store.dispatch(new itemActions.DownloadItemLabel(item));
                     }
                     this.router.navigate(['/item']);
@@ -428,7 +459,6 @@ export class ItemEffects {
                     return (new itemActions.DeleteItemSuccess(item.ItemID))
                 }),
                 catchError(err => {
-                    console.log(err);
                     this.itemService.sendNotification({ type: 'error', title: 'Error', content: err });
                     of(new itemActions.DeleteItemFail(err))
                     return EMPTY;
