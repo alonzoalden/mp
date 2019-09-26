@@ -15,6 +15,7 @@ import { SalesOrder } from '../../../../../shared/class/sales-order';
 export class SalesOrderFulfillmentEditShellComponent implements OnInit {    
     salesOrder$: Observable<SalesOrder>;
     fulfillment$: Observable<Fulfillment>;
+    isLoading$: Observable<boolean>;
     errorMessage$: Observable<string>;
     
     constructor(private store: Store<fromSalesOrder.State>) { }
