@@ -105,7 +105,7 @@ export class SalesOrderCancelDialog {
 
 @Component({
     selector: 'sales-order-cancel.component-print-dialog',
-    templateUrl: '../sales-order-view-cancel/sales-order-view-cancel.component-cancel-dialog.html',
+    templateUrl: '../../sales-order-view-cancel/components/sales-order-view-cancel.component-cancel-dialog.html',
 })
     
 export class SalesOrderCancelComponentPrintDialog implements OnInit, OnDestroy {

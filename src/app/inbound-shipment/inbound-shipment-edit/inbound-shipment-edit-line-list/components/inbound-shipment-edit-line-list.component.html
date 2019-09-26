@@ -14,7 +14,6 @@
                     </div>
                     <div *ngIf="!isLoading && purchaseOrder && purchaseOrder.PurchaseOrderLines && purchaseOrder.PurchaseOrderLines.length > 0">
                         <table mat-table #table [dataSource]="dataSource" >
-
                             <!-- Add Button -->
                             <ng-container matColumnDef="Add">
                                 <th mat-header-cell *matHeaderCellDef width="45px"></th>
