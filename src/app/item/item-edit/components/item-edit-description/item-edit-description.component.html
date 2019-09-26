@@ -29,7 +29,15 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="form-group" [ngClass]="{'has-error': (itemVendorSKUVar.errors && !itemVendorSKUVar.errors.required)
+                        <div class="form-group">
+                            <label class="col-md-2 control-label">{{ 'SKU' | translate }}</label>
+                            <div class="col-md-8">
+                                <div class="form-control grey-highlight">
+                                    {{ item.VendorSKU }}
+                                </div>
+                            </div>
+                        </div>
+                        <!-- <div class="form-group" [ngClass]="{'has-error': (itemVendorSKUVar.errors && !itemVendorSKUVar.errors.required)
                                                                             || ( (itemVendorSKUVar.touched || 
                                                                             itemVendorSKUVar.dirty) && 
                                                                             !itemVendorSKUVar.valid) }">
@@ -51,7 +59,7 @@
                                     </span> 
                                 </span>
                             </div>
-                        </div>
+                        </div> -->
                         <div class="form-group" [ngClass]="{'has-error': (itemItemTypeVar.touched || 
                                                     itemItemTypeVar.dirty) && 
                                                     !itemItemTypeVar.valid }">
