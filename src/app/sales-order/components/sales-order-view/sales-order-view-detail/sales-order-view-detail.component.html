@@ -2,15 +2,7 @@
 <div class="tab-content animated fadeIn">
     <div class="tab-pane active">
         <div class="panel-body p-w-none animated fadeIn" style="min-height: 400px;">
-            <!-- <div class="ibox-title"> -->
-
-                <!-- <h5>{{ 'Order Details' | translate }}</h5> <span class="label label-warning m-l-md"> {{ salesOrder.MerchantStatus | translate }}</span> -->
-
-                <!-- <div class="ibox-tools">
-                    
-                </div> -->
-            <!-- </div> -->
-            <ng-container *ngIf="!salesOrder">
+            <ng-container *ngIf="isLoading || isSalesOrderLinesLoading">
                 <div class="spinner-full-page"> 
                     <div>
                         <div>
@@ -26,13 +18,8 @@
                 </div>
                 <div class="gray-cover-bg1"></div>
             </ng-container>
-                <div *ngIf="salesOrder" class="animated fadeIn">
+            <div *ngIf="salesOrder && !isLoading" class="animated fadeIn">
                 <div class="ibox-content hide-y no-border-top">
-                    <!-- <div class="col-sm-2 col-sm-push-8" *ngIf="!isMerchant && salesOrder.MerchantStatus != 'Canceled'">
-                        <div class="row">
-                            <button type="button" class="btn btn-success max" style="min-width: 160px;" [routerLink]="['/','sales-order', 'view', fulfilledby,orderid,'fulfillment']"><i class="fa fa-check"></i> {{ 'View Shipments' | translate }}</button>
-                        </div>
-                    </div> -->
                     <div class="col-xs-12 center-block">
                         <div class="sales-order-details" [ngClass]="!isMerchant ? 'details-max-width' : ''">
                             <form class="form-horizontal">
@@ -88,7 +75,7 @@
                     </div>
                 </div>
                 <div class="ibox-title"><h5>{{ 'Order Items' | translate }}</h5></div>
-                <div class="ibox-content hide-y">
+                <div *ngIf="!isSalesOrderLinesLoading" class="ibox-content hide-y">
                     <div class="table-responsive">
                         <table mat-table #table [dataSource]="salesOrderLinesMatTable" class="table" matSort>
 
@@ -106,9 +93,6 @@
                             <ng-container matColumnDef="ProductDetails">
                                 <th mat-header-cell *matHeaderCellDef width="300px"></th>
                                 <td mat-cell *matCellDef="let salesorderline" height="80px" class="wrap">
-                                    <!-- <div class="col-xs-3 p-l-none">
-                                        <img *ngIf='salesorderline.ItemImage' style="max-height:70px" [src]='imageURL + salesorderline.ItemImage' [title]='salesorderline.ItemName'>
-                                    </div> -->
                                     <div class="col-xs-11">
                                         <div class="row">
                                             <div class="col-xs-12 "><span class="sm-strong"><a [href]="linkURL + '/' + salesorderline.URLKey + '.html'" target="_blank">{{salesorderline.ItemName}}</a></span></div>
@@ -135,40 +119,6 @@
                                     </div>
                                 </td>
                             </ng-container>
-
-                            <!-- Item Image Column -->
-                            <!-- <ng-container matColumnDef="ItemImage">
-                                <th mat-header-cell *matHeaderCellDef width="100px"></th>
-                                <td mat-cell *matCellDef="let salesorderline" height="100px">
-                                    <img *ngIf='salesorderline.ItemImage' [src]='imageURL + salesorderline.ItemImage' [title]='salesorderline.ItemName'>
-                                </td>
-                            </ng-container> -->
-                            <!-- Item Name Column -->
-                            <!-- <ng-container matColumnDef="ItemName">
-                                <th mat-header-cell *matHeaderCellDef mat-sort-header width="150px">Item Name</th>
-                                <td mat-cell *matCellDef="let salesorderline" class="wrap">{{salesorderline.ItemName}}</td>
-                            </ng-container> -->
-                            <!-- SKU Column -->
-                            <!-- <ng-container matColumnDef="SKU">
-                                <th mat-header-cell *matHeaderCellDef mat-sort-header width="100px">SKU</th>
-                                <td mat-cell *matCellDef="let salesorderline">{{salesorderline.ItemVendorSKU}}</td>
-                            </ng-container> -->
-                            <!-- TPIN Column -->
-                            <!-- <ng-container matColumnDef="TPIN">
-                                <th mat-header-cell *matHeaderCellDef mat-sort-header width="100px">TPIN</th>
-                                <td mat-cell *matCellDef="let salesorderline">{{salesorderline.TPIN}}</td>
-                            </ng-container> -->
-                            <!-- Quantity Column -->
-                            <!-- <ng-container matColumnDef="Quantity">
-                                <th mat-header-cell *matHeaderCellDef mat-sort-header width="80px">Quantity</th>
-                                <td mat-cell *matCellDef="let salesorderline">{{salesorderline.Quantity}}</td>
-                            </ng-container> -->
-                            <!-- Shipped Quantity Column -->
-                            <!-- <ng-container matColumnDef="ShippedQty">
-                                <th mat-header-cell *matHeaderCellDef mat-sort-header width="80px">Shipped Quantity</th>
-                                <td mat-cell *matCellDef="let salesorderline">{{salesorderline.FulfilledQuantity}}</td>
-                            </ng-container> -->
-                            <!-- Merchant Status Column -->
                             <ng-container matColumnDef="MerchantStatus">
                                 <th mat-header-cell *matHeaderCellDef mat-sort-header width="100px">{{ 'Status' | translate }}</th>
                                 <td mat-cell *matCellDef="let salesorderline">
@@ -198,11 +148,6 @@
                                     </div>
                                 </td>
                             </ng-container>
-                            <!-- Fulfilled By Column -->
-                            <!-- <ng-container matColumnDef="Location">
-                                <th mat-header-cell *matHeaderCellDef mat-sort-header width="110px">Fulfilled By</th>
-                                <td mat-cell *matCellDef="let salesorderline">{{salesorderline.Location}}</td>
-                            </ng-container> -->
                             <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
                             <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
                         </table>

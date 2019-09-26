@@ -23,13 +23,13 @@ import * as fromUser from '../../../../shared/state/user-state.reducer';
 export class SalesOrderViewDetailShellComponent implements OnInit {
     salesOrderLinesMatTable$: Observable<MatTableDataSource<SalesOrderLine>>;
     salesOrder$: Observable<SalesOrder>;
-    deliveryDetail$: Observable<string>;
     userInfo$: Observable<Member>;
+    isLoading$: Observable<boolean>;
+    isSalesOrderLinesLoading$: Observable<boolean>;
+    
     errorMessage$: Observable<string>;
-
     isMerchant: boolean;
     orderID: number;
-    fulfilledby
 
     constructor(private store: Store<fromSalesOrder.State>) { }
 
@@ -37,17 +37,18 @@ export class SalesOrderViewDetailShellComponent implements OnInit {
         this.userInfo$ = this.store.pipe(select(fromUser.getCurrentUser));
         this.salesOrderLinesMatTable$ = this.store.pipe(select(fromSalesOrder.getSalesOrderLinesMatTable));
         this.salesOrder$ = this.store.pipe(select(fromSalesOrder.getSalesOrder));
-        this.deliveryDetail$ = this.store.pipe(select(fromSalesOrder.getDeliveryDetail));
         this.errorMessage$ = this.store.pipe(select(fromSalesOrder.getError));
+        setTimeout(() => {
+            this.isLoading$ = this.store.pipe(select(fromSalesOrder.getIsLoading));
+            this.isSalesOrderLinesLoading$ = this.store.pipe(select(fromSalesOrder.getIsSalesOrderLinesLoading));
+            
+        });
     }
     getFulfilledBySalesOrder(payload: {orderid: number, fulfilledby: string}) {
         this.store.dispatch(new salesOrderActions.LoadSalesOrder(payload));
     }
     getSalesOrderLineByVendor(payload: {orderid: number, fulfilledby: string}) {
         this.store.dispatch(new salesOrderActions.LoadSalesOrderLines(payload));
-    }
-    getFulfilledBySalesOrderDelivery(payload: {orderid: number, fulfilledby: string}) {
-        this.store.dispatch(new salesOrderActions.LoadFulfilledBySalesOrderDelivery(payload));
     }
     downloadSalesOrderPackingSlip(payload: SalesOrder) {
         this.store.dispatch(new salesOrderActions.DownloadSalesOrderPackingSlip(payload));

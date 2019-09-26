@@ -21,8 +21,10 @@ export class SalesOrderListShellComponent implements OnInit {
     ngOnInit() {
         this.userInfo$ = this.store.pipe(select(fromUser.getCurrentUser));
         this.salesOrdersMatTable$ = this.store.pipe(select(fromSalesOrder.getSalesOrdersListMatTable));
-        this.isLoading$ = this.store.pipe(select(fromSalesOrder.getIsLoading));
         this.errorMessage$ = this.store.pipe(select(fromSalesOrder.getError));
+        setTimeout(()=> {
+            this.isLoading$ = this.store.pipe(select(fromSalesOrder.getIsLoading));
+        })
     }
     getSalesOrderByVendor(payload: {fulfilledby: string, status: string} ) {
         this.store.dispatch(new salesOrderActions.LoadSalesOrders(payload));

@@ -2,7 +2,7 @@ import { Component, OnInit, ViewChild, Inject, OnChanges, ElementRef, Input, Sim
 import { ActivatedRoute, Router } from '@angular/router';
 import { MatSort, MatTableDataSource, MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material';
 
-import { PurchaseOrder, Carton, CartonInsert, CartonLine, CartonLineInsert, PurchaseOrderLineList } from '../../../../../shared/class/purchase-order';
+import { PurchaseOrder, Carton, CartonLine, PurchaseOrderLineList } from '../../../../../shared/class/purchase-order';
 import { PurchaseOrderService } from '../../../../purchase-order.service';
 import { TranslateService } from '@ngx-translate/core';
 
@@ -12,7 +12,6 @@ import { TranslateService } from '@ngx-translate/core';
 })
 
 export class InboundShipmentEditCartonListComponent implements OnInit, OnChanges {
-    //cartons: Carton[];
     
     @Input() purchaseOrder: PurchaseOrder;
     @Input() errorMessage: string;
@@ -20,19 +19,13 @@ export class InboundShipmentEditCartonListComponent implements OnInit, OnChanges
     @Output() setSelectedCarton = new EventEmitter<Carton>();
     @Output() downloadAllCartonLabel = new EventEmitter<PurchaseOrder>();
     @Output() downloadCartonLabelCount = new EventEmitter<{carton: Carton, count: number, border: string}>();
-    
 
-    //errorMessage: string;
-    //purchaseOrder: PurchaseOrder;
     purchaseorderid: number;
     pendingCopy: boolean;
-
     orderStatus: string;
     pendingAdd: boolean;
     currentIndex: number;
 
-    //displayedColumns = ['Add', 'Down', 'Position', 'Up', 'CartonNumber', 'Weight', 'Dimension', 'LabelQty', 'Label', 'Copy', 'Delete'];
-    //displayedColumns = ['Add', 'Down', 'Position', 'Up', 'Weight', 'Dimension', 'LabelQty', 'CartonNumber', 'TotalUnits', 'Actions'];  
     displayedColumns = ['Add', 'Position', 'Weight', 'Dimension', 'LabelQty', 'CartonNumber', 'TotalUnits', 'Actions'];  
     dataSource: any = null;
 
@@ -174,7 +167,6 @@ export class InboundShipmentEditCartonListComponent implements OnInit, OnChanges
         this.move(this.purchaseOrder.Cartons, carton, 1);
         this.purchaseOrder.Cartons.forEach((value, i) => {
             value.Position = i + 1;
-            //this.saveCarton(value);
         });
         this.refreshDataSource(this.purchaseOrder.Cartons);
     }
@@ -183,7 +175,6 @@ export class InboundShipmentEditCartonListComponent implements OnInit, OnChanges
         this.move(this.purchaseOrder.Cartons, carton, -1);
         this.purchaseOrder.Cartons.forEach((value, i) => {
             value.Position = i + 1;
-            //this.saveCarton(value);
         });
         this.refreshDataSource(this.purchaseOrder.Cartons);
     }
@@ -246,10 +237,6 @@ export class InboundShipmentEditCartonListComponent implements OnInit, OnChanges
             this.refreshDataSource(this.purchaseOrder.Cartons);
 
             this.currentIndex = this.purchaseOrder.Cartons.length - 1;
-            // this.purchaseOrderService.currentCarton = null;
-            // this.purchaseOrderService.currentCartonLines = [];
-            this.purchaseOrderService.currentCarton.next(null);
-            this.purchaseOrderService.currentCartonLines.next([]);
             this.purchaseOrderService.currentCartonID = null;
             
             this.purchaseOrderService.updatePurchaseLineCartonQuantity(this.purchaseOrder);            
@@ -322,7 +309,6 @@ export class InboundShipmentEditCartonListComponent implements OnInit, OnChanges
     }
 
     onShowCartonLine(carton: Carton, index: number) {
-        //if (!carton.CartonLines) carton.CartonLines = [];
         this.setSelectedCarton.emit(null);
         if(this.pendingAdd) {
             this.currentIndex = this.purchaseOrder.Cartons.length - 1;
@@ -330,8 +316,6 @@ export class InboundShipmentEditCartonListComponent implements OnInit, OnChanges
         }
         else {
             this.currentIndex = index;
-            //this.purchaseOrderService.currentCarton = carton;
-            //this.purchaseOrderService.currentCarton.next(carton);
             
             if (index !== this.purchaseOrder.Cartons.length - 1) {
                 this.setSelectedCarton.emit(carton);
@@ -344,15 +328,12 @@ export class InboundShipmentEditCartonListComponent implements OnInit, OnChanges
                 }                
             }
 
-            //this.purchaseOrderService.currentCartonLines = carton.CartonLines;
             this.purchaseOrderService.currentCartonLines.next(carton.CartonLines);
             this.purchaseOrderService.currentCartonID = carton.CartonID;
 
             if(!carton.CartonNumber && this.currentIndex != this.purchaseOrder.Cartons.length - 1) {
-                //this.purchaseOrder = this.purchaseOrderService.currentPurchaseOrderEdit;
                 this.removePendingLine();
                 this.addPendingLine();
-                //this.refreshDataSource(this.purchaseOrderService.currentPurchaseOrderEdit.Cartons);
                 this.refreshDataSource(this.purchaseOrder.Cartons);
             }
 
@@ -436,13 +417,8 @@ export class InboundShipmentEditCartonListComponentCartonLineDialog implements O
         private purchaseOrderService: PurchaseOrderService,
         public dialogRef: MatDialogRef<InboundShipmentEditCartonListComponentCartonLineDialog>,
         @Inject(MAT_DIALOG_DATA) public data: Carton) {
-            //this.purchaseOrderService.currentCarton = data;
-            //this.purchaseOrderService.currentCartonLines = data.CartonLines;
             this.purchaseOrderService.currentCarton.next(data)
             this.purchaseOrderService.currentCartonLines.next(data.CartonLines)
-            
-            //this.removePendingLine();
-            //this.addPendingLine();
 
             this.purchaseOrder = this.purchaseOrderService.currentPurchaseOrderEdit;
             this.purchaseorderid = this.purchaseOrder.PurchaseOrderID;
@@ -460,13 +436,11 @@ export class InboundShipmentEditCartonListComponentCartonLineDialog implements O
         this.purchaseOrderService.currentCartonLines.subscribe(
             (cartonlines: CartonLine[]) => {
                 if(this.purchaseOrderService.newCartonLineIsSelected) {
-                    //this.currentIndex = cartonlines.length - 1;
                     this.purchaseOrderService.newCartonLineIsSelected = false;
                 }
             },
             (error: any) => this.errorMessage = <any>error
         );
-        //this.currentIndex = this.purchaseOrderService.currentCarton.CartonLines.length -1;
         
         this.purchaseOrderService.getPurchaseOrderLineList(this.purchaseorderid).subscribe(
             (purchaseorderlinelist: PurchaseOrderLineList[]) => {
@@ -477,8 +451,6 @@ export class InboundShipmentEditCartonListComponentCartonLineDialog implements O
     }
 
     refreshDataSource(cartonlines: CartonLine[]) {
-        //cartonlines.forEach((c) => this.purchaseOrderService.updateCartonLineRemainingQuantity(c) );
-
         this.dataSource = new MatTableDataSource<CartonLine>(cartonlines);
         this.dataSource.sort = this.sort;
         

@@ -42,7 +42,7 @@ export class SalesOrderFulfillmentListComponent implements OnInit {
         if (changes.salesOrder && !changes.salesOrder.currentValue && changes.salesOrder.firstChange) {
             this.getFulfilledBySalesOrder.emit({orderid: this.route.snapshot.params['id'], fulfilledby: this.route.snapshot.params['fulfilledby']});
         }
-        if (changes.fulfillmentsMatTable.currentValue && !changes.fulfillmentsMatTable.currentValue.data.length && changes.fulfillmentsMatTable.firstChange) {
+        if (changes.fulfillmentsMatTable && changes.fulfillmentsMatTable.currentValue && changes.fulfillmentsMatTable.firstChange) {
             this.getFulfilledByFulfillments.emit({orderid: this.route.parent.snapshot.params['id'], fulfilledby: this.route.parent.snapshot.params['fulfilledby']});
         }
         

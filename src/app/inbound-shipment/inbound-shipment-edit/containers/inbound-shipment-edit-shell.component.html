@@ -1,6 +1,7 @@
 <o-inbound-shipment-edit
     [purchaseOrder]="purchaseOrder$ | async"
     [pendingSave]="pendingSave$ | async"
+    [isLoading]="isLoading$ | async"
     [errorMessage]="errorMessage$ | async"
     (getPurchaseOrder)="getPurchaseOrder($event)"
     (addNewPurchaseOrder)="addNewPurchaseOrder($event)"

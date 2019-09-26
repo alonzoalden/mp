@@ -81,7 +81,7 @@ export class InboundShipmentEditLineListComponent implements OnInit, OnChanges {
         }
     }
     ngOnInit() {
-        this.setSelectedPurchaseOrder.emit(null);
+        //this.setSelectedPurchaseOrder.emit(null);
         this.purchaseorderid = this.route.parent.snapshot.params['id'];
     }
     addPendingLine() {

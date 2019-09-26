@@ -168,7 +168,6 @@ export class InboundShipmentEffects {
                     return (new inboundShipmentActions.AddNewPurchaseOrderSuccess(purchaseOrder));
                 }),
                 catchError(err => {
-                    console.log(err)
                     of(new inboundShipmentActions.AddNewPurchaseOrderFail(err))
                     return EMPTY;
                 })

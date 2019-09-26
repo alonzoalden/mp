@@ -20,7 +20,6 @@ export interface InboundShipmentState {
     cartons: Carton[];
     selectedCarton: Carton;
     isLoading: boolean;
-    isListLoading: boolean;
     pendingDelete: boolean,
     pendingSave: boolean,
     pendingAdd: boolean,
@@ -37,7 +36,6 @@ const initialState: InboundShipmentState = {
     selectedCarton: null,
     simpleItemList: [],
     isLoading: true,
-    isListLoading: true,
     pendingDelete: false,
     pendingSave: false,
     pendingAdd: false,
@@ -144,14 +142,14 @@ export function inboundShipmentReducer(state = initialState, action: InboundShip
         case InboundShipmentActionTypes.LoadPurchaseOrderOverview:
             return {
                 ...state,
-                isListLoading: true,
+                isLoading: true,
                 error: '',
             };
         case InboundShipmentActionTypes.LoadPurchaseOrderOverviewSuccess:
             return {
                 ...state,
                 purchaseOrders: action.payload,
-                isListLoading: false,
+                isLoading: false,
                 error: '',
             };
 
@@ -159,7 +157,7 @@ export function inboundShipmentReducer(state = initialState, action: InboundShip
             return {
                 ...state,
                 purchaseOrders: [],
-                isListLoading: false,
+                isLoading: false,
                 error: action.payload,
             };
         case InboundShipmentActionTypes.LoadPurchaseOrderLinesSuccess:
@@ -216,6 +214,7 @@ export function inboundShipmentReducer(state = initialState, action: InboundShip
             return {
                 ...state,
                 isLoading: false,
+                purchaseOrders: [action.payload, ...state.purchaseOrders],
                 currentPurchaseOrder: action.payload,
                 error: '',
             };
@@ -234,6 +233,10 @@ export function inboundShipmentReducer(state = initialState, action: InboundShip
                 pendingSave: true,
             };
         case InboundShipmentActionTypes.EditPurchaseOrderSuccess:
+            let _currentPurchaseOrdersIndex = state.purchaseOrders.findIndex(item => action.payload.PurchaseOrderID === item.PurchaseOrderID);
+            if (_currentPurchaseOrdersIndex > -1) {
+                state.purchaseOrders[_currentPurchaseOrdersIndex] = action.payload;
+            }
             return {
                 ...state,
                 currentPurchaseOrder: action.payload,

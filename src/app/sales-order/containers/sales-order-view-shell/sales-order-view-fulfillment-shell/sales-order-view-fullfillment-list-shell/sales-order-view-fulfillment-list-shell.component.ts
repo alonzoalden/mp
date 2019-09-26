@@ -26,10 +26,12 @@ export class SalesOrderFulfillmentListShellComponent implements OnInit {
     ngOnInit() {
         this.userInfo$ = this.store.pipe(select(fromUser.getCurrentUser));
         this.fulfillmentsMatTable$ = this.store.pipe(select(fromSalesOrder.getFulfilledByFulfillmentsMatTable));
-        this.isLoading$ = this.store.pipe(select(fromSalesOrder.getIsLoading));
         this.salesOrder$ = this.store.pipe(select(fromSalesOrder.getSalesOrder));
         this.errorMessage$ = this.store.pipe(select(fromSalesOrder.getError));
         this.pendingDelete$ = this.store.pipe(select(fromSalesOrder.getPendingDelete));
+        setTimeout(() => {
+            this.isLoading$ = this.store.pipe(select(fromSalesOrder.getIsLoading));
+        });
     }
     getFulfilledBySalesOrder(payload: {orderid: number, fulfilledby: string}) {
         this.store.dispatch(new salesOrderActions.LoadSalesOrder(payload));

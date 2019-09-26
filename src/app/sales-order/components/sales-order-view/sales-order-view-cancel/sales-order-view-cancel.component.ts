@@ -18,7 +18,6 @@ export class SalesOrderCancelComponent implements OnInit {
     private imageURL = environment.imageURL;
     private linkURL = environment.linkURL;
     @Input() userInfo: Member;
-    @Input() deliveryDetail: string;
     @Input() salesOrder: SalesOrder;
     @Input() salesOrderLinesMatTable: MatTableDataSource<SalesOrderLine>;
     @Input() pendingDelete: boolean = false;
@@ -47,9 +46,6 @@ export class SalesOrderCancelComponent implements OnInit {
                     this.hasCancellationQty = true;
                 }
             });
-        }
-        if (changes.deliveryDetail && changes.deliveryDetail.currentValue) {
-            this.deliveryDetail = changes.deliveryDetail.currentValue.trim().replace(new RegExp('<br />', 'g'), '\n');
         }
         if (changes.salesOrder && !changes.salesOrder.currentValue && changes.salesOrder.firstChange) {
             this.getFulfilledBySalesOrder.emit({orderid: this.route.snapshot.params['id'], fulfilledby: this.fulfilledby});

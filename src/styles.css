@@ -480,6 +480,9 @@ table {
 .max-width {
     width: 100% !important;
 }
+.max-height {
+    height: 100% !important;
+}
 .greater-separater {
     margin-right: 10px;
     margin-left: -15px;

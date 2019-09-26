@@ -42,10 +42,6 @@ export const getIsLoading = createSelector(
     getInboundShipmentFeatureState,
     state => state.isLoading
 );
-export const getIsListLoading = createSelector(
-    getInboundShipmentFeatureState,
-    state => state.isListLoading
-);
 export const getPendingDelete = createSelector(
     getInboundShipmentFeatureState,
     state => state.pendingDelete

@@ -15,7 +15,6 @@ import { SalesOrder } from '../../../../../shared/class/sales-order';
 export class SalesOrderFulfillmentEditShellComponent implements OnInit {    
     salesOrder$: Observable<SalesOrder>;
     fulfillment$: Observable<Fulfillment>;
-    deliveryDetail$: Observable<string>;
     errorMessage$: Observable<string>;
     
     constructor(private store: Store<fromSalesOrder.State>) { }
@@ -23,7 +22,6 @@ export class SalesOrderFulfillmentEditShellComponent implements OnInit {
     ngOnInit() {
         this.salesOrder$ = this.store.pipe(select(fromSalesOrder.getSalesOrder));
         this.fulfillment$ = this.store.pipe(select(fromSalesOrder.getFulfilledByFulfillment));
-        this.deliveryDetail$ = this.store.pipe(select(fromSalesOrder.getDeliveryDetail));
         this.errorMessage$ = this.store.pipe(select(fromSalesOrder.getError));
     }
     getFulfilledByFulfillment(payload: { fulfillmentid: number, fulfilledby: string }) {

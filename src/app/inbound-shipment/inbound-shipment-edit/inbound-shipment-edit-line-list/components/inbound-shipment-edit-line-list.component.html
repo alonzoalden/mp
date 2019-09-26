@@ -5,15 +5,14 @@
         <div class="ibox-content no-border-top wiz-content animated fadeIn" style="height: 300px;">
             <div class="form-group row">
                 <div class="col-md-12">
-                    <div *ngIf="isLoading" class="spinner-container">
-                            <div class="sk-spinner sk-spinner-three-bounce big-spinner">
-                                <div class="sk-bounce1"></div>
-                                <div class="sk-bounce2"></div>
-                                <div class="sk-bounce3"></div>
-                            </div>
+                    <div *ngIf="isLoading" class="spinner-container max-height">
+                        <div class="sk-spinner sk-spinner-three-bounce big-spinner">
+                            <div class="sk-bounce1"></div>
+                            <div class="sk-bounce2"></div>
+                            <div class="sk-bounce3"></div>
                         </div>
+                    </div>
                     <div *ngIf="!isLoading && purchaseOrder && purchaseOrder.PurchaseOrderLines && purchaseOrder.PurchaseOrderLines.length > 0">
-                        <!-- <div *ngIf="purchaseOrder"> -->
                         <table mat-table #table [dataSource]="dataSource" >
 
                             <!-- Add Button -->
@@ -80,13 +79,6 @@
                                                     <div matTooltip="{{item.Description}}" matTooltipPosition="right" matTooltipShowDelay="400">{{item.Description}}</div>
                                                 </ng-template>
                                             </ng-select>
-                                            <!-- <select class="form-control" name="purchaseorderlineItemID" required
-                                                (focus)="formDirty = true;" #lineItemIDRef
-                                                [disabled]="purchaseOrder.Status != 'Pending'"
-                                                [(ngModel)]=purchaseorderline.ItemID (change)="onItemChange(purchaseorderline, i); i === purchaseOrder.PurchaseOrderLines.length-1 && canAdd = true;" [ngModelOptions]="{standalone: true}">
-                                                <option [ngValue]="null" style="font-style: italic" disabled selected>--Select an item--</option>
-                                                <option [value]="item.ItemID" *ngFor="let item of itemList">{{item.Description}}</option>
-                                            </select> -->
                                         </div>
                                     </div>
                                 </td>
@@ -227,9 +219,6 @@
                             </ng-container>
                     
                             <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-                            <!-- <tr mat-row *matRowDef="let purchaseorderline; let i = index; columns: displayedColumns"
-                                [ngStyle]="{'background-color': i === purchaseOrder.PurchaseOrderLines.length-1 ? '#99CCFF' : currentIndex === i ? '#FF9933' : '#FFFFFF' }" 
-                                (click)="onEditPurchaseOrderLine(i)"></tr> -->
                             <tr mat-row class="selected-row" *matRowDef="let purchaseorderline; let i = index; columns: displayedColumns;"
                                 [ngStyle]="{'background-color': purchaseOrderService.rowColorConditions(i, purchaseOrder.PurchaseOrderLines, currentIndex, formDirty)}"
                                 (click)="onEditPurchaseOrderLine(i)"></tr>

@@ -1,7 +1,7 @@
-import { Component, OnInit, OnChanges, ViewChild, Input, Output, EventEmitter, SimpleChange, SimpleChanges } from '@angular/core';
+import { Component, OnInit, OnChanges, ViewChild, Input, Output, EventEmitter, SimpleChanges } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 import { MatSort, MatTableDataSource, MatDialog } from '@angular/material';
-import { PurchaseOrder, PurchaseOrderLine, PurchaseOrderLineList, Carton, CartonLine} from '../../../../../shared/class/purchase-order';
+import { PurchaseOrder,  PurchaseOrderLineList, Carton, CartonLine} from '../../../../../shared/class/purchase-order';
 import { PurchaseOrderService } from '../../../../purchase-order.service';
 
 @Component({
@@ -21,14 +21,12 @@ export class InboundShipmentEditCartonLineListComponent implements OnInit, OnCha
     pendingAdd: boolean;
     currentIndex: number;
 
-    //displayedColumns = ['Add', 'ItemName', 'ItemVendorSKU', 'TPIN', 'Quantity', 'Delete'];
     displayedColumns = ['Add', 'ProductDetails', 'RemainingQuantity', 'CartonQuantity', 'Delete'];
     dataSource: any = null;
 
     formDirty = false;
     canAdd = false;
     cartonlines: CartonLine[];
-    //carton: Carton;
 
     @ViewChild(MatSort, { static: false }) sort: MatSort;
 
@@ -50,10 +48,7 @@ export class InboundShipmentEditCartonLineListComponent implements OnInit, OnCha
 
     ngOnInit() {        
         this.purchaseorderid = this.route.snapshot.parent.params['id'];
-        
-        
         this.getPurchaseOrderLineList.emit(this.purchaseorderid);
-        
     }
 
     addPendingLine() {

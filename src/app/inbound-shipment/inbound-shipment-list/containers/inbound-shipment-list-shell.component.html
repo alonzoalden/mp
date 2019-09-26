@@ -2,6 +2,7 @@
     [userInfo]="userInfo$ | async"
     [purchaseOrdersMatTable]="purchaseOrdersMatTable$ | async"
     [pendingDelete]="pendingDelete$ | async"
+    [isLoading]="isLoading$ | async"
     [errorMessage]="errorMessage$ | async"
     (addNewPurchaseOrder)="addNewPurchaseOrder()"
     (getPurchaseOrderOverview)="getPurchaseOrderOverview()"

@@ -64,16 +64,6 @@ export const getFulfillmentSalesOrderLinesMatTable = createSelector(
     state => new MatTableDataSource<FulfillmentSalesOrderLine>(state.fulfillmentSalesOrderLines)
 );
 
-
-export const getDeliveryDetail = createSelector(
-    getSalesOrderFeatureState,
-    state => state.deliveryDetail
-);
-export const getSalesOrderDeliveryDetail = createSelector(
-    getSalesOrderFeatureState,
-    state => state.salesOrderDeliveryDetail
-);
-
 export const getFulfilledByFulfillments = createSelector(
     getSalesOrderFeatureState,
     state => state.fulfillments
@@ -87,6 +77,10 @@ export const getFulfilledByFulfillment = createSelector(
     state => state.fulfillment
 );
 
+export const getIsSalesOrderLinesLoading = createSelector(
+    getSalesOrderFeatureState,
+    state => state.isSalesOrderLinesLoading
+);
 export const getIsLoading = createSelector(
     getSalesOrderFeatureState,
     state => state.isLoading

@@ -2,4 +2,5 @@
     [salesorder]="salesorder$ | async"
     [errorMessage]="errorMessage$ | async"
     (getFulfilledBySalesOrder)="getFulfilledBySalesOrder($event)"
+    (getSalesOrderLineByVendor)="getSalesOrderLineByVendor($event)"
 ></o-sales-order-view>

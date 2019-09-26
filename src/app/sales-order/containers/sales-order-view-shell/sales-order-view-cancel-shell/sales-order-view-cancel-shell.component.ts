@@ -18,7 +18,6 @@ export class SalesOrderViewCancelShellComponent implements OnInit {
     displayedColumns = ['ItemImage', 'ProductDetails', 'ProductInfo', 'CancellationReason'];
     salesOrderLinesMatTable$: Observable<MatTableDataSource<SalesOrderLine>>;
     salesOrder$: Observable<SalesOrder>;
-    deliveryDetail$: Observable<string>;
     userInfo$: Observable<Member>;
     errorMessage$: Observable<string>;
     pendingDelete$: Observable<boolean>;
@@ -29,7 +28,6 @@ export class SalesOrderViewCancelShellComponent implements OnInit {
         this.userInfo$ = this.store.pipe(select(fromUser.getCurrentUser));
         this.salesOrderLinesMatTable$ = this.store.pipe(select(fromSalesOrder.getSalesOrderLinesMatTable));
         this.salesOrder$ = this.store.pipe(select(fromSalesOrder.getSalesOrder));
-        this.deliveryDetail$ = this.store.pipe(select(fromSalesOrder.getDeliveryDetail));
         this.errorMessage$ = this.store.pipe(select(fromSalesOrder.getError));
         this.pendingDelete$ = this.store.pipe(select(fromSalesOrder.getPendingDelete));
     }

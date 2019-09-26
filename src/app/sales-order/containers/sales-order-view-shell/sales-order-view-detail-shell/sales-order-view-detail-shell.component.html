@@ -2,12 +2,11 @@
     [userInfo]="userInfo$ | async"
     [salesOrderLinesMatTable]="salesOrderLinesMatTable$ | async"
     [salesOrder]="salesOrder$ | async"
-    [deliveryDetail]="deliveryDetail$ | async"
+    [isLoading]="isLoading$ | async"
+    [isSalesOrderLinesLoading]="isSalesOrderLinesLoading$ | async"
     [errorMessage]="errorMessage$ | async"
     (getFulfilledBySalesOrder)="getFulfilledBySalesOrder($event)"
     (getSalesOrderLineByVendor)="getSalesOrderLineByVendor($event)"
-    (getFulfilledBySalesOrderDelivery)="getFulfilledBySalesOrderDelivery($event)"
     (setSalesOrder)="setSalesOrder($event)"
     (downloadSalesOrderPackingSlip)="downloadSalesOrderPackingSlip($event)"
-    
 ></o-sales-order-detail>

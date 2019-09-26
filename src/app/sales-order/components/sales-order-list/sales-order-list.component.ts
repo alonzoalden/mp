@@ -29,8 +29,10 @@ export class SalesOrderListComponent implements OnInit, OnChanges {
     @ViewChild(MatSort, { static: true }) sort: MatSort;
     @ViewChild('FilterBy', { static: true }) FilterBy: ElementRef;
     
-    constructor(private route: ActivatedRoute,
+    constructor(
+        private route: ActivatedRoute,
         private router: Router) { }
+        
     ngOnChanges(changes: SimpleChanges): void {
         if (changes.salesOrdersMatTable && changes.salesOrdersMatTable.currentValue.data.length) {
             this.salesOrdersMatTable.paginator = this.paginator;

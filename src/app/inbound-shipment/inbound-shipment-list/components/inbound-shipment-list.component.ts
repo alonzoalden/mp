@@ -38,7 +38,7 @@ export class InboundShipmentListComponent implements OnInit, OnChanges {
             this.purchaseOrdersMatTable.paginator = this.paginator;
             this.purchaseOrdersMatTable.sort = this.sort;
         }
-        if (changes.purchaseOrdersMatTable && !changes.purchaseOrdersMatTable.currentValue.data.length && changes.purchaseOrdersMatTable.firstChange) {
+        if (changes.purchaseOrdersMatTable && changes.purchaseOrdersMatTable.firstChange) {
             this.getPurchaseOrderOverview.emit();
         }
         if (changes.userInfo && changes.userInfo.currentValue) {

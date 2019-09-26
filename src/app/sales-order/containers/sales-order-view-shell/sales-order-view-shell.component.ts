@@ -22,4 +22,7 @@ export class SalesOrderViewShellComponent implements OnInit {
     getFulfilledBySalesOrder(payload: {orderid: number, fulfilledby: string}) {
         this.store.dispatch(new salesOrderActions.LoadSalesOrder(payload));
     }
+    getSalesOrderLineByVendor(payload: {orderid: number, fulfilledby: string}) {
+        this.store.dispatch(new salesOrderActions.LoadSalesOrderLines(payload));
+    }
 }

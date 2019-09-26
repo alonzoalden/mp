@@ -14,7 +14,7 @@ import { InboundShippingMethod } from '../../../shared/class/inbound-shipping-me
 export class InboundShipmentEditComponent implements OnInit, OnChanges {
     @Input() purchaseOrder: PurchaseOrder;
     @Input() errorMessage: string;
-    //@Input() isLoading: boolean;
+    @Input() isLoading: boolean;
     @Input() pendingSave: boolean;
     @Output() getPurchaseOrder = new EventEmitter<number>();
     @Output() addNewPurchaseOrder = new EventEmitter<void>();
@@ -23,7 +23,6 @@ export class InboundShipmentEditComponent implements OnInit, OnChanges {
     @Output() downloadPurchaseOrderLabel = new EventEmitter<PurchaseOrder>();
     @Output() downloadAllItemLabel = new EventEmitter<{purchaseOrder: PurchaseOrder, border: string}>();
     @Output() downloadAllItemLargeLabel = new EventEmitter<{purchaseOrder: PurchaseOrder, border: string}>();
-    
     @Output() setSelectedPurchaseOrder = new EventEmitter<PurchaseOrder>();
     @Output() setSelectedCarton = new EventEmitter<Carton>();
     
@@ -32,10 +31,7 @@ export class InboundShipmentEditComponent implements OnInit, OnChanges {
     private currentInboundShippingMethod: InboundShippingMethod;
     private currentPurchaseOrderLines: PurchaseOrderLine[];
     private dataIsValid: { [key: string]: boolean } = {};
-    
     purchaseorderid: number;
-    headerLabel: string;
-    origStatus: string;
     
     constructor(private route: ActivatedRoute,
         private router: Router,
@@ -60,19 +56,20 @@ export class InboundShipmentEditComponent implements OnInit, OnChanges {
     }
 
     ngOnChanges(changes: SimpleChanges) {
-        if (changes.purchaseOrder && changes.purchaseOrder.currentValue && !changes.purchaseOrder.previousValue) {
-            this.origStatus = changes.purchaseOrder.currentValue.Status;
-        }
     }
 
     ngOnInit() {
+        this.isLoading = true;
         this.purchaseorderid = this.route.snapshot.params['id'];
-        if (this.purchaseorderid == 0) {
-            this.addNewPurchaseOrder.emit();
-        }
-        else {
-            this.getPurchaseOrder.emit(this.purchaseorderid);
-        }
+        this.route.params.subscribe(params => {
+            this.purchaseorderid = params.id;
+            if (params.id == 0)  {
+                this.addNewPurchaseOrder.emit();
+            }
+            else {
+                this.getPurchaseOrder.emit(this.purchaseorderid);
+            }
+        })
     }
 
     get purchaseorderlines(): PurchaseOrderLine[] {

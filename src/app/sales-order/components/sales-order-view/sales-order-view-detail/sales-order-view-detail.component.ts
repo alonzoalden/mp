@@ -20,13 +20,13 @@ import { takeWhile } from 'rxjs/operators';
 
 export class SalesOrderDetailComponent implements OnInit {
     @Input() userInfo: Member;
-    @Input() deliveryDetail: string;
     @Input() salesOrder: SalesOrder;
     @Input() salesOrderLinesMatTable: MatTableDataSource<SalesOrderLine>;
     @Input() errorMessage: string;
+    @Input() isLoading: boolean;
+    @Input() isSalesOrderLinesLoading: boolean;
     @Output() getFulfilledBySalesOrder = new EventEmitter<{orderid: number, fulfilledby: string}>();
     @Output() getSalesOrderLineByVendor = new EventEmitter<{orderid: number, fulfilledby: string}>();
-    @Output() getFulfilledBySalesOrderDelivery = new EventEmitter<{orderid: number, fulfilledby: string}>();
     @Output() cancelSalesOrderLines = new EventEmitter<SalesOrderLine[]>();
     @Output() getSalesOrderByVendor = new EventEmitter<{fulfilledby: string, status: string}>();
     @Output() downloadSalesOrderPackingSlip = new EventEmitter<SalesOrder>();
@@ -58,13 +58,6 @@ export class SalesOrderDetailComponent implements OnInit {
             this.salesOrderLinesMatTable.paginator = this.paginator;
             this.salesOrderLinesMatTable.sort = this.sort;
         }
-        if (changes.deliveryDetail && changes.deliveryDetail.currentValue) {
-            //this.deliveryDetail = changes.deliveryDetail.currentValue.trim().replace(new RegExp('<br />', 'g'), '\n');
-        }
-        if (changes.salesOrder && !changes.salesOrder.currentValue && changes.salesOrder.firstChange) {
-            this.getFulfilledBySalesOrder.emit({orderid: this.route.parent.snapshot.params['id'], fulfilledby: this.route.parent.snapshot.params['fulfilledby']});
-        }
-        
     }
     ngOnInit() {
         this.orderid = this.route.parent.snapshot.params['id'];
@@ -75,8 +68,8 @@ export class SalesOrderDetailComponent implements OnInit {
         else {
             this.isMerchant = false;
         }
-        this.getSalesOrderLineByVendor.emit({orderid: this.orderid, fulfilledby: this.fulfilledby});
-        this.getFulfilledBySalesOrderDelivery.emit({orderid: this.orderid, fulfilledby: this.fulfilledby});
+
+        //this.getSalesOrderLineByVendor.emit({orderid: this.orderid, fulfilledby: this.fulfilledby});
     }
     
     onPrintPackingSlip() {
@@ -157,7 +150,6 @@ export class SalesOrderCancelComponentPrintDialog implements OnInit, OnDestroy {
                         this.hasCancellationQty = true;
                     }
                 });
-                console.log(salesorderlines);
                 return this.salesOrderLinesMatTable = new MatTableDataSource<SalesOrderLine>(salesorderlines);
             }
           );
