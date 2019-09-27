@@ -1,7 +1,7 @@
 import { Component, OnInit, Input, Output, EventEmitter, SimpleChanges} from '@angular/core';
 import { MatTableDataSource } from '@angular/material';
-import { ItemInsert, ItemList, ItemRelatedProductInsert } from '../../../../shared/class/item';
-import { ItemService } from '../../../item.service';
+import { ItemInsert, ItemList, ItemRelatedProductInsert } from '../../../../../shared/class/item';
+import { ItemService } from '../../../../item.service';
 import { environment } from 'environments/environment';
 
 @Component({

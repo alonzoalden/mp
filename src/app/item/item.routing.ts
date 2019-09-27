@@ -5,16 +5,16 @@ import { ItemComponent } from './item.component';
 import { ItemListShellComponent } from './item-list/containers/item-list-shell/item-list-shell.component';
 import { ItemPrintLabelShellComponent } from './item-print-label/containers/item-print-label-shell.component';
 
-import { ItemAddShellComponent } from './item-add/containers/item-add-shell/item-add-shell.component';
-import { ItemAddDescriptionShellComponent } from './item-add/containers/item-add-description-shell/item-add-description-shell.component';
-import { ItemAddDimensionShellComponent } from './item-add/containers/item-add-dimension-shell/item-add-dimension-shell.component';
-import { ItemAddPriceShellComponent } from './item-add/containers/item-add-price-shell/item-add-price-shell.component';
-import { ItemAddCategoryShellComponent } from './item-add/containers/item-add-category-shell/item-add-category-shell.component';
-import { ItemAddBundleShellComponent } from './item-add/containers/item-add-bundle-shell/item-add-bundle-shell.component';
-import { ItemAddProductRelationShellComponent } from './item-add/containers/item-add-product-relation-shell/item-add-product-relation-shell.component';
-import { ItemAddVendorAttachmentShellComponent } from './item-add/containers/item-add-vendor-attachment-shell/item-add-vendor-attachment-shell.component';
-import { ItemAddVideoShellComponent } from './item-add/containers/item-add-video-shell/item-add-video-shell.component';
-import { ItemAddImageShellComponent } from './item-add/containers/item-add-image-shell/item-add-image-shell.component';
+import { ItemAddShellComponent } from './item-add/containers/item-add-shell.component';
+import { ItemAddDescriptionShellComponent } from './item-add/item-add-description/containers/item-add-description-shell.component';
+import { ItemAddDimensionShellComponent } from './item-add/item-add-dimension/containers/item-add-dimension-shell.component';
+import { ItemAddPriceShellComponent } from './item-add/item-add-price/containers/item-add-price-shell.component';
+import { ItemAddCategoryShellComponent } from './item-add/item-add-category/containers/item-add-category-shell.component';
+import { ItemAddBundleShellComponent } from './item-add/item-add-bundle/containers/item-add-bundle-shell.component';
+import { ItemAddProductRelationShellComponent } from './item-add/item-add-product-relation/containers/item-add-product-relation-shell.component';
+import { ItemAddVendorAttachmentShellComponent } from './item-add/item-add-vendor-attachment/containers/item-add-vendor-attachment-shell.component';
+import { ItemAddVideoShellComponent } from './item-add/item-add-video/containers/item-add-video-shell.component';
+import { ItemAddImageShellComponent } from './item-add/item-add-image/containers/item-add-image-shell.component';
 
 
 import { ItemEditShellComponent  } from './item-edit/containers/item-edit-shell/item-edit-shell.component';
@@ -29,7 +29,7 @@ import { ItemEditVideoShellComponent } from './item-edit/containers/item-edit-vi
 import { ItemEditImageShellComponent } from './item-edit/containers/item-edit-image-shell/item-edit-image-shell.component';
 import { ItemEditInventoryShellComponent } from './item-edit/containers/item-edit-inventory-shell/item-edit-inventory-shell.component';
 
-import { ItemAddBundleGuard } from './item-add/components/item-add-bundle/item-add-bundle.guard';
+import { ItemAddBundleGuard } from './item-add/item-add-bundle/components/item-add-bundle.guard';
 import { ItemEditGuard } from './item-edit/components/item-edit/item-edit.guard';
 import { ItemEditBundleGuard } from './item-edit/components/item-edit-bundle/item-edit-bundle.guard';
 import { ItemPartEditGuard } from './item-part/components/item-part-edit/item-part-edit.guard';
@@ -39,7 +39,7 @@ import { ItemBatchApprovalShellComponent } from './item-batch/item-batch-approva
 import { ItemBatchUpdateShellComponent } from './item-batch/item-batch-update/containers/item-batch-update-shell/item-batch-update-shell.component';
 import { ItemBatchUpdateSelectShellComponent } from './item-batch/item-batch-update/containers/item-batch-update-shell/item-batch-update-select-shell/item-batch-update-select-shell.component';
 import { ItemBatchUpdateUpdateShellComponent } from './item-batch/item-batch-update/containers/item-batch-update-shell/item-batch-update-update-shell/item-batch-update-update-shell.component';
-import { ItemAddPartShellComponent } from './item-add/containers/item-add-part-shell/item-add-part-shell.component';
+import { ItemAddPartShellComponent } from './item-add/item-add-part/containers/item-add-part-shell.component';
 import { ItemEditPartShellComponent } from './item-edit/containers/item-edit-part-shell/item-edit-part-shell.component';
 
 import { ItemPartListComponentItemPrintDialog } from './item-part/components/item-part-list/item-part-list.component';

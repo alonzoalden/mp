@@ -1,8 +1,8 @@
 import { Component, Input, Output, EventEmitter, OnInit, OnChanges, SimpleChanges } from '@angular/core';
 import { Router } from '@angular/router';
-import { ItemInsert, ItemTierPriceInsert, ItemRelatedProductInsert, ItemUpSellInsert, ItemCrossSellInsert, ItemAttachmentInsert, ItemVideoInsert } from '../../../../shared/class/item';
-import { VendorBrand } from '../../../../shared/class/vendor-brand';
-import { ItemService } from '../../../item.service';
+import { ItemInsert, ItemTierPriceInsert, ItemRelatedProductInsert, ItemUpSellInsert, ItemCrossSellInsert, ItemAttachmentInsert, ItemVideoInsert } from '../../../shared/class/item';
+import { VendorBrand } from '../../../shared/class/vendor-brand';
+import { ItemService } from '../../item.service';
 import { Store, select } from '@ngrx/store';
 //import * as itemActions from '../../../state';
 //import * as fromItem from '../../../state';

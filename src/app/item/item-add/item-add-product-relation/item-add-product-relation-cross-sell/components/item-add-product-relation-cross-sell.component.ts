@@ -1,8 +1,8 @@
 import { Component, OnInit, Input, SimpleChanges, OnChanges, Output, EventEmitter } from '@angular/core';
 import { MatTableDataSource } from '@angular/material';
 import { environment } from 'environments/environment';
-import { ItemInsert, ItemList, ItemCrossSellInsert } from '../../../../shared/class/item';
-import { ItemService } from '../../../item.service';
+import { ItemInsert, ItemList, ItemCrossSellInsert } from '../../../../../shared/class/item';
+import { ItemService } from '../../../../item.service';
 
 @Component({
     selector: 'o-item-add-product-relation-cross-sell',

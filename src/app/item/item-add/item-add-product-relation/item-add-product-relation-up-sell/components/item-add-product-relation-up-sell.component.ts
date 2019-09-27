@@ -3,8 +3,8 @@ import { Router, ActivatedRoute } from '@angular/router';
 import { MatTableDataSource } from '@angular/material';
 import { Subscription } from 'rxjs';
 
-import { Item, ItemInsert, ItemList, ItemUpSellInsert, ItemRelatedProductInsert } from '../../../../shared/class/item';
-import { ItemService } from '../../../item.service';
+import { Item, ItemInsert, ItemList, ItemUpSellInsert, ItemRelatedProductInsert } from '../../../../../shared/class/item';
+import { ItemService } from '../../../../item.service';
 import { environment } from 'environments/environment';
 
 @Component({

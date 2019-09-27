@@ -26,32 +26,32 @@ import { ItemListShellComponent } from './item-list/containers/item-list-shell/i
 import { ItemPrintLabelShellComponent } from './item-print-label/containers/item-print-label-shell.component';
 import { ItemPartListShellComponent } from './item-part/containers/item-part-list-shell/item-part-list-shell.component';
 
-import { ItemAddComponent } from './item-add/components/item-add/item-add.component';
-import { ItemAddDescriptionComponent } from './item-add/components/item-add-description/item-add-description.component';
-import { ItemAddDimensionComponent } from './item-add/components/item-add-dimension/item-add-dimension.component';
-import { ItemAddPriceComponent } from './item-add/components/item-add-price/item-add-price.component';
-import { ItemAddCategoryComponent } from './item-add/components/item-add-category/item-add-category.component';
-import { ItemAddBundleComponent } from './item-add/components/item-add-bundle/item-add-bundle.component';
+import { ItemAddComponent } from './item-add/components/item-add.component';
+import { ItemAddDescriptionComponent } from './item-add/item-add-description/components/item-add-description.component';
+import { ItemAddDimensionComponent } from './item-add/item-add-dimension/components/item-add-dimension.component';
+import { ItemAddPriceComponent } from './item-add/item-add-price/components/item-add-price.component';
+import { ItemAddCategoryComponent } from './item-add/item-add-category/components/item-add-category.component';
+import { ItemAddBundleComponent } from './item-add/item-add-bundle/components/item-add-bundle.component';
 //import { ItemAddProductRelationComponent } from './components/item-add/item-add-product-relation/item-add-product-relation.component';
-import { ItemAddProductRelationRelatedProductComponent } from './item-add/components/item-add-product-relation-related-product/item-add-product-relation-related-product.component';
-import { ItemAddProductRelationUpSellComponent } from './item-add/components/item-add-product-relation-up-sell/item-add-product-relation-up-sell.component';
-import { ItemAddProductRelationCrossSellComponent } from './item-add/components/item-add-product-relation-cross-sell/item-add-product-relation-cross-sell.component';
-import { ItemAddVendorAttachmentComponent } from './item-add/components/item-add-vendor-attachment/item-add-vendor-attachment.component';
-import { ItemAddVideoComponent } from './item-add/components/item-add-video/item-add-video.component';
-import { ItemAddImageComponent, ItemAddImageComponentUploadDialog } from './item-add/components/item-add-image/item-add-image.component';
+import { ItemAddProductRelationRelatedProductComponent } from './item-add/item-add-product-relation/item-add-product-relation-related-product/components/item-add-product-relation-related-product.component';
+import { ItemAddProductRelationUpSellComponent } from './item-add/item-add-product-relation/item-add-product-relation-up-sell/components/item-add-product-relation-up-sell.component';
+import { ItemAddProductRelationCrossSellComponent } from './item-add/item-add-product-relation/item-add-product-relation-cross-sell/components/item-add-product-relation-cross-sell.component';
+import { ItemAddVendorAttachmentComponent } from './item-add/item-add-vendor-attachment/components/item-add-vendor-attachment.component';
+import { ItemAddVideoComponent } from './item-add/item-add-video/components/item-add-video.component';
+import { ItemAddImageComponent, ItemAddImageComponentUploadDialog } from './item-add/item-add-image/components/item-add-image.component';
 //import { ItemAddPartComponent } from './item-add/components/item-add-part/item-add-part.component';
 
-import { ItemAddShellComponent } from './item-add/containers/item-add-shell/item-add-shell.component';
-import { ItemAddDescriptionShellComponent } from './item-add/containers/item-add-description-shell/item-add-description-shell.component';
-import { ItemAddDimensionShellComponent } from './item-add/containers/item-add-dimension-shell/item-add-dimension-shell.component';
-import { ItemAddPriceShellComponent } from './item-add/containers/item-add-price-shell/item-add-price-shell.component';
-import { ItemAddCategoryShellComponent } from './item-add/containers/item-add-category-shell/item-add-category-shell.component';
-import { ItemAddBundleShellComponent } from './item-add/containers/item-add-bundle-shell/item-add-bundle-shell.component';
-import { ItemAddProductRelationShellComponent } from './item-add/containers/item-add-product-relation-shell/item-add-product-relation-shell.component';
-import { ItemAddVendorAttachmentShellComponent } from './item-add/containers/item-add-vendor-attachment-shell/item-add-vendor-attachment-shell.component';
-import { ItemAddVideoShellComponent } from './item-add/containers/item-add-video-shell/item-add-video-shell.component';
-import { ItemAddImageShellComponent } from './item-add/containers/item-add-image-shell/item-add-image-shell.component';
-import { ItemAddPartShellComponent } from './item-add/containers/item-add-part-shell/item-add-part-shell.component';
+import { ItemAddShellComponent } from './item-add/containers/item-add-shell.component';
+import { ItemAddDescriptionShellComponent } from './item-add/item-add-description/containers/item-add-description-shell.component';
+import { ItemAddDimensionShellComponent } from './item-add/item-add-dimension/containers/item-add-dimension-shell.component';
+import { ItemAddPriceShellComponent } from './item-add/item-add-price/containers/item-add-price-shell.component';
+import { ItemAddCategoryShellComponent } from './item-add/item-add-category/containers/item-add-category-shell.component';
+import { ItemAddBundleShellComponent } from './item-add/item-add-bundle/containers/item-add-bundle-shell.component';
+import { ItemAddProductRelationShellComponent } from './item-add/item-add-product-relation/containers/item-add-product-relation-shell.component';
+import { ItemAddVendorAttachmentShellComponent } from './item-add/item-add-vendor-attachment/containers/item-add-vendor-attachment-shell.component';
+import { ItemAddVideoShellComponent } from './item-add/item-add-video/containers/item-add-video-shell.component';
+import { ItemAddImageShellComponent } from './item-add/item-add-image/containers/item-add-image-shell.component';
+import { ItemAddPartShellComponent } from './item-add/item-add-part/containers/item-add-part-shell.component';
 //import { ItemAddComponent } from './item-add/item-add.component';
 //import { ItemAddDescriptionComponent } from './item-add/item-add-description.component';
 //import { ItemAddDimensionComponent } from './item-add/item-add-dimension.component';
@@ -66,8 +66,8 @@ import { ItemAddPartShellComponent } from './item-add/containers/item-add-part-s
 //import { ItemAddVideoComponent } from './item-add/item-add-video.component';
 //import { ItemAddImageComponent, ItemAddImageComponentUploadDialog } from './item-add/item-add-image.component';
 //import { ItemAddPartComponent } from './item-add/item-add-part.component';
-import { ItemAddPartSectionPartComponent } from './item-add/components/item-add-part/item-add-part-section-part/item-add-part-section-part.component';
-import { ItemAddPartSectionComponent } from './item-add/components/item-add-part/item-add-part-section/item-add-part-section.component';
+import { ItemAddPartSectionPartComponent } from './item-add/item-add-part/components/item-add-part-section-part/item-add-part-section-part.component';
+import { ItemAddPartSectionComponent } from './item-add/item-add-part/components/item-add-part-section/item-add-part-section.component';
 
 
 
@@ -136,7 +136,7 @@ import { itemRouting } from './item.routing';
 import { ItemService } from '../item/item.service';
 import { ItemEditGuard } from './item-edit/components/item-edit/item-edit.guard';
 import { ItemEditBundleGuard } from './item-edit/components/item-edit-bundle/item-edit-bundle.guard';
-import { ItemAddBundleGuard } from './item-add/components/item-add-bundle/item-add-bundle.guard';
+import { ItemAddBundleGuard } from './item-add/item-add-bundle/components/item-add-bundle.guard';
 
 import { ItemBatchApprovalComponent } from './item-batch/item-batch-approval/components/item-batch-approval/item-batch-approval.component';
 import { ItemBatchUpdateComponent } from './item-batch/item-batch-update/components/item-batch-update/item-batch-update.component';
