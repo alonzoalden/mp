@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { CanDeactivate, ActivatedRouteSnapshot, RouterStateSnapshot } from '@angular/router';
-import { ItemEditBundleComponent } from './item-edit-bundle.component';
+import { ItemEditBundleComponent } from './components/item-edit-bundle.component';
 
 @Injectable()
 export class ItemEditBundleGuard implements CanDeactivate<ItemEditBundleComponent> {

@@ -1,7 +1,7 @@
 import { Component, OnInit, OnDestroy, ViewChild, ElementRef, EventEmitter, Input, Output, SimpleChanges } from '@angular/core';
 import { MatTableDataSource } from '@angular/material';
-import { Item, ItemList, ItemUpSell, ItemUpSellInsert } from '../../../../shared/class/item';
-import { ItemService } from '../../../item.service';
+import { Item, ItemList, ItemUpSell, ItemUpSellInsert } from '../../../../../shared/class/item';
+import { ItemService } from '../../../../item.service';
 import { environment } from 'environments/environment';
 
 @Component({

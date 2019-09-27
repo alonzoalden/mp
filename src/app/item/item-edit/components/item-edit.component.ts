@@ -2,13 +2,13 @@ import { Component, ViewChild, OnInit, OnDestroy, Input, SimpleChanges, Output, 
 import { ActivatedRoute, Router } from '@angular/router';
 import { Subscription } from 'rxjs';
 
-import { Item, ItemSelection, ItemInsert } from '../../../../shared/class/item';
-import { VendorBrand } from '../../../../shared/class/vendor-brand';
+import { Item, ItemSelection, ItemInsert } from '../../../shared/class/item';
+import { VendorBrand } from '../../../shared/class/vendor-brand';
 
-import { ItemService } from '../../../item.service';
-import { AppService } from '../../../../app.service';
+import { ItemService } from '../../item.service';
+import { AppService } from '../../../app.service';
 
-import { environment } from '../../../../../environments/environment';
+import { environment } from '../../../../environments/environment';
 import { Member } from 'app/shared/class/member';
 
 @Component({

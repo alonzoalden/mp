@@ -1,12 +1,12 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Observable } from 'rxjs';
-import { Item, ItemSelection, ItemInsert } from '../../../../shared/class/item';
-import { VendorBrand } from '../../../../shared/class/vendor-brand';
+import { Item, ItemSelection, ItemInsert } from '../../../shared/class/item';
+import { VendorBrand } from '../../../shared/class/vendor-brand';
 import { Store, select } from '@ngrx/store';
-import * as itemActions from '../../../state/item.actions';
-import * as fromItem from '../../../state';
-import * as fromUser from '../../../../shared/state/user-state.reducer';
+import * as itemActions from '../../state/item.actions';
+import * as fromItem from '../../state';
+import * as fromUser from '../../../shared/state/user-state.reducer';
 import { Member } from 'app/shared/class/member';
 
 @Component({
