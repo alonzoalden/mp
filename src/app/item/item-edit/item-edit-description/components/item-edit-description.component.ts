@@ -54,6 +54,27 @@ export class ItemEditDescriptionComponent implements OnInit, AfterViewInit {
                 callbacks: {
                     onBlur: function() {
                         self.updateTextEditorFields();
+                    },
+                    onPaste: function (e) {
+                        var bufferText = ((e.originalEvent || e).clipboardData ).getData('text/html');
+                        e.preventDefault ? e.preventDefault() : (e.returnValue = false);
+                        const commentStripper = /.*?<!--[\s\S]*?-->.*?/g;
+                        bufferText = bufferText.replace(commentStripper, '');
+                        const wordStripper = /<o:p>/gi;
+                        bufferText = bufferText.replace(wordStripper, '');
+                        const wordStripper2 = /<\/o:p>/gi;
+                        bufferText = bufferText.replace(wordStripper2, '');
+                        var div = $('<div />');
+                        div.append(bufferText);
+                        div.find('*').removeAttr('style border class cellspacing cellpadding width height align nowrap valign lang');
+                        div.find('table').addClass('table table-bordered');
+                        div.find('style').remove();
+                        div.find('meta').remove();
+                        div.find('link').remove();
+                        div.find('xml').remove();
+                        setTimeout(function(){
+                            document.execCommand('insertHtml',false,div.html());
+                        },10);
                     }
                 }
             });
