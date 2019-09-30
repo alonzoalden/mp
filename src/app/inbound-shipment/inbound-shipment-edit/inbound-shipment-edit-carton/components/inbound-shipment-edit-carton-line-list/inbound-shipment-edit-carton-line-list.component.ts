@@ -121,7 +121,7 @@ export class InboundShipmentEditCartonLineListComponent implements OnInit, OnCha
         const foundPurchaseOrderLine = this.purchaseOrder.PurchaseOrderLines.find(x => x.PurchaseOrderLineID === cartonline.PurchaseOrderLineID);
 
         if (foundPurchaseOrderLine) {
-            let RemainingQuantity: number = foundPurchaseOrderLine.Quantity;
+            var RemainingQuantity: number = foundPurchaseOrderLine.Quantity;
 
             this.purchaseOrder.Cartons.forEach((carton, ci) => {
                 carton.CartonLines.forEach((cartonline2, cli) => {
