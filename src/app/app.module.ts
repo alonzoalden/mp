@@ -1,11 +1,9 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
 import { HttpModule } from '@angular/http';
-
 import { HttpClientModule, HttpClient } from '@angular/common/http';
 import { TranslateModule, TranslateLoader } from '@ngx-translate/core';
 import { TranslateHttpLoader } from '@ngx-translate/http-loader';
-
 import { HTTP_INTERCEPTORS } from '@angular/common/http';
 
 import {
@@ -46,32 +44,22 @@ import {
 } from '@angular/material';
 
 import { CdkTableModule } from '@angular/cdk/table';
-
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-
 import { OAuthModule, OAuthStorage } from 'angular-oauth2-oidc';
-
 import { ComponentsModule } from './shared/component/components.module';
 import { ToolModule } from './shared/tool/tool.module';
-
 import { AppComponent } from './app.component';
 import { HomeComponent } from './home/home.component';
 import { AuthGuard } from './auth/auth.guard';
-
 import { routing } from './app.routing';
-
 import { environment } from '../environments/environment';
-
 import { AppService } from './app.service';
-
 import { RequestInterceptor } from './core/request.interceptor';
 import { ResponseInterceptor } from './core/response.interceptor';
-import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { AnimateOnScrollModule } from 'ng2-animate-on-scroll';
 import { APP_BASE_HREF } from '@angular/common';
 import { DeviceDetectorModule } from 'ngx-device-detector';
 import { BrowserCompatibilityComponent } from './browser-compatibility/browser-compatibility.component';
-
 import { StoreDevtoolsModule } from '@ngrx/store-devtools';
 import { StoreModule } from '@ngrx/store';
 import { EffectsModule } from '@ngrx/effects';
@@ -92,7 +80,6 @@ export function HttpLoaderFactory(http: HttpClient) {
         BrowserModule,
         HttpModule,
         HttpClientModule,
-        // HttpClientInMemoryWebApiModule.forRoot(ItemVariationData),
         TranslateModule.forRoot({
             loader: {
               provide: TranslateLoader,
@@ -112,11 +99,11 @@ export function HttpLoaderFactory(http: HttpClient) {
         DeviceDetectorModule.forRoot(),
         routing,
         StoreModule.forRoot({}),
-        StoreDevtoolsModule.instrument({
-            name: 'Toolots Merchant Portal DevTools',
-            maxAge: 20,
-            logOnly: environment.production,
-        }),
+        // StoreDevtoolsModule.instrument({
+        //     name: 'Toolots Merchant Portal DevTools',
+        //     maxAge: 20,
+        //     logOnly: environment.production,
+        // }),
         EffectsModule.forRoot([]),
         StoreModule.forFeature('users', userreducer),
         EffectsModule.forFeature([UserEffects])
