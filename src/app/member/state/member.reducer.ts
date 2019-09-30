@@ -1,13 +1,12 @@
 import { MemberActions, MemberActionTypes } from './member.actions';
-import { VendorAttachment, VendorAttachmentInsert } from 'app/shared/class/vendor-attachment';
 import { Member } from 'app/shared/class/member';
 
-// State for this feature (Item Variation)
+// State for this feature (Member)
 export interface MemberState {
-    member: Member,
-    members: Member[],
-    pendingDelete: boolean,
-    pendingRegister: boolean,
+    member: Member;
+    members: Member[];
+    pendingDelete: boolean;
+    pendingRegister: boolean;
     error: string;
 };
 

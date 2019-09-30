@@ -34,7 +34,6 @@ export const pendingRegister = createSelector(
     getCompanyFeatureState,
     state => state.pendingRegister
 );
-
 export const getError = createSelector(
     getCompanyFeatureState,
     state => state.error
