@@ -23,7 +23,7 @@ export class SalesOrderFulfillmentEditComponent implements OnInit {
     @Output() getFulfilledBySalesOrderDelivery = new EventEmitter<{orderid: number, fulfilledby: string}>();
     @Output() getFulfilledByFulfillment = new EventEmitter<{fulfillmentid: number, fulfilledby: string}>();
     @Output() editFulfillment = new EventEmitter<Fulfillment>();
-    
+
     orderid: number;
     fulfilledby: string;
     fulfillmentid: number;
@@ -37,21 +37,20 @@ export class SalesOrderFulfillmentEditComponent implements OnInit {
 
     constructor(private route: ActivatedRoute,
         private salesorderService: SalesOrderService) { }
-    
+
     ngOnChanges(changes: SimpleChanges): void {
         if (changes.deliveryDetail && changes.deliveryDetail.currentValue) {
             this.deliveryDetail = changes.deliveryDetail.currentValue.trim().replace(new RegExp('<br />', 'g'), '\n');
         }
 
         if (changes.fulfillment && changes.fulfillment.currentValue) {
-            if(!this.fulfillment.ShipmentTrackings || this.fulfillment.ShipmentTrackings.length == 0){
+            if (!this.fulfillment.ShipmentTrackings || this.fulfillment.ShipmentTrackings.length == 0) {
                 this.addNewShipmentTracking();
             }
 
-            if(this.fulfilledby == 'merchant' && !this.fulfillment.InternalID) {
+            if (this.fulfilledby == 'merchant' && !this.fulfillment.InternalID) {
                 this.isMerchant = true;
-            }
-            else {
+            } else {
                 this.isMerchant = false;
             }
             this.fulfillmentSalesOrderLines = this.fulfillment.FulfillmentSalesOrderLines;
@@ -68,21 +67,20 @@ export class SalesOrderFulfillmentEditComponent implements OnInit {
         this.orderid = this.route.parent.snapshot.params['id'];
         this.fulfilledby = this.route.parent.snapshot.params['fulfilledby'];
         this.fulfillmentid = this.route.snapshot.params['fulfillmentid'];
-        
+
         this.getFulfilledBySalesOrder.emit({orderid: this.orderid, fulfilledby: this.fulfilledby});
         this.getFulfilledBySalesOrderDelivery.emit({orderid: this.orderid, fulfilledby: this.fulfilledby});
-        
-        if(this.fulfilledby == 'merchant') {
+
+        if (this.fulfilledby == 'merchant') {
             this.isMerchant = true;
-        }
-        else {
+        } else {
             this.isMerchant = false;
         }
     }
 
     addNewShipmentTracking() {
         const _temp = new ShipmentTracking(null, this.fulfillmentid.toString(), null, null);
-        this.fulfillment.ShipmentTrackings.push(_temp);        
+        this.fulfillment.ShipmentTrackings.push(_temp);
     }
     onAddShipmentTracking() {
         this.addNewShipmentTracking();
@@ -92,29 +90,27 @@ export class SalesOrderFulfillmentEditComponent implements OnInit {
         if (this.isValid()) {
             this.editFulfillment.emit(this.fulfillment);
         }
-    }    
+    }
 
     isValid(): boolean {
         if (this.fulfillment
             && this.fulfillment.ShipDate
-            && this.fulfillment.ShipmentTrackings.find(val=> !!val.TrackingNumber && val.TrackingNumber.toString().trim() != '')
+            && this.fulfillment.ShipmentTrackings.find(val => !!val.TrackingNumber && val.TrackingNumber.toString().trim() != '')
             && this.fulfillment.ShipmentTrackings.length > 0
             && this.fulfillment.Carrier
             && this.fulfillment.ShippingMethod
             && this.fulfillment.FulfillmentSalesOrderLines
             && this.fulfillment.FulfillmentSalesOrderLines.length > 0
             && this.getTotalPackageQty() > 0
-        ) {                
+        ) {
             return true;
         } else {
-            if(this.getTotalPackageQty() == 0) {
-                this.salesorderService.sendNotification({ type: 'error', title: 'Error', content: "Item is required"});
-            }
-            else if(!this.fulfillment.ShipmentTrackings.find(val=> !!val.TrackingNumber && val.TrackingNumber.toString().trim() != '') || this.fulfillment.ShipmentTrackings.length == 0) {                        
-                this.salesorderService.sendNotification({ type: 'error', title: 'Error', content: "Tracking Number is required"});
-            }
-            else {
-                this.salesorderService.sendNotification({ type: 'error', title: 'Error', content: "Please enter all required fields"});
+            if (this.getTotalPackageQty() == 0) {
+                this.salesorderService.sendNotification({ type: 'error', title: 'Error', content: 'Item is required'});
+            } else if (!this.fulfillment.ShipmentTrackings.find(val => !!val.TrackingNumber && val.TrackingNumber.toString().trim() != '') || this.fulfillment.ShipmentTrackings.length == 0) {
+                this.salesorderService.sendNotification({ type: 'error', title: 'Error', content: 'Tracking Number is required'});
+            } else {
+                this.salesorderService.sendNotification({ type: 'error', title: 'Error', content: 'Please enter all required fields'});
             }
 
             return false;
@@ -122,8 +118,8 @@ export class SalesOrderFulfillmentEditComponent implements OnInit {
     }
 
     public getTotalPackageQty(): number {
-        var total = 0;
-        if (this.fulfillment != null && this.fulfillment.FulfillmentSalesOrderLines != null && this.fulfillment.FulfillmentSalesOrderLines.length > 0) {   
+        let total = 0;
+        if (this.fulfillment != null && this.fulfillment.FulfillmentSalesOrderLines != null && this.fulfillment.FulfillmentSalesOrderLines.length > 0) {
             this.fulfillment.FulfillmentSalesOrderLines.forEach(x => total += x.PackageQuantity);
         }
         return total;

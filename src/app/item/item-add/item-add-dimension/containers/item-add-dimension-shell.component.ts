@@ -1,8 +1,7 @@
-import { Component, OnInit, SimpleChanges } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { Observable } from 'rxjs';
 import { ItemInsert } from '../../../../shared/class/item';
 import { Store, select } from '@ngrx/store';
-import * as itemActions from '../../../state/item.actions';
 import * as fromItem from '../../../state';
 
 @Component({

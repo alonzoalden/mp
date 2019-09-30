@@ -10,10 +10,9 @@ export class ItemEditBundleGuard implements CanDeactivate<ItemEditBundleComponen
         currentState: RouterStateSnapshot,
         nextState?: RouterStateSnapshot): boolean {
 
-        if (!nextState.url.includes(currentState.url.substring(0, currentState.url.length-6))) {
+        if (!nextState.url.includes(currentState.url.substring(0, currentState.url.length - 6))) {
             return true;
-        }
-        else {
+        } else {
             if (component.hasEmptyTitle) {
                 alert('You must have all "Title" entered for all options');
                 return false;

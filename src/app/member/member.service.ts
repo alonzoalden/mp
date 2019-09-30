@@ -1,11 +1,8 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpErrorResponse, HttpHeaders } from '@angular/common/http';
-
 import { Observable, Subject, of, throwError } from 'rxjs';
 import { catchError, tap } from 'rxjs/operators';
-
 import { Member, MemberInsert, MemberVendor } from '../shared/class/member';
-
 import { OAuthService } from 'angular-oauth2-oidc';
 import { environment } from '../../environments/environment';
 
@@ -62,7 +59,7 @@ export class MemberService {
                                 //tap(data => console.log('Add Member: ' + JSON.stringify(data))),
                                 tap(data => {
                                     data.IsActive = true;
-                                    if(this.members) {
+                                    if (this.members) {
                                         this.members.push(data);
                                     }
                                 }),

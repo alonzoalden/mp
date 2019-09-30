@@ -6,7 +6,7 @@ import { VendorBrand } from '../../../../../shared/class/vendor-brand';
 
 import { ItemService } from '../../../../item.service';
 import { AppService } from '../../../../../app.service';
-declare var $ :any;
+declare var $: any;
 
 @Component({
   selector: 'o-item-part-edit-description',
@@ -17,7 +17,7 @@ export class ItemPartEditDescriptionComponent implements OnInit, AfterViewInit {
     errorMessage: string;
     isPM: boolean;
     item: Item;
-    vendorBrandList: VendorBrand[]; 
+    vendorBrandList: VendorBrand[];
 
     constructor(private route: ActivatedRoute,
                 private itemService: ItemService,
@@ -25,15 +25,15 @@ export class ItemPartEditDescriptionComponent implements OnInit, AfterViewInit {
 
     ngOnInit(): void {
         const itemid = this.route.parent.snapshot.params['id'];
-        
+
         this.itemService.getVendorBrands().subscribe(
             (vendorBrands: VendorBrand[]) => {
                 this.vendorBrandList = vendorBrands;
             },
             (error: any) => {
-                this.errorMessage = <any>error;                
+                this.errorMessage = <any>error;
             }
-        ); 
+        );
 
         this.itemService.getCurrentItemEdit(itemid).subscribe(
             (item: Item) => {
@@ -55,20 +55,20 @@ export class ItemPartEditDescriptionComponent implements OnInit, AfterViewInit {
     }
 
     ngAfterViewInit() {
-        var self = this;
+        let self = this;
 
         $('.summernote').summernote( {
             height: 300,
             tabsize: 2,
             toolbar: [
-                ["style",["style"]],
-                ["font",["bold","underline","clear"]],
-                ["fontname",["fontname"]],
-                ["color",["color"]],
-                ["para",["ul","ol","paragraph"]],
-                ["table",["table"]],
-                ["insert",["link","picture","video"]],
-                ["view",["help"]]
+                ['style', ['style']],
+                ['font', ['bold', 'underline', 'clear']],
+                ['fontname', ['fontname']],
+                ['color', ['color']],
+                ['para', ['ul', 'ol', 'paragraph']],
+                ['table', ['table']],
+                ['insert', ['link', 'picture', 'video']],
+                ['view', ['help']]
             ],
             callbacks: {
                 onBlur: function() {

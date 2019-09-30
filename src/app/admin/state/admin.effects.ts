@@ -6,7 +6,6 @@ import { Actions, Effect, ofType } from '@ngrx/effects';
 import { AdminService } from '../admin.service';
 import * as fromAdmin from './index';
 import * as adminActions from './admin.actions';
-import { VendorAttachment } from 'app/shared/class/vendor-attachment';
 import { Router } from '@angular/router';
 import { Member } from 'app/shared/class/member';
 import { VendorList } from 'app/shared/class/vendor';
@@ -21,7 +20,7 @@ export class AdminEffects {
         private actions$: Actions) { }
 
 
-        
+
     @Effect()
     loadMembers$: Observable<Action> = this.actions$.pipe(
         ofType(adminActions.AdminActionTypes.LoadMembers),
@@ -29,7 +28,7 @@ export class AdminEffects {
             this.adminService.getMembers().pipe(
                 map((members: Member[]) => (new adminActions.LoadMembersSuccess(members))),
                 catchError(err => {
-                    of(new adminActions.LoadMembersFail(err))
+                    of(new adminActions.LoadMembersFail(err));
                     return EMPTY;
                 })
             )
@@ -43,7 +42,7 @@ export class AdminEffects {
             this.adminService.getVendorList().pipe(
                 map((vendorlist: VendorList[]) => (new adminActions.LoadVendorListSuccess(vendorlist))),
                 catchError(err => {
-                    of(new adminActions.LoadVendorListFail(err))
+                    of(new adminActions.LoadVendorListFail(err));
                     return EMPTY;
                 })
             )
@@ -143,6 +142,6 @@ export class AdminEffects {
     //         )
     //     )
     // );
-    
-    
+
+
 }

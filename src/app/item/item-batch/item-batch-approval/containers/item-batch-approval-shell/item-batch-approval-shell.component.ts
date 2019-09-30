@@ -20,7 +20,7 @@ export class ItemBatchApprovalShellComponent implements OnInit {
     errorMessage$: Observable<string>;
 
     constructor(private store: Store<fromItem.State>) {}
-    
+
     ngOnInit() {
         this.userInfo$ = this.store.pipe(select(fromUser.getCurrentUser));
         this.itemBatch$ = this.store.pipe(select(fromItem.getItemBatch));

@@ -1,13 +1,10 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpErrorResponse, HttpHeaders } from '@angular/common/http';
-
 import { Observable, Subject, of, throwError } from 'rxjs';
 import { catchError, tap } from 'rxjs/operators';
-
 import { OAuthService } from 'angular-oauth2-oidc';
 import { environment } from '../../environments/environment';
 import { AppService } from '../app.service';
-
 import { VendorAttachment } from '../shared/class/vendor-attachment';
 import { VendorBrand } from '../shared/class/vendor-brand';
 import { Member } from '../shared/class/member';
@@ -29,7 +26,6 @@ export class CompanyService {
             private notificationComponent: NotificationComponent) { }
 
     sendNotification(notification: any) {
-        //this.subject.next(notification);
         this.notificationComponent.notify(notification);
     }
 
@@ -92,9 +88,9 @@ export class CompanyService {
                                 catchError(this.handleError)
                             );
     }
-    
+
     uploadAttachment(formData: FormData) {
-        
+
 
         console.log(formData);
 
@@ -215,11 +211,11 @@ export class CompanyService {
     }
 
     rowColorConditions(i: number, collection: Array<any>, currentIndex: number, formDirty: boolean): string {
-        const inputRow = i === collection.length-1 && currentIndex === i;
+        const inputRow = i === collection.length - 1 && currentIndex === i;
         const selectedInputRow = inputRow && formDirty;
-        if (selectedInputRow) return '#F5F5F5';
-        else if (inputRow) return '#E8E8E8';
-        else if (currentIndex === i) return '#F5F5F5';
-        else return '#FFFFFF';
+        if (selectedInputRow) { return '#F5F5F5'; }
+        else if (inputRow) { return '#E8E8E8'; }
+        else if (currentIndex === i) { return '#F5F5F5'; }
+        else { return '#FFFFFF'; }
     }
 }

@@ -25,7 +25,7 @@ export class CompanyAttachmentEffects {
             this.companyService.getVendorAttachments().pipe(
                 map(vendorattachments => (new companyActions.LoadVendorAttachmentsSuccess(vendorattachments))),
                 catchError(err => {
-                    of(new companyActions.LoadVendorAttachmentsFail(err))
+                    of(new companyActions.LoadVendorAttachmentsFail(err));
                     return EMPTY;
                 })
             )
@@ -40,7 +40,7 @@ export class CompanyAttachmentEffects {
         mergeMap((vendorattachmentid: number) =>
             this.companyService.deleteVendorAttachment(vendorattachmentid).pipe(
                 map(() => {
-                    const message = `${vendorattachmentid} was deleted`
+                    const message = `${vendorattachmentid} was deleted`;
                     this.companyService.sendNotification({ type: 'success', title: 'Successfully Deleted', content: message });
                     return (new companyActions.DeleteVendorAttachmentSuccess(vendorattachmentid));
                 }),

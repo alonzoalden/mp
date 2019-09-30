@@ -16,7 +16,7 @@ export class SettingEffects {
         private actions$: Actions) { }
 
 
-        
+
     @Effect()
     loadMemberVendors$: Observable<Action> = this.actions$.pipe(
         ofType(settingActions.SettingActionTypes.LoadMemberVendors),
@@ -24,7 +24,7 @@ export class SettingEffects {
             this.settingService.getMemberVendors().pipe(
                 map((members: MemberVendor[]) => (new settingActions.LoadMemberVendorsSuccess(members))),
                 catchError(err => {
-                    of(new settingActions.LoadMemberVendorsFail(err))
+                    of(new settingActions.LoadMemberVendorsFail(err));
                     return EMPTY;
                 })
             )

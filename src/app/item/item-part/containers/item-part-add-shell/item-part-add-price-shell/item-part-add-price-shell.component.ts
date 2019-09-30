@@ -24,13 +24,13 @@ export class ItemPartAddPriceShellComponent implements OnInit {
     minDate = new Date(2000, 0, 1);
     maxDate = new Date(2020, 0, 1);
 
-    PendingAdd: boolean;   
+    PendingAdd: boolean;
     currentItemTierPriceIndex: number;
 
     displayedColumns = ['Add', 'Quantity', 'Price',  'Remove'];
     dataSource: any = null;
     formDirty = false;
-    canAdd = false;    
+    canAdd = false;
     constructor(private itemService: ItemService, private appService: AppService) { }
 
     @ViewChild(MatSort, { static: false }) sort: MatSort;
@@ -51,35 +51,32 @@ export class ItemPartAddPriceShellComponent implements OnInit {
                 );
 
         this.refreshItemTierPriceDataSource(this.item.ItemTierPrices);
-        if(this.item.ItemTierPrices.length === 0) {
+        if (this.item.ItemTierPrices.length === 0) {
             this.PendingAdd = true;
             const _temp = new ItemTierPriceInsert(0, 0, 0);
             this.item.ItemTierPrices.push(_temp);
             this.refreshItemTierPriceDataSource(this.item.ItemTierPrices);
         }
 
-        this.currentItemTierPriceIndex = this.item.ItemTierPrices.length - 1;        
+        this.currentItemTierPriceIndex = this.item.ItemTierPrices.length - 1;
     }
 
-    refreshItemTierPriceDataSource(itemTierPrices: ItemTierPriceInsert[]) 
-    {        
+    refreshItemTierPriceDataSource(itemTierPrices: ItemTierPriceInsert[]) {
         this.dataSource = new MatTableDataSource<ItemTierPriceInsert>(itemTierPrices);
         this.dataSource.sort = this.sort;
     }
 
     onAddItemTierPrice(itemTierPrice: ItemTierPriceInsert) {
-        var counter: number = 0;
+        let counter: number = 0;
         this.item.ItemTierPrices.forEach((p) => {
-            if(p.Quantity === itemTierPrice.Quantity)
-            {
+            if (p.Quantity === itemTierPrice.Quantity) {
                 counter++;
             }
         });
 
         if (counter > 1) {
-            this.itemService.sendNotification({ type: 'error', title: 'Error', content: "Tier Pricing already exists for this Quantity" });            
-        }
-        else {
+            this.itemService.sendNotification({ type: 'error', title: 'Error', content: 'Tier Pricing already exists for this Quantity' });
+        } else {
             this.PendingAdd = true;
             const _temp = new ItemTierPriceInsert(0, 0, 0);
             this.item.ItemTierPrices.push(_temp);
@@ -88,13 +85,12 @@ export class ItemPartAddPriceShellComponent implements OnInit {
     }
 
     onEditItemTierPrice(index: number) {
-        if(this.PendingAdd) {
+        if (this.PendingAdd) {
             this.currentItemTierPriceIndex = this.item.ItemTierPrices.length - 1;
             this.PendingAdd = false;
-        }
-        else {
+        } else {
             this.currentItemTierPriceIndex = index;
-        }    
+        }
     }
 
     onRemoveItemTierPrice(index: number) {
@@ -106,23 +102,20 @@ export class ItemPartAddPriceShellComponent implements OnInit {
         this.item.Price = null;
     }
 
-    onChangeFOBPrice()
-    {
-        if(this.item.FOBPrice) {
+    onChangeFOBPrice() {
+        if (this.item.FOBPrice) {
             this.item.FOBPrice = Number(this.item.FOBPrice.toFixed(2));
         }
 
-        if(this.item.Price)
-        {
-            if(this.item.Price <= 0) {
-                this.item.Price = this.item.FOBPrice * 3;    
-                this.item.Price = Number(this.item.Price.toFixed(2));                 
-            }                    
+        if (this.item.Price) {
+            if (this.item.Price <= 0) {
+                this.item.Price = this.item.FOBPrice * 3;
+                this.item.Price = Number(this.item.Price.toFixed(2));
+            }
+        } else {
+            this.item.Price = this.item.FOBPrice * 3;
+            this.item.Price = Number(this.item.Price.toFixed(2));
         }
-        else {
-            this.item.Price = this.item.FOBPrice * 3;    
-            this.item.Price = Number(this.item.Price.toFixed(2));        
-        }          
     }
 
     clearFields(form) {

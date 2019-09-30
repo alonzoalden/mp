@@ -15,7 +15,7 @@ export interface CompanyInfoState {
     isVendorBrandLoading: boolean;
     isInfoDescriptionLoading: boolean;
     error: string;
-};
+}
 
 const initialState: CompanyInfoState = {
     vendorBrands: [],

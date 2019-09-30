@@ -2,7 +2,7 @@ import { Component, ViewChild, OnInit, OnDestroy } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { RegistrationService } from './registration.service';
 import { OAuthService } from 'angular-oauth2-oidc';
-import { FormBuilder, Validators, FormGroup, FormControl } from '@angular/forms';
+import { FormBuilder, Validators } from '@angular/forms';
 import { VendorRegistration } from '../shared/class/vendor-registration';
 
 import { Subscription } from 'rxjs';
@@ -19,7 +19,7 @@ export class RegistrationComponent implements OnInit, OnDestroy {
     subscription: Subscription;
     registrationForm: any;
     id: any;
-    
+
     vendorRegistration: VendorRegistration;
     errorMessage: string;
     pendingCreate: boolean;
@@ -29,7 +29,7 @@ export class RegistrationComponent implements OnInit, OnDestroy {
     @ViewChild(NotificationComponent, { static: true })
     private  notificationComponent: NotificationComponent;
 
-    
+
     constructor(private route: ActivatedRoute,
         private router: Router,
         private formBuilder: FormBuilder,
@@ -74,7 +74,7 @@ export class RegistrationComponent implements OnInit, OnDestroy {
                 },
                 (error: any) => {
                     this.pendingCreate = false;
-                    this.errorMessage = <any>error;                    
+                    this.errorMessage = <any>error;
                     this.registrationService.sendNotification({ type: 'error', title: 'Error', content: this.errorMessage });
                     //this.router.navigate(['/home']);
                 }
@@ -96,7 +96,7 @@ export class RegistrationComponent implements OnInit, OnDestroy {
             && this.registrationForm.valid) {
             return true;
         } else {
-            if (!this.vendorRegistration.CompanyName 
+            if (!this.vendorRegistration.CompanyName
                     || !this.vendorRegistration.Address
                     || !this.vendorRegistration.City
                     || !this.vendorRegistration.State
@@ -104,15 +104,13 @@ export class RegistrationComponent implements OnInit, OnDestroy {
                     || !this.vendorRegistration.FirstName
                     || !this.vendorRegistration.LastName
                     || !this.vendorRegistration.PhoneNumber
-                    || !this.vendorRegistration.Email){
+                    || !this.vendorRegistration.Email) {
                 //alert('Please enter all required fields');
                 this.registrationService.sendNotification({ type: 'error', title: 'Invalid Data', content: 'Please enter all required fields' });
-            }
-            else if (!this.registrationForm.controls['registrationData'].controls['registrationEmail'].valid) {
+            } else if (!this.registrationForm.controls['registrationData'].controls['registrationEmail'].valid) {
                 //alert('Invalid Email');
                 this.registrationService.sendNotification({ type: 'error', title: 'Invalid Email', content: '' });
-            } 
-            else {
+            } else {
                 //alert('Invalid entry');
                 this.registrationService.sendNotification({ type: 'error', title: 'Invalid entry', content: '' });
             }
@@ -123,7 +121,7 @@ export class RegistrationComponent implements OnInit, OnDestroy {
     onAddComplete(message?: string) {
         //this.registrationService.sendNotification({ type: 'success', title: 'Successfully Created', content: message });
         //this.router.navigate(['/admin']);
-        this.registrationCompleted = true;   
+        this.registrationCompleted = true;
     }
 
     ngOnDestroy(): void {

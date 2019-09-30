@@ -1,9 +1,9 @@
-import { Component, OnInit, OnDestroy, ViewChild, Inject, Input, Output, EventEmitter, OnChanges, SimpleChanges } from '@angular/core';
+import { Component, OnInit, ViewChild, Inject, Input, OnChanges, SimpleChanges } from '@angular/core';
 import { MatTableDataSource, MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material';
-import { Item, ItemInsert, ItemImageInsert } from '../../../../shared/class/item';
+import { ItemInsert, ItemImageInsert } from '../../../../shared/class/item';
 import { ItemService } from '../../../item.service';
 import { environment } from '../../../../../environments/environment';
-declare var $ :any;
+declare var $: any;
 
 @Component({
     selector: 'o-item-add-image',
@@ -32,7 +32,7 @@ export class ItemAddImageComponent implements OnInit, OnChanges {
     public isLoadingMultipleData: Boolean = false;
 
     constructor(private itemService: ItemService, public itemUploadDialog: MatDialog) { }
-    
+
     ngOnChanges(changes: SimpleChanges) {
         if (changes.item && changes.item.currentValue && changes.item.currentValue.ItemImages.length === 0) {
             this.addPendingLine();
@@ -43,30 +43,28 @@ export class ItemAddImageComponent implements OnInit, OnChanges {
         //this.refreshDataSource(this.item.ItemImages);
 
     }
-    
+
     refreshDataSource(itemImages: ItemImageInsert[]) {
         this.itemImagesMatTable = new MatTableDataSource<ItemImageInsert>(itemImages);
     }
 
     onAddItemImage(itemImage: ItemImageInsert) {
-        if (this.isRequirementValid(itemImage)) {      
+        if (this.isRequirementValid(itemImage)) {
             this.pendingAdd = true;
             //const _temp = new ItemImageInsert(null, null, null, null, this.item.ItemImages.length, false, false, false, false, false, false, true);
             //this.item.ItemImages.push(_temp);
             this.addPendingLine();
             this.refreshDataSource(this.item.ItemImages);
-        }
-        else {
-            this.itemService.sendNotification({ type: 'error', title: 'Error', content: "Please select an Image" });
+        } else {
+            this.itemService.sendNotification({ type: 'error', title: 'Error', content: 'Please select an Image' });
         }
     }
 
     onEditItemImage(index: number) {
-        if(this.pendingAdd) {
+        if (this.pendingAdd) {
             this.currentIndex = this.item.ItemImages.length - 1;
             this.pendingAdd = false;
-        }
-        else {
+        } else {
             this.currentIndex = index;
         }
     }
@@ -75,8 +73,7 @@ export class ItemAddImageComponent implements OnInit, OnChanges {
         if (itemImage
             && itemImage.Raw) {
             return true;
-        } 
-        else {
+        } else {
             return false;
         }
     }
@@ -93,7 +90,7 @@ export class ItemAddImageComponent implements OnInit, OnChanges {
     moveUpPosition(itemImage: ItemImageInsert) {
         this.positionMove(this.item.ItemImages, itemImage, -1);
         this.item.ItemImages.forEach((value, index) => {
-            value.Position = index + 1;                        
+            value.Position = index + 1;
         });
 
         this.refreshDataSource(this.item.ItemImages);
@@ -103,13 +100,13 @@ export class ItemAddImageComponent implements OnInit, OnChanges {
         const index = array.indexOf(element);
         const newIndex = index + delta;
         if (newIndex < 0  || newIndex === array.length) { return; } // Already at the top or bottom.
-        const indexes = [index, newIndex].sort((a,b)=>a-b); // Sort the indixes
+        const indexes = [index, newIndex].sort((a, b) => a - b); // Sort the indixes
         array.splice(indexes[0], 2, array[indexes[1]], array[indexes[0]]); // Replace from lowest index, two elements, reverting the order
     }
 
     isBaseImageClick(image: ItemImageInsert, index: number) {
         this.item.ItemImages.forEach((value, i) => {
-            if(i != index) {
+            if (i != index) {
                 value.IsBaseImage = false;
             }
         });
@@ -120,7 +117,7 @@ export class ItemAddImageComponent implements OnInit, OnChanges {
         // this.item.ItemImages.forEach((value, index) => value.IsSmallImage = false);
         // image.IsSmallImage = true;
         this.item.ItemImages.forEach((value, i) => {
-            if(i != index) {
+            if (i != index) {
                 value.IsSmallImage = false;
             }
         });
@@ -131,7 +128,7 @@ export class ItemAddImageComponent implements OnInit, OnChanges {
         // this.item.ItemImages.forEach((value, index) => value.IsThumbnail = false);
         // image.IsThumbnail = true;
         this.item.ItemImages.forEach((value, i) => {
-            if(i != index) {
+            if (i != index) {
                 value.IsThumbnail = false;
             }
         });
@@ -142,20 +139,20 @@ export class ItemAddImageComponent implements OnInit, OnChanges {
         // this.item.ItemImages.forEach((value, index) => value.IsRotatorImage = false);
         // image.IsRotatorImage = true;
         this.item.ItemImages.forEach((value, i) => {
-            if(i != index) {
+            if (i != index) {
                 value.IsRotatorImage = false;
             }
         });
         this.refreshDataSource(this.item.ItemImages);
     }
-    
+
     onRemoveImage(itemImage: ItemImageInsert) {
         const confirmation = confirm(`Remove ${itemImage.Label}?`);
         if (confirmation) {
             const foundIndex = this.item.ItemImages.findIndex(i => i.Position === itemImage.Position);
             if (foundIndex > -1) {
                 this.item.ItemImages.splice(foundIndex, 1);
-            }            
+            }
             this.refreshDataSource(this.item.ItemImages);
         }
     }
@@ -169,14 +166,14 @@ export class ItemAddImageComponent implements OnInit, OnChanges {
 
         this.uploadFiles(itemImage);
     }
-    
+
     uploadFiles(itemImage: ItemImageInsert) {
         if (this.filesToUpload.length > 0) {
             this.pendingUpload = true;
             this.isLoadingData = true;
             const formData: FormData = new FormData();
             for (let i = 0; i < this.filesToUpload.length; i++) {
-                var reader = new FileReader();
+                let reader = new FileReader();
                 formData.append('uploadedFiles', this.filesToUpload[i], this.filesToUpload[i].name);
             }
 
@@ -219,25 +216,25 @@ export class ItemAddImageComponent implements OnInit, OnChanges {
         form.IsThumbnail = null;
         form.IsSmallImage = null;
         form.ItemID = null;
-        $( "#isBaseImage, #isSmallImage, #isThumbnail, #isRotatorImage" ).prop( "checked", false );
+        $( '#isBaseImage, #isSmallImage, #isThumbnail, #isRotatorImage' ).prop( 'checked', false );
     }
 
-    addPendingLine() {    
+    addPendingLine() {
         const _temp = new ItemImageInsert(null, null, null, null, this.item.ItemImages.length, false, false, false, false, false, false, true);
 
-        if(this.item.ItemImages.length === 0) {
+        if (this.item.ItemImages.length === 0) {
             _temp.IsBaseImage = true;
             _temp.IsSmallImage = true;
             _temp.IsThumbnail = true;
             _temp.IsRotatorImage = true;
         }
 
-        this.item.ItemImages.push(_temp);   
+        this.item.ItemImages.push(_temp);
     }
 
     removePendingLine() {
-        if(this.item.ItemImages) {
-            this.item.ItemImages.splice(this.item.ItemImages.length-1, 1);
+        if (this.item.ItemImages) {
+            this.item.ItemImages.splice(this.item.ItemImages.length - 1, 1);
         }
     }
 
@@ -249,41 +246,40 @@ export class ItemAddImageComponent implements OnInit, OnChanges {
 
 
         dialogRef.afterClosed().subscribe(result => {
-            if (result && result.length > 0) {                                
+            if (result && result.length > 0) {
                 this.isLoadingMultipleData = true;
                 this.removePendingLine();
-                const formData: FormData = new FormData(); 
-                for (let i = 0; i < result.length; i++) {                       
-                    formData.append('uploadedFiles', result[i], result[i].name); 
+                const formData: FormData = new FormData();
+                for (let i = 0; i < result.length; i++) {
+                    formData.append('uploadedFiles', result[i], result[i].name);
                 }
                 this.itemService.uploadTempImages(this.newGuid(), formData).subscribe (
                     (data: string) => {
-                        for (let i = 0; i < result.length; i++) {   
+                        for (let i = 0; i < result.length; i++) {
                             const newItemImage = new ItemImageInsert(null, null, null, null, this.item.ItemImages.length, false, false, false, false, false, false, true);
-                            if(this.item.ItemImages.length === 0) {
+                            if (this.item.ItemImages.length === 0) {
                                 newItemImage.IsBaseImage = true;
                                 newItemImage.IsSmallImage = true;
                                 newItemImage.IsThumbnail = true;
                                 newItemImage.IsRotatorImage = true;
-                            }      
+                            }
 
-                            newItemImage.Raw = this.imageURL + '/temp' + data + '_' + i + '.' + result[i].name.substr(result[i].name.lastIndexOf('.')+1).toLowerCase();
+                            newItemImage.Raw = this.imageURL + '/temp' + data + '_' + i + '.' + result[i].name.substr(result[i].name.lastIndexOf('.') + 1).toLowerCase();
                             this.item.ItemImages.push(newItemImage);
 
-                            if(i == result.length - 1)
-                            {                                
+                            if (i == result.length - 1) {
                                 this.addPendingLine();
                                 this.currentIndex = this.item.ItemImages.length - 1;
                                 this.refreshDataSource(this.item.ItemImages);
                             }
                         }
                         this.isLoadingMultipleData = false;
-                    }                    
-                )
+                    }
+                );
             }
         },
         (error: any) => {
-            if(this.item.ItemImages.length === 0) {
+            if (this.item.ItemImages.length === 0) {
                 this.addPendingLine();
             }
             this.itemService.sendNotification({ type: 'error', title: 'Error', content: error });
@@ -305,7 +301,7 @@ export class ItemAddImageComponentUploadDialog implements OnInit {
 
     constructor( public dialogRef: MatDialogRef<ItemAddImageComponentUploadDialog>,
         private itemService: ItemService,
-        @Inject(MAT_DIALOG_DATA) public data: number ) {        
+        @Inject(MAT_DIALOG_DATA) public data: number ) {
     }
 
     ngOnInit() {
@@ -318,15 +314,14 @@ export class ItemAddImageComponentUploadDialog implements OnInit {
     fileChangeEvent(fileInput: any) {
         this.selectedFiles = <Array<File>>fileInput.target.files;
 
-        if(this.selectedFileNames.length + this.data + this.selectedFiles.length > 8) {
+        if (this.selectedFileNames.length + this.data + this.selectedFiles.length > 8) {
             this.itemService.sendNotification({ type: 'error', title: 'Maximum of 8 images', content: '' });
-        }
-        else {
+        } else {
             for (let i = 0; i < this.selectedFiles.length; i++) {
-                this.filesToUpload.push(this.selectedFiles[i])
+                this.filesToUpload.push(this.selectedFiles[i]);
                 this.selectedFileNames.push(this.selectedFiles[i].name);
             }
-        }        
+        }
     }
 
     removeFile(index: number) {

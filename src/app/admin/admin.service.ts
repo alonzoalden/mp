@@ -1,14 +1,10 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpErrorResponse, HttpHeaders } from '@angular/common/http';
-
 import { Observable, of, throwError } from 'rxjs';
 import { catchError, tap } from 'rxjs/operators';
-
 import { Member, MemberInsert } from '../shared/class/member';
-
 import { OAuthService } from 'angular-oauth2-oidc';
 import { environment } from '../../environments/environment';
-
 import { VendorList } from '../shared/class/vendor';
 import { NotificationComponent } from '../shared/tool/notification/notification.component';
 
@@ -44,9 +40,8 @@ export class AdminService {
 
     getMember(id: number): Observable<Member> {
         if (this.members) {
-            
+
             const foundMember = this.members.find(x => x.MemberID === id);
-            console.log(foundMember)
             return of(foundMember);
         }
         return this.http.get<Member>(this.apiURL + '/member/' + id)

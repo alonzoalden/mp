@@ -4,7 +4,6 @@ import * as fromCompany from '../../state';
 import * as fromUser from '../../../../shared/state/user-state.reducer';
 import * as companyActions from '../../state/company-attachment.actions';
 import { Observable } from 'rxjs';
-
 import { VendorAttachment } from 'app/shared/class/vendor-attachment';
 import { MatTableDataSource } from '@angular/material';
 

@@ -16,14 +16,14 @@ export class ItemAddProductRelationRelatedProductComponent implements OnInit {
     @Input() itemRelatedProductsMatTable: MatTableDataSource<ItemRelatedProductInsert>;
     @Output() getItemRelatedProduct = new EventEmitter<ItemRelatedProductInsert>();
     @Output() addNewItemRelatedProductRow = new EventEmitter<ItemRelatedProductInsert>();
-    
+
     relatedProductDisplayedColumns = ['Add', 'Down', 'Position', 'Up', 'ItemName', 'SKU', 'TPIN', 'Remove'];
     //relatedProductDataSource: any = null;
     relatedProductPendingAdd: boolean;
     relatedProductPendingImage: boolean;
     currentItemRelatedProductIndex: number;
     formDirty = false;
-    
+
     private imageURL = environment.imageURL;
 
     constructor(private itemService: ItemService) { }
@@ -38,47 +38,43 @@ export class ItemAddProductRelationRelatedProductComponent implements OnInit {
         this.currentItemRelatedProductIndex = this.item.ItemRelatedProducts.length - 1;
     }
 
-    relatedProductRefreshDataSource(itemRelatedProducts: ItemRelatedProductInsert[]) { 
+    relatedProductRefreshDataSource(itemRelatedProducts: ItemRelatedProductInsert[]) {
         this.itemRelatedProductsMatTable = new MatTableDataSource<ItemRelatedProductInsert>(itemRelatedProducts);
     }
     onAddItemRelatedProduct(itemRelatedProduct: ItemRelatedProductInsert) {
-        if (this.isRelatedProductRequirementValid(itemRelatedProduct)) { 
-            if(!this.existRelatedProduct(itemRelatedProduct.RelatedProductItemID, true)) {        
+        if (this.isRelatedProductRequirementValid(itemRelatedProduct)) {
+            if (!this.existRelatedProduct(itemRelatedProduct.RelatedProductItemID, true)) {
                 this.relatedProductPendingAdd = true;
 
                 const _temp = new ItemRelatedProductInsert(0, null, null, null, null, null, null, null);
                 this.item.ItemRelatedProducts.push(_temp);
                 this.relatedProductRefreshDataSource(this.item.ItemRelatedProducts);
+            } else {
+                this.itemService.sendNotification({ type: 'error', title: 'Error', content: 'Related product already exists' });
             }
-            else {
-                this.itemService.sendNotification({ type: 'error', title: 'Error', content: "Related product already exists" });
-            }   
-        }
-        else {
-            this.itemService.sendNotification({ type: 'error', title: 'Error', content: "Please select an item" });
+        } else {
+            this.itemService.sendNotification({ type: 'error', title: 'Error', content: 'Please select an item' });
         }
     }
     onEditItemRelatedProduct(index: number) {
-        if(this.relatedProductPendingAdd) {
+        if (this.relatedProductPendingAdd) {
             this.currentItemRelatedProductIndex = this.item.ItemRelatedProducts.length - 1;
             this.relatedProductPendingAdd = false;
-        }
-        else {
+        } else {
             this.currentItemRelatedProductIndex = index;
         }
     }
 
     onRelatedProductItemChange(index: number, ) {
-        if(this.item.ItemRelatedProducts[index].RelatedProductItemID) {
-            if(!this.existRelatedProduct(this.item.ItemRelatedProducts[index].RelatedProductItemID)) {
+        if (this.item.ItemRelatedProducts[index].RelatedProductItemID) {
+            if (!this.existRelatedProduct(this.item.ItemRelatedProducts[index].RelatedProductItemID)) {
                 this.getItemRelatedProduct.emit(this.item.ItemRelatedProducts[index]);
                 this.currentItemRelatedProductIndex = this.item.ItemRelatedProducts.length - 1;
-            }
-            else {
+            } else {
                 this.item.ItemRelatedProducts[index].RelatedProductItemID = this.item.ItemRelatedProducts[index].PrevRelatedProductItemID;
                 this.currentItemRelatedProductIndex = this.item.ItemRelatedProducts.length - 1;
                 this.relatedProductRefreshDataSource(this.item.ItemRelatedProducts);
-                this.itemService.sendNotification({ type: 'error', title: 'Error', content: "Related product already exists" });
+                this.itemService.sendNotification({ type: 'error', title: 'Error', content: 'Related product already exists' });
             }
         }
     }
@@ -87,24 +83,22 @@ export class ItemAddProductRelationRelatedProductComponent implements OnInit {
         if (itemRelatedProduct
             && itemRelatedProduct.RelatedProductItemID) {
             return true;
-        } 
-        else {
+        } else {
             return false;
         }
     }
 
-    existRelatedProduct(itemID: number, isNew: boolean = false){
-        var counter: number = 0;
+    existRelatedProduct(itemID: number, isNew: boolean = false) {
+        let counter: number = 0;
         this.item.ItemRelatedProducts.forEach((value, index) => {
-                if(value.RelatedProductItemID === itemID) {
-                    if(isNew || index != this.item.ItemRelatedProducts.length - 1) {
-                        counter += 1; 
+                if (value.RelatedProductItemID === itemID) {
+                    if (isNew || index != this.item.ItemRelatedProducts.length - 1) {
+                        counter += 1;
                     }
                 }
             }
         );
-        if(counter > 1) { return true; }
-        else { return false; }
+        if (counter > 1) { return true; } else { return false; }
     }
 
     relatedProductMoveDownPosition(itemRelatedProduct: ItemRelatedProductInsert) {
@@ -129,7 +123,7 @@ export class ItemAddProductRelationRelatedProductComponent implements OnInit {
         const index = array.indexOf(element);
         const newIndex = index + delta;
         if (newIndex < 0  || newIndex === array.length) { return; } // Already at the top or bottom.
-        const indexes = [index, newIndex].sort((a,b)=>a-b); // Sort the indixes
+        const indexes = [index, newIndex].sort((a, b) => a - b); // Sort the indixes
         array.splice(indexes[0], 2, array[indexes[1]], array[indexes[0]]); // Replace from lowest index, two elements, reverting the order
     }
 
@@ -139,7 +133,7 @@ export class ItemAddProductRelationRelatedProductComponent implements OnInit {
             const foundIndex = this.item.ItemRelatedProducts.findIndex(i => i.RelatedProductItemID === itemRelatedProduct.RelatedProductItemID);
             if (foundIndex > -1) {
                 this.item.ItemRelatedProducts.splice(foundIndex, 1);
-            }            
+            }
             this.relatedProductRefreshDataSource(this.item.ItemRelatedProducts);
         }
     }

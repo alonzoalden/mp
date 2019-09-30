@@ -40,11 +40,11 @@ export class ItemEditCategoryComponent implements OnInit {
         if (changes.currentResult && changes.currentResult.currentValue) {
             this.refreshDataSource(this.currentResult);
         }
-        
+
         if (changes.categoryAssignments && !changes.categoryAssignments.currentValue.length) {
             const itemid = this.route.parent.snapshot.params['id'];
         }
-        
+
         if (changes.categoryAssignments && changes.categoryAssignments.currentValue.length) {
 
                 if (!this.currentResult.length) {
@@ -53,7 +53,7 @@ export class ItemEditCategoryComponent implements OnInit {
                 }
             }
         }
-        
+
         ngOnInit(): void {
             const itemid = this.route.parent.snapshot.params['id'];
             this.getItemCategoryAssignments.emit(itemid);
@@ -67,7 +67,7 @@ export class ItemEditCategoryComponent implements OnInit {
     }
 
     initialize(itemid: number) {
-        
+
         // if (this.itemService.currentItemEdit.ItemCategoryAssignments === null) {
         //     this.itemService.getItemCategoryAssignments(itemid).subscribe(
         //         (itemCategoryAssignments: ItemCategoryAssignment[]) => {

@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { MatTableDataSource} from '@angular/material';
 import { SalesOrder } from '../../../../../shared/class/sales-order';
 import { Fulfillment } from '../../../../../shared/class/fulfillment';
@@ -20,7 +20,7 @@ export class SalesOrderFulfillmentListShellComponent implements OnInit {
     errorMessage$: Observable<string>;
     pendingDelete$: Observable<boolean>;
     isLoading$: Observable<boolean>;
-    
+
     constructor(private store: Store<fromSalesOrder.State>) { }
 
     ngOnInit() {

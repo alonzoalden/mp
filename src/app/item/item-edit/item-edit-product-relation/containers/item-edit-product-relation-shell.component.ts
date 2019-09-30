@@ -42,7 +42,7 @@ export class ItemEditProductRelationShellComponent implements OnInit, OnDestroy 
         this.itemCrossSellsMatTable$ = this.store.pipe(select(fromItem.getItemCrossSellsMatTable));
         this.itemUpSellsMatTable$ = this.store.pipe(select(fromItem.getItemUpSellsMatTable));
         this.itemUpSells$ = this.store.pipe(select(fromItem.getItemUpSells));
-        
+
         this.errorMessage$ = this.store.pipe(select(fromItem.getError));
         this.userInfo$ = this.store.pipe(select(fromUser.getCurrentUser));
 
@@ -59,7 +59,7 @@ export class ItemEditProductRelationShellComponent implements OnInit, OnDestroy 
     getAllItemCrossSell(item: ItemCrossSellInsert) {
         this.store.dispatch(new itemActions.LoadAllItemCrossSell(item));
     }
-    
+
     getItemRelatedProduct(relatedproduct: ItemRelatedProductInsert) {
         this.store.dispatch(new itemActions.LoadItemRelatedProduct(relatedproduct));
     }

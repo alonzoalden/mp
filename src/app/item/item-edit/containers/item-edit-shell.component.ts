@@ -14,14 +14,14 @@ import { Member } from 'app/shared/class/member';
 })
 
 export class ItemEditShellComponent implements OnInit {
-    
+
     vendorBrandList$: Observable<VendorBrand[]>;
     item$: Observable<Item | ItemInsert>;
     pendingAdd$: Observable<boolean>;
     isLoading$: Observable<boolean>;
     errorMessage$: Observable<string>;
-    userInfo$: Observable<Member>
-    
+    userInfo$: Observable<Member>;
+
     constructor(private store: Store<fromItem.State>) { }
 
     ngOnInit() {

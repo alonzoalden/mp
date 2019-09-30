@@ -56,14 +56,14 @@ export class URLVideoItemsSnippet {
         public description: string,
         public thumbnails: URLVideoItemsSnippetThumbnails,
         public channelTitle: string,
-        public categoryId: string        
+        public categoryId: string
     ) {}
 }
 
 
 export class URLVideoItemsSnippetThumbnails {
     constructor(
-        public standard: URLVideoItemsSnippetThumbnailsStandard,        
+        public standard: URLVideoItemsSnippetThumbnailsStandard,
         public medium: URLVideoItemsSnippetThumbnailsMedium
     ) {}
 }

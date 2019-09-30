@@ -1,12 +1,9 @@
-import { Component, OnInit, ViewContainerRef, ViewChild, Inject, ElementRef, Input, Output, EventEmitter, OnChanges, SimpleChanges } from '@angular/core';
+import { Component, OnInit, ViewChild, Input, Output, EventEmitter, OnChanges, SimpleChanges } from '@angular/core';
 import { Router } from '@angular/router';
-import { CurrencyPipe } from '@angular/common';
-import { MatMenuModule, MatPaginator, MatSort, MatTableDataSource, MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material';
-import { Item, ItemInsert } from '../../../../../../shared/class/item';
+import { MatPaginator, MatSort, MatTableDataSource, MatDialog } from '@angular/material';
+import { Item } from '../../../../../../shared/class/item';
 import { ItemService } from '../../../../../item.service';
 import { AppService } from '../../../../../../app.service';
-import { MatMenu } from '@angular/material/menu';
-
 import { environment } from '../../../../../../../environments/environment';
 import { Member } from 'app/shared/class/member';
 
@@ -21,7 +18,7 @@ export class ItemBatchUpdateSelectComponent implements OnInit, OnChanges {
     @Input() errorMessage: string;
     @Input() isLoading: boolean;
     @Output() getItems = new EventEmitter<void>();
-    
+
     selectedCount: number;
     allSelected: boolean = false;
 
@@ -29,7 +26,7 @@ export class ItemBatchUpdateSelectComponent implements OnInit, OnChanges {
     private linkURL = environment.linkURL;
     private previewURL = environment.previewURL;
 
-    displayedColumns = ['Select', 'ProductDetails', 'FulfilledBy', 'Price', 'Quantity', 'MerchantQuantity','Approval'];
+    displayedColumns = ['Select', 'ProductDetails', 'FulfilledBy', 'Price', 'Quantity', 'MerchantQuantity', 'Approval'];
 
     @ViewChild(MatPaginator, { static: true }) paginator: MatPaginator;
     @ViewChild(MatSort, { static: true }) sort: MatSort;
@@ -38,8 +35,8 @@ export class ItemBatchUpdateSelectComponent implements OnInit, OnChanges {
         private itemService: ItemService,
         private appService: AppService,
         public itemPrintDialog: MatDialog,
-        public itemImportDialog: MatDialog) { 
-            
+        public itemImportDialog: MatDialog) {
+
     }
 
     ngOnChanges(changes: SimpleChanges): void {
@@ -53,15 +50,14 @@ export class ItemBatchUpdateSelectComponent implements OnInit, OnChanges {
         if (changes.userInfo && changes.userInfo.currentValue) {
             if (this.userInfo.DefaultPageSize) {
                 this.paginator.pageSize = this.userInfo.DefaultPageSize;
-            }
-            else {
+            } else {
                 this.paginator.pageSize = 100;
             }
         }
     }
 
     ngOnInit() {
-        
+
     }
 
     refreshDataSource(items: Item[]) {
@@ -91,7 +87,7 @@ export class ItemBatchUpdateSelectComponent implements OnInit, OnChanges {
 
     updateSelectedCount(): void {
         if (this.itemBatchItemsMatTable) {
-            this.selectedCount = this.itemBatchItemsMatTable.filteredData.filter( item => item.isSelected === true).length
+            this.selectedCount = this.itemBatchItemsMatTable.filteredData.filter( item => item.isSelected === true).length;
         }
     }
 

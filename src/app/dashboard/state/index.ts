@@ -10,7 +10,7 @@ import { DashboardSalesOrderSummary, InboundShipmentStatusCount, ItemSalesTotal,
 // So the reference to ProductState cannot be added to app.state.ts directly.
 export interface State extends fromRoot.State {
     dashboard: fromDashboard.DashboardState;
-};
+}
 
 // Selector functions
 const getDashboardFeatureState = createFeatureSelector<fromDashboard.DashboardState>('Dashboard');

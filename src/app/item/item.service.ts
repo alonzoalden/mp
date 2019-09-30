@@ -34,11 +34,11 @@ export class ItemService {
     private allSimpleItemList: ItemList[];
     private itemVariationListings: ItemVariationListing[];
     private partItemList: ItemList[];
-    
+
     currentMember: Member;
 
     currentItem: Item;
-    
+
     currentItemInsert: ItemInsert;
     currentItemEdit: Item;
 
@@ -82,23 +82,21 @@ export class ItemService {
     resetItems() {
         this.items = null;
     }
-    
+
     defaultCurrentItemInsert() {
-        if(this.duplicateItemInsert) {  
-            const ItemInsert = this.duplicateItemInsert;          
+        if (this.duplicateItemInsert) {
+            const ItemInsert = this.duplicateItemInsert;
             this.duplicateItemInsert = null;
-            return ItemInsert;            
-        }
-        else {            
-            return new ItemInsert(null, null, 'Toolots', 'simple', null, null, null, null, null, null, null, null, null, null, null, null, 'IN', null, 'LB', null, null, null, 'IN', null, 'LB', false, null, null, null, null, "CN", "", null, false, null, "CatalogAndSearch", null, null, null, null, null, "NotSubmitted", false, null, null, true, false, [], [], [], [], [], [], [], [], [], []);
+            return ItemInsert;
+        } else {
+            return new ItemInsert(null, null, 'Toolots', 'simple', null, null, null, null, null, null, null, null, null, null, null, null, 'IN', null, 'LB', null, null, null, 'IN', null, 'LB', false, null, null, null, null, 'CN', '', null, false, null, 'CatalogAndSearch', null, null, null, null, null, 'NotSubmitted', false, null, null, true, false, [], [], [], [], [], [], [], [], [], []);
         }
     }
 
     getCurrentItemEdit(id: number): Observable<Item> {
         if (this.currentItemEdit) {
             return of(this.currentItemEdit);
-        }
-        else {
+        } else {
             return this.getItem(id);
         }
     }
@@ -138,7 +136,7 @@ export class ItemService {
     refreshItems(): Observable<Item[]> {
         return this.http.get<Item[]>(this.apiURL + '/item/overview')
                         .pipe(
-                            
+
                             //tap(data => console.log(JSON.stringify(data))),
                             tap(data => {
                                 this.items = data;
@@ -184,7 +182,7 @@ export class ItemService {
         }
     }
 
-    copyItem(item: Item) {        
+    copyItem(item: Item) {
         const newItem = new Item(item.ItemID, item.VendorID, item.TPIN, item.Name, item.SKU, item.VendorSKU, item.FulfilledBy, item.ItemType
             , item.Quantity, item.MerchantQuantity, item.ShipWithinDays, item.PriceType, item.Price, item.FOBPrice, item.DropshipPrice, item.EbayPrice, item.SpecialPrice, item.SpecialFrom, item.SpecialTo
             , item.Width, item.Height, item.Length, item.ProductDimensionUOM, item.Weight, item.ProductWeightUOM
@@ -228,7 +226,7 @@ export class ItemService {
                 , itemRelatedProduct.RelatedProductItemID, itemRelatedProduct.PrevRelatedProductItemID, itemRelatedProduct.RelatedItemName
                 , itemRelatedProduct.RelatedItemVendorSKU, itemRelatedProduct.RelatedTPIN, itemRelatedProduct.Position, itemRelatedProduct.UpdatedOn
                 , itemRelatedProduct.CreatedOn, itemRelatedProduct.ImagePath, itemRelatedProduct.pendingAdd);
-                
+
             newItem.ItemRelatedProducts.push(newItemRelatedProduct);
         });
 
@@ -237,7 +235,7 @@ export class ItemService {
                 , itemUpSell.UpSellItemID, itemUpSell.PrevUpSellItemID, itemUpSell.UpSellItemName
                 , itemUpSell.UpSellItemVendorSKU, itemUpSell.UpSellTPIN, itemUpSell.Position, itemUpSell.UpdatedOn
                 , itemUpSell.CreatedOn, itemUpSell.ImagePath, itemUpSell.pendingAdd);
-                
+
             newItem.ItemUpSells.push(newItemUpSell);
         });
 
@@ -246,7 +244,7 @@ export class ItemService {
                 , itemCrossSell.CrossSellItemID, itemCrossSell.PrevCrossSellItemID, itemCrossSell.CrossSellItemName
                 , itemCrossSell.CrossSellItemVendorSKU, itemCrossSell.CrossSellTPIN, itemCrossSell.Position, itemCrossSell.UpdatedOn
                 , itemCrossSell.CreatedOn, itemCrossSell.ImagePath, itemCrossSell.pendingAdd);
-                
+
             newItem.ItemCrossSells.push(newItemCrossSell);
         });
 
@@ -254,7 +252,7 @@ export class ItemService {
             const newItemAttachment = new ItemAttachment(itemAttachment.VendorAttachmentItemID, itemAttachment.VendorAttachmentID, itemAttachment.Title
                 , itemAttachment.FileName, itemAttachment.UploadedFile, itemAttachment.ItemID, itemAttachment.Position, itemAttachment.UpdatedOn
                 , itemAttachment.CreatedOn, itemAttachment.pendingAdd);
-                
+
             newItem.ItemAttachments.push(newItemAttachment);
         });
 
@@ -274,7 +272,7 @@ export class ItemService {
             newItem.ItemImages.push(newItemImage);
         });
 
-        
+
         item.ItemSections.forEach((itemsection) => {
 
             const newItemSection = new ItemSection(itemsection.ItemSectionID, itemsection.ItemID, itemsection.Name, itemsection.ImageRaw, itemsection.ImageFilePath, itemsection.Position
@@ -293,7 +291,7 @@ export class ItemService {
             });
 
             newItem.ItemSections.push(newItemSection);
-            
+
         });
 
         return newItem;
@@ -318,7 +316,7 @@ export class ItemService {
             const newItemOption = new ItemOptionInsert(itemOption.IsRequired, itemOption.Position, itemOption.Title, itemOption.Type, []);
 
             itemOption.ItemSelections.forEach((itemSelection) => {
-                const newItemSelection = new ItemSelectionInsert(itemSelection.ItemID, itemSelection.Position, itemSelection.IsDefault, itemSelection.PriceValue, itemSelection.Qty, itemSelection.CanChangeQty);                                
+                const newItemSelection = new ItemSelectionInsert(itemSelection.ItemID, itemSelection.Position, itemSelection.IsDefault, itemSelection.PriceValue, itemSelection.Qty, itemSelection.CanChangeQty);
                 newItemOption.ItemSelections.push(newItemSelection);
             });
 
@@ -332,20 +330,20 @@ export class ItemService {
 
         item.ItemRelatedProducts.forEach((itemRelatedProduct) => {
             const newItemRelatedProduct = new ItemRelatedProductInsert(itemRelatedProduct.ItemID, itemRelatedProduct.RelatedProductItemID, itemRelatedProduct.PrevRelatedProductItemID
-                , itemRelatedProduct.RelatedItemName, itemRelatedProduct.RelatedItemVendorSKU, itemRelatedProduct.RelatedTPIN, itemRelatedProduct.ImagePath, itemRelatedProduct.Position);                
+                , itemRelatedProduct.RelatedItemName, itemRelatedProduct.RelatedItemVendorSKU, itemRelatedProduct.RelatedTPIN, itemRelatedProduct.ImagePath, itemRelatedProduct.Position);
             newItemInsert.ItemRelatedProducts.push(newItemRelatedProduct);
         });
 
         item.ItemUpSells.forEach((itemUpSell) => {
             const newItemUpSell = new ItemUpSellInsert(itemUpSell.ItemID, itemUpSell.UpSellItemID, itemUpSell.PrevUpSellItemID, itemUpSell.UpSellItemName
-                , itemUpSell.UpSellItemVendorSKU, itemUpSell.UpSellTPIN, itemUpSell.ImagePath, itemUpSell.Position);                
+                , itemUpSell.UpSellItemVendorSKU, itemUpSell.UpSellTPIN, itemUpSell.ImagePath, itemUpSell.Position);
             newItemInsert.ItemUpSells.push(newItemUpSell);
         });
 
         item.ItemCrossSells.forEach((itemCrossSell) => {
             const newItemCrossSell = new ItemCrossSellInsert(itemCrossSell.ItemID, itemCrossSell.CrossSellItemID, itemCrossSell.PrevCrossSellItemID, itemCrossSell.CrossSellItemName
                 , itemCrossSell.CrossSellItemVendorSKU, itemCrossSell.CrossSellTPIN, itemCrossSell.ImagePath, itemCrossSell.Position);
-                
+
             newItemInsert.ItemCrossSells.push(newItemCrossSell);
         });
 
@@ -371,7 +369,7 @@ export class ItemService {
         item.ItemSections.forEach((itemsection) => {
             const newItemSection = new ItemSectionInsert(itemsection.ItemID, itemsection.Name, itemsection.ImageRaw
                 , itemsection.ImageFilePath, itemsection.Position, []);
-                
+
                 itemsection.ItemParts.forEach((itemPart) => {
                     const newItemPart = new ItemPartInsert(itemPart.ItemSectionID
                         , itemPart.PartLabel, itemPart.PartItemID, itemPart.PrevPartItemID, itemPart.PartItemName
@@ -394,9 +392,8 @@ export class ItemService {
                                 //tap(data => console.log('Add Item: ' + JSON.stringify(data))),
                                 tap(data => {
                                     //this.items.push(data);
-                                    if(this.items)
-                                    {
-                                        this.items.splice(0,0,data);
+                                    if (this.items) {
+                                        this.items.splice(0, 0, data);
                                         this.currentItem = data;
                                     }
                                 }),
@@ -426,13 +423,12 @@ export class ItemService {
                             .pipe(
                                 //tap(data => console.log('Delete Item: ' + id)),
                                 tap(data => {
-                                    if(this.items && this.items.length > 0)
-                                    {
+                                    if (this.items && this.items.length > 0) {
                                         const foundIndex = this.items.findIndex(i => i.ItemID === id);
                                         if (foundIndex > -1) {
                                             this.items.splice(foundIndex, 1);
                                             //this.currentItem = null;
-                                        }    
+                                        }
                                     }
                                 }),
                                 catchError(this.handleError)
@@ -601,7 +597,7 @@ export class ItemService {
             );
     }
 
-    uploadTempImage(id: string, formData: FormData) {        
+    uploadTempImage(id: string, formData: FormData) {
         return this.http.post<any>(this.apiURL + '/itemimage/uploadtemp/' + id, formData )
             .pipe(
                 //tap(data => console.log(JSON.stringify(data))),
@@ -676,7 +672,7 @@ export class ItemService {
                                 catchError(this.handleError)
                             );
     }
-    
+
     //Attachments
     getItemAttachments(id: number): Observable<ItemAttachment[]> {
         return this.http.get<ItemAttachment[]>(this.apiURL + '/vendorattachmentitem/item/' + id)
@@ -684,7 +680,7 @@ export class ItemService {
                             //tap(data => console.log(JSON.stringify(data))),
                             catchError(this.handleError)
                         );
-    }    
+    }
 
     addItemAttachment(itemAttachment: ItemAttachmentInsert): Observable<ItemAttachmentInsert> {
         const headers = new HttpHeaders({
@@ -925,7 +921,7 @@ export class ItemService {
     downloadPrintItemLabels(itemPrintLabels: ItemPrintLabel[], border: string) {
         const headers = new HttpHeaders({
             'Content-Type': 'application/json'
-            
+
         });
 
         return this.http.post<Blob>(this.apiURL + '/item/printlabel/' + border, itemPrintLabels, {headers: headers, responseType: 'blob' as 'json' } )
@@ -939,7 +935,7 @@ export class ItemService {
     downloadPrintItemLargeLabels(itemPrintLabels: ItemPrintLabel[], border: string) {
         const headers = new HttpHeaders({
             'Content-Type': 'application/json'
-            
+
         });
 
         return this.http.post<Blob>(this.apiURL + '/item/printlargelabel/' + border, itemPrintLabels, {headers: headers, responseType: 'blob' as 'json' } )
@@ -963,12 +959,9 @@ export class ItemService {
     }
 
     rowColorConditions(i: number, collection: Array<any>, currentItemIndex: number, formDirty: boolean): string {
-        const inputRow = i === collection.length-1 && currentItemIndex === i;
+        const inputRow = i === collection.length - 1 && currentItemIndex === i;
         const selectedInputRow = inputRow && formDirty;
-        if (selectedInputRow) return '#F5F5F5';
-        else if (inputRow) return '#E8E8E8';
-        else if (currentItemIndex === i) return '#F5F5F5';
-        else return '#FFFFFF';
+        if (selectedInputRow) { return '#F5F5F5'; } else if (inputRow) { return '#E8E8E8'; } else if (currentItemIndex === i) { return '#F5F5F5'; } else { return '#FFFFFF'; }
     }
 
     //Global Attribute/Variation
@@ -1063,15 +1056,15 @@ export class ItemService {
                                 catchError(this.handleError)
                             );
     }
-    
+
     // addItemVariation(itemVariationListing: ItemVariationListing, itemAttributes: ItemAttribute[]) {
-        
+
     //     let itemInsertList = this.createProductVariations(itemVariationListing, itemAttributes);
 
     //     let oldItemInsertList = itemVariationListing.ItemVariations;
     //     let oldDefaults: ItemVariationLine[] = itemAttributes.filter((itemattribute) => itemattribute.OldDefault)
     //                                                          .map((item) => new ItemVariationLine(null, null, item.OldDefault.ItemAttributeVariationID, item.OldDefault.ItemAttributeID, null, item.OldDefault.Name, null, null));
-        
+
     //     this.updateItemVariationsWithOriginalInfo(oldItemInsertList, itemInsertList, oldDefaults);
     //     itemVariationListing.ItemVariations = itemInsertList;
     //     return itemVariationListing;
@@ -1094,7 +1087,7 @@ export class ItemService {
     //             const oldMatch = variationLinesToCompare.every((oldItemVariationLine) => {
     //                 return !!newItemVariation.ItemVariationLines.find((newItemVariationLine) => newItemVariationLine.ItemAttributeVariationID === oldItemVariationLine.ItemAttributeVariationID)
     //             });
-                
+
     //             if (defaultTo.length) {
     //                 if (oldMatch) {
     //                     newItemVariations[i] = oldItemVariation;
@@ -1107,7 +1100,7 @@ export class ItemService {
     //             }
     //             else if (oldMatch && !defaultTo.length) {
     //                 newItemVariations[i] = oldItemVariation;
-    //                 newItemVariations[i].IsPrimary = false;                    
+    //                 newItemVariations[i].IsPrimary = false;
     //             }
     //         })
     //     });

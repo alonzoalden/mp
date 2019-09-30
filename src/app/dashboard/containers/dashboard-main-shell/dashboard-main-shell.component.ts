@@ -1,4 +1,4 @@
-import { Component, OnInit, AfterViewInit, ViewChild, HostListener } from '@angular/core';
+import { Component, OnInit, ViewChild, HostListener } from '@angular/core';
 import { MatTableDataSource, MatSidenav } from '@angular/material';
 import { DashboardService } from '../../dashboard.service';
 import { Dashboard, DashboardNews, DashboardVendorNotification, DashboardSalesOrderSummary, InboundShipmentStatusCount, ItemSalesTotal, SalesOrderSummary, SalesStatusTotal } from '../../../shared/class/dashboard';
@@ -51,9 +51,9 @@ export class DashboardMainShellComponent implements OnInit {
     @HostListener('window:resize', [])
     onResize() {
         if (window.innerWidth < 700) {
-            this.sidenav.close()
+            this.sidenav.close();
         } else {
-            this.sidenav.open()
+            this.sidenav.open();
         }
     }
 
@@ -62,7 +62,7 @@ export class DashboardMainShellComponent implements OnInit {
         private route: ActivatedRoute,
         private dashboardService: DashboardService,
         private appService: AppService,
-        private oauthService: OAuthService,) {
+        private oauthService: OAuthService, ) {
     }
 
     ngOnInit() {
@@ -83,7 +83,7 @@ export class DashboardMainShellComponent implements OnInit {
         this.salesOrderSummaryToolotsMatTable$ = this.store.pipe(select(fromDashboard.getSalesOrderSummaryToolotsMatTable));
         this.inboundShipmentStatusCountsMatTable$ = this.store.pipe(select(fromDashboard.getInboundShipmentStatusCountsMatTable));
         this.errorMessage$ = this.store.pipe(select(fromDashboard.getError));
-          
+
         this.oauthService.events.subscribe(e => {
         // console.log('oauth/oidc event');
         // console.log(e);
@@ -115,5 +115,5 @@ export class DashboardMainShellComponent implements OnInit {
     getSalesOrderSummaryToolots() {
         this.store.dispatch(new dashboardActions.LoadSalesOrderSummaryToolots());
     }
-    
+
 }

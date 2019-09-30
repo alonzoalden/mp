@@ -1,7 +1,4 @@
-import { Component, OnDestroy, OnInit, Input, Output, EventEmitter } from '@angular/core';
-import { Router, ActivatedRoute } from '@angular/router';
-
-import { AppService } from '../../../../app.service';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { takeWhile } from 'rxjs/operators';
 import { Member } from 'app/shared/class/member';
 import { Observable } from 'rxjs';
@@ -27,11 +24,11 @@ export class ItemAddProductRelationShellComponent implements OnInit, OnDestroy {
 
     itemRelatedProductsMatTable$: Observable<MatTableDataSource<ItemRelatedProductInsert>>;
     itemCrossSellsMatTable$: Observable<MatTableDataSource<ItemCrossSellInsert>>;
-    
+
     itemUpSellsMatTable$: Observable<MatTableDataSource<ItemUpSellInsert>>;
-    
+
     itemUpSells$: Observable<ItemUpSellInsert[]>;
-    
+
     constructor(
         private userStore: Store<fromUser.State>,
         private store: Store<fromItem.State>
@@ -48,7 +45,7 @@ export class ItemAddProductRelationShellComponent implements OnInit, OnDestroy {
         this.itemCrossSellsMatTable$ = this.store.pipe(select(fromItem.getItemCrossSellsMatTable));
         this.itemUpSellsMatTable$ = this.store.pipe(select(fromItem.getItemUpSellsMatTable));
         this.itemUpSells$ = this.store.pipe(select(fromItem.getItemUpSells));
-        
+
         this.errorMessage$ = this.store.pipe(select(fromItem.getError));
         this.userInfo$ = this.store.pipe(select(fromUser.getCurrentUser));
 
@@ -66,7 +63,7 @@ export class ItemAddProductRelationShellComponent implements OnInit, OnDestroy {
     getAllItemCrossSell(item: ItemCrossSellInsert) {
         this.store.dispatch(new itemActions.LoadAllItemCrossSell(item));
     }
-    
+
     getItemRelatedProduct(relatedproduct: ItemRelatedProductInsert) {
         this.store.dispatch(new itemActions.LoadItemRelatedProduct(relatedproduct));
     }

@@ -4,7 +4,6 @@ import { VendorBrand } from '../../../../shared/class/vendor-brand';
 import { Member } from 'app/shared/class/member';
 import { Observable } from 'rxjs/internal/Observable';
 import { Store, select } from '@ngrx/store';
-//import * as itemActions from '../../../state/item.actions';
 import * as fromItem from '../../../state';
 import * as fromUser from '../../../../shared/state/user-state.reducer';
 

@@ -3,8 +3,6 @@ import { Observable } from 'rxjs';
 import { Store, select } from '@ngrx/store';
 import * as salesOrderActions from '../../../../state/sales-order.actions';
 import * as fromSalesOrder from '../../../../state';
-import * as fromUser from '../../../../../shared/state/user-state.reducer';
-import { Member } from 'app/shared/class/member';
 import { Fulfillment } from '../../../../../shared/class/fulfillment';
 import { SalesOrder } from '../../../../../shared/class/sales-order';
 
@@ -12,12 +10,12 @@ import { SalesOrder } from '../../../../../shared/class/sales-order';
   templateUrl: './sales-order-view-fulfillment-edit-shell.component.html'
 })
 
-export class SalesOrderFulfillmentEditShellComponent implements OnInit {    
+export class SalesOrderFulfillmentEditShellComponent implements OnInit {
     salesOrder$: Observable<SalesOrder>;
     fulfillment$: Observable<Fulfillment>;
     isLoading$: Observable<boolean>;
     errorMessage$: Observable<string>;
-    
+
     constructor(private store: Store<fromSalesOrder.State>) { }
 
     ngOnInit() {

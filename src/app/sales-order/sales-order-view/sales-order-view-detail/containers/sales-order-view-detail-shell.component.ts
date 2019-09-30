@@ -17,7 +17,7 @@ import * as fromSalesOrder from '../../../state';
 import * as fromUser from '../../../../shared/state/user-state.reducer';
 @Component({
   templateUrl: './sales-order-view-detail-shell.component.html',
-  styleUrls: ['../../../sales-order.component.css'] 
+  styleUrls: ['../../../sales-order.component.css']
 })
 
 export class SalesOrderViewDetailShellComponent implements OnInit {
@@ -26,7 +26,7 @@ export class SalesOrderViewDetailShellComponent implements OnInit {
     userInfo$: Observable<Member>;
     isLoading$: Observable<boolean>;
     isSalesOrderLinesLoading$: Observable<boolean>;
-    
+
     errorMessage$: Observable<string>;
     isMerchant: boolean;
     orderID: number;
@@ -41,7 +41,7 @@ export class SalesOrderViewDetailShellComponent implements OnInit {
         setTimeout(() => {
             this.isLoading$ = this.store.pipe(select(fromSalesOrder.getIsLoading));
             this.isSalesOrderLinesLoading$ = this.store.pipe(select(fromSalesOrder.getIsSalesOrderLinesLoading));
-            
+
         });
     }
     getFulfilledBySalesOrder(payload: {orderid: number, fulfilledby: string}) {

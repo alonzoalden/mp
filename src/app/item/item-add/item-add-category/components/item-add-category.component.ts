@@ -20,7 +20,7 @@ export class ItemAddCategoryComponent implements OnInit {
     @Input() currentResult: Array<Category[]>;
     @Output() getCategories = new EventEmitter<number>();
     @Output() getCategoryBreadCrumbs = new EventEmitter<number>();
-    
+
     lastSelectedValue: number = 0;
     displayedColumns = ['SelectedCategory', 'Remove'];
     dataSource: any = null;
@@ -29,7 +29,7 @@ export class ItemAddCategoryComponent implements OnInit {
     @ViewChild('selectionCategories', { static: false }) selectionCategoriesRef: ElementRef;
 
     constructor(private itemService: ItemService) { }
-    
+
     ngOnChanges(changes: SimpleChanges) {
         if (changes.categoriesList && changes.categoriesList.currentValue && changes.categoriesList.currentValue.length === 0) {
             this.getCategories.emit(2);
@@ -37,11 +37,11 @@ export class ItemAddCategoryComponent implements OnInit {
         if (changes.currentResult && changes.currentResult.currentValue) {
             this.refreshDataSource(this.currentResult);
         }
-        
+
     }
-    
+
     ngOnInit(): void {
-        
+
         // if (this.item && this.item.ItemCategoryAssignments.length > 0) {
         //     this.item.ItemCategoryAssignments.forEach((value, index) => {
         //         //this.getCategoryBreadCrumbs.emit(value.ItemCategoryID);
@@ -66,11 +66,11 @@ export class ItemAddCategoryComponent implements OnInit {
                 this.lastSelectedValue = this.categoriesList[this.categoriesList.length - 1][0].ParentItemCategoryID;
             } else {
                 this.lastSelectedValue = categoryValue;
-                
-                
+
+
                 // this.getCategories.emit(categoryValue);
                 // this.categoriesList = this.categoriesList.slice(0, index + 1);
-                
+
                 this.itemService.getCategories(categoryValue).subscribe(
                     (categories: Category[]) => {
                         this.categoriesList = this.categoriesList.slice(0, index + 1);
@@ -114,7 +114,7 @@ export class ItemAddCategoryComponent implements OnInit {
         } else {
             console.log('nothing selected');
         }
-    
+
     }
     clearFields() {
         this.lastSelectedValue = 0;

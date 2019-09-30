@@ -1,23 +1,14 @@
 import { Component, ViewChild, OnInit, OnDestroy } from '@angular/core';
-import { Subscription ,  Observable } from 'rxjs';
-
-import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { Subscription } from 'rxjs';
+import { HttpClient } from '@angular/common/http';
 import { TranslateService } from '@ngx-translate/core';
-
 import { Router } from '@angular/router';
-
 import { OAuthService } from 'angular-oauth2-oidc';
 import { JwksValidationHandler } from 'angular-oauth2-oidc';
 import { authConfig } from './auth/auth.config';
-
 import { AppService } from './app.service';
 import { NotificationComponent } from './shared/tool/notification/notification.component';
-
-import { PurchaseOrder } from './shared/class/purchase-order';
-
-import { environment } from './../environments/environment';
 import { DeviceDetectorService } from 'ngx-device-detector';
-
 import * as fromUser from './shared/state/user-state.reducer';
 import { Store } from '@ngrx/store';
 import * as userActions from './shared/state/user-state.actions';
@@ -53,21 +44,21 @@ export class AppComponent implements OnInit, OnDestroy {
         this.configureWithNewConfigApi();
         translate.setDefaultLang('en');
         this.currentLanguage = 'en';
-                
+
         this.initInterval();
     }
 
     initInterval() {
         setInterval(() => {
-            if(this.wasLoggedIn && !this.isLoggedin) {
+            if (this.wasLoggedIn && !this.isLoggedin) {
                 this.logout();
             }
         }, 5000);
     }
-    
+
     ngOnInit() {
-        
-        
+
+
         this.userStore.dispatch(new userActions.GetCurrentUser());
 
         // this.appService.verifyBrowserCompatibility()
@@ -89,12 +80,12 @@ export class AppComponent implements OnInit, OnDestroy {
         // guid += screen.width || '';
         // guid += screen.pixelDepth || '';
         // console.log(guid);
-        // console.log(document.cookie);    
+        // console.log(document.cookie);
         // console.log(sessionStorage);
         // console.log(window.navigator.userAgent);
         // console.log(window.navigator.mimeTypes);
 
-        
+
 
         this.subscription = this.appService.subject.subscribe(
             notification => this.doNotification(notification)
@@ -106,7 +97,7 @@ export class AppComponent implements OnInit, OnDestroy {
                     (data) => {
                         this.appService.currentMember = data;
                         //Set Default Language
-                        this.currentLanguage =this.appService.currentMember.DefaultLanguage;
+                        this.currentLanguage = this.appService.currentMember.DefaultLanguage;
                         this.translate.setDefaultLang(this.currentLanguage);
 
                         // change vendor if not active
@@ -202,23 +193,23 @@ export class AppComponent implements OnInit, OnDestroy {
         this.router.navigate(['/inbound-shipment', 0, 'edit']);
         // this.appService.addPurchaseOrder().subscribe(
         //     (data: PurchaseOrder) => this.onAddPurchaseOrderComplete(data, `${data.PurchaseOrderID} was added`),
-        //     (error: any) => {     
-        //         //console.log(error);           
-        //         this.errorMessage = <any>error;                              
+        //     (error: any) => {
+        //         //console.log(error);
+        //         this.errorMessage = <any>error;
         //     }
         // );
     }
 
     // onAddPurchaseOrderComplete(purchaseorder: PurchaseOrder, message?: string) {
     //     //this.appService.sendNotification({ type: 'success', title: 'Successfully Added', content: message });
-        
+
     //     if(this.isInboundShipmentPage()) {
     //         this.router.navigate(['/inbound-shipment', purchaseorder.PurchaseOrderID, 'edit']);
     //         //window.location.reload();
     //     }
     //     else {
     //         this.router.navigate(['/inbound-shipment', purchaseorder.PurchaseOrderID, 'edit']);
-    //     }                
+    //     }
     // }
 
     isInboundShipmentPage() {

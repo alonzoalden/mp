@@ -27,7 +27,7 @@ export class ItemAddShellComponent implements OnInit {
         this.isLoading$ = this.store.pipe(select(fromItem.getIsLoading));
         this.errorMessage$ = this.store.pipe(select(fromItem.getError));
     }
-    
+
     getVendorBrands() {
         this.store.dispatch(new itemActions.LoadVendorBrands());
     }

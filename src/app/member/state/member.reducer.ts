@@ -8,7 +8,7 @@ export interface MemberState {
     pendingDelete: boolean;
     pendingRegister: boolean;
     error: string;
-};
+}
 
 const initialState: MemberState = {
     member: null,

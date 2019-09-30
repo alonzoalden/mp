@@ -7,7 +7,7 @@ export class SalesOrder {
         // public CustomerFirstName: string,
         // public CustomerMiddleName: string,
         // public CustomerLastName: string,
-        // public CustomerEmail: string,        
+        // public CustomerEmail: string,
         public SalesSource: string,
         public ShippingMethod: string,
         public Status: string,

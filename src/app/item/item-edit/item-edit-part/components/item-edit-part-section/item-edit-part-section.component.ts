@@ -14,17 +14,17 @@ import { environment } from '../../../../../../environments/environment';
 export class ItemEditPartSectionComponent implements OnInit {
     private imageURL = environment.imageURL;
     isPM: boolean;
-    
+
     // errorMessage: string;
     // item: Item;
     @Input() errorMessage: string;
     @Input() item: Item;
 
-    itemlist: ItemList[];    
+    itemlist: ItemList[];
     //displayedColumns = ['Add', 'Down', 'Position', 'Up', 'New', 'Select', 'ItemName', 'SKU', 'TPIN', 'Price', 'Remove'];
     //displayedColumns = ['Add', 'Down', 'Position', 'Up', 'Thumbnail', 'Label', 'Select', 'ItemName', 'SKU', 'TPIN', 'Price', 'Remove'];
-    
-    displayedColumns = ['Add', 'Down', 'Position', 'Up', 'Thumbnail','ItemName', 'Remove'];
+
+    displayedColumns = ['Add', 'Down', 'Position', 'Up', 'Thumbnail', 'ItemName', 'Remove'];
     dataSource: any = null;
 
     pendingAdd: boolean;
@@ -75,7 +75,7 @@ export class ItemEditPartSectionComponent implements OnInit {
             (itemlist: ItemList[]) => {
                 this.itemlist = itemlist;
                 const _temp = new ItemList(null, 'New Item', null, null, null, null, null);
-                this.itemlist.splice(0,0,_temp);
+                this.itemlist.splice(0, 0, _temp);
                 this.refreshDataSource(this.item.ItemSections);
             },
             (error: any) => this.errorMessage = <any>error
@@ -93,7 +93,7 @@ export class ItemEditPartSectionComponent implements OnInit {
             );
         } else {
             this.removePendingLine();
-            this.addPendingLine();               
+            this.addPendingLine();
             this.currentIndex = this.item.ItemSections.length - 1;
             this.refreshDataSource(this.item.ItemSections);
         }
@@ -101,7 +101,7 @@ export class ItemEditPartSectionComponent implements OnInit {
 
     addPendingLine() {
         const _temp = new ItemSection(0, this.item.ItemID, null, null, null, this.item.ItemSections.length + 1,  null,  null, [],  true, true);
-        
+
         this.item.ItemSections.push(_temp);
     }
 
@@ -112,118 +112,110 @@ export class ItemEditPartSectionComponent implements OnInit {
         }
     }
 
-    refreshDataSource(itemsections: ItemSection[]) { 
+    refreshDataSource(itemsections: ItemSection[]) {
         this.dataSource = new MatTableDataSource<ItemSection>(itemsections);
     }
     onAddItemPartSection(itemPart: ItemSection) {
         itemPart.pendingAdd = false;
         //this.onChangeFOBPrice(itemPart);
         if (this.existName(itemPart.Name)) {
-            this.itemService.sendNotification({ type: 'error', title: 'Error', content: "Section name exists.  Please choose another." });
+            this.itemService.sendNotification({ type: 'error', title: 'Error', content: 'Section name exists.  Please choose another.' });
             return;
         }
 
-        if (this.isRequirementValid(itemPart)) { 
-            
+        if (this.isRequirementValid(itemPart)) {
+
                 this.pendingAdd = true;
 
-                
+
                 const _temp = new ItemSection(0, this.item.ItemID, null, null,  null, this.item.ItemSections.length + 1, null, null, [], true, true);
                 this.item.ItemSections.push(_temp);
-                this.refreshDataSource(this.item.ItemSections);   
+                this.refreshDataSource(this.item.ItemSections);
                 this.pendingChange = false;
-        }
-        else {
-            this.itemService.sendNotification({ type: 'error', title: 'Error', content: "Please choose a name." });
+        } else {
+            this.itemService.sendNotification({ type: 'error', title: 'Error', content: 'Please choose a name.' });
         }
     }
     onChangeSectionName(section: ItemSection) {
         if (this.pendingChange) {
             return;
         }
-        
+
         if (this.existName(section.Name)) {
-            this.itemService.sendNotification({ type: 'error', title: 'Error', content: "Section name exists.  Please choose another." });
+            this.itemService.sendNotification({ type: 'error', title: 'Error', content: 'Section name exists.  Please choose another.' });
             section.Name = '';
         }
-        
+
     }
 
-    existName(name: string, isNew: boolean = false){
-        var counter: number = 0;
+    existName(name: string, isNew: boolean = false) {
+        let counter: number = 0;
         this.item.ItemSections.forEach((value, index) => {
                 if (value.Name === name) {
                     counter += 1;
                 }
             }
         );
-        if(counter > 1) { return true; }
-        else { return false; }
+        if (counter > 1) { return true; } else { return false; }
     }
 
     isRequirementValid(ItemSection: ItemSection): boolean {
         if (ItemSection
             && ItemSection.Name) {
             return true;
-        } 
-        else {
+        } else {
             return false;
         }
     }
 
-    existItemID(itemID: number, isNew: boolean = false){
-        var counter: number = 0;
+    existItemID(itemID: number, isNew: boolean = false) {
+        let counter: number = 0;
         this.item.ItemSections.forEach((value, index) => {
-                if(value.ItemID === itemID) { 
-                    if(isNew || index != this.item.ItemSections.length - 1) {
-                        counter += 1; 
+                if (value.ItemID === itemID) {
+                    if (isNew || index != this.item.ItemSections.length - 1) {
+                        counter += 1;
                     }
                 }
             }
         );
-        if(counter > 1) { return true; }
-        else { return false; }
+        if (counter > 1) { return true; } else { return false; }
     }
 
     onEditItemPartGroup(index: number) {
         if (index !== this.item.ItemSections.length - 1) {
             this.itemService.currentItemPartSelection.next(this.item.ItemSections[index]);
-        }
-        else {
+        } else {
             this.itemService.currentItemPartSelection.next(null);
         }
-        this.refreshDataSource(this.item.ItemSections)
-        if(this.pendingAdd) {
+        this.refreshDataSource(this.item.ItemSections);
+        if (this.pendingAdd) {
             this.pendingAdd = false;
-        }
-        else {
+        } else {
             this.currentIndex = index;
-        }    
+        }
     }
-    
+
     onEditItemPart(index: number) {
-        if(this.currentIndex != index)
-        {
+        if (this.currentIndex != index) {
             this.item.ItemSections.forEach((itempart, i) => {
-                if(i != this.item.ItemSections.length - 1) {
-                    if(!itempart.Name || itempart.Name == '' ) {
-    
+                if (i != this.item.ItemSections.length - 1) {
+                    if (!itempart.Name || itempart.Name == '' ) {
+
                         this.item.ItemSections.splice(i, 1);
                         this.refreshDataSource(this.item.ItemSections);
                     }
                 }
-            });    
+            });
         }
 
-        if(this.pendingAdd) {
+        if (this.pendingAdd) {
             this.currentIndex = this.item.ItemSections.length - 1;
             this.pendingAdd = false;
-        }
-        else {
+        } else {
             this.currentIndex = index;
-        }    
+        }
     }
-    
+
     clickIsNew(itemPart: ItemPart, index: number) {
         itemPart.PartItemID = null;
         itemPart.PartItemName = null;
@@ -245,7 +237,7 @@ export class ItemEditPartSectionComponent implements OnInit {
     moveUpPosition(itemPart: ItemPart) {
         this.positionMove(this.item.ItemSections, itemPart, -1);
         this.item.ItemSections.forEach((value, index) => {
-            value.Position = index + 1;                        
+            value.Position = index + 1;
         });
 
         this.refreshDataSource(this.item.ItemSections);
@@ -255,7 +247,7 @@ export class ItemEditPartSectionComponent implements OnInit {
         const index = array.indexOf(element);
         const newIndex = index + delta;
         if (newIndex < 0  || newIndex === array.length) { return; } // Already at the top or bottom.
-        const indexes = [index, newIndex].sort((a,b)=>a-b); // Sort the indixes
+        const indexes = [index, newIndex].sort((a, b) => a - b); // Sort the indixes
         array.splice(indexes[0], 2, array[indexes[1]], array[indexes[0]]); // Replace from lowest index, two elements, reverting the order
     }
 
@@ -265,7 +257,7 @@ export class ItemEditPartSectionComponent implements OnInit {
             const foundIndex = this.item.ItemSections.findIndex(i => i.ItemSectionID === itemPart.ItemSectionID);
             if (foundIndex > -1) {
                 this.item.ItemSections.splice(foundIndex, 1);
-            }            
+            }
             this.refreshDataSource(this.item.ItemSections);
         }
     }
@@ -277,16 +269,16 @@ export class ItemEditPartSectionComponent implements OnInit {
         ItemPartInsert.PartItemName = null;
         ItemPartInsert.isNew = null;
         ItemPartInsert.PartTPIN = null;
-        
+
         this.formDirty = false;
     }
-    overflowFix(bool: Boolean):void {
-        let container = document.getElementsByClassName('ibox-content')[0];
-        bool ? container.classList.add("overflow-visible") : container.classList.remove("overflow-visible");
+    overflowFix(bool: Boolean): void {
+        const container = document.getElementsByClassName('ibox-content')[0];
+        bool ? container.classList.add('overflow-visible') : container.classList.remove('overflow-visible');
     }
     setPlaceholderText(i: number, itemPart: any) {
         if (this.itemlist) {
-            return i === this.item.ItemSections.length-1
+            return i === this.item.ItemSections.length - 1
                 ? 'Search Item'
                 : itemPart.PartItemID
                     ? this.itemlist.find(item => itemPart.PartItemID === item.ItemID).Description
@@ -303,14 +295,14 @@ export class ItemEditPartSectionComponent implements OnInit {
 
         this.uploadFiles(itemPart);
     }
-    
+
     uploadFiles(itemPart: ItemPart) {
         if (this.filesToUpload.length > 0) {
             this.pendingUpload = true;
             this.isLoadingData = true;
             const formData: FormData = new FormData();
             for (let i = 0; i < this.filesToUpload.length; i++) {
-                var reader = new FileReader();
+                const reader = new FileReader();
                 formData.append('uploadedFiles', this.filesToUpload[i], this.filesToUpload[i].name);
             }
 
@@ -347,14 +339,14 @@ export class ItemEditPartSectionComponent implements OnInit {
 
         this.partUploadFiles(item);
     }
-    
+
     partUploadFiles(item: Item) {
         if (this.partFilesToUpload.length > 0) {
             this.partPendingUpload = true;
             this.isLoadingData = true;
             const formData: FormData = new FormData();
             for (let i = 0; i < this.partFilesToUpload.length; i++) {
-                var reader = new FileReader();
+                const reader = new FileReader();
                 formData.append('partUploadedFiles', this.partFilesToUpload[i], this.partFilesToUpload[i].name);
             }
 
@@ -363,7 +355,7 @@ export class ItemEditPartSectionComponent implements OnInit {
                     (data: string) => {
                         this.partPendingUpload = false;
                         item.PartImageRaw = data;
-                        item.PartIsNewImage = true;                                                
+                        item.PartIsNewImage = true;
                     },
                     err => {
                         this.partPendingUpload = false;

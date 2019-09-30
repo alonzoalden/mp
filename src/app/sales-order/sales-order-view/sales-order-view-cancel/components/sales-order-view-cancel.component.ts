@@ -11,7 +11,7 @@ import { Member } from 'app/shared/class/member';
 @Component({
   selector: 'o-sales-order-cancel',
   templateUrl: './sales-order-view-cancel.component.html',
-  styleUrls: ['../../../sales-order.component.css'] 
+  styleUrls: ['../../../sales-order.component.css']
 })
 
 export class SalesOrderCancelComponent implements OnInit {
@@ -36,13 +36,13 @@ export class SalesOrderCancelComponent implements OnInit {
     hasCancellationQty: boolean = false;
     constructor(private route: ActivatedRoute,
         private salesorderService: SalesOrderService) { }
-        
+
     ngOnChanges(changes: SimpleChanges): void {
         if (changes.salesOrderLinesMatTable && changes.salesOrderLinesMatTable.currentValue.data.length) {
             this.salesOrderLinesMatTable.paginator = this.paginator;
             this.salesOrderLinesMatTable.sort = this.sort;
             this.salesOrderLinesMatTable.data.forEach((salesorderline) => {
-                if(salesorderline.Quantity - salesorderline.FulfilledQuantity > 0) {
+                if (salesorderline.Quantity - salesorderline.FulfilledQuantity > 0) {
                     this.hasCancellationQty = true;
                 }
             });
@@ -50,7 +50,7 @@ export class SalesOrderCancelComponent implements OnInit {
         if (changes.salesOrder && !changes.salesOrder.currentValue && changes.salesOrder.firstChange) {
             this.getFulfilledBySalesOrder.emit({orderid: this.route.snapshot.params['id'], fulfilledby: this.fulfilledby});
         }
-        
+
     }
     ngOnInit() {
         this.orderid = this.route.snapshot.params['id'];
@@ -59,21 +59,21 @@ export class SalesOrderCancelComponent implements OnInit {
     }
 
     onCancel() {
-        if(this.isValid()) {            
-            const confirmation = confirm(`Are you sure you want to cancel this order?`);        
+        if (this.isValid()) {
+            const confirmation = confirm(`Are you sure you want to cancel this order?`);
             if (confirmation) {
                 this.cancelSalesOrderLines.emit(this.salesOrderLinesMatTable.data);
             }
         }
     }
-    isValid() {   
-        var _ret = false;
-        var _count = 0;
+    isValid() {
+        let _ret = false;
+        let _count = 0;
 
         this.salesOrderLinesMatTable.data.forEach((salesorderline) => {
             _count++;
 
-            if(_count == 1) {
+            if (_count == 1) {
                 _ret = true;
             }
 
@@ -83,7 +83,7 @@ export class SalesOrderCancelComponent implements OnInit {
             }
         });
 
-        if(_count == 0) {
+        if (_count == 0) {
             this.salesorderService.sendNotification({ type: 'error', title: 'Error', content: 'No Lines to cancel' });
         }
 

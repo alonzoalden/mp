@@ -1,4 +1,4 @@
-import { MatNativeDateModule } from "@angular/material";
+import { MatNativeDateModule } from '@angular/material';
 
 export class Dashboard {
     constructor(
@@ -45,7 +45,7 @@ export class ItemSalesTotal {
         public ItemName: string,
         public ItemVendorSKU: string,
         public TPIN: string,
-        public URLKey: string,        
+        public URLKey: string,
         public Quantity: number,
         public Amount: number,
     ) {}

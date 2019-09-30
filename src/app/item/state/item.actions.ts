@@ -111,7 +111,7 @@ export enum ItemActionTypes {
   DownloadPrintItemLargeLabels = '[Item Print Label] Download Print Item Large Labels',
   DownloadPrintItemLargeLabelsSuccess = '[Item Print Label] Download Print Item Large Labels Success',
   DownloadPrintItemLargeLabelsFail = '[Item Print Label] Download Print Item Large Labels Fail',
-  
+
 }
 
 // Action Creators
@@ -460,7 +460,7 @@ export class AddItemFail implements Action {
 
 
 export class EditItem implements Action {
-  
+
   readonly type = ItemActionTypes.EditItem;
   constructor(public payload: {item: Item, displayPreview: boolean, printLabel: boolean}) { }
 }

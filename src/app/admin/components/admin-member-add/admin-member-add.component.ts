@@ -1,6 +1,6 @@
 import { Component, OnInit, Input, Output, EventEmitter, OnChanges, SimpleChanges } from '@angular/core';
 import { Router } from '@angular/router';
-import { FormBuilder, Validators, FormGroup, FormControl } from '@angular/forms';
+import { FormBuilder, Validators } from '@angular/forms';
 import { MemberInsert, Member } from '../../../shared/class/member';
 import { AdminService } from '../../admin.service';
 
@@ -50,7 +50,7 @@ export class AdminMemberAddComponent implements OnInit, OnChanges {
         if (this.isValid()) {
             this.member.IsAdmin = true;
             this.member.IsSuperAdmin = true;
-            this.addMember.emit(this.member)
+            this.addMember.emit(this.member);
         }
     }
 

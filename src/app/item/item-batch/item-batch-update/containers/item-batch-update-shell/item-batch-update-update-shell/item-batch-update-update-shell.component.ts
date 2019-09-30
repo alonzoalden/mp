@@ -19,7 +19,7 @@ export class ItemBatchUpdateUpdateShellComponent implements OnInit {
     userInfo$: Observable<Member>;
     isLoading$: Observable<Boolean>;
     errorMessage$: Observable<string>;
-    
+
     constructor(private store: Store<fromItem.State>) {}
 
     ngOnInit() {

@@ -21,7 +21,7 @@ export class UserEffects {
             this.appService.getCurrentMember().pipe(
                 map(member => (new userActions.GetCurrentUserSuccess(member))),
                 catchError(err => {
-                    of(new userActions.GetCurrentUserFail(err))
+                    of(new userActions.GetCurrentUserFail(err));
                     return EMPTY;
                 })
             )

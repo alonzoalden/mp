@@ -28,7 +28,7 @@ export class ItemListShellComponent implements OnInit {
         this.errorMessage$ = this.store.pipe(select(fromItem.getError));
         setTimeout(() => {
             this.isLoading$ = this.store.pipe(select(fromItem.getIsLoading));
-        })
+        });
     }
     getItems(): void {
         this.store.dispatch(new itemActions.LoadItemBatchItems());

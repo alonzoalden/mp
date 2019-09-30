@@ -1,10 +1,10 @@
 export class Fulfillment {
     constructor(
-        public FulfillmentID: number,  
-        public PurchaseOrderID: string,  
+        public FulfillmentID: number,
+        public PurchaseOrderID: string,
         public SalesOrderID: string,
-        
-        public InternalID: string,        
+
+        public InternalID: string,
         public ShipDate: string,
         public Carrier: string,
         public ShippingMethod: string,
@@ -22,14 +22,14 @@ export class Fulfillment {
 export class ShipmentTracking {
     constructor(
         public ShipmentTrackingID: number,
-        public FulfillmentID: string,             
+        public FulfillmentID: string,
         public TrackingNumber: string,
         public CreatedOn: string
     ) {}
 }
 
 export class FulfillmentSalesOrderLine {
-    constructor(        
+    constructor(
         public PurchaseOrderLineID: number,
         public SalesOrderLineID: number,
         public FulfillmentLineID: number,

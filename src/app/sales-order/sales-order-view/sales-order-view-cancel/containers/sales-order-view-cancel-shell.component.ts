@@ -11,7 +11,7 @@ import * as fromUser from '../../../../shared/state/user-state.reducer';
 
 @Component({
   templateUrl: './sales-order-view-cancel-shell.component.html',
-  styleUrls: ['../../../sales-order.component.css'] 
+  styleUrls: ['../../../sales-order.component.css']
 })
 
 export class SalesOrderViewCancelShellComponent implements OnInit {
@@ -21,9 +21,9 @@ export class SalesOrderViewCancelShellComponent implements OnInit {
     userInfo$: Observable<Member>;
     errorMessage$: Observable<string>;
     pendingDelete$: Observable<boolean>;
-    
+
     constructor(private store: Store<fromSalesOrder.State>) { }
-    
+
     ngOnInit() {
         this.userInfo$ = this.store.pipe(select(fromUser.getCurrentUser));
         this.salesOrderLinesMatTable$ = this.store.pipe(select(fromSalesOrder.getSalesOrderLinesMatTable));

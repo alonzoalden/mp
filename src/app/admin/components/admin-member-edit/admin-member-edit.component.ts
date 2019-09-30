@@ -1,6 +1,6 @@
 import { Component, OnInit, Input, SimpleChanges, EventEmitter, Output, OnChanges } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
-import { FormBuilder, Validators, FormGroup, FormControl } from '@angular/forms';
+import { FormBuilder, Validators } from '@angular/forms';
 import { Member } from '../../../shared/class/member';
 import { VendorList } from '../../../shared/class/vendor';
 import { AdminService } from '../../admin.service';
@@ -18,7 +18,7 @@ export class AdminMemberEditComponent implements OnInit, OnChanges {
     @Input() vendorList: VendorList[];
     @Input() pendingSave: boolean;
     @Input() errorMessage: string;
-    @Output() getVendorList = new EventEmitter<void>(); 
+    @Output() getVendorList = new EventEmitter<void>();
     @Output() getMember = new EventEmitter<number>();
     @Output() editMember = new EventEmitter<Member>();
 

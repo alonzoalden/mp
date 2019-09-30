@@ -1,13 +1,8 @@
 import { Component, Input, Output, EventEmitter, OnInit, OnChanges, SimpleChanges } from '@angular/core';
 import { Router } from '@angular/router';
-import { ItemInsert, ItemTierPriceInsert, ItemRelatedProductInsert, ItemUpSellInsert, ItemCrossSellInsert, ItemAttachmentInsert, ItemVideoInsert } from '../../../shared/class/item';
+import { ItemInsert } from '../../../shared/class/item';
 import { VendorBrand } from '../../../shared/class/vendor-brand';
 import { ItemService } from '../../item.service';
-import { Store, select } from '@ngrx/store';
-//import * as itemActions from '../../../state';
-//import * as fromItem from '../../../state';
-//import * as fromUser from '../../../../shared/state/user-state.reducer';
-import { Observable } from 'rxjs';
 
 @Component({
   selector: 'o-item-add',
@@ -21,72 +16,71 @@ export class ItemAddComponent implements OnInit, OnChanges {
     @Input() item: ItemInsert;
     @Input() errorMessage: string;
     @Input() pendingAdd: boolean;
-    
+
 
     @Output() getVendorBrands = new EventEmitter<void>();
     @Output() addItem = new EventEmitter<ItemInsert>();
     @Output() setItem = new EventEmitter<ItemInsert>();
-    
+
     private dataIsValid: { [key: string]: boolean } = {};
 
     constructor(private router: Router,
                 private itemService: ItemService) {
     }
-    ngOnChanges(changes: SimpleChanges) {
-    }
+    ngOnChanges(changes: SimpleChanges) { }
     ngOnInit() {
         this.getVendorBrands.emit();
         this.setItem.emit(this.itemService.defaultCurrentItemInsert());
     }
 
     onAddItem() {
-        if(this.isItemNameValid() && this.isSKUValid()) {
+        if (this.isItemNameValid() && this.isSKUValid()) {
             //if (this.isValid(null) && this.isShippingFeeValid() && this.isShipWithinDaysValid() && this.isBundleValid()) {
                 if (this.isValid(null) && this.isShipWithinDaysValid() && this.isBundleValid()) {
                     //this.pendingAdd = true;
-                            
+
                 const newItem = this.itemService.copyItemInsert(this.item);
 
-                newItem.ItemTierPrices.splice(newItem.ItemTierPrices.length-1, 1);
-                newItem.ItemRelatedProducts.splice(newItem.ItemRelatedProducts.length-1, 1);
+                newItem.ItemTierPrices.splice(newItem.ItemTierPrices.length - 1, 1);
+                newItem.ItemRelatedProducts.splice(newItem.ItemRelatedProducts.length - 1, 1);
                 newItem.ItemRelatedProducts.forEach((value, i) => {
                     value.Position = i + 1;
                 });
-                newItem.ItemUpSells.splice(newItem.ItemUpSells.length-1, 1);
+                newItem.ItemUpSells.splice(newItem.ItemUpSells.length - 1, 1);
                 newItem.ItemUpSells.forEach((value, i) => {
                     value.Position = i + 1;
                 });
-                newItem.ItemCrossSells.splice(newItem.ItemCrossSells.length-1, 1);
+                newItem.ItemCrossSells.splice(newItem.ItemCrossSells.length - 1, 1);
                 newItem.ItemCrossSells.forEach((value, i) => {
                     value.Position = i + 1;
                 });
-                newItem.ItemAttachments.splice(newItem.ItemAttachments.length-1, 1);
+                newItem.ItemAttachments.splice(newItem.ItemAttachments.length - 1, 1);
                 newItem.ItemAttachments.forEach((value, i) => {
                     value.Position = i + 1;
                 });
-                newItem.ItemVideos.splice(newItem.ItemVideos.length-1, 1);
+                newItem.ItemVideos.splice(newItem.ItemVideos.length - 1, 1);
                 newItem.ItemVideos.forEach((value, i) => {
                     value.Position = i + 1;
                 });
-                newItem.ItemImages.splice(newItem.ItemImages.length-1, 1);
+                newItem.ItemImages.splice(newItem.ItemImages.length - 1, 1);
                 newItem.ItemImages.forEach((value, i) => {
                     value.Position = i + 1;
                 });
-                newItem.ItemOptions.splice(newItem.ItemOptions.length-1, 1);
+                newItem.ItemOptions.splice(newItem.ItemOptions.length - 1, 1);
                 newItem.ItemOptions.forEach((value, i) => {
                     value.Position = i + 1;
 
-                    value.ItemSelections.splice(value.ItemSelections.length-1, 1);
+                    value.ItemSelections.splice(value.ItemSelections.length - 1, 1);
                     value.ItemSelections.forEach((value, i) => {
                         value.Position = i + 1;
                     });
-                });            
+                });
 
-                newItem.ItemSections.splice(newItem.ItemSections.length-1, 1);
+                newItem.ItemSections.splice(newItem.ItemSections.length - 1, 1);
                 newItem.ItemSections.forEach((value, i) => {
                     value.Position = i + 1;
 
-                    value.ItemParts.splice(value.ItemParts.length-1, 1);
+                    value.ItemParts.splice(value.ItemParts.length - 1, 1);
                     value.ItemParts.forEach((value, i) => {
                         value.Position = i + 1;
                     });
@@ -94,39 +88,11 @@ export class ItemAddComponent implements OnInit, OnChanges {
                 });
 
                 this.addItem.emit(newItem);
-                //this.loading = true;
-                // this.itemService.addItem(newItem)
-                //     .subscribe(
-                //         () => {
-                //             //this.pendingAdd = false;
-                //             //this.loading = false;
-                //             this.onAddComplete(`${newItem.Name} was saved`);
-                //         },
-                //         (error: any) => {
-                //             //this.pendingAdd = false;
-                //             //this.loading = false;
-
-                //             // const _pendingItemTierPrice = new ItemTierPriceInsert(0, 0, 0);
-                //             // this.item.ItemTierPrices.push(_pendingItemTierPrice);
-                //             // const _pendingRelatedProduct = new ItemRelatedProductInsert(0, null, null, null, null, null, null);
-                //             // this.item.ItemRelatedProducts.push(_pendingRelatedProduct);
-                //             // const _pendingUpSell = new ItemUpSellInsert(0, null, null, null, null, null, null);
-                //             // this.item.ItemUpSells.push(_pendingUpSell);
-                //             // const _pendingCrossSell = new ItemCrossSellInsert(0, null, null, null, null, null, null);
-                //             // this.item.ItemCrossSells.push(_pendingCrossSell);
-                //             // const _pendingItemAttachment = new ItemAttachmentInsert(null, null, null, null, null, null);
-                //             // this.item.ItemAttachments.push(_pendingItemAttachment);
-                //             // const _pendingItemVideo = new ItemVideoInsert(null, null, null, null, null, null, null, null);
-                //             // this.item.ItemAttachments.push(_pendingItemAttachment);
-
-                //             this.itemService.sendNotification({ type: 'error', title: 'Error', content: <any>error });
-                //         }
-                //     );
+                
             } else {
-                //alert('Please enter all required fields');
                 this.itemService.sendNotification({ type: 'error', title: 'Invalid Entry', content: 'Please enter all required fields' });
             }
-        }        
+        }
     }
 
     onAddComplete(message?: string) {
@@ -144,64 +110,57 @@ export class ItemAddComponent implements OnInit, OnChanges {
     }
 
     isShippingFeeValid(): boolean {
-        if(this.item.FulfilledBy === 'Toolots' || this.item.IsFreeShipping) {            
+        if (this.item.FulfilledBy === 'Toolots' || this.item.IsFreeShipping) {
             return true;
-        }
-        else {
+        } else {
             return (this.item.ShippingFee && this.item.ShippingFee > 0);
-        }        
+        }
     }
 
     isShipWithinDaysValid(): boolean {
-        if(this.item.FulfilledBy === 'Toolots') {
+        if (this.item.FulfilledBy === 'Toolots') {
             return true;
-        }
-        else {
+        } else {
             return (this.item.ShipWithinDays && this.item.ShipWithinDays >= 0);
         }
     }
 
-    isItemNameValid(): boolean {      
-        if(this.item.VendorBrandID) {
-            if(this.item.Name.toLowerCase().includes(this.vendorBrandList.find(x => x.VendorBrandID == Number(this.item.VendorBrandID)).BrandName.toLowerCase())) {
+    isItemNameValid(): boolean {
+        if (this.item.VendorBrandID) {
+            if (this.item.Name.toLowerCase().includes(this.vendorBrandList.find(x => x.VendorBrandID == Number(this.item.VendorBrandID)).BrandName.toLowerCase())) {
                 this.itemService.sendNotification({ type: 'error', title: 'Invalid Entry', content: '"Brand" should not be included in "Item Name"' });
-                return false;    
-            }
-            else {
+                return false;
+            } else {
                 return true;
-            }            
-        }  
-        else {
+            }
+        } else {
             return true;
         }
     }
 
-    isSKUValid(): boolean { 
-        var regex = /^[\w\-]*$/g;
-        
-        if(regex.test(this.item.VendorSKU)) {
+    isSKUValid(): boolean {
+        let regex = /^[\w\-]*$/g;
+
+        if (regex.test(this.item.VendorSKU)) {
             return true;
-        }
-        else {
-            this.itemService.sendNotification({ type: 'error', title: 'Invalid Entry', content: 'SKU must be a comination of alphanumeric characters (space not allowed)' });                
+        } else {
+            this.itemService.sendNotification({ type: 'error', title: 'Invalid Entry', content: 'SKU must be a comination of alphanumeric characters (space not allowed)' });
             return false;
         }
     }
 
     isBundleValid(): boolean {
-        if (this.item.ItemType == "bundle") {
-            var _ret = true;
+        if (this.item.ItemType == 'bundle') {
+            let _ret = true;
             this.item.ItemOptions.forEach((option, index) => {
                 if ( (!option.ItemSelections || option.ItemSelections.length === 1) && index != this.item.ItemOptions.length - 1) {
                     this.itemService.sendNotification({ type: 'error', title: 'Invalid Entry', content: 'Selection is required for a Bundle Option "' + option.Title + '"' });
                     _ret = false;
-                }                                
-            });    
+                }
+            });
 
             return _ret;
-        }
-        else
-        {
+        } else {
             return true;
         }
     }
@@ -248,10 +207,10 @@ export class ItemAddComponent implements OnInit, OnChanges {
     }
 
     validateBundle() {
-        return true;        
+        return true;
     }
 
-    validateDescription() {            
+    validateDescription() {
         return (this.item.Name &&
             this.item.VendorSKU &&
             this.item.ItemType &&
@@ -259,7 +218,7 @@ export class ItemAddComponent implements OnInit, OnChanges {
     }
 
     validateDimension() {
-        return (this.item.ItemType != "simple" || (this.item.Width &&
+        return (this.item.ItemType != 'simple' || (this.item.Width &&
             this.item.Height &&
             this.item.Weight &&
             this.item.Length &&
@@ -282,7 +241,7 @@ export class ItemAddComponent implements OnInit, OnChanges {
     //     const dialogRef = this.printDialog.open(ItemVariationComponentDialog, {
     //         data: this.attributesVariationsList
     //     });
-    
+
     //     dialogRef.afterClosed().subscribe(result => {});
     // }
 }

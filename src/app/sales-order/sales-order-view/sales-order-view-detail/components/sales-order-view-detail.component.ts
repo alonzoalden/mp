@@ -4,7 +4,6 @@ import { MatPaginator, MatSort, MatTableDataSource, MatDialog, MatDialogRef, MAT
 import { SalesOrderLine } from '../../../../shared/class/sales-order-line';
 import { SalesOrder } from '../../../../shared/class/sales-order';
 import { SalesOrderService } from '../../../sales-order.service';
-import { AppService } from '../../../../app.service';
 import { environment } from '../../../../../environments/environment';
 import { Member } from 'app/shared/class/member';
 import * as salesOrderActions from '../../../state/sales-order.actions';
@@ -15,7 +14,7 @@ import { takeWhile } from 'rxjs/operators';
 @Component({
   selector: 'o-sales-order-detail',
   templateUrl: './sales-order-view-detail.component.html',
-  styleUrls: ['../../../sales-order.component.css'] 
+  styleUrls: ['../../../sales-order.component.css']
 })
 
 export class SalesOrderDetailComponent implements OnInit {
@@ -32,21 +31,12 @@ export class SalesOrderDetailComponent implements OnInit {
     @Output() downloadSalesOrderPackingSlip = new EventEmitter<SalesOrder>();
     private imageURL = environment.imageURL;
     private linkURL = environment.linkURL;
-    
+
     fulfilledby: string;
     orderid: number;
-    // displayedColumns = ['ItemImage','ItemName', 'SKU', 'TPIN', 'Quantity', 'ShippedQty', 'MerchantStatus', 'UnitPrice', 'LineSubTotal'];
     displayedColumns = ['ItemImage', 'ProductDetails', 'Quantity', 'MerchantStatus', 'UnitPrice', 'LineSubTotal'];
-    //dataSource: any = null;
-
     @ViewChild(MatPaginator, { static: false }) paginator: MatPaginator;
     @ViewChild(MatSort, { static: false }) sort: MatSort;
-
-    // salesorderline: SalesOrderLine;
-    // deliveryDetail: string;
-    // salesorder: SalesOrder;
-    // salesorderlines: SalesOrderLine[];
-
     isMerchant: boolean;
 
     constructor(private route: ActivatedRoute,
@@ -62,16 +52,15 @@ export class SalesOrderDetailComponent implements OnInit {
     ngOnInit() {
         this.orderid = this.route.parent.snapshot.params['id'];
         this.fulfilledby = this.route.parent.snapshot.params['fulfilledby'];
-        if(this.fulfilledby == 'merchant') {
+        if (this.fulfilledby == 'merchant') {
             this.isMerchant = true;
-        }
-        else {
+        } else {
             this.isMerchant = false;
         }
 
         //this.getSalesOrderLineByVendor.emit({orderid: this.orderid, fulfilledby: this.fulfilledby});
     }
-    
+
     onPrintPackingSlip() {
         this.downloadSalesOrderPackingSlip.emit(this.salesOrder);
     }
@@ -81,11 +70,11 @@ export class SalesOrderDetailComponent implements OnInit {
             data: salesorder,
             width: '840px'
         });
-    
+
         dialogRef.afterClosed().subscribe(() => window.location.reload());
     }
     formatPhoneNumber(phoneNumberString) {
-        if (!phoneNumberString) return;
+        if (!phoneNumberString) { return; }
         const cleaned = ('' + phoneNumberString).replace(/\D/g, '');
         const match = cleaned.match(/^(\d{3})(\d{3})(\d{4})$/);
         if (match) {
@@ -107,7 +96,7 @@ export class SalesOrderCancelDialog {
     selector: 'sales-order-cancel.component-print-dialog',
     templateUrl: '../../sales-order-view-cancel/components/sales-order-view-cancel.component-cancel-dialog.html',
 })
-    
+
 export class SalesOrderCancelComponentPrintDialog implements OnInit, OnDestroy {
     itemLabelPrintDialog: SalesOrderCancelDialog;
     errorMessage: string;
@@ -119,9 +108,9 @@ export class SalesOrderCancelComponentPrintDialog implements OnInit, OnDestroy {
     deliveryDetail: string;
     private imageURL = environment.imageURL;
     private linkURL = environment.linkURL;
-    
+
     dataSource: MatTableDataSource<any>;
-    displayedColumns = ['ItemImage', 'ProductDetails','ProductInfo','CancellationReason'];
+    displayedColumns = ['ItemImage', 'ProductDetails', 'ProductInfo', 'CancellationReason'];
     componentActive: boolean = true;
     @ViewChild(MatPaginator, { static: false }) paginator: MatPaginator;
     @ViewChild(MatSort, { static: true }) sort: MatSort;
@@ -156,22 +145,22 @@ export class SalesOrderCancelComponentPrintDialog implements OnInit, OnDestroy {
     }
 
     onCancel() {
-        if(this.isValid()) {            
-            const confirmation = confirm(`Are you sure you want to cancel this order?`);        
+        if (this.isValid()) {
+            const confirmation = confirm(`Are you sure you want to cancel this order?`);
             if (confirmation) {
                 this.store.dispatch(new salesOrderActions.CancelSalesOrderLines(this.salesOrderLinesMatTable.data));
             }
         }
     }
 
-    isValid() {   
-        var _ret = false;
-        var _count = 0;
+    isValid() {
+        let _ret = false;
+        let _count = 0;
 
         this.salesOrderLinesMatTable.data.forEach((salesorderline) => {
             _count++;
 
-            if(_count == 1) {
+            if (_count == 1) {
                 _ret = true;
             }
 
@@ -181,7 +170,7 @@ export class SalesOrderCancelComponentPrintDialog implements OnInit, OnDestroy {
             }
         });
 
-        if(_count == 0) {
+        if (_count == 0) {
             this.salesorderService.sendNotification({ type: 'error', title: 'Error', content: 'No Lines to cancel' });
         }
 

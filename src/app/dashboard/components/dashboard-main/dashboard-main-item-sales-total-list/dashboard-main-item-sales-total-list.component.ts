@@ -1,10 +1,8 @@
-import { Component, ViewChild, OnInit, Input, Output, EventEmitter } from '@angular/core';
+import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 import { MatTableDataSource } from '@angular/material';
-
 import { ItemSalesTotal } from '../../../../shared/class/dashboard';
 import { growContainerAnimation } from '../smooth-open-animation.component';
 import { trigger, transition, useAnimation } from '@angular/animations';
-
 import { environment } from '../../../../../environments/environment';
 
 @Component({
@@ -24,7 +22,7 @@ import { environment } from '../../../../../environments/environment';
 export class DashboardMainItemSalesTotalListComponent implements OnInit {
     private linkURL = environment.linkURL;
     displayedColumns = ['ItemName', 'Quantity', 'Amount'];
-    
+
     @Input() itemSalesTotalsMatTable: MatTableDataSource<ItemSalesTotal>;
     @Input() errorMessage: string;
     @Output() getItemSalesTotal = new EventEmitter<void>();

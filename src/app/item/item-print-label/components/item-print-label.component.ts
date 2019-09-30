@@ -1,11 +1,8 @@
-import { Component, OnInit, OnDestroy, ViewChild, Inject, Input, EventEmitter, Output, SimpleChanges } from '@angular/core';
+import { Component, OnInit, Input, EventEmitter, Output, SimpleChanges } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
-import { MatSort, MatTableDataSource, MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material';
+import { MatTableDataSource, MatDialog, MatDialogRef } from '@angular/material';
 import { Item, ItemPrintLabel, ItemList } from '../../../shared/class/item';
-import { Subscription } from 'rxjs';
-
 import { ItemService } from '../../item.service';
-
 import { environment } from '../../../../environments/environment';
 import { Member } from 'app/shared/class/member';
 
@@ -15,7 +12,7 @@ import { Member } from 'app/shared/class/member';
 })
 
 export class ItemPrintLabelComponent implements OnInit  {
-    
+
     @Input() userInfo: Member;
     @Input() itemPrintLabelsMatTable: MatTableDataSource<ItemPrintLabel>;
     @Input() itemList: ItemList[];
@@ -24,25 +21,13 @@ export class ItemPrintLabelComponent implements OnInit  {
     @Output() getItemList = new EventEmitter<void>();
     @Output() downloadPrintItemLabels = new EventEmitter<{labels: ItemPrintLabel[], border: string}>();
     @Output() downloadPrintItemLargeLabels = new EventEmitter<{labels: ItemPrintLabel[], border: string}>();
-    //this.downloadPrintItemLargeLabels.emit({labels: this.itemPrintLabels, border: border});
-    
-    //errorMessage: string;
-    //itemPrintLabels: ItemPrintLabel[];
-
-    
-    //itemList: ItemList[];
-
     private imageURL = environment.imageURL;
     private linkURL = environment.linkURL;
-
-    PendingAdd: boolean;   
+    PendingAdd: boolean;
     currentIndex: number;
-
-    displayedColumns = ['Add', 'ProductDetails','Quantity', 'Remove'];
-    //dataSource: any = null;
-
+    displayedColumns = ['Add', 'ProductDetails', 'Quantity', 'Remove'];
     formDirty = false;
-    
+
     constructor(private route: ActivatedRoute,
         private router: Router,
         private itemService: ItemService,
@@ -51,38 +36,22 @@ export class ItemPrintLabelComponent implements OnInit  {
     ngOnChanges(changes: SimpleChanges): void {
         if (changes.itemPrintLabelsMatTable && !changes.itemPrintLabelsMatTable.currentValue.data.length) {
             this.addPendingLine();
-            //this.itemPrintLabelsMatTable.paginator = this.paginator;
-            //this.itemPrintLabelsMatTable.sort = this.sort;
         }
-        // if (changes.itemsMatTable && !changes.itemsMatTable.currentValue.data.length && changes.itemsMatTable.firstChange) {
-        //     this.getItems.emit();
-        // }
-        
     }
 
     ngOnInit(): void {
-        //this.itemPrintLabels = [];
-        
         this.currentIndex = 0;
-        
         this.getItemList.emit();
 
-        // this.itemService.getItemList().subscribe(
-        //     (itemlist: ItemList[]) => {
-        //         this.itemList = itemlist;
-        //         this.refreshDataSource(this.itemPrintLabels); 
-        //     },
-        //     (error: any) => this.errorMessage = <any>error
-        // );
     }
 
-    refreshDataSource(itemPrintLabels: ItemPrintLabel[]) {        
+    refreshDataSource(itemPrintLabels: ItemPrintLabel[]) {
         this.itemPrintLabelsMatTable = new MatTableDataSource<ItemPrintLabel>(itemPrintLabels);
     }
 
     addPendingLine() {
         const _temp = new ItemPrintLabel(null, null, null, null, null, null, 1, true);
-        this.itemPrintLabelsMatTable.data.push(_temp);   
+        this.itemPrintLabelsMatTable.data.push(_temp);
     }
 
     removePendingLine() {
@@ -92,7 +61,7 @@ export class ItemPrintLabelComponent implements OnInit  {
         }
     }
 
-    onItemChange(index: number) {      
+    onItemChange(index: number) {
         this.itemService.getItem(this.itemPrintLabelsMatTable.data[index].ItemID).subscribe(
             (item: Item) => {
                 this.itemPrintLabelsMatTable.data[index].ItemName = item.Name;
@@ -105,7 +74,7 @@ export class ItemPrintLabelComponent implements OnInit  {
                 this.errorMessage = <any>error;
                 this.itemService.sendNotification({ type: 'error', title: 'Error', content: this.errorMessage });
             }
-        );      
+        );
     }
 
     onAddItemPrintLabel(itemPrintLabel: ItemPrintLabel) {
@@ -117,13 +86,12 @@ export class ItemPrintLabelComponent implements OnInit  {
     }
 
     onEditItemPrintLabel(index: number) {
-        if(this.PendingAdd) {
+        if (this.PendingAdd) {
             this.currentIndex = this.itemPrintLabelsMatTable.data.length - 1;
             this.PendingAdd = false;
-        }
-        else {
+        } else {
             this.currentIndex = index;
-        }    
+        }
     }
 
     onRemoveItemPrintLabel(index: number) {
@@ -142,13 +110,12 @@ export class ItemPrintLabelComponent implements OnInit  {
         const dialogRef = this.printDialog.open(ItemPrintLabelComponentPrintDialog, {
           width: '250px'
         });
-    
+
         dialogRef.afterClosed().subscribe(result => {
             if (result) {
-                if(result.Size === "small") {
+                if (result.Size === 'small') {
                     this.onPrintLabels(result.Border);
-                }
-                else {
+                } else {
                     this.onPrintLargeLabels(result.Border);
                 }
             }
@@ -238,17 +205,17 @@ export class ItemLabelPrintDialog {
     selector: 'item-print-label.component-print-dialog',
     templateUrl: 'item-print-label.component-print-dialog.html',
     })
-    
+
 export class ItemPrintLabelComponentPrintDialog implements OnInit {
 //quantity: number;
     itemLabelPrintDialog: ItemLabelPrintDialog;
 
     constructor(
         public dialogRef: MatDialogRef<ItemPrintLabelComponentPrintDialog>) {
-        
+
         }
     ngOnInit() {
-        this.itemLabelPrintDialog = new ItemLabelPrintDialog("small", "yes");
+        this.itemLabelPrintDialog = new ItemLabelPrintDialog('small', 'yes');
     }
 
     onCancelClick(): void {

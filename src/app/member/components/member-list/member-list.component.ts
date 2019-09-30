@@ -1,9 +1,6 @@
 import { Component, OnInit, ViewChild, Input, Output, EventEmitter } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
-import { CurrencyPipe } from '@angular/common';
-import { MatMenuModule, MatPaginator, MatSort, MatTableDataSource } from '@angular/material';
-import { MatMenu } from '@angular/material/menu';
-
+import { MatPaginator, MatSort, MatTableDataSource } from '@angular/material';
 import { Member } from '../../../shared/class/member';
 import { MemberService } from '../../member.service';
 import { AppService } from '../../../app.service';
@@ -20,37 +17,30 @@ export class MemberListComponent implements OnInit {
     @Input() members: Member[];
     @Input() errorMessage: string;
     @Output() editMemberRegistration = new EventEmitter<Member>();
-    
-    //errorMessage: string;
-
-    //members: Member[];
-    //currentMember: Member;
-
     displayedColumns = ['Menu', 'Email', 'IsPM', 'IsAdmin', 'IsConfirmed', 'IsActive', 'CreatedOn'];
     dataSource: any = null;
 
     @ViewChild(MatPaginator, { static: true }) paginator: MatPaginator;
     @ViewChild(MatSort, { static: true }) sort: MatSort;
 
-    constructor(private route: ActivatedRoute,
-        private router: Router,    
+    constructor(
+        private router: Router,
         private memberService: MemberService,
         private appService: AppService
      ) { }
 
     ngOnInit() {
         this.appService.getCurrentMember()
-            .subscribe(                    
+            .subscribe(
                 (data) => {
-                    this.appService.currentMember = data;                     
+                    this.appService.currentMember = data;
                     this.currentMember = data;
-                    if(this.currentMember && !this.currentMember.IsAdmin) {
+                    if (this.currentMember && !this.currentMember.IsAdmin) {
                         this.router.navigate(['/home']);
                     }
                     if (data.DefaultPageSize) {
                         this.paginator.pageSize = data.DefaultPageSize;
-                    }
-                    else {
+                    } else {
                         this.paginator.pageSize = 100;
                     }
                 },
@@ -58,7 +48,7 @@ export class MemberListComponent implements OnInit {
                     this.appService.sendNotification({ type: 'error', title: 'Error', content: error });
                     this.errorMessage = <any>error;
                 }
-            );   
+            );
 
         this.memberService.getMembers().subscribe(
             (members: Member[]) => {
@@ -81,7 +71,7 @@ export class MemberListComponent implements OnInit {
     sendConfirmationMember(member: Member): void {
         this.memberService.sendConfirmation(member).subscribe(
             () => {
-                this.memberService.sendNotification({ type: 'success', title: 'Confirmation Sent', content: "" });
+                this.memberService.sendNotification({ type: 'success', title: 'Confirmation Sent', content: '' });
             },
             (error: any) => this.errorMessage = <any>error
         );
@@ -98,7 +88,7 @@ export class MemberListComponent implements OnInit {
     }
 
     deleteMember(member: Member): void {
-        const confirmation = confirm(`Delete ${member.Email}?`);        
+        const confirmation = confirm(`Delete ${member.Email}?`);
         if (confirmation) {
             this.memberService.deleteMember(member).subscribe(
                 () => {
@@ -107,7 +97,7 @@ export class MemberListComponent implements OnInit {
                         this.members.splice(foundIndex, 1);
                     }
                     this.refreshDataSource(this.members);
-                    this.memberService.sendNotification({ type: 'success', title: 'Successfully Deleted', content: "" });
+                    this.memberService.sendNotification({ type: 'success', title: 'Successfully Deleted', content: '' });
                 },
                 (error: any) => {
                     this.refreshDataSource(this.members);
@@ -118,7 +108,7 @@ export class MemberListComponent implements OnInit {
         }
     }
 
-    saveMember(member: Member): void {        
+    saveMember(member: Member): void {
         this.memberService.editMember(member).subscribe(
             () => this.onSaveComplete(`${member.Email} was saved`),
             (error: any) => this.errorMessage = <any>error
@@ -127,7 +117,7 @@ export class MemberListComponent implements OnInit {
     }
 
     onSaveComplete(message?: string): void {
-        this.memberService.sendNotification({ type: 'success', title: 'Successfully Updated', content: message });        
+        this.memberService.sendNotification({ type: 'success', title: 'Successfully Updated', content: message });
         // Navigate back to dashboard
         //this.router.navigate(['/dashboard']);
     }

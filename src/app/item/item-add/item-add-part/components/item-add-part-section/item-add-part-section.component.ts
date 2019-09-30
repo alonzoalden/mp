@@ -1,7 +1,7 @@
 import { Component, OnInit, OnChanges,   ViewChildren, Input, SimpleChanges } from '@angular/core';
 import { Router } from '@angular/router';
 import { MatTableDataSource } from '@angular/material';
-import { Item, ItemInsert, ItemList, ItemPartInsert, ItemSectionInsert, ItemSection, ItemImageInsert } from '../../../../../shared/class/item';
+import { ItemInsert, ItemList, ItemPartInsert, ItemSectionInsert, ItemSection } from '../../../../../shared/class/item';
 import { ItemService } from '../../../../item.service';
 import { AppService } from '../../../../../app.service';
 import { environment } from '../../../../../../environments/environment';
@@ -14,18 +14,18 @@ import { environment } from '../../../../../../environments/environment';
 export class ItemAddPartSectionComponent implements OnInit, OnChanges {
     private imageURL = environment.imageURL;
     isPM: boolean;
-    
+
     //errorMessage: string;
     //item: ItemInsert;
 
     @Input() errorMessage: string;
     @Input() item: ItemInsert;
 
-    itemlist: ItemList[];    
+    itemlist: ItemList[];
     //displayedColumns = ['Add', 'Down', 'Position', 'Up', 'New', 'Select', 'ItemName', 'SKU', 'TPIN', 'Price', 'Remove'];
     //displayedColumns = ['Add', 'Down', 'Position', 'Up', 'Thumbnail', 'Label', 'Select', 'ItemName', 'SKU', 'TPIN', 'Price', 'Remove'];
-    
-    displayedColumns = ['Add', 'Down', 'Position', 'Up', 'Thumbnail','ItemName', 'Remove'];
+
+    displayedColumns = ['Add', 'Down', 'Position', 'Up', 'Thumbnail', 'ItemName', 'Remove'];
 
     dataSource: any = null;
 
@@ -51,7 +51,7 @@ export class ItemAddPartSectionComponent implements OnInit, OnChanges {
     constructor(private router: Router, private itemService: ItemService, private appService: AppService) { }
     ngOnChanges(changes: SimpleChanges) {
         if (changes.item && changes.item.currentValue && changes.item.currentValue.ItemImages.length === 0) {
-            
+
             this.addPendingLine();
         }
     }
@@ -70,32 +70,32 @@ export class ItemAddPartSectionComponent implements OnInit, OnChanges {
         //this.item = this.itemService.currentItemInsert;
 
 
-        if(this.item.ItemSections.length === 0) {
+        if (this.item.ItemSections.length === 0) {
             const _temp = new ItemSectionInsert(0, null, null, null, null, []);
             this.item.ItemSections.push(_temp);
-            
+
         }
         this.refreshDataSource(this.item.ItemSections);
 
         this.currentIndex = this.item.ItemSections.length - 1;
 
-        
+
         this.itemService.getPartItemList().subscribe(
             (itemlist: ItemList[]) => {
                 this.itemlist = itemlist;
                 const _temp = new ItemList(null, 'New Item', null, null, null, null, null);
-                this.itemlist.splice(0,0,_temp);
+                this.itemlist.splice(0, 0, _temp);
 
             },
             (error: any) => this.errorMessage = <any>error
-        );        
+        );
     }
     addPendingLine(): void {
         const _temp = new ItemSectionInsert(0, null, null, null, null, []);
         this.item.ItemSections.push(_temp);
     }
 
-    refreshDataSource(partgroups: ItemSectionInsert[]) { 
+    refreshDataSource(partgroups: ItemSectionInsert[]) {
         this.dataSource = new MatTableDataSource<ItemSectionInsert>(partgroups);
     }
 
@@ -103,20 +103,19 @@ export class ItemAddPartSectionComponent implements OnInit, OnChanges {
 
         //this.onChangeFOBPrice(itemPart);
         if (this.existName(itemPart.Name)) {
-            this.itemService.sendNotification({ type: 'error', title: 'Error', content: "Section name exists.  Please choose another." });
+            this.itemService.sendNotification({ type: 'error', title: 'Error', content: 'Section name exists.  Please choose another.' });
             return;
         }
 
-        if (this.isRequirementValid(itemPart)) { 
-            
+        if (this.isRequirementValid(itemPart)) {
+
                 this.pendingAdd = true;
                 const _temp = new ItemSectionInsert(0, null, null, null, this.item.ItemSections.length + 1, []);
                 this.item.ItemSections.push(_temp);
-                this.refreshDataSource(this.item.ItemSections);   
+                this.refreshDataSource(this.item.ItemSections);
                 this.pendingChange = false;
-        }
-        else {
-            this.itemService.sendNotification({ type: 'error', title: 'Error', content: "Please choose a name." });
+        } else {
+            this.itemService.sendNotification({ type: 'error', title: 'Error', content: 'Please choose a name.' });
         }
     }
 
@@ -124,8 +123,7 @@ export class ItemAddPartSectionComponent implements OnInit, OnChanges {
         if (itemPart
             && itemPart.Name) {
             return true;
-        } 
-        else {
+        } else {
             return false;
         }
     }
@@ -134,58 +132,54 @@ export class ItemAddPartSectionComponent implements OnInit, OnChanges {
         if (this.pendingChange) {
             return;
         }
-        
+
         if (this.existName(section.Name)) {
-            this.itemService.sendNotification({ type: 'error', title: 'Error', content: "Section name exists.  Please choose another." });
+            this.itemService.sendNotification({ type: 'error', title: 'Error', content: 'Section name exists.  Please choose another.' });
             section.Name = '';
         }
-        
+
     }
 
-    existName(name: string, isNew: boolean = false){
-        var counter: number = 0;
+    existName(name: string, isNew: boolean = false) {
+        let counter: number = 0;
         this.item.ItemSections.forEach((value, index) => {
                 if (value.Name === name) {
                     counter += 1;
                 }
             }
         );
-        if(counter > 1) { return true; }
-        else { return false; }
+        if (counter > 1) { return true; } else { return false; }
     }
 
-    existItemID(itemID: number, isNew: boolean = false){
-        var counter: number = 0;
+    existItemID(itemID: number, isNew: boolean = false) {
+        let counter: number = 0;
         this.item.ItemSections.forEach((value, index) => {
-                if(value.ItemID === itemID) { 
-                    if(isNew || index != this.item.ItemSections.length - 1) {
-                        counter += 1; 
+                if (value.ItemID === itemID) {
+                    if (isNew || index != this.item.ItemSections.length - 1) {
+                        counter += 1;
                     }
                 }
             }
         );
-        if(counter > 1) { return true; }
-        else { return false; }
+        if (counter > 1) { return true; } else { return false; }
     }
 
     onEditItemPartGroup(index: number) {
-        
+
         if (index !== this.item.ItemSections.length - 1) {
             this.itemService.currentItemPartSelectionInsert.next(this.item.ItemSections[index]);
-        }
-        else {
+        } else {
             this.itemService.currentItemPartSelectionInsert.next(null);
         }
-        this.refreshDataSource(this.item.ItemSections)
-        if(this.pendingAdd) {
+        this.refreshDataSource(this.item.ItemSections);
+        if (this.pendingAdd) {
             this.pendingAdd = false;
-        }
-        else {
+        } else {
             this.currentIndex = index;
-        }    
+        }
      }
 
-    
+
 
     moveDownPosition(itemPart: ItemPartInsert) {
         this.positionMove(this.item.ItemSections, itemPart, 1);
@@ -199,7 +193,7 @@ export class ItemAddPartSectionComponent implements OnInit, OnChanges {
     moveUpPosition(itemPart: ItemSectionInsert) {
         this.positionMove(this.item.ItemSections, itemPart, -1);
         this.item.ItemSections.forEach((value, index) => {
-            value.Position = index + 1;                        
+            value.Position = index + 1;
         });
 
         this.refreshDataSource(this.item.ItemSections);
@@ -209,7 +203,7 @@ export class ItemAddPartSectionComponent implements OnInit, OnChanges {
         const index = array.indexOf(element);
         const newIndex = index + delta;
         if (newIndex < 0  || newIndex === array.length) { return; } // Already at the top or bottom.
-        const indexes = [index, newIndex].sort((a,b)=>a-b); // Sort the indixes
+        const indexes = [index, newIndex].sort((a, b) => a - b); // Sort the indixes
         array.splice(indexes[0], 2, array[indexes[1]], array[indexes[0]]); // Replace from lowest index, two elements, reverting the order
     }
 
@@ -225,12 +219,12 @@ export class ItemAddPartSectionComponent implements OnInit, OnChanges {
         }
     }
     clearFields(ItemPartInsert: ItemSectionInsert) {
-        
+
         ItemPartInsert.Name = null;
         ItemPartInsert.ImageFilePath = null;
         ItemPartInsert.ImageRaw = null;
         ItemPartInsert = null;
-        
+
         this.formDirty = false;
     }
 
@@ -243,14 +237,14 @@ export class ItemAddPartSectionComponent implements OnInit, OnChanges {
 
         this.uploadFiles(itemPart);
     }
-    
+
     uploadFiles(itemPart: ItemPartInsert) {
         if (this.filesToUpload.length > 0) {
             this.pendingUpload = true;
             this.isLoadingData = true;
             const formData: FormData = new FormData();
             for (let i = 0; i < this.filesToUpload.length; i++) {
-                var reader = new FileReader();
+                let reader = new FileReader();
                 formData.append('uploadedFiles', this.filesToUpload[i], this.filesToUpload[i].name);
             }
 

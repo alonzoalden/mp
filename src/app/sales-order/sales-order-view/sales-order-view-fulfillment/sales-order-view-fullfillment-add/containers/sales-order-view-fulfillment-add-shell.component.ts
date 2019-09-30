@@ -21,12 +21,12 @@ export class SalesOrderFulfillmentAddShellComponent implements OnInit {
     fulfillmentSalesOrderLinesMatTable$: Observable<MatTableDataSource<FulfillmentSalesOrderLine>>;
 
     constructor(private store: Store<fromSalesOrder.State>) { }
-    
+
     ngOnInit() {
         this.salesOrder$ = this.store.pipe(select(fromSalesOrder.getSalesOrder));
         this.fulfillment$ = this.store.pipe(select(fromSalesOrder.getFulfilledByFulfillment));
         this.fulfillmentSalesOrderLinesMatTable$ = this.store.pipe(select(fromSalesOrder.getFulfillmentSalesOrderLinesMatTable));
-        this.isLoading$ = this.store.pipe(select(fromSalesOrder.getIsLoading))
+        this.isLoading$ = this.store.pipe(select(fromSalesOrder.getIsLoading));
         this.errorMessage$ = this.store.pipe(select(fromSalesOrder.getError));
     }
     addFulfillment(payload: Fulfillment) {

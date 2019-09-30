@@ -23,7 +23,7 @@ import {
     MatIconModule,
     MatInputModule,
     MatListModule,
-    MatMenuModule,   
+    MatMenuModule,
     MatNativeDateModule,
     MatPaginatorModule,
     MatProgressBarModule,
@@ -81,7 +81,7 @@ import { UserEffects } from './shared/state/user-state.effects';
 export function HttpLoaderFactory(http: HttpClient) {
     return new TranslateHttpLoader(http);
   }
-  
+
 @NgModule({
     declarations: [
         AppComponent,

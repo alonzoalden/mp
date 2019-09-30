@@ -27,9 +27,9 @@ const SALESORDER_ROUTES: Routes = [
             {
                 path: ':fulfilledby/status/:status',
                 component: SalesOrderListShellComponent,
-                pathMatch: 'full'            
+                pathMatch: 'full'
             },
-            
+
             // {
             //     path: ':fulfilledby/:id/detail',
             //     component: SalesOrderDetailComponent
@@ -70,7 +70,7 @@ const SALESORDER_ROUTES: Routes = [
                 ]
             },
         ]
-    },    
+    },
 ];
 
 export const salesorderRouting = RouterModule.forChild(SALESORDER_ROUTES);

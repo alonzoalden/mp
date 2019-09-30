@@ -1,14 +1,10 @@
-import { Component, OnInit, OnDestroy, ViewChild, Inject } from '@angular/core';
-import { Router, ActivatedRoute } from '@angular/router';
-import { MatTableDataSource, MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material';
-import { Subscription } from 'rxjs';
-
-import { Item, ItemList, ItemImage } from '../../../../../shared/class/item';
+import { Component, OnInit } from '@angular/core';
+import { ActivatedRoute } from '@angular/router';
+import { MatTableDataSource } from '@angular/material';
+import { Item, ItemImage } from '../../../../../shared/class/item';
 import { ItemService } from '../../../../item.service';
-
 import { environment } from '../../../../../../environments/environment';
-
-declare var $ :any;
+declare var $: any;
 
 @Component({
     selector: 'o-item-part-edit-image',
@@ -17,26 +13,21 @@ declare var $ :any;
 
 export class ItemPartEditImageComponent implements OnInit {
     private imageURL = environment.imageURL;
-
     errorMessage: string;
     item: Item;
     itemid: number;
-
     displayedColumns = ['Add', 'Down', 'Position', 'Up', 'Thumbnail', 'Label', 'IsBaseImage', 'IsSmallImage', 'IsThumbnail', 'IsRotatorImage', 'Exclude', 'Remove'];
     dataSource: any = null;
     pendingAdd: boolean;
     currentIndex: number;
-
     formDirty = false;
-
     filesToUpload: Array<File> = [];
     selectedFileNames: string[] = [];
     res: Array<string>;
-
     pendingUpload: boolean;
     public isLoadingData: Boolean = false;
     public isLoadingMultipleData: Boolean = false;
-    
+
     constructor(private route: ActivatedRoute,
         private itemService: ItemService) { }
 
@@ -49,7 +40,7 @@ export class ItemPartEditImageComponent implements OnInit {
 
         this.itemService.getCurrentItemEdit(this.itemid).subscribe(
             (item: Item) => {
-                
+
                 this.itemService.currentItemEdit = item;
                 this.item = this.itemService.currentItemEdit;
                 this.initialize();
@@ -62,9 +53,9 @@ export class ItemPartEditImageComponent implements OnInit {
         if (this.itemService.currentItemEdit.ItemImages === null) {
             this.itemService.getItemImages(this.itemid).subscribe(
                 (itemImages: ItemImage[]) => {
-                    this.item.ItemImages = itemImages;                    
-                    this.addPendingLine();         
-                    
+                    this.item.ItemImages = itemImages;
+                    this.addPendingLine();
+
                     this.currentIndex = this.item.ItemImages.length - 1;
 
                     this.refreshDataSource(this.item.ItemImages);
@@ -73,7 +64,7 @@ export class ItemPartEditImageComponent implements OnInit {
             );
         } else {
             this.removePendingLine();
-            this.addPendingLine();               
+            this.addPendingLine();
 
             this.currentIndex = this.item.ItemImages.length - 1;
 
@@ -83,15 +74,15 @@ export class ItemPartEditImageComponent implements OnInit {
 
     addPendingLine() {
         const _temp = new ItemImage(0, this.itemid, null, null, null,  this.item.ItemImages.length + 1, false, false, false, false, false, false, null, null, true, true);
-        
-        if(this.item.ItemImages.length === 0) {
+
+        if (this.item.ItemImages.length === 0) {
             _temp.IsBaseImage = true;
             _temp.IsSmallImage = true;
             _temp.IsThumbnail = true;
             _temp.IsRotatorImage = true;
         }
 
-        this.item.ItemImages.push(_temp);   
+        this.item.ItemImages.push(_temp);
     }
 
     removePendingLine() {
@@ -101,30 +92,28 @@ export class ItemPartEditImageComponent implements OnInit {
         }
     }
 
-    refreshDataSource(itemImages: ItemImage[]) { 
+    refreshDataSource(itemImages: ItemImage[]) {
         this.dataSource = new MatTableDataSource<ItemImage>(itemImages);
     }
 
     onAddItemImage(itemImage: ItemImage) {
-        if (this.isRequirementValid(itemImage)) {      
+        if (this.isRequirementValid(itemImage)) {
             this.pendingAdd = true;
-            
-            itemImage.pendingAdd = false; 
+
+            itemImage.pendingAdd = false;
 
             this.addPendingLine();
             this.refreshDataSource(this.item.ItemImages);
-        }
-        else {
-            this.itemService.sendNotification({ type: 'error', title: 'Error', content: "Please select an Image" });
+        } else {
+            this.itemService.sendNotification({ type: 'error', title: 'Error', content: 'Please select an Image' });
         }
     }
 
     onEditItemImage(index: number) {
-        if(this.pendingAdd) {
+        if (this.pendingAdd) {
             this.currentIndex = this.item.ItemImages.length - 1;
             this.pendingAdd = false;
-        }
-        else {
+        } else {
             this.currentIndex = index;
         }
     }
@@ -133,8 +122,7 @@ export class ItemPartEditImageComponent implements OnInit {
         if (itemImage
             && itemImage.Raw) {
             return true;
-        } 
-        else {
+        } else {
             return false;
         }
     }
@@ -151,7 +139,7 @@ export class ItemPartEditImageComponent implements OnInit {
     moveUpPosition(itemImage: ItemImage) {
         this.positionMove(this.item.ItemImages, itemImage, -1);
         this.item.ItemImages.forEach((value, index) => {
-            value.Position = index + 1;                        
+            value.Position = index + 1;
         });
 
         this.refreshDataSource(this.item.ItemImages);
@@ -161,13 +149,13 @@ export class ItemPartEditImageComponent implements OnInit {
         const index = array.indexOf(element);
         const newIndex = index + delta;
         if (newIndex < 0  || newIndex === array.length) { return; } // Already at the top or bottom.
-        const indexes = [index, newIndex].sort((a,b)=>a-b); // Sort the indixes
+        const indexes = [index, newIndex].sort((a, b) => a - b); // Sort the indixes
         array.splice(indexes[0], 2, array[indexes[1]], array[indexes[0]]); // Replace from lowest index, two elements, reverting the order
     }
 
     isBaseImageClick(image: ItemImage, index: number) {
         this.item.ItemImages.forEach((value, i) => {
-            if(i != index) {
+            if (i != index) {
                 value.IsBaseImage = false;
             }
         });
@@ -176,7 +164,7 @@ export class ItemPartEditImageComponent implements OnInit {
 
     isSmallImageClick(image: ItemImage, index: number) {
         this.item.ItemImages.forEach((value, i) => {
-            if(i != index) {
+            if (i != index) {
                 value.IsSmallImage = false;
             }
         });
@@ -185,7 +173,7 @@ export class ItemPartEditImageComponent implements OnInit {
 
     isThumbnailClick(image: ItemImage, index: number) {
         this.item.ItemImages.forEach((value, i) => {
-            if(i != index) {
+            if (i != index) {
                 value.IsThumbnail = false;
             }
         });
@@ -194,7 +182,7 @@ export class ItemPartEditImageComponent implements OnInit {
 
     isRotatorImageClick(image: ItemImage, index: number) {
         this.item.ItemImages.forEach((value, i) => {
-            if(i != index) {
+            if (i != index) {
                 value.IsRotatorImage = false;
             }
         });
@@ -207,7 +195,7 @@ export class ItemPartEditImageComponent implements OnInit {
             const foundIndex = this.item.ItemImages.findIndex(i => i.Position === itemImage.Position);
             if (foundIndex > -1) {
                 this.item.ItemImages.splice(foundIndex, 1);
-            }            
+            }
             this.refreshDataSource(this.item.ItemImages);
         }
     }
@@ -228,7 +216,7 @@ export class ItemPartEditImageComponent implements OnInit {
             this.isLoadingData = true;
             const formData: FormData = new FormData();
             for (let i = 0; i < this.filesToUpload.length; i++) {
-                var reader = new FileReader();
+                let reader = new FileReader();
                 formData.append('uploadedFiles', this.filesToUpload[i], this.filesToUpload[i].name);
             }
 
@@ -273,12 +261,12 @@ export class ItemPartEditImageComponent implements OnInit {
         form.IsThumbnail = null;
         form.IsSmallImage = null;
         form.ItemID = null;
-        $( "#isBaseImage, #isSmallImage, #isThumbnail, #isRotatorImage" ).prop( "checked", false );
+        $( '#isBaseImage, #isSmallImage, #isThumbnail, #isRotatorImage' ).prop( 'checked', false );
     }
     clickInputEvents() {
-        $('#isBaseImage')
-        $('#isSmallImage')
-        $('#isThumbnail')
-        $('#isRotatorImage')
+        $('#isBaseImage');
+        $('#isSmallImage');
+        $('#isThumbnail');
+        $('#isRotatorImage');
     }
 }

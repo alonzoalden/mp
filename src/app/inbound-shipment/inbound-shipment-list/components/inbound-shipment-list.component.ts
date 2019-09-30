@@ -45,8 +45,7 @@ export class InboundShipmentListComponent implements OnInit, OnChanges {
             if (this.userInfo.DefaultPageSize) {
                 this.purchaseOrdersMatTable.paginator.pageSize = this.userInfo.DefaultPageSize;
                 this.paginator.pageSize = this.userInfo.DefaultPageSize;
-            }
-            else {
+            } else {
                 this.paginator.pageSize = 100;
             }
         }

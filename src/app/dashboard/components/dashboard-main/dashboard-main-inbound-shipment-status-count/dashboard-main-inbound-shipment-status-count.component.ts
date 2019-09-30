@@ -1,4 +1,4 @@
-import { Component, ViewChild, OnInit, Input, Output, EventEmitter } from '@angular/core';
+import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 import { MatTableDataSource } from '@angular/material';
 import { InboundShipmentStatusCount } from '../../../../shared/class/dashboard';
 import { growContainerAnimation } from '../smooth-open-animation.component';
@@ -21,7 +21,7 @@ export class DashboardMainInboundShipmentStatusCountComponent implements OnInit 
     displayedColumns = ['Status', 'Count'];
     @Input() inboundShipmentStatusCountsMatTable: MatTableDataSource<InboundShipmentStatusCount>;
     @Input() errorMessage: string;
-    @Output() getInboundShipmentStatusCounts = new EventEmitter<void>()
+    @Output() getInboundShipmentStatusCounts = new EventEmitter<void>();
 
     constructor() { }
 

@@ -1,8 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { MatTableDataSource } from '@angular/material';
 import { ItemInsert, ItemVideoInsert } from '../../../../shared/class/item';
-import { ItemService } from '../../../item.service';
-import { URLVideo } from '../../../../shared/class/item-video';
 import { Observable } from 'rxjs';
 import { Store, select } from '@ngrx/store';
 import * as itemActions from '../../../state/item.actions';

@@ -6,10 +6,10 @@ export interface SettingState {
     memberVendors: MemberVendor[];
     currentMemberID: number;
     isLoading: boolean;
-    pendingDelete: boolean,
-    pendingSave: boolean,
+    pendingDelete: boolean;
+    pendingSave: boolean;
     error: string;
-};
+}
 
 const initialState: SettingState = {
     memberVendors: [],

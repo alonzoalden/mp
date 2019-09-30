@@ -22,9 +22,9 @@ export class SalesOrderListShellComponent implements OnInit {
         this.userInfo$ = this.store.pipe(select(fromUser.getCurrentUser));
         this.salesOrdersMatTable$ = this.store.pipe(select(fromSalesOrder.getSalesOrdersListMatTable));
         this.errorMessage$ = this.store.pipe(select(fromSalesOrder.getError));
-        setTimeout(()=> {
+        setTimeout(() => {
             this.isLoading$ = this.store.pipe(select(fromSalesOrder.getIsLoading));
-        })
+        });
     }
     getSalesOrderByVendor(payload: {fulfilledby: string, status: string} ) {
         this.store.dispatch(new salesOrderActions.LoadSalesOrders(payload));

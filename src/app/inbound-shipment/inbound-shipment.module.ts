@@ -6,7 +6,6 @@ import { MatMomentDateModule, MAT_MOMENT_DATE_ADAPTER_OPTIONS } from '@angular/m
 import { CdkTableModule } from '@angular/cdk/table';
 import { ToolModule } from '../shared/tool/tool.module';
 import { NgSelectModule } from '@ng-select/ng-select';
-
 import { InboundShipmentComponent } from './inbound-shipment.component';
 import { InboundShipmentListComponent } from './inbound-shipment-list/components/inbound-shipment-list.component';
 import { InboundShipmentEditComponent, InboundShipmentEditComponentItemPrintDialog } from './inbound-shipment-edit/components/inbound-shipment-edit.component';
@@ -44,7 +43,7 @@ import { ItemService } from '../item/item.service';
         InboundShipmentEditComponentItemPrintDialog,
         InboundShipmentEditCartonListComponentCartonPrintDialog,
         InboundShipmentEditCartonListComponentCartonLineDialog,
-        InboundShipmentEditLineComponentItemPrintDialog,        
+        InboundShipmentEditLineComponentItemPrintDialog,
         InboundShipmentEditShippingInstructionComponentCartonPrintDialog,
         InboundShipmentListShellComponent,
         InboundShipmentListShellComponent,
@@ -53,7 +52,7 @@ import { ItemService } from '../item/item.service';
         InboundShipmentEditCartonShellComponent,
         InboundShipmentEditShippingInstructionShellComponent,
         InboundShipmentEditShippingShellComponent,
-    ],    
+    ],
     entryComponents: [InboundShipmentEditCartonListComponent
         , InboundShipmentEditLineListComponent
         , InboundShipmentEditComponentItemPrintDialog

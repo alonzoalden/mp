@@ -19,7 +19,7 @@ export class AdminMemberListShellComponent implements OnInit  {
     errorMessage$: Observable<string>;
 
     constructor(private store: Store<fromAdmin.State>) { }
-    
+
     ngOnInit() {
         this.membersMatTable$ = this.store.pipe(select(fromAdmin.getMembersMatTable));
         this.userInfo$ = this.store.pipe(select(fromUser.getCurrentUser));

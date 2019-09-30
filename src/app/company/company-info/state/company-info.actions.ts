@@ -128,15 +128,15 @@ export type CompanyInfoActions = LoadVendorBrands
   | LoadCompanyInfoSuccess
   | LoadCompanyInfoFail
   | UpdateCompanyInfoShippingAddress
-  | UpdateCompanyInfoShippingAddressSuccess 
+  | UpdateCompanyInfoShippingAddressSuccess
   | UpdateCompanyInfoShippingAddressFail
   | UpdateCompanyInfoBillingAddress
-  | UpdateCompanyInfoBillingAddressSuccess 
+  | UpdateCompanyInfoBillingAddressSuccess
   | UpdateCompanyInfoBillingAddressFail;
-  
-  
-  
-  
-  
-  
+
+
+
+
+
+
 

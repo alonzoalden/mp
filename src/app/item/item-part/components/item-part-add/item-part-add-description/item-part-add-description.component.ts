@@ -7,7 +7,7 @@ import { VendorBrand } from '../../../../../shared/class/vendor-brand';
 import { ItemService } from '../../../../item.service';
 import { AppService } from '../../../../../app.service';
 
-declare var $ :any;
+declare var $: any;
 
 @Component({
   selector: 'o-item-part-add-description',
@@ -17,9 +17,9 @@ declare var $ :any;
 export class ItemPartAddDescriptionComponent implements OnInit, AfterViewInit {
     errorMessage: string;
     isPM: boolean;
-    
+
     item: ItemInsert;
-    vendorBrandList: VendorBrand[]; 
+    vendorBrandList: VendorBrand[];
 
     constructor(private itemService: ItemService, private appService: AppService) { }
 
@@ -31,9 +31,9 @@ export class ItemPartAddDescriptionComponent implements OnInit, AfterViewInit {
                 this.vendorBrandList = vendorBrands;
             },
             (error: any) => {
-                this.errorMessage = <any>error;                
+                this.errorMessage = <any>error;
             }
-        ); 
+        );
 
         this.appService.getCurrentMember().subscribe(
             (data) => {
@@ -47,20 +47,20 @@ export class ItemPartAddDescriptionComponent implements OnInit, AfterViewInit {
     }
 
     ngAfterViewInit() {
-        var self = this;
+        let self = this;
 
         $('.summernote').summernote( {
             height: 300,
             tabsize: 2,
             toolbar: [
-                ["style",["style"]],
-                ["font",["bold","underline","clear"]],
-                ["fontname",["fontname"]],
-                ["color",["color"]],
-                ["para",["ul","ol","paragraph"]],
-                ["table",["table"]],
-                ["insert",["link","picture","video"]],
-                ["view",["help"]]
+                ['style', ['style']],
+                ['font', ['bold', 'underline', 'clear']],
+                ['fontname', ['fontname']],
+                ['color', ['color']],
+                ['para', ['ul', 'ol', 'paragraph']],
+                ['table', ['table']],
+                ['insert', ['link', 'picture', 'video']],
+                ['view', ['help']]
             ],
             callbacks: {
                 onBlur: function() {
@@ -76,27 +76,27 @@ export class ItemPartAddDescriptionComponent implements OnInit, AfterViewInit {
     }
 
     onTextEditorBlur(id: string) {
-        switch(id) { 
-            case "Description": { 
+        switch (id) {
+            case 'Description': {
                 this.item.Description = $('#itemDescriptionId').summernote('code');
-                break; 
-            } 
-            case "ShortDescription": { 
+                break;
+            }
+            case 'ShortDescription': {
                 this.item.ShortDescription = $('#itemShortDescriptionId').summernote('code');
-                break; 
-            } 
-            case "TechnicalDetail": {
+                break;
+            }
+            case 'TechnicalDetail': {
                 this.item.TechnicalDetail = $('#itemTechnicalDetailId').summernote('code');
-                break;    
-            } 
-            case "AdditionalInformation": { 
+                break;
+            }
+            case 'AdditionalInformation': {
                 this.item.AdditionalInformation = $('#itemAdditionalInformationId').summernote('code');
-                break; 
-            }  
-            default: { 
-               console.log("Invalid choice"); 
-               break;              
-            } 
+                break;
+            }
+            default: {
+               console.log('Invalid choice');
+               break;
+            }
          }
     }
 

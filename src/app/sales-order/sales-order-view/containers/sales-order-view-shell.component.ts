@@ -7,7 +7,7 @@ import { Observable } from 'rxjs';
 
 @Component({
   templateUrl: './sales-order-view-shell.component.html',
-  styleUrls: ['../../sales-order.component.css'] 
+  styleUrls: ['../../sales-order.component.css']
 })
 
 export class SalesOrderViewShellComponent implements OnInit {

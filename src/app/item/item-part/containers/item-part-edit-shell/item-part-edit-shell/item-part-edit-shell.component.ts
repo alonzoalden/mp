@@ -1,13 +1,10 @@
-import { Component, ViewChild, OnInit, OnDestroy } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Subscription } from 'rxjs';
-
 import { Item, ItemSelection } from '../../../../../shared/class/item';
 import { VendorBrand } from '../../../../../shared/class/vendor-brand';
-
 import { ItemService } from '../../../../item.service';
 import { AppService } from '../../../../../app.service';
-
 import { environment } from '../../../../../../environments/environment';
 
 @Component({
@@ -16,19 +13,16 @@ import { environment } from '../../../../../../environments/environment';
 
 export class ItemPartEditShellComponent implements OnInit, OnDestroy {
     private subscription: Subscription;
-    
+
     private originalItem: Item;
     private currentItem: Item;
     itemName: string;
     isPM: boolean;
-    
     errorMessage: string;
     pendingSave: boolean;
-    
     loading: boolean;
+    vendorBrandList: VendorBrand[];
 
-    vendorBrandList: VendorBrand[]; 
-    
     private dataIsValid: { [key: string]: boolean } = {};
 
     constructor(private route: ActivatedRoute,
@@ -38,7 +32,7 @@ export class ItemPartEditShellComponent implements OnInit, OnDestroy {
 
     ngOnInit() {
         const param = this.route.snapshot.params['id'];
-        
+
         this.loading = true;
 
         this.subscription = this.itemService.getItem(param).subscribe(
@@ -52,7 +46,7 @@ export class ItemPartEditShellComponent implements OnInit, OnDestroy {
             error => {
                 this.loading = false;
                 this.itemService.sendNotification({ type: 'error', title: 'Error', content: this.errorMessage });
-                this.router.navigate(['/item']);                
+                this.router.navigate(['/item']);
             }
         );
 
@@ -61,9 +55,9 @@ export class ItemPartEditShellComponent implements OnInit, OnDestroy {
                 this.vendorBrandList = vendorBrands;
             },
             (error: any) => {
-                this.errorMessage = <any>error;                
+                this.errorMessage = <any>error;
             }
-        ); 
+        );
 
         this.appService.getCurrentMember().subscribe(
             (data) => {
@@ -98,7 +92,7 @@ export class ItemPartEditShellComponent implements OnInit, OnDestroy {
     }
 
     saveItem(displayPreview: boolean = false, printLabel: boolean = false): void {
-        if(this.isItemNameValid() && this.isSKUValid() && this.isSubmitValid()) {
+        if (this.isItemNameValid() && this.isSKUValid() && this.isSubmitValid()) {
             //if (this.isValid(null) && this.isShippingFeeValid() && this.isBundleValid()) {
             if (this.isValid(null) && this.isBundleValid()) {
                 this.pendingSave = true;
@@ -132,7 +126,7 @@ export class ItemPartEditShellComponent implements OnInit, OnDestroy {
                     });
                 }
 
-                if(newItem.ItemCrossSells) {
+                if (newItem.ItemCrossSells) {
                     const pendingItemCrossSellIndex = newItem.ItemCrossSells.findIndex(i => i.pendingAdd === true);
                     if (pendingItemCrossSellIndex > -1) {
                         newItem.ItemCrossSells.splice(pendingItemCrossSellIndex, 1);
@@ -142,7 +136,7 @@ export class ItemPartEditShellComponent implements OnInit, OnDestroy {
                     });
                 }
 
-                if(newItem.ItemAttachments) {
+                if (newItem.ItemAttachments) {
                     const pendingItemAttachmentIndex = newItem.ItemAttachments.findIndex(i => i.pendingAdd === true);
                     if (pendingItemAttachmentIndex > -1) {
                         newItem.ItemAttachments.splice(pendingItemAttachmentIndex, 1);
@@ -151,8 +145,8 @@ export class ItemPartEditShellComponent implements OnInit, OnDestroy {
                         value.Position = i + 1;
                     });
                 }
-                
-                if(newItem.ItemVideos) {
+
+                if (newItem.ItemVideos) {
                     const pendingItemVideoIndex = newItem.ItemVideos.findIndex(i => i.pendingAdd === true);
                     if (pendingItemVideoIndex > -1) {
                         newItem.ItemVideos.splice(pendingItemVideoIndex, 1);
@@ -162,7 +156,7 @@ export class ItemPartEditShellComponent implements OnInit, OnDestroy {
                     });
                 }
 
-                if(newItem.ItemImages) {
+                if (newItem.ItemImages) {
                     const pendingItemImageIndex = newItem.ItemImages.findIndex(i => i.pendingAdd === true);
                     if (pendingItemImageIndex > -1) {
                         newItem.ItemImages.splice(pendingItemImageIndex, 1);
@@ -172,7 +166,7 @@ export class ItemPartEditShellComponent implements OnInit, OnDestroy {
                     });
                 }
 
-                if(newItem.ItemOptions) {
+                if (newItem.ItemOptions) {
                     const pendingItemOptionIndex = newItem.ItemOptions.findIndex(i => i.pendingAdd === true);
                     if (pendingItemOptionIndex > -1) {
                         newItem.ItemOptions.splice(pendingItemOptionIndex, 1);
@@ -180,7 +174,7 @@ export class ItemPartEditShellComponent implements OnInit, OnDestroy {
                     newItem.ItemOptions.forEach((value, i) => {
                         value.Position = i + 1;
 
-                        if(value.ItemSelections) {
+                        if (value.ItemSelections) {
                             const pendingItemSelectionIndex = value.ItemSelections.findIndex(i => i.pendingAdd === true);
                             if (pendingItemSelectionIndex > -1) {
                                 value.ItemSelections.splice(pendingItemSelectionIndex, 1);
@@ -193,7 +187,7 @@ export class ItemPartEditShellComponent implements OnInit, OnDestroy {
                     });
                 }
 
-                if(newItem.ItemSections) {
+                if (newItem.ItemSections) {
                     const pendingItemSectionIndex = newItem.ItemSections.findIndex(i => i.pendingAdd === true);
                     if (pendingItemSectionIndex > -1) {
                         newItem.ItemSections.splice(pendingItemSectionIndex, 1);
@@ -201,7 +195,7 @@ export class ItemPartEditShellComponent implements OnInit, OnDestroy {
                     if (newItem.ItemSections) {
                         newItem.ItemSections.forEach((value, i) => {
                             value.Position = i + 1;
-                            
+
                             if (value.ItemParts) {
                                 const pendingItemPartIndex = value.ItemParts.findIndex(i => i.pendingAdd === true);
                                 if (pendingItemPartIndex > -1) {
@@ -217,16 +211,16 @@ export class ItemPartEditShellComponent implements OnInit, OnDestroy {
 
 
                 if (newItem.FulfilledBy === 'Toolots') {
-                    newItem.MerchantQuantity = 0;                    
-                }            
-                if (!this.isPM && newItem.Approval != "Pending") {
-                    newItem.Approval = "NotSubmitted";                    
+                    newItem.MerchantQuantity = 0;
                 }
-                if(newItem.Visibility == 'NotVisibleIndivisually') {
-                    newItem.Approval = "Approved";
+                if (!this.isPM && newItem.Approval != 'Pending') {
+                    newItem.Approval = 'NotSubmitted';
+                }
+                if (newItem.Visibility == 'NotVisibleIndivisually') {
+                    newItem.Approval = 'Approved';
                 }
 
-                this.loading = true;            
+                this.loading = true;
                 this.itemService.editItem(newItem).subscribe(
                     (updatedItem: Item) => {
                         this.pendingSave = false;
@@ -246,14 +240,14 @@ export class ItemPartEditShellComponent implements OnInit, OnDestroy {
                         this.item.MerchantQtyOnOrder = updatedItem.MerchantQtyOnOrder;
 
                         this.originalItem = this.item;
-                        
-                        this.onSaveComplete(`${this.item.Name} was saved`);                                               
 
-                        if(displayPreview) {
-                            window.open(environment.previewURL + this.item.ItemID + "/options/portal", "_blank");
+                        this.onSaveComplete(`${this.item.Name} was saved`);
+
+                        if (displayPreview) {
+                            window.open(environment.previewURL + this.item.ItemID + '/options/portal', '_blank');
                         }
 
-                        if(printLabel) {
+                        if (printLabel) {
                             this.onPrintLabel();
                         }
                     },
@@ -270,51 +264,50 @@ export class ItemPartEditShellComponent implements OnInit, OnDestroy {
     }
 
     onSaveComplete(message?: string): void {
-        if(this.itemService.getCurrentItems()){
+        if (this.itemService.getCurrentItems()) {
             const foundItem = this.itemService.getCurrentItems().find(i => i.ItemID === this.item.ItemID);
 
-            if(this.item.ItemImages)
-            {
+            if (this.item.ItemImages) {
                 const newImagePath = this.item.ItemImages.find(img => img.IsThumbnail && !img.Exclude && !img.Remove);
-                foundItem.ImagePath = newImagePath ? newImagePath.FilePath : null;  
+                foundItem.ImagePath = newImagePath ? newImagePath.FilePath : null;
             }
-           switch(this.item.Approval) {
-                case "NotSubmitted": { 
-                    foundItem.Approval = "Not Submitted"
-                    break; 
-                 } 
-                 case "NotApproved": { 
-                    foundItem.Approval = "Not Approved"
-                    break; 
-                 } 
-                 default: { 
-                    foundItem.Approval = this.item.Approval
-                    break; 
-                 } 
+           switch (this.item.Approval) {
+                case 'NotSubmitted': {
+                    foundItem.Approval = 'Not Submitted';
+                    break;
+                 }
+                 case 'NotApproved': {
+                    foundItem.Approval = 'Not Approved';
+                    break;
+                 }
+                 default: {
+                    foundItem.Approval = this.item.Approval;
+                    break;
+                 }
             }
-            switch(this.item.Visibility) {
-                case "NotVisibleIndivisually": { 
-                    foundItem.Visibility = "Not Visible Individually"
-                    break; 
-                 } 
-                 case "CatalogAndSearch": { 
-                    foundItem.Visibility = "Catalog, Search"
-                    break; 
-                 } 
-                 default: { 
-                    foundItem.Visibility = this.item.Visibility
-                    break; 
-                 } 
+            switch (this.item.Visibility) {
+                case 'NotVisibleIndivisually': {
+                    foundItem.Visibility = 'Not Visible Individually';
+                    break;
+                 }
+                 case 'CatalogAndSearch': {
+                    foundItem.Visibility = 'Catalog, Search';
+                    break;
+                 }
+                 default: {
+                    foundItem.Visibility = this.item.Visibility;
+                    break;
+                 }
             }
             foundItem.Price = this.item.Price;
             foundItem.MerchantQuantity = this.item.MerchantQuantity;
 
             foundItem.QtyAvailable = this.item.QtyAvailable;
             foundItem.MerchantQtyAvailable = this.item.MerchantQtyAvailable;
-            
+
             foundItem.Name = this.item.Name;
             foundItem.VendorSKU = this.item.VendorSKU;
-            
+
             this.itemService.replaceItem(this.item.ItemID, foundItem);
         }
 
@@ -341,75 +334,66 @@ export class ItemPartEditShellComponent implements OnInit, OnDestroy {
             Object.keys(this.dataIsValid).every(d => this.dataIsValid[d] === true));
     }
     isShippingFeeValid(): boolean {
-        if(this.item.FulfilledBy === 'Toolots' || this.item.IsFreeShipping) {            
+        if (this.item.FulfilledBy === 'Toolots' || this.item.IsFreeShipping) {
             return true;
-        }
-        else {
+        } else {
             return (this.item.ShippingFee && this.item.ShippingFee > 0);
-        }        
+        }
     }
     isShipWithinDaysValid(): boolean {
-        if(this.item.FulfilledBy === 'Toolots') {
+        if (this.item.FulfilledBy === 'Toolots') {
             return true;
-        }
-        else {
+        } else {
             return (this.item.ShipWithinDays && this.item.ShipWithinDays >= 0);
         }
     }
-    isItemNameValid(): boolean {      
-        if(this.item.VendorBrandID) {
-            if(this.item.Name.toLowerCase().includes(this.vendorBrandList.find(x => x.VendorBrandID == Number(this.item.VendorBrandID)).BrandName.toLowerCase())) {
+    isItemNameValid(): boolean {
+        if (this.item.VendorBrandID) {
+            if (this.item.Name.toLowerCase().includes(this.vendorBrandList.find(x => x.VendorBrandID == Number(this.item.VendorBrandID)).BrandName.toLowerCase())) {
                 this.itemService.sendNotification({ type: 'error', title: 'Invalid Entry', content: '"Brand" should not be included in "Item Name"' });
-                return false;    
-            }
-            else {
+                return false;
+            } else {
                 return true;
-            }            
-        }  
-        else {
+            }
+        } else {
             return true;
         }
     }
-    isSKUValid(): boolean { 
-        var regex = /^[\w\-]*$/g;
-        
-        if(regex.test(this.item.VendorSKU)) {
+    isSKUValid(): boolean {
+        let regex = /^[\w\-]*$/g;
+
+        if (regex.test(this.item.VendorSKU)) {
             return true;
-        }
-        else {
-            this.itemService.sendNotification({ type: 'error', title: 'Invalid Entry', content: 'SKU must be a comination of alphanumeric characters (space not allowed)' });                
+        } else {
+            this.itemService.sendNotification({ type: 'error', title: 'Invalid Entry', content: 'SKU must be a comination of alphanumeric characters (space not allowed)' });
             return false;
         }
     }
-    isSubmitValid(): boolean {      
-        if(this.originalItem.Approval != "Pending" && this.item.Approval == "Pending" && this.item.ItemImages.filter(x => !x.pendingAdd).length < 1) {
+    isSubmitValid(): boolean {
+        if (this.originalItem.Approval != 'Pending' && this.item.Approval == 'Pending' && this.item.ItemImages.filter(x => !x.pendingAdd).length < 1) {
             this.itemService.sendNotification({ type: 'error', title: 'Invalid Entry', content: 'An image is required' });
-            return false;    
-        }
-        else {
+            return false;
+        } else {
             return true;
-        }      
+        }
     }
     isBundleValid(): boolean {
-        if (this.item.ItemType == "bundle") {
-            var _ret = true;
-            this.item.ItemOptions.forEach((option, index) => {              
-                if(!option.pendingAdd)
-                {
+        if (this.item.ItemType == 'bundle') {
+            let _ret = true;
+            this.item.ItemOptions.forEach((option, index) => {
+                if (!option.pendingAdd) {
                     if ( !option.ItemSelections || ( option.ItemSelections && option.ItemSelections.filter(
                             (selection: ItemSelection) => selection.ItemID
                         ).length === 0 )
                     ) {
                         this.itemService.sendNotification({ type: 'error', title: 'Invalid Entry', content: 'Selection is required for a Bundle Option "' + option.Title + '"' });
                         _ret = false;
-                    }                                                
+                    }
                 }
-            });    
+            });
 
             return _ret;
-        }
-        else
-        {
+        } else {
             return true;
         }
     }
@@ -467,7 +451,7 @@ export class ItemPartEditShellComponent implements OnInit, OnDestroy {
     }
 
     validateDimension() {
-        return (this.item.ItemType != "simple" || (
+        return (this.item.ItemType != 'simple' || (
             this.item.ProductDimensionUOM &&
             this.item.Width &&
             this.item.Height &&

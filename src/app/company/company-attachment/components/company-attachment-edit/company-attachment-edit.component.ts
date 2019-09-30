@@ -12,7 +12,7 @@ import { VendorAttachment } from '../../../../shared/class/vendor-attachment';
 export class CompanyAttachmentEditComponent implements OnChanges {
     filesToUpload: Array<File> = [];
     selectedFileNames: string[] = [];
-    title: string; 
+    title: string;
     @Input() vendorAttachmentsMatTable: MatTableDataSource<VendorAttachment>;
     @Input() vendorAttachment: VendorAttachment;
     @Input() pendingUpload: boolean = false;
@@ -30,8 +30,7 @@ export class CompanyAttachmentEditComponent implements OnChanges {
         if (changes.vendorAttachment) {
             if (changes.vendorAttachment.currentValue) {
                 this.selectedFileNames.push(changes.vendorAttachment.currentValue.UploadedFile);
-            }
-            else if (!changes.vendorAttachment.currentValue && changes.vendorAttachment.firstChange) {
+            } else if (!changes.vendorAttachment.currentValue && changes.vendorAttachment.firstChange) {
                 this.getCurrentVendorAttachment.emit(this.route.snapshot.params['id']);
             }
         }
@@ -48,8 +47,7 @@ export class CompanyAttachmentEditComponent implements OnChanges {
     upload() {
         if (this.selectedFileNames.length === 0) {
             this.companyService.sendNotification({ type: 'error', title: 'Invalid Upload', content: 'Please select at least 1 files to upload!' });
-        }
-        else {
+        } else {
             this.uploadFiles();
         }
     }
@@ -67,8 +65,7 @@ export class CompanyAttachmentEditComponent implements OnChanges {
                     title: this.vendorAttachment.Title,
                     exclude: this.vendorAttachment.Exclude
                 });
-        }
-        else {
+        } else {
             this.editVendorAttachment.emit(this.vendorAttachment);
         }
     }

@@ -4,8 +4,7 @@ import { Observable } from 'rxjs';
 import { Store, select } from '@ngrx/store';
 import * as itemActions from '../../../state/item.actions';
 import * as fromItem from '../../../state';
-import { Item, ItemInsert, ItemList, ItemOption, ItemSelection, ItemOptionInsert, ItemSelectionInsert } from '../../../../shared/class/item';
-
+import { Item, ItemInsert, ItemList, ItemOptionInsert, ItemSelectionInsert } from '../../../../shared/class/item';
 
 @Component({
   templateUrl: './item-edit-bundle-shell.component.html'
@@ -20,7 +19,7 @@ export class ItemEditBundleShellComponent implements OnInit {
     errorMessage$: Observable<string>;
 
     constructor(private store: Store<fromItem.State>) { }
-   
+
     ngOnInit(): void {
         this.item$ = this.store.pipe(select(fromItem.getItem));
         this.itemList$ = this.store.pipe(select(fromItem.getItemList));
@@ -35,5 +34,5 @@ export class ItemEditBundleShellComponent implements OnInit {
     setSelectedBundleOption(option: number) {
         this.store.dispatch(new itemActions.SetSelectedBundleOption(option));
     }
-    
+
 }

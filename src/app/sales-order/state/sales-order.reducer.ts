@@ -15,10 +15,10 @@ export interface SalesOrderState {
     currentSalesOrderID: number;
     isLoading: boolean;
     isSalesOrderLinesLoading: boolean;
-    pendingDelete: boolean,
-    pendingSave: boolean,
+    pendingDelete: boolean;
+    pendingSave: boolean;
     error: string;
-};
+}
 
 const initialState: SalesOrderState = {
     salesOrders: [],
@@ -179,13 +179,13 @@ export function salesOrderReducer(state = initialState, action: SalesOrderAction
                 isLoading: false,
                 error: action.payload,
             };
-            
+
         case SalesOrderActionTypes.CancelSalesOrderLines:
             return {
                 ...state,
                 pendingDelete: true,
             };
-            
+
         case SalesOrderActionTypes.CancelSalesOrderLinesSuccess:
             return {
                 ...state,

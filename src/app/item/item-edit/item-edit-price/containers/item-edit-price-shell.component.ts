@@ -23,7 +23,7 @@ export class ItemEditPriceShellComponent implements OnInit {
     itemTierPricesMatTable$: Observable<MatTableDataSource<ItemTierPrice | ItemTierPriceInsert>>;
 
     constructor(private store: Store<fromItem.State>) { }
-    
+
     ngOnInit(): void {
         this.item$ = this.store.pipe(select(fromItem.getItem));
         this.itemTierPricesMatTable$ = this.store.pipe(select(fromItem.getItemTierPricesMatTable));

@@ -49,7 +49,7 @@ export enum SalesOrderActionTypes {
   EditFulfillmentSuccess  = '[Sales Order] Edit Fulfillment Success',
   EditFulfillmentFail  = '[Sales Order] Edit Fulfillment Fail',
 
-  
+
   // EditCurrentMember = '[Admin] Edit Current Member',
   // EditCurrentMemberSuccess = '[Admin] Edit Current Member Success',
   // EditCurrentMemberFail = '[Admin] Edit Current Member Fail',

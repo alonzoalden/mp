@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { ItemInsert, Item, ItemCategoryAssignment } from '../../../../shared/class/item';
+import { ItemInsert, ItemCategoryAssignment } from '../../../../shared/class/item';
 import { Category } from '../../../../shared/class/category';
 import { Observable } from 'rxjs';
 import { Store, select } from '@ngrx/store';
@@ -16,7 +16,7 @@ export class ItemEditCategoryShellComponent implements OnInit {
     categoryAssignments$: Observable<ItemCategoryAssignment[]>;
     currentResult$: Observable<Array<Category[]>>;
     errorMessage$: Observable<string>;
-    
+
     constructor(private store: Store<fromItem.State>) { }
 
     ngOnInit(): void {
@@ -35,5 +35,5 @@ export class ItemEditCategoryShellComponent implements OnInit {
     getItemCategoryAssignments(id: number) {
         this.store.dispatch(new itemActions.LoadItemCategoryAssignments(id));
     }
-    
+
 }

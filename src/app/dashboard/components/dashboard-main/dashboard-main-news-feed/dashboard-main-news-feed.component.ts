@@ -18,7 +18,7 @@ import { trigger, transition, useAnimation } from '@angular/animations';
 export class DashboardMainNewsFeedComponent implements OnChanges {
     @Input() dashboardNews: DashboardNews[];
     @Input() errorMessage: string;
-    
+
     displayedColumns = ['Subject', 'News', 'CreatedOn'];
     newsDisplay: DashboardNews;
 

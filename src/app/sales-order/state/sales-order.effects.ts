@@ -19,7 +19,7 @@ export class SalesOrderEffects {
         private actions$: Actions) { }
 
 
-        
+
     @Effect()
     loadSalesOrders$: Observable<Action> = this.actions$.pipe(
         ofType(salesOrderActions.SalesOrderActionTypes.LoadSalesOrders),
@@ -28,7 +28,7 @@ export class SalesOrderEffects {
             this.salesOrderService.getSalesOrderByVendor(payload.fulfilledby, payload.status).pipe(
                 map((members: SalesOrder[]) => (new salesOrderActions.LoadSalesOrdersSuccess(members))),
                 catchError(err => {
-                    of(new salesOrderActions.LoadSalesOrdersFail(err))
+                    of(new salesOrderActions.LoadSalesOrdersFail(err));
                     return EMPTY;
                 })
             )
@@ -42,7 +42,7 @@ export class SalesOrderEffects {
             this.salesOrderService.getFulfilledBySalesOrder(payload.orderid, payload.fulfilledby).pipe(
                 map((salesorder: SalesOrder) => (new salesOrderActions.LoadSalesOrderSuccess(salesorder))),
                 catchError(err => {
-                    of(new salesOrderActions.LoadSalesOrderFail(err))
+                    of(new salesOrderActions.LoadSalesOrderFail(err));
                     return EMPTY;
                 })
             )
@@ -56,7 +56,7 @@ export class SalesOrderEffects {
             this.salesOrderService.getSalesOrderLineByVendor(payload.orderid, payload.fulfilledby).pipe(
                 map((salesorderlines: SalesOrderLine[]) => (new salesOrderActions.LoadSalesOrderLinesSuccess(salesorderlines))),
                 catchError(err => {
-                    of(new salesOrderActions.LoadSalesOrderLinesFail(err))
+                    of(new salesOrderActions.LoadSalesOrderLinesFail(err));
                     return EMPTY;
                 })
             )
@@ -70,14 +70,14 @@ export class SalesOrderEffects {
             return this.salesOrderService.getFulfilledBySalesOrderDelivery(payload.orderid, payload.fulfilledby).pipe(
                 map((deliverydetail: string) => (new salesOrderActions.LoadFulfilledBySalesOrderDeliverySuccess(deliverydetail))),
                 catchError(err => {
-                    of(new salesOrderActions.LoadFulfilledBySalesOrderDeliveryFail(err))
+                    of(new salesOrderActions.LoadFulfilledBySalesOrderDeliveryFail(err));
                     return EMPTY;
                 })
-            )
+            );
         }
         )
     );
-    
+
     @Effect()
     getFulfilledByFulfillments$: Observable<Action> = this.actions$.pipe(
         ofType(salesOrderActions.SalesOrderActionTypes.LoadFulfilledByFulfillments),
@@ -86,10 +86,10 @@ export class SalesOrderEffects {
             return this.salesOrderService.getFulfilledByFulfillments(payload.orderid, payload.fulfilledby).pipe(
                 map((fullfillment: Fulfillment[]) => (new salesOrderActions.LoadFulfilledByFulfillmentsSuccess(fullfillment))),
                 catchError(err => {
-                    of(new salesOrderActions.LoadFulfilledByFulfillmentsFail(err))
+                    of(new salesOrderActions.LoadFulfilledByFulfillmentsFail(err));
                     return EMPTY;
                 })
-            )
+            );
         }
         )
     );
@@ -101,10 +101,10 @@ export class SalesOrderEffects {
             return this.salesOrderService.getFulfilledByFulfillment(payload.fulfillmentid, payload.fulfilledby).pipe(
                 map((fullfillment: Fulfillment) => (new salesOrderActions.LoadFulfilledByFulfillmentSuccess(fullfillment))),
                 catchError(err => {
-                    of(new salesOrderActions.LoadFulfilledByFulfillmentFail(err))
+                    of(new salesOrderActions.LoadFulfilledByFulfillmentFail(err));
                     return EMPTY;
                 })
-            )
+            );
         }
         )
     );
@@ -112,15 +112,15 @@ export class SalesOrderEffects {
     getFulfilmmentSalesOrderLines$: Observable<Action> = this.actions$.pipe(
         ofType(salesOrderActions.SalesOrderActionTypes.LoadFulfilmmentSalesOrderLines),
         map((action: salesOrderActions.LoadFulfilmmentSalesOrderLines) => action.payload),
-        mergeMap((payload) => 
+        mergeMap((payload) =>
             this.salesOrderService.getFulfilmmentSalesOrderLines(payload).pipe(
                 map((fullfillments: FulfillmentSalesOrderLine[]) => (new salesOrderActions.LoadFulfilmmentSalesOrderLinesSuccess(fullfillments))),
                 catchError(err => {
-                    of(new salesOrderActions.LoadFulfilmmentSalesOrderLinesFail(err))
+                    of(new salesOrderActions.LoadFulfilmmentSalesOrderLinesFail(err));
                     return EMPTY;
                 })
             )
-        
+
         )
     );
 
@@ -132,17 +132,17 @@ export class SalesOrderEffects {
             this.salesOrderService.cancelSalesOrderLines(payload).pipe(
                 map((salesorderlines: SalesOrderLine[]) => {
                     this.salesOrderService.sendNotification({ type: 'success', title: 'Successfully Canceled' });
-                    return (new salesOrderActions.CancelSalesOrderLinesSuccess(salesorderlines))
+                    return (new salesOrderActions.CancelSalesOrderLinesSuccess(salesorderlines));
                 }),
                 catchError(err => {
                     this.salesOrderService.sendNotification({ type: 'error', title: 'Error', content: err });
-                    of(new salesOrderActions.CancelSalesOrderLinesFail(err))
+                    of(new salesOrderActions.CancelSalesOrderLinesFail(err));
                     return EMPTY;
                 })
             )
         )
     );
-    
+
     @Effect()
     addFulfillment$: Observable<Action> = this.actions$.pipe(
         ofType(salesOrderActions.SalesOrderActionTypes.AddFulfillment),
@@ -150,16 +150,16 @@ export class SalesOrderEffects {
         mergeMap((payload) =>
             this.salesOrderService.addFulfillment(payload).pipe(
                 map((fulfillment: Fulfillment) => {
-                    this.salesOrderService.sendNotification({ type: 'success', title: 'Save Completed', content: "" });
+                    this.salesOrderService.sendNotification({ type: 'success', title: 'Save Completed', content: '' });
                     //this.router.navigate(['/sales-order', 'view', this.fulfilledby,this.orderid,'fulfillment']);
                     //this.router.navigate(['/sales-order', 'view', 'merchant', this.orderid, 'detail']);
                     window.location.reload();
-                    
-                    return (new salesOrderActions.AddFulfillmentSuccess(fulfillment))
+
+                    return (new salesOrderActions.AddFulfillmentSuccess(fulfillment));
                 }),
                 catchError(err => {
                     this.salesOrderService.sendNotification({ type: 'error', title: 'Error', content: err });
-                    of(new salesOrderActions.AddFulfillmentFail(err))
+                    of(new salesOrderActions.AddFulfillmentFail(err));
                     return EMPTY;
                 })
             )
@@ -172,13 +172,13 @@ export class SalesOrderEffects {
         mergeMap((payload) =>
             this.salesOrderService.editFulfillment(payload).pipe(
                 map((fulfillment: Fulfillment) => {
-                    this.salesOrderService.sendNotification({ type: 'success', title: 'Save Completed', content: "" });
+                    this.salesOrderService.sendNotification({ type: 'success', title: 'Save Completed', content: '' });
                     window.location.reload();
-                    return (new salesOrderActions.EditFulfillmentSuccess(fulfillment))
+                    return (new salesOrderActions.EditFulfillmentSuccess(fulfillment));
                 }),
                 catchError(err => {
                     this.salesOrderService.sendNotification({ type: 'error', title: 'Error', content: err });
-                    of(new salesOrderActions.EditFulfillmentFail(err))
+                    of(new salesOrderActions.EditFulfillmentFail(err));
                     return EMPTY;
                 })
             )
@@ -192,11 +192,11 @@ export class SalesOrderEffects {
             this.salesOrderService.cancelSalesOrderLines(payload).pipe(
                 map((salesorderlines: SalesOrderLine[]) => {
                     this.salesOrderService.sendNotification({ type: 'success', title: 'Successfully Deleted' });
-                    return (new salesOrderActions.CancelSalesOrderLinesSuccess(salesorderlines))
+                    return (new salesOrderActions.CancelSalesOrderLinesSuccess(salesorderlines));
                 }),
                 catchError(err => {
                     this.salesOrderService.sendNotification({ type: 'error', title: 'Error', content: err });
-                    of(new salesOrderActions.CancelSalesOrderLinesFail(err))
+                    of(new salesOrderActions.CancelSalesOrderLinesFail(err));
                     return EMPTY;
                 })
             )
@@ -209,7 +209,7 @@ export class SalesOrderEffects {
         mergeMap((payload) =>
             this.salesOrderService.downloadSalesOrderPackingSlip(payload.OrderID).pipe(
                 map((data: any) => {
-                    console.log('huh', payload)
+                    console.log('huh', payload);
                     const blob = new Blob([data], {type: 'application/pdf'});
                     const blobUrl = URL.createObjectURL(blob);
                     if (window.navigator.msSaveOrOpenBlob) {
@@ -236,10 +236,10 @@ export class SalesOrderEffects {
                         document.body.removeChild(a);
                         URL.revokeObjectURL(fileURL);
                     }
-                    return (new salesOrderActions.DownloadSalesOrderPackingSlipSuccess(data))
+                    return (new salesOrderActions.DownloadSalesOrderPackingSlipSuccess(data));
                 }),
                 catchError(err => {
-                    of(new salesOrderActions.LoadSalesOrdersFail(err))
+                    of(new salesOrderActions.LoadSalesOrdersFail(err));
                     return EMPTY;
                 })
             )

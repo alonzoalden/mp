@@ -28,7 +28,7 @@ export class InboundShipmentListShellComponent implements OnInit {
         this.errorMessage$ = this.store.pipe(select(fromInboundShipment.getError));
         setTimeout(() => {
             this.isLoading$ = this.store.pipe(select(fromInboundShipment.getIsLoading));
-        })
+        });
     }
     addNewPurchaseOrder(): void {
         this.store.dispatch(new inboundShipmentActions.AddNewPurchaseOrder());
@@ -45,5 +45,5 @@ export class InboundShipmentListShellComponent implements OnInit {
     deletePurchaseOrder(purchaseorder: PurchaseOrder): void {
         this.store.dispatch(new inboundShipmentActions.DeletePurchaseOrder(purchaseorder));
     }
-    
+
 }

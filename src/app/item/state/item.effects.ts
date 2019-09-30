@@ -6,9 +6,8 @@ import { Actions, Effect, ofType } from '@ngrx/effects';
 import { ItemService } from '../item.service';
 import * as itemActions from './item.actions';
 import { Router } from '@angular/router';
-import { Member, MemberVendor } from 'app/shared/class/member';
 import { VendorBrand } from 'app/shared/class/vendor-brand';
-import { ItemList, Item, ItemCrossSellInsert, ItemUpSell, ItemUpSellInsert, ItemRelatedProduct, ItemRelatedProductInsert, ItemAttachmentInsert, ItemVideoInsert, ItemCategoryAssignment, ItemTierPrice, ItemBatch, ItemInsert, ItemCrossSell, ItemAttachment } from 'app/shared/class/item';
+import { ItemList, Item, ItemUpSell, ItemRelatedProduct, ItemVideoInsert, ItemCategoryAssignment, ItemTierPrice, ItemBatch, ItemInsert, ItemCrossSell, ItemAttachment } from 'app/shared/class/item';
 import { Category } from 'app/shared/class/category';
 import { VendorAttachment, VendorAttachmentList } from 'app/shared/class/vendor-attachment';
 import { URLVideo } from 'app/shared/class/item-video';
@@ -31,7 +30,7 @@ export class ItemEffects {
             this.itemService.getVendorBrands().pipe(
                 map((vendorbrands: VendorBrand[]) => (new itemActions.LoadVendorBrandsSuccess(vendorbrands))),
                 catchError(err => {
-                    of(new itemActions.LoadVendorBrandsFail(err))
+                    of(new itemActions.LoadVendorBrandsFail(err));
                     return EMPTY;
                 })
             )
@@ -45,7 +44,7 @@ export class ItemEffects {
             this.itemService.getSimpleItemList().pipe(
                 map((itemlists: ItemList[]) => (new itemActions.LoadSimpleItemListSuccess(itemlists))),
                 catchError(err => {
-                    of(new itemActions.LoadSimpleItemListFail(err))
+                    of(new itemActions.LoadSimpleItemListFail(err));
                     return EMPTY;
                 })
             )
@@ -59,7 +58,7 @@ export class ItemEffects {
             this.itemService.getCategories(id).pipe(
                 map((categories: Category[]) => (new itemActions.LoadItemCategoriesSuccess(categories))),
                 catchError(err => {
-                    of(new itemActions.LoadItemCategoriesFail(err))
+                    of(new itemActions.LoadItemCategoriesFail(err));
                     return EMPTY;
                 })
             )
@@ -73,13 +72,13 @@ export class ItemEffects {
             this.itemService.getCategoryBreadCrumbs(id).pipe(
                 map((categories: Category[]) => (new itemActions.LoadCategoryBreadCrumbsSuccess(categories))),
                 catchError(err => {
-                    of(new itemActions.LoadCategoryBreadCrumbsFail(err))
+                    of(new itemActions.LoadCategoryBreadCrumbsFail(err));
                     return EMPTY;
                 })
             )
         )
     );
-    
+
     @Effect()
     loadItemList$: Observable<Action> = this.actions$.pipe(
         ofType(itemActions.ItemActionTypes.LoadItemList),
@@ -87,7 +86,7 @@ export class ItemEffects {
             this.itemService.getItemList().pipe(
                 map((itemlist: ItemList[]) => (new itemActions.LoadItemListSuccess(itemlist))),
                 catchError(err => {
-                    of(new itemActions.LoadItemListFail(err))
+                    of(new itemActions.LoadItemListFail(err));
                     return EMPTY;
                 })
             )
@@ -102,7 +101,7 @@ export class ItemEffects {
             this.itemService.getAllItemList().pipe(
                 map((itemlist: ItemList[]) => (new itemActions.LoadAllItemListSuccess(itemlist))),
                 catchError(err => {
-                    of(new itemActions.LoadAllItemListFail(err))
+                    of(new itemActions.LoadAllItemListFail(err));
                     return EMPTY;
                 })
             )
@@ -122,11 +121,11 @@ export class ItemEffects {
                     itemcrosssell.CrossSellTPIN = item.TPIN;
                     itemcrosssell.ImagePath = item.ImagePath;
                     itemcrosssell.pendingAdd = false;
-                    return (new itemActions.LoadAllItemCrossSellSuccess(item))
+                    return (new itemActions.LoadAllItemCrossSellSuccess(item));
                 }),
                 catchError(err => {
                     this.itemService.sendNotification({ type: 'error', title: 'Error', content: err });
-                    of(new itemActions.LoadAllItemCrossSellFail(err))
+                    of(new itemActions.LoadAllItemCrossSellFail(err));
                     return EMPTY;
                 })
             )
@@ -145,11 +144,11 @@ export class ItemEffects {
                     itemupsell.UpSellTPIN = item.TPIN;
                     itemupsell.ImagePath = item.ImagePath;
                     itemupsell.pendingAdd = false;
-                    return (new itemActions.LoadAllItemUpSellSuccess(item))
+                    return (new itemActions.LoadAllItemUpSellSuccess(item));
                 }),
                 catchError(err => {
                     this.itemService.sendNotification({ type: 'error', title: 'Error', content: err });
-                    of(new itemActions.LoadAllItemUpSellFail(err))
+                    of(new itemActions.LoadAllItemUpSellFail(err));
                     return EMPTY;
                 })
             )
@@ -168,11 +167,11 @@ export class ItemEffects {
                     itemrelatedproduct.RelatedTPIN = item.TPIN;
                     itemrelatedproduct.ImagePath = item.ImagePath;
                     itemrelatedproduct.pendingAdd = false;
-                    return (new itemActions.LoadItemRelatedProductSuccess(item))
+                    return (new itemActions.LoadItemRelatedProductSuccess(item));
                 }),
                 catchError(err => {
                     this.itemService.sendNotification({ type: 'error', title: 'Error', content: err });
-                    of(new itemActions.LoadItemRelatedProductFail(err))
+                    of(new itemActions.LoadItemRelatedProductFail(err));
                     return EMPTY;
                 })
             )
@@ -186,7 +185,7 @@ export class ItemEffects {
                 map((item: VendorAttachmentList[]) => (new itemActions.LoadVendorAttachmentListSuccess(item))),
                 catchError(err => {
                     this.itemService.sendNotification({ type: 'error', title: 'Error', content: err });
-                    of(new itemActions.LoadVendorAttachmentListFail(err))
+                    of(new itemActions.LoadVendorAttachmentListFail(err));
                     return EMPTY;
                 })
             )
@@ -205,11 +204,11 @@ export class ItemEffects {
                     }
                     itemattachment.UploadedFile = attachment.UploadedFile;
                     itemattachment.pendingAdd = false;
-                    return (new itemActions.LoadItemAttachmentSuccess(attachment))
+                    return (new itemActions.LoadItemAttachmentSuccess(attachment));
                 }),
                 catchError(err => {
                     this.itemService.sendNotification({ type: 'error', title: 'Error', content: err });
-                    of(new itemActions.LoadItemAttachmentFail(err))
+                    of(new itemActions.LoadItemAttachmentFail(err));
                     return EMPTY;
                 })
             )
@@ -222,32 +221,31 @@ export class ItemEffects {
         mergeMap((itemvideo: ItemVideoInsert) =>
             this.itemService.getVideoURLDetail(itemvideo.Value).pipe(
                 map((urlvideo: URLVideo) => {
-                    if(urlvideo.items[0].snippet.thumbnails.standard) {
+                    if (urlvideo.items[0].snippet.thumbnails.standard) {
                         itemvideo.Thumbnail = urlvideo.items[0].snippet.thumbnails.standard.url;
-                    }
-                    else if(urlvideo.items[0].snippet.thumbnails.medium) {
+                    } else if (urlvideo.items[0].snippet.thumbnails.medium) {
                         itemvideo.Thumbnail = urlvideo.items[0].snippet.thumbnails.medium.url;
                     }
                     itemvideo.Provider = 'youtube';
-                    if(!itemvideo.Label || itemvideo.Label == '') {
+                    if (!itemvideo.Label || itemvideo.Label == '') {
                         itemvideo.Label = urlvideo.items[0].snippet.title;
                     }
                     itemvideo.Description = urlvideo.items[0].snippet.description;
-                    return (new itemActions.LoadVideoURLDetailSuccess(urlvideo))
+                    return (new itemActions.LoadVideoURLDetailSuccess(urlvideo));
                 }),
                 catchError(err => {
-                    itemvideo.Value = "";
-                    itemvideo.URL = "";
-                    itemvideo.Description = "";
-                    itemvideo.Thumbnail = "";
+                    itemvideo.Value = '';
+                    itemvideo.URL = '';
+                    itemvideo.Description = '';
+                    itemvideo.Thumbnail = '';
                     this.itemService.sendNotification({ type: 'error', title: 'Error', content: err });
-                    of(new itemActions.LoadVideoURLDetailFail(err))
+                    of(new itemActions.LoadVideoURLDetailFail(err));
                     return EMPTY;
                 })
             )
         )
     );
-    
+
     @Effect()
     loadItemCategoryAssignments$: Observable<Action> = this.actions$.pipe(
         ofType(itemActions.ItemActionTypes.LoadItemCategoryAssignments),
@@ -257,7 +255,7 @@ export class ItemEffects {
                 map((categoryassignments: ItemCategoryAssignment[]) =>  (new itemActions.LoadItemCategoryAssignmentsSuccess(categoryassignments))),
                 catchError(err => {
                     this.itemService.sendNotification({ type: 'error', title: 'Error', content: err });
-                    of(new itemActions.LoadItemCategoryAssignmentsFail(err))
+                    of(new itemActions.LoadItemCategoryAssignmentsFail(err));
                     return EMPTY;
                 })
             )
@@ -273,7 +271,7 @@ export class ItemEffects {
                 map((tierprices: ItemTierPrice[]) =>  (new itemActions.LoadItemTierPricesSuccess(tierprices))),
                 catchError(err => {
                     this.itemService.sendNotification({ type: 'error', title: 'Error', content: err });
-                    of(new itemActions.LoadItemTierPricesFail(err))
+                    of(new itemActions.LoadItemTierPricesFail(err));
                     return EMPTY;
                 })
             )
@@ -288,14 +286,14 @@ export class ItemEffects {
                 map((itembatch: ItemBatch[]) =>  (new itemActions.LoadPendingItemsSuccess(itembatch))),
                 catchError(err => {
                     this.itemService.sendNotification({ type: 'error', title: 'Error', content: err });
-                    of(new itemActions.LoadItemTierPricesFail(err))
+                    of(new itemActions.LoadItemTierPricesFail(err));
                     return EMPTY;
                 })
             )
         )
     );
 
-    
+
 
     @Effect()
     loadItem$: Observable<Action> = this.actions$.pipe(
@@ -306,7 +304,7 @@ export class ItemEffects {
                 map((item: Item) =>  (new itemActions.LoadItemSuccess(item))),
                 catchError(err => {
                     this.itemService.sendNotification({ type: 'error', title: 'Error', content: err });
-                    of(new itemActions.LoadItemFail(err))
+                    of(new itemActions.LoadItemFail(err));
                     return EMPTY;
                 })
             )
@@ -321,15 +319,15 @@ export class ItemEffects {
                 map((items: Item[]) =>  (new itemActions.LoadRefreshItemsSuccess(items))),
                 catchError(err => {
                     this.itemService.sendNotification({ type: 'error', title: 'Error', content: err });
-                    of(new itemActions.LoadRefreshItemsFail(err))
+                    of(new itemActions.LoadRefreshItemsFail(err));
                     return EMPTY;
                 })
             )
         )
     );
 
-    
-    
+
+
 
     @Effect()
     loadItemBatchItems$: Observable<Action> = this.actions$.pipe(
@@ -339,13 +337,13 @@ export class ItemEffects {
                 map((item: Item[]) =>  (new itemActions.LoadItemBatchItemsSuccess(item))),
                 catchError(err => {
                     this.itemService.sendNotification({ type: 'error', title: 'Error', content: err });
-                    of(new itemActions.LoadItemBatchItemsFail(err))
+                    of(new itemActions.LoadItemBatchItemsFail(err));
                     return EMPTY;
                 })
             )
         )
     );
-    
+
     @Effect()
     loadItemBatchUpdate$: Observable<Action> = this.actions$.pipe(
         ofType(itemActions.ItemActionTypes.LoadItemBatchUpdate),
@@ -354,13 +352,13 @@ export class ItemEffects {
                 map((batchupdates: BatchUpdate[]) =>  (new itemActions.LoadItemBatchUpdateSuccess(batchupdates))),
                 catchError(err => {
                     this.itemService.sendNotification({ type: 'error', title: 'Error', content: err });
-                    of(new itemActions.LoadItemBatchUpdateFail(err))
+                    of(new itemActions.LoadItemBatchUpdateFail(err));
                     return EMPTY;
                 })
             )
         )
     );
-    
+
 
     @Effect()
     editItemBatch$: Observable<Action> = this.actions$.pipe(
@@ -371,7 +369,7 @@ export class ItemEffects {
                 map((item: ItemBatch[]) => (new itemActions.EditItemBatchSuccess(item))),
                 catchError(err => {
                     this.itemService.sendNotification({ type: 'error', title: 'Error', content: err });
-                    of(new itemActions.EditItemBatchFail(err))
+                    of(new itemActions.EditItemBatchFail(err));
                     return EMPTY;
                 })
             )
@@ -386,21 +384,21 @@ export class ItemEffects {
             this.itemService.editItemBatchUpdate(payload).pipe(
                 map((item: BatchUpdateValue[]) => {
                     this.itemService.sendNotification({ type: 'success', title: 'Successfully Updated', content: '' });
-                    this.router.navigate(['item','batchupdate','select']);
-                    this.itemService.resetItems()
+                    this.router.navigate(['item', 'batchupdate', 'select']);
+                    this.itemService.resetItems();
                     this.store.dispatch(new itemActions.LoadItemBatchItems());
-                    return (new itemActions.EditItemBatchUpdateSuccess(item))
+                    return (new itemActions.EditItemBatchUpdateSuccess(item));
                 }),
                 catchError(err => {
                     this.itemService.sendNotification({ type: 'error', title: 'Error', content: err });
-                    of(new itemActions.EditItemBatchUpdateFail(err))
+                    of(new itemActions.EditItemBatchUpdateFail(err));
                     return EMPTY;
                 })
             )
         )
     );
 
-    
+
     @Effect()
     addItem$: Observable<Action> = this.actions$.pipe(
         ofType(itemActions.ItemActionTypes.AddItem),
@@ -410,11 +408,11 @@ export class ItemEffects {
                 map((item: Item) => {
                     this.itemService.sendNotification({ type: 'success', title: 'Successfully Updated', content: `${item.Name} was saved` });
                     this.router.navigate(['/item']);
-                    return (new itemActions.AddItemSuccess(item))
+                    return (new itemActions.AddItemSuccess(item));
                 }),
                 catchError(err => {
                     this.itemService.sendNotification({ type: 'error', title: 'Error', content: err });
-                    of(new itemActions.AddItemFail(err))
+                    of(new itemActions.AddItemFail(err));
                     return EMPTY;
                 })
             )
@@ -431,17 +429,17 @@ export class ItemEffects {
                 map((item: Item) => {
                     this.itemService.sendNotification({ type: 'success', title: 'Successfully Updated', content: `${item.Name} was saved` });
                     if (payload.displayPreview) {
-                        window.open(environment.previewURL + item.ItemID + "/options/portal", "_blank");
+                        window.open(environment.previewURL + item.ItemID + '/options/portal', '_blank');
                     }
                     if (payload.printLabel) {
                         this.store.dispatch(new itemActions.DownloadItemLabel(item));
                     }
                     this.router.navigate(['/item']);
-                    return (new itemActions.EditItemSuccess(item))
+                    return (new itemActions.EditItemSuccess(item));
                 }),
                 catchError(err => {
                     this.itemService.sendNotification({ type: 'error', title: 'Error', content: err });
-                    of(new itemActions.EditItemFail(err))
+                    of(new itemActions.EditItemFail(err));
                     return EMPTY;
                 })
             )
@@ -456,11 +454,11 @@ export class ItemEffects {
             this.itemService.deleteItem(item.ItemID).pipe(
                 map(() => {
                     this.itemService.sendNotification({ type: 'success', title: 'Successfully Deleted', content: `${item.Name} was deleted` });
-                    return (new itemActions.DeleteItemSuccess(item.ItemID))
+                    return (new itemActions.DeleteItemSuccess(item.ItemID));
                 }),
                 catchError(err => {
                     this.itemService.sendNotification({ type: 'error', title: 'Error', content: err });
-                    of(new itemActions.DeleteItemFail(err))
+                    of(new itemActions.DeleteItemFail(err));
                     return EMPTY;
                 })
             )
@@ -501,11 +499,11 @@ export class ItemEffects {
                         URL.revokeObjectURL(fileURL);
                     }
 
-                    return (new itemActions.DownloadItemLabelSuccess(data))
+                    return (new itemActions.DownloadItemLabelSuccess(data));
                 }),
                 catchError(err => {
                     this.itemService.sendNotification({ type: 'error', title: 'Error', content: err });
-                    of(new itemActions.DownloadItemLabelFail(err))
+                    of(new itemActions.DownloadItemLabelFail(err));
                     return EMPTY;
                 })
             )
@@ -546,11 +544,11 @@ export class ItemEffects {
                         URL.revokeObjectURL(fileURL);
 
                     }
-                    return (new itemActions.DownloadItemLabelCountSuccess(data))
+                    return (new itemActions.DownloadItemLabelCountSuccess(data));
                 }),
                 catchError(err => {
                     this.itemService.sendNotification({ type: 'error', title: 'Error', content: err });
-                    of(new itemActions.DownloadItemLabelCountFail(err))
+                    of(new itemActions.DownloadItemLabelCountFail(err));
                     return EMPTY;
                 })
             )
@@ -591,11 +589,11 @@ export class ItemEffects {
                         URL.revokeObjectURL(fileURL);
 
                     }
-                    return (new itemActions.DownloadItemLargeLabelCountSuccess(data))
+                    return (new itemActions.DownloadItemLargeLabelCountSuccess(data));
                 }),
                 catchError(err => {
                     this.itemService.sendNotification({ type: 'error', title: 'Error', content: err });
-                    of(new itemActions.DownloadItemLargeLabelCountFail(err))
+                    of(new itemActions.DownloadItemLargeLabelCountFail(err));
                     return EMPTY;
                 })
             )
@@ -634,11 +632,11 @@ export class ItemEffects {
                         document.body.removeChild(a);
                         URL.revokeObjectURL(fileURL);
                     }
-                    return (new itemActions.DownloadItemLargeLabelCountSuccess(data))
+                    return (new itemActions.DownloadItemLargeLabelCountSuccess(data));
                 }),
                 catchError(err => {
                     this.itemService.sendNotification({ type: 'error', title: 'Error', content: err });
-                    of(new itemActions.DownloadItemLargeLabelCountFail(err))
+                    of(new itemActions.DownloadItemLargeLabelCountFail(err));
                     return EMPTY;
                 })
             )
@@ -669,7 +667,7 @@ export class ItemEffects {
                         const fileURL = window.URL.createObjectURL(blob);
                         const a: HTMLAnchorElement = document.createElement('a') as HTMLAnchorElement;
                         a.href = fileURL;
-                        a.download = String(Date.now());//this.datepipe.transform(date, 'yyyyMMddhhmmss');
+                        a.download = String(Date.now()); //this.datepipe.transform(date, 'yyyyMMddhhmmss');
                         document.body.appendChild(a);
                         a.target = '_blank';
                         a.click();
@@ -677,11 +675,11 @@ export class ItemEffects {
                         document.body.removeChild(a);
                         URL.revokeObjectURL(fileURL);
                     }
-                    return (new itemActions.DownloadItemLargeLabelCountSuccess(data))
+                    return (new itemActions.DownloadItemLargeLabelCountSuccess(data));
                 }),
                 catchError(err => {
                     this.itemService.sendNotification({ type: 'error', title: 'Error', content: err });
-                    of(new itemActions.DownloadItemLargeLabelCountFail(err))
+                    of(new itemActions.DownloadItemLargeLabelCountFail(err));
                     return EMPTY;
                 })
             )
@@ -712,7 +710,7 @@ export class ItemEffects {
                         const fileURL = window.URL.createObjectURL(blob);
                         const a: HTMLAnchorElement = document.createElement('a') as HTMLAnchorElement;
                         a.href = fileURL;
-                        a.download = String(Date.now());//this.datepipe.transform(date, 'yyyyMMddhhmmss');
+                        a.download = String(Date.now()); //this.datepipe.transform(date, 'yyyyMMddhhmmss');
                         document.body.appendChild(a);
                         a.target = '_blank';
                         a.click();
@@ -720,18 +718,18 @@ export class ItemEffects {
                         document.body.removeChild(a);
                         URL.revokeObjectURL(fileURL);
                     }
-                    return (new itemActions.DownloadItemLargeLabelCountSuccess(data))
+                    return (new itemActions.DownloadItemLargeLabelCountSuccess(data));
                 }),
                 catchError(err => {
                     this.itemService.sendNotification({ type: 'error', title: 'Error', content: err });
-                    of(new itemActions.DownloadItemLargeLabelCountFail(err))
+                    of(new itemActions.DownloadItemLargeLabelCountFail(err));
                     return EMPTY;
                 })
             )
         )
     );
-    
-    
+
+
 
 
 

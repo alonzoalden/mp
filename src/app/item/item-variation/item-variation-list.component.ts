@@ -1,11 +1,9 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { MatPaginator, MatSort, MatTableDataSource, MatDialog } from '@angular/material';
 import { Subscription } from 'rxjs';
-
 import { ItemVariationListing } from '../../shared/class/item';
-
 import { AppService } from '../../app.service';
-import { ItemService } from '../item.service'
+import { ItemService } from '../item.service';
 import { environment } from '../../../environments/environment';
 
 @Component({
@@ -16,7 +14,7 @@ import { environment } from '../../../environments/environment';
 export class ItemVariationListComponent implements OnInit {
     subscription: Subscription;
     errorMessage: string;
-    variationListings: ItemVariationListing[]; 
+    variationListings: ItemVariationListing[];
     displayedColumns = ['Menu', 'Name', 'ItemName', 'CreatedOn'];
     dataSource: any = null;
     attributesVariationsList: any[] = [];
@@ -29,15 +27,14 @@ export class ItemVariationListComponent implements OnInit {
         private itemService: ItemService,
         private appService: AppService) { }
 
-    ngOnInit(): void {   
+    ngOnInit(): void {
         this.appService.getCurrentMember()
             .subscribe(
                 (data) => {
                     if (data.DefaultPageSize) {
                         this.paginator.pageSize = data.DefaultPageSize;
-                    }
-                    else {
-                        this.paginator.pageSize = 100;                        
+                    } else {
+                        this.paginator.pageSize = 100;
                     }
                 },
                 (error: any) => {

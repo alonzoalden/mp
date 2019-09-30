@@ -14,7 +14,7 @@ export class ItemEditVideoShellComponent implements OnInit {
     errorMessage$: Observable<string>;
     item$: Observable<Item | ItemInsert>;
     itemVideosMatTable$: Observable<MatTableDataSource<ItemVideo | ItemVideoInsert>>;
-    
+
     constructor(private store: Store<fromItem.State>) { }
 
     ngOnInit(): void {

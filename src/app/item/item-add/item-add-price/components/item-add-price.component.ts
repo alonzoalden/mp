@@ -1,10 +1,6 @@
 import { Component, OnInit, ViewChild, Input, OnChanges, SimpleChanges } from '@angular/core';
-import { MatTableDataSource, MatSort, MatSortable } from '@angular/material';
-import { Router } from '@angular/router';
-import { Subscription } from 'rxjs';
-
+import { MatTableDataSource, MatSort } from '@angular/material';
 import { ItemInsert, ItemTierPriceInsert } from '../../../../shared/class/item';
-
 import { ItemService } from '../../../item.service';
 import { AppService } from '../../../../app.service';
 import { Member } from 'app/shared/class/member';
@@ -20,27 +16,27 @@ export class ItemAddPriceComponent implements OnInit, OnChanges {
     @Input() errorMessage: string;
     @Input() item: ItemInsert;
     @Input() itemTierPricesMatTable: MatTableDataSource<ItemTierPriceInsert>;
-    
+
     //isDropship: boolean;
 
     minDate = new Date(2000, 0, 1);
     maxDate = new Date(2020, 0, 1);
 
-    PendingAdd: boolean;   
+    PendingAdd: boolean;
     currentItemTierPriceIndex: number;
 
     displayedColumns = ['Add', 'Quantity', 'Price',  'Remove'];
-    
+
     dataSource: any = null;
     formDirty = false;
-    canAdd = false;    
+    canAdd = false;
     constructor(private itemService: ItemService, private appService: AppService) { }
 
     @ViewChild(MatSort, { static: false }) sort: MatSort;
 
     ngOnChanges(changes: SimpleChanges) {
         if (changes.item && changes.item.currentValue && changes.item.currentValue.ItemTierPrices.length === 0) {
-            if(changes.item.currentValue.ItemTierPrices.length === 0) {
+            if (changes.item.currentValue.ItemTierPrices.length === 0) {
                 this.PendingAdd = true;
                 const _temp = new ItemTierPriceInsert(0, 0, 0);
                 this.item.ItemTierPrices.push(_temp);
@@ -65,8 +61,8 @@ export class ItemAddPriceComponent implements OnInit, OnChanges {
         //         );
 
         //this.refreshItemTierPriceDataSource(this.item.ItemTierPrices);
-        
-        
+
+
         // if(this.item.ItemTierPrices.length === 0) {
         //     this.PendingAdd = true;
         //     const _temp = new ItemTierPriceInsert(0, 0, 0);
@@ -74,7 +70,7 @@ export class ItemAddPriceComponent implements OnInit, OnChanges {
         //     //this.refreshItemTierPriceDataSource(this.item.ItemTierPrices);
         // }
 
-        this.currentItemTierPriceIndex = this.item.ItemTierPrices.length - 1;        
+        this.currentItemTierPriceIndex = this.item.ItemTierPrices.length - 1;
     }
 
     refreshItemTierPriceDataSource(itemTierPrices: ItemTierPriceInsert[]) {
@@ -83,17 +79,16 @@ export class ItemAddPriceComponent implements OnInit, OnChanges {
     }
 
     onAddItemTierPrice(itemTierPrice: ItemTierPriceInsert) {
-        var counter: number = 0;
+        let counter: number = 0;
         this.item.ItemTierPrices.forEach((p) => {
-            if (p.Quantity === itemTierPrice.Quantity){
+            if (p.Quantity === itemTierPrice.Quantity) {
                 counter++;
             }
         });
 
         if (counter > 1) {
-            this.itemService.sendNotification({ type: 'error', title: 'Error', content: "Tier Pricing already exists for this Quantity" });            
-        }
-        else {
+            this.itemService.sendNotification({ type: 'error', title: 'Error', content: 'Tier Pricing already exists for this Quantity' });
+        } else {
             this.PendingAdd = true;
             const _temp = new ItemTierPriceInsert(null, null, null);
             this.item.ItemTierPrices.push(_temp);
@@ -102,13 +97,12 @@ export class ItemAddPriceComponent implements OnInit, OnChanges {
     }
 
     onEditItemTierPrice(index: number) {
-        if(this.PendingAdd) {
+        if (this.PendingAdd) {
             this.currentItemTierPriceIndex = this.item.ItemTierPrices.length - 1;
             this.PendingAdd = false;
-        }
-        else {
+        } else {
             this.currentItemTierPriceIndex = index;
-        }    
+        }
     }
 
     onRemoveItemTierPrice(index: number) {

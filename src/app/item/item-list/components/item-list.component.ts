@@ -39,7 +39,7 @@ export class ItemListComponent implements OnInit {
     duplicateItemAttachments: ItemAttachment[];
     duplicateItemVideos: ItemVideo[];
 
-    displayedColumns = ['Menu','ItemID','ProductDetails','FulfilledBy','Price','Quantity','MerchantQuantity','Approval','Visibility','UpdatedOn'];
+    displayedColumns = ['Menu', 'ItemID', 'ProductDetails', 'FulfilledBy', 'Price', 'Quantity', 'MerchantQuantity', 'Approval', 'Visibility', 'UpdatedOn'];
 
     @ViewChild(MatPaginator, { static: true }) paginator: MatPaginator;
     @ViewChild(MatSort, { static: true }) sort: MatSort;
@@ -62,8 +62,7 @@ export class ItemListComponent implements OnInit {
         if (changes.userInfo && changes.userInfo.currentValue) {
             if (this.userInfo.DefaultPageSize) {
                 this.paginator.pageSize = this.userInfo.DefaultPageSize;
-            }
-            else {
+            } else {
                 this.paginator.pageSize = 100;
             }
         }
@@ -84,13 +83,12 @@ export class ItemListComponent implements OnInit {
           width: '250px',
           data: item,
         });
-    
+
         dialogRef.afterClosed().subscribe(result => {
             if (result && result.Quantity > 0) {
-                if(result.Size === "small") {
+                if (result.Size === 'small') {
                     this.onPrintLabel(item, result.Quantity, result.Border);
-                }
-                else {
+                } else {
                     this.onPrintLargeLabel(item, result.Quantity, result.Border);
                 }
             }
@@ -99,23 +97,22 @@ export class ItemListComponent implements OnInit {
 
     openDialogImport() {
         const dialogRef = this.itemPrintDialog.open(ItemListComponentImportDialog, {
-            width: '320px', 
+            width: '320px',
             data: this.downloadItemLabelCount
           });
 
           dialogRef.afterClosed().subscribe(result => {
-            if(result)
-            {
+            if (result) {
                 this.loading = true;
                 this.refreshItems.emit();
             }
-            
+
           });
     }
 
     onPrintLabel(item: Item, count: number, border: string) {
         this.downloadItemLabelCount.emit({item: item, count: count, border: border});
-        
+
     }
 
     onPrintLargeLabel(item: Item, count: number, border: string) {
@@ -125,35 +122,34 @@ export class ItemListComponent implements OnInit {
     onRemove(item: Item, index: number) {
         this.currentIndex = index;
 
-        const confirmation = confirm(`Remove ${item.ItemID}: ${item.Name}?`);        
+        const confirmation = confirm(`Remove ${item.ItemID}: ${item.Name}?`);
         if (confirmation) {
             this.deleteItem.emit(item);
         }
     }
 
     onConvertToPart(item: Item) {
-        const confirmation = confirm(`${item.ItemID}: ${item.Name} -Selected Item will be converted as a part item. Would you like to continue?`);        
+        const confirmation = confirm(`${item.ItemID}: ${item.Name} -Selected Item will be converted as a part item. Would you like to continue?`);
         if (confirmation) {
-            
+
             this.loading = true;
 
             this.itemService.getItem(item.ItemID).subscribe(
                 (item: Item) => {
-                    this.selectedItem = item;                        
+                    this.selectedItem = item;
 
-                    if(this.isValidPart(this.selectedItem))
-                    {
+                    if (this.isValidPart(this.selectedItem)) {
                         this.selectedItem.IsPartItem = true;
                         // this.selectedItem.FulfilledBy = 'Toolots';
                         // this.selectedItem.ItemType = 'simple';
                         this.selectedItem.Visibility = 'Search';
-                        this.selectedItem.Approval = 'Approved';         
-                                    
+                        this.selectedItem.Approval = 'Approved';
+
                         this.itemService.editItem(this.selectedItem).subscribe(
                             () => {
-                                this.refresh();                                
+                                this.refresh();
                                 this.loading = false;
-                                this.itemService.sendNotification({ type: 'success', title: 'Successfully Updated', content: "Converted as a part item" });
+                                this.itemService.sendNotification({ type: 'success', title: 'Successfully Updated', content: 'Converted as a part item' });
                             },
                             (error: any) => {
                                 this.refresh();
@@ -161,10 +157,9 @@ export class ItemListComponent implements OnInit {
                                 this.itemService.sendNotification({ type: 'error', title: 'Error', content: this.errorMessage });
                             }
                         );
-                    }    
-                    else {
+                    } else {
                         this.loading = false;
-                    }  
+                    }
                 },
                 error => {
                     this.refresh();
@@ -173,20 +168,18 @@ export class ItemListComponent implements OnInit {
                 }
             );
 
-                  
+
         }
     }
 
-    isValidPart(item: Item) : boolean {
-        if(item.ItemType != 'simple') {
-            this.itemService.sendNotification({ type: 'error', title: 'Error', content: "Item must be a 'Simple' item" });
+    isValidPart(item: Item): boolean {
+        if (item.ItemType != 'simple') {
+            this.itemService.sendNotification({ type: 'error', title: 'Error', content: 'Item must be a \'Simple\' item' });
             return false;
-        }
-        else if (item.FulfilledBy != 'Toolots') {
-            this.itemService.sendNotification({ type: 'error', title: 'Error', content: "Item must be fulfilled by 'Toolots'" });
+        } else if (item.FulfilledBy != 'Toolots') {
+            this.itemService.sendNotification({ type: 'error', title: 'Error', content: 'Item must be fulfilled by \'Toolots\'' });
             return false;
-        }
-        else {
+        } else {
             return true;
         }
     }
@@ -198,34 +191,34 @@ export class ItemListComponent implements OnInit {
         this.itemService.getItemDuplicate(itemid).subscribe(
             (item: Item) => {
                 this.duplicateItemCategoryAssignments = item.ItemCategoryAssignments;
-                this.duplicateItemOptions = item.ItemOptions;                
-                const _pendingItemOption = new ItemOption(null, null, true, item.ItemOptions.length + 1, null, 'radio', null, null, [], true);                
-                this.duplicateItemOptions.forEach((itemOption) => {                    
-                    const _pendingItemSelection = new ItemSelection(null, null, null, null, null, null, itemOption.ItemSelections.length + 1, false, 0, 0, false, null, null, true); 
+                this.duplicateItemOptions = item.ItemOptions;
+                const _pendingItemOption = new ItemOption(null, null, true, item.ItemOptions.length + 1, null, 'radio', null, null, [], true);
+                this.duplicateItemOptions.forEach((itemOption) => {
+                    const _pendingItemSelection = new ItemSelection(null, null, null, null, null, null, itemOption.ItemSelections.length + 1, false, 0, 0, false, null, null, true);
                     if (itemOption.ItemSelections.length === 0) {
                         _pendingItemSelection.IsDefault = true;
-                    }       
+                    }
                     itemOption.ItemSelections.push(_pendingItemSelection);
-                });                
+                });
                 this.duplicateItemOptions.push(_pendingItemOption);
                 this.duplicateItemTierPrices = item.ItemTierPrices;
                 const _pendingItemTierPrice = new ItemTierPrice(0, null, 0, 0, null, null, true);
-                this.duplicateItemTierPrices.push(_pendingItemTierPrice);   
+                this.duplicateItemTierPrices.push(_pendingItemTierPrice);
                 this.duplicateItemRelatedProducts = item.ItemRelatedProducts;
                 const _pendingItemRelatedProduct = new ItemRelatedProduct(0, null, null, null, null, null, null, item.ItemRelatedProducts.length + 1, null, null, null, true);
-                this.duplicateItemRelatedProducts.push(_pendingItemRelatedProduct);   
+                this.duplicateItemRelatedProducts.push(_pendingItemRelatedProduct);
                 this.duplicateItemUpSells = item.ItemUpSells;
                 const _pendingItemUpSell = new ItemUpSell(0, null, null, null, null, null, null, item.ItemUpSells.length + 1, null, null, null, true);
-                this.duplicateItemUpSells.push(_pendingItemUpSell);   
+                this.duplicateItemUpSells.push(_pendingItemUpSell);
                 this.duplicateItemCrossSells = item.ItemCrossSells;
                 const _pendingItemCrossSell = new ItemCrossSell(0, null, null, null, null, null, null, item.ItemCrossSells.length + 1, null, null, null, true);
-                this.duplicateItemCrossSells.push(_pendingItemCrossSell);   
+                this.duplicateItemCrossSells.push(_pendingItemCrossSell);
                 this.duplicateItemAttachments = item.ItemAttachments;
                 const _pendingItemAttachment = new ItemAttachment(0, null, null, null, null, null, item.ItemCrossSells.length + 1, null, null, true);
-                this.duplicateItemAttachments.push(_pendingItemAttachment);   
+                this.duplicateItemAttachments.push(_pendingItemAttachment);
                 this.duplicateItemVideos = item.ItemVideos;
                 const _pendingItemVideo = new ItemVideo(0, null, null, null, null, null, null, item.ItemCrossSells.length + 1, null, null, null, null, null, true, true);
-                this.duplicateItemVideos.push(_pendingItemVideo);   
+                this.duplicateItemVideos.push(_pendingItemVideo);
 
                 this.duplicateItemInsert = new ItemInsert(item.Name, null, item.FulfilledBy, item.ItemType, item.MerchantQuantity, item.ShipWithinDays
                     , item.PriceType, item.Price, item.FOBPrice, item.DropshipPrice, item.SpecialPrice, item.SpecialFrom
@@ -235,11 +228,11 @@ export class ItemListComponent implements OnInit {
                     , item.AdditionalInformation, item.VendorBrandID, item.Approval, item.IsPartItem, item.PartImageRaw, item.PartImageFilePath, item.PartIsNewImage, item.ExcludeGoogleShopping
                     , this.duplicateItemCategoryAssignments, this.duplicateItemOptions, this.duplicateItemTierPrices
                     , this.duplicateItemRelatedProducts, this.duplicateItemUpSells, this.duplicateItemCrossSells, [], [], [], []);
-                
+
                 this.itemService.duplicateItemInsert = this.duplicateItemInsert;
 
                 this.loading = false;
-                this.router.navigate(['/item','add']);
+                this.router.navigate(['/item', 'add']);
             },
             error => {
                 //this.errorMessage = <any>error;
@@ -247,27 +240,16 @@ export class ItemListComponent implements OnInit {
                 this.itemService.sendNotification({ type: 'error', title: 'Error', content: this.errorMessage });
                 this.router.navigate(['/item']);
             }
-        );        
+        );
     }
 
     onPreview(itemid: string) {
-        window.open(environment.previewURL + itemid + "/options/portal/", "_blank");
+        window.open(environment.previewURL + itemid + '/options/portal/', '_blank');
     }
 
-    // onDeleteComplete(item: Item, message?: string): void {
-    //     this.refreshDataSource(this.itemsMatTable.data);
-    //     this.itemService.sendNotification({ type: 'success', title: 'Successfully Deleted', content: message });
-    // }
 
     refresh() {
         this.refreshItems.emit();
-        // this.itemService.refreshItems().subscribe(
-        //     (items: Item[]) => {
-        //         this.items = items;
-        //         this.refreshDataSource(this.items);
-        //     },
-        //     (error: any) => this.errorMessage = <any>error
-        // );
     }
 
     applyFilter(filterValue: string) {
@@ -298,10 +280,10 @@ export class ItemListComponentItemPrintDialog implements OnInit {
     constructor(
         public dialogRef: MatDialogRef<ItemListComponentItemPrintDialog>,
         @Inject(MAT_DIALOG_DATA) public data: Item) {
-        
+
         }
     ngOnInit() {
-        this.itemLabelPrintDialog = new ItemLabelPrintDialog("small", 1, "yes");
+        this.itemLabelPrintDialog = new ItemLabelPrintDialog('small', 1, 'yes');
     }
 
     onCancelClick(): void {
@@ -344,7 +326,7 @@ export class ItemListComponentImportDialog implements OnInit {
 
         this.selectedFiles = <Array<File>>fileInput.target.files;
         for (let i = 0; i < this.selectedFiles.length; i++) {
-            this.filesToUpload.push(this.selectedFiles[i])
+            this.filesToUpload.push(this.selectedFiles[i]);
             this.selectedFileNames.push(this.selectedFiles[i].name);
         }
     }
@@ -355,20 +337,20 @@ export class ItemListComponentImportDialog implements OnInit {
     }
 
     onImportClick() {
-        const formData: FormData = new FormData(); 
+        const formData: FormData = new FormData();
         this.loading = true;
-        formData.append('uploadedFiles', this.filesToUpload[0], this.filesToUpload[0].name);         
+        formData.append('uploadedFiles', this.filesToUpload[0], this.filesToUpload[0].name);
         this.itemService.importItemFile(formData).subscribe (
-            (data: string) => {       
-                this.loading = false; 
-                this.updated = true;     
-                this.dialogRef.close(this.updated);   
+            (data: string) => {
+                this.loading = false;
+                this.updated = true;
+                this.dialogRef.close(this.updated);
             },
             (error: any) => {
                 this.loading = false;
                 this.itemService.sendNotification({ type: 'error', title: 'Error', content: error });
-                this.dialogRef.close(); 
-            });        
+                this.dialogRef.close();
+            });
     }
 
     onTemplateClick() {

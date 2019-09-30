@@ -1,11 +1,8 @@
 import { ItemActionTypes, ItemActions } from './item.actions';
-import { SalesOrder } from '../../shared/class/sales-order';
-import { SalesOrderLine } from '../../shared/class/sales-order-line';
-import { Fulfillment, FulfillmentSalesOrderLine } from '../../shared/class/fulfillment';
-import { ItemInsert, ItemList, ItemOption, ItemOptionInsert, ItemSelectionInsert, ItemCategoryAssignment, Item, ItemCrossSellInsert, ItemUpSellInsert, ItemRelatedProductInsert, ItemBatch, ItemPrintLabel } from '../../shared/class/item';
+import { ItemInsert, ItemList, ItemOptionInsert, ItemSelectionInsert, ItemCategoryAssignment, Item, ItemBatch, ItemPrintLabel } from '../../shared/class/item';
 import { VendorBrand } from '../../shared/class/vendor-brand';
 import { Category } from 'app/shared/class/category';
-import { VendorAttachment, VendorAttachmentList } from 'app/shared/class/vendor-attachment';
+import { VendorAttachmentList } from 'app/shared/class/vendor-attachment';
 import { BatchUpdate } from 'app/shared/class/batch-update';
 
 // State for this feature (Item Variation)
@@ -16,9 +13,9 @@ export interface ItemState {
     item: ItemInsert | Item;
     items: Item[];
     selectedBundleOption: ItemOptionInsert;
-    selectedBundleOptionSelectionList: ItemSelectionInsert[],
-    itemCategories: Array<Category[]>,
-    categoryBreadCrumbs: Array<Category[]>,
+    selectedBundleOptionSelectionList: ItemSelectionInsert[];
+    itemCategories: Array<Category[]>;
+    categoryBreadCrumbs: Array<Category[]>;
     allItemList: ItemList[];
     allItem: Item;
     vendorAttachmentsList: VendorAttachmentList[];
@@ -28,11 +25,11 @@ export interface ItemState {
     itemBatchUpdates: BatchUpdate[];
     itemPrintLabels: ItemPrintLabel[];
     isLoading: boolean;
-    pendingDelete: boolean,
-    pendingSave: boolean,
-    pendingAdd: boolean,
+    pendingDelete: boolean;
+    pendingSave: boolean;
+    pendingAdd: boolean;
     error: string;
-};
+}
 
 const initialState: ItemState = {
     vendorBrandList: [],
@@ -62,7 +59,7 @@ const initialState: ItemState = {
 export function itemReducer(state = initialState, action: ItemActions): ItemState {
 
     switch (action.type) {
-        
+
         case ItemActionTypes.SetItem:
             return {
                 ...state,
@@ -87,7 +84,7 @@ export function itemReducer(state = initialState, action: ItemActions): ItemStat
                 vendorBrandList: [],
                 error: action.payload,
             };
-            
+
         case ItemActionTypes.LoadItemListSuccess:
             return {
                 ...state,
@@ -157,7 +154,7 @@ export function itemReducer(state = initialState, action: ItemActions): ItemStat
                 vendorAttachmentsList: [],
                 error: action.payload,
             };
-            
+
         case ItemActionTypes.LoadItemCategoryAssignmentsSuccess:
             return {
                 ...state,
@@ -190,7 +187,7 @@ export function itemReducer(state = initialState, action: ItemActions): ItemStat
                 isLoading: true,
                 error: '',
             };
-            
+
         case ItemActionTypes.LoadItemSuccess:
             return {
                 ...state,
@@ -205,7 +202,7 @@ export function itemReducer(state = initialState, action: ItemActions): ItemStat
                 item: null,
                 error: action.payload,
             };
-        
+
         case ItemActionTypes.AddItem:
             return {
                 ...state,
@@ -266,7 +263,7 @@ export function itemReducer(state = initialState, action: ItemActions): ItemStat
                 error: action.payload,
             };
 
-            
+
         case ItemActionTypes.LoadPendingItems:
             return {
                 ...state,
@@ -336,7 +333,7 @@ export function itemReducer(state = initialState, action: ItemActions): ItemStat
                 isLoading: false,
                 error: action.payload,
             };
-            
+
 
         case ItemActionTypes.LoadItemBatchUpdateSuccess:
             return {
@@ -362,11 +359,11 @@ export function itemReducer(state = initialState, action: ItemActions): ItemStat
                 ...state,
                 error: action.payload,
             };
-        
-        
-        
 
-            
+
+
+
+
         // case ItemActionTypes.AddNewItemRelatedProductRow:
         //     state.item.ItemRelatedProducts.push(action.payload);
         // return {

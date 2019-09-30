@@ -1,10 +1,9 @@
 import { Component, OnInit } from '@angular/core';
-import { Router, ActivatedRoute } from '@angular/router';
+import { ActivatedRoute } from '@angular/router';
 import { CompanyService } from '../../../company.service';
-import { FormGroup, FormControl, Form } from '@angular/forms';
+import { FormGroup } from '@angular/forms';
 import { CompanyInfo } from '../../../../shared/class/company-info';
 import { TrademarkRegistration } from '../../../../shared/class/trademark-registration';
-import { AddressCountry, AddressState } from '../../../../shared/class/address';
 import { TranslateService } from '@ngx-translate/core';
 
 @Component({
@@ -24,7 +23,7 @@ export class CompanyInfoTrademarkRegistrationComponent implements OnInit {
     filesToUpload: Array<File> = [];
 
     trademarkRegistrationForm: FormGroup;
-    
+
     loading: boolean;
     showForm: boolean;
     showFormSuccess: boolean;
@@ -100,7 +99,7 @@ export class CompanyInfoTrademarkRegistrationComponent implements OnInit {
                 Value: 'Class 15',
                 Name: 'Class 15',
                 Description: 'Musical instruments.',
-                Note: 'This Class includes, in particular: mechanical pianos and their accessories; musical boxes; electrical and electronic musical instruments. This Class does not include, in particular: apparatus for the recording, transmission, amplification and reproduction of sound (Cl. 9).' 
+                Note: 'This Class includes, in particular: mechanical pianos and their accessories; musical boxes; electrical and electronic musical instruments. This Class does not include, in particular: apparatus for the recording, transmission, amplification and reproduction of sound (Cl. 9).'
             },
             {
                 Value: 'Class 16',
@@ -174,7 +173,7 @@ export class CompanyInfoTrademarkRegistrationComponent implements OnInit {
                 Description: 'Carpets, rugs, mats and matting, linoleum and other materials for covering existing floors; wall hangings (non-textile).',
                 Note: 'Class 27 includes mainly products intended to be added as furnishings to previously constructed floors and walls.'
             },
-        ]
+        ];
 
         // this.companyService.getAddressCountry().subscribe(
         //     (addresscountries: AddressCountry[]) => {
@@ -183,11 +182,11 @@ export class CompanyInfoTrademarkRegistrationComponent implements OnInit {
         //     (error: any) => this.errorMessage = <any>error
         // );
     }
-    
+
     addClassSelectInput(): void {
         this.selectedClasses.push({});
     }
-    removeClassSelectInput(index):void {
+    removeClassSelectInput(index): void {
         this.selectedClasses.splice(index, 1);
     }
 
@@ -201,10 +200,10 @@ export class CompanyInfoTrademarkRegistrationComponent implements OnInit {
     }
     // submitTrademarkRegistration() {
     //     if(this.isTrademarkRegistrationValid()) {
-    //         this.companyService.sendNotification({ type: 'success', title: 'Successfully Registered', content: "Trademark registration has been saved." }); 
+    //         this.companyService.sendNotification({ type: 'success', title: 'Successfully Registered', content: "Trademark registration has been saved." });
     //         this.companyService.editCompanyInfoShippingAddress(this.companyInfo).subscribe(
     //             () => {
-    //                 this.companyService.sendNotification({ type: 'success', title: 'Successfully Updated', content: "Shipping address has been updated" }); 
+    //                 this.companyService.sendNotification({ type: 'success', title: 'Successfully Updated', content: "Shipping address has been updated" });
     //             },
     //             (error: any) => {
     //                 this.companyService.sendNotification({ type: 'error', title: 'Error', content: <any>error });
@@ -222,23 +221,22 @@ export class CompanyInfoTrademarkRegistrationComponent implements OnInit {
             && this.trademark.Date1
             && this.trademark.Date2) {
             return true;
-        }
-        else {
+        } else {
             this.companyService.sendNotification({ type: 'error', title: 'Error', content: 'Please enter all required fields' });
             return false;
         }
     }
     clearFields() {
         const confirmation = confirm(`Are you sure you want to clear this Trademark Registration Form?`);
-        if (confirmation) window.location.reload(); 
+        if (confirmation) { window.location.reload(); }
     }
     submitForm() {
         this.loading = true;
-        setTimeout(()=> {
+        setTimeout(() => {
             this.showFormSuccess = true;
             this.showForm = false;
             this.loading = false;
-            this.companyService.sendNotification({ type: 'success', title: 'Successfully Registered', content: "Trademark registration has been saved." }); 
-        }, 1000)
+            this.companyService.sendNotification({ type: 'success', title: 'Successfully Registered', content: 'Trademark registration has been saved.' });
+        }, 1000);
     }
 }

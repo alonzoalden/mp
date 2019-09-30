@@ -9,7 +9,7 @@ export class SalesOrderLine {
         public ItemVendorSKU: string,
         public ItemImage: string,
         public TPIN: string,
-        public URLKey: string,        
+        public URLKey: string,
         public UnitPrice: number,
         public Quantity: number,
         public FulfilledQuantity: number,

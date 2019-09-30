@@ -20,7 +20,7 @@ export class SalesOrderListComponent implements OnInit, OnChanges {
     @Output() getSalesOrderByVendor = new EventEmitter<{fulfilledby: string, status: string}>();
     @Output() downloadSalesOrderPackingSlip = new EventEmitter<SalesOrder>();
     @Output() setSalesOrder = new EventEmitter<SalesOrder>();
-    
+
     displayedColumns = ['Menu', 'ProductInfo', 'ItemImage', 'ItemName', 'ShippingMethod', 'Status', 'VendorTotal'];
     fulfilledby: string;
     status: string;
@@ -28,11 +28,11 @@ export class SalesOrderListComponent implements OnInit, OnChanges {
     @ViewChild(MatPaginator, { static: true }) paginator: MatPaginator;
     @ViewChild(MatSort, { static: true }) sort: MatSort;
     @ViewChild('FilterBy', { static: true }) FilterBy: ElementRef;
-    
+
     constructor(
         private route: ActivatedRoute,
         private router: Router) { }
-        
+
     ngOnChanges(changes: SimpleChanges): void {
         if (changes.salesOrdersMatTable && changes.salesOrdersMatTable.currentValue.data.length) {
             this.salesOrdersMatTable.paginator = this.paginator;
@@ -40,7 +40,7 @@ export class SalesOrderListComponent implements OnInit, OnChanges {
         }
     }
     ngOnInit() {
-        
+
         this.route.params.subscribe((route) => {
             if (route.fulfilledby !== this.fulfilledby) {
                 this.getSalesOrdersByVendor(route.fulfilledby, route.status);
@@ -49,7 +49,7 @@ export class SalesOrderListComponent implements OnInit, OnChanges {
             this.status = route.status;
         }
         );
-        if(this.FilterBy.nativeElement.value) {
+        if (this.FilterBy.nativeElement.value) {
             this.applyFilter(this.FilterBy.nativeElement.value);
         }
     }

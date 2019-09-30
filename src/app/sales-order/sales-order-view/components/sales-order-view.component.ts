@@ -13,8 +13,8 @@ export class SalesOrderViewComponent implements OnInit {
     @Input() errorMessage: string;
     @Output() getFulfilledBySalesOrder = new EventEmitter<{orderid: number, fulfilledby: string}>();
     @Output() getSalesOrderLineByVendor = new EventEmitter<{orderid: number, fulfilledby: string}>();
-    
-    
+
+
     isMerchant: boolean;
     fulfilledby: string;
     orderid: number;
@@ -26,7 +26,7 @@ export class SalesOrderViewComponent implements OnInit {
     ngOnInit() {
         this.orderid = this.route.snapshot.params['id'];
         this.fulfilledby = this.route.snapshot.params['fulfilledby'];
-        this.isMerchant = this.fulfilledby === "merchant";
+        this.isMerchant = this.fulfilledby === 'merchant';
         this.getFulfilledBySalesOrder.emit({orderid: this.orderid, fulfilledby: this.fulfilledby});
         this.getSalesOrderLineByVendor.emit({orderid: this.orderid, fulfilledby: this.fulfilledby});
     }

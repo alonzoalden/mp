@@ -24,9 +24,9 @@ export class ItemEditProductRelationUpSellComponent implements OnInit {
     private imageURL = environment.imageURL;
 
     constructor(private itemService: ItemService) { }
-    
+
     ngOnChanges(changes: SimpleChanges): void {
-        
+
         if (changes.item && changes.item.currentValue && changes.item.currentValue.ItemUpSells.length === 0) {
             this.upSellAddPendingLine();
             this.currentItemUpSellIndex = this.item.ItemUpSells.length - 1;
@@ -40,7 +40,7 @@ export class ItemEditProductRelationUpSellComponent implements OnInit {
 
     upSellAddPendingLine() {
         const _temp = new ItemUpSell(0, this.item.ItemID, null, null, null, null, null, this.item.ItemUpSells.length + 1, null, null, null, true);
-        this.item.ItemUpSells.push(_temp);   
+        this.item.ItemUpSells.push(_temp);
     }
 
     upSellRemovePendingLine() {
@@ -50,14 +50,14 @@ export class ItemEditProductRelationUpSellComponent implements OnInit {
         }
     }
 
-    upSellRefreshDataSource(itemUpSells: ItemUpSell[]) { 
+    upSellRefreshDataSource(itemUpSells: ItemUpSell[]) {
         this.itemUpSellsMatTable = new MatTableDataSource<ItemUpSell>(itemUpSells);
     }
 
     onAddItemUpSell(itemUpSell: ItemUpSell) {
-        if (this.isUpSellRequirementValid(itemUpSell)) { 
-            if(!this.existUpSell(itemUpSell.UpSellItemID, true)) {    
-                this.upSellPendingAdd = true; 
+        if (this.isUpSellRequirementValid(itemUpSell)) {
+            if (!this.existUpSell(itemUpSell.UpSellItemID, true)) {
+                this.upSellPendingAdd = true;
 
                 // this.itemService.getAllItem(itemUpSell.UpSellItemID).subscribe(
                 //     (item: Item) => {
@@ -65,7 +65,7 @@ export class ItemEditProductRelationUpSellComponent implements OnInit {
                 //         itemUpSell.UpSellItemName = item.Name;
                 //         itemUpSell.UpSellItemVendorSKU = item.VendorSKU;
                 //         itemUpSell.UpSellTPIN = item.TPIN;
-                //         itemUpSell.pendingAdd = false;                            
+                //         itemUpSell.pendingAdd = false;
                 //     },
                 //     (error: any) => {
                 //         this.errorMessage = <any>error;
@@ -73,15 +73,13 @@ export class ItemEditProductRelationUpSellComponent implements OnInit {
                 //     }
                 // );
 
-                this.upSellAddPendingLine();  
+                this.upSellAddPendingLine();
                 this.upSellRefreshDataSource(this.item.ItemUpSells);
+            } else {
+                this.itemService.sendNotification({ type: 'error', title: 'Error', content: 'Up-sell product already exists' });
             }
-            else {
-                this.itemService.sendNotification({ type: 'error', title: 'Error', content: "Up-sell product already exists" });
-            }   
-        }
-        else {
-            this.itemService.sendNotification({ type: 'error', title: 'Error', content: "Please select an item" });
+        } else {
+            this.itemService.sendNotification({ type: 'error', title: 'Error', content: 'Please select an item' });
         }
     }
 
@@ -89,39 +87,36 @@ export class ItemEditProductRelationUpSellComponent implements OnInit {
         if (itemUpSell
             && itemUpSell.UpSellItemID) {
             return true;
-        } 
-        else {
+        } else {
             return false;
         }
     }
 
-    existUpSell(itemID: number, isNew: boolean = false){
-        var counter: number = 0;
+    existUpSell(itemID: number, isNew: boolean = false) {
+        let counter: number = 0;
         this.item.ItemUpSells.forEach((value, index) => {
-                if(value.UpSellItemID === itemID) {
-                    if(isNew || index != this.item.ItemUpSells.length - 1) {
-                        counter += 1; 
+                if (value.UpSellItemID === itemID) {
+                    if (isNew || index != this.item.ItemUpSells.length - 1) {
+                        counter += 1;
                     }
                 }
             }
         );
-        if(counter > 1) { return true; }
-        else { return false; }
+        if (counter > 1) { return true; } else { return false; }
     }
 
     onEditItemUpSell(index: number) {
-        if(this.upSellPendingAdd) {
+        if (this.upSellPendingAdd) {
             this.currentItemUpSellIndex = this.item.ItemUpSells.length - 1;
             this.upSellPendingAdd = false;
-        }
-        else {
+        } else {
             this.currentItemUpSellIndex = index;
-        }   
+        }
     }
 
     onUpSellItemChange(index: number) {
-        if(this.item.ItemUpSells[index].UpSellItemID) {
-            if(!this.existUpSell(this.item.ItemUpSells[index].UpSellItemID)) {
+        if (this.item.ItemUpSells[index].UpSellItemID) {
+            if (!this.existUpSell(this.item.ItemUpSells[index].UpSellItemID)) {
                 this.getAllItemUpSell.emit(this.item.ItemUpSells[index]);
                 // this.itemService.getAllItem(this.item.ItemUpSells[index].UpSellItemID).subscribe(
                 //     (item: Item) => {
@@ -137,12 +132,11 @@ export class ItemEditProductRelationUpSellComponent implements OnInit {
                 //         this.itemService.sendNotification({ type: 'error', title: 'Error', content: this.errorMessage });
                 //     }
                 // );
-            }
-            else {
+            } else {
                 this.item.ItemUpSells[index].UpSellItemID = this.item.ItemUpSells[index].PrevUpSellItemID;
                 this.currentItemUpSellIndex = this.item.ItemUpSells.length - 1;
                 this.upSellRefreshDataSource(this.item.ItemUpSells);
-                this.itemService.sendNotification({ type: 'error', title: 'Error', content: "Related product already exists" });
+                this.itemService.sendNotification({ type: 'error', title: 'Error', content: 'Related product already exists' });
             }
         }
     }
@@ -159,7 +153,7 @@ export class ItemEditProductRelationUpSellComponent implements OnInit {
     upSellMoveUpPosition(itemUpSell: ItemUpSell) {
         this.positionMove(this.item.ItemUpSells, itemUpSell, -1);
         this.item.ItemUpSells.forEach((value, index) => {
-            value.Position = index + 1;                        
+            value.Position = index + 1;
         });
 
         this.upSellRefreshDataSource(this.item.ItemUpSells);
@@ -169,7 +163,7 @@ export class ItemEditProductRelationUpSellComponent implements OnInit {
         const index = array.indexOf(element);
         const newIndex = index + delta;
         if (newIndex < 0  || newIndex === array.length) { return; } // Already at the top or bottom.
-        const indexes = [index, newIndex].sort((a,b)=>a-b); // Sort the indixes
+        const indexes = [index, newIndex].sort((a, b) => a - b); // Sort the indixes
         array.splice(indexes[0], 2, array[indexes[1]], array[indexes[0]]); // Replace from lowest index, two elements, reverting the order
     }
 
@@ -179,7 +173,7 @@ export class ItemEditProductRelationUpSellComponent implements OnInit {
             const foundIndex = this.item.ItemUpSells.findIndex(i => i.UpSellItemID === itemUpSell.UpSellItemID);
             if (foundIndex > -1) {
                 this.item.ItemUpSells.splice(foundIndex, 1);
-            }            
+            }
             this.upSellRefreshDataSource(this.item.ItemUpSells);
         }
     }
@@ -187,7 +181,7 @@ export class ItemEditProductRelationUpSellComponent implements OnInit {
     clearFields(ItemUpSellInsert: ItemUpSellInsert) {
         ItemUpSellInsert.UpSellItemID = null;
         this.formDirty = false;
-        
+
         //this.selectionCategoriesRef.nativeElement.value = "0: null";
     }
 }

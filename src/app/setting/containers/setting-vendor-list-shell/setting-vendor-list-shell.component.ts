@@ -19,12 +19,12 @@ export class SettingVendorListShellComponent implements OnInit {
     pendingSave$: Observable<boolean>;
 
     constructor(private store: Store<fromSetting.State>) { }
-    
+
     ngOnInit() {
         this.memberVendorsMatTable$ = this.store.pipe(select(fromSetting.getMemberVendorListMatTable));
         this.userInfo$ = this.store.pipe(select(fromUser.getCurrentUser));
         this.errorMessage$ = this.store.pipe(select(fromSetting.getError));
-        this.pendingSave$ = this.store.pipe(select(fromSetting.getPendingSave));;
+        this.pendingSave$ = this.store.pipe(select(fromSetting.getPendingSave));
     }
 
     getMembersVendors() {

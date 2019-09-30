@@ -25,7 +25,7 @@ export class InboundShipmentEditShellComponent implements OnInit {
             this.isLoading$ = this.store.pipe(select(fromInboundShipment.getIsLoading));
         });
     }
-    
+
     addNewPurchaseOrder() {
         this.store.dispatch(new inboundShipmentActions.AddNewPurchaseOrder());
     }

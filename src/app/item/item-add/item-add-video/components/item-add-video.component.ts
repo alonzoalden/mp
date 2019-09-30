@@ -1,9 +1,7 @@
 import { Component, OnInit, Input, Output, EventEmitter, SimpleChanges } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
 import { MatTableDataSource } from '@angular/material';
 import { ItemInsert, ItemVideoInsert } from '../../../../shared/class/item';
 import { ItemService } from '../../../item.service';
-import { URLVideo } from '../../../../shared/class/item-video';
 
 @Component({
     selector: 'o-item-add-video',
@@ -40,16 +38,15 @@ export class ItemAddVideoComponent implements OnInit {
     }
 
     onAddItemVideo(itemVideo: ItemVideoInsert) {
-        if (this.isRequirementValid(itemVideo)) {    
+        if (this.isRequirementValid(itemVideo)) {
             const videoID = this.getYoutubeQueryString(itemVideo.URL);
-            if (!videoID) return this.itemService.sendNotification({ type: 'error', title: 'Error', content: "Incorrect Youtube URL" });
+            if (!videoID) { return this.itemService.sendNotification({ type: 'error', title: 'Error', content: 'Incorrect Youtube URL' }); }
 
             const existVideo = this.item.ItemVideos.find(x => x.Value === videoID);
             if (existVideo) {
                 itemVideo.URL = '';
-                this.itemService.sendNotification({ type: 'error', title: 'Error', content: "Video already exists" });            
-            }
-            else {
+                this.itemService.sendNotification({ type: 'error', title: 'Error', content: 'Video already exists' });
+            } else {
                 this.pendingAdd = true;
                 itemVideo.Value = videoID;
                 itemVideo.Position = this.item.ItemVideos.length + 1;
@@ -63,12 +60,12 @@ export class ItemAddVideoComponent implements OnInit {
                 //             itemVideo.Thumbnail = URLVideo.items[0].snippet.thumbnails.medium.url;
                 //         }
 
-                        
+
                 //         itemVideo.Provider = 'youtube';
                 //         if(!itemVideo.Label || itemVideo.Label == '')
                 //             itemVideo.Label = URLVideo.items[0].snippet.title;
                 //         itemVideo.Description = URLVideo.items[0].snippet.description;
-                        
+
                 //         const _temp = new ItemVideoInsert(null, null, null, null, null, null, this.item.ItemVideos.length, null);
                 //         this.item.ItemVideos.push(_temp);
                 //         this.refreshDataSource(this.item.ItemVideos);
@@ -79,19 +76,17 @@ export class ItemAddVideoComponent implements OnInit {
                 //         this.itemService.sendNotification({ type: 'error', title: 'Error', content: this.errorMessage });
                 //     }
                 // );
-            }            
-        }
-        else {
-            this.itemService.sendNotification({ type: 'error', title: 'Error', content: "Please select a Video" });
+            }
+        } else {
+            this.itemService.sendNotification({ type: 'error', title: 'Error', content: 'Please select a Video' });
         }
     }
 
     onEditItemVideo(index: number) {
-        if(this.pendingAdd) {
+        if (this.pendingAdd) {
             this.currentIndex = this.item.ItemVideos.length - 1;
             this.pendingAdd = false;
-        }
-        else {
+        } else {
             this.currentIndex = index;
         }
     }
@@ -101,8 +96,7 @@ export class ItemAddVideoComponent implements OnInit {
             const reg = new RegExp( '[?&]' + 'v' + '=([^&#]*)', 'i' );
             const value = reg.exec(url);
             return value[1];
-        }
-        else if (url.includes('/embed/')){
+        } else if (url.includes('/embed/')) {
             const value = url.split('/embed/')[1].split('?')[0];
             return value;
         }
@@ -118,8 +112,7 @@ export class ItemAddVideoComponent implements OnInit {
         if (itemVideo
             && itemVideo.URL) {
             return true;
-        } 
-        else {
+        } else {
             return false;
         }
     }
@@ -136,7 +129,7 @@ export class ItemAddVideoComponent implements OnInit {
     moveUpPosition(itemVideo: ItemVideoInsert) {
         this.positionMove(this.item.ItemVideos, itemVideo, -1);
         this.item.ItemVideos.forEach((value, index) => {
-            value.Position = index + 1;                        
+            value.Position = index + 1;
         });
 
         this.refreshDataSource(this.item.ItemVideos);
@@ -146,17 +139,17 @@ export class ItemAddVideoComponent implements OnInit {
         const index = array.indexOf(element);
         const newIndex = index + delta;
         if (newIndex < 0  || newIndex === array.length) { return; } // Already at the top or bottom.
-        const indexes = [index, newIndex].sort((a,b)=>a-b); // Sort the indixes
+        const indexes = [index, newIndex].sort((a, b) => a - b); // Sort the indixes
         array.splice(indexes[0], 2, array[indexes[1]], array[indexes[0]]); // Replace from lowest index, two elements, reverting the order
     }
-    
+
     onRemoveVideo(itemVideo: ItemVideoInsert) {
         const confirmation = confirm(`Remove ${itemVideo.Label}?`);
         if (confirmation) {
             const foundIndex = this.item.ItemVideos.findIndex(i => i.Position === itemVideo.Position);
             if (foundIndex > -1) {
                 this.item.ItemVideos.splice(foundIndex, 1);
-            }            
+            }
             this.refreshDataSource(this.item.ItemVideos);
         }
     }

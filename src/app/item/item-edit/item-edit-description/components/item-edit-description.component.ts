@@ -1,13 +1,9 @@
 import { Component, OnInit, AfterViewInit, SimpleChanges, Input } from '@angular/core';
-import { Router, ActivatedRoute } from '@angular/router';
-
+import { ActivatedRoute } from '@angular/router';
 import { Item } from '../../../../shared/class/item';
 import { VendorBrand } from '../../../../shared/class/vendor-brand';
-
-import { ItemService } from '../../../item.service';
-import { AppService } from '../../../../app.service';
 import { Member } from 'app/shared/class/member';
-declare var $ :any;
+declare var $: any;
 
 @Component({
   selector: 'o-item-edit-description',
@@ -36,27 +32,27 @@ export class ItemEditDescriptionComponent implements OnInit, AfterViewInit {
     }
 
     ngAfterViewInit() {
-        var self = this;
+        let self = this;
 
             $('.summernote').summernote( {
                 height: 300,
                 tabsize: 2,
                 toolbar: [
-                    ["style",["style"]],
-                    ["font",["bold","underline","clear"]],
-                    ["fontname",["fontname"]],
-                    ["color",["color"]],
-                    ["para",["ul","ol","paragraph"]],
-                    ["table",["table"]],
-                    ["insert",["link","picture","video"]],
-                    ["view",["help"]] 
+                    ['style', ['style']],
+                    ['font', ['bold', 'underline', 'clear']],
+                    ['fontname', ['fontname']],
+                    ['color', ['color']],
+                    ['para', ['ul', 'ol', 'paragraph']],
+                    ['table', ['table']],
+                    ['insert', ['link', 'picture', 'video']],
+                    ['view', ['help']]
                 ],
                 callbacks: {
                     onBlur: function() {
                         self.updateTextEditorFields();
                     },
                     onPaste: function (e) {
-                        var bufferText = ((e.originalEvent || e).clipboardData ).getData('text/html');
+                        let bufferText = ((e.originalEvent || e).clipboardData ).getData('text/html');
                         e.preventDefault ? e.preventDefault() : (e.returnValue = false);
                         const commentStripper = /.*?<!--[\s\S]*?-->.*?/g;
                         bufferText = bufferText.replace(commentStripper, '');
@@ -64,7 +60,7 @@ export class ItemEditDescriptionComponent implements OnInit, AfterViewInit {
                         bufferText = bufferText.replace(wordStripper, '');
                         const wordStripper2 = /<\/o:p>/gi;
                         bufferText = bufferText.replace(wordStripper2, '');
-                        var div = $('<div />');
+                        let div = $('<div />');
                         div.append(bufferText);
                         div.find('*').removeAttr('style border class cellspacing cellpadding width height align nowrap valign lang');
                         div.find('table').addClass('table table-bordered');
@@ -72,9 +68,9 @@ export class ItemEditDescriptionComponent implements OnInit, AfterViewInit {
                         div.find('meta').remove();
                         div.find('link').remove();
                         div.find('xml').remove();
-                        setTimeout(function(){
-                            document.execCommand('insertHtml',false,div.html());
-                        },10);
+                        setTimeout(function() {
+                            document.execCommand('insertHtml', false, div.html());
+                        }, 10);
                     }
                 }
             });
@@ -82,7 +78,7 @@ export class ItemEditDescriptionComponent implements OnInit, AfterViewInit {
             $('#itemShortDescriptionId').summernote('code', this.item.ShortDescription);
             $('#itemTechnicalDetailId').summernote('code', this.item.TechnicalDetail);
             $('#itemAdditionalInformationId').summernote('code', this.item.AdditionalInformation);
-        
+
     }
 
     updateTextEditorFields() {

@@ -13,7 +13,7 @@ export class Item {
 
         public ShipWithinDays: number,
         public PriceType: string,
-       
+
         public Price: number,
         public FOBPrice: number,
         public DropshipPrice: number,
@@ -47,7 +47,7 @@ export class Item {
         public AddProtectionPlan: boolean,
         public URLKey: string,
         public Visibility: string,
-       
+
         public Description: string,
         public ShortDescription: string,
         public TechnicalDetail: string,
@@ -60,7 +60,7 @@ export class Item {
         public Status: boolean,
 
         public Approval: string,
-       
+
         public ImagePath: string,
 
         public IsPartItem: boolean,
@@ -228,9 +228,9 @@ export class ItemUpdate {
         public PartImageRaw: string,
         public PartImageFilePath: string,
         public PartIsNewImage: boolean,
-       
+
         public ExcludeGoogleShopping: boolean,
-       
+
         public ItemCategoryAssignments: Array<ItemCategoryAssignment>,
         public ItemOptions: Array<ItemOption>,
         public ItemTierPrices: Array<ItemTierPrice>,
@@ -309,7 +309,7 @@ export class ItemRelatedProductInsert {
     constructor(
         public ItemID: number,
         public RelatedProductItemID: number,
-       
+
         public PrevRelatedProductItemID: number,
         public RelatedItemName: string,
         public RelatedItemVendorSKU: string,
@@ -336,7 +336,7 @@ export class ItemUpSell {
         public UpdatedOn: string,
         public CreatedOn: string,
         public ImagePath: string,
-       
+
         public pendingAdd: boolean
     ) {}
 }
@@ -345,7 +345,7 @@ export class ItemUpSellInsert {
     constructor(
         public ItemID: number,
         public UpSellItemID: number,
-       
+
         public PrevUpSellItemID: number,
         public UpSellItemName: string,
         public UpSellItemVendorSKU: string,
@@ -380,7 +380,7 @@ export class ItemCrossSellInsert {
     constructor(
         public ItemID: number,
         public CrossSellItemID: number,
-       
+
         public PrevCrossSellItemID: number,
         public CrossSellItemName: string,
         public CrossSellItemVendorSKU: string,
@@ -401,7 +401,7 @@ export class ItemAttachment {
         public FileName: string,
         public UploadedFile: string,
 
-        public ItemID: number,        
+        public ItemID: number,
         public Position: number,
         public UpdatedOn: string,
         public CreatedOn: string,
@@ -439,7 +439,7 @@ export class ItemVideo {
         public Remove: boolean,
         public UpdatedOn: string,
         public CreatedOn: string,
-       
+
         public URL: string,
         public pendingImage: boolean,
         public pendingAdd: boolean
@@ -599,7 +599,7 @@ export class ItemSection {
         public ItemID: number,
         public Name: string,
         public ImageRaw: string,
-        public ImageFilePath: string,        
+        public ImageFilePath: string,
         public Position: number,
         public UpdatedOn: string,
         public CreatedOn: string,
@@ -616,7 +616,7 @@ export class ItemSectionInsert {
         public ItemID: number,
         public Name: string,
         public ImageRaw: string,
-        public ImageFilePath: string,    
+        public ImageFilePath: string,
         public Position: number,
 
         public ItemParts: Array<ItemPartInsert>
@@ -642,7 +642,7 @@ export class ItemPart {
         public ImageRaw: string,
         public ImageFilePath: string,
         public IsNewImage: boolean,
-       
+
         public Position: number,
         public UpdatedOn: string,
         public CreatedOn: string,
@@ -657,18 +657,18 @@ export class ItemPartInsert {
         public ItemSectionID: number,
         public PartLabel: string,
         public PartItemID: number,
-       
+
         public PrevPartItemID: number,
         public PartItemName: string,
         public PartItemVendorSKU: string,
         public PartTPIN: string,
-        public PartFOBPrice: number,        
-        public PartPrice: number,        
+        public PartFOBPrice: number,
+        public PartPrice: number,
 
         public ImageRaw: string,
         public ImageFilePath: string,
         public IsNewImage: boolean,
-       
+
         public Position: number,
 
         public isNew: boolean
@@ -681,7 +681,7 @@ export class ItemPartInsert {
 export class ItemGlobalAttribute {
     constructor(
         public ItemGlobalAttributeID: number,
-        public Name: string,        
+        public Name: string,
         public UpdatedOn: string,
         public CreatedOn: string,
         public ItemGlobalAttributeVariations: Array<ItemGlobalAttributeVariation>
@@ -692,7 +692,7 @@ export class ItemGlobalAttributeVariation {
     constructor(
         public ItemGlobalAttributeVariationID: number,
         public ItemGlobalAttributeID: number,
-        public Name: string,        
+        public Name: string,
         public UpdatedOn: string,
         public CreatedOn: string,
     ) {}
@@ -702,7 +702,7 @@ export class ItemGlobalAttributeVariation {
 export class ItemAttribute {
     constructor(
         public ItemAttributeID: number,
-        public Name: string,        
+        public Name: string,
         public UpdatedOn: string,
         public CreatedOn: string,
         public ItemAttributeVariations: Array<ItemAttributeVariation>,
@@ -715,9 +715,9 @@ export class ItemAttributeVariation {
     constructor(
         public ItemAttributeVariationID: number,
         public ItemAttributeID: number,
-        public Name: string,        
+        public Name: string,
         public UpdatedOn: string,
-        public CreatedOn: string,    
+        public CreatedOn: string,
     ) {}
 }
 
@@ -725,13 +725,13 @@ export class ItemVariationListing {
     constructor(
         public ItemVariationListingID: number,
         public Name: string,
-        public PrimaryItemID: number,        
+        public PrimaryItemID: number,
 
-        public ItemName: string,        
-        public ItemVendorSKU: string,        
-        public ItemTPIN: string,        
-        public ItemURLKey: string,        
-        public ItemImagePath: string,  
+        public ItemName: string,
+        public ItemVendorSKU: string,
+        public ItemTPIN: string,
+        public ItemURLKey: string,
+        public ItemImagePath: string,
 
         public UpdatedOn: string,
         public CreatedOn: string,
@@ -747,16 +747,16 @@ export class ItemVariation {
         public ItemVariationListingName: string,
         public ItemID: number,
 
-        public ItemName: string,        
-        public ItemVendorSKU: string,        
-        public ItemTPIN: string,        
-        public ItemURLKey: string,        
-        public ItemImagePath: string,        
+        public ItemName: string,
+        public ItemVendorSKU: string,
+        public ItemTPIN: string,
+        public ItemURLKey: string,
+        public ItemImagePath: string,
 
         public UpdatedOn: string,
         public CreatedOn: string,
         public ItemVariationLines: Array<ItemVariationLine>,
-       
+
         public IsPrimary: boolean,
     ) {}
 }

@@ -1,14 +1,12 @@
 import { Injectable } from '@angular/core';
-import { HttpClient, HttpErrorResponse, HttpHeaders } from '@angular/common/http';
-
+import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { Observable, Subject, of, throwError } from 'rxjs';
 import { catchError, tap } from 'rxjs/operators';
-
 import { Dashboard, ItemSalesTotal, InboundShipmentStatusCount, SalesStatusTotal, SalesOrderSummary, CurrentSalesOrderSummary, DashboardVendorNotification, DashboardSalesOrderSummary } from '../shared/class/dashboard';
-
 import { OAuthService } from 'angular-oauth2-oidc';
 import { environment } from '../../environments/environment';
 import { NotificationComponent } from '../shared/tool/notification/notification.component';
+
 @Injectable()
 export class DashboardService {
     private apiURL = environment.webapiURL;
@@ -28,7 +26,6 @@ export class DashboardService {
 
     sendNotification(notification: any) {
         this.notificationComponent.notify(notification);
-        //this.subject.next(notification);
     }
 
     reset() {
@@ -131,7 +128,7 @@ export class DashboardService {
                             catchError(this.handleError)
                         );
     }
-    
+
 
     private handleError(err: HttpErrorResponse) {
         // in a real world app, we may send the server to some remote logging infrastructure

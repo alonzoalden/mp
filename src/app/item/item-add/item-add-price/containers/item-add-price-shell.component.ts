@@ -1,23 +1,23 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
-import { MatTableDataSource, MatSort, MatSortable } from '@angular/material';
+import { Component, OnInit } from '@angular/core';
+import { MatTableDataSource } from '@angular/material';
 import { ItemInsert, ItemTierPriceInsert } from '../../../../shared/class/item';
 import { Member } from 'app/shared/class/member';
 import {  Observable } from 'rxjs';
 import { Store, select } from '@ngrx/store';
-import * as itemActions from '../../../state/item.actions';
 import * as fromItem from '../../../state';
 import * as fromUser from '../../../../shared/state/user-state.reducer';
+
 @Component({
     templateUrl: './item-add-price-shell.component.html'
 })
 
 export class ItemAddPriceShellComponent implements OnInit {
-    
+
     item$: Observable<ItemInsert>;
     errorMessage$: Observable<string>;
     userInfo$: Observable<Member>;
     itemTierPricesMatTable$: Observable<MatTableDataSource<ItemTierPriceInsert>>;
-    
+
     constructor(private store: Store<fromItem.State>) { }
 
     ngOnInit(): void {

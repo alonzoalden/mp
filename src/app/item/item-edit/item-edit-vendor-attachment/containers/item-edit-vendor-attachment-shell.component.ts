@@ -33,4 +33,4 @@ export class ItemEditVendorAttachmentShellComponent implements OnInit {
         this.store.dispatch(new itemActions.LoadItemAttachment(itemattachment));
     }
 }
-  
+

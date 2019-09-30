@@ -1,11 +1,7 @@
-import { Component, OnInit, Input } from '@angular/core';
-import { Router, ActivatedRoute } from '@angular/router';
-
-import { Item, ItemInsert } from '../../../../shared/class/item';
-
+import { Component, OnInit } from '@angular/core';
+import { ItemInsert } from '../../../../shared/class/item';
 import { Observable } from 'rxjs';
 import { Store, select } from '@ngrx/store';
-import * as itemActions from '../../../state/item.actions';
 import * as fromItem from '../../../state';
 
 @Component({

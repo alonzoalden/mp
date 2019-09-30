@@ -7,14 +7,14 @@ import { UserActions, UserActionTypes } from './user-state.actions';
 
 export interface State extends fromRoot.State {
     user: UserState;
-};
+}
 
 // State for this feature (User)
 export interface UserState {
     currentUser: Member;
-    currentUserDefaultPageSize: Number; 
+    currentUserDefaultPageSize: Number;
     error: string;
-};
+}
 
 const initialState: UserState = {
     currentUser: null,

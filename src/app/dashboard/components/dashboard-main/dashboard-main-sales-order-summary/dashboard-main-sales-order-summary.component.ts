@@ -1,4 +1,4 @@
-import { Component, ViewChild, OnInit, Input, Output, EventEmitter } from '@angular/core';
+import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 import { MatTableDataSource } from '@angular/material';
 import { SalesOrderSummary } from '../../../../shared/class/dashboard';
 import { growContainerAnimation } from '../smooth-open-animation.component';
@@ -24,9 +24,9 @@ export class DashboardMainSalesOrderSummaryComponent implements OnInit {
     salesOrderSummary: SalesOrderSummary[];
     displayedColumns = ['NumberOfDays', 'SalesAmount', 'SalesQuantity'];
     dataSource: any = null;
-    
+
     constructor() { }
-    
+
     ngOnInit() {
         this.getSalesOrderSummary.emit();
     }

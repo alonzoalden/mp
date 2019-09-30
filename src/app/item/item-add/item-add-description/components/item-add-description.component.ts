@@ -1,9 +1,8 @@
-import { Component, AfterViewInit, OnChanges, Input } from '@angular/core';
+import { Component, AfterViewInit, Input } from '@angular/core';
 import { ItemInsert } from '../../../../shared/class/item';
 import { VendorBrand } from '../../../../shared/class/vendor-brand';
 import { Member } from 'app/shared/class/member';
-
-declare var $ :any;
+declare var $: any;
 
 @Component({
   selector: 'o-item-add-description',
@@ -19,27 +18,27 @@ export class ItemAddDescriptionComponent implements AfterViewInit {
     constructor() { }
 
     ngAfterViewInit() {
-        var self = this;
+        let self = this;
 
         $('.summernote').summernote( {
             height: 300,
             tabsize: 2,
             toolbar: [
-                ["style",["style"]],
-                ["font",["bold","underline","clear"]],
-                ["fontname",["fontname"]],
-                ["color",["color"]],
-                ["para",["ul","ol","paragraph"]],
-                ["table",["table"]],
-                ["insert",["link","picture","video"]],
-                ["view",["help"]]
+                ['style', ['style']],
+                ['font', ['bold', 'underline', 'clear']],
+                ['fontname', ['fontname']],
+                ['color', ['color']],
+                ['para', ['ul', 'ol', 'paragraph']],
+                ['table', ['table']],
+                ['insert', ['link', 'picture', 'video']],
+                ['view', ['help']]
             ],
             callbacks: {
                 onBlur: function() {
                     self.updateTextEditorFields();
                 },
                 onPaste: function (e) {
-                    var bufferText = ((e.originalEvent || e).clipboardData ).getData('text/html');
+                    let bufferText = ((e.originalEvent || e).clipboardData ).getData('text/html');
                     e.preventDefault ? e.preventDefault() : (e.returnValue = false);
                     const commentStripper = /.*?<!--[\s\S]*?-->.*?/g;
                     bufferText = bufferText.replace(commentStripper, '');
@@ -47,7 +46,7 @@ export class ItemAddDescriptionComponent implements AfterViewInit {
                     bufferText = bufferText.replace(wordStripper, '');
                     const wordStripper2 = /<\/o:p>/gi;
                     bufferText = bufferText.replace(wordStripper2, '');
-                    var div = $('<div />');
+                    let div = $('<div />');
                     div.append(bufferText);
                     div.find('*').removeAttr('style border class cellspacing cellpadding width height align nowrap valign lang');
                     div.find('table').addClass('table table-bordered');
@@ -55,9 +54,9 @@ export class ItemAddDescriptionComponent implements AfterViewInit {
                     div.find('meta').remove();
                     div.find('link').remove();
                     div.find('xml').remove();
-                    setTimeout(function(){
-                        document.execCommand('insertHtml',false,div.html());
-                    },10);
+                    setTimeout(function() {
+                        document.execCommand('insertHtml', false, div.html());
+                    }, 10);
                 }
               }
         });
@@ -69,27 +68,27 @@ export class ItemAddDescriptionComponent implements AfterViewInit {
     }
 
     onTextEditorBlur(id: string) {
-        switch(id) { 
-            case "Description": { 
+        switch (id) {
+            case 'Description': {
                 this.item.Description = $('#itemDescriptionId').summernote('code');
-                break; 
-            } 
-            case "ShortDescription": { 
+                break;
+            }
+            case 'ShortDescription': {
                 this.item.ShortDescription = $('#itemShortDescriptionId').summernote('code');
-                break; 
-            } 
-            case "TechnicalDetail": {
+                break;
+            }
+            case 'TechnicalDetail': {
                 this.item.TechnicalDetail = $('#itemTechnicalDetailId').summernote('code');
-                break;    
-            } 
-            case "AdditionalInformation": { 
+                break;
+            }
+            case 'AdditionalInformation': {
                 this.item.AdditionalInformation = $('#itemAdditionalInformationId').summernote('code');
-                break; 
-            }  
-            default: { 
-               console.log("Invalid choice"); 
-               break;              
-            } 
+                break;
+            }
+            default: {
+               console.log('Invalid choice');
+               break;
+            }
          }
     }
 

@@ -16,7 +16,6 @@ export class ItemAddBundleComponent implements OnInit, OnChanges {
     @Input() selectionsMatTable: MatTableDataSource<ItemSelectionInsert>;
     @Input() itemBundleOptionsMatTable: MatTableDataSource<ItemOptionInsert>;
     @Input() itemBundleOptionSelectionsMatTable: MatTableDataSource<ItemSelectionInsert>;
-    
     @Output() getItemList = new EventEmitter<void>();
     @Output() setSelectedBundleOption = new EventEmitter<number>();
 
@@ -32,32 +31,32 @@ export class ItemAddBundleComponent implements OnInit, OnChanges {
             'label': 'Drop-down'
         }
     ];
-    
+
     optionDisplayedColumns = ['Add', 'Down', 'Position', 'Up', 'Title', 'Type', 'Required', 'Remove'];
-    
+
     selectionDisplayedColumns = ['Add', 'Down', 'Position', 'Up', 'Item', 'Quantity', 'IsDefault', 'Remove'];
-    
+
     pendingOptionAdd: boolean;
     currentOptionIndex: number;
     formBundleDirty = false;
-    
+
     pendingSelectionAdd: boolean;
     currentSelectionIndex: number;
-    
+
     formSelectionDirty = false;
-    
+
     constructor(private itemService: ItemService) { }
-    
-    getOptionTypeLabel(value: string){
+
+    getOptionTypeLabel(value: string) {
         return this.optionTypes.find(x => x.value == value).label;
-        
+
     }
     get hasEmptySelection(): boolean {
         let result = false;
         this.item.ItemOptions.forEach(option => {
             option.ItemSelections.forEach((selection, index) => {
                 if (
-                    (selection.ItemID === 0 || String(selection.ItemID) === '0') 
+                    (selection.ItemID === 0 || String(selection.ItemID) === '0')
                     && index != option.ItemSelections.length - 1) {
                     result = true;
                 }
@@ -79,7 +78,7 @@ export class ItemAddBundleComponent implements OnInit, OnChanges {
         if (changes.item && changes.item.currentValue && changes.item.currentValue.ItemOptions.length === 0) {
             const _temp = new ItemOptionInsert(true, null, null, 'select', []);
             this.item.ItemOptions.push(_temp);
-            
+
         }
         if (changes.selectedOption && changes.selectedOption.currentValue && changes.selectedOption.currentValue.ItemSelections.length === 0) {
             const _temp = new ItemSelectionInsert(null, null, false, 0, 1, false);
@@ -103,15 +102,14 @@ export class ItemAddBundleComponent implements OnInit, OnChanges {
     // }
 
     addOption(itemOption: ItemOptionInsert) {
-        if (this.isOptionRequirementValid(itemOption)) {      
+        if (this.isOptionRequirementValid(itemOption)) {
             this.pendingOptionAdd = true;
             itemOption.Position = this.item.ItemOptions.length;
             const _temp = new ItemOptionInsert(true, null, null, 'select', []);
             this.item.ItemOptions.push(_temp);
             //this.refreshOptionDataSource(this.item.ItemOptions);
-        }
-        else {
-            this.itemService.sendNotification({ type: 'error', title: 'Error', content: "Title is required" });
+        } else {
+            this.itemService.sendNotification({ type: 'error', title: 'Error', content: 'Title is required' });
         }
     }
 
@@ -119,14 +117,13 @@ export class ItemAddBundleComponent implements OnInit, OnChanges {
         if (itemOption
             && itemOption.Title) {
             return true;
-        } 
-        else {
+        } else {
             return false;
         }
     }
 
     addSelection(itemSelection: ItemSelectionInsert) {
-        if (this.isSelectionRequirementValid(itemSelection)) {      
+        if (this.isSelectionRequirementValid(itemSelection)) {
             this.pendingSelectionAdd = true;
             itemSelection.Position = this.selectedOption.ItemSelections.length;
             const _temp = new ItemSelectionInsert(null, null, false, 0, 1, false);
@@ -135,9 +132,8 @@ export class ItemAddBundleComponent implements OnInit, OnChanges {
             }
             this.selectedOption.ItemSelections.push(_temp);
             this.setSelectedBundleOption.emit(this.currentOptionIndex);
-        }
-        else {
-            this.itemService.sendNotification({ type: 'error', title: 'Error', content: "Item is required" });
+        } else {
+            this.itemService.sendNotification({ type: 'error', title: 'Error', content: 'Item is required' });
         }
     }
 
@@ -145,8 +141,7 @@ export class ItemAddBundleComponent implements OnInit, OnChanges {
         if (itemSelection
             && (itemSelection.ItemID !== 0 || String(itemSelection.ItemID) !== '0') ) {
             return true;
-        } 
-        else {
+        } else {
             return false;
         }
     }
@@ -173,7 +168,7 @@ export class ItemAddBundleComponent implements OnInit, OnChanges {
     onOptionTypeChange(index: number) {
         this.selectedOption.ItemSelections.forEach((value) => {
             value.IsDefault = false;
-            value.CanChangeQty = false;     
+            value.CanChangeQty = false;
         });
         //this.refreshSelectionDataSource(this.selectedOption.ItemSelections);
     }
@@ -184,16 +179,16 @@ export class ItemAddBundleComponent implements OnInit, OnChanges {
         //this.selectedOption = option;
         this.setSelectedBundleOption.emit(index);
         //this.selections =  option.ItemSelections;
-        this.selectedOptionLabel = this.optionTypes[this.optionTypes.findIndex(type => type.value === option.Type)].label;                
-          
-        if(option.ItemSelections.length === 0 && this.currentOptionIndex !== this.item.ItemOptions.length - 1) {
+        this.selectedOptionLabel = this.optionTypes[this.optionTypes.findIndex(type => type.value === option.Type)].label;
+
+        if (option.ItemSelections.length === 0 && this.currentOptionIndex !== this.item.ItemOptions.length - 1) {
             const _temp = new ItemSelectionInsert(null, null, false, 0, 1, false);
             if (this.selectedOption.ItemSelections.length === 0) {
                 _temp.IsDefault = true;
             }
             option.ItemSelections.push(_temp);
         }
-        this.currentSelectionIndex = option.ItemSelections.length -1;
+        this.currentSelectionIndex = option.ItemSelections.length - 1;
     }
 
     onSelectSelection(index: number) {
@@ -222,16 +217,15 @@ export class ItemAddBundleComponent implements OnInit, OnChanges {
     }
 
     isDefaultClick(selection: ItemSelectionInsert, index: number) {
-        if(this.selectedOption.Type == "radio" || this.selectedOption.Type == "select")
-        {
+        if (this.selectedOption.Type == 'radio' || this.selectedOption.Type == 'select') {
             this.selectedOption.ItemSelections.forEach((value, i) => {
-                if(i != index) {
+                if (i != index) {
                     value.IsDefault = false;
                 }
             });
             //this.refreshSelectionDataSource(this.selectedOption.ItemSelections);
             this.setSelectedBundleOption.emit(this.currentOptionIndex);
-        }        
+        }
     }
 
     getItemName(id: number) {
@@ -242,7 +236,7 @@ export class ItemAddBundleComponent implements OnInit, OnChanges {
         const index = array.indexOf(element);
         const newIndex = index + delta;
         if (newIndex < 0  || newIndex === array.length) { return; } // Already at the top or bottom.
-        const indexes = [index, newIndex].sort((a,b)=>a-b); // Sort the indexes
+        const indexes = [index, newIndex].sort((a, b) => a - b); // Sort the indexes
         array.splice(indexes[0], 2, array[indexes[1]], array[indexes[0]]); // Replace from lowest index, two elements, reverting the order
     }
 
@@ -254,8 +248,8 @@ export class ItemAddBundleComponent implements OnInit, OnChanges {
         form.Type = 'select';
 
     }
-    
-    clearSelectionFields(form) {        
+
+    clearSelectionFields(form) {
         this.formSelectionDirty = false;
         form.CanChangeQty = false;
         form.ItemID = null;

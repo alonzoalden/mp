@@ -16,7 +16,7 @@ export class SettingMemberPreferenceShellComponent implements OnInit {
     errorMessage$: Observable<string>;
 
     constructor(private store: Store<fromSetting.State>) {}
-    
+
     ngOnInit() {
         this.userInfo$ = this.store.pipe(select(fromUser.getCurrentUser));
         this.pendingSave$ = this.store.pipe(select(fromSetting.getPendingSave));

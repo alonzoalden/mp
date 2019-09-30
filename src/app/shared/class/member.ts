@@ -16,7 +16,7 @@ export class Member {
         public DefaultLanguage: string,
         public DefaultPageSize: number,
 
-        public IsActive: boolean,        
+        public IsActive: boolean,
         public UpdatedOn: string,
         public CreatedOn: string,
         public Password: string,

@@ -24,10 +24,10 @@ export class InboundShipmentEffects {
         private router: Router,
         private store: Store<fromInboundShipment.State>,
         private inboundShipmentService: PurchaseOrderService,
-        private itemService: ItemService, 
+        private itemService: ItemService,
         private actions$: Actions) { }
-    
-    
+
+
     @Effect()
     loadPurchaseOrderOverview$: Observable<Action> = this.actions$.pipe(
         ofType(inboundShipmentActions.InboundShipmentActionTypes.LoadPurchaseOrderOverview),
@@ -35,7 +35,7 @@ export class InboundShipmentEffects {
             this.inboundShipmentService.getPurchaseOrderOverview().pipe(
                 map((purchaseOrders: PurchaseOrder[]) => (new inboundShipmentActions.LoadPurchaseOrderOverviewSuccess(purchaseOrders))),
                 catchError(err => {
-                    of(new inboundShipmentActions.LoadPurchaseOrderOverviewFail(err))
+                    of(new inboundShipmentActions.LoadPurchaseOrderOverviewFail(err));
                     return EMPTY;
                 })
             )
@@ -51,7 +51,7 @@ export class InboundShipmentEffects {
                 map((purchaseOrder: PurchaseOrder) => (new inboundShipmentActions.LoadPurchaseOrderSuccess(purchaseOrder))),
                 catchError(err => {
                     //this.router.navigate(['/inbound-shipment']);
-                    of(new inboundShipmentActions.LoadPurchaseOrderFail(err))
+                    of(new inboundShipmentActions.LoadPurchaseOrderFail(err));
                     return EMPTY;
                 })
             )
@@ -66,7 +66,7 @@ export class InboundShipmentEffects {
                 map((purchaseOrder: PurchaseOrder) => (new inboundShipmentActions.LoadCurrentPurchaseOrderEditSuccess(purchaseOrder))),
                 catchError(err => {
                     //this.router.navigate(['/inbound-shipment']);
-                    of(new inboundShipmentActions.LoadCurrentPurchaseOrderEditFail(err))
+                    of(new inboundShipmentActions.LoadCurrentPurchaseOrderEditFail(err));
                     return EMPTY;
                 })
             )
@@ -74,7 +74,7 @@ export class InboundShipmentEffects {
     );
 
 
-    
+
     @Effect()
     loadPurchaseOrderLines$: Observable<Action> = this.actions$.pipe(
         ofType(inboundShipmentActions.InboundShipmentActionTypes.LoadPurchaseOrderLines),
@@ -87,17 +87,17 @@ export class InboundShipmentEffects {
                     });
                     //this.inboundShipmentService.updatePurchaseLineCartonQuantity(this.purchaseOrder);
                     this.inboundShipmentService.currentPurchaseOrderLines = purchaseorderlines;
-                    return (new inboundShipmentActions.LoadPurchaseOrderLinesSuccess(purchaseorderlines))
+                    return (new inboundShipmentActions.LoadPurchaseOrderLinesSuccess(purchaseorderlines));
             }),
 
                 catchError(err => {
-                    of(new inboundShipmentActions.LoadPurchaseOrderLinesFail(err))
+                    of(new inboundShipmentActions.LoadPurchaseOrderLinesFail(err));
                     return EMPTY;
                 })
             )
         )
     );
-    
+
     @Effect()
     loadPurchaseOrderLineList$: Observable<Action> = this.actions$.pipe(
         ofType(inboundShipmentActions.InboundShipmentActionTypes.LoadPurchaseOrderLineList),
@@ -106,13 +106,13 @@ export class InboundShipmentEffects {
             this.inboundShipmentService.getPurchaseOrderLineList(id).pipe(
                 map((purchaseOrder: PurchaseOrderLineList[]) => (new inboundShipmentActions.LoadPurchaseOrderLineListSuccess(purchaseOrder))),
                 catchError(err => {
-                    of(new inboundShipmentActions.LoadPurchaseOrderLineListFail(err))
+                    of(new inboundShipmentActions.LoadPurchaseOrderLineListFail(err));
                     return EMPTY;
                 })
             )
         )
     );
-    
+
     @Effect()
     loadInboundShippingMethods$: Observable<Action> = this.actions$.pipe(
         ofType(inboundShipmentActions.InboundShipmentActionTypes.LoadInboundShippingMethods),
@@ -128,16 +128,16 @@ export class InboundShipmentEffects {
                         this.inboundShipmentService.currentInboundShippingMethod = _inboundShippingMethod;
                         this.inboundShipmentService.currentInboundShippingMethods.push(_inboundShippingMethod);
                     }
-                    return (new inboundShipmentActions.LoadInboundShippingMethodsSuccess(inboundshippingmethods))
+                    return (new inboundShipmentActions.LoadInboundShippingMethodsSuccess(inboundshippingmethods));
                 }),
                 catchError(err => {
-                    of(new inboundShipmentActions.LoadInboundShippingMethodsFail(err))
+                    of(new inboundShipmentActions.LoadInboundShippingMethodsFail(err));
                     return EMPTY;
                 })
             )
         )
     );
-    
+
     @Effect()
     loadCartons$: Observable<Action> = this.actions$.pipe(
         ofType(inboundShipmentActions.InboundShipmentActionTypes.LoadCartons),
@@ -146,7 +146,7 @@ export class InboundShipmentEffects {
             this.inboundShipmentService.getCartons(id).pipe(
                 map((cartons: Carton[]) => (new inboundShipmentActions.LoadCartonsSuccess(cartons))),
                 catchError(err => {
-                    of(new inboundShipmentActions.LoadCartonsFail(err))
+                    of(new inboundShipmentActions.LoadCartonsFail(err));
                     return EMPTY;
                 })
             )
@@ -155,8 +155,8 @@ export class InboundShipmentEffects {
 
 
 
-    
-    
+
+
     @Effect()
     addNewPurchaseOrder$: Observable<Action> = this.actions$.pipe(
         ofType(inboundShipmentActions.InboundShipmentActionTypes.AddNewPurchaseOrder),
@@ -168,7 +168,7 @@ export class InboundShipmentEffects {
                     return (new inboundShipmentActions.AddNewPurchaseOrderSuccess(purchaseOrder));
                 }),
                 catchError(err => {
-                    of(new inboundShipmentActions.AddNewPurchaseOrderFail(err))
+                    of(new inboundShipmentActions.AddNewPurchaseOrderFail(err));
                     return EMPTY;
                 })
             )
@@ -193,13 +193,13 @@ export class InboundShipmentEffects {
                 }),
                 catchError(err => {
                     this.inboundShipmentService.sendNotification({ type: 'error', title: 'Error', content: err });
-                    of(new inboundShipmentActions.EditPurchaseOrderFail(err))
+                    of(new inboundShipmentActions.EditPurchaseOrderFail(err));
                     return EMPTY;
                 })
             )
         )
     );
-    
+
     @Effect()
     editPurchaseOrderThenPrintItemLabels$: Observable<Action> = this.actions$.pipe(
         ofType(inboundShipmentActions.InboundShipmentActionTypes.EditPurchaseOrderThenPrintItemLabels),
@@ -211,24 +211,23 @@ export class InboundShipmentEffects {
                     this.inboundShipmentService.currentPurchaseOrderEdit = payload.purchaseOrder;
                     this.inboundShipmentService.currentPurchaseLineIsUpdated = false;
                     this.inboundShipmentService.sendNotification({ type: 'success', title: 'Successfully Updated', content: `${purchaseOrder.PurchaseOrderID} was saved` });
-                    if(payload.size == "small") {
+                    if (payload.size == 'small') {
                         this.store.dispatch(new inboundShipmentActions.DownloadAllItemLabel({purchaseOrder: purchaseOrder, border: payload.border}));
-                    }
-                    else {
+                    } else {
                         this.store.dispatch(new inboundShipmentActions.DownloadAllItemLargeLabel({purchaseOrder: purchaseOrder, border: payload.border}));
                     }
                     return (new inboundShipmentActions.EditPurchaseOrderThenPrintItemLabelsSuccess(purchaseOrder));
                 }),
                 catchError(err => {
                     this.inboundShipmentService.sendNotification({ type: 'error', title: 'Error', content: err });
-                    of(new inboundShipmentActions.EditPurchaseOrderThenPrintItemLabelsFail(err))
+                    of(new inboundShipmentActions.EditPurchaseOrderThenPrintItemLabelsFail(err));
                     return EMPTY;
                 })
             )
         )
     );
 
-    
+
     @Effect()
     addInboundShippingMethod$: Observable<Action> = this.actions$.pipe(
         ofType(inboundShipmentActions.InboundShipmentActionTypes.AddInboundShippingMethod),
@@ -241,7 +240,7 @@ export class InboundShipmentEffects {
                 }),
                 catchError(err => {
                     this.inboundShipmentService.sendNotification({ type: 'error', title: 'Error', content: err });
-                    of(new inboundShipmentActions.AddInboundShippingMethodFail(err))
+                    of(new inboundShipmentActions.AddInboundShippingMethodFail(err));
                     return EMPTY;
                 })
             )
@@ -260,7 +259,7 @@ export class InboundShipmentEffects {
                 }),
                 catchError(err => {
                     this.inboundShipmentService.sendNotification({ type: 'error', title: 'Error', content: err });
-                    of(new inboundShipmentActions.EditInboundShippingMethodFail(err))
+                    of(new inboundShipmentActions.EditInboundShippingMethodFail(err));
                     return EMPTY;
                 })
             )
@@ -279,13 +278,13 @@ export class InboundShipmentEffects {
                 }),
                 catchError(err => {
                     this.inboundShipmentService.sendNotification({ type: 'error', title: 'Error', content: err });
-                    of(new inboundShipmentActions.DeletePurchaseOrderFail(err))
+                    of(new inboundShipmentActions.DeletePurchaseOrderFail(err));
                     return EMPTY;
                 })
             )
         )
     );
-    
+
 
     @Effect()
     downloadPurchaseOrderLabel$: Observable<Action> = this.actions$.pipe(
@@ -323,7 +322,7 @@ export class InboundShipmentEffects {
                     return (new inboundShipmentActions.DownloadPurchaseOrderLabelSuccess(data));
                 }),
                 catchError(err => {
-                    of(new inboundShipmentActions.DownloadPurchaseOrderLabelFail(err))
+                    of(new inboundShipmentActions.DownloadPurchaseOrderLabelFail(err));
                     return EMPTY;
                 })
             )
@@ -335,7 +334,7 @@ export class InboundShipmentEffects {
         ofType(inboundShipmentActions.InboundShipmentActionTypes.DownloadAllCartonLabel),
         map((action: inboundShipmentActions.DownloadAllCartonLabel) => action.payload),
         mergeMap((purchaseOrder: PurchaseOrder) =>
-            this.inboundShipmentService.downloadAllCartonLabel(purchaseOrder.PurchaseOrderID, "yes").pipe(
+            this.inboundShipmentService.downloadAllCartonLabel(purchaseOrder.PurchaseOrderID, 'yes').pipe(
                 map((data: Blob) => {
                     const blob = new Blob([data], {type: 'application/pdf'});
                 const blobUrl = URL.createObjectURL(blob);
@@ -366,7 +365,7 @@ export class InboundShipmentEffects {
                     return (new inboundShipmentActions.DownloadPurchaseOrderLabelSuccess(data));
                 }),
                 catchError(err => {
-                    of(new inboundShipmentActions.DownloadPurchaseOrderLabelFail(err))
+                    of(new inboundShipmentActions.DownloadPurchaseOrderLabelFail(err));
                     return EMPTY;
                 })
             )
@@ -409,7 +408,7 @@ export class InboundShipmentEffects {
                     return (new inboundShipmentActions.DownloadAllItemLabelSuccess(data));
                 }),
                 catchError(err => {
-                    of(new inboundShipmentActions.DownloadAllItemLabelFail(err))
+                    of(new inboundShipmentActions.DownloadAllItemLabelFail(err));
                     return EMPTY;
                 })
             )
@@ -423,7 +422,7 @@ export class InboundShipmentEffects {
         mergeMap((payload: { purchaseOrder: PurchaseOrder, border: string}) =>
             this.inboundShipmentService.downloadAllItemLargeLabel(payload.purchaseOrder.PurchaseOrderID, payload.border).pipe(
                 map((data: Blob) => {
-                    
+
                     const blob = new Blob([data], {type: 'application/pdf'});
                     const blobUrl = URL.createObjectURL(blob);
                     if (window.navigator.msSaveOrOpenBlob) {
@@ -434,7 +433,7 @@ export class InboundShipmentEffects {
                         // iframe.style.display = 'none';
                         // iframe.src = blobUrl;
                         // document.body.appendChild(iframe);
-    
+
                         // iframe.onload = (function() {
                         //     iframe.contentWindow.focus();
                         //     iframe.contentWindow.print();
@@ -446,20 +445,20 @@ export class InboundShipmentEffects {
                         document.body.appendChild(a);
                         a.target = '_blank';
                         a.click();
-    
+
                         document.body.removeChild(a);
                         URL.revokeObjectURL(fileURL);
                     }
                     return (new inboundShipmentActions.DownloadAllItemLargeLabelSuccess(data));
                 }),
                 catchError(err => {
-                    of(new inboundShipmentActions.DownloadAllItemLargeLabelFail(err))
+                    of(new inboundShipmentActions.DownloadAllItemLargeLabelFail(err));
                     return EMPTY;
                 })
             )
         )
     );
-    
+
     @Effect()
     downloadCartonLabelCount$: Observable<Action> = this.actions$.pipe(
         ofType(inboundShipmentActions.InboundShipmentActionTypes.DownloadCartonLabelCount),
@@ -496,7 +495,7 @@ export class InboundShipmentEffects {
                     return (new inboundShipmentActions.DownloadAllItemLargeLabelSuccess(data));
                 }),
                 catchError(err => {
-                    of(new inboundShipmentActions.DownloadAllItemLargeLabelFail(err))
+                    of(new inboundShipmentActions.DownloadAllItemLargeLabelFail(err));
                     return EMPTY;
                 })
             )
@@ -539,7 +538,7 @@ export class InboundShipmentEffects {
                     return (new inboundShipmentActions.DownloadItemLabelCountSuccess(data));
                 }),
                 catchError(err => {
-                    of(new inboundShipmentActions.DownloadItemLabelCountFail(err))
+                    of(new inboundShipmentActions.DownloadItemLabelCountFail(err));
                     return EMPTY;
                 })
             )
@@ -582,13 +581,13 @@ export class InboundShipmentEffects {
                     return (new inboundShipmentActions.DownloadItemLargeLabelCountSuccess(data));
                 }),
                 catchError(err => {
-                    of(new inboundShipmentActions.DownloadItemLargeLabelCountFail(err))
+                    of(new inboundShipmentActions.DownloadItemLargeLabelCountFail(err));
                     return EMPTY;
                 })
             )
         )
     );
-    
+
     @Effect()
     loadSimpleItemList$: Observable<Action> = this.actions$.pipe(
         ofType(inboundShipmentActions.InboundShipmentActionTypes.LoadSimpleItemList),
@@ -596,7 +595,7 @@ export class InboundShipmentEffects {
             this.itemService.getSimpleItemList().pipe(
                 map((itemlists: ItemList[]) => (new inboundShipmentActions.LoadSimpleItemListSuccess(itemlists))),
                 catchError(err => {
-                    of(new inboundShipmentActions.LoadSimpleItemListFail(err))
+                    of(new inboundShipmentActions.LoadSimpleItemListFail(err));
                     return EMPTY;
                 })
             )
@@ -607,11 +606,11 @@ export class InboundShipmentEffects {
     updatePurchaseLineCartonQuantity$: Observable<Action> = this.actions$.pipe(
         ofType(inboundShipmentActions.InboundShipmentActionTypes.UpdatePurchaseLineCartonQuantity),
         map((action: inboundShipmentActions.UpdatePurchaseLineCartonQuantity) => {
-            console.log(action.payload)
+            console.log(action.payload);
             // state.currentPurchaseOrder.PurchaseOrderLines.forEach((purchaseorderline) => {
             //     purchaseorderline.CartonQuantity = 0;
             // });
-            
+
             // state.currentPurchaseOrder.Cartons.forEach((carton, ci) => {
             //     carton.CartonLines.forEach((cartonline, cli) => {
             //         if (!cartonline.pendingAdd) {
@@ -619,19 +618,19 @@ export class InboundShipmentEffects {
             //             if (purchaseorderline) {
             //                 purchaseorderline.CartonQuantity += cartonline.Quantity;
             //                 this.replacePurchaseOrderLine(cartonline.PurchaseOrderLineID, purchaseorderline);
-    
+
             //                 state.currentPurchaseOrder.PurchaseOrderLines[state.currentPurchaseOrder.PurchaseOrderLines.findIndex(i => i.PurchaseOrderLineID === cartonline.PurchaseOrderLineID)] = purchaseorderline;
             //             }
             //         }
             //     });
             // })
-            return (new inboundShipmentActions.UpdatePurchaseLineCartonQuantity(action.payload))
+            return (new inboundShipmentActions.UpdatePurchaseLineCartonQuantity(action.payload));
         }),
-        // mergeMap((purchaseorder) => 
-            
+        // mergeMap((purchaseorder) =>
+
         //     (new inboundShipmentActions.UpdatePurchaseLineCartonQuantity(purchaseorder))
-        
-            
+
+
         //     // this.itemService.getSimpleItemList().pipe(
         //     //     map((itemlists: ItemList[]) => (new inboundShipmentActions.UpdatePurchaseLineCartonQuantitySuccess(itemlists))),
         //     //     catchError(err => {
@@ -642,9 +641,9 @@ export class InboundShipmentEffects {
         // )
     );
 
-    
-    
 
-    
+
+
+
 
 }

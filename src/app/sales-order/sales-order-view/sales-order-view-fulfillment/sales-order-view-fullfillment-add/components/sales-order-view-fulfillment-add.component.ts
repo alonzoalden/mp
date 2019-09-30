@@ -34,7 +34,7 @@ export class SalesOrderFulfillmentAddComponent implements OnInit, OnChanges {
 
     minDate = new Date(2000, 0, 1);
     maxDate = new Date(2020, 0, 1);
-    
+
     ngOnChanges(changes: SimpleChanges): void {
         if (changes.fulfillmentSalesOrderLinesMatTable && changes.fulfillmentSalesOrderLinesMatTable.currentValue.data.length) {
             this.fulfillment = new Fulfillment(null, String(this.orderid), null, null, null, null, null, null, null, null, null, this.shipmentTrackings, this.fulfillmentSalesOrderLinesMatTable.data);
@@ -46,28 +46,28 @@ export class SalesOrderFulfillmentAddComponent implements OnInit, OnChanges {
         if (changes.fulfillmentSalesOrderLinesMatTable && !changes.fulfillmentSalesOrderLinesMatTable.currentValue.data.length && changes.fulfillmentSalesOrderLinesMatTable.firstChange) {
             this.getFulfilmmentSalesOrderLines.emit(this.route.parent.snapshot.params['id']);
         }
-        
+
     }
 
     ngOnInit() {
         this.orderid = this.route.parent.snapshot.params['id'];
         this.fulfilledby = 'merchant';
-        
+
         this.fulfillment = new Fulfillment(null, String(this.orderid), null, null, null, null, null, null, null, null, null, this.shipmentTrackings, this.fulfillmentSalesOrderLinesMatTable.data);
-        
+
         this.shipmentTrackings = [];
         this.addNewShipmentTracking();
     }
 
     addNewShipmentTracking() {
         const _temp = new ShipmentTracking(null, null, null, null);
-        this.shipmentTrackings.push(_temp);        
+        this.shipmentTrackings.push(_temp);
     }
     onAddShipmentTracking() {
         this.addNewShipmentTracking();
     }
 
-    onAddFulfillment() {        
+    onAddFulfillment() {
         if (this.isValid()) {
             this.addFulfillment.emit(this.fulfillment);
         }
@@ -76,25 +76,23 @@ export class SalesOrderFulfillmentAddComponent implements OnInit, OnChanges {
     isValid(): boolean {
         if (this.fulfillment
             && this.fulfillment.ShipDate
-            && this.fulfillment.ShipmentTrackings.find(val=> !!val.TrackingNumber && val.TrackingNumber.toString().trim() != '')
+            && this.fulfillment.ShipmentTrackings.find(val => !!val.TrackingNumber && val.TrackingNumber.toString().trim() != '')
             && this.fulfillment.ShipmentTrackings.length > 0
             && this.fulfillment.Carrier
             && this.fulfillment.ShippingMethod
             && this.fulfillment.FulfillmentSalesOrderLines
             && this.fulfillment.FulfillmentSalesOrderLines.length > 0
             && this.getTotalPackageQty() > 0
-        ) {                
+        ) {
             return true;
         } else {
-            
-            if(this.getTotalPackageQty() == 0) {
-                this.salesorderService.sendNotification({ type: 'error', title: 'Error', content: "Item is required"});
-            }
-            else if(!this.fulfillment.ShipmentTrackings.find(val=> !!val.TrackingNumber && val.TrackingNumber.toString().trim() != '') || this.fulfillment.ShipmentTrackings.length == 0) {                        
-                this.salesorderService.sendNotification({ type: 'error', title: 'Error', content: "Tracking Number is required"});
-            }
-            else {
-                this.salesorderService.sendNotification({ type: 'error', title: 'Error', content: "Please enter all required fields"});
+
+            if (this.getTotalPackageQty() == 0) {
+                this.salesorderService.sendNotification({ type: 'error', title: 'Error', content: 'Item is required'});
+            } else if (!this.fulfillment.ShipmentTrackings.find(val => !!val.TrackingNumber && val.TrackingNumber.toString().trim() != '') || this.fulfillment.ShipmentTrackings.length == 0) {
+                this.salesorderService.sendNotification({ type: 'error', title: 'Error', content: 'Tracking Number is required'});
+            } else {
+                this.salesorderService.sendNotification({ type: 'error', title: 'Error', content: 'Please enter all required fields'});
             }
 
             return false;
@@ -102,10 +100,10 @@ export class SalesOrderFulfillmentAddComponent implements OnInit, OnChanges {
     }
 
     public getTotalPackageQty(): number {
-        var total = 0;
-        if (this.fulfillment != null && this.fulfillment.FulfillmentSalesOrderLines != null && this.fulfillment.FulfillmentSalesOrderLines.length > 0) {      
+        let total = 0;
+        if (this.fulfillment != null && this.fulfillment.FulfillmentSalesOrderLines != null && this.fulfillment.FulfillmentSalesOrderLines.length > 0) {
             this.fulfillment.FulfillmentSalesOrderLines.forEach(x => total += x.PackageQuantity);
         }
         return total;
-    }  
+    }
 }

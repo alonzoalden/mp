@@ -1,6 +1,4 @@
 import { Component, OnInit, Input, EventEmitter, Output } from '@angular/core';
-import { MatTableDataSource } from '@angular/material';
-
 import { DashboardVendorNotification, Dashboard } from '../../../../shared/class/dashboard';
 import { growContainerAnimation } from '../smooth-open-animation.component';
 import { trigger, transition, useAnimation } from '@angular/animations';
@@ -23,7 +21,7 @@ export class DashboardMainVendorNotificationComponent implements OnInit {
     displayedColumns = ['Status', 'Count'];
     displayedMerchantColumns = ['Unshipped', 'Shipped'];
     displayedToolotsColumns = ['Unshipped', 'Shipped'];
-    
+
     @Input() userInfo: Member;
     @Input() dashboard: Dashboard;
     @Input() dashboardVendorNotification: DashboardVendorNotification;

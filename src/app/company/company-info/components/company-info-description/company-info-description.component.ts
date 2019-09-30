@@ -20,7 +20,7 @@ export class CompanyInfoDescriptionComponent implements OnInit {
     @Output() loadShippingAddressState = new EventEmitter<number | string>();
     @Output() updateCompanyInfoShippingAddress = new EventEmitter<CompanyInfo>();
     @Output() updateCompanyInfoBillingAddress = new EventEmitter<CompanyInfo>();
-    
+
 
     constructor(private companyService: CompanyService) { }
 
@@ -33,11 +33,11 @@ export class CompanyInfoDescriptionComponent implements OnInit {
     }
 
     getBillingAddressState() {
-        this.loadBillingAddressState.emit(this.companyInfo.ShippingCountryID);      
+        this.loadBillingAddressState.emit(this.companyInfo.ShippingCountryID);
     }
 
     updateShippingAddress() {
-        if(this.isShippingAddressValid()) {
+        if (this.isShippingAddressValid()) {
             this.updateCompanyInfoShippingAddress.emit(this.companyInfo);
         }
     }
@@ -50,15 +50,14 @@ export class CompanyInfoDescriptionComponent implements OnInit {
             && this.companyInfo.ShippingState
             && this.companyInfo.ShippingZip) {
             return true;
-        }
-        else {
+        } else {
             this.companyService.sendNotification({ type: 'error', title: 'Error', content: 'Please enter all required fields' });
             return false;
         }
     }
 
     updateBillingAddress() {
-        if(this.isBillingAddressValid()) {
+        if (this.isBillingAddressValid()) {
             this.updateCompanyInfoBillingAddress.emit(this.companyInfo);
         }
     }
@@ -70,37 +69,32 @@ export class CompanyInfoDescriptionComponent implements OnInit {
             && this.companyInfo.BillingState
             && this.companyInfo.BillingZip) {
             return true;
-        }
-        else {
+        } else {
             this.companyService.sendNotification({ type: 'error', title: 'Error', content: 'Please enter all required fields' });
             return false;
         }
     }
 
     onShippingCountryChange() {
-        if(this.companyInfo.ShippingCountryID == 'US') {
+        if (this.companyInfo.ShippingCountryID == 'US') {
             this.getShippingAddressState();
-            this.companyInfo.ShippingState = "Alabama";
-        }
-        else if(this.companyInfo.ShippingCountryID == 'CA') {
+            this.companyInfo.ShippingState = 'Alabama';
+        } else if (this.companyInfo.ShippingCountryID == 'CA') {
             this.getShippingAddressState();
-            this.companyInfo.ShippingState = "Alberta";
-        }
-        else {
+            this.companyInfo.ShippingState = 'Alberta';
+        } else {
             this.companyInfo.ShippingState = '';
         }
     }
 
     onBillingCountryChange() {
-        if(this.companyInfo.BillingCountryID == 'US') {
+        if (this.companyInfo.BillingCountryID == 'US') {
             this.getBillingAddressState();
-            this.companyInfo.BillingState = "Alabama";
-        }
-        else if(this.companyInfo.BillingCountryID == 'CA') {
+            this.companyInfo.BillingState = 'Alabama';
+        } else if (this.companyInfo.BillingCountryID == 'CA') {
             this.getBillingAddressState();
-            this.companyInfo.BillingState = "Alberta";
-        }        
-        else {
+            this.companyInfo.BillingState = 'Alberta';
+        } else {
             this.companyInfo.BillingState = '';
         }
     }

@@ -23,7 +23,7 @@ export class ItemEditPriceComponent implements OnInit {
     @Input() itemTierPricesMatTable: MatTableDataSource<ItemTierPrice>;
     @Output() getItemTierPrices = new EventEmitter<number>();
     //isDropship: boolean;
-    
+
     _itemTierPrices: ItemTierPrice[] = [];
 
     minDate = new Date(2000, 0, 1);
@@ -32,7 +32,7 @@ export class ItemEditPriceComponent implements OnInit {
     specialFrom: Date;
     specialTo: Date;
 
-    PendingAdd: boolean;   
+    PendingAdd: boolean;
     currentItemTierPriceIndex: number;
 
     displayedColumns = ['Add', 'Quantity', 'Price', 'Remove'];
@@ -42,9 +42,9 @@ export class ItemEditPriceComponent implements OnInit {
     canAdd = false;
 
     constructor(private route: ActivatedRoute,
-                private itemService: ItemService, 
+                private itemService: ItemService,
                 private appService: AppService) { }
-    
+
     ngOnChanges(changes: SimpleChanges) {
         if (changes.itemTierPricesMatTable && !changes.itemTierPricesMatTable.currentValue.data.length) {
             this.addPendingLine();
@@ -52,12 +52,12 @@ export class ItemEditPriceComponent implements OnInit {
         this.currentItemTierPriceIndex = this.item.ItemTierPrices.length - 1;
         // this.dataSource.sort = this.sort;
     }
-    
+
     ngOnInit(): void {
         if (!this.item.ItemTierPrices.length) {
             this.getItemTierPrices.emit(this.item.ItemID);
         }
-        if (this.item.ItemTierPrices[this.item.ItemTierPrices.length-1].ItemTierPriceID) {
+        if (this.item.ItemTierPrices[this.item.ItemTierPrices.length - 1].ItemTierPriceID) {
             this.addPendingLine();
         }
     }
@@ -66,8 +66,8 @@ export class ItemEditPriceComponent implements OnInit {
         if (this.itemService.currentItemEdit.ItemTierPrices === null) {
             this.itemService.getItemTierPrices(this.item.ItemID).subscribe(
                 (itemTierPrice: ItemTierPrice[]) => {
-                    this.item.ItemTierPrices = itemTierPrice;                    
-                    this.addPendingLine();                    
+                    this.item.ItemTierPrices = itemTierPrice;
+                    this.addPendingLine();
                     this.currentItemTierPriceIndex = this.item.ItemTierPrices.length - 1;
                     this.refreshItemTierPriceDataSource(this.item.ItemTierPrices);
                 },
@@ -83,7 +83,7 @@ export class ItemEditPriceComponent implements OnInit {
 
     addPendingLine() {
         const _temp = new ItemTierPrice(0, this.item.ItemID, 0, 0, null, null, true);
-        this.item.ItemTierPrices.push(_temp);   
+        this.item.ItemTierPrices.push(_temp);
     }
 
     removePendingLine() {
@@ -93,16 +93,15 @@ export class ItemEditPriceComponent implements OnInit {
         }
     }
 
-    refreshItemTierPriceDataSource(itemTierPrices: ItemTierPrice[]) {        
+    refreshItemTierPriceDataSource(itemTierPrices: ItemTierPrice[]) {
         this.itemTierPricesMatTable = new MatTableDataSource<ItemTierPrice>(itemTierPrices);
     }
 
     onAddItemTierPrice(itemTierPrice: ItemTierPrice) {
         const existItemTierPrice = this.item.ItemTierPrices.find(x => x.Quantity === itemTierPrice.Quantity && !x.pendingAdd);
         if (existItemTierPrice) {
-            this.itemService.sendNotification({ type: 'error', title: 'Error', content: "Tier Pricing already exists for this Quantity" });            
-        }
-        else {
+            this.itemService.sendNotification({ type: 'error', title: 'Error', content: 'Tier Pricing already exists for this Quantity' });
+        } else {
             this.PendingAdd = true;
             itemTierPrice.pendingAdd = false;
             this.addPendingLine();
@@ -111,13 +110,12 @@ export class ItemEditPriceComponent implements OnInit {
     }
 
     onEditItemTierPrice(index: number) {
-        if(this.PendingAdd) {
+        if (this.PendingAdd) {
             this.currentItemTierPriceIndex = this.item.ItemTierPrices.length - 1;
             this.PendingAdd = false;
-        }
-        else {
+        } else {
             this.currentItemTierPriceIndex = index;
-        }    
+        }
     }
 
     onPriceTypeChange() {

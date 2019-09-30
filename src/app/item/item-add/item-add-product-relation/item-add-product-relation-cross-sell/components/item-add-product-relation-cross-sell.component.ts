@@ -16,7 +16,7 @@ export class ItemAddProductRelationCrossSellComponent implements OnInit, OnChang
     @Input() crossSellMatTable: MatTableDataSource<ItemCrossSellInsert>;
     @Output() getAllItemList = new EventEmitter<void>();
     @Output() getAllItemCrossSell = new EventEmitter<ItemCrossSellInsert>();
-    
+
     crossSellDisplayedColumns = ['Add', 'Down', 'Position', 'Up', 'ItemName', 'SKU', 'TPIN', 'Remove'];
     crossSellPendingAdd: boolean;
     currentItemCrossSellIndex: number;
@@ -49,13 +49,11 @@ export class ItemAddProductRelationCrossSellComponent implements OnInit, OnChang
                 this.item.ItemCrossSells.push(_temp);
                 this.crossSellRefreshDataSource(this.item.ItemCrossSells);
                 this.currentItemCrossSellIndex = this.item.ItemCrossSells.length - 1;
+            } else {
+                this.itemService.sendNotification({ type: 'error', title: 'Error', content: 'Up Sell already exists' });
             }
-            else {
-                this.itemService.sendNotification({ type: 'error', title: 'Error', content: "Up Sell already exists" });
-            }
-        }
-        else {
-            this.itemService.sendNotification({ type: 'error', title: 'Error', content: "Please select an item" });
+        } else {
+            this.itemService.sendNotification({ type: 'error', title: 'Error', content: 'Please select an item' });
         }
     }
 
@@ -63,8 +61,7 @@ export class ItemAddProductRelationCrossSellComponent implements OnInit, OnChang
         if (this.crossSellPendingAdd) {
             this.currentItemCrossSellIndex = this.item.ItemCrossSells.length - 1;
             this.crossSellPendingAdd = false;
-        }
-        else {
+        } else {
             this.currentItemCrossSellIndex = index;
         }
     }
@@ -89,12 +86,11 @@ export class ItemAddProductRelationCrossSellComponent implements OnInit, OnChang
                 //         this.itemService.sendNotification({ type: 'error', title: 'Error', content: this.errorMessage });
                 //     }
                 // );
-            }
-            else {
+            } else {
                 this.item.ItemCrossSells[index].CrossSellItemID = this.item.ItemCrossSells[index].PrevCrossSellItemID;
                 this.currentItemCrossSellIndex = this.item.ItemCrossSells.length - 1;
                 this.crossSellRefreshDataSource(this.item.ItemCrossSells);
-                this.itemService.sendNotification({ type: 'error', title: 'Error', content: "Cross-sell item already exists" });
+                this.itemService.sendNotification({ type: 'error', title: 'Error', content: 'Cross-sell item already exists' });
             }
         }
     }
@@ -103,14 +99,13 @@ export class ItemAddProductRelationCrossSellComponent implements OnInit, OnChang
         if (itemCrossSell
             && itemCrossSell.CrossSellItemID) {
             return true;
-        }
-        else {
+        } else {
             return false;
         }
     }
 
     existCrossSell(itemID: number, isNew: boolean = false) {
-        var counter: number = 0;
+        let counter: number = 0;
         this.item.ItemCrossSells.forEach((value, index) => {
             if (value.CrossSellItemID === itemID) {
                 if (isNew || index != this.item.ItemCrossSells.length - 1) {
@@ -119,8 +114,7 @@ export class ItemAddProductRelationCrossSellComponent implements OnInit, OnChang
             }
         }
         );
-        if (counter > 1) { return true; }
-        else { return false; }
+        if (counter > 1) { return true; } else { return false; }
     }
 
     crossSellMoveDownPosition(itemCrossSell: ItemCrossSellInsert) {
