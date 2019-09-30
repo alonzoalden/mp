@@ -44,7 +44,7 @@ export class ItemEditImageComponent implements OnInit {
     guid: string;
 
     ngOnChanges(changes: SimpleChanges): void {
-        if (changes.item && changes.item.currentValue && changes.item.currentValue.ItemImages.length === 0) {
+        if (changes.item && changes.item.currentValue && changes.item.currentValue.ItemImages.length === 0 || this.item.ItemImages[this.item.ItemImages.length-1].ItemID) {
             this.removePendingLine();
             this.addPendingLine();
         }

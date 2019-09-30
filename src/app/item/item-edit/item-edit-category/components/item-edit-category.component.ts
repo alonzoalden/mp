@@ -21,8 +21,6 @@ export class ItemEditCategoryComponent implements OnInit {
     @Output() getCategories = new EventEmitter<number>();
     @Output() getCategoryBreadCrumbs = new EventEmitter<number>();
     @Output() getItemCategoryAssignments = new EventEmitter<number>();
-    
-
 
     lastSelectedValue: number = 0;
     displayedColumns = ['SelectedCategory', 'Remove'];
@@ -42,15 +40,23 @@ export class ItemEditCategoryComponent implements OnInit {
         if (changes.currentResult && changes.currentResult.currentValue) {
             this.refreshDataSource(this.currentResult);
         }
-        if (changes.categoryAssignments && changes.categoryAssignments.currentValue.length) {
-            this.setPreviousSelectedCategories();
+        
+        if (changes.categoryAssignments && !changes.categoryAssignments.currentValue.length) {
+            const itemid = this.route.parent.snapshot.params['id'];
         }
         
-    }
+        if (changes.categoryAssignments && changes.categoryAssignments.currentValue.length) {
 
-    ngOnInit(): void {
-        const itemid = this.route.parent.snapshot.params['id'];
-        this.getItemCategoryAssignments.emit(itemid);
+                if (!this.currentResult.length) {
+                    this.setPreviousSelectedCategories();
+
+                }
+            }
+        }
+        
+        ngOnInit(): void {
+            const itemid = this.route.parent.snapshot.params['id'];
+            this.getItemCategoryAssignments.emit(itemid);
         // this.itemService.getCurrentItemEdit(itemid).subscribe(
         //     (item: Item) => {
         //         this.itemService.currentItemEdit = item;
