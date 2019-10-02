@@ -14,12 +14,10 @@ export enum SettingActionTypes {
 export class LoadMemberVendors implements Action {
   readonly type = SettingActionTypes.LoadMemberVendors;
 }
-
 export class LoadMemberVendorsSuccess implements Action {
   readonly type = SettingActionTypes.LoadMemberVendorsSuccess;
   constructor(public payload: MemberVendor[]) { }
 }
-
 export class LoadMemberVendorsFail implements Action {
   readonly type = SettingActionTypes.LoadMemberVendorsFail;
   constructor(public payload: string) { }
@@ -28,12 +26,10 @@ export class EditCurrentMember implements Action {
   readonly type = SettingActionTypes.EditCurrentMember;
   constructor(public payload: Member) { }
 }
-
 export class EditCurrentMemberSuccess implements Action {
   readonly type = SettingActionTypes.EditCurrentMemberSuccess;
   constructor(public payload: Member) { }
 }
-
 export class EditCurrentMemberFail implements Action {
   readonly type = SettingActionTypes.EditCurrentMemberFail;
   constructor(public payload: string) { }

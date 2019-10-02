@@ -1,7 +1,5 @@
 import { Member } from '../class/member';
 import * as fromRoot from '../../state/app.state';
-
-/* NgRx */
 import { createFeatureSelector, createSelector } from '@ngrx/store';
 import { UserActions, UserActionTypes } from './user-state.actions';
 
@@ -36,7 +34,8 @@ export const getCurrentUserDefaultPageSize = createSelector(
 
 export function userreducer(state = initialState, action: UserActions): UserState {
     switch (action.type) {
-        case UserActionTypes.GetCurrentUserSuccess:
+        
+        case UserActionTypes.LoadCurrentUserSuccess:
             return {
                 ...state,
                 currentUser: action.payload,
@@ -44,12 +43,19 @@ export function userreducer(state = initialState, action: UserActions): UserStat
                 error: ''
             };
 
-        case UserActionTypes.GetCurrentUserFail:
+        case UserActionTypes.LoadCurrentUserFail:
             return {
                 ...state,
                 currentUser: null,
                 currentUserDefaultPageSize: null,
                 error: action.payload
+            };
+        case UserActionTypes.SetCurrentUser:
+            return {
+                ...state,
+                currentUser: action.payload,
+                currentUserDefaultPageSize: action.payload.DefaultPageSize,
+                error: ''
             };
 
         default:

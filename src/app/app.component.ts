@@ -10,8 +10,9 @@ import { AppService } from './app.service';
 import { NotificationComponent } from './shared/tool/notification/notification.component';
 import { DeviceDetectorService } from 'ngx-device-detector';
 import * as fromUser from './shared/state/user-state.reducer';
-import { Store } from '@ngrx/store';
+import { Store, select } from '@ngrx/store';
 import * as userActions from './shared/state/user-state.actions';
+import { takeWhile } from 'rxjs/operators';
 
 declare var $: any;
 
@@ -23,10 +24,10 @@ declare var $: any;
 export class AppComponent implements OnInit, OnDestroy {
     errorMessage: string;
     subscription: Subscription;
+    componentActive: boolean = true;
 
     @ViewChild(NotificationComponent, { static: false })
-    private  notificationComponent: NotificationComponent;
-
+    private notificationComponent: NotificationComponent;
     title = 'app';
     apiResponse: any;
     claims: any;
@@ -34,32 +35,42 @@ export class AppComponent implements OnInit, OnDestroy {
     currentLanguage: string;
 
     constructor(
-                private userStore: Store<fromUser.State>,
-                private oauthService: OAuthService,
-                private httpClient: HttpClient,
-                private router: Router,
-                private appService: AppService,
-                private translate: TranslateService,
-                private deviceService: DeviceDetectorService) {
-        this.configureWithNewConfigApi();
-        translate.setDefaultLang('en');
-        this.currentLanguage = 'en';
-
-        this.initInterval();
-    }
-
-    initInterval() {
-        setInterval(() => {
-            if (this.wasLoggedIn && !this.isLoggedin) {
-                this.logout();
-            }
-        }, 5000);
+        private userStore: Store<fromUser.State>,
+        private oauthService: OAuthService,
+        private httpClient: HttpClient,
+        private router: Router,
+        private appService: AppService,
+        private translate: TranslateService,
+        private deviceService: DeviceDetectorService) {
     }
 
     ngOnInit() {
 
+        this.configureWithNewConfigApi();
+        this.translate.setDefaultLang('en');
+        this.currentLanguage = 'en';
 
-        this.userStore.dispatch(new userActions.GetCurrentUser());
+        this.initInterval();
+
+        this.userStore.pipe(
+            select(fromUser.getCurrentUser),
+            takeWhile(() => this.componentActive)
+        ).subscribe(
+            data => {
+                if (data) {
+                    this.appService.currentMember = data;
+
+                    //Set Default Language
+                    this.currentLanguage = this.appService.currentMember.DefaultLanguage;
+                    this.translate.setDefaultLang(this.currentLanguage);
+
+                    // change vendor if not active
+                    if (!this.appService.currentMember.IsActive) {
+                        this.changeVendor();
+                    }
+                }
+            }
+        );
 
         // this.appService.verifyBrowserCompatibility()
         //     .subscribe((data) => {
@@ -85,34 +96,42 @@ export class AppComponent implements OnInit, OnDestroy {
         // console.log(window.navigator.userAgent);
         // console.log(window.navigator.mimeTypes);
 
-
-
         this.subscription = this.appService.subject.subscribe(
             notification => this.doNotification(notification)
         );
 
         if (this.isLoggedin) {
-            this.appService.getCurrentMember()
-                .subscribe(
-                    (data) => {
-                        this.appService.currentMember = data;
-                        //Set Default Language
-                        this.currentLanguage = this.appService.currentMember.DefaultLanguage;
-                        this.translate.setDefaultLang(this.currentLanguage);
+            this.userStore.dispatch(new userActions.LoadCurrentUser());
+            // this.appService.getCurrentMember()
+            //     .subscribe(
+            //         (data) => {
+            //             this.appService.currentMember = data;
 
-                        // change vendor if not active
-                        if (!this.appService.currentMember.IsActive) {
-                            this.changeVendor();
-                        }
-                    },
-                    (error: any) => {
-                        this.errorMessage = <any>error;
-                        //console.log(error);
-                        this.logout();
-                    }
-                );
+            //             //Set Default Language
+            //             this.currentLanguage = this.appService.currentMember.DefaultLanguage;
+            //             this.translate.setDefaultLang(this.currentLanguage);
+
+            //             // change vendor if not active
+            //             if (!this.appService.currentMember.IsActive) {
+            //                 this.changeVendor();
+            //             }
+            //         },
+            //         (error: any) => {
+            //             this.errorMessage = <any>error;
+            //             //console.log(error);
+            //             this.logout();
+            //         }
+            //     );
         }
 
+    }
+
+    initInterval() {
+        setInterval(() => {
+            if (this.wasLoggedIn && !this.isLoggedin) {
+                this.logout();
+            }
+        }, 5000);
     }
 
     changeVendor() {
@@ -275,6 +294,7 @@ export class AppComponent implements OnInit, OnDestroy {
     }
 
     ngOnDestroy(): void {
+        this.componentActive = false;
         this.subscription.unsubscribe();
     }
 
@@ -285,5 +305,5 @@ export class AppComponent implements OnInit, OnDestroy {
     switchLanguage(language: string) {
         this.translate.use(language);
         this.currentLanguage = language;
-      }
+    }
 }

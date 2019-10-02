@@ -7,15 +7,17 @@ import { SettingService } from '../setting.service';
 import * as settingActions from './setting.actions';
 import { Router } from '@angular/router';
 import { Member, MemberVendor } from 'app/shared/class/member';
+import * as fromUser from '../../shared/state/user-state.reducer';
+import { Store, select } from '@ngrx/store';
+import * as userActions from '../../shared/state/user-state.actions';
 
 @Injectable()
 export class SettingEffects {
     constructor(
         private router: Router,
         private settingService: SettingService,
-        private actions$: Actions) { }
-
-
+        private actions$: Actions,
+        private userStore: Store<fromUser.State>,) { }
 
     @Effect()
     loadMemberVendors$: Observable<Action> = this.actions$.pipe(
@@ -39,7 +41,8 @@ export class SettingEffects {
         mergeMap((payload: Member) =>
             this.settingService.editCurrentMember(payload).pipe(
                 map((member: Member) => {
-                    this.settingService.sendNotification({ type: 'success', title: 'Successfully Updated', content: '' });
+                    this.userStore.dispatch(new userActions.SetCurrentUser(member));
+                    this.settingService.sendNotification({ type: 'success', title: 'Successfully Updated', content: `Company switched to ${member.VendorName}` });
                     window.location.reload();
                     return (new settingActions.EditCurrentMemberSuccess(member));
                 }),
