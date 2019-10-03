@@ -16,6 +16,7 @@ export class MemberListShellComponent implements OnInit {
     membersMatTable$: Observable<MatTableDataSource<Member>>;
     errorMessage$: Observable<string>;
     pendingDelete$: Observable<boolean>;
+    isLoading$: Observable<boolean>;
 
     constructor(private store: Store<fromMember.State>) { }
 
@@ -27,6 +28,9 @@ export class MemberListShellComponent implements OnInit {
         this.membersMatTable$ = this.store.pipe(select(fromMember.getMembersMatTable));
         this.pendingDelete$ = this.store.pipe(select(fromMember.getPendingDelete));
         this.errorMessage$ = this.store.pipe(select(fromMember.getError));
+        setTimeout(()=> {
+            this.isLoading$ = this.store.pipe(select(fromMember.getIsLoading));
+        });
     }
     getMembers() {
         this.store.dispatch(new memberActions.LoadMembers());

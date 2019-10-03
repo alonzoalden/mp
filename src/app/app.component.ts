@@ -82,46 +82,12 @@ export class AppComponent implements OnInit, OnDestroy {
         //         }
         //     });
 
-        // var nav = window.navigator;
-        // var screen = window.screen;
-        // var guid = nav.mimeTypes.length.toString();
-        // guid += nav.userAgent.replace(/\D+/g, '');
-        // guid += nav.plugins.length;
-        // guid += screen.height || '';
-        // guid += screen.width || '';
-        // guid += screen.pixelDepth || '';
-        // console.log(guid);
-        // console.log(document.cookie);
-        // console.log(sessionStorage);
-        // console.log(window.navigator.userAgent);
-        // console.log(window.navigator.mimeTypes);
-
         this.subscription = this.appService.subject.subscribe(
             notification => this.doNotification(notification)
         );
 
         if (this.isLoggedin) {
             this.userStore.dispatch(new userActions.LoadCurrentUser());
-            // this.appService.getCurrentMember()
-            //     .subscribe(
-            //         (data) => {
-            //             this.appService.currentMember = data;
-
-            //             //Set Default Language
-            //             this.currentLanguage = this.appService.currentMember.DefaultLanguage;
-            //             this.translate.setDefaultLang(this.currentLanguage);
-
-            //             // change vendor if not active
-            //             if (!this.appService.currentMember.IsActive) {
-            //                 this.changeVendor();
-            //             }
-            //         },
-            //         (error: any) => {
-            //             this.errorMessage = <any>error;
-            //             //console.log(error);
-            //             this.logout();
-            //         }
-            //     );
         }
 
     }
@@ -163,16 +129,6 @@ export class AppComponent implements OnInit, OnDestroy {
 
     get wasLoggedIn() {
         return (this.appService.wasLoggedIn || this.isLoggedin) && !(this.router.url === '/home' || this.router.url === '/');
-
-        //return (this.appService.getWasLoggedIn() || this.isLoggedin) && !(this.router.url === '/home' || this.router.url === '/');
-
-        // if ( (this.appService.getWasLoggedIn() || this.isLoggedin) && !(this.router.url === '/home' || this.router.url === '/') ) {
-        //     return true;
-        // }
-        // else {
-        //     this.router.navigate(['/home']);
-        //     return false;
-        // }
     }
 
     login() {
@@ -210,26 +166,7 @@ export class AppComponent implements OnInit, OnDestroy {
 
     addPurchaseOrder() {
         this.router.navigate(['/inbound-shipment', 0, 'edit']);
-        // this.appService.addPurchaseOrder().subscribe(
-        //     (data: PurchaseOrder) => this.onAddPurchaseOrderComplete(data, `${data.PurchaseOrderID} was added`),
-        //     (error: any) => {
-        //         //console.log(error);
-        //         this.errorMessage = <any>error;
-        //     }
-        // );
     }
-
-    // onAddPurchaseOrderComplete(purchaseorder: PurchaseOrder, message?: string) {
-    //     //this.appService.sendNotification({ type: 'success', title: 'Successfully Added', content: message });
-
-    //     if(this.isInboundShipmentPage()) {
-    //         this.router.navigate(['/inbound-shipment', purchaseorder.PurchaseOrderID, 'edit']);
-    //         //window.location.reload();
-    //     }
-    //     else {
-    //         this.router.navigate(['/inbound-shipment', purchaseorder.PurchaseOrderID, 'edit']);
-    //     }
-    // }
 
     isInboundShipmentPage() {
         return this.router.url.indexOf('inbound-shipment/') > 0;

@@ -26,6 +26,10 @@ export const getMembersMatTable = createSelector(
     getCompanyFeatureState,
     state => new MatTableDataSource<Member>(state.members)
 );
+export const getIsLoading = createSelector(
+    getCompanyFeatureState,
+    state => state.isLoading
+);
 export const getPendingDelete = createSelector(
     getCompanyFeatureState,
     state => state.pendingDelete

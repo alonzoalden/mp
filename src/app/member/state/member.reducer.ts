@@ -5,6 +5,7 @@ import { Member } from 'app/shared/class/member';
 export interface MemberState {
     member: Member;
     members: Member[];
+    isLoading: boolean;
     pendingDelete: boolean;
     pendingRegister: boolean;
     error: string;
@@ -13,6 +14,7 @@ export interface MemberState {
 const initialState: MemberState = {
     member: null,
     members: [],
+    isLoading: false,
     pendingDelete: false,
     pendingRegister: false,
     error: ''
@@ -56,34 +58,43 @@ export function memberReducer(state = initialState, action: MemberActions): Memb
                 pendingRegister: false,
                 error: action.payload,
             };
+        case MemberActionTypes.LoadMembers:
+            return {
+                ...state,
+                isLoading: true
+            };
         case MemberActionTypes.LoadMembersSuccess:
             return {
                 ...state,
                 members: action.payload,
+                isLoading: false,
                 error: '',
             };
         case MemberActionTypes.LoadMembersFail:
             return {
                 ...state,
                 members: null,
+                isLoading: false,
                 error: action.payload,
             };
+        
         case MemberActionTypes.DeleteMember:
             return {
                 ...state,
                 pendingDelete: true,
             };
-         case MemberActionTypes.DeleteMemberSuccess:
-         const _updatedMembers = state.members.filter(member => member.MemberID !== action.payload.MemberID);
+        case MemberActionTypes.DeleteMemberSuccess:
+            const _updatedMembers = state.members.filter(member => member.MemberID !== action.payload.MemberID);
             return {
                 ...state,
                 members: _updatedMembers,
+                pendingDelete: false,
                 error: '',
             };
-        case MemberActionTypes.LoadMembersFail:
+        case MemberActionTypes.DeleteMemberFail:
             return {
                 ...state,
-                members: null,
+                pendingDelete: false,
                 error: action.payload,
             };
 

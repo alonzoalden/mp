@@ -79,8 +79,8 @@ export class MemberEffects {
         map((action: memberActions.DeleteMember) => action.payload),
         mergeMap((member) =>
             this.memberService.deleteMember(member).pipe(
-                map(member => {
-                    this.memberService.sendNotification({ type: 'success', title: 'Confirmation Sent', content: '' });
+                map(() => {
+                    this.memberService.sendNotification({ type: 'success', title: 'Successfully Deleted', content: `${member.Email} has been deleted.` });
                     return (new memberActions.DeleteMemberSuccess(member));
                 }),
                 catchError(err => {

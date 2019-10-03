@@ -42,8 +42,13 @@ export class SettingEffects {
             this.settingService.editCurrentMember(payload).pipe(
                 map((member: Member) => {
                     this.userStore.dispatch(new userActions.SetCurrentUser(member));
-                    this.settingService.sendNotification({ type: 'success', title: 'Successfully Updated', content: `Company switched to ${member.VendorName}` });
-                    window.location.reload();
+                    if (payload.VendorID !== member.VendorID) {
+                        this.settingService.sendNotification({ type: 'success', title: 'Successfully Updated', content: `Company switched to ${member.VendorName}` });
+                        window.location.reload();
+                    }
+                    else if (payload.DefaultPageSize !== member.DefaultPageSize) {
+                        this.settingService.sendNotification({ type: 'success', title: 'Successfully Updated', content: `Default Page Size is ${member.DefaultPageSize}` });
+                    }
                     return (new settingActions.EditCurrentMemberSuccess(member));
                 }),
                 catchError(err => {

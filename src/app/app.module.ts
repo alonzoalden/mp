@@ -99,11 +99,11 @@ export function HttpLoaderFactory(http: HttpClient) {
         DeviceDetectorModule.forRoot(),
         routing,
         StoreModule.forRoot({}),
-        // StoreDevtoolsModule.instrument({
-        //     name: 'Toolots Merchant Portal DevTools',
-        //     maxAge: 20,
-        //     logOnly: environment.production,
-        // }),
+        StoreDevtoolsModule.instrument({
+            name: 'Toolots Merchant Portal DevTools',
+            maxAge: 10,
+            logOnly: environment.production,
+        }),
         EffectsModule.forRoot([]),
         StoreModule.forFeature('users', userreducer),
         EffectsModule.forFeature([UserEffects])

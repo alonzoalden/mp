@@ -47,7 +47,13 @@
                             <div class="col-md-2 center-block col-xs-12 m-t-lg m-b-lg">
                                 <button type="button" 
                                     class="btn btn-default btn-home-signup full-width"
-                                    (click)="onUpdate()">{{ 'Update' | translate }}</button>                
+                                    [disabled]="pendingSave"
+                                    (click)="onUpdate()">
+                                    <span *ngIf="!pendingSave">{{ 'Update' | translate }}</span>
+                                    <div *ngIf="pendingSave">
+                                        <i class="fa fa-spinner fa-spin"></i>
+                                    </div>
+                                </button>
                             </div>
                         </div>
                     </div>
