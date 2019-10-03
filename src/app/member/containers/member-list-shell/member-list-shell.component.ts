@@ -35,9 +35,6 @@ export class MemberListShellComponent implements OnInit {
     getMembers() {
         this.store.dispatch(new memberActions.LoadMembers());
     }
-    sendConfirmationMember(member: Member) {
-        this.store.dispatch(new memberActions.SendConfirmationMember(member));
-    }
     deleteMember(member: Member) {
         this.store.dispatch(new memberActions.DeleteMember(member));
     }
