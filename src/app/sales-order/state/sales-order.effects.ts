@@ -187,16 +187,16 @@ export class SalesOrderEffects {
     @Effect()
     deleteFulfillment$: Observable<Action> = this.actions$.pipe(
         ofType(salesOrderActions.SalesOrderActionTypes.DeleteFulfillment),
-        map((action: salesOrderActions.CancelSalesOrderLines) => action.payload),
+        map((action: salesOrderActions.DeleteFulfillment) => action.payload),
         mergeMap((payload) =>
-            this.salesOrderService.cancelSalesOrderLines(payload).pipe(
-                map((salesorderlines: SalesOrderLine[]) => {
+            this.salesOrderService.deleteFulfillment(payload).pipe(
+                map(() => {
                     this.salesOrderService.sendNotification({ type: 'success', title: 'Successfully Deleted' });
-                    return (new salesOrderActions.CancelSalesOrderLinesSuccess(salesorderlines));
+                    return (new salesOrderActions.DeleteFulfillmentSuccess(payload));
                 }),
                 catchError(err => {
                     this.salesOrderService.sendNotification({ type: 'error', title: 'Error', content: err });
-                    of(new salesOrderActions.CancelSalesOrderLinesFail(err));
+                    of(new salesOrderActions.DeleteFulfillmentFail(err));
                     return EMPTY;
                 })
             )

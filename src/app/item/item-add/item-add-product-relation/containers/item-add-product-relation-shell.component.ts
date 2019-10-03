@@ -20,6 +20,7 @@ export class ItemAddProductRelationShellComponent implements OnInit, OnDestroy {
     item$: Observable<ItemInsert>;
     errorMessage$: Observable<string>;
     userInfo$: Observable<Member>;
+    itemList$: Observable<ItemList[]>;
     allItemList$: Observable<ItemList[]>;
 
     itemRelatedProductsMatTable$: Observable<MatTableDataSource<ItemRelatedProductInsert>>;
@@ -35,10 +36,9 @@ export class ItemAddProductRelationShellComponent implements OnInit, OnDestroy {
     ) { }
 
     ngOnInit() {
-        this.store.dispatch(new itemActions.LoadAllItemList());
-
         this.item$ = this.store.pipe(select(fromItem.getItem));
 
+        this.itemList$ = this.store.pipe(select(fromItem.getItemList));
         this.allItemList$ = this.store.pipe(select(fromItem.getAllItemList));
 
         this.itemRelatedProductsMatTable$ = this.store.pipe(select(fromItem.getItemRelatedProductsMatTable));

@@ -25,6 +25,7 @@ export class ItemEditShellComponent implements OnInit {
     constructor(private store: Store<fromItem.State>) { }
 
     ngOnInit() {
+        this.store.dispatch(new itemActions.LoadItemList());
         this.store.dispatch(new itemActions.LoadAllItemList());
         this.store.dispatch(new itemActions.LoadVendorBrands());
         this.vendorBrandList$ = this.store.pipe(select(fromItem.getVendorBrandList));

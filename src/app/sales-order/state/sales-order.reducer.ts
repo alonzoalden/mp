@@ -258,9 +258,10 @@ export function salesOrderReducer(state = initialState, action: SalesOrderAction
             };
 
         case SalesOrderActionTypes.DeleteFulfillmentSuccess:
+            const _updatedFulfillmentList = state.fulfillments.filter(fulfillment => fulfillment.FulfillmentID !== action.payload);
             return {
                 ...state,
-                fulfillments: state.fulfillments,
+                fulfillments: _updatedFulfillmentList,                
                 pendingDelete: false,
                 error: '',
             };

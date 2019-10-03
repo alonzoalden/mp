@@ -17,8 +17,6 @@ export class ItemAddComponent implements OnInit, OnChanges {
     @Input() errorMessage: string;
     @Input() pendingAdd: boolean;
 
-
-    @Output() getVendorBrands = new EventEmitter<void>();
     @Output() addItem = new EventEmitter<ItemInsert>();
     @Output() setItem = new EventEmitter<ItemInsert>();
 
@@ -29,7 +27,6 @@ export class ItemAddComponent implements OnInit, OnChanges {
     }
     ngOnChanges(changes: SimpleChanges) { }
     ngOnInit() {
-        this.getVendorBrands.emit();
         this.setItem.emit(this.itemService.defaultCurrentItemInsert());
     }
 
