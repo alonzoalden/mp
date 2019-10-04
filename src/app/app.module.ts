@@ -101,11 +101,11 @@ export function HttpLoaderFactory(http: HttpClient) {
         EffectsModule.forRoot([]),
         StoreModule.forFeature('users', userreducer),
         EffectsModule.forFeature([UserEffects]),
-        StoreDevtoolsModule.instrument({
-            name: 'Toolots Merchant Portal DevTools',
-            maxAge: 10,
-            logOnly: environment.production,
-        }),
+        // StoreDevtoolsModule.instrument({
+        //     name: 'Toolots Merchant Portal DevTools',
+        //     maxAge: 10,
+        //     logOnly: environment.production,
+        // }),
     ],
     exports: [
         CdkTableModule,
