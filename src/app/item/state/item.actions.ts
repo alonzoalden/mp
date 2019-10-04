@@ -7,7 +7,7 @@ import { ItemInsert, ItemList, ItemOption, ItemOptionInsert, ItemSelectionInsert
 import { Category } from 'app/shared/class/category';
 import { ItemUpSell } from 'app/shared/class/item-up-sell';
 import { VendorAttachment, VendorAttachmentList } from 'app/shared/class/vendor-attachment';
-import { URLVideo } from 'app/shared/class/item-video';
+import { URLVideo, ItemVideo } from 'app/shared/class/item-video';
 import { BatchUpdate, BatchUpdateValue } from 'app/shared/class/batch-update';
 
 export enum ItemActionTypes {
@@ -322,7 +322,7 @@ export class LoadVideoURLDetailSuccess implements Action {
 
 export class LoadVideoURLDetailFail implements Action {
   readonly type = ItemActionTypes.LoadVideoURLDetailFail;
-  constructor(public payload: string) { }
+  constructor(public payload: { row: ItemVideo, error: string}) { }
 }
 
 

@@ -28,6 +28,9 @@ export class ItemAddVideoComponent implements OnInit {
             this.item.ItemVideos.push(_temp);
             this.currentIndex = this.item.ItemVideos.length - 1;
         }
+        if (changes.itemVideosMatTable && changes.itemVideosMatTable.currentValue.data.length) {
+            this.currentIndex = this.item.ItemVideos.length - 1;
+        }
     }
     ngOnInit(): void {
         this.currentIndex = this.item.ItemVideos.length - 1;
@@ -51,6 +54,9 @@ export class ItemAddVideoComponent implements OnInit {
                 itemVideo.Value = videoID;
                 itemVideo.Position = this.item.ItemVideos.length + 1;
                 this.getVideoURLDetail.emit(itemVideo);
+                const _temp = new ItemVideoInsert(null, null, null, null, null, null, this.item.ItemVideos.length, null);
+                this.item.ItemVideos.push(_temp);
+                this.refreshDataSource(this.item.ItemVideos);
                 // this.itemService.getVideoURLDetail(videoID).subscribe(
                 //     (URLVideo: URLVideo) => {
                 //         if(URLVideo.items[0].snippet.thumbnails.standard) {

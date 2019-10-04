@@ -360,6 +360,20 @@ export function itemReducer(state = initialState, action: ItemActions): ItemStat
                 error: action.payload,
             };
 
+        case ItemActionTypes.LoadVideoURLDetailSuccess:
+            return {
+                ...state,
+            };
+        case ItemActionTypes.LoadVideoURLDetailFail:
+            const _videoIndex = state.item.ItemVideos.findIndex(video => video.Label === action.payload.row.Label);
+            state.item.ItemVideos.splice(_videoIndex, 1);
+            return {
+                ...state,
+                error: action.payload.error,
+            };
+
+            
+
 
 
 

@@ -26,14 +26,16 @@ export class ItemEditVideoComponent implements OnInit {
     constructor(private itemService: ItemService) { }
 
     ngOnChanges(changes: SimpleChanges) {
-
         if (changes.item && changes.item.currentValue) {
             if (this.item.ItemVideos.length === 0 || this.item.ItemVideos[this.item.ItemVideos.length - 1].ItemVideoID) {
                 this.addPendingLine();
-                this.currentIndex = this.item.ItemVideos.length - 1;
-
+                //this.currentIndex = this.item.ItemVideos.length - 1;
             }
         }
+        if (changes.itemVideosMatTable && changes.itemVideosMatTable.currentValue.data.length) {
+            this.currentIndex = this.item.ItemVideos.length - 1;
+        }
+
     }
 
     ngOnInit(): void {

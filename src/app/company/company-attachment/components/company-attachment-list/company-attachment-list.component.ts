@@ -29,6 +29,10 @@ export class CompanyAttachmentListComponent implements OnChanges, AfterViewInit 
             this.vendorAttachmentsMatTable.paginator = this.paginator;
             this.vendorAttachmentsMatTable.sort = this.sort;
         }
+        if (changes.userInfoDefaultPageSize && !changes.userInfoDefaultPageSize.currentValue) {
+            this.userInfoDefaultPageSize = 100;
+        }
+        
     }
     onSetVendorAttachmentID(id: number) {
         this.setVendorAttachmentID.emit(id);

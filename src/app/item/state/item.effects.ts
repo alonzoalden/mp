@@ -7,7 +7,7 @@ import { ItemService } from '../item.service';
 import * as itemActions from './item.actions';
 import { Router } from '@angular/router';
 import { VendorBrand } from 'app/shared/class/vendor-brand';
-import { ItemList, Item, ItemUpSell, ItemRelatedProduct, ItemVideoInsert, ItemCategoryAssignment, ItemTierPrice, ItemBatch, ItemInsert, ItemCrossSell, ItemAttachment } from 'app/shared/class/item';
+import { ItemList, Item, ItemUpSell, ItemRelatedProduct, ItemVideoInsert, ItemCategoryAssignment, ItemTierPrice, ItemBatch, ItemInsert, ItemCrossSell, ItemAttachment, ItemVideo } from 'app/shared/class/item';
 import { Category } from 'app/shared/class/category';
 import { VendorAttachment, VendorAttachmentList } from 'app/shared/class/vendor-attachment';
 import { URLVideo } from 'app/shared/class/item-video';
@@ -218,7 +218,7 @@ export class ItemEffects {
     loadVideoURLDetail$: Observable<Action> = this.actions$.pipe(
         ofType(itemActions.ItemActionTypes.LoadVideoURLDetail),
         map((action: itemActions.LoadVideoURLDetail) => action.payload),
-        mergeMap((itemvideo: ItemVideoInsert) =>
+        mergeMap((itemvideo: ItemVideo) =>
             this.itemService.getVideoURLDetail(itemvideo.Value).pipe(
                 map((urlvideo: URLVideo) => {
                     if (urlvideo.items[0].snippet.thumbnails.standard) {
@@ -231,6 +231,7 @@ export class ItemEffects {
                         itemvideo.Label = urlvideo.items[0].snippet.title;
                     }
                     itemvideo.Description = urlvideo.items[0].snippet.description;
+                    itemvideo.pendingAdd = false;
                     return (new itemActions.LoadVideoURLDetailSuccess(urlvideo));
                 }),
                 catchError(err => {
@@ -238,9 +239,9 @@ export class ItemEffects {
                     itemvideo.URL = '';
                     itemvideo.Description = '';
                     itemvideo.Thumbnail = '';
+                    itemvideo.pendingAdd = false;
                     this.itemService.sendNotification({ type: 'error', title: 'Error', content: err });
-                    of(new itemActions.LoadVideoURLDetailFail(err));
-                    return EMPTY;
+                    return of(new itemActions.LoadVideoURLDetailFail({ row: itemvideo, error: err}));
                 })
             )
         )
