@@ -6,11 +6,10 @@ import { Actions, Effect, ofType } from '@ngrx/effects';
 import { SalesOrderService } from '../sales-order.service';
 import * as salesOrderActions from './sales-order.actions';
 import { Router } from '@angular/router';
-import { Member, MemberVendor } from 'app/shared/class/member';
 import { SalesOrder } from 'app/shared/class/sales-order';
 import { SalesOrderLine } from 'app/shared/class/sales-order-line';
 import { Fulfillment, FulfillmentSalesOrderLine } from 'app/shared/class/fulfillment';
-import { Store, select } from '@ngrx/store';
+import { Store } from '@ngrx/store';
 import * as fromSalesOrder from './index';
 
 
