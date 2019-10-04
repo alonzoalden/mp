@@ -5,7 +5,6 @@ import { SalesOrder } from '../../../../../shared/class/sales-order';
 import { Fulfillment, ShipmentTracking, FulfillmentSalesOrderLine } from '../../../../../shared/class/fulfillment';
 import { SalesOrderService } from '../../../../sales-order.service';
 import { environment } from '../../../../../../environments/environment';
-import { SalesOrderLine } from 'app/shared/class/sales-order-line';
 
 @Component({
   selector: 'o-sales-order-fulfillment-add',
@@ -19,7 +18,6 @@ export class SalesOrderFulfillmentAddComponent implements OnInit, OnChanges {
     @Input() salesOrder: SalesOrder;
     @Input() fulfillment: Fulfillment;
     @Input() isLoading: boolean;
-    @Input() salesOrderLinesMatTable: MatTableDataSource<SalesOrderLine>;
     @Input() fulfillmentSalesOrderLinesMatTable: MatTableDataSource<FulfillmentSalesOrderLine>;
     @Output() getFulfilledBySalesOrder = new EventEmitter<{orderid: number, fulfilledby: string}>();
     @Output() getFulfilmmentSalesOrderLines = new EventEmitter<number>();
@@ -55,7 +53,7 @@ export class SalesOrderFulfillmentAddComponent implements OnInit, OnChanges {
         this.isLoading = true;
         this.orderid = this.route.parent.snapshot.params['id'];
         this.fulfilledby = 'merchant';
-        //this.getFulfilmmentSalesOrderLines.emit(this.orderid);
+        this.getFulfilmmentSalesOrderLines.emit(this.orderid);
         this.fulfillment = new Fulfillment(null, String(this.orderid), null, null, null, null, null, null, null, null, null, this.shipmentTrackings, this.fulfillmentSalesOrderLinesMatTable.data);
 
         this.shipmentTrackings = [];

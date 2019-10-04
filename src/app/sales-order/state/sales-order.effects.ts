@@ -10,10 +10,14 @@ import { Member, MemberVendor } from 'app/shared/class/member';
 import { SalesOrder } from 'app/shared/class/sales-order';
 import { SalesOrderLine } from 'app/shared/class/sales-order-line';
 import { Fulfillment, FulfillmentSalesOrderLine } from 'app/shared/class/fulfillment';
+import { Store, select } from '@ngrx/store';
+import * as fromSalesOrder from './index';
+
 
 @Injectable()
 export class SalesOrderEffects {
     constructor(
+        private store: Store<fromSalesOrder.State>,
         private router: Router,
         private salesOrderService: SalesOrderService,
         private actions$: Actions) { }
@@ -152,6 +156,7 @@ export class SalesOrderEffects {
                 map((fulfillment: Fulfillment) => {
                     this.salesOrderService.sendNotification({ type: 'success', title: 'Save Completed', content: '' });
                     this.router.navigate(['/sales-order', 'view', payload.fulfilledby, payload.orderid, 'fulfillment']);
+                    this.store.dispatch(new salesOrderActions.LoadSalesOrder(payload));
                     //this.router.navigate(['/sales-order', 'view', 'merchant', this.orderid, 'detail']);
                     return (new salesOrderActions.AddFulfillmentSuccess(fulfillment));
                 }),
@@ -171,6 +176,7 @@ export class SalesOrderEffects {
             this.salesOrderService.editFulfillment(payload.fulfillment).pipe(
                 map((fulfillment: Fulfillment) => {
                     this.router.navigate(['/sales-order', 'view', payload.fulfilledby, payload.orderid, 'fulfillment']);
+                    this.store.dispatch(new salesOrderActions.LoadSalesOrder(payload));
                     this.salesOrderService.sendNotification({ type: 'success', title: 'Save Completed', content: `Shipment ID: ${fulfillment.FulfillmentID} has been updated` });
                     return (new salesOrderActions.EditFulfillmentSuccess(fulfillment));
                 }),
