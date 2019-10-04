@@ -28,7 +28,8 @@ export class SalesOrderDetailComponent implements OnInit {
     @Output() getSalesOrderLineByVendor = new EventEmitter<{orderid: number, fulfilledby: string}>();
     @Output() cancelSalesOrderLines = new EventEmitter<SalesOrderLine[]>();
     @Output() getSalesOrderByVendor = new EventEmitter<{fulfilledby: string, status: string}>();
-    @Output() downloadSalesOrderPackingSlip = new EventEmitter<SalesOrder>();
+    @Output() downloadSalesOrderPackingSlip = new EventEmitter<{salesorder: SalesOrder, orderid: number}>();
+
     private imageURL = environment.imageURL;
     private linkURL = environment.linkURL;
 
@@ -40,7 +41,6 @@ export class SalesOrderDetailComponent implements OnInit {
     isMerchant: boolean;
 
     constructor(private route: ActivatedRoute,
-        private salesorderService: SalesOrderService,
         public printDialog: MatDialog) { }
 
     ngOnChanges(changes: SimpleChanges): void {
@@ -58,11 +58,11 @@ export class SalesOrderDetailComponent implements OnInit {
             this.isMerchant = false;
         }
 
-        //this.getSalesOrderLineByVendor.emit({orderid: this.orderid, fulfilledby: this.fulfilledby});
+        this.getSalesOrderLineByVendor.emit({orderid: this.orderid, fulfilledby: this.fulfilledby});
     }
 
     onPrintPackingSlip() {
-        this.downloadSalesOrderPackingSlip.emit(this.salesOrder);
+        this.downloadSalesOrderPackingSlip.emit({salesorder: this.salesOrder, orderid: this.orderid});
     }
 
     openDialogCancelOrder(salesorder) {
@@ -71,7 +71,12 @@ export class SalesOrderDetailComponent implements OnInit {
             width: '840px'
         });
 
-        dialogRef.afterClosed().subscribe(() => window.location.reload());
+        dialogRef.afterClosed().subscribe((data) => {
+            if (data) {
+                this.getFulfilledBySalesOrder.emit({orderid: this.orderid, fulfilledby: this.fulfilledby});
+                this.getSalesOrderLineByVendor.emit({orderid: this.orderid, fulfilledby: this.fulfilledby});
+            }
+        });
     }
     formatPhoneNumber(phoneNumberString) {
         if (!phoneNumberString) { return; }

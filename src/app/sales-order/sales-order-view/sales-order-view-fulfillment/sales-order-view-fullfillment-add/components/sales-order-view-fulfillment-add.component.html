@@ -1,7 +1,7 @@
 <div class="tab-content">
     <div class="tab-pane active">
         <div class="panel-body animated fadeIn p-w-none" style="min-height: 400px;">
-            <ng-container *ngIf="!salesOrder || !fulfillment || !fulfillment.ShipmentTrackings">
+            <ng-container *ngIf="!salesOrder || !fulfillment || !fulfillment.ShipmentTrackings || isLoading">
                 <div class="spinner-full-page"> 
                     <div>
                         <div>
@@ -102,7 +102,7 @@
                 </div>
                 <div class="ibox-title"><h5>{{ 'Shipment Items' | translate }}</h5></div>
                 <div class="ibox-content hide-y">
-                    <div class="table-responsive" *ngIf="fulfillment && fulfillment.FulfillmentSalesOrderLines">
+                    <div class="table-responsive" *ngIf="fulfillment && fulfillment.FulfillmentSalesOrderLines && !isLoading">
                         <table mat-table #table [dataSource]="dataSource" class="table" matSort>
 
                             <!-- Product Details Column -->

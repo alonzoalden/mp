@@ -10,10 +10,10 @@ import { SalesOrder } from '../../../shared/class/sales-order';
 
 export class SalesOrderViewComponent implements OnInit {
     @Input() salesorder: SalesOrder;
+    //@Input() isLoading: boolean;
     @Input() errorMessage: string;
     @Output() getFulfilledBySalesOrder = new EventEmitter<{orderid: number, fulfilledby: string}>();
     @Output() getSalesOrderLineByVendor = new EventEmitter<{orderid: number, fulfilledby: string}>();
-
 
     isMerchant: boolean;
     fulfilledby: string;
@@ -28,6 +28,6 @@ export class SalesOrderViewComponent implements OnInit {
         this.fulfilledby = this.route.snapshot.params['fulfilledby'];
         this.isMerchant = this.fulfilledby === 'merchant';
         this.getFulfilledBySalesOrder.emit({orderid: this.orderid, fulfilledby: this.fulfilledby});
-        this.getSalesOrderLineByVendor.emit({orderid: this.orderid, fulfilledby: this.fulfilledby});
+        //this.getSalesOrderLineByVendor.emit({orderid: this.orderid, fulfilledby: this.fulfilledby});
     }
 }

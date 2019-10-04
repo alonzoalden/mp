@@ -184,7 +184,7 @@ export class LoadFulfilmmentSalesOrderLinesFail implements Action {
 
 export class AddFulfillment implements Action {
   readonly type = SalesOrderActionTypes.AddFulfillment;
-  constructor(public payload: Fulfillment) { }
+  constructor(public payload: { fulfillment: Fulfillment, orderid: number; fulfilledby: string }) { }
 }
 export class AddFulfillmentSuccess implements Action {
   readonly type = SalesOrderActionTypes.AddFulfillmentSuccess;
@@ -197,7 +197,7 @@ export class AddFulfillmentFail implements Action {
 
 export class EditFulfillment implements Action {
   readonly type = SalesOrderActionTypes.EditFulfillment;
-  constructor(public payload: Fulfillment) { }
+  constructor(public payload: { fulfillment: Fulfillment, orderid: number; fulfilledby: string }) { }
 }
 export class EditFulfillmentSuccess implements Action {
   readonly type = SalesOrderActionTypes.EditFulfillmentSuccess;
@@ -237,7 +237,7 @@ export class LoadSalesOrderDeliveryFail implements Action {
 
 export class DownloadSalesOrderPackingSlip implements Action {
   readonly type = SalesOrderActionTypes.DownloadSalesOrderPackingSlip;
-  constructor(public payload: SalesOrder) { }
+  constructor(public payload: {salesorder: SalesOrder, orderid: number}) { }
 }
 
 export class DownloadSalesOrderPackingSlipSuccess implements Action {

@@ -22,11 +22,19 @@ export class SalesOrderFulfillmentEditShellComponent implements OnInit {
         this.salesOrder$ = this.store.pipe(select(fromSalesOrder.getSalesOrder));
         this.fulfillment$ = this.store.pipe(select(fromSalesOrder.getFulfilledByFulfillment));
         this.errorMessage$ = this.store.pipe(select(fromSalesOrder.getError));
+        setTimeout(()=> {
+            this.isLoading$ = this.store.pipe(select(fromSalesOrder.getIsLoading));
+        });
     }
     getFulfilledByFulfillment(payload: { fulfillmentid: number, fulfilledby: string }) {
         this.store.dispatch(new salesOrderActions.LoadFulfilledByFulfillment(payload));
     }
-    editFulfillment(payload: Fulfillment) {
+    editFulfillment(payload: { fulfillment: Fulfillment, orderid: number; fulfilledby: string }) {
         this.store.dispatch(new salesOrderActions.EditFulfillment(payload));
     }
+
+
+
+
+
 }

@@ -162,14 +162,14 @@ export function salesOrderReducer(state = initialState, action: SalesOrderAction
         case SalesOrderActionTypes.LoadFulfilmmentSalesOrderLines:
             return {
                 ...state,
-                //isLoading: true,
+                isLoading: true,
                 error: '',
             };
         case SalesOrderActionTypes.LoadFulfilmmentSalesOrderLinesSuccess:
             return {
                 ...state,
                 fulfillmentSalesOrderLines: action.payload,
-                //isLoading: false,
+                isLoading: false,
                 error: '',
             };
         case SalesOrderActionTypes.LoadFulfilmmentSalesOrderLinesFail:

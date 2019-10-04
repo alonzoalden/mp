@@ -41,7 +41,6 @@ export class SalesOrderViewDetailShellComponent implements OnInit {
         setTimeout(() => {
             this.isLoading$ = this.store.pipe(select(fromSalesOrder.getIsLoading));
             this.isSalesOrderLinesLoading$ = this.store.pipe(select(fromSalesOrder.getIsSalesOrderLinesLoading));
-
         });
     }
     getFulfilledBySalesOrder(payload: {orderid: number, fulfilledby: string}) {
@@ -50,7 +49,7 @@ export class SalesOrderViewDetailShellComponent implements OnInit {
     getSalesOrderLineByVendor(payload: {orderid: number, fulfilledby: string}) {
         this.store.dispatch(new salesOrderActions.LoadSalesOrderLines(payload));
     }
-    downloadSalesOrderPackingSlip(payload: SalesOrder) {
+    downloadSalesOrderPackingSlip(payload: {salesorder: SalesOrder, orderid: number}) {
         this.store.dispatch(new salesOrderActions.DownloadSalesOrderPackingSlip(payload));
     }
 }

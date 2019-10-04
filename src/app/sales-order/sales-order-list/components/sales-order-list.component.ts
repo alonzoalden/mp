@@ -18,7 +18,7 @@ export class SalesOrderListComponent implements OnInit, OnChanges {
     @Input() isLoading: boolean = true;
     @Input() errorMessage: string;
     @Output() getSalesOrderByVendor = new EventEmitter<{fulfilledby: string, status: string}>();
-    @Output() downloadSalesOrderPackingSlip = new EventEmitter<SalesOrder>();
+    @Output() downloadSalesOrderPackingSlip = new EventEmitter<{salesorder: SalesOrder, orderid: number}>();
     @Output() setSalesOrder = new EventEmitter<SalesOrder>();
 
     displayedColumns = ['Menu', 'ProductInfo', 'ItemImage', 'ItemName', 'ShippingMethod', 'Status', 'VendorTotal'];
@@ -70,7 +70,7 @@ export class SalesOrderListComponent implements OnInit, OnChanges {
     }
 
     onPrintPackingSlip(salesorder: SalesOrder) {
-        this.downloadSalesOrderPackingSlip.emit(salesorder);
+        this.downloadSalesOrderPackingSlip.emit({salesorder: salesorder, orderid: salesorder.OrderID});
     }
     isShipmentLate(shipByDate: Date): boolean {
         return new Date(shipByDate) < new Date();

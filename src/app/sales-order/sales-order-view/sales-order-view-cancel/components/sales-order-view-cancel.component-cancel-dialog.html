@@ -1,11 +1,10 @@
-<h3 class="ibox-title dialog-title">Cancel Order
+<h3 class="ibox-title dialog-title">{{ 'Cancel Order' | translate }}
     <span class="pull-right"><i (click)="onCloseClick()" class="fa fa-close" matTooltip="{{ 'Close' | translate }}" aria-label="Close Icon for Cancel Order"></i></span>
 </h3>
 
-<div mat-dialog-content>
-    <h4>Are you sure you want to cancel your order?</h4>
-
+<div mat-dialog-content class="lightgray-bg">
     <div class="ibox-content hide-y">
+        <h4>Are you sure you want to cancel your order?</h4>
         <div class="table-responsive">
             <table mat-table #table [dataSource]="salesOrderLinesMatTable" class="table" matSort>
                 <!-- Item Image Column -->
@@ -81,7 +80,7 @@
 
 </div>
 <mat-dialog-actions>
-    <button mat-button class="btn btn-remove-150" (click)="onCloseClick()">Back</button>
     <button mat-button class="btn btn-danger-150" (click)="onCancel()" [mat-dialog-close]="salesOrder">Cancel Order</button>
+    <button mat-button class="btn btn-remove-150" (click)="onCloseClick()">Back</button>
 </mat-dialog-actions>
     

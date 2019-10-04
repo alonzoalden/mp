@@ -9,7 +9,7 @@
                 </div>
             </div>
             
-            <ng-container *ngIf="!salesOrder || !fulfillment || !fulfillment.FulfillmentSalesOrderLines">
+            <ng-container *ngIf="!salesOrder || !fulfillment || !fulfillment.FulfillmentSalesOrderLines || isLoading">
                 <div class="spinner-full-page"> 
                     <div>
                         <div>
@@ -132,7 +132,7 @@
                 </div>
                 <div class="ibox-title"><h5>{{ 'Shipment Items' | translate }}</h5></div>
                 <div class="ibox-content hide-y">
-                    <div class="table-responsive" *ngIf="fulfillment && fulfillment.FulfillmentSalesOrderLines">
+                    <div class="table-responsive" *ngIf="fulfillment && fulfillment.FulfillmentSalesOrderLines && !isLoading">
                         <table mat-table #table [dataSource]="fulfillmentSalesOrderLinesMatTable" class="table" matSort>
                             <!-- Product Details Column -->
                             <ng-container matColumnDef="ProductDetails">
@@ -206,7 +206,7 @@
                                 </td>
                             </ng-container>
                             <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-                            <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+                            <tr mat-row *matRowDef="let row; let i = index; columns: displayedColumns;"></tr>
                         </table>
                     </div>
                     <div class="m-t-xl" *ngIf="isMerchant"> 

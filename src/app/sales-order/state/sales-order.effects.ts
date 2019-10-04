@@ -131,7 +131,7 @@ export class SalesOrderEffects {
         mergeMap((payload) =>
             this.salesOrderService.cancelSalesOrderLines(payload).pipe(
                 map((salesorderlines: SalesOrderLine[]) => {
-                    this.salesOrderService.sendNotification({ type: 'success', title: 'Successfully Canceled' });
+                    this.salesOrderService.sendNotification({ type: 'success', title: 'Successfully Canceled', content: '' });
                     return (new salesOrderActions.CancelSalesOrderLinesSuccess(salesorderlines));
                 }),
                 catchError(err => {
@@ -148,13 +148,11 @@ export class SalesOrderEffects {
         ofType(salesOrderActions.SalesOrderActionTypes.AddFulfillment),
         map((action: salesOrderActions.AddFulfillment) => action.payload),
         mergeMap((payload) =>
-            this.salesOrderService.addFulfillment(payload).pipe(
+            this.salesOrderService.addFulfillment(payload.fulfillment).pipe(
                 map((fulfillment: Fulfillment) => {
                     this.salesOrderService.sendNotification({ type: 'success', title: 'Save Completed', content: '' });
-                    //this.router.navigate(['/sales-order', 'view', this.fulfilledby,this.orderid,'fulfillment']);
+                    this.router.navigate(['/sales-order', 'view', payload.fulfilledby, payload.orderid, 'fulfillment']);
                     //this.router.navigate(['/sales-order', 'view', 'merchant', this.orderid, 'detail']);
-                    window.location.reload();
-
                     return (new salesOrderActions.AddFulfillmentSuccess(fulfillment));
                 }),
                 catchError(err => {
@@ -170,10 +168,10 @@ export class SalesOrderEffects {
         ofType(salesOrderActions.SalesOrderActionTypes.EditFulfillment),
         map((action: salesOrderActions.EditFulfillment) => action.payload),
         mergeMap((payload) =>
-            this.salesOrderService.editFulfillment(payload).pipe(
+            this.salesOrderService.editFulfillment(payload.fulfillment).pipe(
                 map((fulfillment: Fulfillment) => {
-                    this.salesOrderService.sendNotification({ type: 'success', title: 'Save Completed', content: '' });
-                    window.location.reload();
+                    this.router.navigate(['/sales-order', 'view', payload.fulfilledby, payload.orderid, 'fulfillment']);
+                    this.salesOrderService.sendNotification({ type: 'success', title: 'Save Completed', content: `Shipment ID: ${fulfillment.FulfillmentID} has been updated` });
                     return (new salesOrderActions.EditFulfillmentSuccess(fulfillment));
                 }),
                 catchError(err => {
@@ -207,13 +205,12 @@ export class SalesOrderEffects {
         ofType(salesOrderActions.SalesOrderActionTypes.DownloadSalesOrderPackingSlip),
         map((action: salesOrderActions.DownloadSalesOrderPackingSlip) => action.payload),
         mergeMap((payload) =>
-            this.salesOrderService.downloadSalesOrderPackingSlip(payload.OrderID).pipe(
+            this.salesOrderService.downloadSalesOrderPackingSlip(payload.orderid).pipe(
                 map((data: any) => {
-                    console.log('huh', payload);
                     const blob = new Blob([data], {type: 'application/pdf'});
                     const blobUrl = URL.createObjectURL(blob);
                     if (window.navigator.msSaveOrOpenBlob) {
-                        const fileName = payload.IncrementID;
+                        const fileName = payload.salesorder.IncrementID;
                         window.navigator.msSaveOrOpenBlob(data, fileName + '.pdf'); // IE is the worst!!!
                     } else {
                         // const iframe = document.createElement('iframe');
@@ -228,7 +225,7 @@ export class SalesOrderEffects {
                         const fileURL = window.URL.createObjectURL(blob);
                         const a: HTMLAnchorElement = document.createElement('a') as HTMLAnchorElement;
                         a.href = fileURL;
-                        a.download = String(payload.IncrementID);
+                        a.download = String(payload.salesorder.IncrementID);
                         document.body.appendChild(a);
                         a.target = '_blank';
                         a.click();
@@ -245,25 +242,4 @@ export class SalesOrderEffects {
             )
         )
     );
-
-
-    // @Effect()
-    // editCurrentMember$: Observable<Action> = this.actions$.pipe(
-    //     ofType(settingActions.SettingActionTypes.EditCurrentMember),
-    //     map((action: settingActions.EditCurrentMember) => action.payload),
-    //     mergeMap((payload: Member) =>
-    //         this.settingService.editCurrentMember(payload).pipe(
-    //             map((member: Member) => {
-    //                 this.settingService.sendNotification({ type: 'success', title: 'Successfully Updated', content: '' });
-    //                 window.location.reload();
-    //                 return (new settingActions.EditCurrentMemberSuccess(member));
-    //             }),
-    //             catchError(err => {
-    //                 this.settingService.sendNotification({ type: 'error', title: 'Error', content: err });
-    //                 this.router.navigate(['/setting']);
-    //                 return of(new settingActions.EditCurrentMemberFail(err));
-    //             })
-    //         )
-    //     )
-    // );
 }

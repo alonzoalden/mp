@@ -21,7 +21,7 @@ export class SalesOrderFulfillmentAddComponent implements OnInit, OnChanges {
     @Input() fulfillmentSalesOrderLinesMatTable: MatTableDataSource<FulfillmentSalesOrderLine>;
     @Output() getFulfilledBySalesOrder = new EventEmitter<{orderid: number, fulfilledby: string}>();
     @Output() getFulfilmmentSalesOrderLines = new EventEmitter<number>();
-    @Output() addFulfillment = new EventEmitter<Fulfillment>();
+    @Output() addFulfillment = new EventEmitter<{fulfillment: Fulfillment, orderid: number; fulfilledby: string}>();
     orderid: number;
     fulfilledby: string;
     displayedColumns = ['ProductDetails', 'RemainingQuantity', 'PackageQuantity'];
@@ -44,15 +44,16 @@ export class SalesOrderFulfillmentAddComponent implements OnInit, OnChanges {
             this.getFulfilledBySalesOrder.emit({orderid: this.route.parent.snapshot.params['id'], fulfilledby: this.route.parent.snapshot.params['fulfilledby']});
         }
         if (changes.fulfillmentSalesOrderLinesMatTable && !changes.fulfillmentSalesOrderLinesMatTable.currentValue.data.length && changes.fulfillmentSalesOrderLinesMatTable.firstChange) {
-            this.getFulfilmmentSalesOrderLines.emit(this.route.parent.snapshot.params['id']);
+            // this.getFulfilmmentSalesOrderLines.emit(this.route.parent.snapshot.params['id']);
         }
 
     }
 
     ngOnInit() {
+        this.isLoading = true;
         this.orderid = this.route.parent.snapshot.params['id'];
         this.fulfilledby = 'merchant';
-
+        //this.getFulfilmmentSalesOrderLines.emit(this.orderid);
         this.fulfillment = new Fulfillment(null, String(this.orderid), null, null, null, null, null, null, null, null, null, this.shipmentTrackings, this.fulfillmentSalesOrderLinesMatTable.data);
 
         this.shipmentTrackings = [];
@@ -69,7 +70,7 @@ export class SalesOrderFulfillmentAddComponent implements OnInit, OnChanges {
 
     onAddFulfillment() {
         if (this.isValid()) {
-            this.addFulfillment.emit(this.fulfillment);
+            this.addFulfillment.emit({fulfillment: this.fulfillment, orderid: this.orderid, fulfilledby: this.fulfilledby});
         }
     }
 

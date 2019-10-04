@@ -12,12 +12,16 @@ import { Observable } from 'rxjs';
 
 export class SalesOrderViewShellComponent implements OnInit {
     salesorder$: Observable<SalesOrder>;
+    //isLoading$: Observable<boolean>;
     errorMessage$: Observable<string>;
     constructor(private store: Store<fromSalesOrder.State>) { }
 
     ngOnInit() {
         this.salesorder$ = this.store.pipe(select(fromSalesOrder.getSalesOrder));
         this.errorMessage$ = this.store.pipe(select(fromSalesOrder.getError));
+        // setTimeout(()=> {
+        //     this.isLoading$ = this.store.pipe(select(fromSalesOrder.getIsLoading));
+        // });
     }
     getFulfilledBySalesOrder(payload: {orderid: number, fulfilledby: string}) {
         this.store.dispatch(new salesOrderActions.LoadSalesOrder(payload));

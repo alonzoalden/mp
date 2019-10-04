@@ -26,10 +26,12 @@ export class SalesOrderFulfillmentAddShellComponent implements OnInit {
         this.salesOrder$ = this.store.pipe(select(fromSalesOrder.getSalesOrder));
         this.fulfillment$ = this.store.pipe(select(fromSalesOrder.getFulfilledByFulfillment));
         this.fulfillmentSalesOrderLinesMatTable$ = this.store.pipe(select(fromSalesOrder.getFulfillmentSalesOrderLinesMatTable));
-        this.isLoading$ = this.store.pipe(select(fromSalesOrder.getIsLoading));
         this.errorMessage$ = this.store.pipe(select(fromSalesOrder.getError));
+        setTimeout(()=> {
+            this.isLoading$ = this.store.pipe(select(fromSalesOrder.getIsLoading));
+        });
     }
-    addFulfillment(payload: Fulfillment) {
+    addFulfillment(payload: { fulfillment: Fulfillment, orderid: number; fulfilledby: string }) {
         this.store.dispatch(new salesOrderActions.AddFulfillment(payload));
     }
     getFulfilledBySalesOrder(payload: { orderid: number, fulfilledby: string }) {

@@ -22,14 +22,13 @@ export class SalesOrderFulfillmentEditComponent implements OnInit {
     @Output() getFulfilledBySalesOrder = new EventEmitter<{orderid: number, fulfilledby: string}>();
     @Output() getFulfilledBySalesOrderDelivery = new EventEmitter<{orderid: number, fulfilledby: string}>();
     @Output() getFulfilledByFulfillment = new EventEmitter<{fulfillmentid: number, fulfilledby: string}>();
-    @Output() editFulfillment = new EventEmitter<Fulfillment>();
+    @Output() editFulfillment = new EventEmitter<{fulfillment: Fulfillment, orderid: number; fulfilledby: string}>();
 
     orderid: number;
     fulfilledby: string;
     fulfillmentid: number;
     fulfillmentSalesOrderLines: FulfillmentSalesOrderLine[];
     fulfillmentSalesOrderLinesMatTable: MatTableDataSource<FulfillmentSalesOrderLine>;
-    //displayedColumns = ['ItemImage', 'ItemName', 'SKU', 'TPIN', 'RemainingQuantity', 'PackageQuantity'];
     displayedColumns = ['ProductDetails', 'RemainingQuantity', 'PackageQuantity'];
     isMerchant: boolean;
     minDate = new Date(2000, 0, 1);
@@ -56,20 +55,22 @@ export class SalesOrderFulfillmentEditComponent implements OnInit {
             this.fulfillmentSalesOrderLines = this.fulfillment.FulfillmentSalesOrderLines;
             this.fulfillmentSalesOrderLinesMatTable = new MatTableDataSource<FulfillmentSalesOrderLine>(this.fulfillmentSalesOrderLines);
         }
-        if (changes.fulfillment && !changes.fulfillment.currentValue && changes.fulfillment.firstChange) {
-            this.getFulfilledByFulfillment.emit({fulfillmentid: this.route.snapshot.params['fulfillmentid'], fulfilledby: this.route.parent.snapshot.params['fulfilledby']});
-        }
+        // if (changes.fulfillment && !changes.fulfillment.currentValue && changes.fulfillment.firstChange) {
+        //     this.getFulfilledByFulfillment.emit({fulfillmentid: this.route.snapshot.params['fulfillmentid'], fulfilledby: this.route.parent.snapshot.params['fulfilledby']});
+        // }
         if (changes.salesOrder && !changes.salesOrder.currentValue && changes.salesOrder.firstChange) {
             this.getFulfilledBySalesOrder.emit({orderid: this.route.parent.snapshot.params['id'], fulfilledby: this.route.parent.snapshot.params['fulfilledby']});
         }
     }
     ngOnInit() {
+        this.isLoading = true;
         this.orderid = this.route.parent.snapshot.params['id'];
         this.fulfilledby = this.route.parent.snapshot.params['fulfilledby'];
         this.fulfillmentid = this.route.snapshot.params['fulfillmentid'];
 
         this.getFulfilledBySalesOrder.emit({orderid: this.orderid, fulfilledby: this.fulfilledby});
         this.getFulfilledBySalesOrderDelivery.emit({orderid: this.orderid, fulfilledby: this.fulfilledby});
+        this.getFulfilledByFulfillment.emit({fulfillmentid: this.route.snapshot.params['fulfillmentid'], fulfilledby: this.route.parent.snapshot.params['fulfilledby']});
 
         if (this.fulfilledby == 'merchant') {
             this.isMerchant = true;
@@ -79,7 +80,7 @@ export class SalesOrderFulfillmentEditComponent implements OnInit {
     }
 
     addNewShipmentTracking() {
-        const _temp = new ShipmentTracking(null, this.fulfillmentid.toString(), null, null);
+        const _temp = new ShipmentTracking(null, this.route.snapshot.params['fulfillmentid'].toString(), null, null);
         this.fulfillment.ShipmentTrackings.push(_temp);
     }
     onAddShipmentTracking() {
@@ -88,7 +89,7 @@ export class SalesOrderFulfillmentEditComponent implements OnInit {
 
     onUpdateFulfillment() {
         if (this.isValid()) {
-            this.editFulfillment.emit(this.fulfillment);
+            this.editFulfillment.emit({fulfillment: this.fulfillment, orderid: this.orderid, fulfilledby: this.fulfilledby});
         }
     }
 

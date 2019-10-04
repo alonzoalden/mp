@@ -40,7 +40,6 @@ import {
     MatToolbarModule,
     MatTooltipModule,
     MatFormFieldModule,
-    MatMenuTrigger
 } from '@angular/material';
 
 import { CdkTableModule } from '@angular/cdk/table';
@@ -99,14 +98,14 @@ export function HttpLoaderFactory(http: HttpClient) {
         DeviceDetectorModule.forRoot(),
         routing,
         StoreModule.forRoot({}),
-        // StoreDevtoolsModule.instrument({
-        //     name: 'Toolots Merchant Portal DevTools',
-        //     maxAge: 10,
-        //     logOnly: environment.production,
-        // }),
         EffectsModule.forRoot([]),
         StoreModule.forFeature('users', userreducer),
-        EffectsModule.forFeature([UserEffects])
+        EffectsModule.forFeature([UserEffects]),
+        StoreDevtoolsModule.instrument({
+            name: 'Toolots Merchant Portal DevTools',
+            maxAge: 10,
+            logOnly: environment.production,
+        }),
     ],
     exports: [
         CdkTableModule,

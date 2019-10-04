@@ -32,7 +32,7 @@ export class SalesOrderListShellComponent implements OnInit {
     setSalesOrder(payload: SalesOrder) {
         this.store.dispatch(new salesOrderActions.SetSalesOrder(payload));
     }
-    downloadSalesOrderPackingSlip(payload: SalesOrder) {
+    downloadSalesOrderPackingSlip(payload: {salesorder: SalesOrder, orderid: number}) {
         this.store.dispatch(new salesOrderActions.DownloadSalesOrderPackingSlip(payload));
     }
 }
