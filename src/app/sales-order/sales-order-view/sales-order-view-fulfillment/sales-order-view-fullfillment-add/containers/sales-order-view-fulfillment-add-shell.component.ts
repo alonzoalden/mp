@@ -25,6 +25,7 @@ export class SalesOrderFulfillmentAddShellComponent implements OnInit {
     ngOnInit() {
         this.salesOrder$ = this.store.pipe(select(fromSalesOrder.getSalesOrder));
         this.fulfillment$ = this.store.pipe(select(fromSalesOrder.getFulfilledByFulfillment));
+        
         this.fulfillmentSalesOrderLinesMatTable$ = this.store.pipe(select(fromSalesOrder.getFulfillmentSalesOrderLinesMatTable));
         this.errorMessage$ = this.store.pipe(select(fromSalesOrder.getError));
         setTimeout(()=> {
