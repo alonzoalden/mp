@@ -5,7 +5,7 @@
             <form class="form-horizontal" #itemForm="ngForm">
                 <fieldset>
                     <o-item-edit-product-relation-related-product
-                        [relatedProductItemlist]="allItemList$ | async"
+                        [relatedProductItemlist]="itemList$ | async"
                         [item]="item$ | async"
                         [itemRelatedProductsMatTable]="itemRelatedProductsMatTable$ | async"
                         [errorMessage]="errorMessage$ | async"

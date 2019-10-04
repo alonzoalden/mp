@@ -214,7 +214,7 @@ export class DeleteFulfillment implements Action {
 }
 export class DeleteFulfillmentSuccess implements Action {
   readonly type = SalesOrderActionTypes.DeleteFulfillmentSuccess;
-  constructor(public payload: Fulfillment) { }
+  constructor(public payload: number) { }
 }
 export class DeleteFulfillmentFail implements Action {
   readonly type = SalesOrderActionTypes.DeleteFulfillmentFail;

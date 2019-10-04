@@ -5,7 +5,7 @@ import { SalesOrderLine } from '../../../../shared/class/sales-order-line';
 import { SalesOrder } from '../../../../shared/class/sales-order';
 import { SalesOrderService } from '../../../sales-order.service';
 import { environment } from '../../../../../environments/environment';
-import { Member } from 'app/shared/class/member';
+import { Member } from '../../../../shared/class/member';
 import * as salesOrderActions from '../../../state/sales-order.actions';
 import * as fromSalesOrder from '../../../state';
 import { Store, select } from '@ngrx/store';
