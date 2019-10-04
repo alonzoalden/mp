@@ -218,7 +218,7 @@ export function itemReducer(state = initialState, action: ItemActions): ItemStat
         case ItemActionTypes.AddItemFail:
             return {
                 ...state,
-                item: null,
+                //item: null,
                 pendingAdd: false,
                 error: action.payload,
             };
@@ -237,7 +237,7 @@ export function itemReducer(state = initialState, action: ItemActions): ItemStat
         case ItemActionTypes.EditItemFail:
             return {
                 ...state,
-                item: null,
+                //item: null,
                 pendingSave: false,
                 error: action.payload,
             };

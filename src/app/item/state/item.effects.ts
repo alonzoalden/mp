@@ -412,8 +412,7 @@ export class ItemEffects {
                 }),
                 catchError(err => {
                     this.itemService.sendNotification({ type: 'error', title: 'Error', content: err });
-                    of(new itemActions.AddItemFail(err));
-                    return EMPTY;
+                    return of(new itemActions.AddItemFail(err));
                 })
             )
         )
@@ -439,8 +438,7 @@ export class ItemEffects {
                 }),
                 catchError(err => {
                     this.itemService.sendNotification({ type: 'error', title: 'Error', content: err });
-                    of(new itemActions.EditItemFail(err));
-                    return EMPTY;
+                    return of(new itemActions.EditItemFail(err));
                 })
             )
         )

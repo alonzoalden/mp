@@ -25,8 +25,8 @@ export class InboundShipmentListShellComponent implements OnInit {
         this.userInfo$ = this.store.pipe(select(fromUser.getCurrentUser));
         this.purchaseOrdersMatTable$ = this.store.pipe(select(fromInboundShipment.purchaseOrdersMatTable));
         this.pendingDelete$ = this.store.pipe(select(fromInboundShipment.getPendingDelete));
-        this.errorMessage$ = this.store.pipe(select(fromInboundShipment.getError));
         setTimeout(() => {
+            this.errorMessage$ = this.store.pipe(select(fromInboundShipment.getError));
             this.isLoading$ = this.store.pipe(select(fromInboundShipment.getIsLoading));
         });
     }

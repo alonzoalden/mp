@@ -17,7 +17,7 @@ export class ItemEditShellComponent implements OnInit {
 
     vendorBrandList$: Observable<VendorBrand[]>;
     item$: Observable<Item | ItemInsert>;
-    pendingAdd$: Observable<boolean>;
+    pendingSave$: Observable<boolean>;
     isLoading$: Observable<boolean>;
     errorMessage$: Observable<string>;
     userInfo$: Observable<Member>;
@@ -30,7 +30,7 @@ export class ItemEditShellComponent implements OnInit {
         this.store.dispatch(new itemActions.LoadVendorBrands());
         this.vendorBrandList$ = this.store.pipe(select(fromItem.getVendorBrandList));
         this.item$ = this.store.pipe(select(fromItem.getItem));
-        this.pendingAdd$ = this.store.pipe(select(fromItem.getPendingAdd));
+        this.pendingSave$ = this.store.pipe(select(fromItem.getPendingSave));
         this.errorMessage$ = this.store.pipe(select(fromItem.getError));
         this.userInfo$ = this.store.pipe(select(fromUser.getCurrentUser));
         setTimeout(() => {

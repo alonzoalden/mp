@@ -168,8 +168,9 @@ export class InboundShipmentEffects {
                     return (new inboundShipmentActions.AddNewPurchaseOrderSuccess(purchaseOrder));
                 }),
                 catchError(err => {
-                    of(new inboundShipmentActions.AddNewPurchaseOrderFail(err));
-                    return EMPTY;
+                    this.inboundShipmentService.sendNotification({ type: 'error', title: 'Error', content: err });
+                    this.router.navigate(['/inbound-shipment']);
+                    return of(new inboundShipmentActions.AddNewPurchaseOrderFail(err));
                 })
             )
         )
@@ -193,8 +194,8 @@ export class InboundShipmentEffects {
                 }),
                 catchError(err => {
                     this.inboundShipmentService.sendNotification({ type: 'error', title: 'Error', content: err });
-                    of(new inboundShipmentActions.EditPurchaseOrderFail(err));
-                    return EMPTY;
+                    this.router.navigate(['/inbound-shipment', payload.purchaseOrder.PurchaseOrderID, 'edit']);
+                    return of(new inboundShipmentActions.EditPurchaseOrderFail(err));
                 })
             )
         )

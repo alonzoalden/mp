@@ -72,7 +72,7 @@ export class ItemEditComponent implements OnInit {
         if (this.isItemNameValid() && this.isSKUValid() && this.isSubmitValid()) {
             //if (this.isValid(null) && this.isShippingFeeValid() && this.isBundleValid()) {
             if (this.isValid(null) && this.isBundleValid()) {
-                this.pendingSave = true;
+                //this.pendingSave = true;
                 const newItem = this.itemService.copyItem(this.item);
 
                 if (newItem.ItemTierPrices) {
