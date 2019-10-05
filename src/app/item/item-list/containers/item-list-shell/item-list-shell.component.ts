@@ -31,7 +31,7 @@ export class ItemListShellComponent implements OnInit {
         });
     }
     getItems(): void {
-        this.store.dispatch(new itemActions.LoadItemBatchItems());
+        this.store.dispatch(new itemActions.LoadMainItems());
     }
     downloadItemLabelCount(payload: {item: Item, count: number, border: string}): void {
         this.store.dispatch(new itemActions.DownloadItemLabelCount(payload));

@@ -59,6 +59,9 @@ export enum ItemActionTypes {
   LoadItems = '[Item] Load Items',
   LoadItemsSuccess = '[Item] Load Items Success',
   LoadItemsFail = '[Item] Load Items Fail',
+  LoadMainItems = '[Item Batch] Load Main Items',
+  LoadMainItemsSuccess = '[Item Batch] Load Main Items Success',
+  LoadMainItemsFail = '[Item Batch] Load Main Items Fail',
   LoadRefreshItems = '[Item] Load Refresh Items',
   LoadRefreshItemsSuccess = '[Item] Load Refresh Items Success',
   LoadRefreshItemsFail = '[Item] Load Refresh Items Fail',
@@ -156,6 +159,23 @@ export class LoadRefreshItemsFail implements Action {
   readonly type = ItemActionTypes.LoadRefreshItemsFail;
   constructor(public payload: string) { }
 }
+
+
+
+export class LoadMainItems implements Action {
+  readonly type = ItemActionTypes.LoadMainItems;
+}
+
+export class LoadMainItemsSuccess implements Action {
+  readonly type = ItemActionTypes.LoadMainItemsSuccess;
+  constructor(public payload: Item[]) { }
+}
+
+export class LoadMainItemsFail implements Action {
+  readonly type = ItemActionTypes.LoadMainItemsFail;
+  constructor(public payload: string) { }
+}
+
 
 export class LoadItemList implements Action {
   readonly type = ItemActionTypes.LoadItemList;
@@ -325,8 +345,6 @@ export class LoadVideoURLDetailFail implements Action {
   constructor(public payload: { row: ItemVideo, error: string}) { }
 }
 
-
-
 export class LoadItemCategoryAssignments implements Action {
   readonly type = ItemActionTypes.LoadItemCategoryAssignments;
   constructor(public payload: number) { }
@@ -421,7 +439,7 @@ export class EditItemBatch implements Action {
 
 export class EditItemBatchSuccess implements Action {
   readonly type = ItemActionTypes.EditItemBatchSuccess;
-  constructor(public payload: ItemBatch[]) { }
+  constructor(public payload: { itembatch: ItemBatch[], updateditems: ItemBatch[]}) { }
 }
 
 export class EditItemBatchFail implements Action {
@@ -584,15 +602,13 @@ export class DownloadPrintItemLargeLabelsFail implements Action {
 }
 
 
-
-
-
-
-
 // Union the valid types
 export type ItemActions = LoadVendorBrands
 | LoadVendorBrandsSuccess
 | LoadVendorBrandsFail
+| LoadMainItems
+| LoadMainItemsSuccess
+| LoadMainItemsFail
 | LoadItemList
 | LoadItemListSuccess
 | LoadItemListFail

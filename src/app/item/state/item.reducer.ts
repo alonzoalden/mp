@@ -284,9 +284,15 @@ export function itemReducer(state = initialState, action: ItemActions): ItemStat
                 error: action.payload,
             };
         case ItemActionTypes.EditItemBatchSuccess:
+            action.payload.updateditems.forEach(updateditem => {
+                const _item = state.items.find(item => item.ItemID === updateditem.ItemID);
+                if (_item) {
+                    _item.Approval = 'Approved';
+                }
+            });
             return {
                 ...state,
-                itemBatch: action.payload,
+                itemBatch: action.payload.itembatch,
                 pendingSave: false,
                 error: '',
             };
@@ -318,7 +324,27 @@ export function itemReducer(state = initialState, action: ItemActions): ItemStat
                 isLoading: false,
                 error: action.payload,
             };
-
+        case ItemActionTypes.LoadMainItems:
+            return {
+                ...state,
+                isLoading: true,
+            };
+        case ItemActionTypes.LoadMainItemsSuccess:
+            return {
+                ...state,
+                items: action.payload,
+                itemBatchItems: action.payload,
+                isLoading: false,
+                error: '',
+            };
+        case ItemActionTypes.LoadMainItemsFail:
+            return {
+                ...state,
+                items: [],
+                itemBatchItems: [],
+                isLoading: false,
+                error: action.payload,
+            };
         case ItemActionTypes.LoadRefreshItemsSuccess:
             return {
                 ...state,
@@ -371,19 +397,6 @@ export function itemReducer(state = initialState, action: ItemActions): ItemStat
                 ...state,
                 error: action.payload.error,
             };
-
-            
-
-
-
-
-
-        // case ItemActionTypes.AddNewItemRelatedProductRow:
-        //     state.item.ItemRelatedProducts.push(action.payload);
-        // return {
-        //         ...state,
-        //         item: state.item
-        //     };
         default:
             return state;
     }

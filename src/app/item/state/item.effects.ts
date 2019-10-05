@@ -328,7 +328,21 @@ export class ItemEffects {
     );
 
 
-
+    
+    @Effect()
+    loadMainItems$: Observable<Action> = this.actions$.pipe(
+        ofType(itemActions.ItemActionTypes.LoadMainItems),
+        mergeMap((id: number) =>
+            this.itemService.getItems().pipe(
+                map((item: Item[]) =>  (new itemActions.LoadMainItemsSuccess(item))),
+                catchError(err => {
+                    this.itemService.sendNotification({ type: 'error', title: 'Error', content: err });
+                    of(new itemActions.LoadMainItemsFail(err));
+                    return EMPTY;
+                })
+            )
+        )
+    );
 
     @Effect()
     loadItemBatchItems$: Observable<Action> = this.actions$.pipe(
@@ -367,7 +381,10 @@ export class ItemEffects {
         map((action: itemActions.EditItemBatch) => action.payload),
         mergeMap((payload: ItemBatch[]) =>
             this.itemService.editItemBatch(payload).pipe(
-                map((item: ItemBatch[]) => (new itemActions.EditItemBatchSuccess(item))),
+                map((item: ItemBatch[]) => {
+                    const _updateditems: ItemBatch[] = payload.filter(item => item.Approve);
+                    return (new itemActions.EditItemBatchSuccess({itembatch: item, updateditems: _updateditems}))
+                }),
                 catchError(err => {
                     this.itemService.sendNotification({ type: 'error', title: 'Error', content: err });
                     of(new itemActions.EditItemBatchFail(err));
