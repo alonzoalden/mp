@@ -2,7 +2,7 @@
 <div class="row wrapper border-bottom white-bg page-heading">
     <div class="col-lg-9">
         <h2>
-            {{ 'Sales Order' | translate }}:<span class="xs-strong"> #{{isLoading || !salesorder ? '' : salesorder.IncrementID}}</span>
+            {{ 'Sales Order' | translate }}:<span class="xs-strong"> #{{salesorder.IncrementID}}</span>
         </h2>
         <ol class="breadcrumb">
             <li>
