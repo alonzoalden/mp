@@ -14,7 +14,7 @@ import { SalesOrderFulfillmentAddShellComponent } from './sales-order-view/sales
 import { SalesOrderFulfillmentEditShellComponent } from './sales-order-view/sales-order-view-fulfillment/sales-order-view-fullfillment-edit/containers/sales-order-view-fulfillment-edit-shell.component';
 import { SalesOrderFulfillmentListShellComponent } from './sales-order-view/sales-order-view-fulfillment/sales-order-view-fullfillment-list/containers/sales-order-view-fulfillment-list-shell.component';
 import { SalesOrderListComponent } from './sales-order-list/components/sales-order-list.component';
-import { SalesOrderDetailComponent, SalesOrderCancelComponentPrintDialog } from './sales-order-view/sales-order-view-detail/components/sales-order-view-detail.component';
+import { SalesOrderDetailComponent, SalesOrderCancelComponentPrintDialog, SalesOrderOpenBocComponentDialog } from './sales-order-view/sales-order-view-detail/components/sales-order-view-detail.component';
 import { SalesOrderViewComponent } from './sales-order-view/components/sales-order-view.component';
 import { SalesOrderCancelComponent } from './sales-order-view/sales-order-view-cancel/components/sales-order-view-cancel.component';
 import { SalesOrderFulfillmentListComponent } from './sales-order-view/sales-order-view-fulfillment/sales-order-view-fullfillment-list/components/sales-order-view-fulfillment-list.component';
@@ -47,9 +47,10 @@ import { EffectsModule } from '@ngrx/effects';
         SalesOrderFulfillmentListComponent,
         SalesOrderFulfillmentAddComponent,
         SalesOrderFulfillmentEditComponent,
-        SalesOrderCancelComponentPrintDialog
+        SalesOrderCancelComponentPrintDialog,
+        SalesOrderOpenBocComponentDialog
     ],
-    entryComponents: [SalesOrderCancelComponentPrintDialog],
+    entryComponents: [SalesOrderCancelComponentPrintDialog, SalesOrderOpenBocComponentDialog],
     imports: [
         TranslateModule,
         ReactiveFormsModule,
