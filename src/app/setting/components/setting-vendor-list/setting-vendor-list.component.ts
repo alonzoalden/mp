@@ -35,6 +35,7 @@ export class SettingVendorListComponent implements OnInit {
         }
     }
     ngOnInit() {
+        this.applyFilter('');
         this.getMembersVendors.emit();
     }
     switchMemberVendor(memberVendor: MemberVendor): void {

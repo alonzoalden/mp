@@ -69,7 +69,7 @@ export class ItemListComponent implements OnInit {
     }
 
     ngOnInit() {
-
+        this.applyFilter('');
     }
 
     refreshDataSource(items: Item[]) {

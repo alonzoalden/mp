@@ -58,6 +58,7 @@ export class MemberListComponent implements OnInit, OnChanges {
     }
     ngOnInit() {
         this.getMembers.emit();
+        this.applyFilter('');
     }
 
     refreshDataSource(members: Member[]) {
@@ -108,9 +109,9 @@ export class MemberListComponent implements OnInit, OnChanges {
     }
 
     applyFilter(filterValue: string) {
-        this.dataSource.filter = filterValue.trim().toLowerCase();
-        if (this.dataSource.paginator) {
-            this.dataSource.paginator.firstPage();
+        this.membersMatTable.filter = filterValue.trim().toLowerCase();
+        if (this.membersMatTable.paginator) {
+            this.membersMatTable.paginator.firstPage();
         }
     }
 }

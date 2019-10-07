@@ -99,6 +99,7 @@ export class MemberEffects {
             this.memberService.editMember(member).pipe(
                 map(member => {
                     this.memberService.sendNotification({ type: 'success', title: 'Successfully Updated', content: `${member.Email} was saved` });
+                    window.location.reload();
                     return (new memberActions.EditMemberSuccess(member));
                 }),
                 catchError(err => {

@@ -36,7 +36,6 @@ export class ItemBatchUpdateSelectComponent implements OnInit, OnChanges {
         private appService: AppService,
         public itemPrintDialog: MatDialog,
         public itemImportDialog: MatDialog) {
-
     }
 
     ngOnChanges(changes: SimpleChanges): void {
@@ -57,7 +56,7 @@ export class ItemBatchUpdateSelectComponent implements OnInit, OnChanges {
     }
 
     ngOnInit() {
-
+        this.applyFilter('');
     }
 
     refreshDataSource(items: Item[]) {

@@ -51,7 +51,10 @@ export class InboundShipmentListComponent implements OnInit, OnChanges {
         }
     }
 
-    ngOnInit() { }
+    ngOnInit() {
+        this.applyFilter('');
+    }
+
 
     refreshDataSource(purchaseorders: PurchaseOrder[]) {
         this.purchaseOrdersMatTable = new MatTableDataSource<PurchaseOrder>(purchaseorders);

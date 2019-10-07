@@ -40,7 +40,7 @@ export class SalesOrderListComponent implements OnInit, OnChanges {
         }
     }
     ngOnInit() {
-
+        this.applyFilter('');
         this.route.params.subscribe((route) => {
             if (route.fulfilledby !== this.fulfilledby) {
                 this.getSalesOrdersByVendor(route.fulfilledby, route.status);

@@ -80,7 +80,7 @@ export class AdminEffects {
                         this.userStore.dispatch(new userActions.SetCurrentUser(member));
                     }
                     this.adminService.replaceMember(member.MemberID, member);
-                    this.adminService.sendNotification({ type: 'success', title: 'Successfully Created', content: `${member.Email} was saved` });
+                    this.adminService.sendNotification({ type: 'success', title: 'Successfully Updated', content: `${member.Email} was saved` });
                     window.location.reload();
                     //this.router.navigate(['/admin']);
                     return (new adminActions.EditMemberSuccess(member));

@@ -50,6 +50,7 @@ export class ItemBatchApprovalComponent implements OnInit {
     }
 
     ngOnInit() {
+        this.applyFilter('');
         this.getPendingItems.emit();
     }
 

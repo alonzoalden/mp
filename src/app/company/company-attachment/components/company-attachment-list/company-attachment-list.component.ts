@@ -34,6 +34,9 @@ export class CompanyAttachmentListComponent implements OnChanges, AfterViewInit 
         }
         
     }
+    ngOnInit() {
+        this.applyFilter('');
+    }
     onSetVendorAttachmentID(id: number) {
         this.setVendorAttachmentID.emit(id);
     }
