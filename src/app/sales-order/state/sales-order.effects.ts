@@ -11,6 +11,7 @@ import { SalesOrderLine } from 'app/shared/class/sales-order-line';
 import { Fulfillment, FulfillmentSalesOrderLine } from 'app/shared/class/fulfillment';
 import { Store } from '@ngrx/store';
 import * as fromSalesOrder from './index';
+import { BOLRequest } from 'app/shared/class/bol-request';
 
 
 @Injectable()
@@ -145,7 +146,26 @@ export class SalesOrderEffects {
             )
         )
     );
-
+    
+    @Effect()
+    addBOLRequest$: Observable<Action> = this.actions$.pipe(
+        ofType(salesOrderActions.SalesOrderActionTypes.AddBOLRequest),
+        map((action: salesOrderActions.AddBOLRequest) => action.payload),
+        mergeMap((payload) =>
+            this.salesOrderService.addBOLRequest(payload).pipe(
+                map((bolrequest: BOLRequest) => {
+                    this.salesOrderService.sendNotification({ type: 'success', title: 'BOL Request Sent', content: '' });
+                    return (new salesOrderActions.AddBOLRequestSuccess(bolrequest));
+                }),
+                catchError(err => {
+                    this.salesOrderService.sendNotification({ type: 'error', title: 'Error', content: err });
+                    of(new salesOrderActions.AddBOLRequestFail(err));
+                    return EMPTY;
+                })
+            )
+        )
+    );
+    
     @Effect()
     addFulfillment$: Observable<Action> = this.actions$.pipe(
         ofType(salesOrderActions.SalesOrderActionTypes.AddFulfillment),

@@ -29,6 +29,7 @@ export class CompanyInfoDescriptionComponent implements OnInit {
     }
 
     getShippingAddressState() {
+        console.log('hey')
         this.loadShippingAddressState.emit(this.companyInfo.ShippingCountryID);
     }
 

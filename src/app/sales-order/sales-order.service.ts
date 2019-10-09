@@ -7,6 +7,7 @@ import { SalesOrderLine } from '../shared/class/sales-order-line';
 import { Fulfillment, FulfillmentSalesOrderLine } from '../shared/class/fulfillment';
 import { OAuthService } from 'angular-oauth2-oidc';
 import { environment } from '../../environments/environment';
+import { BOLRequest } from 'app/shared/class/bol-request';
 
 @Injectable()
 export class SalesOrderService {
@@ -253,6 +254,49 @@ export class SalesOrderService {
 
     downloadSalesOrderPackingSlip(id: number) {
         return this.http.get(this.apiURL + '/salesorder/' + id + '/packingslip', { responseType: 'blob' });
+    }
+
+    getBOLRequest(salesorderid: number): Observable<BOLRequest> {
+        const headers = new HttpHeaders({
+            'Content-Type': 'application/json'
+        });
+        return this.http.get<BOLRequest>(this.apiURL + '/bolrequest/purchaseorder/' + salesorderid, { headers: headers })
+                        .pipe(
+                            //tap(data => console.log(JSON.stringify(data))),
+                            catchError(this.handleError)
+                        );
+    }
+
+    addBOLRequest(bolrequest: BOLRequest): Observable<BOLRequest> {
+        const headers = new HttpHeaders({
+            'Content-Type': 'application/json'
+        });
+        return this.http.post<BOLRequest>(this.apiURL + '/bolrequest', bolrequest, { headers: headers } )
+                            .pipe(
+                                //tap(data => console.log('Add Fulfillment: ' + JSON.stringify(data))),
+                                catchError(this.handleError)
+                            );
+    }
+
+    uploadBOLRequest(salesorderid: number, formdata: FormData): Observable<BOLRequest> {
+        const headers = new HttpHeaders({
+            'Content-Type': 'application/json'
+        });
+        return this.http.post<BOLRequest>(this.apiURL + '/bolrequest/purchaseorder' + salesorderid + '/upload/', formdata, { headers: headers } )
+                        .pipe(
+                            //tap(data => console.log('Add Fulfillment: ' + JSON.stringify(data))),
+                            catchError(this.handleError)
+                        );
+    }
+    
+
+    rowColorConditions(i: number, collection: Array<any>, currentIndex: number, formDirty: boolean): string {
+        const inputRow = i === collection.length - 1 && currentIndex === i;
+        const selectedInputRow = inputRow && formDirty;
+        if (selectedInputRow) { return '#F5F5F5'; }
+        else if (inputRow) { return '#E8E8E8'; }
+        else if (currentIndex === i) { return '#F5F5F5'; }
+        else { return '#FFFFFF'; }
     }
 
     private handleError(err: HttpErrorResponse) {

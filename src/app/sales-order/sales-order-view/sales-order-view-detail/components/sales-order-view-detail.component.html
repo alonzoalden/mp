@@ -71,8 +71,8 @@
                             <button type="button" class="btn btn-danger" *ngIf="fulfilledby =='merchant' && salesOrder?.MerchantStatus === 'Unshipped'" (click)="openDialogCancelOrder(salesOrder)">
                                 <i class="fa fa-remove"></i><span class=""> {{ 'Cancel Order' | translate }}</span>
                             </button>
-                            <button type="button" class="btn btn-primary" *ngIf="fulfilledby =='merchant' && salesOrder?.MerchantStatus === 'Unshipped'" (click)="openDialogBOC(salesOrder)">
-                                <i class="fa fa-edit"></i><span class=""> {{ 'Edit BOC' | translate }}</span>
+                            <button type="button" class="btn btn-primary" *ngIf="fulfilledby =='merchant' && salesOrder?.MerchantStatus === 'Unshipped'" (click)="openDialogBOL(salesOrder)">
+                                <i class="fa fa-edit"></i><span class=""> {{ 'Request BOL' | translate }}</span>
                             </button>
                         </div>
                     </div>

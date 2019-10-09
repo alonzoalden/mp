@@ -24,26 +24,10 @@ export const getSalesOrdersListMatTable = createSelector(
     getSalesOrderFeatureState,
     state => new MatTableDataSource<SalesOrder>(state.salesOrders)
 );
-
 export const getSalesOrder = createSelector(
         getSalesOrderFeatureState,
         state => state.salesOrder
-    );
-
-// export const getSalesOrder = createSelector(
-//     getSalesOrderFeatureState,
-//     state => state.salesOrders.find(item => item.OrderID === state.currentSalesOrderID)
-// );
-
-// export const getCurrentSalesOrderID = createSelector(
-//     getSalesOrderFeatureState,
-//     state => state.currentSalesOrderID
-// );
-// export const getSalesOrder = createSelector(
-//     getSalesOrderFeatureState,
-//     getCurrentSalesOrderID,
-//     (state, currentSalesOrderID) => state.salesOrders.find(item => item.OrderID === currentSalesOrderID)
-// );
+);
 export const getSalesOrderLines = createSelector(
     getSalesOrderFeatureState,
     state => state.salesOrderLines
@@ -52,9 +36,6 @@ export const getSalesOrderLinesMatTable = createSelector(
     getSalesOrderFeatureState,
     state => new MatTableDataSource<SalesOrderLine>(state.salesOrderLines)
 );
-
-
-
 export const getFulfillmentSalesOrderLines = createSelector(
     getSalesOrderFeatureState,
     state => state.fulfillmentSalesOrderLines
@@ -63,7 +44,6 @@ export const getFulfillmentSalesOrderLinesMatTable = createSelector(
     getSalesOrderFeatureState,
     state => new MatTableDataSource<FulfillmentSalesOrderLine>(state.fulfillmentSalesOrderLines)
 );
-
 export const getFulfilledByFulfillments = createSelector(
     getSalesOrderFeatureState,
     state => state.fulfillments
@@ -76,6 +56,13 @@ export const getFulfilledByFulfillment = createSelector(
     getSalesOrderFeatureState,
     state => state.fulfillment
 );
+
+export const getBOLRequest = createSelector(
+    getSalesOrderFeatureState,
+    state => state.BOLRequest
+);
+
+
 
 export const getIsSalesOrderLinesLoading = createSelector(
     getSalesOrderFeatureState,

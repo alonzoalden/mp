@@ -4,6 +4,7 @@ import { CommonModule } from '@angular/common';
 import { MatPaginatorModule, MatTableModule, MatFormFieldModule, MatInputModule, MatSortModule, MatMenuModule, MatButtonModule, MatDatepickerModule, MatTooltipModule, MatDialogModule } from '@angular/material';
 import { CdkTableModule } from '@angular/cdk/table';
 import { ToolModule } from '../shared/tool/tool.module';
+import { NgSelectModule } from '@ng-select/ng-select';
 import { SalesOrderComponent } from './sales-order.component';
 import { SalesOrderViewCancelShellComponent } from './sales-order-view/sales-order-view-cancel/containers/sales-order-view-cancel-shell.component';
 import { SalesOrderViewShellComponent } from './sales-order-view/containers/sales-order-view-shell.component';
@@ -14,7 +15,7 @@ import { SalesOrderFulfillmentAddShellComponent } from './sales-order-view/sales
 import { SalesOrderFulfillmentEditShellComponent } from './sales-order-view/sales-order-view-fulfillment/sales-order-view-fullfillment-edit/containers/sales-order-view-fulfillment-edit-shell.component';
 import { SalesOrderFulfillmentListShellComponent } from './sales-order-view/sales-order-view-fulfillment/sales-order-view-fullfillment-list/containers/sales-order-view-fulfillment-list-shell.component';
 import { SalesOrderListComponent } from './sales-order-list/components/sales-order-list.component';
-import { SalesOrderDetailComponent, SalesOrderCancelComponentPrintDialog, SalesOrderOpenBocComponentDialog } from './sales-order-view/sales-order-view-detail/components/sales-order-view-detail.component';
+import { SalesOrderDetailComponent, SalesOrderCancelComponentPrintDialog, SalesOrderOpenBOLComponentDialog } from './sales-order-view/sales-order-view-detail/components/sales-order-view-detail.component';
 import { SalesOrderViewComponent } from './sales-order-view/components/sales-order-view.component';
 import { SalesOrderCancelComponent } from './sales-order-view/sales-order-view-cancel/components/sales-order-view-cancel.component';
 import { SalesOrderFulfillmentListComponent } from './sales-order-view/sales-order-view-fulfillment/sales-order-view-fullfillment-list/components/sales-order-view-fulfillment-list.component';
@@ -23,10 +24,13 @@ import { SalesOrderFulfillmentEditComponent } from './sales-order-view/sales-ord
 import { SalesOrderService } from './sales-order.service';
 import { salesorderRouting } from './sales-order.routing';
 import { TranslateModule } from '@ngx-translate/core';
-import { salesOrderReducer } from './state/sales-order.reducer';
-import { SalesOrderEffects } from './state/sales-order.effects';
 import { StoreModule } from '@ngrx/store';
 import { EffectsModule } from '@ngrx/effects';
+import { salesOrderReducer } from './state/sales-order.reducer';
+import { SalesOrderEffects } from './state/sales-order.effects';
+import { companyInfoReducer } from '../company/company-info/state/company-info.reducer';
+import { CompanyInfoEffects } from '../company/company-info/state/company-info.effects';
+import { CompanyService } from 'app/company/company.service';
 
 @NgModule({
     declarations: [
@@ -48,9 +52,9 @@ import { EffectsModule } from '@ngrx/effects';
         SalesOrderFulfillmentAddComponent,
         SalesOrderFulfillmentEditComponent,
         SalesOrderCancelComponentPrintDialog,
-        SalesOrderOpenBocComponentDialog
+        SalesOrderOpenBOLComponentDialog
     ],
-    entryComponents: [SalesOrderCancelComponentPrintDialog, SalesOrderOpenBocComponentDialog],
+    entryComponents: [SalesOrderCancelComponentPrintDialog, SalesOrderOpenBOLComponentDialog],
     imports: [
         TranslateModule,
         ReactiveFormsModule,
@@ -69,11 +73,14 @@ import { EffectsModule } from '@ngrx/effects';
         MatDialogModule,
         ToolModule,
         salesorderRouting,
+        NgSelectModule,
         StoreModule.forFeature('SalesOrder', salesOrderReducer),
-        EffectsModule.forFeature([SalesOrderEffects])
+        EffectsModule.forFeature([SalesOrderEffects]),
+        StoreModule.forFeature('CompanyInfo', companyInfoReducer),
+        EffectsModule.forFeature([CompanyInfoEffects])
     ],
     providers: [
-        SalesOrderService
+        SalesOrderService, CompanyService
     ]
 })
 

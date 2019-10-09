@@ -2,6 +2,7 @@ import { SalesOrderActionTypes, SalesOrderActions } from './sales-order.actions'
 import { SalesOrder } from 'app/shared/class/sales-order';
 import { SalesOrderLine } from 'app/shared/class/sales-order-line';
 import { Fulfillment, FulfillmentSalesOrderLine } from 'app/shared/class/fulfillment';
+import { BOLRequest } from 'app/shared/class/bol-request';
 
 // State for this feature (Item Variation)
 export interface SalesOrderState {
@@ -13,6 +14,7 @@ export interface SalesOrderState {
     salesOrderLines: SalesOrderLine[];
     deliveryDetail: string;
     currentSalesOrderID: number;
+    BOLRequest: BOLRequest;
     isLoading: boolean;
     isSalesOrderLinesLoading: boolean;
     pendingDelete: boolean;
@@ -29,6 +31,7 @@ const initialState: SalesOrderState = {
     salesOrderLines: [],
     deliveryDetail: '',
     currentSalesOrderID: null,
+    BOLRequest: null,
     isLoading: true,
     isSalesOrderLinesLoading: true,
     pendingDelete: false,
@@ -227,6 +230,18 @@ export function salesOrderReducer(state = initialState, action: SalesOrderAction
                 fulfillment: null,
                 fulfillmentSalesOrderLines: [],
                 pendingSave: false,
+                error: action.payload,
+            };
+        case SalesOrderActionTypes.AddBOLRequestSuccess:
+            return {
+                ...state,
+                BOLRequest: action.payload,
+                error: '',
+            };
+        case SalesOrderActionTypes.AddBOLRequestFail:
+            return {
+                ...state,
+                BOLRequest: null,
                 error: action.payload,
             };
         case SalesOrderActionTypes.EditFulfillment:

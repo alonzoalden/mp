@@ -20,7 +20,6 @@ export class SalesOrder {
         public ItemImage: string,
         public URLKey: string,
 
-
         public ShipByDate: Date,
         public CustomerName: string,
         public ShipAddressCompanyName: string,
@@ -33,7 +32,6 @@ export class SalesOrder {
         public ShipAddressCountry: string,
         public ShipAddressPhoneNumber: string,
         public CreatedOn: Date,
-
         public MerchantStatus: string
     ) {}
 }

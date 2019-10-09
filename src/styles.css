@@ -431,7 +431,7 @@ table {
     background-color: #ed5565;
     height: 100% !important;
 }
-
+.btn-primary-150,
 .btn-remove-150,
 .btn-danger-150 {
     width: 150px;
@@ -439,12 +439,14 @@ table {
     color: #FFF !important;
 }
 .btn-danger-150 {
-    background-color: #ed5565;
+    background-color: #ed5565 ;
 }
 .btn-remove-150 {
     background-color: lightgrey;
 }
-
+.btn-primary-150 {
+    background-color: #1ab394;
+}
 .btn-success-xs,
 .btn-success-sm {
     color: #FFF !important;
@@ -459,9 +461,6 @@ table {
 }
 .btn-remove:hover {
     background-color: #E0E0E0;
-}
-.btn-danger {
-
 }
 .add-category-submit {
     margin-top: 20px;

@@ -26,7 +26,6 @@ export class CompanyInfoDescriptionShellComponent implements OnInit {
         this.shippingAddressStates$ = this.store.pipe(select(fromCompany.getShippingAddressStates));
         this.isInfoDescriptionLoading$ = this.store.pipe(select(fromCompany.isInfoDescriptionLoading));
         this.errorMessage$ = this.store.pipe(select(fromCompany.getError));
-
     }
 
     loadCompanyInfoDescription() {

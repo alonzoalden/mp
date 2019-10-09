@@ -6,6 +6,7 @@
     [isSalesOrderLinesLoading]="isSalesOrderLinesLoading$ | async"
     [errorMessage]="errorMessage$ | async"
     (getFulfilledBySalesOrder)="getFulfilledBySalesOrder($event)"
+    (addBOLRequest)="addBOLRequest($event)"
     (getSalesOrderLineByVendor)="getSalesOrderLineByVendor($event)"
     (downloadSalesOrderPackingSlip)="downloadSalesOrderPackingSlip($event)"
 ></o-sales-order-detail>
