@@ -89,14 +89,19 @@ export class SalesOrderDetailComponent implements OnInit {
     }
 
     openDialogBOL(salesorder) {
+        const _data = {
+            ...salesorder,
+            orderid: this.orderid
+
+        }
         const dialogRef = this.printDialog.open(SalesOrderOpenBOLComponentDialog, {
-            data: salesorder,
+            data: _data,
             width: '1040px'
         });
 
         dialogRef.afterClosed().subscribe((bolrequest) => {
             if (bolrequest) {
-                this.addBOLRequest.emit(bolrequest);
+                
             }
         });
     }
@@ -109,106 +114,6 @@ export class SalesOrderDetailComponent implements OnInit {
           return '(' + match[1] + ') ' + match[2] + '-' + match[3];
         }
         return null;
-    }
-}
-
-
-export class SalesOrderCancelDialog {
-    constructor(
-        public Size: string,
-        public Border: string
-    ) {}
-}
-
-@Component({
-    selector: 'sales-order-cancel.component-print-dialog',
-    templateUrl: '../../sales-order-view-cancel/components/sales-order-view-cancel.component-cancel-dialog.html',
-})
-
-export class SalesOrderCancelComponentPrintDialog implements OnInit, OnDestroy {
-    itemLabelPrintDialog: SalesOrderCancelDialog;
-    errorMessage: string;
-    fulfilledby: string;
-    orderid: number;
-    salesOrder: SalesOrder;
-    hasCancellationQty: boolean = false;
-    salesOrderLinesMatTable: MatTableDataSource<SalesOrderLine>;
-    deliveryDetail: string;
-    private imageURL = environment.imageURL;
-    private linkURL = environment.linkURL;
-
-    dataSource: MatTableDataSource<any>;
-    displayedColumns = ['ItemImage', 'ProductDetails', 'ProductInfo', 'CancellationReason'];
-    componentActive: boolean = true;
-    @ViewChild(MatPaginator, { static: false }) paginator: MatPaginator;
-    @ViewChild(MatSort, { static: true }) sort: MatSort;
-
-    constructor(
-        @Inject(MAT_DIALOG_DATA) public data: SalesOrder,
-        public dialogRef: MatDialogRef<SalesOrderCancelComponentPrintDialog>,
-        private route: ActivatedRoute,
-        private router: Router,
-        private store: Store<fromSalesOrder.State>,
-        private salesorderService: SalesOrderService) {}
-
-    ngOnInit() {
-        this.salesOrder = this.data;
-        this.orderid = this.data.OrderID;
-        this.fulfilledby = 'merchant';
-
-        //this.store.dispatch(new salesOrderActions.LoadSalesOrderLines({orderid: this.orderid, fulfilledby: this.fulfilledby}));
-        this.store.pipe(
-            select(fromSalesOrder.getSalesOrderLines),
-            takeWhile(() => this.componentActive)
-          ).subscribe(
-            salesorderlines => {
-                salesorderlines.forEach((salesorderline) => {
-                    if (salesorderline.Quantity - salesorderline.FulfilledQuantity > 0) {
-                        this.hasCancellationQty = true;
-                    }
-                });
-                return this.salesOrderLinesMatTable = new MatTableDataSource<SalesOrderLine>(salesorderlines);
-            }
-          );
-    }
-
-    onCancel() {
-        if (this.isValid()) {
-            const confirmation = confirm(`Are you sure you want to cancel this order?`);
-            if (confirmation) {
-                this.store.dispatch(new salesOrderActions.CancelSalesOrderLines(this.salesOrderLinesMatTable.data));
-            }
-        }
-    }
-
-    isValid() {
-        let _ret = false;
-        let _count = 0;
-
-        this.salesOrderLinesMatTable.data.forEach((salesorderline) => {
-            _count++;
-
-            if (_count == 1) {
-                _ret = true;
-            }
-
-            if (salesorderline.Quantity - salesorderline.FulfilledQuantity > 0 && !salesorderline.CancellationReason) {
-                this.salesorderService.sendNotification({ type: 'error', title: 'Error', content: 'Cancellation Reasons are required' });
-                _ret = false;
-            }
-        });
-
-        if (_count == 0) {
-            this.salesorderService.sendNotification({ type: 'error', title: 'Error', content: 'No Lines to cancel' });
-        }
-
-        return _ret;
-    }
-    onCloseClick(): void {
-        this.dialogRef.close();
-    }
-    ngOnDestroy(): void {
-        this.componentActive = false;
     }
 }
 
@@ -252,7 +157,7 @@ export class SalesOrderOpenBOLComponentDialog implements OnInit, OnDestroy {
     ];
 
     constructor(
-        @Inject(MAT_DIALOG_DATA) public data: SalesOrder,
+        @Inject(MAT_DIALOG_DATA) public data: {salesorder: SalesOrder, orderid: number},
         public dialogRef: MatDialogRef<SalesOrderCancelComponentPrintDialog>,
         private route: ActivatedRoute,
         private router: Router,
@@ -261,14 +166,12 @@ export class SalesOrderOpenBOLComponentDialog implements OnInit, OnDestroy {
         private salesorderService: SalesOrderService) {}
 
     ngOnInit() {
-        this.orderid = this.route.snapshot.params['id'];
-        console.log(this.route.snapshot)
+        this.orderid = this.data.orderid;
+        
         this.bolRequest = new BOLRequest(null, this.orderid, null, null, null, null, null, null, null, null, null, null, null, null, []);
         this.addPendingLine();
         this.refreshDataSource(this.bolRequest.BOLRequestLines);
-        this.salesOrder = this.data;
-        
-        //this.orderid = this.data.OrderID;
+        this.salesOrder = this.data.salesorder;
         this.fulfilledby = 'merchant';
 
         this.companyStore.dispatch(new companyActions.LoadCompanyInfo());
@@ -297,8 +200,7 @@ export class SalesOrderOpenBOLComponentDialog implements OnInit, OnDestroy {
                 if (addresscountries) {
                     this.addressCountries = addresscountries;
                     this.bolRequest.CountryID = 'US';
-                }
-                
+                }   
             }
         );
         this.companyStore.pipe(
@@ -315,6 +217,19 @@ export class SalesOrderOpenBOLComponentDialog implements OnInit, OnDestroy {
                 
             }
         );
+        this.store.pipe(
+            select(fromSalesOrder.getBOLRequest),
+            takeWhile(() => this.componentActive)
+        ).subscribe(
+            (bolrequest: BOLRequest) => {
+                console.log(bolrequest);
+                if (bolrequest && bolrequest.BOLRequestID) {
+                    this.dialogRef.close(this.bolRequest);
+                }
+                
+            }
+        );
+        
     }
 
     onRequestBol() {
@@ -325,7 +240,10 @@ export class SalesOrderOpenBOLComponentDialog implements OnInit, OnDestroy {
             if (!_lastItem.Length || !_lastItem.Height) {
                 this.bolRequest.BOLRequestLines.splice(_lastIndex, 1);
             }
-            this.dialogRef.close(this.bolRequest);
+            this.store.dispatch(new salesOrderActions.AddBOLRequest(this.bolRequest));
+            // this.addBOLRequestAnd.emit({bolrequest: this.bolRequest, dialogRef: this.dialogRef});
+            
+            
         }
         else {
             this.salesorderService.sendNotification({ type: 'error', title: 'Error', content: 'Please make sure your BOL Request is complete' });
@@ -335,10 +253,10 @@ export class SalesOrderOpenBOLComponentDialog implements OnInit, OnDestroy {
     onAddBOLRequestLine(bolrequestline: BOLRequestLine) {
         if (this.isUpBOLRequestLineRequirementValid(bolrequestline)) {
             this.pendingAdd = true;
-                this.addPendingLine();
-                this.refreshDataSource(this.bolRequest.BOLRequestLines);
-                this.currentIndex = this.bolRequest.BOLRequestLines.length - 1;
-                this.formDirty = false;
+            this.addPendingLine();
+            this.refreshDataSource(this.bolRequest.BOLRequestLines);
+            this.currentIndex = this.bolRequest.BOLRequestLines.length - 1;
+            this.formDirty = false;
         
         } else {
             this.salesorderService.sendNotification({ type: 'error', title: 'Error', content: 'Please input all fields' });
@@ -441,5 +359,107 @@ export class SalesOrderOpenBOLComponentDialog implements OnInit, OnDestroy {
         requestline.Weight = null;
         requestline.Pieces = 1;
         this.formDirty = false;
+    }
+}
+
+
+
+
+export class SalesOrderCancelDialog {
+    constructor(
+        public Size: string,
+        public Border: string
+    ) {}
+}
+
+@Component({
+    selector: 'sales-order-cancel.component-print-dialog',
+    templateUrl: '../../sales-order-view-cancel/components/sales-order-view-cancel.component-cancel-dialog.html',
+})
+
+export class SalesOrderCancelComponentPrintDialog implements OnInit, OnDestroy {
+    itemLabelPrintDialog: SalesOrderCancelDialog;
+    errorMessage: string;
+    fulfilledby: string;
+    orderid: number;
+    salesOrder: SalesOrder;
+    hasCancellationQty: boolean = false;
+    salesOrderLinesMatTable: MatTableDataSource<SalesOrderLine>;
+    deliveryDetail: string;
+    private imageURL = environment.imageURL;
+    private linkURL = environment.linkURL;
+
+    dataSource: MatTableDataSource<any>;
+    displayedColumns = ['ItemImage', 'ProductDetails', 'ProductInfo', 'CancellationReason'];
+    componentActive: boolean = true;
+    @ViewChild(MatPaginator, { static: false }) paginator: MatPaginator;
+    @ViewChild(MatSort, { static: true }) sort: MatSort;
+
+    constructor(
+        @Inject(MAT_DIALOG_DATA) public data: SalesOrder,
+        public dialogRef: MatDialogRef<SalesOrderCancelComponentPrintDialog>,
+        private route: ActivatedRoute,
+        private router: Router,
+        private store: Store<fromSalesOrder.State>,
+        private salesorderService: SalesOrderService) {}
+
+    ngOnInit() {
+        this.salesOrder = this.data;
+        this.orderid = this.data.OrderID;
+        this.fulfilledby = 'merchant';
+
+        //this.store.dispatch(new salesOrderActions.LoadSalesOrderLines({orderid: this.orderid, fulfilledby: this.fulfilledby}));
+        this.store.pipe(
+            select(fromSalesOrder.getSalesOrderLines),
+            takeWhile(() => this.componentActive)
+          ).subscribe(
+            salesorderlines => {
+                salesorderlines.forEach((salesorderline) => {
+                    if (salesorderline.Quantity - salesorderline.FulfilledQuantity > 0) {
+                        this.hasCancellationQty = true;
+                    }
+                });
+                return this.salesOrderLinesMatTable = new MatTableDataSource<SalesOrderLine>(salesorderlines);
+            }
+          );
+    }
+
+    onCancel() {
+        if (this.isValid()) {
+            const confirmation = confirm(`Are you sure you want to cancel this order?`);
+            if (confirmation) {
+                this.store.dispatch(new salesOrderActions.CancelSalesOrderLines(this.salesOrderLinesMatTable.data));
+            }
+        }
+    }
+
+    isValid() {
+        let _ret = false;
+        let _count = 0;
+
+        this.salesOrderLinesMatTable.data.forEach((salesorderline) => {
+            _count++;
+
+            if (_count == 1) {
+                _ret = true;
+            }
+
+            if (salesorderline.Quantity - salesorderline.FulfilledQuantity > 0 && !salesorderline.CancellationReason) {
+                this.salesorderService.sendNotification({ type: 'error', title: 'Error', content: 'Cancellation Reasons are required' });
+                _ret = false;
+            }
+        });
+
+        if (_count == 0) {
+            this.salesorderService.sendNotification({ type: 'error', title: 'Error', content: 'No Lines to cancel' });
+        }
+
+        return _ret;
+    }
+    onCloseClick(): void {
+        this.dialogRef.close();
+    }
+    ngOnDestroy(): void {
+        this.componentActive = false;
     }
 }
