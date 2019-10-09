@@ -15,7 +15,7 @@ import { SalesOrderFulfillmentAddShellComponent } from './sales-order-view/sales
 import { SalesOrderFulfillmentEditShellComponent } from './sales-order-view/sales-order-view-fulfillment/sales-order-view-fullfillment-edit/containers/sales-order-view-fulfillment-edit-shell.component';
 import { SalesOrderFulfillmentListShellComponent } from './sales-order-view/sales-order-view-fulfillment/sales-order-view-fullfillment-list/containers/sales-order-view-fulfillment-list-shell.component';
 import { SalesOrderListComponent } from './sales-order-list/components/sales-order-list.component';
-import { SalesOrderDetailComponent, SalesOrderCancelComponentPrintDialog, SalesOrderOpenBOLComponentDialog } from './sales-order-view/sales-order-view-detail/components/sales-order-view-detail.component';
+import { SalesOrderDetailComponent, SalesOrderCancelComponentPrintDialog, SalesOrderOpenBOLComponentDialog, SalesOrderUploadBOLComponentDialog } from './sales-order-view/sales-order-view-detail/components/sales-order-view-detail.component';
 import { SalesOrderViewComponent } from './sales-order-view/components/sales-order-view.component';
 import { SalesOrderCancelComponent } from './sales-order-view/sales-order-view-cancel/components/sales-order-view-cancel.component';
 import { SalesOrderFulfillmentListComponent } from './sales-order-view/sales-order-view-fulfillment/sales-order-view-fullfillment-list/components/sales-order-view-fulfillment-list.component';
@@ -52,9 +52,10 @@ import { CompanyService } from 'app/company/company.service';
         SalesOrderFulfillmentAddComponent,
         SalesOrderFulfillmentEditComponent,
         SalesOrderCancelComponentPrintDialog,
-        SalesOrderOpenBOLComponentDialog
+        SalesOrderOpenBOLComponentDialog,
+        SalesOrderUploadBOLComponentDialog
     ],
-    entryComponents: [SalesOrderCancelComponentPrintDialog, SalesOrderOpenBOLComponentDialog],
+    entryComponents: [SalesOrderCancelComponentPrintDialog, SalesOrderOpenBOLComponentDialog, SalesOrderUploadBOLComponentDialog],
     imports: [
         TranslateModule,
         ReactiveFormsModule,

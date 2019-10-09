@@ -50,6 +50,13 @@ export enum SalesOrderActionTypes {
     AddBOLRequest = '[Sales Order] Add BOL Request',
     AddBOLRequestSuccess = '[Sales Order] Add BOL Request Success',
     AddBOLRequestFail = '[Sales Order] Add BOL Request Fail',
+    LoadBOLRequest = '[Sales Order] Load BOL Request',
+    LoadBOLRequestSuccess = '[Sales Order] Load BOL Request Success',
+    LoadBOLRequestFail = '[Sales Order] Load BOL Request Fail',
+    UploadBOLAttachment = '[Sales Order] Upload BOL Attachment',
+    UploadBOLAttachmentSuccess = '[Sales Order] Upload BOL Attachment Success',
+    UploadBOLAttachmentFail = '[Sales Order] Upload BOL Attachment Fail',
+    
 }
 
 // Action Creators
@@ -186,6 +193,30 @@ export class AddBOLRequestFail implements Action {
     readonly type = SalesOrderActionTypes.AddBOLRequestFail;
     constructor(public payload: string) { }
 }
+export class LoadBOLRequest implements Action {
+    readonly type = SalesOrderActionTypes.LoadBOLRequest;
+    constructor(public payload: number) { }
+}
+export class LoadBOLRequestSuccess implements Action {
+    readonly type = SalesOrderActionTypes.LoadBOLRequestSuccess;
+    constructor(public payload: BOLRequest) { }
+}
+export class LoadBOLRequestFail implements Action {
+    readonly type = SalesOrderActionTypes.LoadBOLRequestFail;
+    constructor(public payload: string) { }
+}
+export class UploadBOLAttachment implements Action {
+    readonly type = SalesOrderActionTypes.UploadBOLAttachment;
+    constructor(public payload: {id: number, form: FormData, name: string}) { }
+}
+export class UploadBOLAttachmentSuccess implements Action {
+    readonly type = SalesOrderActionTypes.UploadBOLAttachmentSuccess;
+    constructor(public payload: BOLRequest) { }
+}
+export class UploadBOLAttachmentFail implements Action {
+    readonly type = SalesOrderActionTypes.UploadBOLAttachmentFail;
+    constructor(public payload: string) { }
+}
 export class EditFulfillment implements Action {
     readonly type = SalesOrderActionTypes.EditFulfillment;
     constructor(public payload: { fulfillment: Fulfillment, orderid: number; fulfilledby: string }) { }
@@ -210,7 +241,6 @@ export class DeleteFulfillmentFail implements Action {
     readonly type = SalesOrderActionTypes.DeleteFulfillmentFail;
     constructor(public payload: string) { }
 }
-
 export class LoadSalesOrderDelivery implements Action {
     readonly type = SalesOrderActionTypes.LoadSalesOrderDelivery;
     constructor(public payload: number) { }
@@ -278,5 +308,11 @@ export type SalesOrderActions = LoadSalesOrders
     | EditFulfillmentFail
     | AddBOLRequest
     | AddBOLRequestSuccess
-    | AddBOLRequestFail;
+    | AddBOLRequestFail
+    | LoadBOLRequest
+    | LoadBOLRequestSuccess
+    | LoadBOLRequestFail
+    | UploadBOLAttachment
+    | UploadBOLAttachmentSuccess
+    | UploadBOLAttachmentFail;
 

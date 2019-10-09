@@ -4,9 +4,12 @@
     [salesOrder]="salesOrder$ | async"
     [isLoading]="isLoading$ | async"
     [isSalesOrderLinesLoading]="isSalesOrderLinesLoading$ | async"
+    [isBOLRequestLoading]="isBOLRequestLoading$ | async"
     [errorMessage]="errorMessage$ | async"
+    [BOLRequest]="BOLRequest$ | async"
     (getFulfilledBySalesOrder)="getFulfilledBySalesOrder($event)"
     (addBOLRequest)="addBOLRequest($event)"
+    (getBOLRequest)="getBOLRequest($event)"
     (getSalesOrderLineByVendor)="getSalesOrderLineByVendor($event)"
     (downloadSalesOrderPackingSlip)="downloadSalesOrderPackingSlip($event)"
 ></o-sales-order-detail>

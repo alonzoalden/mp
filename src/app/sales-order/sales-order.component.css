@@ -18,7 +18,8 @@
     vertical-align: top;
     width: 20%;
 }
-.center-block .sales-order-actions > button {
+.center-block .sales-order-actions > button,
+.center-block .sales-order-actions > a {
     width: 170px;
     margin-bottom: 20px;
     display: block;

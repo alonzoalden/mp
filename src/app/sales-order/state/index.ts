@@ -56,14 +56,10 @@ export const getFulfilledByFulfillment = createSelector(
     getSalesOrderFeatureState,
     state => state.fulfillment
 );
-
 export const getBOLRequest = createSelector(
     getSalesOrderFeatureState,
     state => state.BOLRequest
 );
-
-
-
 export const getIsSalesOrderLinesLoading = createSelector(
     getSalesOrderFeatureState,
     state => state.isSalesOrderLinesLoading
@@ -79,6 +75,14 @@ export const getPendingDelete = createSelector(
 export const getPendingSave = createSelector(
     getSalesOrderFeatureState,
     state => state.pendingSave
+);
+export const getPendingAdd = createSelector(
+    getSalesOrderFeatureState,
+    state => state.pendingAdd
+);
+export const getIsBOLRequestLoading = createSelector(
+    getSalesOrderFeatureState,
+    state => state.isBOLRequestLoading
 );
 export const getError = createSelector(
     getSalesOrderFeatureState,

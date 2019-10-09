@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild, OnDestroy, Inject, Output, Input, EventEmitter, SimpleChanges } from '@angular/core';
+import { Component, OnInit, ViewChild, OnDestroy, Inject, Output, Input, EventEmitter, SimpleChanges, OnChanges } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { MatPaginator, MatSort, MatTableDataSource, MatDialog, MatDialogRef, MAT_DIALOG_DATA} from '@angular/material';
 import { SalesOrderLine } from '../../../../shared/class/sales-order-line';
@@ -25,23 +25,23 @@ import { AddressCountry, AddressState } from 'app/shared/class/address';
 })
 
 export class SalesOrderDetailComponent implements OnInit {
+    private imageURL = environment.imageURL;
+    private linkURL = environment.linkURL;
     @Input() userInfo: Member;
     @Input() salesOrder: SalesOrder;
     @Input() salesOrderLinesMatTable: MatTableDataSource<SalesOrderLine>;
     @Input() errorMessage: string;
     @Input() isLoading: boolean;
     @Input() isSalesOrderLinesLoading: boolean;
+    @Input() isBOLRequestLoading: boolean;
+    @Input() BOLRequest: BOLRequest;
+    @Output() addBOLRequest = new EventEmitter<BOLRequest>();
+    @Output() getBOLRequest = new EventEmitter<number>();
     @Output() getFulfilledBySalesOrder = new EventEmitter<{orderid: number, fulfilledby: string}>();
     @Output() getSalesOrderLineByVendor = new EventEmitter<{orderid: number, fulfilledby: string}>();
     @Output() cancelSalesOrderLines = new EventEmitter<SalesOrderLine[]>();
     @Output() getSalesOrderByVendor = new EventEmitter<{fulfilledby: string, status: string}>();
     @Output() downloadSalesOrderPackingSlip = new EventEmitter<{salesorder: SalesOrder, orderid: number}>();
-    @Output() addBOLRequest = new EventEmitter<BOLRequest>();
-
-
-    private imageURL = environment.imageURL;
-    private linkURL = environment.linkURL;
-
     fulfilledby: string;
     orderid: number;
     displayedColumns = ['ItemImage', 'ProductDetails', 'Quantity', 'MerchantStatus', 'UnitPrice', 'LineSubTotal'];
@@ -57,6 +57,8 @@ export class SalesOrderDetailComponent implements OnInit {
             this.salesOrderLinesMatTable.paginator = this.paginator;
             this.salesOrderLinesMatTable.sort = this.sort;
         }
+        if (changes.BOLRequest && changes.BOLRequest.currentValue) {
+        }
     }
     ngOnInit() {
         this.orderid = this.route.parent.snapshot.params['id'];
@@ -66,8 +68,8 @@ export class SalesOrderDetailComponent implements OnInit {
         } else {
             this.isMerchant = false;
         }
-
         this.getSalesOrderLineByVendor.emit({orderid: this.orderid, fulfilledby: this.fulfilledby});
+        this.getBOLRequest.emit(this.orderid);
     }
 
     onPrintPackingSlip() {
@@ -90,9 +92,8 @@ export class SalesOrderDetailComponent implements OnInit {
 
     openDialogBOL(salesorder) {
         const _data = {
-            ...salesorder,
+            salesorder,
             orderid: this.orderid
-
         }
         const dialogRef = this.printDialog.open(SalesOrderOpenBOLComponentDialog, {
             data: _data,
@@ -105,6 +106,20 @@ export class SalesOrderDetailComponent implements OnInit {
             }
         });
     }
+    openDialogUploadBOLRequest(salesorder) {
+        const _data = {
+            salesorder,
+            orderid: this.orderid
+        }
+        const dialogRef = this.printDialog.open(SalesOrderUploadBOLComponentDialog, {
+            data: _data,
+            width: '1040px'
+        });
+
+        dialogRef.afterClosed().subscribe(() => {
+
+        });
+    }
 
     formatPhoneNumber(phoneNumberString) {
         if (!phoneNumberString) { return; }
@@ -114,6 +129,130 @@ export class SalesOrderDetailComponent implements OnInit {
           return '(' + match[1] + ') ' + match[2] + '-' + match[3];
         }
         return null;
+    }
+}
+
+@Component({
+    selector: 'sales-order-view-detail.component-upload-bol-dialog',
+    templateUrl: './sales-order-view-detail.component-upload-bol-dialog.html',
+})
+
+export class SalesOrderUploadBOLComponentDialog implements OnInit, OnDestroy {
+    private fileURL = environment.fileURL;
+    itemLabelPrintDialog: SalesOrderCancelDialog;
+    errorMessage: string;
+    fulfilledby: string;
+    orderid: number;
+    salesOrder: SalesOrder;
+    // hasCancellationQty: boolean = false;
+    // salesOrderLinesMatTable: MatTableDataSource<SalesOrderLine>;
+    // deliveryDetail: string;
+    // private imageURL = environment.imageURL;
+    // private linkURL = environment.linkURL;
+    // formDirty: boolean = true;
+    pendingAdd: boolean;
+    // dataSource: MatTableDataSource<any>;
+    // displayedColumns = ['Add', 'Type', 'Weight', 'Dimensions', 'Pieces', 'Remove'];
+    componentActive: boolean = true;
+    // @ViewChild(MatPaginator, { static: false }) paginator: MatPaginator;
+    // @ViewChild(MatSort, { static: true }) sort: MatSort;
+
+    // bolRequest: BOLRequest;
+    // companyInfo: CompanyInfo;
+    // addressCountries: AddressCountry[];
+    // shippingAddressStates: AddressState[];
+    // currentIndex: number;
+    // requestLineTypes: any =  [
+    //     {
+    //         Value: 'Crate'
+    //     },
+    //     {
+    //         Value: 'Pallet'
+    //     }
+    // ];
+    filesToUpload: Array<File> = [];
+    selectedFileNames: string[] = [];
+    name: string;
+    constructor(
+        @Inject(MAT_DIALOG_DATA) public data: {salesorder: SalesOrder, orderid: number},
+        public dialogRef: MatDialogRef<SalesOrderCancelComponentPrintDialog>,
+        private store: Store<fromSalesOrder.State>,
+        private companyStore: Store<fromCompany.State>,
+        private salesorderService: SalesOrderService) {}
+
+    ngOnInit() {
+        
+        this.orderid = this.data.orderid;
+        
+        // this.bolRequest = new BOLRequest(null, this.orderid, null, null, null, null, null, null, null, null, null, null, null, null, []);
+        // this.addPendingLine();
+        // this.refreshDataSource(this.bolRequest.BOLRequestLines);
+        this.salesOrder = this.data.salesorder;
+        // this.fulfilledby = 'merchant';
+
+        // this.companyStore.dispatch(new companyActions.LoadCompanyInfo());
+        // this.companyStore.dispatch(new companyActions.LoadAddressCountry());
+        this.store.pipe(
+            select(fromSalesOrder.getBOLRequest),
+            takeWhile(() => this.componentActive)
+        ).subscribe(
+            (bolrequest: BOLRequest) => {
+                if (bolrequest && bolrequest.BOLPath) {
+                    console.log(bolrequest);
+                    this.dialogRef.close(bolrequest);
+                }
+            }
+        );
+        this.store.pipe(
+            select(fromSalesOrder.getPendingAdd),
+            takeWhile(() => this.componentActive)
+        ).subscribe(
+            (pendingadd: boolean) => {
+                if (typeof pendingadd === 'boolean') {
+                    this.pendingAdd = pendingadd;
+                }
+            }
+        );
+    }
+    fileChangeEvent(fileInput: any) {
+        // Clear Uploaded Files result message
+        this.filesToUpload = <Array<File>>fileInput.target.files;
+        for (let i = 0; i < this.filesToUpload.length; i++) {
+            this.selectedFileNames.push(this.filesToUpload[i].name);
+        }
+    }
+
+    upload() {
+        if (this.selectedFileNames.length === 0) {
+            this.salesorderService.sendNotification({ type: 'error', title: 'Invalid Upload', content: 'Please select at least 1 files to upload!' });
+        } else {
+            this.uploadFiles();
+        }
+    }
+
+    uploadFiles() {
+        if (this.filesToUpload.length > 0) {
+            var formData: FormData = new FormData();
+            for (let i = 0; i < this.filesToUpload.length; i++) {
+                formData.append('uploadedFiles', this.filesToUpload[i], this.filesToUpload[i].name);
+            }
+            this.store.dispatch(new salesOrderActions.UploadBOLAttachment({
+                id: this.orderid,
+                form: formData,
+                name: this.name
+            }));
+        }
+    }
+
+    cancelUpload() {
+        this.filesToUpload = [];
+        this.selectedFileNames = [];
+    }
+    onCloseClick(): void {
+        this.dialogRef.close();
+    }
+    ngOnDestroy(): void {
+        this.componentActive = false;
     }
 }
 
@@ -222,28 +361,32 @@ export class SalesOrderOpenBOLComponentDialog implements OnInit, OnDestroy {
             takeWhile(() => this.componentActive)
         ).subscribe(
             (bolrequest: BOLRequest) => {
-                console.log(bolrequest);
                 if (bolrequest && bolrequest.BOLRequestID) {
                     this.dialogRef.close(this.bolRequest);
                 }
-                
             }
         );
-        
+        this.store.pipe(
+            select(fromSalesOrder.getPendingAdd),
+            takeWhile(() => this.componentActive)
+        ).subscribe(
+            (pendingadd: boolean) => {
+                if (typeof pendingadd === 'boolean') {
+                    this.pendingAdd = pendingadd;
+                }
+            }
+        );
     }
 
     onRequestBol() {
+        const _lastIndex = this.bolRequest.BOLRequestLines.length - 1;
+        const _lastItem = this.bolRequest.BOLRequestLines[_lastIndex];
+        if (!_lastItem.Length || !_lastItem.Height) {
+            this.bolRequest.BOLRequestLines.splice(_lastIndex, 1);
+        }
         if (this.isUpBOLRequestRequirementValid()) {
             
-            const _lastIndex = this.bolRequest.BOLRequestLines.length - 1;
-            const _lastItem = this.bolRequest.BOLRequestLines[_lastIndex];
-            if (!_lastItem.Length || !_lastItem.Height) {
-                this.bolRequest.BOLRequestLines.splice(_lastIndex, 1);
-            }
             this.store.dispatch(new salesOrderActions.AddBOLRequest(this.bolRequest));
-            // this.addBOLRequestAnd.emit({bolrequest: this.bolRequest, dialogRef: this.dialogRef});
-            
-            
         }
         else {
             this.salesorderService.sendNotification({ type: 'error', title: 'Error', content: 'Please make sure your BOL Request is complete' });

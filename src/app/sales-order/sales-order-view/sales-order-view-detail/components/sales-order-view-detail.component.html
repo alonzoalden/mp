@@ -65,14 +65,31 @@
                             </form>
                         </div>
                         <div class="sales-order-actions" *ngIf="isMerchant">
+                            <a class="button" class="btn btn-primary"
+                                *ngIf="fulfilledby === 'merchant' && salesOrder?.MerchantStatus === 'Unshipped' && BOLRequest && BOLRequest.BOLPath"
+                                href="{{fileURL}}{{BOLRequest.BOLPath}}" target="_blank">
+                                <i class="fa fa fa-file-pdf-o m-r-xs"></i><span> {{ 'Download BOL' | translate }} </span>
+                            </a>
+                            <!-- <button type="button" class="btn btn-primary"
+                                *ngIf="fulfilledby === 'merchant' && salesOrder?.MerchantStatus === 'Unshipped' && this.BOLRequest && this.BOLRequest.BOLPath"
+                                (click)="downloadBOLRequest(salesOrder)">
+                                    <i class="fa fa fa-file-pdf-o m-r-xs"></i><span> {{ 'Download BOL' | translate }} </span>
+                            </button> -->
                             <button type="button" class="btn btn-info" (click)="onPrintPackingSlip()">
-                                <i class="fa fa-print m-r-xs"></i><span class=""> {{ 'Print Packing Slip' | translate }}</span>
-                            </button>             
+                                <i class="fa fa-print m-r-xs"></i><span> {{ 'Print Packing Slip' | translate }} </span>
+                            </button>          
                             <button type="button" class="btn btn-danger" *ngIf="fulfilledby =='merchant' && salesOrder?.MerchantStatus === 'Unshipped'" (click)="openDialogCancelOrder(salesOrder)">
-                                <i class="fa fa-remove"></i><span class=""> {{ 'Cancel Order' | translate }}</span>
+                                <i class="fa fa-remove m-r-xs"></i><span> {{ 'Cancel Order' | translate }} </span>
                             </button>
-                            <button type="button" class="btn btn-primary" *ngIf="fulfilledby =='merchant' && salesOrder?.MerchantStatus === 'Unshipped'" (click)="openDialogBOL(salesOrder)">
-                                <i class="fa fa-edit"></i><span class=""> {{ 'Request BOL' | translate }}</span>
+                            <button type="button" class="btn btn-primary"
+                                *ngIf="fulfilledby === 'merchant' && salesOrder?.MerchantStatus === 'Unshipped' && !this.BOLRequest && !this.isBOLRequestLoading"
+                                (click)="openDialogBOL(salesOrder)">
+                                    <i class="fa fa-edit m-r-xs"></i><span> {{ 'Request BOL' | translate }} </span>
+                            </button>
+                            <button type="button" class="btn btn-primary"
+                                *ngIf="fulfilledby === 'merchant' && salesOrder?.MerchantStatus === 'Unshipped' && this.BOLRequest && !this.BOLRequest.BOLPath"
+                                (click)="openDialogUploadBOLRequest(salesOrder)">
+                                    <i class="fa fa-upload m-r-xs"></i><span> {{ 'Upload BOL' | translate }} </span>
                             </button>
                         </div>
                     </div>

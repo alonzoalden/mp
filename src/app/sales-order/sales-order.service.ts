@@ -278,11 +278,8 @@ export class SalesOrderService {
                             );
     }
 
-    uploadBOLRequest(salesorderid: number, formdata: FormData): Observable<BOLRequest> {
-        const headers = new HttpHeaders({
-            'Content-Type': 'application/json'
-        });
-        return this.http.post<BOLRequest>(this.apiURL + '/bolrequest/purchaseorder' + salesorderid + '/upload/', formdata, { headers: headers } )
+    uploadBOLAttachment(salesorderid: number, formdata: FormData): Observable<BOLRequest> {
+        return this.http.post<BOLRequest>(this.apiURL + '/bolrequest/purchaseorder/' + salesorderid + '/upload', formdata )
                         .pipe(
                             //tap(data => console.log('Add Fulfillment: ' + JSON.stringify(data))),
                             catchError(this.handleError)

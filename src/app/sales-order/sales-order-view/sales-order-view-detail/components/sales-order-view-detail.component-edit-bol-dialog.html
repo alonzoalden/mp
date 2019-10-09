@@ -266,7 +266,10 @@
 </div>
     
 <mat-dialog-actions>
-    <button mat-button class="btn btn-primary-150" (click)="onRequestBol()">Request BOL</button>
+    <button mat-button class="btn btn-primary-150" (click)="onRequestBol()">
+        <ng-container *ngIf="!pendingAdd">Request BOL</ng-container>
+        <ng-container *ngIf="pendingAdd"><i class="fa fa-spinner fa-spin"></i></ng-container>
+    </button>
     <button mat-button class="btn btn-remove-150" (click)="onCloseClick()">Back</button>
 </mat-dialog-actions>
     

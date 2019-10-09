@@ -27,7 +27,8 @@ export class SalesOrderViewDetailShellComponent implements OnInit {
     userInfo$: Observable<Member>;
     isLoading$: Observable<boolean>;
     isSalesOrderLinesLoading$: Observable<boolean>;
-
+    isBOLRequestLoading$: Observable<boolean>;
+    BOLRequest$: Observable<BOLRequest>;
     errorMessage$: Observable<string>;
     isMerchant: boolean;
     orderID: number;
@@ -38,10 +39,12 @@ export class SalesOrderViewDetailShellComponent implements OnInit {
         this.userInfo$ = this.store.pipe(select(fromUser.getCurrentUser));
         this.salesOrderLinesMatTable$ = this.store.pipe(select(fromSalesOrder.getSalesOrderLinesMatTable));
         this.salesOrder$ = this.store.pipe(select(fromSalesOrder.getSalesOrder));
+        this.BOLRequest$ = this.store.pipe(select(fromSalesOrder.getBOLRequest));
         this.errorMessage$ = this.store.pipe(select(fromSalesOrder.getError));
         setTimeout(() => {
             this.isLoading$ = this.store.pipe(select(fromSalesOrder.getIsLoading));
             this.isSalesOrderLinesLoading$ = this.store.pipe(select(fromSalesOrder.getIsSalesOrderLinesLoading));
+            this.isBOLRequestLoading$ = this.store.pipe(select(fromSalesOrder.getIsBOLRequestLoading));
         });
     }
     getFulfilledBySalesOrder(payload: {orderid: number, fulfilledby: string}) {
@@ -56,5 +59,7 @@ export class SalesOrderViewDetailShellComponent implements OnInit {
     addBOLRequest(payload: BOLRequest) {
         this.store.dispatch(new salesOrderActions.AddBOLRequest(payload));
     }
-    
+    getBOLRequest(payload: number) {
+        this.store.dispatch(new salesOrderActions.LoadBOLRequest(payload));
+    }
 }
