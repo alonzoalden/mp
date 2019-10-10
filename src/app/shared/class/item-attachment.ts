@@ -7,7 +7,7 @@ export class ItemAttachment {
         public Title: string,
         public FileName: string,
         public UploadedFile: string,
-        
+
         public Position: number,
         public UpdatedOn: string,
         public CreatedOn: string

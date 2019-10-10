@@ -24,12 +24,14 @@ export class ItemListShellComponent implements OnInit {
     ngOnInit() {
         this.userInfo$ = this.store.pipe(select(fromUser.getCurrentUser));
         this.itemsMatTable$ = this.store.pipe(select(fromItem.getItemsMatTable));
-        this.isLoading$ = this.store.pipe(select(fromItem.getIsLoading));
         this.pendingDelete$ = this.store.pipe(select(fromItem.getPendingDelete));
         this.errorMessage$ = this.store.pipe(select(fromItem.getError));
+        setTimeout(() => {
+            this.isLoading$ = this.store.pipe(select(fromItem.getIsLoading));
+        });
     }
     getItems(): void {
-        this.store.dispatch(new itemActions.LoadItemBatchItems());
+        this.store.dispatch(new itemActions.LoadMainItems());
     }
     downloadItemLabelCount(payload: {item: Item, count: number, border: string}): void {
         this.store.dispatch(new itemActions.DownloadItemLabelCount(payload));

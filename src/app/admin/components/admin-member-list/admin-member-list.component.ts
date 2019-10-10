@@ -15,7 +15,7 @@ export class AdminMemberListComponent implements OnChanges, AfterViewInit {
     @Input() pendingDelete: boolean;
     @Input() errorMessage: string;
     @Output() getMembers = new EventEmitter<void>();
-    @Output() setMemberID = new EventEmitter<number>(); 
+    @Output() setMemberID = new EventEmitter<number>();
     @ViewChild(MatPaginator, { static: true }) paginator: MatPaginator;
     @ViewChild(MatSort, { static: true }) sort: MatSort;
 
@@ -32,8 +32,7 @@ export class AdminMemberListComponent implements OnChanges, AfterViewInit {
             }
             if (changes.userInfo.currentValue.DefaultPageSize) {
                 this.paginator.pageSize = changes.userInfo.currentValue.DefaultPageSize;
-            }
-            else {
+            } else {
                 this.paginator.pageSize = 100;
             }
         }

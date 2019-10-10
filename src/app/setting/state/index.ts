@@ -9,7 +9,7 @@ import { MemberVendor } from 'app/shared/class/member';
 // So the reference to ProductState cannot be added to app.state.ts directly.
 export interface State extends fromRoot.State {
     setting: fromSetting.SettingState;
-};
+}
 
 // Selector functions
 const getSettingFeatureState = createFeatureSelector<fromSetting.SettingState>('Setting');

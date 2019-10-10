@@ -49,7 +49,7 @@ export enum SalesOrderActionTypes {
   EditFulfillmentSuccess  = '[Sales Order] Edit Fulfillment Success',
   EditFulfillmentFail  = '[Sales Order] Edit Fulfillment Fail',
 
-  
+
   // EditCurrentMember = '[Admin] Edit Current Member',
   // EditCurrentMemberSuccess = '[Admin] Edit Current Member Success',
   // EditCurrentMemberFail = '[Admin] Edit Current Member Fail',
@@ -184,7 +184,7 @@ export class LoadFulfilmmentSalesOrderLinesFail implements Action {
 
 export class AddFulfillment implements Action {
   readonly type = SalesOrderActionTypes.AddFulfillment;
-  constructor(public payload: Fulfillment) { }
+  constructor(public payload: { fulfillment: Fulfillment, orderid: number; fulfilledby: string }) { }
 }
 export class AddFulfillmentSuccess implements Action {
   readonly type = SalesOrderActionTypes.AddFulfillmentSuccess;
@@ -197,7 +197,7 @@ export class AddFulfillmentFail implements Action {
 
 export class EditFulfillment implements Action {
   readonly type = SalesOrderActionTypes.EditFulfillment;
-  constructor(public payload: Fulfillment) { }
+  constructor(public payload: { fulfillment: Fulfillment, orderid: number; fulfilledby: string }) { }
 }
 export class EditFulfillmentSuccess implements Action {
   readonly type = SalesOrderActionTypes.EditFulfillmentSuccess;
@@ -214,7 +214,7 @@ export class DeleteFulfillment implements Action {
 }
 export class DeleteFulfillmentSuccess implements Action {
   readonly type = SalesOrderActionTypes.DeleteFulfillmentSuccess;
-  constructor(public payload: Fulfillment) { }
+  constructor(public payload: number) { }
 }
 export class DeleteFulfillmentFail implements Action {
   readonly type = SalesOrderActionTypes.DeleteFulfillmentFail;
@@ -237,7 +237,7 @@ export class LoadSalesOrderDeliveryFail implements Action {
 
 export class DownloadSalesOrderPackingSlip implements Action {
   readonly type = SalesOrderActionTypes.DownloadSalesOrderPackingSlip;
-  constructor(public payload: SalesOrder) { }
+  constructor(public payload: {salesorder: SalesOrder, orderid: number}) { }
 }
 
 export class DownloadSalesOrderPackingSlipSuccess implements Action {

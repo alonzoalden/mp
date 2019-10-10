@@ -1,13 +1,11 @@
 import { Component, OnInit, AfterViewInit } from '@angular/core';
 import { Router } from '@angular/router';
-
 import { ItemInsert } from '../../../../../shared/class/item';
 import { VendorBrand } from '../../../../../shared/class/vendor-brand';
-
 import { ItemService } from '../../../../item.service';
 import { AppService } from '../../../../../app.service';
 
-declare var $ :any;
+declare var $: any;
 
 @Component({
   templateUrl: './item-part-add-description-shell.component.html'
@@ -16,9 +14,8 @@ declare var $ :any;
 export class ItemPartAddDescriptionShellComponent implements OnInit, AfterViewInit {
     errorMessage: string;
     isPM: boolean;
-    
     item: ItemInsert;
-    vendorBrandList: VendorBrand[]; 
+    vendorBrandList: VendorBrand[];
 
     constructor(private itemService: ItemService, private appService: AppService) { }
 
@@ -30,9 +27,9 @@ export class ItemPartAddDescriptionShellComponent implements OnInit, AfterViewIn
                 this.vendorBrandList = vendorBrands;
             },
             (error: any) => {
-                this.errorMessage = <any>error;                
+                this.errorMessage = <any>error;
             }
-        ); 
+        );
 
         this.appService.getCurrentMember().subscribe(
             (data) => {
@@ -46,20 +43,20 @@ export class ItemPartAddDescriptionShellComponent implements OnInit, AfterViewIn
     }
 
     ngAfterViewInit() {
-        var self = this;
+        let self = this;
 
         $('.summernote').summernote( {
             height: 300,
             tabsize: 2,
             toolbar: [
-                ["style",["style"]],
-                ["font",["bold","underline","clear"]],
-                ["fontname",["fontname"]],
-                ["color",["color"]],
-                ["para",["ul","ol","paragraph"]],
-                ["table",["table"]],
-                ["insert",["link","picture","video"]],
-                ["view",["help"]]
+                ['style', ['style']],
+                ['font', ['bold', 'underline', 'clear']],
+                ['fontname', ['fontname']],
+                ['color', ['color']],
+                ['para', ['ul', 'ol', 'paragraph']],
+                ['table', ['table']],
+                ['insert', ['link', 'picture', 'video']],
+                ['view', ['help']]
             ],
             callbacks: {
                 onBlur: function() {
@@ -75,27 +72,27 @@ export class ItemPartAddDescriptionShellComponent implements OnInit, AfterViewIn
     }
 
     onTextEditorBlur(id: string) {
-        switch(id) { 
-            case "Description": { 
+        switch (id) {
+            case 'Description': {
                 this.item.Description = $('#itemDescriptionId').summernote('code');
-                break; 
-            } 
-            case "ShortDescription": { 
+                break;
+            }
+            case 'ShortDescription': {
                 this.item.ShortDescription = $('#itemShortDescriptionId').summernote('code');
-                break; 
-            } 
-            case "TechnicalDetail": {
+                break;
+            }
+            case 'TechnicalDetail': {
                 this.item.TechnicalDetail = $('#itemTechnicalDetailId').summernote('code');
-                break;    
-            } 
-            case "AdditionalInformation": { 
+                break;
+            }
+            case 'AdditionalInformation': {
                 this.item.AdditionalInformation = $('#itemAdditionalInformationId').summernote('code');
-                break; 
-            }  
-            default: { 
-               console.log("Invalid choice"); 
-               break;              
-            } 
+                break;
+            }
+            default: {
+               console.log('Invalid choice');
+               break;
+            }
          }
     }
 

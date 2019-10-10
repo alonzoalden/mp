@@ -17,7 +17,7 @@ export class AdminMemberAddShellComponent implements OnInit  {
     errorMessage$: Observable<string>;
 
     constructor(private store: Store<fromAdmin.State>) {}
-    
+
     ngOnInit() {
         this.userInfo$ = this.store.pipe(select(fromUser.getCurrentUser));
         this.pendingSave$ = this.store.pipe(select(fromAdmin.getPendingSave));

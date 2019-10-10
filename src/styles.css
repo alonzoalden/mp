@@ -480,6 +480,9 @@ table {
 .max-width {
     width: 100% !important;
 }
+.max-height {
+    height: 100% !important;
+}
 .greater-separater {
     margin-right: 10px;
     margin-left: -15px;
@@ -2227,4 +2230,7 @@ th.mat-header-cell {
 .diaglog-content .ibox-content {
     padding: 40px;
     height: 100%;
+}
+.line-height-fix {
+    line-height: normal !important;
 }

@@ -24,7 +24,7 @@ export enum InboundShipmentActionTypes {
   EditPurchaseOrderThenPrintItemLabels = '[InboundShipment] Edit Purchase Order Then Print Item Labels',
   EditPurchaseOrderThenPrintItemLabelsSuccess = '[InboundShipment] Edit Purchase Order Then Print Item Labels Success',
   EditPurchaseOrderThenPrintItemLabelsFail = '[InboundShipment] Edit Purchase Order Then Print Item Labels Fail',
-  
+
   AddInboundShippingMethod = '[InboundShipment] Add Inbound Shipping Method',
   AddInboundShippingMethodSuccess = '[InboundShipment] Add Inbound Shipping Method Success',
   AddInboundShippingMethodFail = '[InboundShipment] Add Inbound Shipping Method Fail',
@@ -47,7 +47,7 @@ export enum InboundShipmentActionTypes {
   DownloadAllItemLabel = '[InboundShipment] Download All Item Label',
   DownloadAllItemLabelSuccess = '[InboundShipment] Download All Item Label Success',
   DownloadAllItemLabelFail = '[InboundShipment] Download All Item Label Fail',
-  
+
   DownloadAllItemLargeLabel = '[InboundShipment] Download All Item Large Label',
   DownloadAllItemLargeLabelSuccess = '[InboundShipment] Download All Item Large Label Success',
   DownloadAllItemLargeLabelFail = '[InboundShipment] Download All Item Large Label Fail',
@@ -59,12 +59,12 @@ export enum InboundShipmentActionTypes {
   DownloadItemLabelCount = '[InboundShipment] Download Item Label Count',
   DownloadItemLabelCountSuccess = '[InboundShipment] Download Item Label Count Success',
   DownloadItemLabelCountFail = '[InboundShipment] Download Item Label Count Fail',
-  
+
   DownloadItemLargeLabelCount = '[InboundShipment] Download Item Large Label Count',
   DownloadItemLargeLabelCountSuccess = '[InboundShipment] Download Item Large Label Count Success',
   DownloadItemLargeLabelCountFail = '[InboundShipment] Download Item Large Label Count Fail',
 
-   
+
   LoadPurchaseOrderLines = '[InboundShipment] Load Purchase Order Lines',
   LoadPurchaseOrderLinesSuccess = '[InboundShipment] Load Purchase Order Lines Success',
   LoadPurchaseOrderLinesFail = '[InboundShipment] Load Purchase Order Lines Fail',
@@ -76,12 +76,12 @@ export enum InboundShipmentActionTypes {
   LoadCartons = '[InboundShipment] Load Cartons List',
   LoadCartonsSuccess = '[InboundShipment] Load Cartons Success',
   LoadCartonsFail = '[InboundShipment] Load Cartons Fail',
-  
-  
+
+
   SetSelectedCarton = '[InboundShipment] Set Selected Carton',
   SetSelectedPurchaseOrder = '[InboundShipment] Set Selected Purchase Order',
   UpdatePurchaseLineCartonQuantity = '[InboundShipment] Update Purchase Line Carton Quantity',
-  
+
   // LoadSelectedCartonSuccess = '[InboundShipment] Load Selected Carton Success',
   // LoadSelectedCartonFail = '[InboundShipment] Load Selected Carton Fail',
 

@@ -13,7 +13,7 @@ import { componentFactoryName } from '@angular/compiler';
 
 const MEMBER_ROUTES: Routes = [
     {
-        path: '', 
+        path: '',
         component: MemberComponent,
         children: [ {
                 path: '',
@@ -31,7 +31,7 @@ const MEMBER_ROUTES: Routes = [
                 path: 'confirm',
                 component: MemberConfirmShellComponent
             } ]
-    }   
+    }
 ];
 
 export const memberRouting = RouterModule.forChild(MEMBER_ROUTES);

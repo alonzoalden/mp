@@ -7,16 +7,18 @@ import { SettingService } from '../setting.service';
 import * as settingActions from './setting.actions';
 import { Router } from '@angular/router';
 import { Member, MemberVendor } from 'app/shared/class/member';
+import * as fromUser from '../../shared/state/user-state.reducer';
+import { Store, select } from '@ngrx/store';
+import * as userActions from '../../shared/state/user-state.actions';
 
 @Injectable()
 export class SettingEffects {
     constructor(
         private router: Router,
         private settingService: SettingService,
-        private actions$: Actions) { }
+        private actions$: Actions,
+        private userStore: Store<fromUser.State>,) { }
 
-
-        
     @Effect()
     loadMemberVendors$: Observable<Action> = this.actions$.pipe(
         ofType(settingActions.SettingActionTypes.LoadMemberVendors),
@@ -24,7 +26,7 @@ export class SettingEffects {
             this.settingService.getMemberVendors().pipe(
                 map((members: MemberVendor[]) => (new settingActions.LoadMemberVendorsSuccess(members))),
                 catchError(err => {
-                    of(new settingActions.LoadMemberVendorsFail(err))
+                    of(new settingActions.LoadMemberVendorsFail(err));
                     return EMPTY;
                 })
             )
@@ -39,8 +41,18 @@ export class SettingEffects {
         mergeMap((payload: Member) =>
             this.settingService.editCurrentMember(payload).pipe(
                 map((member: Member) => {
-                    this.settingService.sendNotification({ type: 'success', title: 'Successfully Updated', content: '' });
-                    window.location.reload();
+                    this.userStore.dispatch(new userActions.SetCurrentUser(member));
+                    // if (payload.VendorID !== member.VendorID) {
+                    //     this.settingService.sendNotification({ type: 'success', title: 'Successfully Updated', content: `Company switched to ${member.VendorName}` });
+                    //     window.location.reload();
+                    // }
+                    if (payload.DefaultPageSize !== member.DefaultPageSize) {
+                        this.settingService.sendNotification({ type: 'success', title: 'Successfully Updated', content: `Default Page Size is ${member.DefaultPageSize}` });
+                    }
+                    else {
+                        this.settingService.sendNotification({ type: 'success', title: 'Successfully Updated', content: `Company switched to ${member.VendorName}` });
+                        window.location.reload();
+                    }
                     return (new settingActions.EditCurrentMemberSuccess(member));
                 }),
                 catchError(err => {

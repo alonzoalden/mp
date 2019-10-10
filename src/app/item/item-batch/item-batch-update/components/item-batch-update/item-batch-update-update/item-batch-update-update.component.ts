@@ -1,12 +1,9 @@
-import { Component, OnInit, ViewContainerRef, ViewChild, Inject, ElementRef, Input, Output, EventEmitter, OnChanges, SimpleChanges } from '@angular/core';
+import { Component, OnInit, ViewChild, Input, Output, EventEmitter, OnChanges, SimpleChanges } from '@angular/core';
 import { Router } from '@angular/router';
-import { CurrencyPipe } from '@angular/common';
-import { MatMenuModule, MatPaginator, MatSort, MatTableDataSource, MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material';
+import { MatPaginator, MatSort, MatTableDataSource } from '@angular/material';
 import { Item } from '../../../../../../shared/class/item';
-import { BatchUpdate, FieldDropDown, FieldType, BatchUpdateValue } from '../../../../../../shared/class/batch-update';
+import { BatchUpdate, BatchUpdateValue } from '../../../../../../shared/class/batch-update';
 import { ItemService } from '../../../../../item.service';
-import { AppService } from '../../../../../../app.service';
-
 import { environment } from '../../../../../../../environments/environment';
 import { Member } from 'app/shared/class/member';
 
@@ -14,7 +11,6 @@ import { Member } from 'app/shared/class/member';
     selector: 'o-item-batch-update-update',
     templateUrl: './item-batch-update-update.component.html'
 })
-
 
 export class ItemBatchUpdateUpdateComponent implements OnInit, OnChanges {
     @Input() userInfo: Member;
@@ -24,17 +20,8 @@ export class ItemBatchUpdateUpdateComponent implements OnInit, OnChanges {
     @Input() isLoading: boolean;
     @Output() getItemBatchUpdates = new EventEmitter<void>();
     @Output() editItemBatchUpdate = new EventEmitter<BatchUpdateValue[]>();
-    
-
-    //errorMessage: string;
-    //items: Item[];
-
-    //batchUpdates: BatchUpdate[];
     batchUpdateValues: BatchUpdateValue[];
     selectedBatchUpdate: BatchUpdate;
-
-    
-
     batchUpdateField: string;
     batchUpdateValue: string;
 
@@ -42,18 +29,14 @@ export class ItemBatchUpdateUpdateComponent implements OnInit, OnChanges {
     private linkURL = environment.linkURL;
     private previewURL = environment.previewURL;
 
-    displayedColumns = ['ProductDetails', 'FulfilledBy', 'Price', 'Quantity', 'MerchantQuantity','Approval','Remove'];
-    //dataSource: any = null;
-
+    displayedColumns = ['ProductDetails', 'FulfilledBy', 'Price', 'Quantity', 'MerchantQuantity', 'Approval', 'Remove'];
     loading: boolean;
 
     @ViewChild(MatPaginator, { static: true }) paginator: MatPaginator;
     @ViewChild(MatSort, { static: true }) sort: MatSort;
 
     constructor(private router: Router
-        , private appService: AppService
-        , private itemService: ItemService) { 
-            
+        , private itemService: ItemService) {
     }
     ngOnChanges(changes: SimpleChanges): void {
         if (changes.batchUpdates && !changes.batchUpdates.currentValue.length) {
@@ -65,8 +48,7 @@ export class ItemBatchUpdateUpdateComponent implements OnInit, OnChanges {
         if (changes.userInfo && changes.userInfo.currentValue) {
             if (this.userInfo.DefaultPageSize) {
                 this.paginator.pageSize = this.userInfo.DefaultPageSize;
-            }
-            else {
+            } else {
                 this.paginator.pageSize = 100;
             }
         }
@@ -74,20 +56,19 @@ export class ItemBatchUpdateUpdateComponent implements OnInit, OnChanges {
 
     ngOnInit() {}
 
-    onFieldChange(batchUpdateField: string) {        
+    onFieldChange(batchUpdateField: string) {
         this.selectedBatchUpdate = this.batchUpdates.find(x => x.FieldName === batchUpdateField);
         this.batchUpdateValue = '';
     }
 
     refreshDataSource() {
-        if(this.countSelected() > 0) {
+        if (this.countSelected() > 0) {
             this.itemBatchItemsMatTable = new MatTableDataSource<Item>(this.itemBatchItemsMatTable.data.filter(x => x.isSelected === true));
             this.itemBatchItemsMatTable.sort = this.sort;
-            this.itemBatchItemsMatTable.paginator = this.paginator;    
-        }
-        else {
+            this.itemBatchItemsMatTable.paginator = this.paginator;
+        } else {
             this.itemService.sendNotification({ type: 'info', title: 'Info', content: 'Please select item(s) that requires the update' });
-            this.router.navigate(['item','batchupdate','select']);
+            this.router.navigate(['item', 'batchupdate', 'select']);
         }
     }
 
@@ -104,36 +85,23 @@ export class ItemBatchUpdateUpdateComponent implements OnInit, OnChanges {
                 const newBatchUpdateValue = new BatchUpdateValue('item', this.batchUpdateField, 'ItemID', String(item.ItemID), this.batchUpdateValue);
                 this.batchUpdateValues.push(newBatchUpdateValue);
             });
-            
+
             this.editItemBatchUpdate.emit(this.batchUpdateValues);
             this.batchUpdateValues = [];
-            // this.itemService.editItemBatchUpdate(this.batchUpdateValues).subscribe(
-            //     () => {
-            //         this.itemService.resetItems();
-            //         this.itemService.sendNotification({ type: 'success', title: 'Successfully Updated', content: '' });
-            //         this.itemBatchItemsMatTable.data.forEach( (item) => item.isSelected = false );
-            //         this.batchUpdateValues = [];
-            //         this.router.navigate(['item','batchupdate','select']);
-            //     },
-            //     (error: any) => {
-            //         this.itemService.sendNotification({ type: 'error', title: 'Error', content: <any>error });
-            //     }
-            // )
 
         }
     }
 
-    validate() : boolean {
-        if (this.selectedBatchUpdate.FieldType.Type == "number" && isNaN(Number(this.batchUpdateValue)) ) {
+    validate(): boolean {
+        if (this.selectedBatchUpdate && this.selectedBatchUpdate.FieldType && this.selectedBatchUpdate.FieldType.Type == 'number' && isNaN(Number(this.batchUpdateValue)) ) {
             this.itemService.sendNotification({ type: 'error', title: 'Error', content: 'Invalid Format' });
             return false;
-        }
-        else {
+        } else {
             return true;
         }
     }
 
-    countSelected() : number {
+    countSelected(): number {
         return this.itemBatchItemsMatTable.data.filter(x => x.isSelected === true).length;
     }
 }

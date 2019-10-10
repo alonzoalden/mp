@@ -1,0 +1,32 @@
+
+<div class="tab-content">
+    <div class="tab-pane active">
+        <div class="panel-body p-w-none">
+            <form class="form-horizontal" #itemForm="ngForm">
+                <fieldset>
+                    <o-item-edit-product-relation-related-product
+                        [relatedProductItemlist]="itemList$ | async"
+                        [item]="item$ | async"
+                        [itemRelatedProductsMatTable]="itemRelatedProductsMatTable$ | async"
+                        [errorMessage]="errorMessage$ | async"
+                        (getItemRelatedProduct)="getItemRelatedProduct($event)"
+                    ></o-item-edit-product-relation-related-product>
+                    <o-item-edit-product-relation-up-sell *ngIf="currentMember?.IsPM"
+                        [upSellItemlist]="allItemList$ | async"
+                        [item]="item$ | async"
+                        [itemUpSellsMatTable]="itemUpSellsMatTable$ | async"
+                        [errorMessage]="errorMessage$ | async"
+                        (getAllItemUpSell)="getAllItemUpSell($event)"
+                    ></o-item-edit-product-relation-up-sell>
+                    <o-item-edit-product-relation-cross-sell *ngIf="currentMember?.IsPM"
+                        [crossSellItemlist]="allItemList$ | async"
+                        [item]="item$ | async"
+                        [crossSellMatTable]="itemCrossSellsMatTable$ | async"
+                        [errorMessage]="errorMessage$ | async"
+                        (getAllItemCrossSell)="getAllItemCrossSell($event)"
+                    ></o-item-edit-product-relation-cross-sell>
+                </fieldset>
+            </form>              
+        </div>  
+    </div>    
+</div>

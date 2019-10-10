@@ -8,10 +8,10 @@ export interface AdminState {
     vendorList: VendorList[];
     currentMemberID: number;
     isLoading: boolean;
-    pendingDelete: boolean,
-    pendingSave: boolean,
+    pendingDelete: boolean;
+    pendingSave: boolean;
     error: string;
-};
+}
 
 const initialState: AdminState = {
     members: [],
@@ -50,7 +50,7 @@ export function adminReducer(state = initialState, action: AdminActions): AdminS
             return {
                 ...state,
                 members: [],
-                
+
                 error: action.payload,
             };
 
@@ -74,7 +74,7 @@ export function adminReducer(state = initialState, action: AdminActions): AdminS
                 isLoading: false,
                 error: '',
             };
-            
+
         case AdminActionTypes.LoadVendorListFail:
             return {
                 ...state,
@@ -96,7 +96,7 @@ export function adminReducer(state = initialState, action: AdminActions): AdminS
                 pendingSave: false,
                 error: '',
             };
-            
+
         case AdminActionTypes.AddMemberFail:
             return {
                 ...state,
@@ -111,12 +111,11 @@ export function adminReducer(state = initialState, action: AdminActions): AdminS
             };
         case AdminActionTypes.EditMemberSuccess:
             let _memberslist = [];
-            let _member = state.members.find(item => action.payload.MemberID === item.MemberID);
+            const _member = state.members.find(item => action.payload.MemberID === item.MemberID);
             if (_member) {
                 _memberslist = state.members.map(item => action.payload.MemberID === item.MemberID ? action.payload : item);
-            }
-            else {
-                _memberslist = [...state.members, action.payload]
+            } else {
+                _memberslist = [...state.members, action.payload];
             }
 
             return {
@@ -131,7 +130,7 @@ export function adminReducer(state = initialState, action: AdminActions): AdminS
                 error: action.payload,
                 pendingSave: false,
             };
-        
+
 
         // case CompanyAttachmentActionTypes.LoadVendorAttachmentsSuccess:
         //     return {
@@ -160,7 +159,7 @@ export function adminReducer(state = initialState, action: AdminActions): AdminS
         //         pendingDelete: false,
         //         error: ''
         //     };
-        
+
 
         // case CompanyAttachmentActionTypes.DeleteVendorAttachmentFail:
         //     return {
@@ -168,7 +167,7 @@ export function adminReducer(state = initialState, action: AdminActions): AdminS
         //         pendingDelete: false,
         //         error: action.payload
         //     };
-        
+
         // case CompanyAttachmentActionTypes.EditVendorAttachmentSuccess:
         //     let _attachmentsList = [];
         //     let _attachment = state.vendorAttachments.find(item => action.payload.VendorAttachmentID === item.VendorAttachmentID);
@@ -196,7 +195,7 @@ export function adminReducer(state = initialState, action: AdminActions): AdminS
         //     //     pendingUpload: false,
         //     //     error: ''
         //     // };
-    
+
         // case CompanyAttachmentActionTypes.EditVendorAttachmentFail:
         //     return {
         //         ...state,
@@ -213,7 +212,7 @@ export function adminReducer(state = initialState, action: AdminActions): AdminS
         // //         ...state,
         // //     };
 
-        
+
         // case CompanyAttachmentActionTypes.GetVendorAttachmentSuccess:
         //     return {
         //         ...state,
@@ -236,7 +235,7 @@ export function adminReducer(state = initialState, action: AdminActions): AdminS
         //         ...state,
         //         pendingUpload: true
         //     }
-            
+
 
         default:
             return state;

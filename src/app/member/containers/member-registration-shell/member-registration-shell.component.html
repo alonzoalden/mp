@@ -1,12 +1,6 @@
-<!-- <o-member-list
-    [userInfoDefaultPageSize]="userInfoDefaultPageSize$ | async" 
-    [vendorAttachmentsMatTable]="vendorAttachmentsMatTable$ | async"
-    [errorMessage]="errorMessage$ | async"
-    [pendingDelete]="pendingDelete$ | async"
-    (getMemberByInviteGUID)="getVendorAttachments($event)"
-    (editMemberRegistration)="editMemberRegistration($event)"
-    
-></o-member-list> -->
-
 <o-member-registration
+    [member]="member$ | async" 
+    [errorMessage]="errorMessage$ | async"
+    (getMemberByInviteGUID)="getMemberByInviteGUID($event)"
+    (editMemberRegistration)="editMemberRegistration($event)"
 ></o-member-registration>

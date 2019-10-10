@@ -11,7 +11,7 @@ import { Fulfillment, FulfillmentSalesOrderLine } from 'app/shared/class/fulfill
 // So the reference to ProductState cannot be added to app.state.ts directly.
 export interface State extends fromRoot.State {
     setting: fromSalesOrder.SalesOrderState;
-};
+}
 
 // Selector functions
 const getSalesOrderFeatureState = createFeatureSelector<fromSalesOrder.SalesOrderState>('SalesOrder');
@@ -41,7 +41,7 @@ export const getSalesOrder = createSelector(
 // );
 // export const getSalesOrder = createSelector(
 //     getSalesOrderFeatureState,
-//     getCurrentSalesOrderID, 
+//     getCurrentSalesOrderID,
 //     (state, currentSalesOrderID) => state.salesOrders.find(item => item.OrderID === currentSalesOrderID)
 // );
 export const getSalesOrderLines = createSelector(
@@ -64,16 +64,6 @@ export const getFulfillmentSalesOrderLinesMatTable = createSelector(
     state => new MatTableDataSource<FulfillmentSalesOrderLine>(state.fulfillmentSalesOrderLines)
 );
 
-
-export const getDeliveryDetail = createSelector(
-    getSalesOrderFeatureState,
-    state => state.deliveryDetail
-);
-export const getSalesOrderDeliveryDetail = createSelector(
-    getSalesOrderFeatureState,
-    state => state.salesOrderDeliveryDetail
-);
-
 export const getFulfilledByFulfillments = createSelector(
     getSalesOrderFeatureState,
     state => state.fulfillments
@@ -87,6 +77,10 @@ export const getFulfilledByFulfillment = createSelector(
     state => state.fulfillment
 );
 
+export const getIsSalesOrderLinesLoading = createSelector(
+    getSalesOrderFeatureState,
+    state => state.isSalesOrderLinesLoading
+);
 export const getIsLoading = createSelector(
     getSalesOrderFeatureState,
     state => state.isLoading

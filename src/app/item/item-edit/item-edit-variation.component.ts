@@ -2,13 +2,10 @@ import { Component, OnInit, OnDestroy, ViewChild, Inject } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 import {  MatDialog } from '@angular/material';
 import { Subscription } from 'rxjs';
-
 import { Item } from '../../shared/class/item';
 import { ItemService } from '../item.service';
-
 import { environment } from '../../../environments/environment';
-
-declare var $ :any;
+declare var $: any;
 
 @Component({
     selector: 'o-item-edit-variation',
@@ -23,7 +20,7 @@ export class ItemEditVariationComponent implements OnInit {
     item: Item;
     itemid: number;
     isLoading: boolean = false;
-    
+
     constructor(private route: ActivatedRoute,
         private itemService: ItemService, public itemUploadDialog: MatDialog) { }
 
@@ -47,11 +44,11 @@ export class ItemEditVariationComponent implements OnInit {
     //     this.subscription = this.itemService.getItem(param).subscribe(
     //         (item: Item) => {
     //             this.itemService.currentItemEdit = item;
-    //             this.router.navigate(['/item', param, 'edit']);                  
+    //             this.router.navigate(['/item', param, 'edit']);
     //         },
     //         error => {
     //             this.itemService.sendNotification({ type: 'error', title: 'Error', content: this.errorMessage });
-    //             this.router.navigate(['/item']);                
+    //             this.router.navigate(['/item']);
     //         }
     //     );
     // }

@@ -20,12 +20,11 @@ export interface InboundShipmentState {
     cartons: Carton[];
     selectedCarton: Carton;
     isLoading: boolean;
-    isListLoading: boolean;
-    pendingDelete: boolean,
-    pendingSave: boolean,
-    pendingAdd: boolean,
+    pendingDelete: boolean;
+    pendingSave: boolean;
+    pendingAdd: boolean;
     error: string;
-};
+}
 
 const initialState: InboundShipmentState = {
     purchaseOrders: [],
@@ -37,7 +36,6 @@ const initialState: InboundShipmentState = {
     selectedCarton: null,
     simpleItemList: [],
     isLoading: true,
-    isListLoading: true,
     pendingDelete: false,
     pendingSave: false,
     pendingAdd: false,
@@ -45,7 +43,7 @@ const initialState: InboundShipmentState = {
 };
 
 export function inboundShipmentReducer(state = initialState, action: InboundShipmentActions): InboundShipmentState {
-    
+
     switch (action.type) {
         case InboundShipmentActionTypes.LoadPurchaseOrder:
             return {
@@ -70,7 +68,7 @@ export function inboundShipmentReducer(state = initialState, action: InboundShip
                 error: action.payload,
             };
 
-        
+
         case InboundShipmentActionTypes.LoadCurrentPurchaseOrderEdit:
             return {
                 ...state,
@@ -92,7 +90,7 @@ export function inboundShipmentReducer(state = initialState, action: InboundShip
                 isLoading: false,
                 error: action.payload,
             };
-        
+
         case InboundShipmentActionTypes.LoadCartons:
             return {
                 ...state,
@@ -144,14 +142,14 @@ export function inboundShipmentReducer(state = initialState, action: InboundShip
         case InboundShipmentActionTypes.LoadPurchaseOrderOverview:
             return {
                 ...state,
-                isListLoading: true,
+                isLoading: true,
                 error: '',
             };
         case InboundShipmentActionTypes.LoadPurchaseOrderOverviewSuccess:
             return {
                 ...state,
                 purchaseOrders: action.payload,
-                isListLoading: false,
+                isLoading: false,
                 error: '',
             };
 
@@ -159,7 +157,7 @@ export function inboundShipmentReducer(state = initialState, action: InboundShip
             return {
                 ...state,
                 purchaseOrders: [],
-                isListLoading: false,
+                isLoading: false,
                 error: action.payload,
             };
         case InboundShipmentActionTypes.LoadPurchaseOrderLinesSuccess:
@@ -194,7 +192,7 @@ export function inboundShipmentReducer(state = initialState, action: InboundShip
                 isLoading: false,
                 error: action.payload,
             };
-        
+
 
         case InboundShipmentActionTypes.LoadInboundShippingMethodsSuccess:
             return {
@@ -211,11 +209,12 @@ export function inboundShipmentReducer(state = initialState, action: InboundShip
                 isLoading: false,
                 error: action.payload,
             };
-            
+
         case InboundShipmentActionTypes.AddNewPurchaseOrderSuccess:
             return {
                 ...state,
                 isLoading: false,
+                purchaseOrders: [action.payload, ...state.purchaseOrders],
                 currentPurchaseOrder: action.payload,
                 error: '',
             };
@@ -227,13 +226,17 @@ export function inboundShipmentReducer(state = initialState, action: InboundShip
                 isLoading: false,
                 error: action.payload,
             };
-        
+
         case InboundShipmentActionTypes.EditPurchaseOrder:
             return {
                 ...state,
                 pendingSave: true,
             };
         case InboundShipmentActionTypes.EditPurchaseOrderSuccess:
+            const _currentPurchaseOrdersIndex = state.purchaseOrders.findIndex(item => action.payload.PurchaseOrderID === item.PurchaseOrderID);
+            if (_currentPurchaseOrdersIndex > -1) {
+                state.purchaseOrders[_currentPurchaseOrdersIndex] = action.payload;
+            }
             return {
                 ...state,
                 currentPurchaseOrder: action.payload,
@@ -247,7 +250,7 @@ export function inboundShipmentReducer(state = initialState, action: InboundShip
                 pendingSave: false,
                 error: action.payload,
             };
-        
+
         case InboundShipmentActionTypes.DeletePurchaseOrder:
             return {
                 ...state,
@@ -288,7 +291,7 @@ export function inboundShipmentReducer(state = initialState, action: InboundShip
         return {
                 ...state,
             };
-            
+
         default:
             return state;
     }

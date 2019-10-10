@@ -17,14 +17,14 @@ export class AppService {
     private apiURL = environment.webapiURL;
     currentMember: Member;
     wasLoggedIn: boolean;
-    
+
     public subject = new Subject<string>();
 
     public disabledBrowsers = {
         'IE': 1,
         'MS-Edge': 1
-    }
-    
+    };
+
     constructor(private http: HttpClient,
         private oauthService: OAuthService) { }
 

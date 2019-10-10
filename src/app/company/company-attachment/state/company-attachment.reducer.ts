@@ -1,15 +1,15 @@
 import { CompanyAttachmentActions, CompanyAttachmentActionTypes } from './company-attachment.actions';
-import { VendorAttachment, VendorAttachmentInsert } from 'app/shared/class/vendor-attachment';
+import { VendorAttachment } from 'app/shared/class/vendor-attachment';
 
 // State for this feature (Item Variation)
 export interface CompanyAttachmentState {
     vendorAttachments: VendorAttachment[];
     currentVendorAttachmentID: number;
     isVendorAttachmentsLoading: boolean;
-    pendingDelete: boolean,
-    pendingUpload: boolean,
+    pendingDelete: boolean;
+    pendingUpload: boolean;
     error: string;
-};
+}
 
 const initialState: CompanyAttachmentState = {
     vendorAttachments: [],
@@ -56,7 +56,7 @@ export function companyAttachmentReducer(state = initialState, action: CompanyAt
                 pendingDelete: false,
                 error: ''
             };
-        
+
 
         case CompanyAttachmentActionTypes.DeleteVendorAttachmentFail:
             return {
@@ -64,17 +64,16 @@ export function companyAttachmentReducer(state = initialState, action: CompanyAt
                 pendingDelete: false,
                 error: action.payload
             };
-        
+
         case CompanyAttachmentActionTypes.EditVendorAttachmentSuccess:
             let _attachmentsList = [];
-            let _attachment = state.vendorAttachments.find(item => action.payload.VendorAttachmentID === item.VendorAttachmentID);
+            const _attachment = state.vendorAttachments.find(item => action.payload.VendorAttachmentID === item.VendorAttachmentID);
 
             if (_attachment) {
                 _attachmentsList = state.vendorAttachments.map(
                     item => action.payload.VendorAttachmentID === item.VendorAttachmentID ? action.payload : item);
-            }
-            else {
-                _attachmentsList = [...state.vendorAttachments, action.payload]
+            } else {
+                _attachmentsList = [...state.vendorAttachments, action.payload];
             }
 
             return {
@@ -92,7 +91,7 @@ export function companyAttachmentReducer(state = initialState, action: CompanyAt
             //     pendingUpload: false,
             //     error: ''
             // };
-    
+
         case CompanyAttachmentActionTypes.EditVendorAttachmentFail:
             return {
                 ...state,
@@ -109,7 +108,7 @@ export function companyAttachmentReducer(state = initialState, action: CompanyAt
         //         ...state,
         //     };
 
-        
+
         case CompanyAttachmentActionTypes.GetVendorAttachmentSuccess:
             return {
                 ...state,
@@ -121,18 +120,18 @@ export function companyAttachmentReducer(state = initialState, action: CompanyAt
             return {
                 ...state,
                 pendingUpload: true
-            }
+            };
         case CompanyAttachmentActionTypes.UploadUpdateVendorAttachment:
             return {
                 ...state,
                 pendingUpload: true
-            }
+            };
         case CompanyAttachmentActionTypes.EditVendorAttachment:
             return {
                 ...state,
                 pendingUpload: true
-            }
-            
+            };
+
 
         default:
             return state;

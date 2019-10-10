@@ -18,7 +18,7 @@ export class ItemPartAddComponent {
 
     loading: boolean;
 
-    vendorBrandList: VendorBrand[]; 
+    vendorBrandList: VendorBrand[];
 
     private dataIsValid: { [key: string]: boolean } = {};
 
@@ -32,16 +32,16 @@ export class ItemPartAddComponent {
         this.item.FulfilledBy = 'Toolots';
         this.item.ItemType = 'simple';
         this.item.Visibility = 'Search';
-        this.item.Approval = 'Approved';         
+        this.item.Approval = 'Approved';
 
         this.itemService.getVendorBrands().subscribe(
             (vendorBrands: VendorBrand[]) => {
                 this.vendorBrandList = vendorBrands;
             },
             (error: any) => {
-                this.errorMessage = <any>error;                
+                this.errorMessage = <any>error;
             }
-        ); 
+        );
     }
 
     get item(): ItemInsert {
@@ -59,20 +59,20 @@ export class ItemPartAddComponent {
     }
 
     onAddItem() {
-        if(this.isItemNameValid() && this.isSKUValid()) {
+        if (this.isItemNameValid() && this.isSKUValid()) {
                 if (this.isValid(null) && this.isShipWithinDaysValid()) {
                     this.pendingAdd = true;
-                            
+
                 const newItem = this.itemService.copyItemInsert(this.item);
 
-                newItem.ItemTierPrices.splice(newItem.ItemTierPrices.length-1, 1);
-    
-                newItem.ItemImages.splice(newItem.ItemImages.length-1, 1);
+                newItem.ItemTierPrices.splice(newItem.ItemTierPrices.length - 1, 1);
+
+                newItem.ItemImages.splice(newItem.ItemImages.length - 1, 1);
                 newItem.ItemImages.forEach((value, i) => {
                     value.Position = i + 1;
                 });
 
-                this.loading = true; 
+                this.loading = true;
                 this.itemService.addPartItem(newItem)
                     .subscribe(
                         () => {
@@ -89,7 +89,7 @@ export class ItemPartAddComponent {
             } else {
                 this.itemService.sendNotification({ type: 'error', title: 'Invalid Entry', content: 'Please enter all required fields' });
             }
-        }        
+        }
     }
 
     onAddComplete(message?: string) {
@@ -107,46 +107,41 @@ export class ItemPartAddComponent {
     }
 
     isShippingFeeValid(): boolean {
-        if(this.item.FulfilledBy === 'Toolots' || this.item.IsFreeShipping) {            
+        if (this.item.FulfilledBy === 'Toolots' || this.item.IsFreeShipping) {
             return true;
-        }
-        else {
+        } else {
             return (this.item.ShippingFee && this.item.ShippingFee > 0);
-        }        
+        }
     }
 
     isShipWithinDaysValid(): boolean {
-        if(this.item.FulfilledBy === 'Toolots') {
+        if (this.item.FulfilledBy === 'Toolots') {
             return true;
-        }
-        else {
+        } else {
             return (this.item.ShipWithinDays && this.item.ShipWithinDays >= 0);
         }
     }
 
-    isItemNameValid(): boolean {      
-        if(this.item.VendorBrandID) {
-            if(this.item.Name.toLowerCase().includes(this.vendorBrandList.find(x => x.VendorBrandID == Number(this.item.VendorBrandID)).BrandName.toLowerCase())) {
+    isItemNameValid(): boolean {
+        if (this.item.VendorBrandID) {
+            if (this.item.Name.toLowerCase().includes(this.vendorBrandList.find(x => x.VendorBrandID == Number(this.item.VendorBrandID)).BrandName.toLowerCase())) {
                 this.itemService.sendNotification({ type: 'error', title: 'Invalid Entry', content: '"Brand" should not be included in "Item Name"' });
-                return false;    
-            }
-            else {
+                return false;
+            } else {
                 return true;
-            }            
-        }  
-        else {
+            }
+        } else {
             return true;
         }
     }
 
-    isSKUValid(): boolean { 
-        var regex = /^[\w\-]*$/g;
-        
-        if(regex.test(this.item.VendorSKU)) {
+    isSKUValid(): boolean {
+        let regex = /^[\w\-]*$/g;
+
+        if (regex.test(this.item.VendorSKU)) {
             return true;
-        }
-        else {
-            this.itemService.sendNotification({ type: 'error', title: 'Invalid Entry', content: 'SKU must be a comination of alphanumeric characters (space not allowed)' });                
+        } else {
+            this.itemService.sendNotification({ type: 'error', title: 'Invalid Entry', content: 'SKU must be a comination of alphanumeric characters (space not allowed)' });
             return false;
         }
     }
@@ -177,7 +172,7 @@ export class ItemPartAddComponent {
         }
     }
 
-    validateDescription() {            
+    validateDescription() {
         return (this.item.Name &&
             this.item.VendorSKU &&
             this.item.ItemType &&
@@ -185,7 +180,7 @@ export class ItemPartAddComponent {
     }
 
     validateDimension() {
-        return (this.item.ItemType != "simple" || (this.item.Width &&
+        return (this.item.ItemType != 'simple' || (this.item.Width &&
             this.item.Height &&
             this.item.Weight &&
             this.item.Length &&

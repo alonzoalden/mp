@@ -3,7 +3,6 @@ import { Store, select } from '@ngrx/store';
 import * as fromCompany from '../../state';
 import * as companyActions from '../../state/company-attachment.actions';
 import { Observable } from 'rxjs';
-
 import { VendorAttachment } from 'app/shared/class/vendor-attachment';
 
 @Component({

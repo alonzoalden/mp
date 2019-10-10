@@ -19,7 +19,7 @@ export class NotificationComponent {
     constructor(private _service: NotificationsService) { }
 
     notify (notification: any) {
-        switch(notification.type) {
+        switch (notification.type) {
             case 'success':
                 this._service.success(notification.title, notification.content, {});
                 break;

@@ -5,11 +5,14 @@ import { Action, Store } from '@ngrx/store';
 import { Actions, Effect, ofType } from '@ngrx/effects';
 import { AdminService } from '../admin.service';
 import * as fromAdmin from './index';
+import * as fromUser from '../../shared/state/user-state.reducer';
+import * as userActions from '../../shared/state/user-state.actions';
 import * as adminActions from './admin.actions';
-import { VendorAttachment } from 'app/shared/class/vendor-attachment';
 import { Router } from '@angular/router';
 import { Member } from 'app/shared/class/member';
 import { VendorList } from 'app/shared/class/vendor';
+import { UserActionTypes } from 'app/shared/state/user-state.actions';
+import { AppService } from 'app/app.service';
 
 @Injectable()
 export class AdminEffects {
@@ -17,11 +20,13 @@ export class AdminEffects {
     constructor(
         private router: Router,
         private store: Store<fromAdmin.State>,
+        private userStore: Store<fromUser.State>,
+        private appService: AppService,
         private adminService: AdminService,
         private actions$: Actions) { }
 
 
-        
+
     @Effect()
     loadMembers$: Observable<Action> = this.actions$.pipe(
         ofType(adminActions.AdminActionTypes.LoadMembers),
@@ -29,7 +34,7 @@ export class AdminEffects {
             this.adminService.getMembers().pipe(
                 map((members: Member[]) => (new adminActions.LoadMembersSuccess(members))),
                 catchError(err => {
-                    of(new adminActions.LoadMembersFail(err))
+                    of(new adminActions.LoadMembersFail(err));
                     return EMPTY;
                 })
             )
@@ -43,7 +48,7 @@ export class AdminEffects {
             this.adminService.getVendorList().pipe(
                 map((vendorlist: VendorList[]) => (new adminActions.LoadVendorListSuccess(vendorlist))),
                 catchError(err => {
-                    of(new adminActions.LoadVendorListFail(err))
+                    of(new adminActions.LoadVendorListFail(err));
                     return EMPTY;
                 })
             )
@@ -64,25 +69,6 @@ export class AdminEffects {
             )
         )
     );
-
-    // @Effect()
-    // deleteVendorAttachments$: Observable<Action> = this.actions$.pipe(
-    //     ofType(companyActions.CompanyAttachmentActionTypes.DeleteVendorAttachment),
-    //     map((action: companyActions.DeleteVendorAttachment) => action.payload),
-    //     mergeMap((vendorattachmentid: number) =>
-    //         this.companyService.deleteVendorAttachment(vendorattachmentid).pipe(
-    //             map(() => {
-    //                 const message = `${vendorattachmentid} was deleted`
-    //                 this.companyService.sendNotification({ type: 'success', title: 'Successfully Deleted', content: message });
-    //                 return (new companyActions.DeleteVendorAttachmentSuccess(vendorattachmentid));
-    //             }),
-    //             catchError(err => {
-    //                 this.companyService.sendNotification({ type: 'error', title: 'Error', content: err });
-    //                 return of(new companyActions.DeleteVendorAttachmentFail(err));
-    //             })
-    //         )
-    //     )
-    // );
     @Effect()
     editMember$: Observable<Action> = this.actions$.pipe(
         ofType(adminActions.AdminActionTypes.EditMember),
@@ -90,10 +76,13 @@ export class AdminEffects {
         mergeMap((payload: Member) =>
             this.adminService.editMember(payload).pipe(
                 map((member: Member) => {
+                    if (this.appService.currentMember.MemberID === member.MemberID) {
+                        this.userStore.dispatch(new userActions.SetCurrentUser(member));
+                    }
                     this.adminService.replaceMember(member.MemberID, member);
-                    this.adminService.sendNotification({ type: 'success', title: 'Successfully Created', content: `${member.Email} was saved` });
+                    this.adminService.sendNotification({ type: 'success', title: 'Successfully Updated', content: `${member.Email} was saved` });
                     window.location.reload();
-                    this.router.navigate(['/admin']);
+                    //this.router.navigate(['/admin']);
                     return (new adminActions.EditMemberSuccess(member));
                 }),
                 catchError(err => {
@@ -124,25 +113,4 @@ export class AdminEffects {
             )
         )
     );
-    // @Effect()
-    // uploadUpdateVendorAttachments$: Observable<Action> = this.actions$.pipe(
-    //     ofType(companyActions.CompanyAttachmentActionTypes.UploadUpdateVendorAttachment),
-    //     map((action: companyActions.UploadUpdateVendorAttachment) => action.payload),
-    //     mergeMap((payload) =>
-    //         this.companyService.uploadUpdateAttachment(payload.id, payload.form).pipe(
-    //             map((vendorattachment: VendorAttachment) => {
-    //                 vendorattachment.Title = payload.title;
-    //                 vendorattachment.Exclude = payload.exclude;
-    //                 this.store.dispatch(new companyActions.EditVendorAttachment(vendorattachment));
-    //                 return (new companyActions.UploadVendorAttachmentSuccess(vendorattachment));
-    //             }),
-    //             catchError(err => {
-    //                 this.companyService.sendNotification({ type: 'error', title: 'Error', content: err });
-    //                 return of(new companyActions.UploadVendorAttachmentFail(err));
-    //             })
-    //         )
-    //     )
-    // );
-    
-    
 }

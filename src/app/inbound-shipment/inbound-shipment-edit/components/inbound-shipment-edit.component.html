@@ -1,7 +1,7 @@
 <div class="row wrapper border-bottom white-bg page-heading">
     <div class="col-lg-12">
         <h2>
-            {{ 'Inbound Shipment' | translate }}: {{purchaseOrder?.PackingSlipNumber}}
+            {{ 'Inbound Shipment' | translate }}: <span *ngIf="!isLoading">{{ purchaseOrder?.PackingSlipNumber }}</span>
         </h2>
         <ol class="breadcrumb">
             <li>
@@ -26,6 +26,7 @@
                         <div class="ibox-content border" style="padding: 10px 20px 10px 20px;" >
                             <div class="row">
                                 <div class="inbound-shipment-details">
+                                    <ng-container *ngIf="!isLoading">
                                         <div>
                                             <div>
                                                 <strong class="">{{ 'Transaction Date' | translate }}</strong>
@@ -44,24 +45,7 @@
                                                 <p class="no-margins ">{{purchaseOrder?.ShipmentDate | date}}</p>
                                             </div>
                                         </div>
-                                    <!-- <div class="col-xs-12 col-lg-2" [ngClass]="purchaseOrder?.ShipmentDate ? 'col-sm-4' : 'col-sm-6'">
-                                        <div>
-                                            <p class="no-margins text-lg">{{purchaseOrder?.TransactionDate | date}}</p>
-                                            <strong class="m-b-xs">Transaction Date</strong>
-                                        </div>
-                                    </div>
-                                    <div class="col-xs-12 col-lg-2 m-xs-resp" [ngClass]="purchaseOrder?.ShipmentDate ? 'col-sm-4' : 'col-sm-6'">
-                                        <div>
-                                            <p class="no-margins text-lg">{{purchaseOrder?.Status}}</p>
-                                            <strong class="m-b-xs">Status</strong>
-                                        </div>
-                                    </div>
-                                    <div class="col-xs-12 col-lg-2 col-sm-4 m-xs-resp" *ngIf="purchaseOrder?.ShipmentDate">
-                                        <div>
-                                            <p class="no-margins text-lg">{{purchaseOrder?.ShipmentDate | date}}</p>
-                                            <strong class="m-b-xs">Shipment Date</strong>
-                                        </div>
-                                    </div> -->
+                                    </ng-container>
                                 </div>
                             </div>
                         </div>

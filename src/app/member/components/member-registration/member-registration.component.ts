@@ -1,6 +1,6 @@
 import { Component, OnInit, Inject, Input, Output, EventEmitter } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { FormBuilder, Validators, FormGroup, FormControl } from '@angular/forms';
+import { FormBuilder, Validators } from '@angular/forms';
 import { Member } from '../../../shared/class/member';
 import { MemberService } from '../../member.service';
 import 'rxjs/add/operator/filter';
@@ -14,16 +14,11 @@ import { MatDialog, MAT_DIALOG_DATA, MatDialogRef } from '@angular/material';
 export class MemberRegistrationComponent implements OnInit {
     memberForm: any;
 
-    //errorMessage: string;
-    //member: Member;
     @Input() member: Member;
-    @Input() pendingDelete: boolean;
     @Input() errorMessage: string;
     @Output() getMemberByInviteGUID = new EventEmitter<string>();
     @Output() editMemberRegistration = new EventEmitter<Member>();
-    
-    //member: Member = new Member(null, '', '', '', '', true, '', '', true, true, true, true, '', 1, true, '', '', '', '', );
-    
+
     inviteGUID: string;
     pendingRegister: boolean;
     merchantAgreement: boolean = false;
@@ -34,7 +29,7 @@ export class MemberRegistrationComponent implements OnInit {
         private formBuilder: FormBuilder,
         private memberService: MemberService,
         public printDialog: MatDialog) {
-        
+
         this.memberForm = this.formBuilder.group({
             'memberData': this.formBuilder.group({
                 'memberFirstName': [Validators.required],
@@ -48,49 +43,21 @@ export class MemberRegistrationComponent implements OnInit {
     }
 
     ngOnInit(): void {
-        
+        this.member = new Member(null, '', '', '', '', true, '', '', true, true, true, true, '', 1, true, '', '', '', '', );
         this.route.queryParams
             .filter(params => params.inviteGUID)
             .subscribe(params => {
                 this.inviteGUID = params.inviteGUID;
+                this.getMemberByInviteGUID.emit(this.inviteGUID);
             });
 
-        this.getMemberByInviteGUID.emit(this.inviteGUID);
-        // this.memberService.getMemberByInviteGUID(this.inviteGUID).subscribe(
-        //     (member: Member) => {
-        //         this.member = member;
-        //         this.member.Password = '';
-        //         this.member.ConfirmPassword = '';
-                
 
-        //         if (this.member.IsConfirmed) {
-        //             this.router.navigate(['/home']);
-        //         }
-        //     },
-        //     error => {
-        //         this.errorMessage = <any>error;
-        //         this.memberService.sendNotification({ type: 'error', title: 'Error', content: this.errorMessage });
-        //         this.router.navigate(['/home']);
-        //     }
-        // );
     }
 
     onRegisterMember() {
         if (this.isValid()) {
-            //this.pendingRegister = true;
             this.member.IsConfirmed = true;
-            
             this.editMemberRegistration.emit(this.member);
-            this.memberService.editMemberRegistration(this.member).subscribe(
-                () => {
-                    this.pendingRegister = false;
-                    this.onSaveComplete(`${this.member.Email} was saved`)
-                },
-                (error: any) => {
-                    this.pendingRegister = false;
-                    this.errorMessage = <any>error;
-                }
-            );
         }
     }
 
@@ -120,7 +87,7 @@ export class MemberRegistrationComponent implements OnInit {
                 //alert('Invalid Password');
                 this.memberService.sendNotification({
                     type: 'error', title: 'Invalid Password'
-                    //, content: 'Must contain the following:<br>-Minimum of 6 characters<br>-Number<br>-Lower case letter<br>-Upper case letter<br>-Special character(non-letter/non-numeric)' });           
+                    //, content: 'Must contain the following:<br>-Minimum of 6 characters<br>-Number<br>-Lower case letter<br>-Upper case letter<br>-Special character(non-letter/non-numeric)' });
                     , content: 'Must contain the following:<br>-Minimum of 6 characters<br>-Number<br>-Lower case letter'
                 });
             } else if (this.member.Password !== this.member.ConfirmPassword) {
@@ -133,13 +100,13 @@ export class MemberRegistrationComponent implements OnInit {
             return false;
         }
 
-        
+
     }
 
     openDialogMerchantAgreement() {
         const dialogRef = this.printDialog.open(MerchantAgreementComponentDialog, {
         });
-    
+
         dialogRef.afterClosed().subscribe(() => {});
     }
 
@@ -153,7 +120,7 @@ export class MerchantAgreementComponentDialog implements OnInit {
         public dialogRef: MatDialogRef<MerchantAgreementComponentDialog>,
         @Inject(MAT_DIALOG_DATA) public data: any) {}
     ngOnInit() {
-        
+
     }
     close(): void {
         this.dialogRef.close();

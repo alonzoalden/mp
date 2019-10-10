@@ -1,11 +1,6 @@
-import { Component, OnInit, ViewContainerRef, ViewChild, Inject, ElementRef, Input, Output, EventEmitter, SimpleChanges } from '@angular/core';
-import { Router } from '@angular/router';
-import { CurrencyPipe } from '@angular/common';
-import { MatMenuModule, MatPaginator, MatSort, MatTableDataSource, MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material';
+import { Component, OnInit, ViewChild, Input, Output, EventEmitter, SimpleChanges } from '@angular/core';
+import { MatPaginator, MatSort, MatTableDataSource, MatDialog } from '@angular/material';
 import { ItemBatch } from '../../../../../shared/class/item';
-import { ItemService } from '../../../../item.service';
-import { AppService } from '../../../../../app.service';
-import { MatMenu } from '@angular/material/menu';
 
 import { environment } from '../../../../../../environments/environment';
 import { Member } from 'app/shared/class/member';
@@ -29,19 +24,16 @@ export class ItemBatchApprovalComponent implements OnInit {
     private linkURL = environment.linkURL;
     private previewURL = environment.previewURL;
 
-    displayedColumns = ['Approve', 'ProductDetails', 'FulfilledBy', 'Price', 'Quantity', 'MerchantQuantity','Approval'];
-
-    //loading: boolean;
+    displayedColumns = ['Approve', 'ProductDetails', 'FulfilledBy', 'Price', 'Quantity', 'MerchantQuantity', 'Approval'];
 
     @ViewChild(MatPaginator, { static: true }) paginator: MatPaginator;
     @ViewChild(MatSort, { static: true }) sort: MatSort;
 
-    constructor(private router: Router,
-        private itemService: ItemService,
-        private appService: AppService,
+    constructor(
         public itemPrintDialog: MatDialog,
-        public itemImportDialog: MatDialog) { 
-            
+        public itemImportDialog: MatDialog
+    ) {
+
     }
     ngOnChanges(changes: SimpleChanges): void {
         if (changes.itemBatchMatTable && changes.itemBatchMatTable.currentValue.data.length) {
@@ -51,14 +43,14 @@ export class ItemBatchApprovalComponent implements OnInit {
         if (changes.userInfo && changes.userInfo.currentValue) {
             if (this.userInfo.DefaultPageSize) {
                 this.paginator.pageSize = this.userInfo.DefaultPageSize;
-            }
-            else {
+            } else {
                 this.paginator.pageSize = 100;
             }
         }
     }
-    
+
     ngOnInit() {
+        this.applyFilter('');
         this.getPendingItems.emit();
     }
 
@@ -74,14 +66,13 @@ export class ItemBatchApprovalComponent implements OnInit {
             this.itemBatchMatTable.paginator.firstPage();
         }
     }
-    
-    CheckAll() {        
-        if(this.allSelected) {
+
+    CheckAll() {
+        if (this.allSelected) {
             this.items.forEach(item => { item.Approve = false; });
-            this.allSelected = false;            
-        }
-        else {            
-            this.items.forEach(item => { item.Approve = true; })
+            this.allSelected = false;
+        } else {
+            this.items.forEach(item => { item.Approve = true; });
             this.allSelected = true;
         }
     }

@@ -29,12 +29,12 @@ export class MemberEffects {
                     if (member.IsConfirmed) {
                         this.router.navigate(['/home']);
                     }
-                    return (new memberActions.LoadMemberByInviteGUIDSuccess(member))
+                    return (new memberActions.LoadMemberByInviteGUIDSuccess(member));
                 }),
                 catchError(err => {
                     this.memberService.sendNotification({ type: 'error', title: 'Error', content: err });
                     this.router.navigate(['/home']);
-                    of(new memberActions.LoadMemberByInviteGUIDFail(err))
+                    of(new memberActions.LoadMemberByInviteGUIDFail(err));
                     return EMPTY;
                 })
             )
@@ -49,11 +49,11 @@ export class MemberEffects {
                 map(member => {
                     this.memberService.sendNotification({ type: 'success', title: 'Successfully Updated', content: `${member.Email} was saved` });
                     this.router.navigate(['/dashboard']);
-                    return (new memberActions.EditMemberRegistrationSuccess(member))
+                    return (new memberActions.EditMemberRegistrationSuccess(member));
                 }),
                 catchError(err => {
                     this.memberService.sendNotification({ type: 'error', title: 'Error', content: err });
-                    of(new memberActions.LoadMemberByInviteGUIDFail(err))
+                    of(new memberActions.LoadMemberByInviteGUIDFail(err));
                     return EMPTY;
                 })
             )
@@ -67,7 +67,7 @@ export class MemberEffects {
                 map(member => (new memberActions.LoadMembersSuccess(member))),
                 catchError(err => {
                     this.memberService.sendNotification({ type: 'error', title: 'Error', content: err });
-                    of(new memberActions.LoadMembersFail(err))
+                    of(new memberActions.LoadMembersFail(err));
                     return EMPTY;
                 })
             )
@@ -79,13 +79,13 @@ export class MemberEffects {
         map((action: memberActions.DeleteMember) => action.payload),
         mergeMap((member) =>
             this.memberService.deleteMember(member).pipe(
-                map(member => {
-                    this.memberService.sendNotification({ type: 'success', title: 'Confirmation Sent', content: "" });
+                map(() => {
+                    this.memberService.sendNotification({ type: 'success', title: 'Successfully Deleted', content: `${member.Email} has been deleted.` });
                     return (new memberActions.DeleteMemberSuccess(member));
                 }),
                 catchError(err => {
                     this.memberService.sendNotification({ type: 'error', title: 'Error', content: err });
-                    of(new memberActions.DeleteMemberFail(err))
+                    of(new memberActions.DeleteMemberFail(err));
                     return EMPTY;
                 })
             )
@@ -99,11 +99,12 @@ export class MemberEffects {
             this.memberService.editMember(member).pipe(
                 map(member => {
                     this.memberService.sendNotification({ type: 'success', title: 'Successfully Updated', content: `${member.Email} was saved` });
+                    window.location.reload();
                     return (new memberActions.EditMemberSuccess(member));
                 }),
                 catchError(err => {
                     this.memberService.sendNotification({ type: 'error', title: 'Error', content: err });
-                    of(new memberActions.EditMemberFail(err))
+                    of(new memberActions.EditMemberFail(err));
                     return EMPTY;
                 })
             )

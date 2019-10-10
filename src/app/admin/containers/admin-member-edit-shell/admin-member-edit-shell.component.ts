@@ -21,10 +21,10 @@ export class AdminMemberEditShellComponent implements OnInit  {
     errorMessage$: Observable<string>;
 
     constructor(private store: Store<fromAdmin.State>) {}
-    
+
     ngOnInit() {
         this.member$ = this.store.pipe(select(fromAdmin.getMember));
-        this.vendorList$ = this.store.pipe(select(fromAdmin.getVendorList))
+        this.vendorList$ = this.store.pipe(select(fromAdmin.getVendorList));
         this.userInfo$ = this.store.pipe(select(fromUser.getCurrentUser));
         this.pendingSave$ = this.store.pipe(select(fromAdmin.getPendingSave));
         this.errorMessage$ = this.store.pipe(select(fromAdmin.getError));

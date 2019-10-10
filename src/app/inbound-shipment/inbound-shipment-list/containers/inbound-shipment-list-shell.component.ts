@@ -18,20 +18,17 @@ export class InboundShipmentListShellComponent implements OnInit {
     pendingDelete$: Observable<Boolean>;
     errorMessage$: Observable<string>;
     userInfo$: Observable<Member>;
-    isListLoading$: Observable<boolean>;
-    
 
     constructor(private store: Store<fromInboundShipment.State>) {}
 
     ngOnInit() {
         this.userInfo$ = this.store.pipe(select(fromUser.getCurrentUser));
         this.purchaseOrdersMatTable$ = this.store.pipe(select(fromInboundShipment.purchaseOrdersMatTable));
-        this.isLoading$ = this.store.pipe(select(fromInboundShipment.getIsLoading));
-        this.isListLoading$ = this.store.pipe(select(fromInboundShipment.getIsListLoading));
-        
-
         this.pendingDelete$ = this.store.pipe(select(fromInboundShipment.getPendingDelete));
-        this.errorMessage$ = this.store.pipe(select(fromInboundShipment.getError));
+        setTimeout(() => {
+            this.errorMessage$ = this.store.pipe(select(fromInboundShipment.getError));
+            this.isLoading$ = this.store.pipe(select(fromInboundShipment.getIsLoading));
+        });
     }
     addNewPurchaseOrder(): void {
         this.store.dispatch(new inboundShipmentActions.AddNewPurchaseOrder());
@@ -48,5 +45,5 @@ export class InboundShipmentListShellComponent implements OnInit {
     deletePurchaseOrder(purchaseorder: PurchaseOrder): void {
         this.store.dispatch(new inboundShipmentActions.DeletePurchaseOrder(purchaseorder));
     }
-    
+
 }

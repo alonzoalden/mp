@@ -1,22 +1,19 @@
 import { Component, OnInit, OnChanges, ViewChild, Inject, ElementRef, Input, Output, EventEmitter} from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { MatPaginator, MatSort, MatTableDataSource, MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material';
-// import { PurchaseOrderLine } from '../../shared/class/purchase-order-line';
 import { PurchaseOrder, PurchaseOrderLine } from '../../../../shared/class/purchase-order';
 import { PurchaseOrderService } from '../../../purchase-order.service';
 import { environment } from '../../../../../environments/environment';
 import { ItemList } from '../../../../shared/class/item';
 import { SimpleChanges } from '@angular/core';
 
-
 @Component({
 selector: 'o-inbound-shipment-edit-line-list',
 templateUrl: './inbound-shipment-edit-line-list.component.html',
-//   styleUrls: ['./inbound-shipment-edit-line-list.component.css', './inbound-shipment-edit.component.css']
 })
 
 export class InboundShipmentEditLineListComponent implements OnInit, OnChanges {
-    
+
     @Input() purchaseOrder: PurchaseOrder;
     @Input() errorMessage: string;
     @Input() isLoading: boolean;
@@ -26,30 +23,15 @@ export class InboundShipmentEditLineListComponent implements OnInit, OnChanges {
     @Output() downloadItemLabelCount = new EventEmitter<{purchaseorderline: PurchaseOrderLine, count: number, border: string}>();
     @Output() downloadItemLargeLabelCount = new EventEmitter<{purchaseorderline: PurchaseOrderLine, count: number, border: string}>();
     @Output() setSelectedPurchaseOrder = new EventEmitter<PurchaseOrder>();
-    //@Output() updatePurchaseLineCartonQuantity = new EventEmitter<PurchaseOrder>();
-    
-
-    //errorMessage: string;
-    //purchaseOrder: PurchaseOrder;
     purchaseorderid: number;
-    //purchaseorderlines: PurchaseOrderLine[];
-    //orderStatus: string;
-    
     private linkURL = environment.linkURL;
-
-    //displayedColumns = ['Incomplete', 'ItemName', 'ItemVendorSKU', 'TPIN', 'FOBPrice', 'Quantity', 'CartonQuantity', 'ReceivedQty', 'Label', 'Edit', 'Delete'];
-    //displayedColumns = ['Add', 'Incomplete', 'ItemName', 'ItemVendorSKU', 'TPIN', 'FOBPrice', 'Quantity', 'CartonQuantity', 'ReceivedQty', 'Label', 'Delete'];
-    //displayedColumns = ['Add', 'Incomplete', 'ProductDetails', 'FOBPrice', 'Quantity', 'CartonQuantity', 'ReceivedQty', 'Label', 'Delete']
     displayedColumns = ['Add', 'Incomplete', 'ProductDetails', 'FOBPrice', 'Quantity', 'CartonQuantity', 'ReceivedQty', 'Actions'];
     dataSource: any = null;
-    
+
     PendingAdd: boolean;
     currentIndex: number;
-
-    //itemList: ItemList[];
-
     formDirty = false;
-    
+
     @ViewChild('lineItemIDRef', { static: false }) lineItemIDRef: ElementRef;
 
     @ViewChild(MatPaginator, { static: false }) paginator: MatPaginator;
@@ -61,17 +43,17 @@ export class InboundShipmentEditLineListComponent implements OnInit, OnChanges {
     }
     ngOnChanges(changes: SimpleChanges) {
         if (changes.purchaseOrder && changes.purchaseOrder.currentValue && (!changes.purchaseOrder.currentValue.PurchaseOrderLines.length
-                || changes.purchaseOrder.currentValue.PurchaseOrderLines[changes.purchaseOrder.currentValue.PurchaseOrderLines.length-1].PurchaseOrderLineID)) {
+                || changes.purchaseOrder.currentValue.PurchaseOrderLines[changes.purchaseOrder.currentValue.PurchaseOrderLines.length - 1].PurchaseOrderLineID)) {
             this.addPendingLine();
             this.currentIndex = this.purchaseOrder.PurchaseOrderLines.length - 1;
             this.refreshDataSource(this.purchaseOrder.PurchaseOrderLines);
         }
         if (changes.purchaseOrder && changes.purchaseOrder.currentValue) {
-            
+
             if (!this.purchaseOrder.PurchaseOrderLines || !this.purchaseOrder.PurchaseOrderLines.length) {
                 this.getPurchaseOrderLines.emit(this.route.parent.snapshot.params['id']);
             }
-            if (!this.purchaseOrder.PurchaseOrderLines.length || this.purchaseOrder.PurchaseOrderLines[this.purchaseOrder.PurchaseOrderLines.length-1].PurchaseOrderID) {
+            if (!this.purchaseOrder.PurchaseOrderLines.length || this.purchaseOrder.PurchaseOrderLines[this.purchaseOrder.PurchaseOrderLines.length - 1].PurchaseOrderID) {
                 this.refreshDataSource(this.purchaseOrder.PurchaseOrderLines);
                 this.currentIndex = this.purchaseOrder.PurchaseOrderLines.length - 1;
             }
@@ -81,16 +63,13 @@ export class InboundShipmentEditLineListComponent implements OnInit, OnChanges {
         }
     }
     ngOnInit() {
-        this.setSelectedPurchaseOrder.emit(null);
+        //this.setSelectedPurchaseOrder.emit(null);
         this.purchaseorderid = this.route.parent.snapshot.params['id'];
     }
     addPendingLine() {
-        
         const _temp = new PurchaseOrderLine(null, this.purchaseorderid, null, null, null, null, null, null, 1, 0, null, null, null, null, true);
         this.purchaseOrder.PurchaseOrderLines.push(_temp);
         this.refreshDataSource(this.purchaseOrder.PurchaseOrderLines);
-        
-
     }
 
     removePendingLine() {
@@ -101,121 +80,96 @@ export class InboundShipmentEditLineListComponent implements OnInit, OnChanges {
     }
 
     onAddPurchaseOrderLine(PurchaseOrderLine: PurchaseOrderLine) {
-        if (this.isRequirementValid(PurchaseOrderLine)) { 
-            if(!this.existItem(PurchaseOrderLine.ItemID, true)) {        
+        if (this.isRequirementValid(PurchaseOrderLine)) {
+            if (!this.existItem(PurchaseOrderLine.ItemID, true)) {
                 this.PendingAdd = true;
                 PurchaseOrderLine.pendingAdd = false;
                 PurchaseOrderLine.PrevItemID = PurchaseOrderLine.ItemID;
-                
+
                 this.addPendingLine();
                 this.refreshDataSource(this.purchaseOrder.PurchaseOrderLines);
 
                 this.purchaseOrderService.currentPurchaseLineIsUpdated = true;
+            } else {
+                this.purchaseOrderService.sendNotification({ type: 'error', title: 'Error', content: 'Item already exists' });
             }
-            else {
-                this.purchaseOrderService.sendNotification({ type: 'error', title: 'Error', content: "Item already exists" });
-            }   
         }
     }
 
     isRequirementValid(PurchaseOrderLine: PurchaseOrderLine): boolean {
         if (PurchaseOrderLine && PurchaseOrderLine.ItemID) {
-            if(PurchaseOrderLine.Quantity > 0) {
+            if (PurchaseOrderLine.Quantity > 0) {
                 return true;
-            }
-            else {
-                this.purchaseOrderService.sendNotification({ type: 'error', title: 'Error', content: "Please enter quantity" });
+            } else {
+                this.purchaseOrderService.sendNotification({ type: 'error', title: 'Error', content: 'Please enter quantity' });
                 return false;
             }
-        } 
-        else {
-            this.purchaseOrderService.sendNotification({ type: 'error', title: 'Error', content: "Please select an item" });
+        } else {
+            this.purchaseOrderService.sendNotification({ type: 'error', title: 'Error', content: 'Please select an item' });
             return false;
         }
     }
 
     onEditPurchaseOrderLine(index: number) {
-        if(this.PendingAdd) {
+        if (this.PendingAdd) {
             this.currentIndex = this.purchaseOrder.PurchaseOrderLines.length - 1;
             this.PendingAdd = false;
-        }
-        else {
+        } else {
             this.currentIndex = index;
-        }    
+        }
     }
-    
+
     refreshDataSource(purchaseorderlines: PurchaseOrderLine[]) {
         this.dataSource = new MatTableDataSource<PurchaseOrderLine>(purchaseorderlines);
         this.dataSource.paginator = this.paginator;
         this.dataSource.sort = this.sort;
     }
 
-    // onItemChange(newValue: number, purchaseorderline: PurchaseOrderLine) {
-    //     const selectedItem = this.itemList.find(x => x.ItemID === newValue);
-    //     if (selectedItem) {
-    //         purchaseorderline.ItemName = selectedItem.ItemName;
-    //         purchaseorderline.ItemVendorSKU = selectedItem.VendorSKU;
-    //         purchaseorderline.TPIN = selectedItem.TPIN;
-    //         purchaseorderline.FOBPrice = selectedItem.FOBPrice;
-    //     }
-    // }
-
-    onItemChange(purchaseorderline: PurchaseOrderLine, index: number) {        
-        if(!this.existItem(purchaseorderline.ItemID)) {
+    onItemChange(purchaseorderline: PurchaseOrderLine, index: number) {
+        if (!this.existItem(purchaseorderline.ItemID)) {
             const selectedItem = this.itemList.find(x => x.ItemID === purchaseorderline.ItemID);
             if (selectedItem) {
                 purchaseorderline.ItemName = selectedItem.ItemName;
                 purchaseorderline.ItemVendorSKU = selectedItem.VendorSKU;
                 purchaseorderline.TPIN = selectedItem.TPIN;
                 purchaseorderline.FOBPrice = selectedItem.FOBPrice;
-                
-                if(index != this.purchaseOrder.PurchaseOrderLines.length - 1) {
+
+                if (index != this.purchaseOrder.PurchaseOrderLines.length - 1) {
                     this.purchaseOrderService.currentPurchaseLineIsUpdated = true;
                 }
             }
-        }        
-        else {
+        } else {
             purchaseorderline.ItemID = purchaseorderline.PrevItemID;
-            // const selectedItem = this.itemList.find(x => x.ItemID === purchaseorderline.ItemID);
-            // if (selectedItem) {
-            //     purchaseorderline.ItemName = selectedItem.ItemName;
-            //     purchaseorderline.ItemVendorSKU = selectedItem.VendorSKU;
-            //     purchaseorderline.TPIN = selectedItem.TPIN;
-            //     purchaseorderline.FOBPrice = selectedItem.FOBPrice;
-            // }                
-
             this.currentIndex = this.purchaseOrder.PurchaseOrderLines.length - 1;
             this.refreshDataSource(this.purchaseOrder.PurchaseOrderLines);
-            this.purchaseOrderService.sendNotification({ type: 'error', title: 'Error', content: "Item already exists" });
+            this.purchaseOrderService.sendNotification({ type: 'error', title: 'Error', content: 'Item already exists' });
         }
     }
 
-    existItem(itemID: number, isNew: boolean = false){
-        var counter: number = 0;
+    existItem(itemID: number, isNew: boolean = false) {
+        let counter: number = 0;
         this.purchaseOrder.PurchaseOrderLines.forEach((value, index) => {
-                if(value.ItemID === itemID) {
-                    if(isNew || index != this.purchaseOrder.PurchaseOrderLines.length - 1) {
-                        counter += 1; 
+                if (value.ItemID === itemID) {
+                    if (isNew || index != this.purchaseOrder.PurchaseOrderLines.length - 1) {
+                        counter += 1;
                     }
                 }
             }
         );
-        if(counter > 1) { return true; }
-        else { return false; }
+        if (counter > 1) { return true; } else { return false; }
     }
 
     openDialogPrintItemLabel(purchaseorderline: PurchaseOrderLine) {
         const dialogRef = this.itemPrintDialog.open(InboundShipmentEditLineComponentItemPrintDialog, {
           width: '250px',
-          data: purchaseorderline          
+          data: purchaseorderline
         });
-    
+
         dialogRef.afterClosed().subscribe(result => {
             if (result && result.Quantity > 0) {
-                if(result.Size === "small") {
+                if (result.Size === 'small') {
                     this.onPrintLabel(purchaseorderline, result.Quantity, result.Border);
-                }
-                else {
+                } else {
                     this.onPrintLargeLabel(purchaseorderline, result.Quantity, result.Border);
                 }
             }
@@ -223,94 +177,15 @@ export class InboundShipmentEditLineListComponent implements OnInit, OnChanges {
     }
 
     onPrintLabel(purchaseorderline: PurchaseOrderLine, count: number, border: string) {
-
         this.downloadItemLabelCount.emit({purchaseorderline, count, border});
-
-        // this.purchaseOrderService.downloadItemLabelCount(purchaseorderline.ItemID, count, border).subscribe(
-        //     (data) => {
-        //         const blob = new Blob([data], {type: 'application/pdf'});
-        //         const blobUrl = URL.createObjectURL(blob);
-        //         if (window.navigator.msSaveOrOpenBlob) {
-        //             const fileName = purchaseorderline.TPIN;
-        //             window.navigator.msSaveOrOpenBlob(data, fileName + '.pdf'); // IE is the worst!!!
-        //         } else {
-        //             // const iframe = document.createElement('iframe');
-        //             // iframe.style.display = 'none';
-        //             // iframe.src = blobUrl;
-        //             // document.body.appendChild(iframe);
-
-        //             // iframe.onload = (function() {
-        //             //     iframe.contentWindow.focus();
-        //             //     iframe.contentWindow.print();
-        //             // });
-        //             const fileURL = window.URL.createObjectURL(blob);
-        //             const a: HTMLAnchorElement = document.createElement('a') as HTMLAnchorElement;
-        //             a.href = fileURL;
-        //             a.download = purchaseorderline.TPIN;
-        //             document.body.appendChild(a);
-        //             a.target = '_blank';
-        //             a.click();
-
-        //             document.body.removeChild(a);
-        //             URL.revokeObjectURL(fileURL);
-        //         }
-        //     }
-        // );
     }
 
     onPrintLargeLabel(purchaseorderline: PurchaseOrderLine, count: number, border: string) {
         this.downloadItemLargeLabelCount.emit({purchaseorderline, count, border});
-
-        // this.purchaseOrderService.downloadItemLargeLabelCount(purchaseorderline.ItemID, count, border).subscribe(
-        //     (data) => {
-        //         const blob = new Blob([data], {type: 'application/pdf'});
-        //         const blobUrl = URL.createObjectURL(blob);
-        //         if (window.navigator.msSaveOrOpenBlob) {
-        //             const fileName = purchaseorderline.TPIN;
-        //             window.navigator.msSaveOrOpenBlob(data, fileName + '.pdf'); // IE is the worst!!!
-        //         } else {
-        //             // const iframe = document.createElement('iframe');
-        //             // iframe.style.display = 'none';
-        //             // iframe.src = blobUrl;
-        //             // document.body.appendChild(iframe);
-
-        //             // iframe.onload = (function() {
-        //             //     iframe.contentWindow.focus();
-        //             //     iframe.contentWindow.print();
-        //             // });
-        //             const fileURL = window.URL.createObjectURL(blob);
-        //             const a: HTMLAnchorElement = document.createElement('a') as HTMLAnchorElement;
-        //             a.href = fileURL;
-        //             a.download = purchaseorderline.TPIN;
-        //             document.body.appendChild(a);
-        //             a.target = '_blank';
-        //             a.click();
-
-        //             document.body.removeChild(a);
-        //             URL.revokeObjectURL(fileURL);
-        //         }
-        //     }
-        // );
     }
     scrollToElement($element): void {
-        $element.scrollIntoView({behavior: "smooth", block: "start", inline: "nearest"});
+        $element.scrollIntoView({behavior: 'smooth', block: 'start', inline: 'nearest'});
     }
-    // onRemovePurchaseOrderLine(purchaseorderline: PurchaseOrderLine) {
-    //     const confirmation = confirm(`Remove ${purchaseorderline.ItemName}?`);
-    //     if (confirmation) {
-    //         this.purchaseOrderService.deletePurchaseOrderLine(purchaseorderline.PurchaseOrderLineID).subscribe(
-    //             () => {
-    //                 this.onDeleteComplete(purchaseorderline, `${purchaseorderline.PurchaseOrderLineID} was deleted`);
-    //             },
-    //             (error: any) => {
-    //                 this.errorMessage = <any>error;
-    //                 this.purchaseOrderService.sendNotification({ type: 'error', title: 'Error', content: this.errorMessage });
-    //                 window.location.reload();
-    //             }
-    //         );
-    //     }
-    // }
-
     onRemovePurchaseOrderLine(purchaseorderline: PurchaseOrderLine, index: number) {
         const confirmation = confirm(`Remove ${purchaseorderline.ItemName}?`);
         if (confirmation) {
@@ -318,15 +193,8 @@ export class InboundShipmentEditLineListComponent implements OnInit, OnChanges {
             this.refreshDataSource(this.purchaseOrder.PurchaseOrderLines);
 
             this.purchaseOrderService.currentPurchaseLineIsUpdated = true;
-        }        
+        }
     }
-
-    // onDeleteComplete(purchaseorderline: PurchaseOrderLine, message?: string): void {
-    //     // this.purchaseorderlines.splice(this.purchaseorderlines.indexOf(purchaseorderline), 1);
-    //     this.refreshDataSource(this.purchaseOrder.PurchaseOrderLines);
-    //     this.purchaseOrderService.sendNotification({ type: 'success', title: 'Successfully Deleted', content: message });
-    // }
-
     applyFilter(filterValue: string) {
         this.dataSource.filter = filterValue.trim().toLowerCase();
         if (this.dataSource.paginator) {
@@ -337,19 +205,16 @@ export class InboundShipmentEditLineListComponent implements OnInit, OnChanges {
     clearFields(form) {
         form.ItemID = null;
         this.formDirty = false;
-        
-        //this.lineItemIDRef.nativeElement.value = "0: null";
         form.FOBPrice = '';
         form.Quantity = 1;
     }
 }
 
-
 export class ItemLabelPrintDialog {
     constructor(
         public Size: string,
         public Quantity: number,
-        public Border: string  
+        public Border: string
     ) {}
 }
 
@@ -359,16 +224,15 @@ templateUrl: 'inbound-shipment-edit-line-list.component-item-print-dialog.html',
 })
 
 export class InboundShipmentEditLineComponentItemPrintDialog implements OnInit {
-//quantity: number;
 itemLabelPrintDialog: ItemLabelPrintDialog;
 
     constructor(
         public dialogRef: MatDialogRef<InboundShipmentEditLineComponentItemPrintDialog>,
         @Inject(MAT_DIALOG_DATA) public data: PurchaseOrderLine) {
-        
+
         }
     ngOnInit() {
-        this.itemLabelPrintDialog = new ItemLabelPrintDialog("small", this.data.Quantity, "yes");
+        this.itemLabelPrintDialog = new ItemLabelPrintDialog('small', this.data.Quantity, 'yes');
     }
 
     onCancelClick(): void {

@@ -10,8 +10,8 @@ import { CompanyService } from '../../../company.service';
 export class CompanyAttachmentAddComponent implements OnInit {
     vendorAttachment: VendorAttachmentInsert;
     filesToUpload: Array<File> = [];
-    selectedFileNames: string[] = [];    
-    
+    selectedFileNames: string[] = [];
+
     @Input() pendingUpload: boolean = false;
     @Input() errorMessage: string;
     @Output() uploadVendorAttachment = new EventEmitter<{ form: FormData, title: string }>();
@@ -31,7 +31,7 @@ export class CompanyAttachmentAddComponent implements OnInit {
     }
 
     upload() {
-        if(this.isRequirementValid()) {
+        if (this.isRequirementValid()) {
             if (this.filesToUpload.length === 0) {
                 this.companyService.sendNotification({ type: 'error', title: 'Invalid Upload', content: 'Please select at least 1 files to upload!' });
             } else if (this.filesToUpload.length > 3) {
@@ -39,9 +39,8 @@ export class CompanyAttachmentAddComponent implements OnInit {
             } else {
                 this.uploadFiles();
             }
-        }
-        else {
-            this.companyService.sendNotification({ type: 'error', title: 'Error', content: "Please enter all required fields" });
+        } else {
+            this.companyService.sendNotification({ type: 'error', title: 'Error', content: 'Please enter all required fields' });
         }
     }
 
@@ -49,8 +48,7 @@ export class CompanyAttachmentAddComponent implements OnInit {
         if (this.vendorAttachment
             && this.vendorAttachment.Title) {
             return true;
-        } 
-        else {
+        } else {
             return false;
         }
     }

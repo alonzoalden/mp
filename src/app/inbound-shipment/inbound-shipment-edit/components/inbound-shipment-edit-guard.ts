@@ -1,7 +1,6 @@
 import { Injectable } from '@angular/core';
 import { CanDeactivate } from '@angular/router';
-
-import {InboundShipmentEditComponent} from './inbound-shipment-edit.component'
+import {InboundShipmentEditComponent} from './inbound-shipment-edit.component';
 
 @Injectable()
 export class InboundShipmentEditGuard implements CanDeactivate<InboundShipmentEditComponent> {

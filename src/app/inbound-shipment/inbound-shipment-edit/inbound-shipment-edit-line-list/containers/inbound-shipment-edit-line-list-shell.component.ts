@@ -1,13 +1,8 @@
-import { Component, OnInit, OnDestroy, ViewChild, Inject, ElementRef } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
-import { MatPaginator, MatSort, MatTableDataSource, MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material';
+import { Component, OnInit } from '@angular/core';
 import { ItemList } from '../../../../shared/class/item';
-// import { PurchaseOrderLine } from '../../shared/class/purchase-order-line';
 import { Store, select } from '@ngrx/store';
 import * as inboundShipmentActions from '../../../state/inbound-shipment.actions';
 import * as fromInboundShipment from '../../../state';
-import * as fromUser from '../../../../shared/state/user-state.reducer';
-import * as fromItem from '../../../../item/state';
 import * as itemActions from '../../../../item/state/item.actions';
 import { Observable } from 'rxjs';
 import { PurchaseOrder, PurchaseOrderLine } from '../../../../shared/class/purchase-order';
@@ -25,7 +20,6 @@ export class InboundShipmentEditLineListShellComponent implements OnInit {
 
     constructor(
         private store: Store<fromInboundShipment.State>,
-        private itemStore: Store<fromItem.State>
     ) { }
 
     ngOnInit() {
@@ -52,6 +46,6 @@ export class InboundShipmentEditLineListShellComponent implements OnInit {
     setSelectedPurchaseOrder(purchaseorder: PurchaseOrder): void {
         this.store.dispatch(new inboundShipmentActions.SetSelectedPurchaseOrder(purchaseorder));
     }
-    
+
 
 }

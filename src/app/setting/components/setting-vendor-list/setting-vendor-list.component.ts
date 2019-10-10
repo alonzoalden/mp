@@ -14,10 +14,9 @@ export class SettingVendorListComponent implements OnInit {
     @Input() errorMessage: string;
     @Output() getMembersVendors = new EventEmitter<void>();
     @Output() editCurrentMember = new EventEmitter<Member>();
-    
     @ViewChild(MatPaginator, { static: true }) paginator: MatPaginator;
     @ViewChild(MatSort, { static: true }) sort: MatSort;
-    
+
     displayedColumns = ['VendorID', 'MerchantID', 'VendorName', 'CreatedOn', 'Switch'];
 
     constructor() { }
@@ -30,25 +29,24 @@ export class SettingVendorListComponent implements OnInit {
         if (changes.userInfo && changes.userInfo.currentValue) {
             if (changes.userInfo.currentValue.DefaultPageSize) {
                 this.paginator.pageSize = changes.userInfo.currentValue.DefaultPageSize;
-            }
-            else {
+            } else {
                 this.paginator.pageSize = 100;
             }
         }
     }
     ngOnInit() {
+        this.applyFilter('');
         this.getMembersVendors.emit();
     }
-
     switchMemberVendor(memberVendor: MemberVendor): void {
         this.userInfo.VendorID = memberVendor.VendorID.toString();
         this.editCurrentMember.emit(this.userInfo);
     }
 
     isCurrentVendor(vendorid: string) {
-        return (this.userInfo.VendorID === vendorid);
+        return (this.userInfo && this.userInfo.VendorID === vendorid);
     }
-    
+
     applyFilter(filterValue: string) {
         this.memberVendorsMatTable.filter = filterValue.trim().toLowerCase();
         if (this.memberVendorsMatTable.paginator) {

@@ -6,10 +6,10 @@ export interface SettingState {
     memberVendors: MemberVendor[];
     currentMemberID: number;
     isLoading: boolean;
-    pendingDelete: boolean,
-    pendingSave: boolean,
+    pendingDelete: boolean;
+    pendingSave: boolean;
     error: string;
-};
+}
 
 const initialState: SettingState = {
     memberVendors: [],
@@ -40,8 +40,27 @@ export function settingReducer(state = initialState, action: SettingActions): Se
         case SettingActionTypes.LoadMemberVendorsFail:
             return {
                 ...state,
-                memberVendors: [],
                 isLoading: false,
+                error: action.payload,
+            };
+
+        case SettingActionTypes.EditCurrentMember:
+            return {
+                ...state,
+                pendingSave: true,
+                error: '',
+            };
+
+        case SettingActionTypes.EditCurrentMemberSuccess:
+            return {
+                ...state,
+                pendingSave: false,
+                error: '',
+            };
+        case SettingActionTypes.EditCurrentMemberFail:
+            return {
+                ...state,
+                pendingSave: false,
                 error: action.payload,
             };
         default:

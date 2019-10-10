@@ -9,7 +9,7 @@ import { VendorAttachment } from 'app/shared/class/vendor-attachment';
 // So the reference to ProductState cannot be added to app.state.ts directly.
 export interface State extends fromRoot.State {
     companies: fromCompany.CompanyAttachmentState;
-};
+}
 
 // Selector functions
 const getCompanyFeatureState = createFeatureSelector<fromCompany.CompanyAttachmentState>('CompanyAttachment');

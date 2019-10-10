@@ -1,19 +1,13 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpErrorResponse, HttpHeaders } from '@angular/common/http';
-
 import { Observable, Subject, of, throwError } from 'rxjs';
 import { catchError, tap } from 'rxjs/operators';
-
 import { PurchaseOrder, PurchaseOrderLine, PurchaseOrderLineInsert, PurchaseOrderLineList, Carton, CartonInsert, CartonLine, CartonLineInsert } from '../shared/class/purchase-order';
-//import {  PurchaseOrderLine, PurchaseOrderLineInsert, PurchaseOrderLineList } from '../shared/class/purchase-order-line';
 import { ItemList } from '../shared/class/item';
-
 import { OAuthService } from 'angular-oauth2-oidc';
 import { InboundShippingMethod, InboundShippingMethodInsert } from '../shared/class/inbound-shipping-method';
-
 import { environment } from '../../environments/environment';
-import { Store, select } from '@ngrx/store';
-import * as inboundShipmentActions from './state/inbound-shipment.actions';
+import { Store } from '@ngrx/store';
 import * as fromInboundShipment from './state';
 import { NotificationComponent } from '../shared/tool/notification/notification.component';
 
@@ -37,12 +31,12 @@ export class PurchaseOrderService {
 
     private cartons: Carton[];
     //currentCarton: Carton;
-    currentCarton = new Subject<Carton>()
+    currentCarton = new Subject<Carton>();
     currentPurchaseOrderID: number;
 
     private cartonlines: CartonLine[];
     //currentCartonLines: CartonLine[];
-    currentCartonLines = new Subject<CartonLine[]>()
+    currentCartonLines = new Subject<CartonLine[]>();
     currentCartonLine: CartonLine;
     currentCartonID: number;
 
@@ -50,7 +44,7 @@ export class PurchaseOrderService {
     currentPurchaseLineIsUpdated: boolean;
     newCartonLineIsSelected: boolean;
     currentStep: number;
-    
+
     private purchaseorderlineList: PurchaseOrderLineList[];
 
     public subject = new Subject<string>();
@@ -113,14 +107,14 @@ export class PurchaseOrderService {
     }
 
     copyPurchaseOrder(purchaseorder: PurchaseOrder) {
-        const newPurchaseOrder = new PurchaseOrder(purchaseorder.PurchaseOrderID, purchaseorder.TransactionDate, purchaseorder.ShipmentDate, 
+        const newPurchaseOrder = new PurchaseOrder(purchaseorder.PurchaseOrderID, purchaseorder.TransactionDate, purchaseorder.ShipmentDate,
             purchaseorder.PackingSlipNumber, purchaseorder.Status, purchaseorder.UpdatedOn, purchaseorder.CreatedOn, [], [], []);
 
         purchaseorder.PurchaseOrderLines.forEach((purchaseorderline) => {
             const newPurchaseorderline = new PurchaseOrderLine(purchaseorderline.PurchaseOrderLineID, purchaseorderline.PurchaseOrderID, purchaseorderline.ItemID,
                 purchaseorderline.ItemName, purchaseorderline.ItemVendorSKU, purchaseorderline.TPIN, purchaseorderline.URLKey, purchaseorderline.FOBPrice, purchaseorderline.Quantity,
                 purchaseorderline.CartonQuantity, purchaseorderline.ReceivedQty, purchaseorderline.UpdatedOn, purchaseorderline.CreatedOn, purchaseorderline.PrevItemID, purchaseorderline.pendingAdd);
-            
+
             newPurchaseOrder.PurchaseOrderLines.push(newPurchaseorderline);
         });
 
@@ -131,7 +125,7 @@ export class PurchaseOrderService {
                 carton.CartonLines.forEach((cartonline) => {
                     const newCartonLine = new CartonLine(cartonline.CartonLineID, cartonline.CartonID, cartonline.PurchaseOrderID, cartonline.PurchaseOrderLineID, cartonline.ItemName,
                         cartonline.ItemVendorSKU, cartonline.TPIN, cartonline.URLKey, cartonline.Quantity, cartonline.RemainingQuantity, cartonline.UpdatedOn, cartonline.CreatedOn, cartonline.PrevPurchaseOrderLineID, cartonline.pendingAdd);
-                    
+
                     newCarton.CartonLines.push(newCartonLine);
                 });
             }
@@ -142,7 +136,7 @@ export class PurchaseOrderService {
         purchaseorder.InboundShippingMethods.forEach((inboundshippingmethod) => {
             const newInboundShippingMethod = new InboundShippingMethod(inboundshippingmethod.InboundShippingMethodID, inboundshippingmethod.PurchaseOrderID, inboundshippingmethod.Title,
                 inboundshippingmethod.BillingOfLading, inboundshippingmethod.ContainerNumber, inboundshippingmethod.UpdatedOn, inboundshippingmethod.CreatedOn);
-            
+
             newPurchaseOrder.InboundShippingMethods.push(newInboundShippingMethod);
         });
 
@@ -395,18 +389,16 @@ export class PurchaseOrderService {
                             );
     }
     updatePurchaseLineCartonQuantity(purchaseorder: PurchaseOrder) {
-        //if (!this.currentPurchaseOrderEdit) return;          
+        //if (!this.currentPurchaseOrderEdit) return;
         purchaseorder.PurchaseOrderLines.forEach((purchaseorderline) => {
             purchaseorderline.CartonQuantity = 0;
         });
-        
+
         purchaseorder.Cartons.forEach((carton, ci) => {
             carton.CartonLines.forEach((cartonline, cli) => {
-                if(!cartonline.pendingAdd)
-                {
+                if (!cartonline.pendingAdd) {
                     const purchaseorderline = purchaseorder.PurchaseOrderLines.find(x => x.PurchaseOrderLineID === cartonline.PurchaseOrderLineID);
-                    if(purchaseorderline)
-                    {
+                    if (purchaseorderline) {
                         purchaseorderline.CartonQuantity += cartonline.Quantity;
                         this.replacePurchaseOrderLine(cartonline.PurchaseOrderLineID, purchaseorderline);
 
@@ -414,27 +406,27 @@ export class PurchaseOrderService {
                     }
                 }
             });
-        })
-    };
+        });
+    }
 
     updateCartonLineRemainingQuantity(cartonline: CartonLine, purchaseorder: PurchaseOrder) {
-        //if (!this.currentPurchaseOrderEdit) return;     
+        //if (!this.currentPurchaseOrderEdit) return;
         const foundPurchaseOrderLine = purchaseorder.PurchaseOrderLines.find(x => x.PurchaseOrderLineID === cartonline.PurchaseOrderLineID);
 
-        if(foundPurchaseOrderLine) {
+        if (foundPurchaseOrderLine) {
             cartonline.RemainingQuantity = foundPurchaseOrderLine.Quantity;
-            
+
             purchaseorder.Cartons.forEach((carton, ci) => {
                 carton.CartonLines.forEach((cartonline2, cli) => {
-                    if(!cartonline2.pendingAdd) {
-                        if(cartonline2.PurchaseOrderLineID == cartonline.PurchaseOrderLineID) {
+                    if (!cartonline2.pendingAdd) {
+                        if (cartonline2.PurchaseOrderLineID == cartonline.PurchaseOrderLineID) {
                             cartonline.RemainingQuantity = cartonline.RemainingQuantity - cartonline2.Quantity;
                         }
                     }
                 });
-            })
+            });
         }
-    };
+    }
 
     getSimpleItemList(): Observable<ItemList[]>  {
         if (this.itemList && this.itemList.length > 0) {
@@ -450,7 +442,7 @@ export class PurchaseOrderService {
                                 catchError(this.handleError)
                             );
     }
-    
+
     downloadItemLabel(itemID: number) {
         return this.http.get(this.apiURL + '/item/' + itemID + '/label', { responseType: 'blob' });
     }
@@ -661,7 +653,7 @@ export class PurchaseOrderService {
 
     validateCarton() {
         // return (this.currentPurchaseOrderLines && !this.currentPurchaseOrderLines.find(x => x.CartonQuantity !== x.Quantity));
-        return (this.currentPurchaseOrderEdit && this.currentPurchaseOrderEdit.PurchaseOrderLines 
+        return (this.currentPurchaseOrderEdit && this.currentPurchaseOrderEdit.PurchaseOrderLines
             && !this.currentPurchaseOrderEdit.PurchaseOrderLines.find(x => x.CartonQuantity !== x.Quantity && !x.pendingAdd));
     }
 
@@ -696,11 +688,8 @@ export class PurchaseOrderService {
     }
 
     rowColorConditions(i: number, collection: Array<any>, currentItemIndex: number, formDirty: boolean): string {
-        const inputRow = i === collection.length-1 && currentItemIndex === i;
+        const inputRow = i === collection.length - 1 && currentItemIndex === i;
         const selectedInputRow = inputRow && formDirty;
-        if (selectedInputRow) return '#F5F5F5';
-        else if (inputRow) return '#E8E8E8';
-        else if (currentItemIndex === i) return '#F5F5F5';
-        else return '#FFFFFF';
+        if (selectedInputRow) { return '#F5F5F5'; } else if (inputRow) { return '#E8E8E8'; } else if (currentItemIndex === i) { return '#F5F5F5'; } else { return '#FFFFFF'; }
     }
 }

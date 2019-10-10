@@ -1,0 +1,6 @@
+<o-item-edit-video
+    [item]="item$ | async"
+    [itemVideosMatTable]="itemVideosMatTable$ | async"
+    [errorMessage]="errorMessage$ | async"
+    (getVideoURLDetail)="getVideoURLDetail($event)"
+></o-item-edit-video>

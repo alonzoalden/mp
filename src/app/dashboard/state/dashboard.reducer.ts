@@ -11,9 +11,9 @@ export interface DashboardState {
     itemSalesTotals: ItemSalesTotal[];
     salesStatusTotals: SalesStatusTotal[];
     dashboardVendorNotification: DashboardVendorNotification;
-    isLoading: boolean,
+    isLoading: boolean;
     error: string;
-};
+}
 
 const initialState: DashboardState = {
     dashboard: null,

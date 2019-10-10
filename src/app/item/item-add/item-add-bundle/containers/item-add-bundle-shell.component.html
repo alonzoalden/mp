@@ -1,0 +1,10 @@
+<o-item-add-bundle
+    [itemList]="itemList$ | async"
+    [item]="item$ | async"
+    [selectedOption]="selectedBundleOption$ | async"
+    [itemBundleOptionsMatTable]="itemBundleOptionsMatTable$ | async"
+    [itemBundleOptionSelectionsMatTable]="itemBundleOptionSelectionsMatTable$ | async"
+    [errorMessage]="errorMessage$ | async"
+    (getItemList)="getItemList()"
+    (setSelectedBundleOption)="setSelectedBundleOption($event)"
+></o-item-add-bundle>

@@ -9,7 +9,7 @@ import { PurchaseOrder } from '../..//shared/class/purchase-order';
 // So the reference to ProductState cannot be added to app.state.ts directly.
 export interface State extends fromRoot.State {
     inboundShipment: fromInboundShipment.InboundShipmentState;
-};
+}
 
 // Selector functions
 const getInboundShipmentFeatureState = createFeatureSelector<fromInboundShipment.InboundShipmentState>('InboundShipment');
@@ -36,15 +36,11 @@ export const getSelectedCarton = createSelector(
 
 export const getSimpleItemList = createSelector(
     getInboundShipmentFeatureState,
-    state => state.simpleItemList 
+    state => state.simpleItemList
 );
 export const getIsLoading = createSelector(
     getInboundShipmentFeatureState,
     state => state.isLoading
-);
-export const getIsListLoading = createSelector(
-    getInboundShipmentFeatureState,
-    state => state.isListLoading
 );
 export const getPendingDelete = createSelector(
     getInboundShipmentFeatureState,

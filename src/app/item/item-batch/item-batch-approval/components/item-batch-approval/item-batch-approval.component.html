@@ -28,7 +28,7 @@
                         </button>
                     </div>
                     <div class="filter">
-                        <i class="fa fa-search batch" aria-label="Icon for Filter By Input Bar" [ngClass]="this.dataSource?.filter ? 'selected' : ''" (click)="FilterBy.select()"></i> 
+                        <i class="fa fa-search batch" aria-label="Icon for Filter By Input Bar" [ngClass]="itemBatchMatTable?.filter ? 'selected' : ''" (click)="FilterBy.select()"></i> 
                         <input (keyup)="applyFilter($event.target.value)" placeholder="{{ 'Filter By' | translate }}" class="form-control" #FilterBy>
                     </div>
                 </div>

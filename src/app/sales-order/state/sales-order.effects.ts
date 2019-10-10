@@ -6,20 +6,23 @@ import { Actions, Effect, ofType } from '@ngrx/effects';
 import { SalesOrderService } from '../sales-order.service';
 import * as salesOrderActions from './sales-order.actions';
 import { Router } from '@angular/router';
-import { Member, MemberVendor } from 'app/shared/class/member';
 import { SalesOrder } from 'app/shared/class/sales-order';
 import { SalesOrderLine } from 'app/shared/class/sales-order-line';
 import { Fulfillment, FulfillmentSalesOrderLine } from 'app/shared/class/fulfillment';
+import { Store } from '@ngrx/store';
+import * as fromSalesOrder from './index';
+
 
 @Injectable()
 export class SalesOrderEffects {
     constructor(
+        private store: Store<fromSalesOrder.State>,
         private router: Router,
         private salesOrderService: SalesOrderService,
         private actions$: Actions) { }
 
 
-        
+
     @Effect()
     loadSalesOrders$: Observable<Action> = this.actions$.pipe(
         ofType(salesOrderActions.SalesOrderActionTypes.LoadSalesOrders),
@@ -28,7 +31,7 @@ export class SalesOrderEffects {
             this.salesOrderService.getSalesOrderByVendor(payload.fulfilledby, payload.status).pipe(
                 map((members: SalesOrder[]) => (new salesOrderActions.LoadSalesOrdersSuccess(members))),
                 catchError(err => {
-                    of(new salesOrderActions.LoadSalesOrdersFail(err))
+                    of(new salesOrderActions.LoadSalesOrdersFail(err));
                     return EMPTY;
                 })
             )
@@ -42,7 +45,7 @@ export class SalesOrderEffects {
             this.salesOrderService.getFulfilledBySalesOrder(payload.orderid, payload.fulfilledby).pipe(
                 map((salesorder: SalesOrder) => (new salesOrderActions.LoadSalesOrderSuccess(salesorder))),
                 catchError(err => {
-                    of(new salesOrderActions.LoadSalesOrderFail(err))
+                    of(new salesOrderActions.LoadSalesOrderFail(err));
                     return EMPTY;
                 })
             )
@@ -56,7 +59,7 @@ export class SalesOrderEffects {
             this.salesOrderService.getSalesOrderLineByVendor(payload.orderid, payload.fulfilledby).pipe(
                 map((salesorderlines: SalesOrderLine[]) => (new salesOrderActions.LoadSalesOrderLinesSuccess(salesorderlines))),
                 catchError(err => {
-                    of(new salesOrderActions.LoadSalesOrderLinesFail(err))
+                    of(new salesOrderActions.LoadSalesOrderLinesFail(err));
                     return EMPTY;
                 })
             )
@@ -70,14 +73,14 @@ export class SalesOrderEffects {
             return this.salesOrderService.getFulfilledBySalesOrderDelivery(payload.orderid, payload.fulfilledby).pipe(
                 map((deliverydetail: string) => (new salesOrderActions.LoadFulfilledBySalesOrderDeliverySuccess(deliverydetail))),
                 catchError(err => {
-                    of(new salesOrderActions.LoadFulfilledBySalesOrderDeliveryFail(err))
+                    of(new salesOrderActions.LoadFulfilledBySalesOrderDeliveryFail(err));
                     return EMPTY;
                 })
-            )
+            );
         }
         )
     );
-    
+
     @Effect()
     getFulfilledByFulfillments$: Observable<Action> = this.actions$.pipe(
         ofType(salesOrderActions.SalesOrderActionTypes.LoadFulfilledByFulfillments),
@@ -86,10 +89,10 @@ export class SalesOrderEffects {
             return this.salesOrderService.getFulfilledByFulfillments(payload.orderid, payload.fulfilledby).pipe(
                 map((fullfillment: Fulfillment[]) => (new salesOrderActions.LoadFulfilledByFulfillmentsSuccess(fullfillment))),
                 catchError(err => {
-                    of(new salesOrderActions.LoadFulfilledByFulfillmentsFail(err))
+                    of(new salesOrderActions.LoadFulfilledByFulfillmentsFail(err));
                     return EMPTY;
                 })
-            )
+            );
         }
         )
     );
@@ -101,10 +104,10 @@ export class SalesOrderEffects {
             return this.salesOrderService.getFulfilledByFulfillment(payload.fulfillmentid, payload.fulfilledby).pipe(
                 map((fullfillment: Fulfillment) => (new salesOrderActions.LoadFulfilledByFulfillmentSuccess(fullfillment))),
                 catchError(err => {
-                    of(new salesOrderActions.LoadFulfilledByFulfillmentFail(err))
+                    of(new salesOrderActions.LoadFulfilledByFulfillmentFail(err));
                     return EMPTY;
                 })
-            )
+            );
         }
         )
     );
@@ -112,15 +115,15 @@ export class SalesOrderEffects {
     getFulfilmmentSalesOrderLines$: Observable<Action> = this.actions$.pipe(
         ofType(salesOrderActions.SalesOrderActionTypes.LoadFulfilmmentSalesOrderLines),
         map((action: salesOrderActions.LoadFulfilmmentSalesOrderLines) => action.payload),
-        mergeMap((payload) => 
+        mergeMap((payload) =>
             this.salesOrderService.getFulfilmmentSalesOrderLines(payload).pipe(
                 map((fullfillments: FulfillmentSalesOrderLine[]) => (new salesOrderActions.LoadFulfilmmentSalesOrderLinesSuccess(fullfillments))),
                 catchError(err => {
-                    of(new salesOrderActions.LoadFulfilmmentSalesOrderLinesFail(err))
+                    of(new salesOrderActions.LoadFulfilmmentSalesOrderLinesFail(err));
                     return EMPTY;
                 })
             )
-        
+
         )
     );
 
@@ -131,35 +134,34 @@ export class SalesOrderEffects {
         mergeMap((payload) =>
             this.salesOrderService.cancelSalesOrderLines(payload).pipe(
                 map((salesorderlines: SalesOrderLine[]) => {
-                    this.salesOrderService.sendNotification({ type: 'success', title: 'Successfully Canceled' });
-                    return (new salesOrderActions.CancelSalesOrderLinesSuccess(salesorderlines))
+                    this.salesOrderService.sendNotification({ type: 'success', title: 'Successfully Canceled', content: '' });
+                    return (new salesOrderActions.CancelSalesOrderLinesSuccess(salesorderlines));
                 }),
                 catchError(err => {
                     this.salesOrderService.sendNotification({ type: 'error', title: 'Error', content: err });
-                    of(new salesOrderActions.CancelSalesOrderLinesFail(err))
+                    of(new salesOrderActions.CancelSalesOrderLinesFail(err));
                     return EMPTY;
                 })
             )
         )
     );
-    
+
     @Effect()
     addFulfillment$: Observable<Action> = this.actions$.pipe(
         ofType(salesOrderActions.SalesOrderActionTypes.AddFulfillment),
         map((action: salesOrderActions.AddFulfillment) => action.payload),
         mergeMap((payload) =>
-            this.salesOrderService.addFulfillment(payload).pipe(
+            this.salesOrderService.addFulfillment(payload.fulfillment).pipe(
                 map((fulfillment: Fulfillment) => {
-                    this.salesOrderService.sendNotification({ type: 'success', title: 'Save Completed', content: "" });
-                    //this.router.navigate(['/sales-order', 'view', this.fulfilledby,this.orderid,'fulfillment']);
+                    this.salesOrderService.sendNotification({ type: 'success', title: 'Save Completed', content: '' });
+                    this.router.navigate(['/sales-order', 'view', payload.fulfilledby, payload.orderid, 'fulfillment']);
+                    this.store.dispatch(new salesOrderActions.LoadSalesOrder(payload));
                     //this.router.navigate(['/sales-order', 'view', 'merchant', this.orderid, 'detail']);
-                    window.location.reload();
-                    
-                    return (new salesOrderActions.AddFulfillmentSuccess(fulfillment))
+                    return (new salesOrderActions.AddFulfillmentSuccess(fulfillment));
                 }),
                 catchError(err => {
                     this.salesOrderService.sendNotification({ type: 'error', title: 'Error', content: err });
-                    of(new salesOrderActions.AddFulfillmentFail(err))
+                    of(new salesOrderActions.AddFulfillmentFail(err));
                     return EMPTY;
                 })
             )
@@ -170,15 +172,16 @@ export class SalesOrderEffects {
         ofType(salesOrderActions.SalesOrderActionTypes.EditFulfillment),
         map((action: salesOrderActions.EditFulfillment) => action.payload),
         mergeMap((payload) =>
-            this.salesOrderService.editFulfillment(payload).pipe(
+            this.salesOrderService.editFulfillment(payload.fulfillment).pipe(
                 map((fulfillment: Fulfillment) => {
-                    this.salesOrderService.sendNotification({ type: 'success', title: 'Save Completed', content: "" });
-                    window.location.reload();
-                    return (new salesOrderActions.EditFulfillmentSuccess(fulfillment))
+                    this.router.navigate(['/sales-order', 'view', payload.fulfilledby, payload.orderid, 'fulfillment']);
+                    this.store.dispatch(new salesOrderActions.LoadSalesOrder(payload));
+                    this.salesOrderService.sendNotification({ type: 'success', title: 'Save Completed', content: `Shipment ID: ${fulfillment.FulfillmentID} has been updated` });
+                    return (new salesOrderActions.EditFulfillmentSuccess(fulfillment));
                 }),
                 catchError(err => {
                     this.salesOrderService.sendNotification({ type: 'error', title: 'Error', content: err });
-                    of(new salesOrderActions.EditFulfillmentFail(err))
+                    of(new salesOrderActions.EditFulfillmentFail(err));
                     return EMPTY;
                 })
             )
@@ -187,16 +190,16 @@ export class SalesOrderEffects {
     @Effect()
     deleteFulfillment$: Observable<Action> = this.actions$.pipe(
         ofType(salesOrderActions.SalesOrderActionTypes.DeleteFulfillment),
-        map((action: salesOrderActions.CancelSalesOrderLines) => action.payload),
+        map((action: salesOrderActions.DeleteFulfillment) => action.payload),
         mergeMap((payload) =>
-            this.salesOrderService.cancelSalesOrderLines(payload).pipe(
-                map((salesorderlines: SalesOrderLine[]) => {
+            this.salesOrderService.deleteFulfillment(payload).pipe(
+                map(() => {
                     this.salesOrderService.sendNotification({ type: 'success', title: 'Successfully Deleted' });
-                    return (new salesOrderActions.CancelSalesOrderLinesSuccess(salesorderlines))
+                    return (new salesOrderActions.DeleteFulfillmentSuccess(payload));
                 }),
                 catchError(err => {
                     this.salesOrderService.sendNotification({ type: 'error', title: 'Error', content: err });
-                    of(new salesOrderActions.CancelSalesOrderLinesFail(err))
+                    of(new salesOrderActions.DeleteFulfillmentFail(err));
                     return EMPTY;
                 })
             )
@@ -207,13 +210,12 @@ export class SalesOrderEffects {
         ofType(salesOrderActions.SalesOrderActionTypes.DownloadSalesOrderPackingSlip),
         map((action: salesOrderActions.DownloadSalesOrderPackingSlip) => action.payload),
         mergeMap((payload) =>
-            this.salesOrderService.downloadSalesOrderPackingSlip(payload.OrderID).pipe(
+            this.salesOrderService.downloadSalesOrderPackingSlip(payload.orderid).pipe(
                 map((data: any) => {
-                    console.log('huh', payload)
                     const blob = new Blob([data], {type: 'application/pdf'});
                     const blobUrl = URL.createObjectURL(blob);
                     if (window.navigator.msSaveOrOpenBlob) {
-                        const fileName = payload.IncrementID;
+                        const fileName = payload.salesorder.IncrementID;
                         window.navigator.msSaveOrOpenBlob(data, fileName + '.pdf'); // IE is the worst!!!
                     } else {
                         // const iframe = document.createElement('iframe');
@@ -228,7 +230,7 @@ export class SalesOrderEffects {
                         const fileURL = window.URL.createObjectURL(blob);
                         const a: HTMLAnchorElement = document.createElement('a') as HTMLAnchorElement;
                         a.href = fileURL;
-                        a.download = String(payload.IncrementID);
+                        a.download = String(payload.salesorder.IncrementID);
                         document.body.appendChild(a);
                         a.target = '_blank';
                         a.click();
@@ -236,34 +238,13 @@ export class SalesOrderEffects {
                         document.body.removeChild(a);
                         URL.revokeObjectURL(fileURL);
                     }
-                    return (new salesOrderActions.DownloadSalesOrderPackingSlipSuccess(data))
+                    return (new salesOrderActions.DownloadSalesOrderPackingSlipSuccess(data));
                 }),
                 catchError(err => {
-                    of(new salesOrderActions.LoadSalesOrdersFail(err))
+                    of(new salesOrderActions.LoadSalesOrdersFail(err));
                     return EMPTY;
                 })
             )
         )
     );
-
-
-    // @Effect()
-    // editCurrentMember$: Observable<Action> = this.actions$.pipe(
-    //     ofType(settingActions.SettingActionTypes.EditCurrentMember),
-    //     map((action: settingActions.EditCurrentMember) => action.payload),
-    //     mergeMap((payload: Member) =>
-    //         this.settingService.editCurrentMember(payload).pipe(
-    //             map((member: Member) => {
-    //                 this.settingService.sendNotification({ type: 'success', title: 'Successfully Updated', content: '' });
-    //                 window.location.reload();
-    //                 return (new settingActions.EditCurrentMemberSuccess(member));
-    //             }),
-    //             catchError(err => {
-    //                 this.settingService.sendNotification({ type: 'error', title: 'Error', content: err });
-    //                 this.router.navigate(['/setting']);
-    //                 return of(new settingActions.EditCurrentMemberFail(err));
-    //             })
-    //         )
-    //     )
-    // );
 }

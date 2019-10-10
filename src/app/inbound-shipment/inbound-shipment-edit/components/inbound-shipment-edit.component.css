@@ -175,6 +175,9 @@
         flex-direction: column;
     }
 }
+.inbound-shipment-details {
+    height: 36px;
+}
 .inbound-shipment-details > div {
     min-width: 200px;
     display: inline-block;

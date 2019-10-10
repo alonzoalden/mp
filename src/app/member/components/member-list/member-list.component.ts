@@ -1,9 +1,6 @@
-import { Component, OnInit, ViewChild, Input, Output, EventEmitter } from '@angular/core';
+import { Component, OnInit, ViewChild, Input, Output, EventEmitter, OnChanges, SimpleChange, SimpleChanges } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
-import { CurrencyPipe } from '@angular/common';
-import { MatMenuModule, MatPaginator, MatSort, MatTableDataSource } from '@angular/material';
-import { MatMenu } from '@angular/material/menu';
-
+import { MatPaginator, MatSort, MatTableDataSource } from '@angular/material';
 import { Member } from '../../../shared/class/member';
 import { MemberService } from '../../member.service';
 import { AppService } from '../../../app.service';
@@ -14,62 +11,54 @@ import { AppService } from '../../../app.service';
     styleUrls: ['./member-list.component.css']
 })
 
-export class MemberListComponent implements OnInit {
-    @Input() currentMember: Member;
+export class MemberListComponent implements OnInit, OnChanges {
     @Input() userInfo: Member;
-    @Input() members: Member[];
+    @Input() membersMatTable: MatTableDataSource<Member>;
+    @Input() pendingDelete: boolean;
+    @Input() isLoading: boolean;
     @Input() errorMessage: string;
+    @Output() getMembers = new EventEmitter<Member>();
     @Output() editMemberRegistration = new EventEmitter<Member>();
+    @Output() deleteMember = new EventEmitter<Member>();
     
-    //errorMessage: string;
-
-    //members: Member[];
-    //currentMember: Member;
-
     displayedColumns = ['Menu', 'Email', 'IsPM', 'IsAdmin', 'IsConfirmed', 'IsActive', 'CreatedOn'];
     dataSource: any = null;
+    currentIndex: number;
 
     @ViewChild(MatPaginator, { static: true }) paginator: MatPaginator;
     @ViewChild(MatSort, { static: true }) sort: MatSort;
 
-    constructor(private route: ActivatedRoute,
-        private router: Router,    
+    
+    members: any[];
+
+    constructor(
+        private router: Router,
         private memberService: MemberService,
         private appService: AppService
      ) { }
 
-    ngOnInit() {
-        this.appService.getCurrentMember()
-            .subscribe(                    
-                (data) => {
-                    this.appService.currentMember = data;                     
-                    this.currentMember = data;
-                    if(this.currentMember && !this.currentMember.IsAdmin) {
-                        this.router.navigate(['/home']);
-                    }
-                    if (data.DefaultPageSize) {
-                        this.paginator.pageSize = data.DefaultPageSize;
-                    }
-                    else {
-                        this.paginator.pageSize = 100;
-                    }
-                },
-                (error: any) => {
-                    this.appService.sendNotification({ type: 'error', title: 'Error', content: error });
-                    this.errorMessage = <any>error;
-                }
-            );   
-
-        this.memberService.getMembers().subscribe(
-            (members: Member[]) => {
-                this.members = members;
-                this.refreshDataSource(members);
-            },
-            (error: any) => {
-                this.memberService.sendNotification({ type: 'error', title: 'Error', content: error });
-                this.errorMessage = <any>error;
+    ngOnChanges(changes: SimpleChanges): void {
+        if (changes.membersMatTable && !changes.membersMatTable.currentValue.data.length && changes.membersMatTable.firstChange) {
+            //this.getMembers.emit();
+        }
+        if (changes.membersMatTable && changes.membersMatTable.currentValue.data.length) {
+            this.membersMatTable.paginator = this.paginator;
+            this.membersMatTable.sort = this.sort;
+        }
+        if (changes.userInfo && changes.userInfo.currentValue) {
+            if (!changes.userInfo.currentValue.IsAdmin) {
+                this.router.navigate(['/home']);
             }
-        );
+            if (changes.userInfo.currentValue.DefaultPageSize) {
+                this.paginator.pageSize = changes.userInfo.currentValue.DefaultPageSize;
+            } else {
+                this.paginator.pageSize = 100;
+            }
+        }
+    }
+    ngOnInit() {
+        this.getMembers.emit();
+        this.applyFilter('');
     }
 
     refreshDataSource(members: Member[]) {
@@ -81,7 +70,7 @@ export class MemberListComponent implements OnInit {
     sendConfirmationMember(member: Member): void {
         this.memberService.sendConfirmation(member).subscribe(
             () => {
-                this.memberService.sendNotification({ type: 'success', title: 'Confirmation Sent', content: "" });
+                this.memberService.sendNotification({ type: 'success', title: 'Confirmation Sent', content: '' });
             },
             (error: any) => this.errorMessage = <any>error
         );
@@ -97,28 +86,15 @@ export class MemberListComponent implements OnInit {
         this.saveMember(member);
     }
 
-    deleteMember(member: Member): void {
-        const confirmation = confirm(`Delete ${member.Email}?`);        
+    onDeleteMember(member: Member): void {
+        const confirmation = confirm(`Delete ${member.Email}?`);
+        
         if (confirmation) {
-            this.memberService.deleteMember(member).subscribe(
-                () => {
-                    const foundIndex = this.members.findIndex(i => i.MemberID === member.MemberID);
-                    if (foundIndex > -1) {
-                        this.members.splice(foundIndex, 1);
-                    }
-                    this.refreshDataSource(this.members);
-                    this.memberService.sendNotification({ type: 'success', title: 'Successfully Deleted', content: "" });
-                },
-                (error: any) => {
-                    this.refreshDataSource(this.members);
-                    this.errorMessage = <any>error;
-                    this.memberService.sendNotification({ type: 'error', title: 'Error', content: this.errorMessage });
-                }
-            );
+            this.deleteMember.emit(member);
         }
     }
 
-    saveMember(member: Member): void {        
+    saveMember(member: Member): void {
         this.memberService.editMember(member).subscribe(
             () => this.onSaveComplete(`${member.Email} was saved`),
             (error: any) => this.errorMessage = <any>error
@@ -127,15 +103,15 @@ export class MemberListComponent implements OnInit {
     }
 
     onSaveComplete(message?: string): void {
-        this.memberService.sendNotification({ type: 'success', title: 'Successfully Updated', content: message });        
+        this.memberService.sendNotification({ type: 'success', title: 'Successfully Updated', content: message });
         // Navigate back to dashboard
         //this.router.navigate(['/dashboard']);
     }
 
     applyFilter(filterValue: string) {
-        this.dataSource.filter = filterValue.trim().toLowerCase();
-        if (this.dataSource.paginator) {
-            this.dataSource.paginator.firstPage();
+        this.membersMatTable.filter = filterValue.trim().toLowerCase();
+        if (this.membersMatTable.paginator) {
+            this.membersMatTable.paginator.firstPage();
         }
     }
 }

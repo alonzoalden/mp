@@ -23,11 +23,11 @@ export class ItemVariationDetailComponent implements OnInit {
     displayedColumns = [];
     columns = [];
     dataSource: any = null;
-        
+
     selectedItemAttributes: ItemAttribute[] = [];
     originalItemAttributes: ItemAttribute[] = [];
-    variationCount: number;    
-    
+    variationCount: number;
+
     private imageURL = environment.imageURL;
     isEdit: boolean = false;
     itemLists: ItemList[];
@@ -35,7 +35,7 @@ export class ItemVariationDetailComponent implements OnInit {
     pendingSave: boolean = false;
     itemAttributes: ItemAttribute[];
     tempitems = ['tools', 'cars'];
-    
+
     @ViewChild(MatPaginator, { static: true } ) paginator: MatPaginator;
     @ViewChild(MatSort, { static: true }) sort: MatSort;
 
@@ -46,11 +46,11 @@ export class ItemVariationDetailComponent implements OnInit {
                 private route: ActivatedRoute,
                 private itemService: ItemService,
                 public printDialog: MatDialog) {}
-    
+
     ngOnInit(): void {
         this.loading = true;
         const param = this.route.snapshot.params['id'];
-        
+
         if (param) {
             this.isEdit = true;
             this.subscriptionItemList = this.itemService.getItemList().subscribe(
@@ -62,7 +62,7 @@ export class ItemVariationDetailComponent implements OnInit {
                             this.setPrimaryItem(itemVariationListing);
                             this.itemVariationListing = itemVariationListing;
                             this.loading = false;
-                            
+
                             this.subscriptionItemAttributes = this.itemService.getItemAttributes().subscribe((itemAttributes) => {
                                 this.itemAttributes = itemAttributes;
                                 this.createAttributesVariationsList(itemVariationListing, itemAttributes);
@@ -72,13 +72,12 @@ export class ItemVariationDetailComponent implements OnInit {
                         error => {
                             this.loading = false;
                             this.itemService.sendNotification({ type: 'error', title: 'Error', content: this.errorMessage });
-                            this.router.navigate(['/item/variation-listing']);                
+                            this.router.navigate(['/item/variation-listing']);
                         }
-                    )
+                    );
                 }
-            )
-        }
-        else {
+            );
+        } else {
             this.subscriptionItemAttributes = this.itemService.getItemAttributes().subscribe((itemattributes) => {
                 this.itemAttributes = itemattributes;
                 this.itemVariationListing = this.itemService.defaultVariationListingInsert();
@@ -90,7 +89,7 @@ export class ItemVariationDetailComponent implements OnInit {
                 });
 
             });
-            
+
         }
     }
     refreshDataSource(data: any[]) {
@@ -107,18 +106,18 @@ export class ItemVariationDetailComponent implements OnInit {
     }
     openDialogSelectItem(item: ItemVariation, index: number) {
         const variationTitle = item.ItemVariationLines.map((attribute) => attribute.ItemAttributeVariationName).join(' / ');
-        
+
         const data = {
             itemLists: [...this.itemLists],
             variationTitle: variationTitle,
             variationListing: this.itemVariationListing,
             item: item
-        }
+        };
         const dialogRef = this.printDialog.open(ItemVariationSelectItemComponentDialog, {
             width: '700px',
             data: data
         });
-    
+
         dialogRef.afterClosed().subscribe(result => {
             if (result && result.ItemID) {
                 item.ItemID = result.ItemID;
@@ -126,8 +125,7 @@ export class ItemVariationDetailComponent implements OnInit {
                 item.ItemTPIN = result.TPIN;
                 item.ItemImagePath = result.ImagePath;
                 item.ItemVendorSKU = result.VendorSKU;
-            }
-            else if (!result) {
+            } else if (!result) {
                 item.ItemID = null;
                 item.ItemName = null;
                 item.ItemTPIN = null;
@@ -142,8 +140,8 @@ export class ItemVariationDetailComponent implements OnInit {
     }
     updateListing() {
         this.pendingSave = true;
-        const noPrimaryItemSelected = this.itemVariationListing.ItemVariations.every((itemvaration) => !itemvaration.IsPrimary)
-        if (noPrimaryItemSelected) this.itemVariationListing.PrimaryItemID = null;
+        const noPrimaryItemSelected = this.itemVariationListing.ItemVariations.every((itemvaration) => !itemvaration.IsPrimary);
+        if (noPrimaryItemSelected) { this.itemVariationListing.PrimaryItemID = null; }
         const itemMethod = this.isEdit ? 'editItemVariationListing' : 'addItemVariationListing';
             this.itemService[itemMethod](this.itemVariationListing).subscribe(
                 (listing: ItemVariationListing) => {
@@ -164,28 +162,28 @@ export class ItemVariationDetailComponent implements OnInit {
     openDialogItemVariation() {
         this.originalItemAttributes = [...this.selectedItemAttributes];
         this.selectedItemAttributes = this.selectedItemAttributes.filter((itemAttribute) => itemAttribute.SelectedItemAttributeVariations.length);
-        
+
         const data = {
             selectedItemAttributes: this.selectedItemAttributes,
             itemVariationListing: this.itemVariationListing,
             isEdit: true
-        }
+        };
         const dialogRef = this.printDialog.open(ItemVariationComponentDialog, {
             data: data
         });
-    
+
         dialogRef.afterClosed().subscribe((listing: ItemVariationListing) => {
-            if (!listing) return this.selectedItemAttributes = this.originalItemAttributes;
+            if (!listing) { return this.selectedItemAttributes = this.originalItemAttributes; }
             this.itemVariationListing = listing;
             this.createAttributesVariationsColumns(this.itemVariationListing);
         });
     }
     selectPrimaryItem(itemVariation) {
-        if (!itemVariation.ItemID) return;
-        if (itemVariation.IsPrimary) itemVariation.IsPrimary = !itemVariation.IsPrimary;
+        if (!itemVariation.ItemID) { return; }
+        if (itemVariation.IsPrimary) { itemVariation.IsPrimary = !itemVariation.IsPrimary; }
         this.itemVariationListing.ItemVariations.forEach((variation, i) => {
-            if (variation.ItemID !== itemVariation.ItemID) variation.IsPrimary = false;
-        })
+            if (variation.ItemID !== itemVariation.ItemID) { variation.IsPrimary = false; }
+        });
         this.itemVariationListing.PrimaryItemID = itemVariation.ItemID;
         this.itemVariationListing.ItemName = itemVariation.ItemName;
         this.itemVariationListing.ItemVendorSKU = itemVariation.ItemVendorSKU;
@@ -196,17 +194,17 @@ export class ItemVariationDetailComponent implements OnInit {
         itemVariationListing.ItemVariations.forEach((itemvariation) => {
             itemvariation.ItemVariationLines.forEach((itemVariationLine) => {
                 const itemAttribute = itemAttributes.find((attr) => attr.ItemAttributeID === itemVariationLine.ItemAttributeID);
-                if (!itemAttribute.SelectedItemAttributeVariations) itemAttribute.SelectedItemAttributeVariations = [];
-                const itemExists = itemAttribute.SelectedItemAttributeVariations.find((option)=> option.ItemAttributeVariationID === itemVariationLine.ItemAttributeVariationID);
+                if (!itemAttribute.SelectedItemAttributeVariations) { itemAttribute.SelectedItemAttributeVariations = []; }
+                const itemExists = itemAttribute.SelectedItemAttributeVariations.find((option) => option.ItemAttributeVariationID === itemVariationLine.ItemAttributeVariationID);
 
                 if (!itemExists) {
                     const itemToPush = itemAttribute.ItemAttributeVariations.find((attr) => attr.ItemAttributeVariationID === itemVariationLine.ItemAttributeVariationID);
                     itemAttribute.SelectedItemAttributeVariations.push(itemToPush);
                 }
-            })
+            });
         });
-        const selectedItemAttributes = itemAttributes.filter((item)=> {
-            if (item.SelectedItemAttributeVariations) return item;
+        const selectedItemAttributes = itemAttributes.filter((item) => {
+            if (item.SelectedItemAttributeVariations) { return item; }
         });
         this.selectedItemAttributes = selectedItemAttributes;
     }
@@ -215,15 +213,15 @@ export class ItemVariationDetailComponent implements OnInit {
         this.displayedColumns = itemVariationListing.ItemVariations[0].ItemVariationLines.map((itemVariationLine) => itemVariationLine.ItemAttributeName);
         this.displayedColumns.unshift('PrimaryItem');
         this.displayedColumns.push('ItemName');
-        let data = this.itemVariationListing.ItemVariations;
+        const data = this.itemVariationListing.ItemVariations;
         data.forEach((itemvariation) => itemvariation.ItemVariationLines.forEach((line) => itemvariation[line.ItemAttributeName] = line.ItemAttributeVariationName));
         this.refreshDataSource(data);
     }
     setPrimaryItem(listing) {
-        if (listing.PrimaryItemID && listing.PrimaryItemID != "" && listing.PrimaryItemID != 0) {
+        if (listing.PrimaryItemID && listing.PrimaryItemID != '' && listing.PrimaryItemID != 0) {
             listing.ItemVariations.forEach((itemvariation) => {
-                if (listing.PrimaryItemID === itemvariation.ItemID) itemvariation.IsPrimary = true;
-            })    
+                if (listing.PrimaryItemID === itemvariation.ItemID) { itemvariation.IsPrimary = true; }
+            });
         }
     }
     handlePage($event) {
@@ -231,8 +229,8 @@ export class ItemVariationDetailComponent implements OnInit {
         this.itemsPerPage = $event.pageSize;
     }
     ngOnDestroy() {
-        if (this.subscriptionItemList) this.subscriptionItemList.unsubscribe();
-        if (this.subscriptionItemVariationListing) this.subscriptionItemVariationListing.unsubscribe();
-        if (this.subscriptionItemAttributes) this.subscriptionItemAttributes.unsubscribe();
+        if (this.subscriptionItemList) { this.subscriptionItemList.unsubscribe(); }
+        if (this.subscriptionItemVariationListing) { this.subscriptionItemVariationListing.unsubscribe(); }
+        if (this.subscriptionItemAttributes) { this.subscriptionItemAttributes.unsubscribe(); }
     }
 }

@@ -1,7 +1,7 @@
 export class BatchUpdate {
     constructor(
         public BatchUpdateID: string,
-        public TableName: string,        
+        public TableName: string,
         public FieldName: string,
         public FieldLabel: string,
         public FieldTypeID: string,
@@ -15,7 +15,7 @@ export class BatchUpdate {
 export class FieldType {
     constructor(
         public FieldTypeID: string,
-        public Label: string,        
+        public Label: string,
         public Type: string
     ) {}
 }
@@ -23,7 +23,7 @@ export class FieldType {
 export class FieldDropDown {
     constructor(
         public FieldDropDownID: string,
-        public FieldTypeID: string,        
+        public FieldTypeID: string,
         public Label: string,
         public Value: string
     ) {}
@@ -32,7 +32,7 @@ export class FieldDropDown {
 export class BatchUpdateValue {
     constructor(
         public TableName: string,
-        public FieldName: string,        
+        public FieldName: string,
         public WhereField: string,
         public WhereValue: string,
         public UpdateValue: string,

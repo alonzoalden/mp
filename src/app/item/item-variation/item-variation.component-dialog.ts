@@ -1,6 +1,5 @@
 import { Component, OnInit, Inject, ViewChild, ElementRef } from '@angular/core';
 import { ItemAttribute, ItemVariationListing, ItemAttributeVariation, ItemVariation, ItemVariationLine } from '../../shared/class/item';
-
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material';
 import { ItemService } from '../item.service';
 import { Subscription } from 'rxjs';
@@ -17,10 +16,10 @@ export class ItemVariationComponentDialog implements OnInit {
     newAttribute: ItemAttribute;
     addItemVariationInvalid: boolean = true;
     canShowDefaultOldSettingsInput: boolean = false;
-    
+
     itemVariationListing: ItemVariationListing;
     originalData: ItemAttribute[];
-    
+
     @ViewChild('oldDefaultRef', { static: true }) oldDefaultRef: ElementRef;
 
     constructor(
@@ -41,33 +40,32 @@ export class ItemVariationComponentDialog implements OnInit {
                     this.newAttribute = this.attributesVariationsListData[0];
                 }
             });
-            
+
         if (this.data.isEdit) {
             this.itemVariationListing = this.data.itemVariationListing;
-        }
-        else {
+        } else {
             this.itemVariationListing = this.itemService.defaultVariationListingInsert();
         }
         this.validateItemVariation();
     }
 
     createAttribute() {
-        if (!this.newAttribute) return;
+        if (!this.newAttribute) { return; }
         const tab = this.attributesVariationsListData.find(x => x.ItemAttributeID === this.newAttribute.ItemAttributeID);
         this.selectedItemAttributes.push(tab);
         this.displayAvailableAttributes();
         this.clearNewAttributeField();
         this.validateItemVariation();
-        if (this.data.isEdit) this.canShowDefaultOldSettings(this.newAttribute);
+        if (this.data.isEdit) { this.canShowDefaultOldSettings(this.newAttribute); }
     }
-    
+
     displayAvailableAttributes() {
         if (this.selectedItemAttributes.length) {
-           let updatedListData = [...this.attributesVariationsListData];
+           const updatedListData = [...this.attributesVariationsListData];
            this.selectedItemAttributes.forEach((itemAttribute) => {
                const index = updatedListData.findIndex((item) => item.ItemAttributeID === itemAttribute.ItemAttributeID);
-               if (index > -1) updatedListData.splice(index, 1);
-           })
+               if (index > -1) { updatedListData.splice(index, 1); }
+           });
            this.attributesVariationsListData = updatedListData;
        }
    }
@@ -80,28 +78,28 @@ export class ItemVariationComponentDialog implements OnInit {
         );
    }
 
-    clearNewAttributeField() {    
+    clearNewAttributeField() {
         this.newAttribute = null;
     }
-    
+
     onCancelClick(): void {
         this.dialogRef.close();
     }
-    
+
     onAddItemVariationClick() {
         this.selectedItemAttributes = this.selectedItemAttributes.filter((itemAttribute:  ItemAttribute) => itemAttribute.SelectedItemAttributeVariations.length);
         const listing = this.createItemVariationListing(this.itemVariationListing, this.selectedItemAttributes);
         this.dialogRef.close(listing);
     }
 
-    onNgModelChange(tab) {        
+    onNgModelChange(tab) {
         if (tab.OldDefault && tab.OldDefault.ItemAttributeVariationID) {
-            const variationUnselected = tab.SelectedItemAttributeVariations.find((attributevariation) => { 
+            const variationUnselected = tab.SelectedItemAttributeVariations.find((attributevariation) => {
                 return attributevariation.ItemAttributeVariationID === tab.OldDefault.ItemAttributeVariationID;
-            })
-            if (!variationUnselected) tab.OldDefault = tab.SelectedItemAttributeVariations[0];
+            });
+            if (!variationUnselected) { tab.OldDefault = tab.SelectedItemAttributeVariations[0]; }
         }
-         
+
         if (this.canShowDefaultOldSettingsInput && !tab.OldDefault) {
             tab.OldDefault = tab.SelectedItemAttributeVariations[0];
         }
@@ -111,27 +109,27 @@ export class ItemVariationComponentDialog implements OnInit {
         this.validateItemVariation();
     }
     validateItemVariation() {
-        this.addItemVariationInvalid = !!this.selectedItemAttributes.find((item) => {  
+        this.addItemVariationInvalid = !!this.selectedItemAttributes.find((item) => {
             return (item && item.SelectedItemAttributeVariations && item.SelectedItemAttributeVariations.length === 1);
         });
         const noVariationsSelected = this.selectedItemAttributes.every((itemattribute) => {
-            if (!itemattribute.SelectedItemAttributeVariations) return true;
-            if (itemattribute.SelectedItemAttributeVariations) return itemattribute.SelectedItemAttributeVariations.length === 0;
+            if (!itemattribute.SelectedItemAttributeVariations) { return true; }
+            if (itemattribute.SelectedItemAttributeVariations) { return itemattribute.SelectedItemAttributeVariations.length === 0; }
         });
-        if (noVariationsSelected) this.addItemVariationInvalid = true;
+        if (noVariationsSelected) { this.addItemVariationInvalid = true; }
     }
 
     createItemVariationListing(itemVariationListing: ItemVariationListing, itemAttributes: ItemAttribute[]) {
-        
-        let itemInsertList = this.createProductVariations(itemVariationListing, itemAttributes);
 
-        let originalItemInsertList = itemVariationListing.ItemVariations;
-        let oldDefaults: ItemVariationLine[] = itemAttributes.filter((itemattribute) => itemattribute.OldDefault)
+        const itemInsertList = this.createProductVariations(itemVariationListing, itemAttributes);
+
+        const originalItemInsertList = itemVariationListing.ItemVariations;
+        const oldDefaults: ItemVariationLine[] = itemAttributes.filter((itemattribute) => itemattribute.OldDefault)
                                                              .map((item) => new ItemVariationLine(
                                                                  null, null, item.OldDefault.ItemAttributeVariationID,
                                                                  item.OldDefault.ItemAttributeID, null, item.OldDefault.Name,
                                                                  null, null));
-        
+
         this.updateItemVariationsWithOriginalInfo(originalItemInsertList, itemInsertList, oldDefaults);
         itemVariationListing.ItemVariations = itemInsertList;
         return itemVariationListing;
@@ -145,8 +143,8 @@ export class ItemVariationComponentDialog implements OnInit {
             const variationLines = itemVariationLines.map((variationline) => {
                 const attributeName = this.selectedItemAttributes.find((attribute) => attribute.ItemAttributeID === variationline.ItemAttributeID).Name;
                 return new ItemVariationLine(variationline.ItemVariationLineID, null, variationline.ItemAttributeVariationID, variationline.ItemAttributeID,
-                        attributeName, variationline.Name, variationline.UpdatedOn, variationline.CreatedOn )
-            })
+                        attributeName, variationline.Name, variationline.UpdatedOn, variationline.CreatedOn );
+            });
             return new ItemVariation(null, itemVariationListing.ItemVariationListingID, itemVariationListing.Name, null, null, null, null, null, null, null, null, variationLines, false);
         });
     }
@@ -158,7 +156,7 @@ export class ItemVariationComponentDialog implements OnInit {
                 const oldMatch = variationLinesToCompare.every((oldItemVariationLine) => {
                     return !!newItemVariation.ItemVariationLines.find((newItemVariationLine) => newItemVariationLine.ItemAttributeVariationID === oldItemVariationLine.ItemAttributeVariationID);
                 });
-                
+
                 if (defaultTo.length) {
                     if (oldMatch) {
                         newItemVariations[i] = oldItemVariation;
@@ -168,12 +166,11 @@ export class ItemVariationComponentDialog implements OnInit {
                         });
                         newItemVariations[i].IsPrimary = false;
                     }
-                }
-                else if (oldMatch && !defaultTo.length) {
+                } else if (oldMatch && !defaultTo.length) {
                     newItemVariations[i] = oldItemVariation;
-                    newItemVariations[i].IsPrimary = false;                    
+                    newItemVariations[i].IsPrimary = false;
                 }
-            })
+            });
         });
     }
     ngOnDestroy() {
@@ -181,15 +178,16 @@ export class ItemVariationComponentDialog implements OnInit {
     }
 
     private cartesian(args) {
-        var r = [], arg = args, max = arg.length-1;
+        const r = [], arg = args, max = arg.length - 1;
         function helper(arr, i) {
-            for (var j=0, l=arg[i].length; j<l; j++) {
-                var a = arr.slice(0); // clone arr
+            for (let j = 0, l = arg[i].length; j < l; j++) {
+                const a = arr.slice(0); // clone arr
                 a.push(arg[i][j]);
-                if (i==max)
+                if (i == max) {
                     r.push(a);
-                else
-                    helper(a, i+1);
+                } else {
+                    helper(a, i + 1);
+                }
             }
         }
         helper([], 0);

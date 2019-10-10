@@ -21,6 +21,12 @@ import { memberRouting } from './member.routing';
 import { MemberService } from './member.service';
 import { TranslateModule } from '@ngx-translate/core';
 
+/* NgRx */
+import { StoreModule } from '@ngrx/store';
+import { EffectsModule } from '@ngrx/effects';
+import { MemberEffects } from './state/member.effects';
+import { memberReducer } from './state/member.reducer';
+
 @NgModule({
     declarations: [
         MemberComponent,
@@ -55,7 +61,9 @@ import { TranslateModule } from '@ngx-translate/core';
         ToolModule,
         MatTooltipModule,
         MatDialogModule,
-        memberRouting
+        memberRouting,
+        StoreModule.forFeature('Member', memberReducer),
+        EffectsModule.forFeature([MemberEffects]),
     ],
     providers: [
         MemberService

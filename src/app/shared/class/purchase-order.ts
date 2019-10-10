@@ -34,7 +34,7 @@ export class PurchaseOrderLine {
         public CartonQuantity: number,
         public ReceivedQty: number,
         public UpdatedOn: string,
-        public CreatedOn: string,        
+        public CreatedOn: string,
 
         public PrevItemID: number,
         public pendingAdd: boolean
@@ -45,7 +45,7 @@ export class Carton {
     constructor(
         public CartonID: number,
         public PurchaseOrderID: number,
-        public PackingSlipNumber: string,  
+        public PackingSlipNumber: string,
         public CartonNumber: string,
         public Position: number,
         public Length: number,
@@ -106,7 +106,7 @@ export class CartonLine {
         public TPIN: string,
         public URLKey: string,                    // show
         public Quantity: number,               // show
-        public RemainingQuantity: number,               // show        
+        public RemainingQuantity: number,               // show
         public UpdatedOn: string,
         public CreatedOn: string,
 

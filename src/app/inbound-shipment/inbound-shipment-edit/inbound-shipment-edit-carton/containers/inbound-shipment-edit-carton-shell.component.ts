@@ -17,7 +17,7 @@ export class InboundShipmentEditCartonShellComponent  implements OnInit {
     isLoading$: Observable<boolean>;
     errorMessage$: Observable<string>;
     selectedCarton$: Observable<Carton>;
-    
+
     constructor(private store: Store<fromInboundShipment.State>) {}
 
     ngOnInit() {
@@ -42,7 +42,7 @@ export class InboundShipmentEditCartonShellComponent  implements OnInit {
     downloadCartonLabelCount(payload: { carton: Carton, count: number, border: string}): void {
         this.store.dispatch(new inboundShipmentActions.DownloadCartonLabelCount(payload));
     }
-    
-    
-    
+
+
+
 }

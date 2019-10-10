@@ -9,7 +9,7 @@ import { Member } from 'app/shared/class/member';
 // So the reference to ProductState cannot be added to app.state.ts directly.
 export interface State extends fromRoot.State {
     members: fromMember.MemberState;
-};
+}
 
 // Selector functions
 const getCompanyFeatureState = createFeatureSelector<fromMember.MemberState>('Member');
@@ -26,6 +26,10 @@ export const getMembersMatTable = createSelector(
     getCompanyFeatureState,
     state => new MatTableDataSource<Member>(state.members)
 );
+export const getIsLoading = createSelector(
+    getCompanyFeatureState,
+    state => state.isLoading
+);
 export const getPendingDelete = createSelector(
     getCompanyFeatureState,
     state => state.pendingDelete
@@ -34,7 +38,6 @@ export const pendingRegister = createSelector(
     getCompanyFeatureState,
     state => state.pendingRegister
 );
-
 export const getError = createSelector(
     getCompanyFeatureState,
     state => state.error

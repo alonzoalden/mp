@@ -135,10 +135,10 @@ export type CompanyAttachmentActions = LoadVendorAttachments
   | UploadUpdateVendorAttachment
   | UploadUpdateVendorAttachmentSuccess
   | UploadUpdateVendorAttachmentFail;
-  
-  
-  
-  
-  
-  
+
+
+
+
+
+
 

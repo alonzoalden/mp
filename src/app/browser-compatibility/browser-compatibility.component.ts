@@ -10,7 +10,7 @@ export class BrowserCompatibilityComponent implements OnInit {
 
     constructor(private deviceService: DeviceDetectorService, private router: Router) {
     }
-    
+
     ngOnInit() {
         const mainNav = (<HTMLElement>document.getElementById('main-nav'));
         if (mainNav) {

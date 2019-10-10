@@ -2,22 +2,17 @@ import { createSelector, createFeatureSelector, select } from '@ngrx/store';
 import * as fromRoot from '../../state/app.state';
 import * as fromItem from './item.reducer';
 import { MatTableDataSource } from '@angular/material';
-import { SalesOrder } from 'app/shared/class/sales-order';
-import { SalesOrderLine } from 'app/shared/class/sales-order-line';
-import { Fulfillment, FulfillmentSalesOrderLine } from 'app/shared/class/fulfillment';
-import { ItemOptionInsert, ItemSelectionInsert, ItemTierPrice, ItemTierPriceInsert, ItemCrossSellInsert, ItemRelatedProductInsert, ItemUpSell, ItemUpSellInsert, ItemAttachmentInsert, ItemImageInsert, ItemVideoInsert, ItemBatch, Item, ItemPrintLabel } from 'app/shared/class/item';
-import { ItemRelatedProduct } from 'app/shared/class/item-related-product';
+import { ItemOptionInsert, ItemSelectionInsert, ItemTierPriceInsert, ItemCrossSellInsert, ItemRelatedProductInsert, ItemUpSellInsert, ItemAttachmentInsert, ItemImageInsert, ItemVideoInsert, ItemBatch, Item, ItemPrintLabel } from 'app/shared/class/item';
 
 // Extends the app state to include the product feature.
 // This is required because products are lazy loaded.
 // So the reference to ProductState cannot be added to app.state.ts directly.
 export interface State extends fromRoot.State {
     item: fromItem.ItemState;
-};
+}
 
 // Selector functions
 const getItemFeatureState = createFeatureSelector<fromItem.ItemState>('Item');
-
 
 export const getVendorBrandList = createSelector(
     getItemFeatureState,
@@ -25,13 +20,8 @@ export const getVendorBrandList = createSelector(
 );
 export const getSimpleItemList = createSelector(
     getItemFeatureState,
-    state => state.simpleItemList 
+    state => state.simpleItemList
 );
-// export const getSalesOrdersListMatTable = createSelector(
-//     getItemFeatureState,
-//     state => new MatTableDataSource<SalesOrder>(state.salesOrders)
-// );
-
 export const getItem = createSelector(
     getItemFeatureState,
     state => state.item
@@ -49,119 +39,114 @@ export const getItemList = createSelector(
     state => state.itemList
 );
 export const getItemBundleOptions = createSelector(
-    getItemFeatureState, 
+    getItemFeatureState,
     state => state.item ? state.item.ItemOptions : []
-)
+);
 export const getItemBundleOptionsMatTable = createSelector(
-    getItemFeatureState, 
+    getItemFeatureState,
     state => new MatTableDataSource<ItemOptionInsert>(state.item ? state.item.ItemOptions : [])
-)
-
+);
 export const getSelectedBundleOption = createSelector(
-    getItemFeatureState, 
+    getItemFeatureState,
     state => state.selectedBundleOption
-)
+);
 export const getItemBundleOptionSelectionsMatTable = createSelector(
-    getItemFeatureState, 
+    getItemFeatureState,
     state => new MatTableDataSource<ItemSelectionInsert>(state.selectedBundleOptionSelectionList)
-)
-
+);
 export const getItemTierPrices = createSelector(
-    getItemFeatureState, 
+    getItemFeatureState,
     state => state.item ? state.item.ItemTierPrices : []
-)
+);
 export const getItemTierPricesMatTable = createSelector(
-    getItemFeatureState, 
-    // state => state.item ? new MatTableDataSource<ItemTierPriceInsert>(state.item.ItemTierPrices) : new MatTableDataSource<ItemTierPriceInsert>([])
-    state => new MatTableDataSource<ItemTierPriceInsert>(state.item.ItemTierPrices) 
-)
-
-
+    getItemFeatureState,
+    state => new MatTableDataSource<ItemTierPriceInsert>(state.item.ItemTierPrices)
+);
 export const getItemCategories = createSelector(
-    getItemFeatureState, 
+    getItemFeatureState,
     state => state.itemCategories
-)
+);
 export const getCategoryBreadCrumbs = createSelector(
-    getItemFeatureState, 
+    getItemFeatureState,
     state => state.categoryBreadCrumbs
-)
+);
 export const getAllItemList = createSelector(
-    getItemFeatureState, 
+    getItemFeatureState,
     state => state.allItemList
-)
+);
 export const getAllItem = createSelector(
-    getItemFeatureState, 
+    getItemFeatureState,
     state => state.allItem
-)
+);
 export const getItemRelatedProducts = createSelector(
-    getItemFeatureState, 
+    getItemFeatureState,
     state => state.item.ItemRelatedProducts
-)
+);
 export const getItemRelatedProductsMatTable = createSelector(
-    getItemFeatureState, 
-    state => new MatTableDataSource<ItemRelatedProductInsert>(state.item.ItemRelatedProducts) 
-)
+    getItemFeatureState,
+    state => new MatTableDataSource<ItemRelatedProductInsert>(state.item.ItemRelatedProducts)
+);
 export const getItemCrossSells = createSelector(
-    getItemFeatureState, 
+    getItemFeatureState,
     state => state.item.ItemCrossSells
-)
+);
 export const getItemCrossSellsMatTable = createSelector(
-    getItemFeatureState, 
-    state => new MatTableDataSource<ItemCrossSellInsert>(state.item.ItemCrossSells) 
-)
+    getItemFeatureState,
+    state => new MatTableDataSource<ItemCrossSellInsert>(state.item.ItemCrossSells)
+);
 export const getItemUpSells = createSelector(
-    getItemFeatureState, 
+    getItemFeatureState,
     state => state.item.ItemUpSells
-)
+);
 export const getItemUpSellsMatTable = createSelector(
-    getItemFeatureState, 
-    state => new MatTableDataSource<ItemUpSellInsert>(state.item.ItemUpSells) 
-)
+    getItemFeatureState,
+    state => new MatTableDataSource<ItemUpSellInsert>(state.item.ItemUpSells)
+);
 export const getVendorAttachmentList = createSelector(
-    getItemFeatureState, 
+    getItemFeatureState,
     state => state.vendorAttachmentsList
-)
+);
 export const getItemAttachmentsMatTable = createSelector(
-    getItemFeatureState, 
-    state => new MatTableDataSource<ItemAttachmentInsert>(state.item.ItemAttachments) 
-)
+    getItemFeatureState,
+    state => new MatTableDataSource<ItemAttachmentInsert>(state.item.ItemAttachments)
+);
 export const getItemImagesMatTable = createSelector(
-    getItemFeatureState, 
-    state => new MatTableDataSource<ItemImageInsert>(state.item.ItemImages) 
-)
+    getItemFeatureState,
+    state => new MatTableDataSource<ItemImageInsert>(state.item.ItemImages)
+);
 export const getItemVideosMatTable = createSelector(
-    getItemFeatureState, 
-    state => new MatTableDataSource<ItemVideoInsert>(state.item.ItemVideos) 
-)
+    getItemFeatureState,
+    state => new MatTableDataSource<ItemVideoInsert>(state.item.ItemVideos)
+);
 export const getCategoryAssignments = createSelector(
-    getItemFeatureState, 
+    getItemFeatureState,
     state => state.categoryAssignments
-)
+);
 export const getItemBatch = createSelector(
-    getItemFeatureState, 
+    getItemFeatureState,
     state => state.itemBatch
-)
+);
 export const getItemBatchMatTable = createSelector(
-    getItemFeatureState, 
-    state => new MatTableDataSource<ItemBatch>(state.itemBatch) 
-)
+    getItemFeatureState,
+    state => new MatTableDataSource<ItemBatch>(state.itemBatch)
+);
 
 export const getItemBatchItems = createSelector(
-    getItemFeatureState, 
+    getItemFeatureState,
     state => state.itemBatchItems
-)
+);
 export const getItemBatchItemsMatTable = createSelector(
-    getItemFeatureState, 
-    state => new MatTableDataSource<Item>(state.itemBatchItems) 
-)
+    getItemFeatureState,
+    state => new MatTableDataSource<Item>(state.itemBatchItems)
+);
 export const getItemBatchUpdates = createSelector(
-    getItemFeatureState, 
+    getItemFeatureState,
     state => state.itemBatchUpdates
-)
+);
 export const getItemPrintLabelsMatTable = createSelector(
-    getItemFeatureState, 
-    state => new MatTableDataSource<ItemPrintLabel>(state.itemPrintLabels) 
-)
+    getItemFeatureState,
+    state => new MatTableDataSource<ItemPrintLabel>(state.itemPrintLabels)
+);
 
 export const getIsLoading = createSelector(
     getItemFeatureState,

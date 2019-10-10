@@ -1,12 +1,12 @@
-import { Component, OnInit, ViewChild, Inject } from '@angular/core';
-import { ActivatedRoute, Router } from '@angular/router';
+import { Component, OnInit, Inject } from '@angular/core';
+import { ActivatedRoute } from '@angular/router';
 import { MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material';
 import { PurchaseOrderService } from '../../../purchase-order.service';
-import { PurchaseOrder, Carton, CartonInsert, CartonLine, CartonLineInsert } from '../../../../shared/class/purchase-order';
+import { PurchaseOrder } from '../../../../shared/class/purchase-order';
 
 @Component({
     selector: 'o-inbound-shipment-edit-shipping-instruction',
-    templateUrl: './inbound-shipment-edit-shipping-instruction.component.html',		
+    templateUrl: './inbound-shipment-edit-shipping-instruction.component.html',
     styleUrls: ['../../components/inbound-shipment-edit.component.css']
 })
 
@@ -16,10 +16,9 @@ export class InboundShipmentEditShippingInstructionComponent implements OnInit {
     purchaseorderid: number;
 
     constructor(private route: ActivatedRoute,
-                private router: Router,
                 private purchaseOrderService: PurchaseOrderService,
                 public cartonPrintDialog: MatDialog) { }
-    
+
     ngOnInit() {
         this.purchaseorderid = this.route.parent.snapshot.params['id'];
 
@@ -30,14 +29,14 @@ export class InboundShipmentEditShippingInstructionComponent implements OnInit {
             },
             (error: any) => this.errorMessage = <any>error
         );
-    }    
+    }
 
     openDialogPrintCartonLabel() {
         const dialogRef = this.cartonPrintDialog.open(InboundShipmentEditShippingInstructionComponentCartonPrintDialog, {
           width: '250px',
           data: this.purchaseorder
         });
-    
+
         dialogRef.afterClosed().subscribe(result => {
             this.onPrintAllCartonLabels(result.Border);
         });
@@ -100,7 +99,7 @@ export class InboundShipmentEditShippingInstructionComponentCartonPrintDialog im
 
     ngOnInit() {
         //this.quantity = this.data.LabelQty;
-        this.cartonLabelPrintDialog = new CartonAllLabelPrintDialog("yes");
+        this.cartonLabelPrintDialog = new CartonAllLabelPrintDialog('yes');
     }
 
     onCancelClick(): void {

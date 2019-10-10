@@ -1,7 +1,5 @@
 import { Component, OnInit, OnChanges, Input, SimpleChanges } from '@angular/core';
-import { ActivatedRoute, Router } from '@angular/router';
-import { Subscription } from 'rxjs';
-
+import { ActivatedRoute } from '@angular/router';
 import { PurchaseOrder } from '../../../../shared/class/purchase-order';
 import { InboundShippingMethod } from '../../../../shared/class/inbound-shipping-method';
 import { PurchaseOrderService } from '../../../purchase-order.service';
@@ -13,10 +11,6 @@ import { PurchaseOrderService } from '../../../purchase-order.service';
 })
 
 export class InboundShipmentEditShippingComponent implements OnInit, OnChanges {
-    private purchaseOrderSubscription: Subscription;
-
-    //errorMessage: string;
-    //purchaseorder: PurchaseOrder;
     inboundShippingMethod: InboundShippingMethod;
     origStatus: string;
 
@@ -24,10 +18,8 @@ export class InboundShipmentEditShippingComponent implements OnInit, OnChanges {
     @Input() errorMessage: string;
 
     constructor(private route: ActivatedRoute,
-        private router: Router,
-        private purchaseOrderService: PurchaseOrderService) { 
-        this.purchaseOrderService.currentStep = 3;
-    }
+        private purchaseOrderService: PurchaseOrderService
+    ) {}
 
     minDate = new Date(2000, 0, 1);
     maxDate = new Date(2020, 0, 1);
@@ -56,45 +48,6 @@ export class InboundShipmentEditShippingComponent implements OnInit, OnChanges {
     }
 
     ngOnInit(): void {
-        const param = this.route.parent.snapshot.params['id'];
-
-        // this.purchaseOrderSubscription = this.purchaseOrderService.getCurrentPurchaseOrderEdit(param).subscribe(
-        //     (purchaseorder) => {
-        //         this.purchaseOrderService.currentPurchaseOrderEdit = purchaseorder;
-        //         this.purchaseorder = this.purchaseOrderService.currentPurchaseOrderEdit;
-        //         this.origStatus = this.purchaseorder.Status;
-        //         if (this.purchaseorder.InboundShippingMethods && this.purchaseorder.InboundShippingMethods[0]) {
-        //             this.inboundShippingMethod = this.purchaseorder.InboundShippingMethods[0];
-        //             //this.purchaseOrderService.currentInboundShippingMethod = this.inboundShippingMethod;
-        //         } else {
-        //             if(!this.purchaseorder.InboundShippingMethods)
-        //             {
-        //                 this.purchaseorder.InboundShippingMethods = [];
-        //             }
-        //             const _temp = new InboundShippingMethod(null, param, '', '', '', null, null);
-        //             this.purchaseorder.InboundShippingMethods.push(_temp);
-        //             this.inboundShippingMethod = this.purchaseorder.InboundShippingMethods[0];
-        //             //this.purchaseOrderService.currentInboundShippingMethod = this.inboundShippingMethod;                    
-        //             //this.purchaseOrderService.currentInboundShippingMethods.push(this.inboundShippingMethod);
-        //         }
-        //     },
-        //     error => this.errorMessage = <any>error
-        // );        
-
-        // this.purchaseOrderService.getInboundShippingMethods(param).subscribe(
-        //     (inboundshippingmethods: InboundShippingMethod[]) => {
-        //         this.purchaseOrderService.currentInboundShippingMethods = inboundshippingmethods;
-        //         if (inboundshippingmethods && inboundshippingmethods[0]) {
-        //             this.inboundShippingMethod = inboundshippingmethods[0];
-        //             this.purchaseOrderService.currentInboundShippingMethod = inboundshippingmethods[0];
-        //         } else {
-        //             this.inboundShippingMethod = new InboundShippingMethod(null, param, '', '', '', null, null);
-        //             this.purchaseOrderService.currentInboundShippingMethod = this.inboundShippingMethod;
-        //             this.purchaseOrderService.currentInboundShippingMethods.push(this.inboundShippingMethod);
-        //         }
-        //     },
-        //     error => this.errorMessage = <any>error
-        // );
     }
 
     savePurchaseOrderShipment(): void {

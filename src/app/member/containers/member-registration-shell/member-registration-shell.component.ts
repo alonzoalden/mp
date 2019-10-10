@@ -16,20 +16,13 @@ import { Observable } from 'rxjs';
 })
 
 export class MemberRegistrationShellComponent implements OnInit {
-    //memberForm: any;
-
-    //errorMessage: string;
-    //member: Member;
-    //member: Member = new Member(null, '', '', '', '', true, '', '', true, true, true, true, '', 1, true, '', '', '', '', );
-    
-
-    userInfo$: Observable<Member>;
+    member$: Observable<Member>;
     errorMessage$: Observable<string>;
 
     constructor(private store: Store<fromMember.State>) {}
 
     ngOnInit(): void {
-        this.userInfo$ = this.store.pipe(select(fromUser.getCurrentUser));
+        this.member$ = this.store.pipe(select(fromMember.getMember));
         this.errorMessage$ = this.store.pipe(select(fromMember.getError));
     }
     getMemberByInviteGUID(guid: string): void {

@@ -21,7 +21,7 @@ export class CompanyInfoEffects {
             this.companyService.getVendorBrands().pipe(
                 map(vendorbrands => (new companyInfoActions.LoadVendorBrandsSuccess(vendorbrands))),
                 catchError(err => {
-                    of(new companyInfoActions.LoadVendorBrandsFail(err))
+                    of(new companyInfoActions.LoadVendorBrandsFail(err));
                     return EMPTY;
                 })
             )
@@ -44,7 +44,7 @@ export class CompanyInfoEffects {
                     return (new companyInfoActions.LoadCompanyInfoSuccess(companyinfo));
                 }),
                 catchError(err => {
-                    of(new companyInfoActions.LoadCompanyInfoFail(err))
+                    of(new companyInfoActions.LoadCompanyInfoFail(err));
                     return EMPTY;
                 })
             )
@@ -59,7 +59,7 @@ export class CompanyInfoEffects {
             this.companyService.getAddressCountry().pipe(
                 map(addresscountry => (new companyInfoActions.LoadAddressCountrySuccess(addresscountry))),
                 catchError(err => {
-                    of(new companyInfoActions.LoadAddressCountryFail(err))
+                    of(new companyInfoActions.LoadAddressCountryFail(err));
                     return EMPTY;
                 })
             )
@@ -75,7 +75,7 @@ export class CompanyInfoEffects {
             this.companyService.getAddressState(id).pipe(
                 map(addresscountry => (new companyInfoActions.LoadShippingAddressStateSuccess(addresscountry))),
                 catchError(err => {
-                    of(new companyInfoActions.LoadShippingAddressStateFail(err))
+                    of(new companyInfoActions.LoadShippingAddressStateFail(err));
                     return EMPTY;
                 })
             )
@@ -91,7 +91,7 @@ export class CompanyInfoEffects {
             this.companyService.getAddressState(id).pipe(
                 map(addresscountry => (new companyInfoActions.LoadBillingAddressStateSuccess(addresscountry))),
                 catchError(err => {
-                    of(new companyInfoActions.LoadBillingAddressStateFail(err))
+                    of(new companyInfoActions.LoadBillingAddressStateFail(err));
                     return EMPTY;
                 })
             )
@@ -106,12 +106,12 @@ export class CompanyInfoEffects {
         mergeMap((companyinfo) =>
             this.companyService.editCompanyInfoShippingAddress(companyinfo).pipe(
                 map(companyinfo => {
-                    this.companyService.sendNotification({ type: 'success', title: 'Successfully Updated', content: "Shipping address has been updated" }); 
-                    return (new companyInfoActions.UpdateCompanyInfoShippingAddressSuccess(companyinfo))
+                    this.companyService.sendNotification({ type: 'success', title: 'Successfully Updated', content: 'Shipping address has been updated' });
+                    return (new companyInfoActions.UpdateCompanyInfoShippingAddressSuccess(companyinfo));
                 }),
                 catchError(err => {
                     this.companyService.sendNotification({ type: 'error', title: 'Error', content: err });
-                    of(new companyInfoActions.UpdateCompanyInfoShippingAddressFail(err))
+                    of(new companyInfoActions.UpdateCompanyInfoShippingAddressFail(err));
                     return EMPTY;
                 })
             )
@@ -125,12 +125,12 @@ export class CompanyInfoEffects {
         mergeMap((companyinfo) =>
             this.companyService.editCompanyInfoBillingAddress(companyinfo).pipe(
                 map(companyinfo => {
-                    this.companyService.sendNotification({ type: 'success', title: 'Successfully Updated', content: "Billing address has been updated" }); 
-                    return (new companyInfoActions.UpdateCompanyInfoBillingAddressSuccess(companyinfo))
+                    this.companyService.sendNotification({ type: 'success', title: 'Successfully Updated', content: 'Billing address has been updated' });
+                    return (new companyInfoActions.UpdateCompanyInfoBillingAddressSuccess(companyinfo));
                 }),
                 catchError(err => {
                     this.companyService.sendNotification({ type: 'error', title: 'Error', content: err });
-                    of(new companyInfoActions.UpdateCompanyInfoBillingAddressFail(err))
+                    of(new companyInfoActions.UpdateCompanyInfoBillingAddressFail(err));
                     return EMPTY;
                 })
             )

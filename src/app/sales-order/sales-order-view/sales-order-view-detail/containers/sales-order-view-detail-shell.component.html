@@ -1,0 +1,11 @@
+<o-sales-order-detail
+    [userInfo]="userInfo$ | async"
+    [salesOrderLinesMatTable]="salesOrderLinesMatTable$ | async"
+    [salesOrder]="salesOrder$ | async"
+    [isLoading]="isLoading$ | async"
+    [isSalesOrderLinesLoading]="isSalesOrderLinesLoading$ | async"
+    [errorMessage]="errorMessage$ | async"
+    (getFulfilledBySalesOrder)="getFulfilledBySalesOrder($event)"
+    (getSalesOrderLineByVendor)="getSalesOrderLineByVendor($event)"
+    (downloadSalesOrderPackingSlip)="downloadSalesOrderPackingSlip($event)"
+></o-sales-order-detail>

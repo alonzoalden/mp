@@ -13,7 +13,7 @@ import { environment } from '../../environments/environment';
 
 export class HomeComponent implements OnInit {
 
-    loadAPI:Promise<any>;
+    loadAPI: Promise<any>;
     id: any;
     constructor(activatedRoute: ActivatedRoute,
             private router: Router,
@@ -26,30 +26,30 @@ export class HomeComponent implements OnInit {
         this.loadAPI = new Promise((resolve) => {
             this.loadScript();
             resolve(true);
-        })
+        });
     }
 
-    public loadScript() {        
-        var isFound = false;
-        var scripts = document.getElementsByTagName("script")
-        for (var i = 0; i < scripts.length; ++i) {
-            if (scripts[i].getAttribute('src') != null && scripts[i].getAttribute('src').includes("loader")) {
+    public loadScript() {
+        let isFound = false;
+        const scripts = document.getElementsByTagName('script');
+        for (let i = 0; i < scripts.length; ++i) {
+            if (scripts[i].getAttribute('src') != null && scripts[i].getAttribute('src').includes('loader')) {
                 isFound = true;
             }
         }
-    
+
         if (!isFound) {
-            var dynamicScripts = [""];
-    
-            for (var i = 0; i < dynamicScripts.length; i++) {
-                let node = document.createElement('script');
+            const dynamicScripts = [''];
+
+            for (let i = 0; i < dynamicScripts.length; i++) {
+                const node = document.createElement('script');
                 node.src = dynamicScripts [i];
                 node.type = 'text/javascript';
                 node.async = false;
                 node.charset = 'utf-8';
                 document.getElementsByTagName('head')[0].appendChild(node);
             }
-    
+
         }
     }
 
@@ -75,17 +75,17 @@ export class HomeComponent implements OnInit {
             }
         });
     }
-    
+
     detectBrowser() {
-        let isIEOrEdge = /msie\s|trident\/|edge\//i.test(window.navigator.userAgent);
+        const isIEOrEdge = /msie\s|trident\/|edge\//i.test(window.navigator.userAgent);
         //console.log(isIEOrEdge);
         //console.log(window.navigator.userAgent);
     }
-    
+
     redirectToDashboard() {
         // this.router.navigate(['/dashboard']);
         window.location.href = window.location.href.replace('/home', '/dashboard');
-        
+
     }
 
     get isLoggedin() {
@@ -114,7 +114,7 @@ export class HomeComponent implements OnInit {
         //         const browser = this.deviceService.getDeviceInfo().browser;
         //         if (this.appService.disabledBrowsers[browser] && data.country_code !== 'US') {
         //             this.router.navigate(['/browser-invalid']);
-        //         } 
+        //         }
         //         else {
         //             this.oauthService.initImplicitFlow();
         //         }
@@ -128,6 +128,6 @@ export class HomeComponent implements OnInit {
     }
 
     scrollToElement($element): void {
-        $element.scrollIntoView({behavior: "smooth", block: "start", inline: "nearest"});
+        $element.scrollIntoView({behavior: 'smooth', block: 'start', inline: 'nearest'});
     }
 }

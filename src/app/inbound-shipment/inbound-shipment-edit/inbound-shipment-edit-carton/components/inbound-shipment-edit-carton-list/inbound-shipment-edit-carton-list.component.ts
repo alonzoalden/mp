@@ -1,41 +1,28 @@
-import { Component, OnInit, ViewChild, Inject, OnChanges, ElementRef, Input, SimpleChanges, Output, EventEmitter } from '@angular/core';
+import { Component, OnInit, ViewChild, Inject, OnChanges, Input, SimpleChanges, Output, EventEmitter } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { MatSort, MatTableDataSource, MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material';
-
-import { PurchaseOrder, Carton, CartonInsert, CartonLine, CartonLineInsert, PurchaseOrderLineList } from '../../../../../shared/class/purchase-order';
+import { PurchaseOrder, Carton, CartonLine, PurchaseOrderLineList } from '../../../../../shared/class/purchase-order';
 import { PurchaseOrderService } from '../../../../purchase-order.service';
-import { TranslateService } from '@ngx-translate/core';
-
 @Component({
     selector: 'o-inbound-shipment-edit-carton-list',
     templateUrl: './inbound-shipment-edit-carton-list.component.html'
 })
 
 export class InboundShipmentEditCartonListComponent implements OnInit, OnChanges {
-    //cartons: Carton[];
-
     @Input() purchaseOrder: PurchaseOrder;
     @Input() errorMessage: string;
     @Output() getCartons = new EventEmitter<number>();
     @Output() setSelectedCarton = new EventEmitter<Carton>();
     @Output() downloadAllCartonLabel = new EventEmitter<PurchaseOrder>();
     @Output() downloadCartonLabelCount = new EventEmitter<{carton: Carton, count: number, border: string}>();
-    
 
-    //errorMessage: string;
-    //purchaseOrder: PurchaseOrder;
     purchaseorderid: number;
     pendingCopy: boolean;
-
     orderStatus: string;
     pendingAdd: boolean;
     currentIndex: number;
-
-    //displayedColumns = ['Add', 'Down', 'Position', 'Up', 'CartonNumber', 'Weight', 'Dimension', 'LabelQty', 'Label', 'Copy', 'Delete'];
-    //displayedColumns = ['Add', 'Down', 'Position', 'Up', 'Weight', 'Dimension', 'LabelQty', 'CartonNumber', 'TotalUnits', 'Actions'];
-    displayedColumns = ['Sort','Add', 'Position', 'Weight', 'Dimension', 'LabelQty', 'CartonNumber', 'TotalUnits', 'Actions'];
+    displayedColumns = ['Add', 'Position', 'Weight', 'Dimension', 'LabelQty', 'CartonNumber', 'TotalUnits', 'Actions'];
     dataSource: any = null;
-
     formDirty = false;
     canAdd = false;
     sortNum: number;
@@ -48,7 +35,7 @@ export class InboundShipmentEditCartonListComponent implements OnInit, OnChanges
                 private cartonPrintDialog: MatDialog) { }
 
     ngOnChanges(changes: SimpleChanges) {
-        if (changes.purchaseOrder && (!changes.purchaseOrder.currentValue.Cartons.length || changes.purchaseOrder.currentValue.Cartons[changes.purchaseOrder.currentValue.Cartons.length-1].CartonID)) {
+        if (changes.purchaseOrder && (!changes.purchaseOrder.currentValue.Cartons.length || changes.purchaseOrder.currentValue.Cartons[changes.purchaseOrder.currentValue.Cartons.length - 1].CartonID)) {
             this.setSelectedCarton.emit(null);
             this.addPendingLine();
             this.refreshDataSource(this.purchaseOrder.Cartons);
@@ -59,24 +46,21 @@ export class InboundShipmentEditCartonListComponent implements OnInit, OnChanges
             if (!this.purchaseOrder.Cartons || !this.purchaseOrder.Cartons.length) {
                 this.getCartons.emit(this.route.parent.snapshot.params['id']);
             }
-          
         }
-
     }
-        
+
     ngOnInit() {
         this.purchaseorderid = this.route.parent.snapshot.params['id'];
-        
     }
 
     getTotalQuantity(cartonLines: CartonLine[]) {
-        if (!cartonLines) return;
-        return cartonLines.filter(c => !c.pendingAdd).map(i => i.Quantity).reduce((a,b) => a+b, 0);
+        if (!cartonLines) { return; }
+        return cartonLines.filter(c => !c.pendingAdd).map(i => i.Quantity).reduce((a, b) => a + b, 0);
     }
 
     addPendingLine() {
         const _temp = new Carton(null, this.purchaseorderid, null, null, this.purchaseOrder.Cartons.length + 1, null, null, null, null, 4, null, null, [], true);
-        if (!this.purchaseOrder) return
+        if (!this.purchaseOrder) { return; }
         this.purchaseOrder.Cartons.push(_temp);
     }
 
@@ -116,7 +100,6 @@ export class InboundShipmentEditCartonListComponent implements OnInit, OnChanges
 
     saveAndPrint(carton: Carton, quantity: number, border: string) {
         const newPurchaseOrder = this.purchaseOrderService.copyPurchaseOrder(this.purchaseOrder);
-
         if (newPurchaseOrder.PurchaseOrderLines) {
             const pendingPurchaseOrderLineIndex = newPurchaseOrder.PurchaseOrderLines.findIndex(i => i.pendingAdd === true);
             if (pendingPurchaseOrderLineIndex > -1) {
@@ -132,7 +115,7 @@ export class InboundShipmentEditCartonListComponent implements OnInit, OnChanges
                 newPurchaseOrder.Cartons.forEach((c, i) => {
                     c.Position = i + 1;
 
-                    if(c.CartonLines) {
+                    if (c.CartonLines) {
                         const pendingCartonLineIndex = c.CartonLines.findIndex(i => i.pendingAdd === true);
                         if (pendingCartonLineIndex > -1) {
                             c.CartonLines.splice(pendingCartonLineIndex, 1);
@@ -175,7 +158,6 @@ export class InboundShipmentEditCartonListComponent implements OnInit, OnChanges
         this.move(this.purchaseOrder.Cartons, carton, 1);
         this.purchaseOrder.Cartons.forEach((value, i) => {
             value.Position = i + 1;
-            //this.saveCarton(value);
         });
         this.refreshDataSource(this.purchaseOrder.Cartons);
     }
@@ -184,7 +166,6 @@ export class InboundShipmentEditCartonListComponent implements OnInit, OnChanges
         this.move(this.purchaseOrder.Cartons, carton, -1);
         this.purchaseOrder.Cartons.forEach((value, i) => {
             value.Position = i + 1;
-            //this.saveCarton(value);
         });
         this.refreshDataSource(this.purchaseOrder.Cartons);
     }
@@ -193,11 +174,11 @@ export class InboundShipmentEditCartonListComponent implements OnInit, OnChanges
         const index = array.indexOf(element);
         const newIndex = index + delta;
         if (newIndex < 0  || newIndex === array.length) { return; } // Already at the top or bottom.
-        const indexes = [index, newIndex].sort((a,b)=>a-b); // Sort the indexes
+        const indexes = [index, newIndex].sort((a, b) => a - b); // Sort the indexes
         array.splice(indexes[0], 2, array[indexes[1]], array[indexes[0]]); // Replace from lowest index, two elements, reverting the order
     }
 
-    compare(a,b) {
+    compare(a, b) {
         return a - b;
     }
 
@@ -214,13 +195,11 @@ export class InboundShipmentEditCartonListComponent implements OnInit, OnChanges
         }
     }
 
-    isRequirementValid(carton: Carton)
-    {
+    isRequirementValid(carton: Carton) {
         if (carton && carton.Weight && carton.Length && carton.Width && carton.Height) {
             return true;
-        }
-        else {
-            this.purchaseOrderService.sendNotification({ type: 'error', title: 'Error', content: "Please enter the weight and dimension" });
+        } else {
+            this.purchaseOrderService.sendNotification({ type: 'error', title: 'Error', content: 'Please enter the weight and dimension' });
             return false;
         }
     }
@@ -247,10 +226,6 @@ export class InboundShipmentEditCartonListComponent implements OnInit, OnChanges
             this.refreshDataSource(this.purchaseOrder.Cartons);
 
             this.currentIndex = this.purchaseOrder.Cartons.length - 1;
-            // this.purchaseOrderService.currentCarton = null;
-            // this.purchaseOrderService.currentCartonLines = [];
-            this.purchaseOrderService.currentCarton.next(null);
-            this.purchaseOrderService.currentCartonLines.next([]);
             this.purchaseOrderService.currentCartonID = null;
 
             this.purchaseOrderService.updatePurchaseLineCartonQuantity(this.purchaseOrder);
@@ -258,7 +233,7 @@ export class InboundShipmentEditCartonListComponent implements OnInit, OnChanges
     }
 
     onEditCarton(carton: Carton) {
-        this.router.navigate(['/inbound-shipment', this.purchaseorderid, 'edit', 'carton', 'list', carton.CartonID,'edit']);
+        this.router.navigate(['/inbound-shipment', this.purchaseorderid, 'edit', 'carton', 'list', carton.CartonID, 'edit']);
     }
 
     onCopyCarton(carton: Carton, index: number) {
@@ -274,15 +249,14 @@ export class InboundShipmentEditCartonListComponent implements OnInit, OnChanges
             newCarton.CartonLines.push(newCartonLine);
         });
 
-        var isValid : boolean = true;
+        var isValid: boolean = true;
 
         newCarton.CartonLines.forEach((cartonline, i) => {
-            if(isValid && !this.isValidQuantity(cartonline)) {
+            if (isValid && !this.isValidQuantity(cartonline)) {
                 isValid = false;
             }
 
-            if(i == newCarton.CartonLines.length -1 && isValid)
-            {
+            if (i == newCarton.CartonLines.length - 1 && isValid) {
 
                 this.purchaseOrder.Cartons.splice(this.purchaseOrder.Cartons.length - 1, 0, newCarton);
 
@@ -293,67 +267,58 @@ export class InboundShipmentEditCartonListComponent implements OnInit, OnChanges
 
         this.purchaseOrderService.updatePurchaseLineCartonQuantity(this.purchaseOrder);
         this.pendingCopy = false;
-        
+
     }
 
     isValidQuantity(cartonline: CartonLine) {
 
         const foundPurchaseOrderLine = this.purchaseOrderService.currentPurchaseOrderEdit.PurchaseOrderLines.find(x => x.PurchaseOrderLineID === cartonline.PurchaseOrderLineID);
 
-        if(foundPurchaseOrderLine)
-        {
-            var RemainingQuantity : number = foundPurchaseOrderLine.Quantity;
+        if (foundPurchaseOrderLine) {
+            var RemainingQuantity: number = foundPurchaseOrderLine.Quantity;
 
             this.purchaseOrderService.currentPurchaseOrderEdit.Cartons.forEach((carton, ci) => {
                 carton.CartonLines.forEach((cartonline2, cli) => {
-                    if(cartonline2.PurchaseOrderLineID == cartonline.PurchaseOrderLineID) {
+                    if (cartonline2.PurchaseOrderLineID == cartonline.PurchaseOrderLineID) {
                         RemainingQuantity = RemainingQuantity - cartonline2.Quantity;
                     }
                 });
-            })
+            });
         }
 
-        if(RemainingQuantity - cartonline.Quantity < 0) {
-            this.purchaseOrderService.sendNotification({ type: 'error', title: 'Error', content: "Exceeded line quantity" });
+        if (RemainingQuantity - cartonline.Quantity < 0) {
+            this.purchaseOrderService.sendNotification({ type: 'error', title: 'Error', content: 'Exceeded line quantity' });
             return false;
-        }
-        else {
+        } else {
             return true;
         }
     }
 
     onShowCartonLine(carton: Carton, index: number) {
-        //if (!carton.CartonLines) carton.CartonLines = [];
         this.setSelectedCarton.emit(null);
-        if(this.pendingAdd) {
+        if (this.pendingAdd) {
             this.currentIndex = this.purchaseOrder.Cartons.length - 1;
             this.pendingAdd = false;
-        }
-        else {
+        } else {
             this.currentIndex = index;
-            //this.purchaseOrderService.currentCarton = carton;
-            //this.purchaseOrderService.currentCarton.next(carton);
 
             if (index !== this.purchaseOrder.Cartons.length - 1) {
                 this.setSelectedCarton.emit(carton);
             }
 
-            if(this.currentIndex != this.purchaseOrder.Cartons.length - 1) {
+            if (this.currentIndex != this.purchaseOrder.Cartons.length - 1) {
                 const foundIndex = carton.CartonLines.findIndex(i => i.pendingAdd === true);
                 if (foundIndex < 0) {
                     this.addPendingCartonLine(carton);
                 }
             }
 
-            //this.purchaseOrderService.currentCartonLines = carton.CartonLines;
             this.purchaseOrderService.currentCartonLines.next(carton.CartonLines);
             this.purchaseOrderService.currentCartonID = carton.CartonID;
 
-            if(!carton.CartonNumber && this.currentIndex != this.purchaseOrder.Cartons.length - 1) {
-                //this.purchaseOrder = this.purchaseOrderService.currentPurchaseOrderEdit;
+            if (!carton.CartonNumber && this.currentIndex != this.purchaseOrder.Cartons.length - 1) {
                 this.removePendingLine();
                 this.addPendingLine();
-                //this.refreshDataSource(this.purchaseOrderService.currentPurchaseOrderEdit.Cartons);
                 this.refreshDataSource(this.purchaseOrder.Cartons);
             }
 
@@ -417,7 +382,7 @@ export class InboundShipmentEditCartonListComponentCartonPrintDialog implements 
 
     ngOnInit() {
         //this.quantity = this.data.LabelQty;
-        this.cartonLabelPrintDialog = new CartonLabelPrintDialog(this.data.LabelQty, "yes");
+        this.cartonLabelPrintDialog = new CartonLabelPrintDialog(this.data.LabelQty, 'yes');
     }
 
     onCancelClick(): void {
@@ -458,13 +423,8 @@ export class InboundShipmentEditCartonListComponentCartonLineDialog implements O
         private purchaseOrderService: PurchaseOrderService,
         public dialogRef: MatDialogRef<InboundShipmentEditCartonListComponentCartonLineDialog>,
         @Inject(MAT_DIALOG_DATA) public data: Carton) {
-            //this.purchaseOrderService.currentCarton = data;
-            //this.purchaseOrderService.currentCartonLines = data.CartonLines;
-            this.purchaseOrderService.currentCarton.next(data)
-            this.purchaseOrderService.currentCartonLines.next(data.CartonLines)
-
-            //this.removePendingLine();
-            //this.addPendingLine();
+            this.purchaseOrderService.currentCarton.next(data);
+            this.purchaseOrderService.currentCartonLines.next(data.CartonLines);
 
             this.purchaseOrder = this.purchaseOrderService.currentPurchaseOrderEdit;
             this.purchaseorderid = this.purchaseOrder.PurchaseOrderID;
@@ -481,14 +441,12 @@ export class InboundShipmentEditCartonListComponentCartonLineDialog implements O
         );
         this.purchaseOrderService.currentCartonLines.subscribe(
             (cartonlines: CartonLine[]) => {
-                if(this.purchaseOrderService.newCartonLineIsSelected) {
-                    //this.currentIndex = cartonlines.length - 1;
+                if (this.purchaseOrderService.newCartonLineIsSelected) {
                     this.purchaseOrderService.newCartonLineIsSelected = false;
                 }
             },
             (error: any) => this.errorMessage = <any>error
         );
-        //this.currentIndex = this.purchaseOrderService.currentCarton.CartonLines.length -1;
 
         this.purchaseOrderService.getPurchaseOrderLineList(this.purchaseorderid).subscribe(
             (purchaseorderlinelist: PurchaseOrderLineList[]) => {
@@ -499,8 +457,6 @@ export class InboundShipmentEditCartonListComponentCartonLineDialog implements O
     }
 
     refreshDataSource(cartonlines: CartonLine[]) {
-        //cartonlines.forEach((c) => this.purchaseOrderService.updateCartonLineRemainingQuantity(c) );
-
         this.dataSource = new MatTableDataSource<CartonLine>(cartonlines);
         this.dataSource.sort = this.sort;
 
@@ -523,45 +479,42 @@ export class InboundShipmentEditCartonListComponentCartonLineDialog implements O
         if (index === this.cartonlines.length - 1) {
             this.canAdd = true;
         }
-        if(!this.existItem(cartonline.PurchaseOrderLineID)) {
+        if (!this.existItem(cartonline.PurchaseOrderLineID)) {
             const selectedItem = this.purchaseorderlineList.find(x => x.Value === cartonline.PurchaseOrderLineID);
             if (selectedItem) {
                 cartonline.ItemName = selectedItem.ItemName;
                 cartonline.ItemVendorSKU = selectedItem.VendorSKU;
                 cartonline.TPIN = selectedItem.TPIN;
 
-                if(this.isValidQuantity(cartonline))
-                {
+                if (this.isValidQuantity(cartonline)) {
                     this.purchaseOrderService.updatePurchaseLineCartonQuantity(this.purchaseOrder);
                     //this.purchaseOrderService.updateCartonLineRemainingQuantity(cartonline);
                 }
             }
-        }
-        else {
+        } else {
             cartonline.PurchaseOrderLineID = cartonline.PrevPurchaseOrderLineID;
             this.currentIndex = this.cartonlines.length - 1;
             this.refreshDataSource(this.cartonlines);
-            this.purchaseOrderService.sendNotification({ type: 'error', title: 'Error', content: "Item already exists" });
+            this.purchaseOrderService.sendNotification({ type: 'error', title: 'Error', content: 'Item already exists' });
         }
 
     }
 
-    existItem(purchaseorderlineID: number, isNew: boolean = false){
-        var counter: number = 0;
+    existItem(purchaseorderlineID: number, isNew: boolean = false) {
+        let counter: number = 0;
         this.cartonlines.forEach((value, index) => {
-                if(value.PurchaseOrderLineID === purchaseorderlineID) {
-                    if(isNew || index != this.cartonlines.length - 1) {
+                if (value.PurchaseOrderLineID === purchaseorderlineID) {
+                    if (isNew || index != this.cartonlines.length - 1) {
                         counter += 1;
                     }
                 }
             }
         );
-        if(counter > 1) { return true; }
-        else { return false; }
+        if (counter > 1) { return true; } else { return false; }
     }
 
     quantityChange(cartonline: CartonLine) {
-        if(this.isValidQuantity(cartonline)) {
+        if (this.isValidQuantity(cartonline)) {
             this.purchaseOrderService.updatePurchaseLineCartonQuantity(this.purchaseOrder);
         }
     }
@@ -570,40 +523,37 @@ export class InboundShipmentEditCartonListComponentCartonLineDialog implements O
 
         const foundPurchaseOrderLine = this.purchaseOrderService.currentPurchaseOrderEdit.PurchaseOrderLines.find(x => x.PurchaseOrderLineID === cartonline.PurchaseOrderLineID);
 
-        if(foundPurchaseOrderLine)
-        {
-            var RemainingQuantity : number = foundPurchaseOrderLine.Quantity;
+        if (foundPurchaseOrderLine) {
+            var RemainingQuantity: number = foundPurchaseOrderLine.Quantity;
 
             this.purchaseOrderService.currentPurchaseOrderEdit.Cartons.forEach((carton, ci) => {
                 carton.CartonLines.forEach((cartonline2, cli) => {
-                    if(isPendingAdd) {
-                        if(cartonline2.PurchaseOrderLineID == cartonline.PurchaseOrderLineID) {
+                    if (isPendingAdd) {
+                        if (cartonline2.PurchaseOrderLineID == cartonline.PurchaseOrderLineID) {
                             RemainingQuantity = RemainingQuantity - cartonline2.Quantity;
                         }
-                    }
-                    else {
-                        if(!cartonline2.pendingAdd) {
-                            if(cartonline2.PurchaseOrderLineID == cartonline.PurchaseOrderLineID) {
+                    } else {
+                        if (!cartonline2.pendingAdd) {
+                            if (cartonline2.PurchaseOrderLineID == cartonline.PurchaseOrderLineID) {
                                 RemainingQuantity = RemainingQuantity - cartonline2.Quantity;
                             }
                         }
                     }
                 });
-            })
+            });
         }
 
-        if(RemainingQuantity < 0) {
-            this.purchaseOrderService.sendNotification({ type: 'error', title: 'Error', content: "Exceeded line quantity" });
+        if (RemainingQuantity < 0) {
+            this.purchaseOrderService.sendNotification({ type: 'error', title: 'Error', content: 'Exceeded line quantity' });
             cartonline.Quantity = 0;
             return false;
-        }
-        else {
+        } else {
             return true;
         }
     }
     onAddCartonLine(cartonline: CartonLine) {
         if (this.isRequirementValid(cartonline)) {
-            if(!this.existItem(cartonline.PurchaseOrderLineID, true)) {
+            if (!this.existItem(cartonline.PurchaseOrderLineID, true)) {
                 this.pendingAdd = true;
                 cartonline.PrevPurchaseOrderLineID = cartonline.PurchaseOrderLineID;
                 cartonline.pendingAdd = false;
@@ -612,23 +562,21 @@ export class InboundShipmentEditCartonListComponentCartonLineDialog implements O
                 this.refreshDataSource(this.cartonlines);
                 this.purchaseOrderService.updatePurchaseLineCartonQuantity(this.purchaseOrder);
             } else {
-                this.purchaseOrderService.sendNotification({ type: 'error', title: 'Error', content: "Product already exists" });
+                this.purchaseOrderService.sendNotification({ type: 'error', title: 'Error', content: 'Product already exists' });
             }
 
         }
     }
     isRequirementValid(cartonline: CartonLine) {
         if (cartonline && cartonline.PurchaseOrderLineID) {
-            if(cartonline.Quantity > 0 && this.isValidQuantity(cartonline, true)) {
+            if (cartonline.Quantity > 0 && this.isValidQuantity(cartonline, true)) {
                 return true;
-            }
-            else {
-                this.purchaseOrderService.sendNotification({ type: 'error', title: 'Error', content: "Please enter quantity" });
+            } else {
+                this.purchaseOrderService.sendNotification({ type: 'error', title: 'Error', content: 'Please enter quantity' });
                 return false;
             }
-        }
-        else {
-            this.purchaseOrderService.sendNotification({ type: 'error', title: 'Error', content: "Please select an item" });
+        } else {
+            this.purchaseOrderService.sendNotification({ type: 'error', title: 'Error', content: 'Please select an item' });
             return false;
         }
     }
@@ -651,11 +599,10 @@ export class InboundShipmentEditCartonListComponentCartonLineDialog implements O
         this.refreshDataSource(this.cartonlines);
     }
     onEditCartonLine(index: number) {
-        if(this.pendingAdd) {
+        if (this.pendingAdd) {
             this.currentIndex = this.cartonlines.length - 1;
             this.pendingAdd = false;
-        }
-        else {
+        } else {
             this.purchaseOrderService.updatePurchaseLineCartonQuantity(this.purchaseOrder);
             this.currentIndex = index;
         }
@@ -670,7 +617,7 @@ export class InboundShipmentEditCartonListComponentCartonLineDialog implements O
         this.dialogRef.close();
     }
     scrollToElement($element): void {
-        $element.scrollIntoView({behavior: "smooth", block: "start", inline: "nearest"});
+        $element.scrollIntoView({behavior: 'smooth', block: 'start', inline: 'nearest'});
     }
 
 }

@@ -44,8 +44,8 @@ const COMPANY_ROUTES: Routes = [
                 path: 'trademark',
                 component: CompanyInfoTrademarkRegistrationShellComponent
             }
-        ]                
-        } ]        
+        ]
+        } ]
     }
 ];
 

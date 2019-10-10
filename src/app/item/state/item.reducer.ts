@@ -1,11 +1,8 @@
 import { ItemActionTypes, ItemActions } from './item.actions';
-import { SalesOrder } from '../../shared/class/sales-order';
-import { SalesOrderLine } from '../../shared/class/sales-order-line';
-import { Fulfillment, FulfillmentSalesOrderLine } from '../../shared/class/fulfillment';
-import { ItemInsert, ItemList, ItemOption, ItemOptionInsert, ItemSelectionInsert, ItemCategoryAssignment, Item, ItemCrossSellInsert, ItemUpSellInsert, ItemRelatedProductInsert, ItemBatch, ItemPrintLabel } from '../../shared/class/item';
+import { ItemInsert, ItemList, ItemOptionInsert, ItemSelectionInsert, ItemCategoryAssignment, Item, ItemBatch, ItemPrintLabel } from '../../shared/class/item';
 import { VendorBrand } from '../../shared/class/vendor-brand';
 import { Category } from 'app/shared/class/category';
-import { VendorAttachment, VendorAttachmentList } from 'app/shared/class/vendor-attachment';
+import { VendorAttachmentList } from 'app/shared/class/vendor-attachment';
 import { BatchUpdate } from 'app/shared/class/batch-update';
 
 // State for this feature (Item Variation)
@@ -16,9 +13,9 @@ export interface ItemState {
     item: ItemInsert | Item;
     items: Item[];
     selectedBundleOption: ItemOptionInsert;
-    selectedBundleOptionSelectionList: ItemSelectionInsert[],
-    itemCategories: Array<Category[]>,
-    categoryBreadCrumbs: Array<Category[]>,
+    selectedBundleOptionSelectionList: ItemSelectionInsert[];
+    itemCategories: Array<Category[]>;
+    categoryBreadCrumbs: Array<Category[]>;
     allItemList: ItemList[];
     allItem: Item;
     vendorAttachmentsList: VendorAttachmentList[];
@@ -28,11 +25,11 @@ export interface ItemState {
     itemBatchUpdates: BatchUpdate[];
     itemPrintLabels: ItemPrintLabel[];
     isLoading: boolean;
-    pendingDelete: boolean,
-    pendingSave: boolean,
-    pendingAdd: boolean,
+    pendingDelete: boolean;
+    pendingSave: boolean;
+    pendingAdd: boolean;
     error: string;
-};
+}
 
 const initialState: ItemState = {
     vendorBrandList: [],
@@ -62,7 +59,7 @@ const initialState: ItemState = {
 export function itemReducer(state = initialState, action: ItemActions): ItemState {
 
     switch (action.type) {
-        
+
         case ItemActionTypes.SetItem:
             return {
                 ...state,
@@ -87,7 +84,7 @@ export function itemReducer(state = initialState, action: ItemActions): ItemStat
                 vendorBrandList: [],
                 error: action.payload,
             };
-            
+
         case ItemActionTypes.LoadItemListSuccess:
             return {
                 ...state,
@@ -157,7 +154,7 @@ export function itemReducer(state = initialState, action: ItemActions): ItemStat
                 vendorAttachmentsList: [],
                 error: action.payload,
             };
-            
+
         case ItemActionTypes.LoadItemCategoryAssignmentsSuccess:
             return {
                 ...state,
@@ -184,17 +181,45 @@ export function itemReducer(state = initialState, action: ItemActions): ItemStat
                 item: state.item,
                 error: action.payload,
             };
-            
+        case ItemActionTypes.LoadItem:
+            return {
+                ...state,
+                isLoading: true,
+                error: '',
+            };
+
         case ItemActionTypes.LoadItemSuccess:
             return {
                 ...state,
+                isLoading: false,
                 item: action.payload,
                 error: '',
             };
         case ItemActionTypes.LoadItemFail:
             return {
                 ...state,
+                isLoading: false,
                 item: null,
+                error: action.payload,
+            };
+
+        case ItemActionTypes.AddItem:
+            return {
+                ...state,
+                pendingAdd: true,
+            };
+        case ItemActionTypes.AddItemSuccess:
+            return {
+                ...state,
+                itemBatchItems: [action.payload, ...state.itemBatchItems],
+                pendingAdd: false,
+                error: '',
+            };
+        case ItemActionTypes.AddItemFail:
+            return {
+                ...state,
+                //item: null,
+                pendingAdd: false,
                 error: action.payload,
             };
         case ItemActionTypes.EditItem:
@@ -212,7 +237,7 @@ export function itemReducer(state = initialState, action: ItemActions): ItemStat
         case ItemActionTypes.EditItemFail:
             return {
                 ...state,
-                item: null,
+                //item: null,
                 pendingSave: false,
                 error: action.payload,
             };
@@ -238,7 +263,7 @@ export function itemReducer(state = initialState, action: ItemActions): ItemStat
                 error: action.payload,
             };
 
-            
+
         case ItemActionTypes.LoadPendingItems:
             return {
                 ...state,
@@ -259,9 +284,15 @@ export function itemReducer(state = initialState, action: ItemActions): ItemStat
                 error: action.payload,
             };
         case ItemActionTypes.EditItemBatchSuccess:
+            action.payload.updateditems.forEach(updateditem => {
+                const _item = state.items.find(item => item.ItemID === updateditem.ItemID);
+                if (_item) {
+                    _item.Approval = 'Approved';
+                }
+            });
             return {
                 ...state,
-                itemBatch: action.payload,
+                itemBatch: action.payload.itembatch,
                 pendingSave: false,
                 error: '',
             };
@@ -293,7 +324,27 @@ export function itemReducer(state = initialState, action: ItemActions): ItemStat
                 isLoading: false,
                 error: action.payload,
             };
-
+        case ItemActionTypes.LoadMainItems:
+            return {
+                ...state,
+                isLoading: true,
+            };
+        case ItemActionTypes.LoadMainItemsSuccess:
+            return {
+                ...state,
+                items: action.payload,
+                itemBatchItems: action.payload,
+                isLoading: false,
+                error: '',
+            };
+        case ItemActionTypes.LoadMainItemsFail:
+            return {
+                ...state,
+                items: [],
+                itemBatchItems: [],
+                isLoading: false,
+                error: action.payload,
+            };
         case ItemActionTypes.LoadRefreshItemsSuccess:
             return {
                 ...state,
@@ -308,7 +359,7 @@ export function itemReducer(state = initialState, action: ItemActions): ItemStat
                 isLoading: false,
                 error: action.payload,
             };
-            
+
 
         case ItemActionTypes.LoadItemBatchUpdateSuccess:
             return {
@@ -334,17 +385,18 @@ export function itemReducer(state = initialState, action: ItemActions): ItemStat
                 ...state,
                 error: action.payload,
             };
-        
-        
-        
 
-            
-        // case ItemActionTypes.AddNewItemRelatedProductRow:
-        //     state.item.ItemRelatedProducts.push(action.payload);
-        // return {
-        //         ...state,
-        //         item: state.item
-        //     };
+        case ItemActionTypes.LoadVideoURLDetailSuccess:
+            return {
+                ...state,
+            };
+        case ItemActionTypes.LoadVideoURLDetailFail:
+            const _videoIndex = state.item.ItemVideos.findIndex(video => video.Label === action.payload.row.Label);
+            state.item.ItemVideos.splice(_videoIndex, 1);
+            return {
+                ...state,
+                error: action.payload.error,
+            };
         default:
             return state;
     }

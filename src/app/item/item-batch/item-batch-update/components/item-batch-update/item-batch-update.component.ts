@@ -10,6 +10,7 @@ import { Router } from '@angular/router';
 export class ItemBatchUpdateComponent implements OnChanges {
     @Input() errorMessage: string;
     @Input() userInfo: Member;
+    @Input() isLoading: Member;
 
     constructor(private router: Router) { }
 

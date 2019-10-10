@@ -1,0 +1,209 @@
+<div class="tab-content" *ngIf='item'>
+    <div class="tab-pane active">
+        <div class="panel-body p-w-none">
+            <form class="form-horizontal" #itemForm="ngForm">
+                <fieldset>
+                    <div class="ibox-title"><h5>{{ 'Item Price' | translate }}</h5></div>
+                    <div class="ibox-content">
+                        <!-- <div class="form-group" *ngIf="item.ItemType === 'bundle'">
+                            <label class="col-md-2 control-label" for="itemPriceTypeId">{{ 'Price Type' | translate }}</label>
+                            <div class="col-md-8">
+                                <select id="itemPriceTypeId" name="itemPriceType" class="form-control" [(ngModel)]=item.PriceType 
+                                    (change)="onPriceTypeChange()" #itemPriceTypeVar="ngModel">
+                                    <option value="Fixed">Fixed</option>
+                                    <option value="Dynamic">Dynamic</option>
+                                </select>  
+                            </div>
+                        </div> -->
+                        <div class="form-group" *ngIf="item.PriceType !== 'Dynamic'" [ngClass]="{'has-error': (itemPriceVar.touched || 
+                                                                                    itemPriceVar.dirty) && 
+                                                                                    !itemPriceVar.valid }">
+                            <label class="col-md-2 control-label" for="itemPriceId">{{ 'Selling Price' | translate }}</label>
+                            <div class="col-md-8">
+                                <input class="form-control" type="number" id="itemPriceId" placeholder="{{ 'Selling Price' | translate }} ({{ 'Required' | translate }})" 
+                                    step="0.01" onchange="this.value = parseFloat(this.value).toFixed(2);" onkeydown="return event.keyCode == 69 || event.keyCode == 189 ? false : true" min="0"
+                                    required [(ngModel)]="item.Price" name="itemPrice" #itemPriceVar="ngModel" />
+                                <span class="help-block" *ngIf="(itemPriceVar.touched ||
+                                                        itemPriceVar.dirty) &&
+                                                        itemPriceVar.errors">
+                                    <span *ngIf="itemPriceVar.errors.required">
+                                        {{ 'Selling Price' | translate }} {{ 'is required' | translate }}
+                                    </span>
+                                </span>
+                            </div>
+                        </div>
+                        <div class="form-group" *ngIf="!userInfo.IsDropship" [ngClass]="{'has-error': (itemFOBPriceVar.touched || 
+                                                                                    itemFOBPriceVar.dirty) && 
+                                                                                    !itemFOBPriceVar.valid }">
+                            <label class="col-md-2 control-label" for="itemFOBPriceId">{{ 'FOB Price' | translate }}</label>
+                            <div class="col-md-8">
+                                <input class="form-control" id="itemFOBPriceId" type="number" placeholder="{{ 'FOB Price' | translate }} ({{ 'Required' | translate }})" 
+                                    step="0.01" onchange="this.value = parseFloat(this.value).toFixed(2);" onkeydown="return event.keyCode == 69 || event.keyCode == 189 ? false : true" min="0"
+                                    required [(ngModel)]=item.FOBPrice name="itemFOBPrice" #itemFOBPriceVar="ngModel" />
+                                <span class="help-block" *ngIf="(itemFOBPriceVar.touched ||
+                                                        itemFOBPriceVar.dirty) &&
+                                                        itemFOBPriceVar.errors">
+                                    <span *ngIf="itemFOBPriceVar.errors.required">
+                                        {{ 'FOB Price' | translate }} {{ 'is required' | translate }}
+                                    </span>
+                                </span>
+                            </div>
+                        </div>
+                        <div class="form-group" *ngIf="userInfo.IsDropship" [ngClass]="{'has-error': (itemDropshipPriceVar.touched || 
+                                                                                    itemDropshipPriceVar.dirty) && 
+                                                                                    !itemDropshipPriceVar.valid }">
+                            <label class="col-md-2 control-label" for="itemDropshipPriceId">{{ 'Drop-ship Price' | translate }}</label>
+                            <div class="col-md-8">
+                                <input class="form-control" id="itemDropshipPriceId" type="number" placeholder="{{ 'Dropship Price' | translate }} ({{ 'Required' | translate }})" 
+                                    step="0.01" onchange="this.value = parseFloat(this.value).toFixed(2);" onkeydown="return event.keyCode == 69 || event.keyCode == 189 ? false : true" min="0"
+                                    required [(ngModel)]=item.DropshipPrice name="itemDropshipPrice" #itemDropshipPriceVar="ngModel" />
+                                <span class="help-block" *ngIf="(itemDropshipPriceVar.touched ||
+                                                        itemDropshipPriceVar.dirty) &&
+                                                        itemDropshipPriceVar.errors">
+                                    <span *ngIf="itemDropshipPriceVar.errors.required">
+                                        {{ 'Drop-ship Price' | translate }} {{ 'is required' | translate }}
+                                    </span>
+                                </span>
+                            </div>
+                        </div>
+                        <div class="form-group" *ngIf="item.EbayPrice">
+                            <label class="col-md-2 control-label" for="itemEbayPriceId">{{ 'Ebay Price' | translate }}</label>
+                            <div class="col-md-8">
+                                <div class="col-md-12" [ngClass]="{'grey-highlight': item.EbayPrice}">
+                                    {{item.EbayPrice | number: '1.2-2'}}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="ibox-title"><h5>{{ 'Add Tier Pricing' | translate }}</h5></div>
+                    <div class="ibox-content">
+                        <div class="form-group row">
+                            <div class="col-md-12">
+                                <div *ngIf="item.ItemTierPrices && item.ItemTierPrices.length > 0">
+                                    <table mat-table #table [dataSource]="itemTierPricesMatTable" style="width: 100%;">
+                                        <!-- Add Button -->
+                                        <ng-container matColumnDef="Add">
+                                            <th mat-header-cell *matHeaderCellDef width="45px"></th>
+                                            <td mat-cell *matCellDef="let itemTierPrice; let i = index">                                                 
+                                                <div *ngIf="i === item.ItemTierPrices.length-1">
+                                                    <a (click)='itemTierPrice.Quantity > 0  && itemTierPrice.Price > 0 ? onAddItemTierPrice(itemTierPrice) : return; formDirty = false;'>
+                                                        <span [matTooltip]="itemTierPrice.Quantity > 0  && itemTierPrice.Price > 0 ? ( 'Add' | translate ) : ( 'Required fields must be complete' | translate )"
+                                                            class="glyphicon glyphicon-plus fs-20" 
+                                                            [ngClass]="i === item.ItemTierPrices.length-1 && itemTierPrice.Quantity > 0  && itemTierPrice.Price > 0 ? 'green' : 'gray'">
+                                                        </span>
+                                                    </a>
+                                                </div>
+                                            </td>
+                                        </ng-container>
+                                        <!-- Quantity Column -->
+                                        <ng-container matColumnDef="Quantity">
+                                            <th mat-header-cell *matHeaderCellDef width="200px">{{ 'Quantity' | translate }}</th>
+                                            <td mat-cell *matCellDef="let itemTierPrice; let i = index">
+                                                <div *ngIf="i !== item.ItemTierPrices.length-1">
+                                                <!-- <div *ngIf="currentItemTierPriceIndex !== i && i !== item.ItemTierPrices.length-1"> -->
+                                                    {{itemTierPrice.Quantity}}
+                                                </div>
+                                                <div *ngIf="i === item.ItemTierPrices.length-1">
+                                                <!-- <div *ngIf="currentItemTierPriceIndex === i || i === item.ItemTierPrices.length-1"> -->
+                                                    <input #itemQuantityVar="ngModel" class="form-control" id="itemTierQuantityID" type="number"
+                                                        onkeydown="return event.keyCode == 69 || event.keyCode == 189 || event.keyCode == 190 ? false : true" min="0"
+                                                        [(ngModel)]=itemTierPrice.Quantity [ngModelOptions]="{standalone: true}"
+                                                        (focus)="formDirty = true;" (ngModelChange)="i === item.ItemTierPrices.length-1 && canAdd = true;"/>
+                                                </div>                                        
+                                            </td>
+                                        </ng-container>
+                                        <!-- Price Column -->
+                                        <ng-container matColumnDef="Price">
+                                            <th mat-header-cell *matHeaderCellDef width="200px">{{ 'Selling Price' | translate }}</th>
+                                            <td mat-cell *matCellDef="let itemTierPrice; let i = index">
+                                                <div *ngIf="currentItemTierPriceIndex !== i && i !== item.ItemTierPrices.length-1">
+                                                    {{itemTierPrice.Price | currency}}
+                                                </div>                                                
+                                                <div *ngIf="currentItemTierPriceIndex === i || i === item.ItemTierPrices.length-1">
+                                                    <input class="form-control" id="itemTierPriceID" type="number"
+                                                        step="0.01" onchange="this.value = parseFloat(this.value).toFixed(2);" onkeydown="return event.keyCode == 69 || event.keyCode == 189 ? false : true" min="0"
+                                                        [(ngModel)]=itemTierPrice.Price [ngModelOptions]="{standalone: true}"
+                                                        (focus)="formDirty = true;" (ngModelChange)="i === item.ItemTierPrices.length-1 && canAdd = true;"/>
+                                                </div>
+                                            </td>
+                                        </ng-container>
+                                        <!-- Remove Button -->
+                                        <ng-container matColumnDef="Remove">
+                                            <th mat-header-cell *matHeaderCellDef width="200px">{{ 'Remove' | translate }}</th>
+                                            <td mat-cell *matCellDef="let itemTierPrice; let i = index">
+                                                <div *ngIf="i !== item.ItemTierPrices.length-1">
+                                                    <a matTooltip="{{ 'Remove' | translate }}" attr.aria-label="{{ 'Remove' | translate }}" (click)='onRemoveItemTierPrice(i); currentItemTierPriceIndex = item.ItemTierPrices.length-1;'><span class="glyphicon glyphicon-trash"></span></a>
+                                                </div>
+                                                <div [hidden]="!formDirty && i === item.ItemTierPrices.length-1"> 
+                                                    <a matTooltip="{{ 'Clear' | translate }}" attr.aria-label="{{ 'Clear' | translate}}" (click)="clearFields(itemTierPrice);"><i *ngIf="i === item.ItemTierPrices.length-1" class="fa fa-eraser"></i></a>
+                                                </div>
+                                            </td>
+                                        </ng-container>
+
+                                        <tr mat-header-row *matHeaderRowDef="displayedColumns" ></tr>
+                                        <tr class="selected-row" mat-row *matRowDef="let row; let i = index; columns: displayedColumns" 
+                                            [ngStyle]="{'background-color': itemService.rowColorConditions(i, item.ItemTierPrices, currentItemTierPriceIndex, formDirty)}"
+                                            (click)="onEditItemTierPrice(i)"></tr>                                
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="ibox-title"><h5>{{ 'Special Price' | translate }}</h5></div>
+                    <div class="ibox-content">
+                        <div class="form-group" [ngClass]="{'has-error': (itemSpecialPriceVar.touched || 
+                                                                                itemSpecialPriceVar.dirty) && 
+                                                                                !itemSpecialPriceVar.valid }">
+                            <label class="col-md-2 control-label" for="itemSpecialPriceId">{{ 'Special Price' | translate }}</label>
+                            <div class="col-md-8">
+                                <input class="form-control" id="itemSpecialPriceId" type="number" placeholder="{{ 'Special Price' | translate }}" step="0.01" onchange="this.value = parseFloat(this.value).toFixed(2);" onkeydown="return event.keyCode == 69 || event.keyCode == 189 ? false : true" min="0"
+                                    [(ngModel)]=item.SpecialPrice name="itemSpecialPrice" #itemSpecialPriceVar="ngModel" />
+                                <span class="help-block" *ngIf="(itemSpecialPriceVar.touched ||
+                                                                            itemSpecialPriceVar.dirty) &&
+                                                                            itemSpecialPriceVar.errors">
+                                </span>
+                            </div>
+                        </div>
+
+                        <div class="form-group" [ngClass]="{'has-error': (itemSpecialFromVar.touched || 
+                                                                                itemSpecialFromVar.dirty) && 
+                                                                                !itemSpecialFromVar.valid }">
+                            <label class="col-md-2 control-label" for="itemSpecialFromId">{{ 'Special Price From' | translate }}</label>
+                            <div class="col-md-8">
+                                <mat-form-field class="example-full-width">
+                                    <input matInput [min]="minDate" [max]="maxDate" [matDatepicker]="pickerFrom" placeholder="{{ 'Choose a date' | translate }}" class="form-control" id="itemSpecialFromId"
+                                        [(ngModel)]="item.SpecialFrom" name="itemSpecialFrom" #itemSpecialFromVar="ngModel" />
+                                    <mat-datepicker-toggle matSuffix [for]="pickerFrom"></mat-datepicker-toggle>
+                                    <mat-datepicker #pickerFrom></mat-datepicker>
+                                </mat-form-field>
+                                <span class="help-block" *ngIf="(itemSpecialFromVar.touched ||
+                                                                            itemSpecialFromVar.dirty) &&
+                                                                            itemSpecialFromVar.errors">
+                                </span>
+                            </div>
+                        </div>
+
+                        <div class="form-group" [ngClass]="{'has-error': (itemSpecialToVar.touched || 
+                                                                                itemSpecialToVar.dirty) && 
+                                                                                !itemSpecialToVar.valid }">
+                            <label class="col-md-2 control-label" for="itemSpecialToId">{{ 'Special Price To' | translate }}</label>
+                            <div class="col-md-8">
+                                <mat-form-field class="example-full-width">
+                                    <input matInput [min]="minDate" [max]="maxDate" [matDatepicker]="pickerTo" placeholder="{{ 'Choose a date' | translate }}" class="form-control" id="itemSpecialToId"
+                                        [(ngModel)]="item.SpecialTo" name="itemSpecialTo" #itemSpecialToVar="ngModel" />
+                                    <mat-datepicker-toggle matSuffix [for]="pickerTo"></mat-datepicker-toggle>
+                                    <mat-datepicker #pickerTo></mat-datepicker>
+                                </mat-form-field>
+                                <span class="help-block" *ngIf="(itemSpecialToVar.touched ||
+                                                                            itemSpecialToVar.dirty) &&
+                                                                            itemSpecialToVar.errors">
+                
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                </fieldset>
+            </form>
+        </div>
+    </div>
+</div>
