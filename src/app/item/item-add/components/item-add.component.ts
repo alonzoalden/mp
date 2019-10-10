@@ -219,6 +219,7 @@ export class ItemAddComponent implements OnInit, OnChanges {
             this.item.Height &&
             this.item.Weight &&
             this.item.Length &&
+            this.item.PackagingType &&
             this.item.PackageWidth &&
             this.item.PackageHeight &&
             this.item.PackageWeight &&

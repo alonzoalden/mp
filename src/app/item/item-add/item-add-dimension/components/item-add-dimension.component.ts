@@ -24,7 +24,7 @@ export class ItemAddDimensionComponent implements OnInit {
     constructor() { }
     
     ngOnInit() {
-        this.item.PackagingType = this.packagingTypes[0].Value;
+        //this.item.PackagingType = this.packagingTypes[0].Value;
     }
 
 }
