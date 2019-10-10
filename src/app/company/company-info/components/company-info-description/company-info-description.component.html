@@ -148,7 +148,7 @@
                                 <select class="form-control" id="companyInfoShippingCountryId" name="companyInfoShippingCountry" 
                                     [(ngModel)]=companyInfo.ShippingCountryID  #companyInfoShippingCountryVar="ngModel" (change)="onShippingCountryChange()">                                    
                                     <option [value]="country.CountryID" *ngFor="let country of addressCountries">{{country.CountryName}}</option>
-                                </select>                     
+                                </select>
                             </div>
                         </div>
                         <div class="form-group">

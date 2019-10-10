@@ -34,7 +34,7 @@ export class Item {
         public PackageDimensionUOM: string,
         public PackageWeight: number,
         public PackageWeightUOM: string,
-
+        public PackagingType: string,
         public IsFreeShipping: boolean,
         public ShippingFee: number,
         public MetaTitle: string,
@@ -127,7 +127,7 @@ export class ItemInsert {
         public PackageDimensionUOM: string,
         public PackageWeight: number,
         public PackageWeightUOM: string,
-
+        public PackagingType: string,
         public IsFreeShipping: boolean,
         public ShippingFee: number,
         public MetaTitle: string,
@@ -200,7 +200,7 @@ export class ItemUpdate {
         public PackageDimensionUOM: string,
         public PackageWeight: number,
         public PackageWeightUOM: string,
-
+        public PackagingType: string,
         public IsFreeShipping: boolean,
         public ShippingFee: number,
         public MetaTitle: string,

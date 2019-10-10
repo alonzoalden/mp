@@ -10,7 +10,7 @@ import { InboundShipmentComponent } from './inbound-shipment.component';
 import { InboundShipmentListComponent } from './inbound-shipment-list/components/inbound-shipment-list.component';
 import { InboundShipmentEditComponent, InboundShipmentEditComponentItemPrintDialog } from './inbound-shipment-edit/components/inbound-shipment-edit.component';
 import { InboundShipmentEditLineListComponent, InboundShipmentEditLineComponentItemPrintDialog } from './inbound-shipment-edit/inbound-shipment-edit-line-list/components/inbound-shipment-edit-line-list.component';
-import { InboundShipmentEditCartonListComponent, InboundShipmentEditCartonListComponentCartonPrintDialog, InboundShipmentEditCartonListComponentCartonLineDialog } from './inbound-shipment-edit/inbound-shipment-edit-carton/components/inbound-shipment-edit-carton-list/inbound-shipment-edit-carton-list.component';
+import { InboundShipmentEditCartonListComponent, InboundShipmentEditCartonListComponentCartonPrintDialog } from './inbound-shipment-edit/inbound-shipment-edit-carton/components/inbound-shipment-edit-carton-list/inbound-shipment-edit-carton-list.component';
 import { InboundShipmentEditCartonLineListComponent } from './inbound-shipment-edit/inbound-shipment-edit-carton/components/inbound-shipment-edit-carton-line-list/inbound-shipment-edit-carton-line-list.component';
 import { InboundShipmentEditShippingInstructionComponent, InboundShipmentEditShippingInstructionComponentCartonPrintDialog } from './inbound-shipment-edit/inbound-shipment-edit-shipping-instruction/components/inbound-shipment-edit-shipping-instruction.component';
 import { InboundShipmentEditShippingComponent } from './inbound-shipment-edit/inbound-shipment-edit-shipping/components/inbound-shipment-edit-shipping.component';
@@ -42,7 +42,6 @@ import { ItemService } from '../item/item.service';
         InboundShipmentEditShippingComponent,
         InboundShipmentEditComponentItemPrintDialog,
         InboundShipmentEditCartonListComponentCartonPrintDialog,
-        InboundShipmentEditCartonListComponentCartonLineDialog,
         InboundShipmentEditLineComponentItemPrintDialog,
         InboundShipmentEditShippingInstructionComponentCartonPrintDialog,
         InboundShipmentListShellComponent,
@@ -57,7 +56,6 @@ import { ItemService } from '../item/item.service';
         , InboundShipmentEditLineListComponent
         , InboundShipmentEditComponentItemPrintDialog
         , InboundShipmentEditCartonListComponentCartonPrintDialog
-        , InboundShipmentEditCartonListComponentCartonLineDialog
         , InboundShipmentEditLineComponentItemPrintDialog
         , InboundShipmentEditShippingInstructionComponentCartonPrintDialog],
     imports: [

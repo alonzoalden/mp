@@ -1,6 +1,6 @@
 import { Component, OnInit, OnChanges, ViewChild, Input, Output, EventEmitter, SimpleChanges } from '@angular/core';
-import { Router, ActivatedRoute } from '@angular/router';
-import { MatSort, MatTableDataSource, MatDialog } from '@angular/material';
+import { ActivatedRoute } from '@angular/router';
+import { MatSort, MatTableDataSource } from '@angular/material';
 import { PurchaseOrder,  PurchaseOrderLineList, Carton, CartonLine} from '../../../../../shared/class/purchase-order';
 import { PurchaseOrderService } from '../../../../purchase-order.service';
 
@@ -17,23 +17,17 @@ export class InboundShipmentEditCartonLineListComponent implements OnInit, OnCha
     @Input() carton: Carton;
     @Input() errorMessage: string;
     @Output() getPurchaseOrderLineList = new EventEmitter<number>();
-
     pendingAdd: boolean;
     currentIndex: number;
-
     displayedColumns = ['Add', 'ProductDetails', 'RemainingQuantity', 'CartonQuantity', 'Delete'];
     dataSource: any = null;
-
     formDirty = false;
     canAdd = false;
     cartonlines: CartonLine[];
-
     @ViewChild(MatSort, { static: false }) sort: MatSort;
 
     constructor(private route: ActivatedRoute,
-                private router: Router,
-                private purchaseOrderService: PurchaseOrderService,
-                private inboundShipmentDialog: MatDialog) { }
+                private purchaseOrderService: PurchaseOrderService) { }
 
     ngOnChanges(changes: SimpleChanges) {
         if (changes.carton && changes.carton.currentValue && !changes.carton.currentValue.CartonLines) {
@@ -192,7 +186,6 @@ export class InboundShipmentEditCartonLineListComponent implements OnInit, OnCha
     }
 
     onDeleteComplete(cartonline: CartonLine, message?: string): void {
-        // this.purchaseOrderService.clearPurchaseOrderLines();
         const purchaseorderline = this.purchaseOrderService.currentPurchaseOrderLines.find(x => x.PurchaseOrderLineID === cartonline.PurchaseOrderLineID);
         purchaseorderline.CartonQuantity -= cartonline.Quantity;
         this.purchaseOrderService.replacePurchaseOrderLine(cartonline.PurchaseOrderLineID, purchaseorderline);
@@ -215,9 +208,6 @@ export class InboundShipmentEditCartonLineListComponent implements OnInit, OnCha
     clearFields(form) {
         this.formDirty = false;
         this.canAdd = false;
-        //form.Quantity = 1;
-        //form.PurcahseOrderLineID = null;
-        //this.linePurchaseOrderIDRef.nativeElement.value = "0: null";
         this.removePendingLine();
         this.addPendingLine();
     }

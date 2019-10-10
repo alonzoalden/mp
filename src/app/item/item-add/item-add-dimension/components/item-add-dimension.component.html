@@ -254,6 +254,29 @@
                             </div>
                         </div>
                     </div>
+                    <div class="ibox-title"><h5>{{ 'Package Type' | translate }}</h5></div>
+                    <div class="ibox-content">
+                        <div class="form-group" [ngClass]="{'has-error': (packagingTypeVar.touched || 
+                                                                        packagingTypeVar.dirty) && 
+                                                                        !packagingTypeVar.valid }">
+                            <label class="col-md-2 control-label">{{ 'Packaging Type' | translate }}</label>
+                            <div class="col-md-2">
+                                <select class="form-control" id="packagingTypeId" name="packagingType" 
+                                    [(ngModel)]=item.PackagingType #packagingTypeVar="ngModel">                                    
+                                    <option [value]="type.Value" *ngFor="let type of packagingTypes">{{type.Name}}</option>
+                                </select>
+                                
+                                    <span class="pull-right help-block animated fadeInLeft" *ngIf="(packagingTypeVar.touched ||
+                                                                                                    packagingTypeVar.dirty) &&
+                                                                                                    packagingTypeVar.errors">
+                                        <span *ngIf="itemPackageLengthVar.errors.required">
+                                            *{{ 'Packaging Type Required' | translate }}
+                                        </span>
+                                    </span>
+                                    
+                            </div>
+                        </div>
+                    </div>
                 </fieldset>
             </form>
         </div>
