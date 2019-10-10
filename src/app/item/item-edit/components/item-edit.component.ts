@@ -405,6 +405,7 @@ export class ItemEditComponent implements OnInit {
             this.item.ProductWeightUOM &&
             this.item.Weight &&
             this.item.Length &&
+            this.item.PackagingType &&
             this.item.PackageDimensionUOM &&
             this.item.PackageWidth &&
             this.item.PackageHeight &&

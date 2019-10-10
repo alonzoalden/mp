@@ -89,7 +89,7 @@ export class ItemService {
             this.duplicateItemInsert = null;
             return ItemInsert;
         } else {
-            return new ItemInsert(null, null, 'Toolots', 'simple', null, null, null, null, null, null, null, null, null, null, null, null, 'IN', null, 'LB', null, null, null, 'IN', null, 'LB', false, null, null, null, null, 'CN', '', null, false, null, 'CatalogAndSearch', null, null, null, null, null, 'NotSubmitted', false, null, null, true, false, [], [], [], [], [], [], [], [], [], []);
+            return new ItemInsert(null, null, 'Toolots', 'simple', null, null, null, null, null, null, null, null, null, null, null, null, 'IN', null, 'LB', null, null, null, 'IN', null, 'LB', null, false, null, null, null, null, 'CN', '', null, false, null, 'CatalogAndSearch', null, null, null, null, null, 'NotSubmitted', false, null, null, true, false, [], [], [], [], [], [], [], [], [], []);
         }
     }
 
@@ -186,7 +186,7 @@ export class ItemService {
         const newItem = new Item(item.ItemID, item.VendorID, item.TPIN, item.Name, item.SKU, item.VendorSKU, item.FulfilledBy, item.ItemType
             , item.Quantity, item.MerchantQuantity, item.ShipWithinDays, item.PriceType, item.Price, item.FOBPrice, item.DropshipPrice, item.EbayPrice, item.SpecialPrice, item.SpecialFrom, item.SpecialTo
             , item.Width, item.Height, item.Length, item.ProductDimensionUOM, item.Weight, item.ProductWeightUOM
-            , item.PackageWidth, item.PackageHeight, item.PackageLength, item.PackageDimensionUOM, item.PackageWeight, item.PackageWeightUOM
+            , item.PackageWidth, item.PackageHeight, item.PackageLength, item.PackageDimensionUOM, item.PackageWeight, item.PackageWeightUOM, item.PackagingType
             , item.IsFreeShipping, item.ShippingFee, item.MetaTitle, item.MetaKeywords, item.MetaDescription, item.Origin, item.Warranty
             , item.MerchantWarranty, item.AddProtectionPlan, item.URLKey, item.Visibility, item.Description, item.ShortDescription, item.TechnicalDetail, item.AdditionalInformation
             , item.VendorBrandID, item.RequestApproval, item.RejectionReason, item.Status, item.Approval, item.ImagePath, item.IsPartItem, item.PartImageRaw, item.PartImageFilePath, item.PartIsNewImage, item.ExcludeGoogleShopping, item.UpdatedOn, item.CreatedOn
@@ -301,7 +301,7 @@ export class ItemService {
         const newItemInsert = new ItemInsert(item.Name, item.VendorSKU, item.FulfilledBy, item.ItemType, item.MerchantQuantity, item.ShipWithinDays
             , item.PriceType, item.Price, item.FOBPrice, item.DropshipPrice, item.SpecialPrice, item.SpecialFrom, item.SpecialTo
             , item.Width, item.Height, item.Length, item.ProductDimensionUOM, item.Weight, item.ProductWeightUOM
-            , item.PackageWidth, item.PackageHeight, item.PackageLength, item.PackageDimensionUOM, item.PackageWeight, item.PackageWeightUOM
+            , item.PackageWidth, item.PackageHeight, item.PackageLength, item.PackageDimensionUOM, item.PackageWeight, item.PackageWeightUOM, item.PackagingType
             , item.IsFreeShipping, item.ShippingFee, item.MetaTitle, item.MetaKeywords, item.MetaDescription, item.Origin, item.Warranty, item.MerchantWarranty, item.AddProtectionPlan, item.URLKey
             , item.Visibility, item.Description, item.ShortDescription, item.TechnicalDetail, item.AdditionalInformation, item.VendorBrandID, item.Approval
             , item.IsPartItem, item.PartImageRaw, item.PartImageFilePath, item.PartIsNewImage, item.ExcludeGoogleShopping

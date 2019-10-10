@@ -1,0 +1,275 @@
+<h3 class="ibox-title dialog-title">{{ 'Request BOL for Sales Order: #' | translate }}{{salesOrder?.IncrementID}}
+    <span class="pull-right"><i (click)="onCloseClick()" class="fa fa-close" matTooltip="{{ 'Close' | translate }}" aria-label="Close Icon for Cancel Order"></i></span>
+</h3>
+    
+<div mat-dialog-content class="lightgray-bg animated fadeIn">
+    <div class="ibox-title"><h5>{{ 'Pick Up Date' | translate }}</h5></div>
+    <div class="ibox-content hide-y m-b-md">
+        <div class="row">
+            <div class="form-group col-md-12">
+                <div class="col-md-8">
+                    <mat-form-field class="example-full-width">
+                        <input matInput [min]="minDate" [max]="maxDate" [matDatepicker]="picker" placeholder="{{ 'Choose a date' | translate }}"
+                            class="form-control" 
+                            id="pickUpDate"
+                            [(ngModel)]="bolRequest.PickUpDate"
+                            name="pickUpDate" 
+                            #purchaseorderShipmentDateVar="ngModel" autofocus/>                    
+                        <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+                        <mat-datepicker #picker></mat-datepicker>
+                    </mat-form-field>                        
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="ibox-title"><h5>{{ 'BOL Request Lines' | translate }}</h5></div>
+    <div class="ibox-content m-b-md overflow-visible">
+        <div class="table-responsive overflow-visible">
+            <table mat-table #table [dataSource]="dataSource" class="table" matSort>
+                <!-- Add Button -->
+                <ng-container matColumnDef="Add">
+                    <th mat-header-cell *matHeaderCellDef width="45px"></th>
+                    <td mat-cell *matCellDef="let requestline; let i = index">                                                 
+                        <div *ngIf="i === bolRequest.BOLRequestLines.length-1">
+                            <a (click)='onAddBOLRequestLine(requestline); formDirty = false;'>
+                                <span [matTooltip]="requestline.PackageType ? ( 'Add' | translate ) : ( 'Required fields must be complete' | translate )"
+                                    class="glyphicon glyphicon-plus fs-20" [ngClass]="isUpBOLRequestLineRequirementValid(requestline) ? 'green' : 'gray'">
+                                </span>
+                            </a>
+                        </div>
+                    </td>
+                </ng-container>
+                <!-- Type Column -->
+                <ng-container matColumnDef="Type">
+                    <th mat-header-cell *matHeaderCellDef width="70px">{{ 'Type' | translate }}</th>
+                    <td mat-cell *matCellDef="let requestline" height="74px" class="wrap">
+                        <div >
+                            <select class="" (focus)="formDirty = true;" id="requestLineType" name="requestLineType" 
+                                [(ngModel)]=requestline.PackageType  #requestLineTypeVar="ngModel">                                    
+                                <option [value]="type.Value" *ngFor="let type of requestLineTypes">{{type.Value}}</option>
+                            </select>
+                        </div>
+                        {{requestline.Type}}
+                    </td>
+                </ng-container>
+                <!-- Weight Column -->
+                <ng-container matColumnDef="Weight">
+                    <th mat-header-cell *matHeaderCellDef width="70px">{{ 'Weight' | translate }}</th>
+                    <td mat-cell *matCellDef="let requestline; let i = index" class="wrap">
+                        <div *ngIf="currentIndex !== i && i !== bolRequest.BOLRequestLines.length-1">
+                            {{requestline.Weight}}
+                        </div>
+
+
+                        <div *ngIf="currentIndex === i || i === bolRequest.BOLRequestLines.length-1">
+                            <input class="form-control" id="requestLineWeight" type="number" placeholder="{{ 'Weight' | translate }}" 
+                                onkeydown="return event.keyCode == 69 || event.keyCode == 189 || event.keyCode == 190 ? false : true" min="0"
+                                [(ngModel)]=requestline.Weight [ngModelOptions]="{standalone: true}" (focus)="formDirty = true;"/>
+                        </div>
+                    </td>
+                    </ng-container>       
+                <!-- Dimension Column -->
+                <ng-container matColumnDef="Dimensions">
+                    <th mat-header-cell *matHeaderCellDef width="240px">{{ 'Dimension (in)' | translate }}</th>
+                    <td class="column-w-3input" mat-cell *matCellDef="let requestline; let i = index" >
+                        <div *ngIf="currentIndex !== i && i !== bolRequest.BOLRequestLines.length-1">
+                            {{requestline.Length}}" X {{requestline.Width}}" X {{requestline.Height}}"
+                        </div>
+                        <div *ngIf="currentIndex === i || i === bolRequest.BOLRequestLines.length-1">
+                            <input class="form-control" id="cartonLengthID" type="number" placeholder="{{ 'L' | translate }}"
+                                onkeydown="return event.keyCode == 69 || event.keyCode == 189 || event.keyCode == 190 ? false : true" min="0"
+                                [(ngModel)]=requestline.Length [ngModelOptions]="{standalone: true}"
+                                (focus)="formDirty = true;" (ngModelChange)="i = bolRequest.BOLRequestLines.length-1" />" X
+                            <input class="form-control" id="cartonWidthID" type="number" placeholder="{{ 'W' | translate }}"
+                                onkeydown="return event.keyCode == 69 || event.keyCode == 189 || event.keyCode == 190 ? false : true" min="0"
+                                [(ngModel)]=requestline.Width [ngModelOptions]="{standalone: true}"
+                                (focus)="formDirty = true;" (ngModelChange)="i = bolRequest.BOLRequestLines.length-1" />" X
+                            <input class="form-control" id="cartonHeightID" type="number" placeholder="{{ 'H' | translate }}"
+                                onkeydown="return event.keyCode == 69 || event.keyCode == 189 || event.keyCode == 190 ? false : true" min="0"
+                                [(ngModel)]=requestline.Height [ngModelOptions]="{standalone: true}"
+                                (focus)="formDirty = true;" (ngModelChange)="i = bolRequest.BOLRequestLines.length-1"/>" 
+                        </div>
+                    </td>
+                </ng-container>
+                <!-- Pieces Column -->
+                <ng-container matColumnDef="Pieces">
+                    <th mat-header-cell *matHeaderCellDef width="100px">{{ 'Pieces' | translate }}</th>
+                    <td mat-cell *matCellDef="let requestline; let i = index;" class="wrap">
+                        <div *ngIf="currentIndex !== i && i !== bolRequest.BOLRequestLines.length-1">
+                            {{requestline.Pieces}}
+                        </div>
+
+
+                        <div *ngIf="currentIndex === i || i === bolRequest.BOLRequestLines.length-1">
+                            <input class="form-control" id="requestLinePieces" type="number" placeholder="{{ 'Pieces' | translate }}" 
+                                onkeydown="return event.keyCode == 69 || event.keyCode == 189 || event.keyCode == 190 ? false : true" min="1"
+                                [(ngModel)]=requestline.Pieces [ngModelOptions]="{standalone: true}" (focus)="formDirty = true;"/>
+                        </div>
+                        
+                        
+                    </td>
+                </ng-container>
+                <!-- Remove Column -->
+                <ng-container matColumnDef="Remove">
+                    <th mat-header-cell *matHeaderCellDef width="100px">{{ 'Remove' | translate }}</th>
+                    <td mat-cell *matCellDef="let requestline; let i = index;">
+                        <div *ngIf="i !== bolRequest.BOLRequestLines.length-1">    
+                            <a (click)="onRemoveRequestline(requestline, i); curretIndex = bolRequest.BOLRequestLines.length-1;">
+                                <span matTooltip="{{ 'Remove' | translate }}" attr.aria-label="{{ 'Remove' | translate}}" class="glyphicon glyphicon-trash"></span>
+                            </a>
+                        </div>
+                        <div [hidden]="!formDirty && i === bolRequest.BOLRequestLines.length-1">
+                            <a matTooltip="{{ 'Clear' | translate }}" attr.aria-label="{{ 'Clear' | translate}}" (click)="clearFields(requestline);"><i *ngIf="i === bolRequest.BOLRequestLines.length-1" class="fa fa-eraser"></i></a>
+                        </div>
+                    </td>
+                </ng-container>
+
+                <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+                <tr [ngStyle]="{'background-color': salesorderService.rowColorConditions(i, bolRequest.BOLRequestLines, currentIndex, formDirty)}"
+                    mat-row *matRowDef="let row; let i = index; columns: displayedColumns;" (click)='onEditRequestLine(i);'>
+                </tr>
+            </table>
+        </div>
+    </div>
+    
+    <div class="ibox-title"><h5>{{ 'Shipping Address' | translate }}</h5></div>
+    <div class="ibox-content m-b-md" style="min-height: 379px;">
+        <form class="form-horizontal animated fadeIn" #companyInfoForm="ngForm" *ngIf="companyInfo">
+            <fieldset>
+                <div class="form-group" [ngClass]="{'has-error': (companyNameVar.touched || 
+                                                                companyNameVar.dirty) && 
+                                                                !companyNameVar.valid }">
+                    <label class="col-md-2 control-label">{{ 'Company Name' | translate }}</label>
+                    <div class="col-md-8">
+                        <input class="form-control" id="companyNameId" type="text" placeholder="{{ 'Company Name' | translate }}"
+                            [(ngModel)]=bolRequest.Name name="companyName" #companyNameVar="ngModel" />
+                        <span class="help-block" *ngIf="(companyNameVar.touched ||
+                                                        companyNameVar.dirty) &&
+                                                        companyNameVar.errors">
+                            <span *ngIf="companyNameVar.errors.required">
+                                {{ 'Company Name' | translate }} {{ 'is required' | translate }}
+                            </span>
+                        </span>
+                    </div>                        
+                </div>
+                <div class="form-group" [ngClass]="{'has-error': (shippingAddressVar.touched || 
+                                                                shippingAddressVar.dirty) && 
+                                                                !shippingAddressVar.valid }">
+                    <label class="col-md-2 control-label">{{ 'Address' | translate }}</label>
+                    <div class="col-md-8">
+                        <input class="form-control" id="shippingAddressId" type="text" placeholder="{{ 'Address' | translate }} ({{ 'Required' | translate }})" required 
+                            [(ngModel)]=bolRequest.AddressLine1 name="shippingAddress" #shippingAddressVar="ngModel" />
+                        <span class="help-block" *ngIf="(shippingAddressVar.touched ||
+                                                        shippingAddressVar.dirty) &&
+                                                        shippingAddressVar.errors">
+                            <span *ngIf="shippingAddressVar.errors.required">
+                                {{ 'Address' | translate }} {{ 'is required' | translate }}
+                            </span>
+                        </span>
+                    </div>                        
+                </div>
+                <div class="form-group">
+                    <label class="col-md-2 control-label">{{ 'Address 2' | translate }}</label>
+                    <div class="col-md-8">
+                        <input class="form-control" id="shippingAddress2Id" type="text" placeholder="{{ 'Address 2' | translate }}" [(ngModel)]=bolRequest.AddressLine2 name="shippingAddress2" #shippingAddress2Var="ngModel" />
+                    </div>                        
+                </div>
+                <div class="form-group" [ngClass]="{'has-error': (shippingCityVar.touched || 
+                                                                shippingCityVar.dirty) && 
+                                                                !shippingCityVar.valid }">
+                    <label class="col-md-2 control-label">{{ 'City' | translate }}</label>
+                    <div class="col-md-8">
+                        <input class="form-control" id="shippingCityId" type="text" placeholder="{{ 'City' | translate }} ({{ 'Required' | translate }})" required
+                            [(ngModel)]=bolRequest.City name="shippingCity" #shippingCityVar="ngModel" />     
+                        <span class="help-block" *ngIf="(shippingCityVar.touched ||
+                                                        shippingCityVar.dirty) &&
+                                                        shippingCityVar.errors">
+                            <span *ngIf="shippingCityVar.errors.required">
+                                {{ 'City' | translate }} {{ 'is required' | translate }}
+                            </span>
+                        </span>                   
+                    </div>
+                </div>
+                <div class="form-group"
+                    *ngIf="bolRequest && bolRequest.CountryID != 'US' && bolRequest.CountryID != 'CA'"
+                    [ngClass]="{'has-error': (shippingStateVar.touched || 
+                                                        shippingStateVar.dirty) && 
+                                                        !shippingStateVar.valid }">
+                    <label class="col-md-2 control-label">{{ 'State/Province' | translate }}</label>
+                    <div class="col-md-8">
+                        <input class="form-control" id="shippingStateId" type="text" placeholder="{{ 'State/Province' | translate }} ({{ 'Required' | translate }})" required 
+                            [(ngModel)]=bolRequest.State name="shippingState" #shippingStateVar="ngModel" />    
+                        <span class="help-block" *ngIf="(shippingStateVar.touched ||
+                                                        shippingStateVar.dirty) &&
+                                                        shippingStateVar.errors">
+                            <span *ngIf="shippingStateVar.errors.required">
+                                {{ 'State/Province' | translate }} {{ 'is required' | translate }}
+                            </span>
+                        </span>                                                   
+                    </div>
+                </div>
+                <div class="form-group" *ngIf="companyInfo && (companyInfo.ShippingCountryID == 'US' || companyInfo.ShippingCountryID == 'CA')">
+                    <label class="col-md-2 control-label">{{ 'State/Province' | translate }}</label>
+                    <div class="col-md-8">
+                        <div>
+                            <select class="form-control" id="companyInfoShippingStateId" name="companyInfoShippingState" 
+                                [(ngModel)]=bolRequest.State  #companyInfoShippingStateVar="ngModel">                                    
+                                <option [value]="state.StateName" *ngFor="let state of shippingAddressStates">{{state.StateName}}</option>
+                            </select>
+                        </div>                                                     
+                    </div>
+                </div>
+                <div class="form-group" [ngClass]="{'has-error': (shippingZipVar.touched || 
+                                                                shippingZipVar.dirty) && 
+                                                                !shippingZipVar.valid }">
+                    <label class="col-md-2 control-label">{{ 'Zip/Postal Code' | translate }}</label>
+                    <div class="col-md-8">
+                        <input class="form-control" id="shippingZipId" type="text" placeholder="{{ 'Zip/Postal Code' | translate }} ({{ 'Required' | translate }})" required 
+                            [(ngModel)]=bolRequest.PostalCode name="shippingZip" #shippingZipVar="ngModel" />    
+                        <span class="help-block" *ngIf="(shippingZipVar.touched ||
+                                                        shippingZipVar.dirty) &&
+                                                        shippingZipVar.errors">
+                            <span *ngIf="shippingZipVar.errors.required">
+                                {{ 'Zip/Postal Code' | translate }} {{ 'is required' | translate }}
+                            </span>
+                        </span>                      
+                    </div>
+                </div>
+                <div class="form-group" [ngClass]="{'has-error': (phoneNumberVar.touched || 
+                                                                phoneNumberVar.dirty) && 
+                                                                !phoneNumberVar.valid }">
+                    <label class="col-md-2 control-label">{{ 'Phone Number' | translate }}</label>
+                    <div class="col-md-8">
+                        <input class="form-control" id="phoneNumber" type="text" placeholder="{{ 'Phone Number' | translate }} ({{ 'Required' | translate }})" required 
+                            [(ngModel)]=bolRequest.PhoneNumber name="phoneNumber" #phoneNumberVar="ngModel" />    
+                        <span class="help-block" *ngIf="(phoneNumberVar.touched ||
+                                                        phoneNumberVar.dirty) &&
+                                                        phoneNumberVar.errors">
+                            <span *ngIf="phoneNumberVar.errors.required">
+                                {{ 'Phone Number' | translate }} {{ 'is required' | translate }}
+                            </span>
+                        </span>                      
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-md-2 control-label">{{ 'Country/Region' | translate }}</label>
+                    <div class="col-md-8"> 
+                        <select class="form-control" id="countryID" name="countryID" 
+                            [(ngModel)]=bolRequest.CountryID  #countryIDVar="ngModel" (change)="onShippingCountryChange()">                                    
+                            <option [value]="country.CountryID" *ngFor="let country of addressCountries">{{country.CountryName}}</option>
+                        </select>                   
+                    </div>
+                </div>
+            </fieldset>
+        </form>
+    </div>
+</div>
+    
+<mat-dialog-actions>
+    <button mat-button class="btn btn-primary-150" (click)="onRequestBol()">
+        <ng-container *ngIf="!pendingAdd">Request BOL</ng-container>
+        <ng-container *ngIf="pendingAdd"><i class="fa fa-spinner fa-spin"></i></ng-container>
+    </button>
+    <button mat-button class="btn btn-remove-150" (click)="onCloseClick()">Back</button>
+</mat-dialog-actions>
+    

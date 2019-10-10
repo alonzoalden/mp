@@ -149,13 +149,6 @@
                         <ng-container matColumnDef="Actions">
                             <th mat-header-cell *matHeaderCellDef  width="180px">{{ 'Actions' | translate }}</th>
                             <td class="action-column" mat-cell *matCellDef="let carton;  let i = index" >
-                                <!-- <span *ngIf="i !== purchaseOrder.Cartons.length-1">
-                                    <a (click)="openDialogCartonLine(carton, i)"
-                                        matTooltip="{{ 'Carton Line' | translate }}"
-                                        attr.aria-label="{{ 'Carton Line' | translate}}">
-                                        <span class="glyphicon glyphicon-list"></span>
-                                    </a>
-                                </span> -->
                                 <span *ngIf="carton.CartonNumber && i !== purchaseOrder.Cartons.length-1">
                                     <a (click)="openDialogPrintCartonLabel(carton)"
                                         matTooltip="{{ 'Print Carton Label' | translate }}"

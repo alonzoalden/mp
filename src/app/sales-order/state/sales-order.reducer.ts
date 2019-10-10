@@ -2,6 +2,7 @@ import { SalesOrderActionTypes, SalesOrderActions } from './sales-order.actions'
 import { SalesOrder } from 'app/shared/class/sales-order';
 import { SalesOrderLine } from 'app/shared/class/sales-order-line';
 import { Fulfillment, FulfillmentSalesOrderLine } from 'app/shared/class/fulfillment';
+import { BOLRequest } from 'app/shared/class/bol-request';
 
 // State for this feature (Item Variation)
 export interface SalesOrderState {
@@ -13,10 +14,13 @@ export interface SalesOrderState {
     salesOrderLines: SalesOrderLine[];
     deliveryDetail: string;
     currentSalesOrderID: number;
+    BOLRequest: BOLRequest;
     isLoading: boolean;
     isSalesOrderLinesLoading: boolean;
     pendingDelete: boolean;
     pendingSave: boolean;
+    pendingAdd: boolean;
+    isBOLRequestLoading: boolean;
     error: string;
 }
 
@@ -29,10 +33,13 @@ const initialState: SalesOrderState = {
     salesOrderLines: [],
     deliveryDetail: '',
     currentSalesOrderID: null,
+    BOLRequest: null,
     isLoading: true,
     isSalesOrderLinesLoading: true,
     pendingDelete: false,
     pendingSave: false,
+    pendingAdd: false,
+    isBOLRequestLoading: false,
     error: ''
 };
 
@@ -229,6 +236,64 @@ export function salesOrderReducer(state = initialState, action: SalesOrderAction
                 pendingSave: false,
                 error: action.payload,
             };
+        case SalesOrderActionTypes.AddBOLRequest:
+            return {
+                ...state,
+                pendingAdd: true,
+            };
+        case SalesOrderActionTypes.AddBOLRequestSuccess:
+            return {
+                ...state,
+                pendingAdd: false,
+                BOLRequest: action.payload,
+                error: '',
+            };
+        case SalesOrderActionTypes.AddBOLRequestFail:
+            return {
+                ...state,
+                pendingAdd: false,
+                BOLRequest: null,
+                error: action.payload,
+            };
+        case SalesOrderActionTypes.UploadBOLAttachment:
+            return {
+                ...state,
+                pendingAdd: true,
+            };
+        case SalesOrderActionTypes.UploadBOLAttachmentSuccess:
+            return {
+                ...state,
+                pendingAdd: false,
+                BOLRequest: action.payload,
+                error: '',
+            };
+        case SalesOrderActionTypes.UploadBOLAttachmentFail:
+            return {
+                ...state,
+                pendingAdd: false,
+                BOLRequest: null,
+                error: action.payload,
+            };
+        case SalesOrderActionTypes.LoadBOLRequest:
+            return {
+                ...state,
+                isBOLRequestLoading: true,
+            };
+        case SalesOrderActionTypes.LoadBOLRequestSuccess:
+            return {
+                ...state,
+                isBOLRequestLoading: false,
+                BOLRequest: action.payload,
+                error: '',
+            };
+        case SalesOrderActionTypes.LoadBOLRequestFail:
+            return {
+                ...state,
+                isBOLRequestLoading: false,
+                BOLRequest: null,
+                error: action.payload,
+            };
+        
         case SalesOrderActionTypes.EditFulfillment:
             return {
                 ...state,

@@ -1,8 +1,9 @@
-import { Component, OnInit, ViewChild, OnDestroy, Inject, Output, Input, EventEmitter, SimpleChanges } from '@angular/core';
+import { Component, OnInit, ViewChild, OnDestroy, Inject, Output, Input, EventEmitter, SimpleChanges, OnChanges } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { MatPaginator, MatSort, MatTableDataSource, MatDialog, MatDialogRef, MAT_DIALOG_DATA} from '@angular/material';
 import { SalesOrderLine } from '../../../../shared/class/sales-order-line';
 import { SalesOrder } from '../../../../shared/class/sales-order';
+import { BOLRequest } from '../../../../shared/class/bol-request';
 import { SalesOrderService } from '../../../sales-order.service';
 import { environment } from '../../../../../environments/environment';
 import { Member } from '../../../../shared/class/member';
@@ -10,6 +11,8 @@ import * as salesOrderActions from '../../../state/sales-order.actions';
 import * as fromSalesOrder from '../../../state';
 import { Store, select } from '@ngrx/store';
 import { takeWhile } from 'rxjs/operators';
+import { SalesOrderViewBOLRequestComponentDialog } from '../../sales-order-view-bol/sales-order-view-bol-request/components/sales-order-view-bol.component.request-dialog';
+import { SalesOrderViewUploadBOLComponentDialog } from '../../sales-order-view-bol/sales-order-view-bol-upload/components/sales-order-view-bol.component.upload-dialog';
 
 @Component({
   selector: 'o-sales-order-detail',
@@ -17,22 +20,25 @@ import { takeWhile } from 'rxjs/operators';
   styleUrls: ['../../../sales-order.component.css']
 })
 
-export class SalesOrderDetailComponent implements OnInit {
+export class SalesOrderDetailComponent implements OnInit, OnChanges {
+    private imageURL = environment.imageURL;
+    private linkURL = environment.linkURL;
+    private bolURL = environment.bolURL;
     @Input() userInfo: Member;
     @Input() salesOrder: SalesOrder;
     @Input() salesOrderLinesMatTable: MatTableDataSource<SalesOrderLine>;
     @Input() errorMessage: string;
     @Input() isLoading: boolean;
     @Input() isSalesOrderLinesLoading: boolean;
+    @Input() isBOLRequestLoading: boolean;
+    @Input() BOLRequest: BOLRequest;
+    @Output() addBOLRequest = new EventEmitter<BOLRequest>();
+    @Output() getBOLRequest = new EventEmitter<number>();
     @Output() getFulfilledBySalesOrder = new EventEmitter<{orderid: number, fulfilledby: string}>();
     @Output() getSalesOrderLineByVendor = new EventEmitter<{orderid: number, fulfilledby: string}>();
     @Output() cancelSalesOrderLines = new EventEmitter<SalesOrderLine[]>();
     @Output() getSalesOrderByVendor = new EventEmitter<{fulfilledby: string, status: string}>();
     @Output() downloadSalesOrderPackingSlip = new EventEmitter<{salesorder: SalesOrder, orderid: number}>();
-
-    private imageURL = environment.imageURL;
-    private linkURL = environment.linkURL;
-
     fulfilledby: string;
     orderid: number;
     displayedColumns = ['ItemImage', 'ProductDetails', 'Quantity', 'MerchantStatus', 'UnitPrice', 'LineSubTotal'];
@@ -48,6 +54,8 @@ export class SalesOrderDetailComponent implements OnInit {
             this.salesOrderLinesMatTable.paginator = this.paginator;
             this.salesOrderLinesMatTable.sort = this.sort;
         }
+        if (changes.BOLRequest && changes.BOLRequest.currentValue) {
+        }
     }
     ngOnInit() {
         this.orderid = this.route.parent.snapshot.params['id'];
@@ -57,8 +65,8 @@ export class SalesOrderDetailComponent implements OnInit {
         } else {
             this.isMerchant = false;
         }
-
         this.getSalesOrderLineByVendor.emit({orderid: this.orderid, fulfilledby: this.fulfilledby});
+        this.getBOLRequest.emit(this.orderid);
     }
 
     onPrintPackingSlip() {
@@ -78,6 +86,34 @@ export class SalesOrderDetailComponent implements OnInit {
             }
         });
     }
+
+    openDialogBOL(salesorder) {
+        const _data = {
+            salesorder,
+            orderid: this.orderid
+        }
+        const dialogRef = this.printDialog.open(SalesOrderViewBOLRequestComponentDialog, {
+            data: _data,
+            width: '1040px'
+        });
+
+        dialogRef.afterClosed().subscribe(() => {
+        });
+    }
+    openDialogUploadBOLRequest(salesorder) {
+        const _data = {
+            salesorder,
+            orderid: this.orderid
+        }
+        const dialogRef = this.printDialog.open(SalesOrderViewUploadBOLComponentDialog, {
+            data: _data,
+            width: '1040px'
+        });
+
+        dialogRef.afterClosed().subscribe(() => {
+        });
+    }
+
     formatPhoneNumber(phoneNumberString) {
         if (!phoneNumberString) { return; }
         const cleaned = ('' + phoneNumberString).replace(/\D/g, '');
@@ -89,14 +125,12 @@ export class SalesOrderDetailComponent implements OnInit {
     }
 }
 
-
 export class SalesOrderCancelDialog {
     constructor(
         public Size: string,
         public Border: string
     ) {}
 }
-
 @Component({
     selector: 'sales-order-cancel.component-print-dialog',
     templateUrl: '../../sales-order-view-cancel/components/sales-order-view-cancel.component-cancel-dialog.html',

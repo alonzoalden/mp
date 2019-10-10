@@ -11,6 +11,7 @@ import { SalesOrderLine } from 'app/shared/class/sales-order-line';
 import { Fulfillment, FulfillmentSalesOrderLine } from 'app/shared/class/fulfillment';
 import { Store } from '@ngrx/store';
 import * as fromSalesOrder from './index';
+import { BOLRequest } from 'app/shared/class/bol-request';
 
 
 @Injectable()
@@ -20,8 +21,6 @@ export class SalesOrderEffects {
         private router: Router,
         private salesOrderService: SalesOrderService,
         private actions$: Actions) { }
-
-
 
     @Effect()
     loadSalesOrders$: Observable<Action> = this.actions$.pipe(
@@ -145,7 +144,59 @@ export class SalesOrderEffects {
             )
         )
     );
+    @Effect()
+    loadBOLRequest$: Observable<Action> = this.actions$.pipe(
+        ofType(salesOrderActions.SalesOrderActionTypes.LoadBOLRequest),
+        map((action: salesOrderActions.LoadBOLRequest) => action.payload),
+        mergeMap((payload) =>
+            this.salesOrderService.getBOLRequest(payload).pipe(
+                map((bolrequest: BOLRequest) => (new salesOrderActions.LoadBOLRequestSuccess(bolrequest))),
+                catchError(err => {
+                    return of(new salesOrderActions.LoadBOLRequestFail(err));
+                })
+            )
 
+        )
+    );
+    
+    
+    @Effect()
+    uploadBOLAttachment$: Observable<Action> = this.actions$.pipe(
+        ofType(salesOrderActions.SalesOrderActionTypes.UploadBOLAttachment),
+        map((action: salesOrderActions.UploadBOLAttachment) => action.payload),
+        mergeMap((payload) =>
+            this.salesOrderService.uploadBOLAttachment(payload.id, payload.form).pipe(
+                map((bolrequest: BOLRequest) => {
+                    this.salesOrderService.sendNotification({ type: 'success', title: 'Upload Successful', content: `BOL Request Attachment saved` });
+                    payload.dialogRef.close();
+                    return (new salesOrderActions.UploadBOLAttachmentSuccess(bolrequest));
+                }),
+                catchError(err => {
+                    this.salesOrderService.sendNotification({ type: 'error', title: 'Error', content: err });
+                    return of(new salesOrderActions.UploadBOLAttachmentFail(err));
+                })
+            )
+        )
+    );
+    @Effect()
+    addBOLRequest$: Observable<Action> = this.actions$.pipe(
+        ofType(salesOrderActions.SalesOrderActionTypes.AddBOLRequest),
+        map((action: salesOrderActions.AddBOLRequest) => action.payload),
+        mergeMap((payload: BOLRequest) =>
+            this.salesOrderService.addBOLRequest(payload).pipe(
+                map((bolrequest: BOLRequest) => {
+                    this.salesOrderService.sendNotification({ type: 'success', title: 'BOL Request Sent', content: `` });
+                    return (new salesOrderActions.AddBOLRequestSuccess(bolrequest));
+                }),
+                catchError(err => {
+                    this.salesOrderService.sendNotification({ type: 'error', title: 'Error', content: err });
+                    of(new salesOrderActions.AddBOLRequestFail(err));
+                    return EMPTY;
+                })
+            )
+        )
+    );
+    
     @Effect()
     addFulfillment$: Observable<Action> = this.actions$.pipe(
         ofType(salesOrderActions.SalesOrderActionTypes.AddFulfillment),

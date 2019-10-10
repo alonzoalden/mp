@@ -51,7 +51,7 @@
                                     </div>
                                     
                                     <ng-container *ngIf="!pendingDelete || i !== currentIndex">
-                                        <button mat-button [matMenuTriggerFor]="menu"><i class="fa fa-bars fa-2x"></i></button>
+                                        <button mat-button [disabled]="pendingDelete" [matMenuTriggerFor]="menu"><i class="fa fa-bars fa-2x"></i></button>
                                         <mat-menu #menu="matMenu">
                                             <!-- <button mat-menu-item [routerLink]="[vendorattachment.VendorAttachmentID, 'edit']">{{ 'Edit' | translate }}</button> -->
                                             <button mat-menu-item (click)="onSetVendorAttachmentID(vendorattachment.VendorAttachmentID)" [routerLink]="[vendorattachment.VendorAttachmentID, 'edit']">{{ 'Edit' | translate }}</button>
