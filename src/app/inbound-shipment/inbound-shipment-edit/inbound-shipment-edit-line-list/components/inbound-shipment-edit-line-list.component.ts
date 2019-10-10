@@ -208,6 +208,14 @@ export class InboundShipmentEditLineListComponent implements OnInit, OnChanges {
         form.FOBPrice = '';
         form.Quantity = 1;
     }
+
+    validatePurchaseOrderLineQuantity(purchaseorderline: PurchaseOrderLine) {
+        if (purchaseorderline.Quantity < purchaseorderline.CartonQuantity) {
+            purchaseorderline.Quantity = purchaseorderline.CartonQuantity
+            this.purchaseOrderService.sendNotification({ type: 'error', title: 'Error', content: 'Can not be lower than Carton Quantity' });
+        }
+    }
+
 }
 
 export class ItemLabelPrintDialog {

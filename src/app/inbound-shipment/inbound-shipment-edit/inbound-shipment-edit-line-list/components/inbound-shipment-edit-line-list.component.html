@@ -144,6 +144,7 @@
                                     <div *ngIf="currentIndex === i || i === purchaseOrder.PurchaseOrderLines.length-1">
                                         <input class="form-control" id="purchaseorderlineQuantity" type="number" placeholder="{{ 'Quantity' | translate }}"
                                             (focus)="formDirty = true;"
+                                            (change)="validatePurchaseOrderLineQuantity(purchaseorderline)"
                                             onkeydown="return event.keyCode == 69 || event.keyCode == 189 || event.keyCode == 190 ? false : true" min="0"
                                             [disabled]="purchaseOrder.Status != 'Pending'"
                                             [(ngModel)]=purchaseorderline.Quantity [ngModelOptions]="{standalone: true}" />
@@ -153,7 +154,7 @@
 
                             <!-- Carton Quantity Column -->
                             <ng-container matColumnDef="CartonQuantity">
-                                <th mat-header-cell *matHeaderCellDef  width="80px">{{ 'Carton Quantity' | translate }}</th>
+                                <th mat-header-cell *matHeaderCellDef width="80px">{{ 'Carton Quantity' | translate }}</th>
                                 <td mat-cell *matCellDef="let purchaseorderline" >
                                     <div *ngIf="i != purchaseOrder.PurchaseOrderLines.length-1">
                                         {{purchaseorderline.CartonQuantity}}

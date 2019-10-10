@@ -258,12 +258,12 @@ export class InboundShipmentEditCartonListComponent implements OnInit, OnChanges
 
     isValidQuantity(cartonline: CartonLine) {
 
-        const foundPurchaseOrderLine = this.purchaseOrderService.currentPurchaseOrderEdit.PurchaseOrderLines.find(x => x.PurchaseOrderLineID === cartonline.PurchaseOrderLineID);
+        const foundPurchaseOrderLine = this.purchaseOrder.PurchaseOrderLines.find(x => x.PurchaseOrderLineID === cartonline.PurchaseOrderLineID);
 
         if (foundPurchaseOrderLine) {
             var RemainingQuantity: number = foundPurchaseOrderLine.Quantity;
 
-            this.purchaseOrderService.currentPurchaseOrderEdit.Cartons.forEach((carton, ci) => {
+            this.purchaseOrder.Cartons.forEach((carton, ci) => {
                 carton.CartonLines.forEach((cartonline2, cli) => {
                     if (cartonline2.PurchaseOrderLineID == cartonline.PurchaseOrderLineID) {
                         RemainingQuantity = RemainingQuantity - cartonline2.Quantity;
