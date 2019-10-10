@@ -15,7 +15,9 @@ import { SalesOrderFulfillmentAddShellComponent } from './sales-order-view/sales
 import { SalesOrderFulfillmentEditShellComponent } from './sales-order-view/sales-order-view-fulfillment/sales-order-view-fullfillment-edit/containers/sales-order-view-fulfillment-edit-shell.component';
 import { SalesOrderFulfillmentListShellComponent } from './sales-order-view/sales-order-view-fulfillment/sales-order-view-fullfillment-list/containers/sales-order-view-fulfillment-list-shell.component';
 import { SalesOrderListComponent } from './sales-order-list/components/sales-order-list.component';
-import { SalesOrderDetailComponent, SalesOrderCancelComponentPrintDialog, SalesOrderOpenBOLComponentDialog, SalesOrderUploadBOLComponentDialog } from './sales-order-view/sales-order-view-detail/components/sales-order-view-detail.component';
+import { SalesOrderDetailComponent, SalesOrderCancelComponentPrintDialog } from './sales-order-view/sales-order-view-detail/components/sales-order-view-detail.component';
+import { SalesOrderViewBOLRequestComponentDialog } from './sales-order-view/sales-order-view-bol/sales-order-view-bol-request/components/sales-order-view-bol.component.request-dialog';
+import { SalesOrderViewUploadBOLComponentDialog } from './sales-order-view/sales-order-view-bol/sales-order-view-bol-upload/components/sales-order-view-bol.component.upload-dialog';
 import { SalesOrderViewComponent } from './sales-order-view/components/sales-order-view.component';
 import { SalesOrderCancelComponent } from './sales-order-view/sales-order-view-cancel/components/sales-order-view-cancel.component';
 import { SalesOrderFulfillmentListComponent } from './sales-order-view/sales-order-view-fulfillment/sales-order-view-fullfillment-list/components/sales-order-view-fulfillment-list.component';
@@ -52,10 +54,10 @@ import { CompanyService } from 'app/company/company.service';
         SalesOrderFulfillmentAddComponent,
         SalesOrderFulfillmentEditComponent,
         SalesOrderCancelComponentPrintDialog,
-        SalesOrderOpenBOLComponentDialog,
-        SalesOrderUploadBOLComponentDialog
+        SalesOrderViewBOLRequestComponentDialog,
+        SalesOrderViewUploadBOLComponentDialog
     ],
-    entryComponents: [SalesOrderCancelComponentPrintDialog, SalesOrderOpenBOLComponentDialog, SalesOrderUploadBOLComponentDialog],
+    entryComponents: [SalesOrderCancelComponentPrintDialog, SalesOrderViewBOLRequestComponentDialog, SalesOrderViewUploadBOLComponentDialog],
     imports: [
         TranslateModule,
         ReactiveFormsModule,

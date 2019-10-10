@@ -167,8 +167,8 @@ export class SalesOrderEffects {
         mergeMap((payload) =>
             this.salesOrderService.uploadBOLAttachment(payload.id, payload.form).pipe(
                 map((bolrequest: BOLRequest) => {
-                    bolrequest.Name = payload.name;
-                    //this.store.dispatch(new companyActions.EditVendorAttachment(vendorattachment));
+                    this.salesOrderService.sendNotification({ type: 'success', title: 'Upload Successful', content: `BOL Request Attachment saved` });
+                    payload.dialogRef.close();
                     return (new salesOrderActions.UploadBOLAttachmentSuccess(bolrequest));
                 }),
                 catchError(err => {

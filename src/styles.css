@@ -2233,3 +2233,6 @@ th.mat-header-cell {
 .line-height-fix {
     line-height: normal !important;
 }
+.fa-close {
+    cursor: pointer;
+}

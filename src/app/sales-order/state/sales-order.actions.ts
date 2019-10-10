@@ -3,6 +3,7 @@ import { SalesOrder } from 'app/shared/class/sales-order';
 import { SalesOrderLine } from 'app/shared/class/sales-order-line';
 import { Fulfillment, FulfillmentSalesOrderLine } from 'app/shared/class/fulfillment';
 import { BOLRequest } from 'app/shared/class/bol-request';
+import { MatDialogRef } from '@angular/material';
 
 export enum SalesOrderActionTypes {
     LoadSalesOrders = '[Sales Order] Load Sales Orders',
@@ -207,7 +208,7 @@ export class LoadBOLRequestFail implements Action {
 }
 export class UploadBOLAttachment implements Action {
     readonly type = SalesOrderActionTypes.UploadBOLAttachment;
-    constructor(public payload: {id: number, form: FormData, name: string}) { }
+    constructor(public payload: {id: number, form: FormData, dialogRef: MatDialogRef<any>}) { }
 }
 export class UploadBOLAttachmentSuccess implements Action {
     readonly type = SalesOrderActionTypes.UploadBOLAttachmentSuccess;

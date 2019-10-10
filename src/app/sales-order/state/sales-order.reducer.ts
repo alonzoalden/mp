@@ -255,6 +255,25 @@ export function salesOrderReducer(state = initialState, action: SalesOrderAction
                 BOLRequest: null,
                 error: action.payload,
             };
+        case SalesOrderActionTypes.UploadBOLAttachment:
+            return {
+                ...state,
+                pendingAdd: true,
+            };
+        case SalesOrderActionTypes.UploadBOLAttachmentSuccess:
+            return {
+                ...state,
+                pendingAdd: false,
+                BOLRequest: action.payload,
+                error: '',
+            };
+        case SalesOrderActionTypes.UploadBOLAttachmentFail:
+            return {
+                ...state,
+                pendingAdd: false,
+                BOLRequest: null,
+                error: action.payload,
+            };
         case SalesOrderActionTypes.LoadBOLRequest:
             return {
                 ...state,
