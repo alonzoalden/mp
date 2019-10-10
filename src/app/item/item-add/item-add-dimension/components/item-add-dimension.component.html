@@ -265,11 +265,11 @@
                                     [(ngModel)]=item.PackagingType #packagingTypeVar="ngModel">                                    
                                     <option [value]="type.Value" *ngFor="let type of packagingTypes">{{type.Name}}</option>
                                 </select>
+                            
+                                <span class=" help-block" *ngIf=!item.PackagingType>
+                                    *{{ 'Packaging Type Required' | translate }}
+                                </span>
                                 
-                                    <span class=" help-block" *ngIf=!item.PackagingType>
-                                        *{{ 'Packaging Type Required' | translate }}
-                                    </span>
-                                    
                             </div>
                         </div>
                     </div>
