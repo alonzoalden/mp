@@ -17,6 +17,7 @@ export class InboundShipmentEditLineListComponent implements OnInit, OnChanges {
     @Input() purchaseOrder: PurchaseOrder;
     @Input() errorMessage: string;
     @Input() isLoading: boolean;
+    @Input() isSimpleItemListLoading: boolean;
     @Input() itemList: ItemList[];
     @Output() getSimpleItemList = new EventEmitter<void>();
     @Output() getPurchaseOrderLines = new EventEmitter<number>();
@@ -24,7 +25,9 @@ export class InboundShipmentEditLineListComponent implements OnInit, OnChanges {
     @Output() downloadItemLargeLabelCount = new EventEmitter<{purchaseorderline: PurchaseOrderLine, count: number, border: string}>();
     @Output() setSelectedPurchaseOrder = new EventEmitter<PurchaseOrder>();
     purchaseorderid: number;
-    private linkURL = environment.linkURL;
+    public linkURL = environment.linkURL;
+    public imageURL = environment.imageURL;
+
     displayedColumns = ['Add', 'Incomplete', 'ProductDetails', 'FOBPrice', 'Quantity', 'CartonQuantity', 'ReceivedQty', 'Actions'];
     dataSource: any = null;
 
@@ -58,12 +61,11 @@ export class InboundShipmentEditLineListComponent implements OnInit, OnChanges {
                 this.currentIndex = this.purchaseOrder.PurchaseOrderLines.length - 1;
             }
         }
-        if (changes.itemList && !this.itemList.length) {
+        if (changes.itemList && changes.itemList.firstChange) {
             this.getSimpleItemList.emit();
         }
     }
     ngOnInit() {
-        //this.setSelectedPurchaseOrder.emit(null);
         this.purchaseorderid = this.route.parent.snapshot.params['id'];
     }
     addPendingLine() {
@@ -79,12 +81,12 @@ export class InboundShipmentEditLineListComponent implements OnInit, OnChanges {
         }
     }
 
-    onAddPurchaseOrderLine(PurchaseOrderLine: PurchaseOrderLine) {
-        if (this.isRequirementValid(PurchaseOrderLine)) {
-            if (!this.existItem(PurchaseOrderLine.ItemID, true)) {
+    onAddPurchaseOrderLine(purchaseorderline: PurchaseOrderLine) {
+        if (this.isRequirementValid(purchaseorderline)) {
+            if (!this.existItem(purchaseorderline.ItemID, true)) {
                 this.PendingAdd = true;
-                PurchaseOrderLine.pendingAdd = false;
-                PurchaseOrderLine.PrevItemID = PurchaseOrderLine.ItemID;
+                purchaseorderline.pendingAdd = false;
+                purchaseorderline.PrevItemID = purchaseorderline.ItemID;
 
                 this.addPendingLine();
                 this.refreshDataSource(this.purchaseOrder.PurchaseOrderLines);
@@ -96,9 +98,9 @@ export class InboundShipmentEditLineListComponent implements OnInit, OnChanges {
         }
     }
 
-    isRequirementValid(PurchaseOrderLine: PurchaseOrderLine): boolean {
-        if (PurchaseOrderLine && PurchaseOrderLine.ItemID) {
-            if (PurchaseOrderLine.Quantity > 0) {
+    isRequirementValid(purchaseorderline: PurchaseOrderLine): boolean {
+        if (purchaseorderline && purchaseorderline.ItemID) {
+            if (purchaseorderline.Quantity > 0) {
                 return true;
             } else {
                 this.purchaseOrderService.sendNotification({ type: 'error', title: 'Error', content: 'Please enter quantity' });
@@ -134,7 +136,7 @@ export class InboundShipmentEditLineListComponent implements OnInit, OnChanges {
                 purchaseorderline.TPIN = selectedItem.TPIN;
                 purchaseorderline.FOBPrice = selectedItem.FOBPrice;
 
-                if (index != this.purchaseOrder.PurchaseOrderLines.length - 1) {
+                if (index !== this.purchaseOrder.PurchaseOrderLines.length - 1) {
                     this.purchaseOrderService.currentPurchaseLineIsUpdated = true;
                 }
             }
@@ -150,7 +152,7 @@ export class InboundShipmentEditLineListComponent implements OnInit, OnChanges {
         let counter: number = 0;
         this.purchaseOrder.PurchaseOrderLines.forEach((value, index) => {
                 if (value.ItemID === itemID) {
-                    if (isNew || index != this.purchaseOrder.PurchaseOrderLines.length - 1) {
+                    if (isNew || index !== this.purchaseOrder.PurchaseOrderLines.length - 1) {
                         counter += 1;
                     }
                 }
@@ -211,7 +213,7 @@ export class InboundShipmentEditLineListComponent implements OnInit, OnChanges {
 
     validatePurchaseOrderLineQuantity(purchaseorderline: PurchaseOrderLine) {
         if (purchaseorderline.Quantity < purchaseorderline.CartonQuantity) {
-            purchaseorderline.Quantity = purchaseorderline.CartonQuantity
+            purchaseorderline.Quantity = purchaseorderline.CartonQuantity;
             this.purchaseOrderService.sendNotification({ type: 'error', title: 'Error', content: 'Can not be lower than Carton Quantity' });
         }
     }

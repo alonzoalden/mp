@@ -473,9 +473,9 @@ export class ItemService {
     }
 
     getSimpleItemList()  {
-        if (this.simpleItemList && this.simpleItemList.length > 0) {
-            return of(this.simpleItemList);
-        }
+        // if (this.simpleItemList && this.simpleItemList.length > 0) {
+        //     return of(this.simpleItemList);
+        // }
         const headers = new HttpHeaders({
             'Content-Type': 'application/json'
         });
