@@ -1,4 +1,5 @@
 <o-item-edit-description
+    [userInfo]="userInfo$ | async"
     [vendorBrandList]="vendorBrandList$ | async"
     [item]="item$ | async"
     [isLoading]="isLoading$ | async"
