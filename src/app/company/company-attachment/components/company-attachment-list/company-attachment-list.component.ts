@@ -1,4 +1,4 @@
-import { Component, ViewChild, Input, Output, EventEmitter, SimpleChanges, OnChanges, AfterViewInit } from '@angular/core';
+import { Component, ViewChild, Input, Output, EventEmitter, SimpleChanges, OnInit, OnChanges, AfterViewInit } from '@angular/core';
 import { MatTableDataSource, MatPaginator, MatSort } from '@angular/material';
 import { VendorAttachment } from '../../../../shared/class/vendor-attachment';
 import { environment } from '../../../../../environments/environment';
@@ -8,13 +8,14 @@ import { environment } from '../../../../../environments/environment';
     templateUrl: './company-attachment-list.component.html'
 })
 
-export class CompanyAttachmentListComponent implements OnChanges, AfterViewInit {
+export class CompanyAttachmentListComponent implements OnInit, OnChanges, AfterViewInit {
     private fileURL = environment.fileURL;
     displayedColumns = ['Menu', 'View', 'ID', 'Title', 'CreatedOn', 'Exclude'];
     currentIndex = null;
     @Input() userInfoDefaultPageSize: number;
     @Input() vendorAttachmentsMatTable: MatTableDataSource<VendorAttachment>;
     @Input() pendingDelete: boolean;
+    @Input() isVendorAttachmentsLoading: boolean;
     @Input() errorMessage: string;
     @Output() getVendorAttachments = new EventEmitter<void>();
     @Output() setVendorAttachmentID = new EventEmitter<number>();
@@ -32,7 +33,7 @@ export class CompanyAttachmentListComponent implements OnChanges, AfterViewInit 
         if (changes.userInfoDefaultPageSize && !changes.userInfoDefaultPageSize.currentValue) {
             this.userInfoDefaultPageSize = 100;
         }
-        
+
     }
     ngOnInit() {
         this.applyFilter('');

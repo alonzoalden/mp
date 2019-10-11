@@ -19,6 +19,7 @@ export class ItemEditProductRelationShellComponent implements OnInit, OnDestroy 
 
     item$: Observable<Item | ItemInsert>;
     errorMessage$: Observable<string>;
+    isItemListLoading$: Observable<boolean>;
     userInfo$: Observable<Member>;
     itemList$: Observable<ItemList[]>;
     allItemList$: Observable<ItemList[]>;
@@ -45,6 +46,7 @@ export class ItemEditProductRelationShellComponent implements OnInit, OnDestroy 
 
         this.errorMessage$ = this.store.pipe(select(fromItem.getError));
         this.userInfo$ = this.store.pipe(select(fromUser.getCurrentUser));
+        this.isItemListLoading$ = this.store.pipe(select(fromItem.getIsItemListLoading));
 
         this.userStore.pipe(
             select(fromUser.getCurrentUser),

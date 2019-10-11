@@ -13,6 +13,7 @@ import * as fromItem from '../../../state';
 
 export class ItemAddVendorAttachmentShellComponent implements OnInit {
     errorMessage$: Observable<string>;
+    isVendorAttachmentsListLoading$: Observable<boolean>;
     item$: Observable<ItemInsert>;
     itemAttachmentsMatTable$: Observable<MatTableDataSource<ItemAttachmentInsert>>;
     vendorAttachmentsList$: Observable<VendorAttachmentList[]>;
@@ -24,6 +25,9 @@ export class ItemAddVendorAttachmentShellComponent implements OnInit {
         this.errorMessage$ = this.store.pipe(select(fromItem.getError));
         this.itemAttachmentsMatTable$ = this.store.pipe(select(fromItem.getItemAttachmentsMatTable));
         this.vendorAttachmentsList$ = this.store.pipe(select(fromItem.getVendorAttachmentList));
+        setTimeout(() => {
+            this.isVendorAttachmentsListLoading$ = this.store.pipe(select(fromItem.getIsVendorAttachmentsListLoading));
+        });
     }
     getVendorAttachmentList(): void {
         this.store.dispatch(new itemActions.LoadVendorAttachmentList());

@@ -458,9 +458,9 @@ export class ItemService {
     }
 
     getItemList()  {
-        if (this.itemList && this.itemList.length > 0) {
-            return of(this.itemList);
-        }
+        // if (this.itemList && this.itemList.length > 0) {
+        //     return of(this.itemList);
+        // }
         const headers = new HttpHeaders({
             'Content-Type': 'application/json'
         });

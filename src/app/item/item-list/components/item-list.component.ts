@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild, Inject, Input, Output, EventEmitter, SimpleChanges } from '@angular/core';
+import { Component, OnInit, ViewChild, Inject, Input, Output, EventEmitter, SimpleChanges, OnChanges } from '@angular/core';
 import { Router } from '@angular/router';
 import { MatPaginator, MatSort, MatTableDataSource, MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material';
 import { Item, ItemInsert, ItemCategoryAssignment, ItemOption, ItemSelection, ItemTierPrice, ItemRelatedProduct, ItemUpSell, ItemCrossSell, ItemAttachment, ItemVideo } from '../../../shared/class/item';
@@ -11,7 +11,7 @@ import { Member } from 'app/shared/class/member';
     templateUrl: './item-list.component.html'
 })
 
-export class ItemListComponent implements OnInit {
+export class ItemListComponent implements OnInit, OnChanges {
     private imageURL = environment.imageURL;
     private linkURL = environment.linkURL;
     @Input() userInfo: Member;

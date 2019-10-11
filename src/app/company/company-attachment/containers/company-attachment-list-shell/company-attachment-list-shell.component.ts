@@ -1,3 +1,4 @@
+import { getIsLoading } from './../../../../sales-order/state/index';
 import { Component, OnInit } from '@angular/core';
 import { Store, select } from '@ngrx/store';
 import * as fromCompany from '../../state';
@@ -17,6 +18,7 @@ export class CompanyAttachmentListShellComponent implements OnInit {
     vendorAttachment$: Observable<VendorAttachment>;
     userInfoDefaultPageSize$: Observable<Number>;
     pendingDelete$: Observable<boolean>;
+    isVendorAttachmentsLoading$: Observable<boolean>;
     errorMessage$: Observable<string>;
 
     constructor(private store: Store<fromCompany.State>) {}
@@ -27,6 +29,9 @@ export class CompanyAttachmentListShellComponent implements OnInit {
         this.userInfoDefaultPageSize$ = this.store.pipe(select(fromUser.getCurrentUserDefaultPageSize));
         this.pendingDelete$ = this.store.pipe(select(fromCompany.getPendingDelete));
         this.errorMessage$ = this.store.pipe(select(fromCompany.getError));
+        setTimeout(() => {
+            this.isVendorAttachmentsLoading$ = this.store.pipe(select(fromCompany.getIsVendorAttachmentsLoading));
+        });
     }
 
     getVendorAttachments() {
