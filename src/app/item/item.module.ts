@@ -115,6 +115,7 @@ import { StoreModule } from '@ngrx/store';
 import { EffectsModule } from '@ngrx/effects';
 import { itemReducer } from './state/item.reducer';
 import { ItemEffects } from './state/item.effects';
+import {SharePipeModule} from "../shared/pipe/share.pipe";
 
 @NgModule({
     declarations: [
@@ -261,7 +262,8 @@ import { ItemEffects } from './state/item.effects';
         // StoreModule.forFeature('ItemVariations', itemreducer),
         // EffectsModule.forFeature([ItemVariationEffects])
         StoreModule.forFeature('Item', itemReducer),
-        EffectsModule.forFeature([ItemEffects])
+        EffectsModule.forFeature([ItemEffects]),
+        SharePipeModule
     ],
     providers: [
         ItemService,
