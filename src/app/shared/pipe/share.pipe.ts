@@ -11,13 +11,13 @@ export class localizedDatePipe implements PipeTransform {
     }
 
     transform(value: any, pattern: string = 'mediumDate'): any {
-        let currentLang = translateLangToLocaleId(this.translateService.currentLang ? this.translateService.currentLang : this.translateService.defaultLang);
+        let currentLang = currentLangToLocaleID(this.translateService.currentLang ? this.translateService.currentLang : this.translateService.defaultLang);
         const datePipe: DatePipe = new DatePipe(currentLang);
         return datePipe.transform(value, pattern);
     }
 }
 
-export function translateLangToLocaleId(currentLang: string):string {
+export function currentLangToLocaleID(currentLang: string):string {
     switch (currentLang) {
         case 'en':
             return 'en-US';
