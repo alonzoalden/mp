@@ -19,10 +19,8 @@ export class ItemEditDimensionComponent implements OnInit {
             Name: 'Freight',
             Value: 4
         }
-    ]
+    ];
     constructor(private route: ActivatedRoute) { }
 
-    ngOnInit(): void {
-        
-    }
+    ngOnInit(): void { }
 }

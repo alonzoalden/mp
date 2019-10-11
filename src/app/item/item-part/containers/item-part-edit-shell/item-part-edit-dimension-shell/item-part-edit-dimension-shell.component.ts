@@ -12,6 +12,16 @@ import { ItemService } from '../../../../item.service';
 export class ItemPartEditDimensionShellComponent implements OnInit {
     errorMessage: string;
     item: Item;
+    packagingTypes: any = [
+        {
+            Name: 'Small Parcel',
+            Value: 5
+        },
+        {
+            Name: 'Freight',
+            Value: 4
+        }
+    ];
 
     constructor(private route: ActivatedRoute,
                 private itemService: ItemService) { }
