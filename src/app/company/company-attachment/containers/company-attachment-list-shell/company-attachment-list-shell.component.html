@@ -1,8 +1,9 @@
 <o-company-attachment-list
-    [userInfoDefaultPageSize]="userInfoDefaultPageSize$ | async" 
+    [userInfoDefaultPageSize]="userInfoDefaultPageSize$ | async"
     [vendorAttachmentsMatTable]="vendorAttachmentsMatTable$ | async"
     [errorMessage]="errorMessage$ | async"
     [pendingDelete]="pendingDelete$ | async"
+    [isVendorAttachmentsLoading]="isVendorAttachmentsLoading$ | async"
     (getVendorAttachments)="getVendorAttachments()"
     (deleteVendorAttachment)="deleteVendorAttachment($event)"
     (setVendorAttachmentID)="setVendorAttachmentID($event)"

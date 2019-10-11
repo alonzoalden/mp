@@ -71,7 +71,7 @@
                                             name="itemRelatedProductItemID"
                                             required
                                             #itemRelatedProductRelatedProductItemIDVar="ngModel"
-                                            [loading]="!relatedProductItemlist.length"
+                                            [loading]="isItemListLoading"
                                             loadingText="Loading...">
 
                                     <ng-template ng-option-tmp let-item="item">

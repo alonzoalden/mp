@@ -91,7 +91,7 @@ export class ItemEffects {
                 })
             )
         ),
-        take(1)
+        // take(1)
     );
 
     @Effect()
@@ -328,7 +328,7 @@ export class ItemEffects {
     );
 
 
-    
+
     @Effect()
     loadMainItems$: Observable<Action> = this.actions$.pipe(
         ofType(itemActions.ItemActionTypes.LoadMainItems),

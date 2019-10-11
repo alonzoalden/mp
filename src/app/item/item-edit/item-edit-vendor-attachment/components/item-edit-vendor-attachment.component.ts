@@ -14,6 +14,7 @@ import { environment } from '../../../../../environments/environment';
 export class ItemEditVendorAttachmentComponent implements OnInit, OnChanges {
     private fileURL = environment.fileURL;
     @Input() errorMessage: string;
+    @Input() isVendorAttachmentsListLoading: boolean;
     @Input() item: Item;
     @Input() itemAttachmentsMatTable: MatTableDataSource<ItemAttachment>;
     @Input() vendorAttachmentsList: VendorAttachmentList[];
@@ -34,7 +35,7 @@ export class ItemEditVendorAttachmentComponent implements OnInit, OnChanges {
                 this.addPendingLine();
             }
         }
-        if (changes.vendorAttachmentsList && changes.vendorAttachmentsList.currentValue && changes.vendorAttachmentsList.currentValue.length === 0) {
+        if (changes.vendorAttachmentsList && changes.vendorAttachmentsList.firstChange) {
             this.getVendorAttachmentList.emit();
         }
     }

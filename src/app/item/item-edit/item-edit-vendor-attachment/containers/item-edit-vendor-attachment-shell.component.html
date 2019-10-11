@@ -3,6 +3,7 @@
     [itemAttachmentsMatTable]="itemAttachmentsMatTable$ | async"
     [vendorAttachmentsList]="vendorAttachmentsList$ | async"
     [errorMessage]="errorMessage$ | async"
+    [isVendorAttachmentsListLoading]="isVendorAttachmentsListLoading$ | async"
     (getVendorAttachmentList)="getVendorAttachmentList()"
     (getAttachment)="getAttachment($event)"
 ></o-item-edit-vendor-attachment>

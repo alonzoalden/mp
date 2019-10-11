@@ -35,6 +35,10 @@ export const getPendingDelete = createSelector(
     getCompanyFeatureState,
     state => state.pendingDelete
 );
+export const getIsVendorAttachmentsLoading = createSelector(
+    getCompanyFeatureState,
+    state => state.isVendorAttachmentsLoading
+);
 export const getError = createSelector(
     getCompanyFeatureState,
     state => state.error

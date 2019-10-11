@@ -25,6 +25,8 @@ export interface ItemState {
     itemBatchUpdates: BatchUpdate[];
     itemPrintLabels: ItemPrintLabel[];
     isLoading: boolean;
+    isVendorAttachmentsListLoading: boolean;
+    isItemListLoading: boolean;
     pendingDelete: boolean;
     pendingSave: boolean;
     pendingAdd: boolean;
@@ -50,6 +52,8 @@ const initialState: ItemState = {
     itemBatchUpdates: [],
     itemPrintLabels: [],
     isLoading: true,
+    isVendorAttachmentsListLoading: false,
+    isItemListLoading: false,
     pendingDelete: false,
     pendingSave: false,
     pendingAdd: false,
@@ -84,17 +88,24 @@ export function itemReducer(state = initialState, action: ItemActions): ItemStat
                 vendorBrandList: [],
                 error: action.payload,
             };
-
+        case ItemActionTypes.LoadItemList:
+            return {
+                ...state,
+                isItemListLoading: true,
+                error: '',
+            };
         case ItemActionTypes.LoadItemListSuccess:
             return {
                 ...state,
                 itemList: action.payload,
+                isItemListLoading: false,
                 error: '',
             };
         case ItemActionTypes.LoadItemListFail:
             return {
                 ...state,
                 itemList: [],
+                isItemListLoading: false,
                 error: action.payload,
             };
         case ItemActionTypes.LoadSimpleItemListSuccess:
@@ -141,17 +152,24 @@ export function itemReducer(state = initialState, action: ItemActions): ItemStat
                 allItemList: [],
                 error: action.payload,
             };
-
+        case ItemActionTypes.LoadVendorAttachmentList:
+            return {
+                ...state,
+                isVendorAttachmentsListLoading: true,
+                error: '',
+            };
         case ItemActionTypes.LoadVendorAttachmentListSuccess:
             return {
                 ...state,
                 vendorAttachmentsList: action.payload,
+                isVendorAttachmentsListLoading: false,
                 error: '',
             };
         case ItemActionTypes.LoadVendorAttachmentListFail:
             return {
                 ...state,
                 vendorAttachmentsList: [],
+                isVendorAttachmentsListLoading: false,
                 error: action.payload,
             };
 

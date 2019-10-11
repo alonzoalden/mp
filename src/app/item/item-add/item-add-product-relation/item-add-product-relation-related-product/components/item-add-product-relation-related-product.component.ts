@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, Output, EventEmitter, SimpleChanges} from '@angular/core';
+import { Component, OnInit, Input, Output, EventEmitter, SimpleChanges, OnChanges} from '@angular/core';
 import { MatTableDataSource } from '@angular/material';
 import { ItemInsert, ItemList, ItemRelatedProductInsert } from '../../../../../shared/class/item';
 import { ItemService } from '../../../../item.service';
@@ -9,8 +9,9 @@ import { environment } from 'environments/environment';
   templateUrl: './item-add-product-relation-related-product.component.html'
 })
 
-export class ItemAddProductRelationRelatedProductComponent implements OnInit {
+export class ItemAddProductRelationRelatedProductComponent implements OnInit, OnChanges {
     @Input() errorMessage: string;
+    @Input() isItemListLoading: boolean;
     @Input() item: ItemInsert;
     @Input() relatedProductItemlist: ItemList[];
     @Input() itemRelatedProductsMatTable: MatTableDataSource<ItemRelatedProductInsert>;
@@ -18,7 +19,6 @@ export class ItemAddProductRelationRelatedProductComponent implements OnInit {
     @Output() addNewItemRelatedProductRow = new EventEmitter<ItemRelatedProductInsert>();
 
     relatedProductDisplayedColumns = ['Add', 'Down', 'Position', 'Up', 'ItemName', 'SKU', 'TPIN', 'Remove'];
-    //relatedProductDataSource: any = null;
     relatedProductPendingAdd: boolean;
     relatedProductPendingImage: boolean;
     currentItemRelatedProductIndex: number;
@@ -92,7 +92,7 @@ export class ItemAddProductRelationRelatedProductComponent implements OnInit {
         let counter: number = 0;
         this.item.ItemRelatedProducts.forEach((value, index) => {
                 if (value.RelatedProductItemID === itemID) {
-                    if (isNew || index != this.item.ItemRelatedProducts.length - 1) {
+                    if (isNew || index !== this.item.ItemRelatedProducts.length - 1) {
                         counter += 1;
                     }
                 }

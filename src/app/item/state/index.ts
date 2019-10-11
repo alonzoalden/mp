@@ -130,7 +130,6 @@ export const getItemBatchMatTable = createSelector(
     getItemFeatureState,
     state => new MatTableDataSource<ItemBatch>(state.itemBatch)
 );
-
 export const getItemBatchItems = createSelector(
     getItemFeatureState,
     state => state.itemBatchItems
@@ -147,7 +146,6 @@ export const getItemPrintLabelsMatTable = createSelector(
     getItemFeatureState,
     state => new MatTableDataSource<ItemPrintLabel>(state.itemPrintLabels)
 );
-
 export const getIsLoading = createSelector(
     getItemFeatureState,
     state => state.isLoading
@@ -164,6 +162,15 @@ export const getPendingAdd = createSelector(
     getItemFeatureState,
     state => state.pendingAdd
 );
+export const getIsVendorAttachmentsListLoading = createSelector(
+    getItemFeatureState,
+    state => state.isVendorAttachmentsListLoading
+);
+export const getIsItemListLoading = createSelector(
+    getItemFeatureState,
+    state => state.isItemListLoading
+);
+
 export const getError = createSelector(
     getItemFeatureState,
     state => state.error

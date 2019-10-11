@@ -29,6 +29,11 @@ export function companyAttachmentReducer(state = initialState, action: CompanyAt
                 currentVendorAttachmentID: action.payload,
                 error: '',
             };
+        case CompanyAttachmentActionTypes.LoadVendorAttachments:
+            return {
+                ...state,
+                isVendorAttachmentsLoading: true
+            };
         case CompanyAttachmentActionTypes.LoadVendorAttachmentsSuccess:
             return {
                 ...state,

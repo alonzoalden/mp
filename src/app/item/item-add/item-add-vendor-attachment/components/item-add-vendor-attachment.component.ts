@@ -13,6 +13,7 @@ import { environment } from '../../../../../environments/environment';
 export class ItemAddVendorAttachmentComponent implements OnInit, OnChanges {
     private fileURL = environment.fileURL;
     @Input() errorMessage: string;
+    @Input() isVendorAttachmentsListLoading: boolean;
     @Input() item: ItemInsert;
     @Input() itemAttachmentsMatTable: MatTableDataSource<ItemAttachmentInsert>;
     @Input() vendorAttachmentsList: VendorAttachmentList[];
@@ -32,7 +33,7 @@ export class ItemAddVendorAttachmentComponent implements OnInit, OnChanges {
             const _temp = new ItemAttachmentInsert(null, null, null, null, null, null);
             this.item.ItemAttachments.push(_temp);
         }
-        if (changes.vendorAttachmentsList && changes.vendorAttachmentsList.currentValue && changes.vendorAttachmentsList.currentValue.length === 0) {
+        if (changes.vendorAttachmentsList && changes.vendorAttachmentsList.firstChange) {
             this.getVendorAttachmentList.emit();
         }
     }

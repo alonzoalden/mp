@@ -3,18 +3,18 @@
     <div class="tab-pane active">
         <div class="panel-body p-w-none">
             <form class="form-horizontal" #itemForm="ngForm">
-                <fieldset>                
+                <fieldset>
                     <div class="ibox-title"><h5>{{ 'Attachments' | translate }}</h5></div>
                     <div class="ibox-content">
                         <div class="form-group row">
-                            <div class="col-md-12">                            
+                            <div class="col-md-12">
                                 <div *ngIf="item.ItemAttachments.length && item.ItemAttachments.length > 0">
                                     <table mat-table #table [dataSource]="itemAttachmentsMatTable">
                                         <!-- Add Button -->
                                         <ng-container matColumnDef="Add">
                                             <th mat-header-cell *matHeaderCellDef width="45px"></th>
-                                            <td mat-cell *matCellDef="let itemAttachment; let i = index">                                                 
-                                                <div *ngIf="i === item.ItemAttachments.length-1">                               
+                                            <td mat-cell *matCellDef="let itemAttachment; let i = index">
+                                                <div *ngIf="i === item.ItemAttachments.length-1">
                                                     <a (click)='onAddItemAttachment(itemAttachment); formDirty = false;'><span [matTooltip]="itemAttachment.VendorAttachmentID ? ('Add' | translate) : ('Required fields must be complete' | translate)" class="glyphicon glyphicon-plus fs-20" [ngClass]="itemAttachment.VendorAttachmentID ? 'green' : 'gray'"></span></a>
                                                 </div>
                                             </td>
@@ -25,7 +25,7 @@
                                             <td mat-cell *matCellDef="let itemAttachment; let i = index">
                                                 <div *ngIf="i < item.ItemAttachments.length-2">
                                                     <a (click)='moveDownPosition(itemAttachment)' *ngIf='i !== item.ItemAttachments.length - 1'><span class="glyphicon glyphicon-arrow-down"></span></a>
-                                                </div>                                            
+                                                </div>
                                             </td>
                                         </ng-container>
                                         <!-- Position Column -->
@@ -62,8 +62,8 @@
                                             <th mat-header-cell *matHeaderCellDef width="160px">{{ 'Attachment ID' | translate }}</th>
                                             <td mat-cell *matCellDef="let itemAttachment; let i = index">
                                                 <div *ngIf="i !== item.ItemAttachments.length-1">
-                                                    {{itemAttachment.VendorAttachmentID}}            
-                                                </div>                     
+                                                    {{itemAttachment.VendorAttachmentID}}
+                                                </div>
                                             </td>
                                         </ng-container>
                                         <!-- Title Column -->
@@ -72,7 +72,7 @@
                                             <td mat-cell *matCellDef="let itemAttachment; let i = index">
                                                 <div *ngIf="i !== item.ItemAttachments.length-1">
                                                     {{itemAttachment.Title}}
-                                                </div>         
+                                                </div>
                                                 <div *ngIf="i === item.ItemAttachments.length-1">
                                                     <ng-select  [items]="vendorAttachmentsList"
                                                                 [virtualScroll]="true"
@@ -86,7 +86,7 @@
                                                                 name="itemAttachmentID"
                                                                 required
                                                                 #itemAttachmentIDVar="ngModel"
-                                                                [loading]="!vendorAttachmentsList.length"
+                                                                [loading]="isVendorAttachmentsListLoading"
                                                                 loadingText="Loading..."
                                                                 >
                                                         <ng-template ng-option-tmp let-item="item">
@@ -99,37 +99,37 @@
                                                         <option [ngValue]="null" style="font-style: italic" disabled selected>--Select an attachment--</option>
                                                         <option [value]="vendorattachment.Value" *ngFor="let vendorattachment of vendorattachmentlist">{{vendorattachment.Label}}</option>
                                                     </select> -->
-                                                </div>                                  
-                                            </td>                   
-                                        </ng-container>  
+                                                </div>
+                                            </td>
+                                        </ng-container>
                                         <!-- FileName Column -->
                                         <ng-container matColumnDef="FileName">
                                             <th mat-header-cell *matHeaderCellDef width="250px">{{ 'File Name' | translate }}</th>
                                             <td mat-cell *matCellDef="let itemAttachment; let i = index">
                                                 <div *ngIf="i !== item.ItemAttachments.length-1">
                                                     {{itemAttachment.FileName}}
-                                                </div>     
-                                            </td>                    
-                                        </ng-container>              
+                                                </div>
+                                            </td>
+                                        </ng-container>
                                         <!-- Remove Column -->
                                         <ng-container matColumnDef="Remove">
                                             <th mat-header-cell *matHeaderCellDef width="80px">{{ 'Remove' | translate }}</th>
                                             <td mat-cell *matCellDef="let itemAttachment; let i = index;">
-                                                <div *ngIf="i !== item.ItemAttachments.length-1">    
+                                                <div *ngIf="i !== item.ItemAttachments.length-1">
                                                     <a (click)="onRemoveAttachment(itemAttachment)">
                                                         <span matTooltip="{{ 'Remove' | translate }}" attr.aria-label="{{ 'Remove' | translate}}"  class="glyphicon glyphicon-trash"></span>
                                                     </a>
                                                 </div>
-                                                <div [hidden]="!formDirty && i === item.ItemAttachments.length-1"> 
+                                                <div [hidden]="!formDirty && i === item.ItemAttachments.length-1">
                                                     <a matTooltip="{{ 'Clear' | translate }}" attr.aria-label="{{ 'Clear' | translate}}"  (click)="clearFields(itemAttachment);"><i *ngIf="i === item.ItemAttachments.length-1" class="fa fa-eraser"></i></a>
                                                     <!-- <button *ngIf="i === item.ItemAttachments.length-1"
-                                                            type="button" 
+                                                            type="button"
                                                             class="btn btn-remove-sm"
                                                             (click)="clearFields();">Clear</button> -->
                                                 </div>
                                             </td>
                                         </ng-container>
-                                                        
+
                                         <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
                                         <tr class="selected-row" mat-row *matRowDef="let itemAttachment; let i = index; columns: displayedColumns;"
                                             [ngStyle]="{'background-color': itemService.rowColorConditions(i, item.ItemAttachments, currentIndex, formDirty)}"

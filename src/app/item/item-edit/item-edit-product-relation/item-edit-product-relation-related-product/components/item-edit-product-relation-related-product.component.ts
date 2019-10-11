@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, Output, EventEmitter, SimpleChanges } from '@angular/core';
+import { Component, OnInit, Input, Output, EventEmitter, SimpleChanges, OnChanges } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { MatTableDataSource } from '@angular/material';
 import { Item, ItemList, ItemRelatedProduct, ItemRelatedProductInsert } from '../../../../../shared/class/item';
@@ -10,8 +10,9 @@ import { environment } from 'environments/environment';
   templateUrl: './item-edit-product-relation-related-product.component.html'
 })
 
-export class ItemEditProductRelationRelatedProductComponent implements OnInit {
+export class ItemEditProductRelationRelatedProductComponent implements OnInit, OnChanges {
     @Input() errorMessage: string;
+    @Input() isItemListLoading: boolean;
     @Input() item: Item;
     @Input() relatedProductItemlist: ItemList[];
     @Input() itemRelatedProductsMatTable: MatTableDataSource<ItemRelatedProduct>;
@@ -19,7 +20,6 @@ export class ItemEditProductRelationRelatedProductComponent implements OnInit {
     @Output() addNewItemRelatedProductRow = new EventEmitter<ItemRelatedProduct>();
 
     relatedProductDisplayedColumns = ['Add', 'Down', 'Position', 'Up', 'ItemName', 'SKU', 'TPIN', 'Remove'];
-    //relatedProductDataSource: any = null;
     relatedProductPendingAdd: boolean;
     currentItemRelatedProductIndex: number;
     formDirty = false;
@@ -27,8 +27,8 @@ export class ItemEditProductRelationRelatedProductComponent implements OnInit {
 
     private imageURL = environment.imageURL;
 
-    constructor(private route: ActivatedRoute,
-        private itemService: ItemService) { }
+    constructor(private itemService: ItemService) { }
+
     ngOnChanges(changes: SimpleChanges) {
         if (changes.item && changes.item.currentValue && changes.item.currentValue.ItemRelatedProducts.length === 0) {
             this.relatedProductAddPendingLine();
@@ -85,7 +85,7 @@ export class ItemEditProductRelationRelatedProductComponent implements OnInit {
         if (this.isRelatedProductRequirementValid(itemRelatedProduct)) {
             if (!this.existRelatedProduct(itemRelatedProduct.RelatedProductItemID, true)) {
                 this.relatedProductPendingAdd = true;
-                //this.getItemRelatedProduct.emit(itemRelatedProduct);
+                // this.getItemRelatedProduct.emit(itemRelatedProduct);
                 // this.itemService.getItem(itemRelatedProduct.RelatedProductItemID).subscribe(
                 //     (item: Item) => {
                 //         itemRelatedProduct.PrevRelatedProductItemID = item.ItemID;
@@ -207,6 +207,5 @@ export class ItemEditProductRelationRelatedProductComponent implements OnInit {
     clearFields(itemRelatedProduct: ItemRelatedProductInsert) {
         itemRelatedProduct.RelatedProductItemID = null;
         this.formDirty = false;
-        //this.selectionCategoriesRef.nativeElement.value = "0: null";
     }
 }
