@@ -12,10 +12,20 @@ import { ItemService } from '../../../../item.service';
 export class ItemPartAddDimensionShellComponent implements OnInit {
     errorMessage: string;
     item: ItemInsert;
-
+    packagingTypes: any = [
+        {
+            Name: 'Small Parcel',
+            Value: 5
+        },
+        {
+            Name: 'Freight',
+            Value: 4
+        }
+    ];
     constructor(private itemService: ItemService) { }
 
     ngOnInit(): void {
         this.item = this.itemService.currentItemInsert;
+        this.item.PackagingType = this.packagingTypes[0].Value;
     }
 }

@@ -11,7 +11,7 @@ import { environment } from '../../../../../environments/environment';
   })
 
 export class ItemAddVendorAttachmentComponent implements OnInit, OnChanges {
-    private fileURL = environment.fileURL;
+    public fileURL = environment.fileURL;
     @Input() errorMessage: string;
     @Input() isVendorAttachmentsListLoading: boolean;
     @Input() item: ItemInsert;
@@ -86,7 +86,7 @@ export class ItemAddVendorAttachmentComponent implements OnInit, OnChanges {
         let counter: number = 0;
         this.item.ItemAttachments.forEach((value, index) => {
                 if (value.VendorAttachmentID === vendorAttachmentID) {
-                    if (isNew || index != this.item.ItemRelatedProducts.length - 1) {
+                    if (isNew || index !== this.item.ItemRelatedProducts.length - 1) {
                         counter += 1;
                     }
                 }

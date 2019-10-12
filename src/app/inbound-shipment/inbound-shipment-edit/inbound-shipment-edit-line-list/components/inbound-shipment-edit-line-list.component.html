@@ -1,6 +1,6 @@
 
 <form class="form-horizontal" #purchaseorderlineForm="ngForm">
-    <fieldset>  
+    <fieldset>
         <!-- <div class="ibox-title"><h5>Inbound Shipment Lines</h5></div> -->
         <div class="ibox-content no-border-top wiz-content animated fadeIn" style="height: 300px;">
             <div class="form-group row">
@@ -17,8 +17,8 @@
                             <!-- Add Button -->
                             <ng-container matColumnDef="Add">
                                 <th mat-header-cell *matHeaderCellDef width="45px"></th>
-                                <td mat-cell *matCellDef="let purchaseorderline; let i = index">                                                 
-                                    <div *ngIf="i === purchaseOrder.PurchaseOrderLines.length-1 && purchaseOrder.Status === 'Pending'">                               
+                                <td mat-cell *matCellDef="let purchaseorderline; let i = index">
+                                    <div *ngIf="i === purchaseOrder.PurchaseOrderLines.length-1 && purchaseOrder.Status === 'Pending'">
                                         <a (click)='onAddPurchaseOrderLine(purchaseorderline); formDirty = false;'><span [matTooltip]="purchaseorderline.ItemID ? ( 'Add' | translate ) : ( 'Required fields must be complete' | translate )" attr.aria-label="{{ 'Add' | translate}}" class="glyphicon glyphicon-plus fs-20" [ngClass]="purchaseorderline.ItemID ? 'green' : 'gray'"></span></a>
                                     </div>
                                 </td>
@@ -27,7 +27,7 @@
                             <ng-container matColumnDef="Incomplete">
                                 <th mat-header-cell *matHeaderCellDef width="25px"></th>
                                 <td mat-cell *matCellDef="let purchaseorderline; let i = index">
-                                    <span class="glyphicon glyphicon-info-sign" *ngIf="purchaseorderline.Quantity !== purchaseorderline.CartonQuantity && i !== purchaseOrder.PurchaseOrderLines.length-1" 
+                                    <span class="glyphicon glyphicon-info-sign" *ngIf="purchaseorderline.Quantity !== purchaseorderline.CartonQuantity && i !== purchaseOrder.PurchaseOrderLines.length-1"
                                         matTooltip="{{ 'Requires Carton' | translate }}"
                                         attr.aria-label="{{ 'Requires Carton' | translate}}"></span>
                                 </td>
@@ -46,10 +46,10 @@
                                                 <div class="col-xs-12 "><span class="sm-strong"><a [href]="linkURL + '/' + purchaseorderline.URLKey + '.html'" target="_blank">{{purchaseorderline.ItemName}}</a></span></div>
                                             </div>
                                             <div class="row" *ngIf="purchaseorderline.ItemVendorSKU">
-                                                <div class="col-xs-12 "> <span class="sm-text m-r-xs">{{ 'SKU' | translate }}: </span> {{purchaseorderline.ItemVendorSKU}}</div> 
+                                                <div class="col-xs-12 "> <span class="sm-text m-r-xs">{{ 'SKU' | translate }}: </span> {{purchaseorderline.ItemVendorSKU}}</div>
                                             </div>
                                             <div class="row" *ngIf="purchaseorderline.TPIN">
-                                                <div class="col-xs-12 "><span class="sm-text m-r-xs">{{ 'TPIN' | translate }}: </span> {{purchaseorderline.TPIN}}</div>                                         
+                                                <div class="col-xs-12 "><span class="sm-text m-r-xs">{{ 'TPIN' | translate }}: </span> {{purchaseorderline.TPIN}}</div>
                                             </div>
                                         </div>
                                     </div>
@@ -70,7 +70,7 @@
                                                         name="purchaseorderlineItemID"
                                                         required
                                                         [disabled]="purchaseOrder.Status != 'Pending'"
-                                                        [loading]="!itemList?.length"
+                                                        [loading]="isSimpleItemListLoading"
                                                         loadingText="Loading..."
                                                         class="inbound-line"
                                                         >
@@ -108,7 +108,7 @@
                                         {{purchaseorderline.ItemVendorSKU}}
                                     </div>
                                 </td>
-                            </ng-container>                                                                    
+                            </ng-container>
                             <!-- TPIN Column -->
                             <ng-container matColumnDef="TPIN">
                                 <th mat-header-cell *matHeaderCellDef width="100px">{{ 'TPIN' | translate }}</th>
@@ -155,8 +155,8 @@
                             <!-- Carton Quantity Column -->
                             <ng-container matColumnDef="CartonQuantity">
                                 <th mat-header-cell *matHeaderCellDef width="80px">{{ 'Carton Quantity' | translate }}</th>
-                                <td mat-cell *matCellDef="let purchaseorderline" >
-                                    <div *ngIf="i != purchaseOrder.PurchaseOrderLines.length-1">
+                                <td mat-cell *matCellDef="let purchaseorderline; let i = index" >
+                                    <div *ngIf="i !== purchaseOrder.PurchaseOrderLines.length-1">
                                         {{purchaseorderline.CartonQuantity}}
                                     </div>
                                 </td>
@@ -178,7 +178,7 @@
                                             <span class="glyphicon glyphicon-print"></span>
                                         </a>
                                     </span>
-                                    <span *ngIf="purchaseOrder.Status === 'Pending' && purchaseorderline.CartonQuantity === 0 && i !== purchaseOrder.PurchaseOrderLines.length-1"> 
+                                    <span *ngIf="purchaseOrder.Status === 'Pending' && purchaseorderline.CartonQuantity === 0 && i !== purchaseOrder.PurchaseOrderLines.length-1">
                                         <a (click)="onRemovePurchaseOrderLine(purchaseorderline, i)"
                                             matTooltip="{{ 'Remove' | translate }}"
                                             attr.aria-label="{{ 'Remove' | translate}}">
@@ -207,7 +207,7 @@
                             <ng-container matColumnDef="Delete">
                                 <th mat-header-cell *matHeaderCellDef width="80px">{{ 'Remove' | translate }}</th>
                                 <td mat-cell *matCellDef="let purchaseorderline; let i = index" width="50px">
-                                    <div *ngIf="purchaseOrder.Status === 'Pending' && purchaseorderline.CartonQuantity === 0 && i !== purchaseOrder.PurchaseOrderLines.length-1"> 
+                                    <div *ngIf="purchaseOrder.Status === 'Pending' && purchaseorderline.CartonQuantity === 0 && i !== purchaseOrder.PurchaseOrderLines.length-1">
                                         <a (click)="onRemovePurchaseOrderLine(purchaseorderline, i)">
                                             <span class="glyphicon glyphicon-trash"></span>
                                         </a>
@@ -217,7 +217,7 @@
                                     </div>
                                 </td>
                             </ng-container>
-                    
+
                             <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
                             <tr mat-row class="selected-row" *matRowDef="let purchaseorderline; let i = index; columns: displayedColumns;"
                                 [ngStyle]="{'background-color': purchaseOrderService.rowColorConditions(i, purchaseOrder.PurchaseOrderLines, currentIndex, formDirty)}"

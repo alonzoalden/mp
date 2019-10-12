@@ -8,6 +8,7 @@
                         [errorMessage]="errorMessage$ | async"
                         [itemList]="itemList$ | async"
                         [isLoading]="isLoading$ | async"
+                        [isSimpleItemListLoading]="isSimpleItemListLoading$ | async"
                         (getSimpleItemList)="getSimpleItemList()"
                         (getPurchaseOrderLines)="getPurchaseOrderLines($event)"
                         (downloadItemLabelCount)="downloadItemLabelCount($event)"

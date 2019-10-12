@@ -24,7 +24,7 @@ export class ItemAddProductRelationRelatedProductComponent implements OnInit, On
     currentItemRelatedProductIndex: number;
     formDirty = false;
 
-    private imageURL = environment.imageURL;
+    public imageURL = environment.imageURL;
 
     constructor(private itemService: ItemService) { }
     ngOnChanges(changes: SimpleChanges) {

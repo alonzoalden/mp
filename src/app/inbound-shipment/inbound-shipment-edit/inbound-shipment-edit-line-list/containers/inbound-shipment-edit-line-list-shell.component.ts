@@ -3,7 +3,6 @@ import { ItemList } from '../../../../shared/class/item';
 import { Store, select } from '@ngrx/store';
 import * as inboundShipmentActions from '../../../state/inbound-shipment.actions';
 import * as fromInboundShipment from '../../../state';
-import * as itemActions from '../../../../item/state/item.actions';
 import { Observable } from 'rxjs';
 import { PurchaseOrder, PurchaseOrderLine } from '../../../../shared/class/purchase-order';
 
@@ -12,9 +11,9 @@ import { PurchaseOrder, PurchaseOrderLine } from '../../../../shared/class/purch
 })
 
 export class InboundShipmentEditLineListShellComponent implements OnInit {
-
     purchaseOrder$: Observable<PurchaseOrder>;
     isLoading$: Observable<boolean>;
+    isSimpleItemListLoading$: Observable<boolean>;
     errorMessage$: Observable<string>;
     itemList$: Observable<ItemList[]>;
 
@@ -24,9 +23,12 @@ export class InboundShipmentEditLineListShellComponent implements OnInit {
 
     ngOnInit() {
         this.purchaseOrder$ = this.store.pipe(select(fromInboundShipment.getPurchaseOrder));
-        this.isLoading$ = this.store.pipe(select(fromInboundShipment.getIsLoading));
         this.errorMessage$ = this.store.pipe(select(fromInboundShipment.getError));
         this.itemList$ = this.store.pipe(select(fromInboundShipment.getSimpleItemList));
+        setTimeout(() => {
+            this.isLoading$ = this.store.pipe(select(fromInboundShipment.getIsLoading));
+            this.isSimpleItemListLoading$ = this.store.pipe(select(fromInboundShipment.getIsSimpleItemListLoading));
+        });
     }
     getPurchaseOrderLines(payload: number): void {
         this.store.dispatch(new inboundShipmentActions.LoadPurchaseOrderLines(payload));
@@ -38,7 +40,7 @@ export class InboundShipmentEditLineListShellComponent implements OnInit {
         this.store.dispatch(new inboundShipmentActions.DownloadItemLargeLabelCount(payload));
     }
     getSimpleItemList(): void {
-        this.store.dispatch(new itemActions.LoadSimpleItemList());
+        this.store.dispatch(new inboundShipmentActions.LoadSimpleItemList());
     }
     updatePurchaseLineCartonQuantity(purchaseorder: PurchaseOrder): void {
         this.store.dispatch(new inboundShipmentActions.UpdatePurchaseLineCartonQuantity(purchaseorder));
@@ -46,6 +48,4 @@ export class InboundShipmentEditLineListShellComponent implements OnInit {
     setSelectedPurchaseOrder(purchaseorder: PurchaseOrder): void {
         this.store.dispatch(new inboundShipmentActions.SetSelectedPurchaseOrder(purchaseorder));
     }
-
-
 }

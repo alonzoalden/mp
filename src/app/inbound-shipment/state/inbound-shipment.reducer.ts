@@ -20,6 +20,7 @@ export interface InboundShipmentState {
     cartons: Carton[];
     selectedCarton: Carton;
     isLoading: boolean;
+    isSimpleItemListLoading: boolean;
     pendingDelete: boolean;
     pendingSave: boolean;
     pendingAdd: boolean;
@@ -36,6 +37,7 @@ const initialState: InboundShipmentState = {
     selectedCarton: null,
     simpleItemList: [],
     isLoading: true,
+    isSimpleItemListLoading: false,
     pendingDelete: false,
     pendingSave: false,
     pendingAdd: false,
@@ -272,22 +274,27 @@ export function inboundShipmentReducer(state = initialState, action: InboundShip
                 pendingDelete: false,
                 error: action.payload,
             };
-
+        case InboundShipmentActionTypes.LoadSimpleItemList:
+            return {
+                ...state,
+                isSimpleItemListLoading: true,
+            };
         case InboundShipmentActionTypes.LoadSimpleItemListSuccess:
             return {
                 ...state,
                 simpleItemList: action.payload,
+                isSimpleItemListLoading: false,
                 error: '',
             };
         case InboundShipmentActionTypes.LoadSimpleItemListFail:
             return {
                 ...state,
                 simpleItemList: [],
+                isSimpleItemListLoading: false,
                 error: action.payload,
             };
 
         case InboundShipmentActionTypes.UpdatePurchaseLineCartonQuantity:
-            //console.log(action.payload);
         return {
                 ...state,
             };
