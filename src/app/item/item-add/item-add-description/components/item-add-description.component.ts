@@ -39,6 +39,9 @@ export class ItemAddDescriptionComponent implements AfterViewInit {
                 },
                 onPaste: function (e) {
                     let bufferText = ((e.originalEvent || e).clipboardData ).getData('text/html');
+                    if(!bufferText){
+                        return;
+                    }
                     e.preventDefault ? e.preventDefault() : (e.returnValue = false);
                     const commentStripper = /<!--\[if\s+gte\s+mso\s+9\]>(?:(?!<!\[endif\]-->)[\s\S])*<!\[endif\]-->/gi;
                     bufferText = bufferText.replace(commentStripper,'');
@@ -70,9 +73,9 @@ export class ItemAddDescriptionComponent implements AfterViewInit {
                     div.find('xml').remove();
                     div.find('title').remove();
                     div.find('w').remove();
-                    div.html( div.html().replace(/\n/g,''))
+                    div.html( div.html().replace(/\n/g,''));
                     setTimeout(function() {
-                      document.execCommand('insertHtml', false, div.html());
+                        document.execCommand('insertHtml', false, div.html());
                     }, 10);
                 }
               }
