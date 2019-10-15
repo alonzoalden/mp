@@ -141,6 +141,7 @@ export class ItemEditCategoryComponent implements OnInit {
                     this.currentResult.push(categories);
                     this.categoriesList.splice(1);
                     this.categoryAssignments.push(new ItemCategoryAssignment(this.lastSelectedValue));
+                    this.item.ItemCategoryAssignments.push(new ItemCategoryAssignment(this.lastSelectedValue));
                     this.lastSelectedValue = 0;
                     // this.selectionCategoriesRef.nativeElement.value = 0;
 
