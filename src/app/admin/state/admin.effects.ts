@@ -4,28 +4,22 @@ import { mergeMap, map, catchError, take } from 'rxjs/operators';
 import { Action, Store } from '@ngrx/store';
 import { Actions, Effect, ofType } from '@ngrx/effects';
 import { AdminService } from '../admin.service';
-import * as fromAdmin from './index';
 import * as fromUser from '../../shared/state/user-state.reducer';
 import * as userActions from '../../shared/state/user-state.actions';
 import * as adminActions from './admin.actions';
 import { Router } from '@angular/router';
 import { Member } from 'app/shared/class/member';
 import { VendorList } from 'app/shared/class/vendor';
-import { UserActionTypes } from 'app/shared/state/user-state.actions';
 import { AppService } from 'app/app.service';
 
 @Injectable()
 export class AdminEffects {
-    [x: string]: any;
     constructor(
         private router: Router,
-        private store: Store<fromAdmin.State>,
         private userStore: Store<fromUser.State>,
         private appService: AppService,
         private adminService: AdminService,
         private actions$: Actions) { }
-
-
 
     @Effect()
     loadMembers$: Observable<Action> = this.actions$.pipe(
@@ -63,7 +57,7 @@ export class AdminEffects {
             this.adminService.getMember(id).pipe(
                 map((member: Member) => (new adminActions.LoadMemberSuccess(member))),
                 catchError(err => {
-                    this.companyService.sendNotification({ type: 'error', title: 'Error', content: err });
+                    this.adminService.sendNotification({ type: 'error', title: 'Error', content: err });
                     return of(new adminActions.LoadMemberFail(err));
                 })
             )
@@ -106,7 +100,7 @@ export class AdminEffects {
                     return (new adminActions.AddMemberSuccess(member));
                 }),
                 catchError(err => {
-                    this.companyService.sendNotification({ type: 'error', title: 'Error', content: err });
+                    this.adminService.sendNotification({ type: 'error', title: 'Error', content: err });
                     this.router.navigate(['/admin']);
                     return of(new adminActions.AddMemberFail(err));
                 })

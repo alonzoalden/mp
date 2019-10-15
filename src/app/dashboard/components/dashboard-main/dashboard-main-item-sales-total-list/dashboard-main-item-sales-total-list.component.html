@@ -1,14 +1,10 @@
 <div class="ibox float-e-margins" *ngIf="itemSalesTotalsMatTable?.data.length > 0">
-    <!-- <div class="ibox-title">
-        <h5>{{ 'Top Item Sales' | translate }}</h5>
-    </div> -->
     <mat-expansion-panel [expanded]="true">
         <mat-expansion-panel-header class="ibox-title">
             <mat-panel-title>
-            <h5>{{ 'Top Item Sales' | translate }}</h5> 
+            <h5>{{ 'Top Item Sales' | translate }}</h5>
             </mat-panel-title>
         </mat-expansion-panel-header>
-    
         <div class="ibox-content" style="min-height: 338px;">
                 <table mat-table #table [dataSource]="itemSalesTotalsMatTable" style="width: 100%;" class="table-striped">
                     <!-- Item Name -->
@@ -35,4 +31,3 @@
             </div>
     </mat-expansion-panel>
 </div>
-    

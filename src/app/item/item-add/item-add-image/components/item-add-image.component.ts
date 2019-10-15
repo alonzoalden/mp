@@ -11,22 +11,17 @@ declare var $: any;
 })
 
 export class ItemAddImageComponent implements OnInit, OnChanges {
-    private imageURL = environment.imageURL;
-
+    imageURL = environment.imageURL;
     @Input() errorMessage: string;
     @Input() item: ItemInsert;
     @Input() itemImagesMatTable: MatTableDataSource<ItemImageInsert>;
-
     displayedColumns = ['Add', 'Down', 'Position', 'Up', 'Thumbnail', 'Label', 'IsBaseImage', 'IsSmallImage', 'IsThumbnail', 'IsRotatorImage', 'Exclude', 'Remove'];
-    //dataSource: any = null;
     pendingAdd: boolean;
     currentIndex: number;
     formDirty = false;
-
     filesToUpload: Array<File> = [];
     selectedFileNames: string[] = [];
     res: Array<string>;
-
     pendingUpload: boolean;
     public isLoadingData: Boolean = false;
     public isLoadingMultipleData: Boolean = false;
@@ -40,8 +35,6 @@ export class ItemAddImageComponent implements OnInit, OnChanges {
     }
     ngOnInit(): void {
         this.currentIndex = this.item.ItemImages.length - 1;
-        //this.refreshDataSource(this.item.ItemImages);
-
     }
 
     refreshDataSource(itemImages: ItemImageInsert[]) {
@@ -51,8 +44,6 @@ export class ItemAddImageComponent implements OnInit, OnChanges {
     onAddItemImage(itemImage: ItemImageInsert) {
         if (this.isRequirementValid(itemImage)) {
             this.pendingAdd = true;
-            //const _temp = new ItemImageInsert(null, null, null, null, this.item.ItemImages.length, false, false, false, false, false, false, true);
-            //this.item.ItemImages.push(_temp);
             this.addPendingLine();
             this.refreshDataSource(this.item.ItemImages);
         } else {
@@ -106,7 +97,7 @@ export class ItemAddImageComponent implements OnInit, OnChanges {
 
     isBaseImageClick(image: ItemImageInsert, index: number) {
         this.item.ItemImages.forEach((value, i) => {
-            if (i != index) {
+            if (i !== index) {
                 value.IsBaseImage = false;
             }
         });
@@ -114,10 +105,8 @@ export class ItemAddImageComponent implements OnInit, OnChanges {
     }
 
     isSmallImageClick(image: ItemImageInsert, index: number) {
-        // this.item.ItemImages.forEach((value, index) => value.IsSmallImage = false);
-        // image.IsSmallImage = true;
         this.item.ItemImages.forEach((value, i) => {
-            if (i != index) {
+            if (i !== index) {
                 value.IsSmallImage = false;
             }
         });
@@ -125,10 +114,8 @@ export class ItemAddImageComponent implements OnInit, OnChanges {
     }
 
     isThumbnailClick(image: ItemImageInsert, index: number) {
-        // this.item.ItemImages.forEach((value, index) => value.IsThumbnail = false);
-        // image.IsThumbnail = true;
         this.item.ItemImages.forEach((value, i) => {
-            if (i != index) {
+            if (i !== index) {
                 value.IsThumbnail = false;
             }
         });
@@ -136,10 +123,8 @@ export class ItemAddImageComponent implements OnInit, OnChanges {
     }
 
     isRotatorImageClick(image: ItemImageInsert, index: number) {
-        // this.item.ItemImages.forEach((value, index) => value.IsRotatorImage = false);
-        // image.IsRotatorImage = true;
         this.item.ItemImages.forEach((value, i) => {
-            if (i != index) {
+            if (i !== index) {
                 value.IsRotatorImage = false;
             }
         });
@@ -173,7 +158,6 @@ export class ItemAddImageComponent implements OnInit, OnChanges {
             this.isLoadingData = true;
             const formData: FormData = new FormData();
             for (let i = 0; i < this.filesToUpload.length; i++) {
-                let reader = new FileReader();
                 formData.append('uploadedFiles', this.filesToUpload[i], this.filesToUpload[i].name);
             }
 
@@ -239,6 +223,7 @@ export class ItemAddImageComponent implements OnInit, OnChanges {
     }
 
     uploadMultipleImages() {
+        // tslint:disable-next-line: no-use-before-declare
         const dialogRef = this.itemUploadDialog.open(ItemAddImageComponentUploadDialog, {
             width: '350px',
             data: this.item.ItemImages.length - 1
@@ -267,7 +252,7 @@ export class ItemAddImageComponent implements OnInit, OnChanges {
                             newItemImage.Raw = this.imageURL + '/temp' + data + '_' + i + '.' + result[i].name.substr(result[i].name.lastIndexOf('.') + 1).toLowerCase();
                             this.item.ItemImages.push(newItemImage);
 
-                            if (i == result.length - 1) {
+                            if (i === result.length - 1) {
                                 this.addPendingLine();
                                 this.currentIndex = this.item.ItemImages.length - 1;
                                 this.refreshDataSource(this.item.ItemImages);
@@ -292,6 +277,7 @@ export class ItemAddImageComponent implements OnInit, OnChanges {
     templateUrl: 'item-add-image.component-upload-dialog.html',
 })
 
+// tslint:disable-next-line: component-class-suffix
 export class ItemAddImageComponentUploadDialog implements OnInit {
     filesToUpload: Array<File> = [];
     selectedFiles: Array<File> = [];

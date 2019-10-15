@@ -18,7 +18,7 @@ export class ItemAddDescriptionComponent implements AfterViewInit {
     constructor() { }
 
     ngAfterViewInit() {
-        let self = this;
+        const self = this;
 
         $('.summernote').summernote( {
             height: 300,
@@ -46,7 +46,7 @@ export class ItemAddDescriptionComponent implements AfterViewInit {
                     bufferText = bufferText.replace(wordStripper, '');
                     const wordStripper2 = /<\/o:p>/gi;
                     bufferText = bufferText.replace(wordStripper2, '');
-                    let div = $('<div />');
+                    const div = $('<div />');
                     div.append(bufferText);
                     div.find('*').removeAttr('style border class cellspacing cellpadding width height align nowrap valign lang');
                     div.find('table').addClass('table table-bordered');

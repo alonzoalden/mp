@@ -1,8 +1,9 @@
 import { Component, OnInit, OnChanges, ViewChild, Input, Output, EventEmitter, SimpleChanges } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { MatSort, MatTableDataSource } from '@angular/material';
-import { PurchaseOrder,  PurchaseOrderLineList, Carton, CartonLine} from '../../../../../shared/class/purchase-order';
+import { PurchaseOrder, PurchaseOrderLineList, Carton, CartonLine} from '../../../../../shared/class/purchase-order';
 import { PurchaseOrderService } from '../../../../purchase-order.service';
+import { environment } from 'environments/environment';
 
 @Component({
     selector: 'o-inbound-shipment-edit-carton-line-list',
@@ -11,6 +12,8 @@ import { PurchaseOrderService } from '../../../../purchase-order.service';
 })
 
 export class InboundShipmentEditCartonLineListComponent implements OnInit, OnChanges {
+    imageURL = environment.imageURL;
+    linkURL = environment.linkURL;
     purchaseorderid: number;
     @Input() purchaseOrder: PurchaseOrder;
     @Input() purchaseOrderLineList: PurchaseOrderLineList[];
@@ -95,7 +98,7 @@ export class InboundShipmentEditCartonLineListComponent implements OnInit, OnCha
         let counter: number = 0;
         this.carton.CartonLines.forEach((value, index) => {
                 if (value.PurchaseOrderLineID === purchaseorderlineID) {
-                    if (isNew || index != this.cartonlines.length - 1) {
+                    if (isNew || index !== this.cartonlines.length - 1) {
                         counter += 1;
                     }
                 }
@@ -113,33 +116,30 @@ export class InboundShipmentEditCartonLineListComponent implements OnInit, OnCha
 
     isValidQuantity(cartonline: CartonLine, isPendingAdd: boolean = false) {
         const foundPurchaseOrderLine = this.purchaseOrder.PurchaseOrderLines.find(x => x.PurchaseOrderLineID === cartonline.PurchaseOrderLineID);
-
         if (foundPurchaseOrderLine) {
-            var RemainingQuantity: number = foundPurchaseOrderLine.Quantity;
-
-            this.purchaseOrder.Cartons.forEach((carton, ci) => {
-                carton.CartonLines.forEach((cartonline2, cli) => {
+            let _remainingQuantity: number = foundPurchaseOrderLine.Quantity;
+            this.purchaseOrder.Cartons.forEach((carton) => {
+                carton.CartonLines.forEach((cartonline2) => {
                     if (isPendingAdd) {
-                        if (cartonline2.PurchaseOrderLineID == cartonline.PurchaseOrderLineID) {
-                            RemainingQuantity = RemainingQuantity - cartonline2.Quantity;
+                        if (cartonline2.PurchaseOrderLineID === cartonline.PurchaseOrderLineID) {
+                            _remainingQuantity = _remainingQuantity - cartonline2.Quantity;
                         }
                     } else {
                         if (!cartonline2.pendingAdd) {
-                            if (cartonline2.PurchaseOrderLineID == cartonline.PurchaseOrderLineID) {
-                                RemainingQuantity = RemainingQuantity - cartonline2.Quantity;
+                            if (cartonline2.PurchaseOrderLineID === cartonline.PurchaseOrderLineID) {
+                                _remainingQuantity = _remainingQuantity - cartonline2.Quantity;
                             }
                         }
                     }
                 });
             });
-        }
-
-        if (RemainingQuantity < 0) {
-            this.purchaseOrderService.sendNotification({ type: 'error', title: 'Error', content: 'Exceeded line quantity' });
-            cartonline.Quantity = 0;
-            return false;
-        } else {
-            return true;
+            if (_remainingQuantity < 0) {
+                this.purchaseOrderService.sendNotification({ type: 'error', title: 'Error', content: 'Exceeded line quantity' });
+                cartonline.Quantity = 0;
+                return false;
+            } else {
+                return true;
+            }
         }
     }
 
@@ -176,10 +176,8 @@ export class InboundShipmentEditCartonLineListComponent implements OnInit, OnCha
     onRemoveCartonLine(cartonline: CartonLine, index: number) {
         const confirmation = confirm(`Remove ${cartonline.ItemVendorSKU}?`);
         if (confirmation) {
-
             this.cartonlines.splice(index, 1);
             this.refreshDataSource(this.cartonlines);
-
             this.purchaseOrderService.updatePurchaseLineCartonQuantity(this.purchaseOrder);
 
         }
@@ -189,13 +187,11 @@ export class InboundShipmentEditCartonLineListComponent implements OnInit, OnCha
         const purchaseorderline = this.purchaseOrderService.currentPurchaseOrderLines.find(x => x.PurchaseOrderLineID === cartonline.PurchaseOrderLineID);
         purchaseorderline.CartonQuantity -= cartonline.Quantity;
         this.purchaseOrderService.replacePurchaseOrderLine(cartonline.PurchaseOrderLineID, purchaseorderline);
-
         this.purchaseOrderService.sendNotification({ type: 'success', title: 'Successfully Deleted', content: message });
         this.refreshDataSource(this.cartonlines);
     }
 
     onEditCartonLine(index: number) {
-
         if (this.pendingAdd) {
             this.currentIndex = this.cartonlines.length - 1;
             this.pendingAdd = false;
@@ -205,7 +201,7 @@ export class InboundShipmentEditCartonLineListComponent implements OnInit, OnCha
         }
     }
 
-    clearFields(form) {
+    clearFields() {
         this.formDirty = false;
         this.canAdd = false;
         this.removePendingLine();

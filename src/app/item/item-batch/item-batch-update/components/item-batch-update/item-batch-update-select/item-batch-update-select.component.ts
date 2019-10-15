@@ -1,9 +1,6 @@
 import { Component, OnInit, ViewChild, Input, Output, EventEmitter, OnChanges, SimpleChanges } from '@angular/core';
-import { Router } from '@angular/router';
 import { MatPaginator, MatSort, MatTableDataSource, MatDialog } from '@angular/material';
 import { Item } from '../../../../../../shared/class/item';
-import { ItemService } from '../../../../../item.service';
-import { AppService } from '../../../../../../app.service';
 import { environment } from '../../../../../../../environments/environment';
 import { Member } from 'app/shared/class/member';
 
@@ -18,24 +15,19 @@ export class ItemBatchUpdateSelectComponent implements OnInit, OnChanges {
     @Input() errorMessage: string;
     @Input() isLoading: boolean;
     @Output() getItems = new EventEmitter<void>();
-
     selectedCount: number;
     allSelected: boolean = false;
-
-    private imageURL = environment.imageURL;
-    private linkURL = environment.linkURL;
-    private previewURL = environment.previewURL;
-
+    imageURL = environment.imageURL;
+    linkURL = environment.linkURL;
+    previewURL = environment.previewURL;
     displayedColumns = ['Select', 'ProductDetails', 'FulfilledBy', 'Price', 'Quantity', 'MerchantQuantity', 'Approval'];
-
     @ViewChild(MatPaginator, { static: true }) paginator: MatPaginator;
     @ViewChild(MatSort, { static: true }) sort: MatSort;
 
-    constructor(private router: Router,
-        private itemService: ItemService,
-        private appService: AppService,
+    constructor(
         public itemPrintDialog: MatDialog,
-        public itemImportDialog: MatDialog) {
+        public itemImportDialog: MatDialog
+        ) {
     }
 
     ngOnChanges(changes: SimpleChanges): void {

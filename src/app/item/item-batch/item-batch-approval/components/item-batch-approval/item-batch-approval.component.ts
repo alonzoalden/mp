@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild, Input, Output, EventEmitter, SimpleChanges } from '@angular/core';
+import { Component, OnInit, ViewChild, Input, Output, EventEmitter, SimpleChanges, OnChanges } from '@angular/core';
 import { MatPaginator, MatSort, MatTableDataSource, MatDialog } from '@angular/material';
 import { ItemBatch } from '../../../../../shared/class/item';
 
@@ -10,7 +10,7 @@ import { Member } from 'app/shared/class/member';
     templateUrl: './item-batch-approval.component.html'
 })
 
-export class ItemBatchApprovalComponent implements OnInit {
+export class ItemBatchApprovalComponent implements OnInit, OnChanges {
     @Input() userInfo: Member;
     @Input() items: ItemBatch[];
     @Input() itemBatchMatTable: MatTableDataSource<ItemBatch>;
@@ -19,10 +19,9 @@ export class ItemBatchApprovalComponent implements OnInit {
     @Output() getPendingItems = new EventEmitter<void>();
     @Output() editItemBatch = new EventEmitter<ItemBatch[]>();
     allSelected: boolean = false;
-
-    private imageURL = environment.imageURL;
-    private linkURL = environment.linkURL;
-    private previewURL = environment.previewURL;
+    imageURL = environment.imageURL;
+    linkURL = environment.linkURL;
+    previewURL = environment.previewURL;
 
     displayedColumns = ['Approve', 'ProductDetails', 'FulfilledBy', 'Price', 'Quantity', 'MerchantQuantity', 'Approval'];
 
@@ -67,7 +66,7 @@ export class ItemBatchApprovalComponent implements OnInit {
         }
     }
 
-    CheckAll() {
+    checkAll() {
         if (this.allSelected) {
             this.items.forEach(item => { item.Approve = false; });
             this.allSelected = false;
@@ -83,7 +82,7 @@ export class ItemBatchApprovalComponent implements OnInit {
         // }
     }
 
-    Approve() {
+    approve() {
         const confirmation = confirm(`All selected items will be approved. Will you like to continue?`);
         if (confirmation) {
             this.editItemBatch.emit(this.items);

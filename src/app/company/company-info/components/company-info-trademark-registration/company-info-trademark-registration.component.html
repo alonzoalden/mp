@@ -6,7 +6,7 @@
                     <div class="ibox-title" *ngIf="showForm"><h5>{{ 'Register' | translate }}</h5></div>
                     <div class="ibox-content animated fadeIn" [ngClass]="!showForm ? 'no-border-top' : ''">
                         <ng-container *ngIf="loading">
-                            <div class="spinner-full-page"> 
+                            <div class="spinner-full-page">
                                 <div>
                                     <div>
                                         <div class="spinner-container">
@@ -36,11 +36,11 @@
                             <div class="question-container center-block" >
                                 <div>
                                     <div class="question-number">{{ '1' | translate }}.</div>
-                                    <div class="question-content form-group" [ngClass]="{'has-error': (!trademarkTypeVar.touched || 
-                                                                                                        trademarkTypeVar.dirty) && 
+                                    <div class="question-content form-group" [ngClass]="{'has-error': (!trademarkTypeVar.touched ||
+                                                                                                        trademarkTypeVar.dirty) &&
                                                                                                         !trademarkTypeVar.valid }">
                                         <label class="label-question">{{ 'What type of trademark would you like to register?' | translate }}</label>
-                                        
+
                                         <div>
                                             <mat-radio-group [(ngModel)]="trademark.Type" [ngModelOptions]="{standalone: true}" #trademarkTypeVar="ngModel">
                                                 <span class="m-r-md">
@@ -54,7 +54,7 @@
                                                 </span>
                                             </mat-radio-group>
                                         </div>
-                                        <span *ngIf="trademarkTypeVar.errors?.required">
+                                        <span *ngIf="trademarkTypeVar?.errors?.required">
                                             {{ 'Address' | translate }} {{ 'is required' | translate }}
                                         </span>
                                     </div>
@@ -65,7 +65,7 @@
                                         <label class="label-question">{{ 'How many classes would you like to apply under? Which class do you want to apply?' | translate }}</label>
                                         <p style="font-weight: 300;">{{ 'Trademark classes are defined categories of products and services, and most people initially apply under the one class that is most central to their business. However, if you are using or plan to use your trademark to cover products in multiple classes, you should include those classes in your application. An additional ** fee applies for each additional class, which includes the USPTO filing fee.' | translate }}</p>
                                         <div class="m-b-sm" *ngFor="let amount of selectedClasses; let i = index;">
-                                            <ng-select  
+                                            <ng-select
                                                 [items]="classList"
                                                 bindLabel="Name"
                                                 bindValue="Value"
@@ -88,29 +88,21 @@
                                             <div *ngIf="i !== 0;" class="ibox-tools remove-input-icon"><a><i (click)="removeClassSelectInput(i)" class="fa fa-times fs-16"></i></a></div>
                                         </div>
 
-                                        <!-- <span class="animated fadeInDown help-block" style="position: absolute;" *ngIf="(selectedClassesVar?.touched ||
-                                                                selectedClassesVar?.dirty) &&
-                                                                selectedClassesVar?.errors">
-                                            <span class="" *ngIf="selectedClassesVar?.errors?.required">
-                                                {{ 'List of products' | translate }} {{ 'is required' | translate }}
-                                            </span>
-                                        </span> -->
                                         <div class="ibox-tools text-left m-t-xs">
                                             <a class="m-n text-right " (click)="addClassSelectInput()">
-                                                
                                                 <span class="text-muted">{{ 'Add Another Class (optional)' | translate }}</span>
                                             </a>
                                         </div>
-                                        
+
                                     </div>
                                 </div>
                                 <div>
                                     <div class="question-number">{{ '3' | translate }}.</div>
-                                    <div class="question-content form-group" [ngClass]="{'has-error': (trademarkRegistrationNameVar.touched || 
-                                                                                                        trademarkRegistrationNameVar.dirty) && 
+                                    <div class="question-content form-group" [ngClass]="{'has-error': (trademarkRegistrationNameVar.touched ||
+                                                                                                        trademarkRegistrationNameVar.dirty) &&
                                                                                                         !trademarkRegistrationNameVar.valid }">
                                         <label class="label-question">{{ 'What is the name you wish to trademark? (Or, if applying to trademark a logo: What words or text appear in your logo?) Please include the exact characters, numbers, spacing and punctuation.' | translate }}</label>
-                                        <input class="form-control" style="width: 95%;" type="text" placeholder="{{ 'Enter Name' | translate }}" required 
+                                        <input class="form-control" style="width: 95%;" type="text" placeholder="{{ 'Enter Name' | translate }}" required
                                         [(ngModel)]=trademark.TrademarkRegistrationName name="trademarkRegistrationName" #trademarkRegistrationNameVar="ngModel" />
                                         <span class="animated fadeInDown help-block" style="position: absolute;" *ngIf="(trademarkRegistrationNameVar.touched ||
                                                                 trademarkRegistrationNameVar.dirty) &&
@@ -120,7 +112,7 @@
                                             </span>
                                         </span>
                                     </div>
-                                    
+
                                 </div>
                                 <div>
                                     <div class="question-number">{{ '4' | translate }}.</div>
@@ -132,7 +124,6 @@
                                                 accept="application/msword,image/gif,image/jpeg,application/pdf,image/png,application/vnd.ms-excel,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet,application/zip,.doc,.gif,.jpeg,.jpg,.pdf,.png,.xls,.xlsx,.zip"
                                                 #fileUpload>
                                         </label>
-                                        <img src="{{p}}">
                                         <span class="m-l-md" *ngFor="let fileName of selectedFileNames; let i = index">{{ 'File Selected' | translate }} : {{fileName}}</span>
                                         <input type="text" class="m-t-sm form-control" style="width: 95%;" placeholder="{{ 'Describe your logo' | translate }}"
                                         [(ngModel)]=trademark.Logo [ngModelOptions]="{standalone: true}">
@@ -155,12 +146,12 @@
                                 </div>
                                 <div>
                                     <div class="question-number">{{ '6' | translate }}.</div>
-                                    <div class="question-content form-group" [ngClass]="{'has-error': (trademarkProductsListVar.touched || 
-                                                                                trademarkProductsListVar.dirty) && 
+                                    <div class="question-content form-group" [ngClass]="{'has-error': (trademarkProductsListVar.touched ||
+                                                                                trademarkProductsListVar.dirty) &&
                                                                                 !trademarkProductsListVar.valid }">
                                         <label class="col-md-12 label-question">{{ 'Please provide a comprehensive list of products that you are selling with your trademark (in the US):' | translate }}</label>
                                         <input class="form-control" style="width: 95%;" #trademarkProductsListVar="ngModel" required type="text" placeholder="{{ 'Enter products' | translate }}"
-                                        [(ngModel)]=trademark.Products [ngModelOptions]="{standalone: true}" />
+                                            [(ngModel)]=products [ngModelOptions]="{standalone: true}" />
                                         <span class="animated fadeInDown help-block" style="position: absolute;" *ngIf="(trademarkProductsListVar.touched ||
                                                                 trademarkProductsListVar.dirty) &&
                                                                 trademarkProductsListVar.errors">
@@ -172,18 +163,18 @@
                                 </div>
                                 <div>
                                     <div class="question-number">{{ '7' | translate }}.</div>
-                                    <div class="question-content form-group" [ngClass]="{'has-error': (trademarkDate1Var.touched || 
-                                                                                trademarkDate1Var.dirty) && 
+                                    <div class="question-content form-group" [ngClass]="{'has-error': (trademarkDate1Var.touched ||
+                                                                                trademarkDate1Var.dirty) &&
                                                                                 !trademarkDate1Var.valid }">
                                         <label class="col-md-12 label-question">{{ 'Date of First Use of Mark Anywhere by the applicant, or the applicant\'s related company, licensee, or predecessor in interest at least as early as:' | translate }}</label>
                                         <mat-form-field class="example-full-width" >
                                             <input matInput [min]="minDate" [max]="maxDate" [matDatepicker]="picker" placeholder="{{ 'Choose a date' | translate }}"
-                                                class="form-control" 
+                                                class="form-control"
                                                 id="trademarkDate"
                                                 [(ngModel)]="trademark.Date1"
                                                 name="trademarkDate"
                                                 [ngModelOptions]="{standalone: true}"
-                                                #trademarkDate1Var="ngModel" required/>                    
+                                                #trademarkDate1Var="ngModel" required/>
                                             <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
                                             <mat-datepicker #picker></mat-datepicker>
                                         </mat-form-field>
@@ -198,19 +189,19 @@
                                 </div>
                                 <div>
                                     <div class="question-number">{{ '8' | translate }}.</div>
-                                    <div class="question-content form-group" [ngClass]="{'has-error': (trademarkDate2Var.touched || 
-                                                                                trademarkDate2Var.dirty) && 
+                                    <div class="question-content form-group" [ngClass]="{'has-error': (trademarkDate2Var.touched ||
+                                                                                trademarkDate2Var.dirty) &&
                                                                                 !trademarkDate2Var.valid }">
                                         <label class="col-md-12 label-question">{{ 'Date of First Use of the Mark in Commerce (in the US) by the applicant, or the applicant\'s related company, licensee, or predecessor in interest at least as early as:' | translate }}</label>
                                         <p style="font-weight: 300;">{{ 'If you have a pending application for this trademark in a foreign country, you may claim a right of priority. This means that your U.S. application will receive the same effective filing date as your foreign filing. We will need the filing date, foreign country and serial number for the foreign application. To use foreign registration as a basis for filing, you will need to send us a certified copy of the foreign registration (registration certificate). If the foreign registration is not in English, you must also provide an English translation.' | translate }}</p>
                                         <mat-form-field class="example-full-width">
                                             <input matInput [min]="minDate" [max]="maxDate" [matDatepicker]="picker2" placeholder="{{ 'Choose a date' | translate }}"
-                                                class="form-control" 
+                                                class="form-control"
                                                 id="trademarkDate2"
                                                 [(ngModel)]="trademark.Date2"
                                                 name="trademarkDate2"
                                                 [ngModelOptions]="{standalone: true}"
-                                                #trademarkDate2Var="ngModel" required/>                    
+                                                #trademarkDate2Var="ngModel" required/>
                                             <mat-datepicker-toggle matSuffix [for]="picker2"></mat-datepicker-toggle>
                                             <mat-datepicker #picker2></mat-datepicker>
                                         </mat-form-field>
@@ -245,17 +236,17 @@
                                             <div class="m-t-lg">
                                                 <label class="col-md-12 label-question">{{ 'In what foregin country was the trademark application submitted?' | translate }}</label>
                                                 <input type="text" class="m-t-sm form-control" style="width: 95%;" placeholder="{{ 'Enter Country' | translate }}"
-                                                [(ngModel)]=trademark.ForeignCountry [ngModelOptions]="{standalone: true}"> 
+                                                [(ngModel)]=trademark.ForeignCountry [ngModelOptions]="{standalone: true}">
                                             </div>
                                             <div class="m-t-md">
                                                 <label class="col-md-12 label-question">{{ 'What was the filing date for your foreign application?' | translate }}</label>
                                                 <mat-form-field class="example-full-width">
                                                     <input matInput [min]="minDate" [max]="maxDate" [matDatepicker]="ForeignFilingDate" placeholder="{{ 'Choose a date' | translate }}"
-                                                        class="form-control" 
+                                                        class="form-control"
                                                         id="trademarkForeignFilingDate"
                                                         [(ngModel)]="trademark.ForeignFilingDate"
                                                         name="trademarkForeignFilingDate"
-                                                        [ngModelOptions]="{standalone: true}" />                    
+                                                        [ngModelOptions]="{standalone: true}" />
                                                     <mat-datepicker-toggle matSuffix [for]="ForeignFilingDate"></mat-datepicker-toggle>
                                                     <mat-datepicker #ForeignFilingDate></mat-datepicker>
                                                 </mat-form-field>
@@ -263,7 +254,7 @@
                                             <div class="m-t-lg">
                                                 <label class="col-md-12 label-question">{{ 'What is the official number assigned to your foreign application?' | translate }}</label>
                                                 <input type="text" class="m-t-sm form-control" style="width: 95%;" placeholder="{{ 'Enter Number' | translate }}"
-                                                [(ngModel)]=trademark.ForeignCountry1 [ngModelOptions]="{standalone: true}"> 
+                                                [(ngModel)]=trademark.ForeignCountry1 [ngModelOptions]="{standalone: true}">
                                             </div>
                                         </div>
                                     </div>
@@ -291,22 +282,22 @@
                                             <div class="m-t-lg">
                                                 <label class="col-md-12 label-question">{{ 'In what country was the trademark registered?' | translate }}</label>
                                                 <input type="text" class="m-t-sm form-control" style="width: 95%;" placeholder="{{ 'Enter Country' | translate }}"
-                                                [(ngModel)]=trademark.ForeignCountry2 name="billingState"[ngModelOptions]="{standalone: true}" /> 
+                                                [(ngModel)]=trademark.ForeignCountry2 name="billingState"[ngModelOptions]="{standalone: true}" />
                                             </div>
                                             <div class="m-t-lg">
                                                 <label class="col-md-12 label-question">{{ 'What is the registration number?' | translate }}</label>
                                                 <input type="text" class="m-t-sm form-control" style="width: 95%;" placeholder="{{ 'Enter Country' | translate }}"
-                                                [(ngModel)]=trademark.ForeignCountry3 name="billingState" [ngModelOptions]="{standalone: true}" /> 
+                                                [(ngModel)]=trademark.ForeignCountry3 name="billingState" [ngModelOptions]="{standalone: true}" />
                                             </div>
                                             <div class="m-t-md m-r-lg" style="display: inline-block; width: 210px;">
                                                 <label class="col-md-12 label-question">{{ 'What is the registration date?' | translate }}</label>
                                                 <mat-form-field class="example-full-width">
                                                     <input matInput [min]="minDate" [max]="maxDate" [matDatepicker]="RegistrationDate" placeholder="{{ 'Choose a date' | translate }}"
-                                                        class="form-control" 
+                                                        class="form-control"
                                                         id="trademarkRegistrationDate"
                                                         [(ngModel)]="trademark.RegistrationDate"
                                                         name="trademarkRegistrationDate"
-                                                        [ngModelOptions]="{standalone: true}"/>                    
+                                                        [ngModelOptions]="{standalone: true}"/>
                                                     <mat-datepicker-toggle matSuffix [for]="RegistrationDate"></mat-datepicker-toggle>
                                                     <mat-datepicker #RegistrationDate></mat-datepicker>
                                                 </mat-form-field>
@@ -315,11 +306,11 @@
                                                 <label class="col-md-12 label-question">{{ 'What is the registration expiration date?' | translate }}</label>
                                                 <mat-form-field class="example-full-width">
                                                     <input matInput [min]="minDate" [max]="maxDate" [matDatepicker]="RegistrationExpirationDate" placeholder="{{ 'Choose a date' | translate }}"
-                                                        class="form-control" 
+                                                        class="form-control"
                                                         id="RegistrationExpirationDate"
                                                         [(ngModel)]="trademark.RegistrationExpirationDate"
                                                         name="trademarkRegistrationExpirationDate"
-                                                        [ngModelOptions]="{standalone: true}"/>                    
+                                                        [ngModelOptions]="{standalone: true}"/>
                                                     <mat-datepicker-toggle matSuffix [for]="RegistrationExpirationDate"></mat-datepicker-toggle>
                                                     <mat-datepicker #RegistrationExpirationDate></mat-datepicker>
                                                 </mat-form-field>
@@ -328,15 +319,15 @@
                                                 <label class="col-md-12 label-question">{{ 'What is the registration renewal date?' | translate }}</label>
                                                 <mat-form-field class="example-full-width">
                                                     <input matInput [min]="minDate" [max]="maxDate" [matDatepicker]="RegistrationRenewalDate" placeholder="{{ 'Choose a date' | translate }}"
-                                                        class="form-control" 
+                                                        class="form-control"
                                                         id="trademarkRegistrationRenewalDate"
                                                         [(ngModel)]="trademark.RegistrationRenewalDate"
                                                         name="trademarkRegistrationRenewalDate"
-                                                        [ngModelOptions]="{standalone: true}"/>                    
+                                                        [ngModelOptions]="{standalone: true}"/>
                                                     <mat-datepicker-toggle matSuffix [for]="RegistrationRenewalDate"></mat-datepicker-toggle>
                                                     <mat-datepicker #RegistrationRenewalDate></mat-datepicker>
                                                 </mat-form-field>
-                                            </div> 
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
@@ -347,12 +338,12 @@
                                         <input class="form-control" style="width: 95%;" id="trademarkSpecimen" type="text" placeholder="{{ 'Enter specimen' | translate }}"
                                         [(ngModel)]=trademark.Specimen name="trademarkSpecimen" #trademarkSpecimenVar="ngModel" [ngModelOptions]="{standalone: true}" />
                                     </div>
-                                </div>              
+                                </div>
                                 <div class="m-t-xl text-right m-r-xl">
                                     <button mat-button type="button" class="m-t-xl btn btn-danger-sm m-r-sm" style="width: 93px !important;" (click)="clearFields();"><i class="fa fa-times m-r-xs"></i>{{ 'Clear' | translate }}</button>
                                     <button mat-button type="button" class="m-t-xl btn button-success-sm1 m-l-sm" style="margin-left: 10px !important; width: 280px !important;" (click)="submitForm()"><i class="fa fa-check m-r-xs"></i>{{ 'Submit Trademark Registration' | translate }}</button>
                                     <!-- <button mat-button type="button" class="m-t-xl btn button-success-sm1 m-l-sm" style="margin-left: 10px !important; width: 280px !important;" (click)="submitTrademarkRegistration()"><i class="fa fa-check m-r-xs"></i>{{ '(real submit)' | translate }}</button> -->
-                                </div> 
+                                </div>
                             </div>
                         </div>
                     </div>

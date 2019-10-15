@@ -15,19 +15,18 @@ export class CompanyInfoTrademarkRegistrationComponent implements OnInit {
     errorMessage: string;
     companyInfo: CompanyInfo;
     formDirty: boolean;
-    trademark: TrademarkRegistration;
-
+    trademark: any;
+    products: any;
     selectedClasses: any[];
-
     selectedFileNames: string[] = [];
     filesToUpload: Array<File> = [];
-
     trademarkRegistrationForm: FormGroup;
-
     loading: boolean;
     showForm: boolean;
     showFormSuccess: boolean;
     classList: any[];
+    minDate = new Date(2000, 0, 1);
+    maxDate = new Date(2020, 0, 1);
 
     constructor(private route: ActivatedRoute,
         private companyService: CompanyService,

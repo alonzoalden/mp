@@ -3,7 +3,7 @@
         <mat-expansion-panel [expanded]="true">
             <mat-expansion-panel-header class="ibox-title">
                 <mat-panel-title>
-                    <h5>{{ 'News' | translate }} <span class="m-l-10imp label label-primary pull-right animated fadeIn">{{ 'Updated' | translate }} {{ newsDisplay.CreatedOn | date:'MMMM yyyy'}}</span> </h5> 
+                    <h5>{{ 'News' | translate }} <span class="m-l-10imp label label-primary pull-right animated fadeIn">{{ 'Updated' | translate }} {{ newsDisplay.CreatedOn | date:'MMMM yyyy'}}</span> </h5>
                 </mat-panel-title>
             </mat-expansion-panel-header>
             <div class="ibox-content no-scroll-bar" >
@@ -21,10 +21,6 @@
                         <h5> <a *ngIf="dashboardNews.length > 1" (click)="newsDisplay = dashboardNews[1]">{{dashboardNews[1].Subject}} <span class="text-muted skinny"> - {{dashboardNews[1].CreatedOn | date:'fullDate'}}</span></a></h5>
                         <h5> <a *ngIf="dashboardNews.length > 2" (click)="newsDisplay = dashboardNews[2]">{{dashboardNews[2].Subject}}<span class="text-muted skinny"> - {{dashboardNews[1].CreatedOn | date:'fullDate'}}</span></a></h5>
                     </div>
-                    <!-- <div class="m-t-sm m-b-none" (click)="toggleNews(dashboard.DashboardNews)">
-                        <a *ngIf="dataSource.data.length < 4 && dashboard.DashboardNews.length > 3"><small><strong>See all recent news...</strong></small></a>
-                        <a *ngIf="dataSource.data.length > 3 && dashboard.DashboardNews.length > 3 && dashboard.DashboardNews.length === dataSource.data.length"><small><strong>Hide all recent news...</strong></small></a>
-                    </div> -->
                 </div>
             </div>
         </mat-expansion-panel>

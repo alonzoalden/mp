@@ -26,8 +26,8 @@
                 <div class="ibox-content">
                     <form class="form-horizontal" #purchaseorderForm="ngForm" *ngIf="vendorAttachment">
                         <fieldset>
-                            <div class="form-group" [ngClass]="{'has-error': (vendorAttachmentTitleVar.touched || 
-                                                vendorAttachmentTitleVar.dirty) && 
+                            <div class="form-group" [ngClass]="{'has-error': (vendorAttachmentTitleVar.touched ||
+                                                vendorAttachmentTitleVar.dirty) &&
                                                 !vendorAttachmentTitleVar.valid }">
                                 <label class="col-md-2 control-label" for="vendorAttachmentTitleId">{{ 'Title' | translate }}</label>
                                 <div class="col-md-8">
@@ -36,49 +36,48 @@
                                     <span class="help-block" *ngIf="(vendorAttachmentTitleVar.touched ||
                                                 vendorAttachmentTitleVar.dirty) &&
                                                 vendorAttachmentTitleVar.errors">
-                                        <span *ngIf="vendorAttachmentTitleVar.errors.required">
+                                        <span *ngIf="vendorAttachmentTitleVar?.errors.required">
                                             {{ 'Title' | translate }} {{ 'is required' | translate }}
                                         </span>
                                     </span>
                                 </div>
                             </div>
-                    
+
                             <div *ngIf="filesToUpload.length === 0" >
                                 <label class="col-md-2 control-label" for="cartonLengthId">{{ 'Upload File' | translate }}</label>
-                                <div class="col-md-2">     
+                                <div class="col-md-2">
                                     <label class="btn btn-primary" style="width:100%; height:100%;">
-                                        <!-- Choose File&hellip; <input type="file" style="display: none;" (change)="fileChangeEvent($event)" accept=".*" #fileUpload> -->
                                         {{ 'Choose File…' | translate }} <input type="file" style="display: none;" (change)="fileChangeEvent($event)"
                                             accept="application/msword,image/gif,image/jpeg,application/pdf,image/png,application/vnd.ms-excel,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet,application/zip,.doc,.gif,.jpeg,.jpg,.pdf,.png,.xls,.xlsx,.zip"
                                             #fileUpload>
                                     </label>
-                                </div>            
-                            </div> 
+                                </div>
+                            </div>
                             <div class="row" *ngIf="filesToUpload?.length > 0">
-                                <div class="col-md-2">                            
-                                </div>   
-                                <div class="col-md-2">   
+                                <div class="col-md-2">
+                                </div>
+                                <div class="col-md-2">
                                     <ul>
                                         <li *ngFor="let fileName of selectedFileNames; let i = index">{{ 'File Selected' | translate }} : {{fileName}}</li>
-                                    </ul> 
+                                    </ul>
                                 </div>
-                                
+
                             </div>
                             <div class="row" *ngIf="filesToUpload?.length > 0">
                                 <div class="col-md-2"> </div>
-                                <div class="col-md-2">   
-                                    <button class="btn btn-danger btn-sm" type="button" (click)="cancelUpload()">{{ 'Remove' | translate }}</button>         
+                                <div class="col-md-2">
+                                    <button class="btn btn-danger btn-sm" type="button" (click)="cancelUpload()">{{ 'Remove' | translate }}</button>
                                 </div>
                             </div>
                             <br>
                             <div class="row" *ngIf="filesToUpload.length !== 0">
-                                <div class="col-md-2">              
-                                </div>   
-                                <div class="col-md-2">   
-                                    <button class="btn btn-primary" 
-                                        style="width:100%; height:100%;" 
+                                <div class="col-md-2">
+                                </div>
+                                <div class="col-md-2">
+                                    <button class="btn btn-primary"
+                                        style="width:100%; height:100%;"
                                         type="button"
-                                        [disabled]="pendingUpload" 
+                                        [disabled]="pendingUpload"
                                         (click)="upload()">
                                         <span *ngIf="!pendingUpload">{{ 'Add' | translate }}</span>
                                         <span *ngIf="pendingUpload"><i class="fa fa-spinner fa-spin"></i></span>
@@ -91,8 +90,8 @@
                 </div>
             </div>
         </div>
-    </div> 
-</div>           
+    </div>
+</div>
 
 
-            
+

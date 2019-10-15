@@ -40,7 +40,6 @@ export class LoadDashboardFail implements Action {
     readonly type = DashboardActionTypes.LoadDashboardFail;
     constructor(public payload: string) { }
 }
-
 export class LoadSalesOrderSummaryMerchant implements Action {
     readonly type = DashboardActionTypes.LoadSalesOrderSummaryMerchant;
 }
@@ -52,7 +51,6 @@ export class LoadSalesOrderSummaryMerchantFail implements Action {
     readonly type = DashboardActionTypes.LoadSalesOrderSummaryMerchantFail;
     constructor(public payload: string) { }
 }
-
 export class LoadSalesOrderSummaryToolots implements Action {
     readonly type = DashboardActionTypes.LoadSalesOrderSummaryToolots;
 }
@@ -64,7 +62,6 @@ export class LoadSalesOrderSummaryToolotsFail implements Action {
     readonly type = DashboardActionTypes.LoadSalesOrderSummaryToolotsFail;
     constructor(public payload: string) { }
 }
-
 export class LoadInboundShipmentStatusCounts implements Action {
     readonly type = DashboardActionTypes.LoadInboundShipmentStatusCounts;
 }
@@ -76,7 +73,6 @@ export class LoadInboundShipmentStatusCountsFail implements Action {
     readonly type = DashboardActionTypes.LoadInboundShipmentStatusCountsFail;
     constructor(public payload: string) { }
 }
-
 export class LoadItemSalesTotal implements Action {
     readonly type = DashboardActionTypes.LoadItemSalesTotal;
 }
@@ -88,7 +84,6 @@ export class LoadItemSalesTotalFail implements Action {
     readonly type = DashboardActionTypes.LoadItemSalesTotalFail;
     constructor(public payload: string) { }
 }
-
 export class LoadSalesOrderSummary implements Action {
     readonly type = DashboardActionTypes.LoadSalesOrderSummary;
 }
@@ -100,7 +95,6 @@ export class LoadSalesOrderSummaryFail implements Action {
     readonly type = DashboardActionTypes.LoadSalesOrderSummaryFail;
     constructor(public payload: string) { }
 }
-
 export class LoadSalesStatusTotals implements Action {
     readonly type = DashboardActionTypes.LoadSalesStatusTotals;
 }
@@ -112,7 +106,6 @@ export class LoadSalesStatusTotalsFail implements Action {
     readonly type = DashboardActionTypes.LoadSalesStatusTotalsFail;
     constructor(public payload: string) { }
 }
-
 export class LoadDashboardVendorNotification implements Action {
     readonly type = DashboardActionTypes.LoadDashboardVendorNotification;
 }

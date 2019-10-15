@@ -85,8 +85,6 @@ export class DashboardMainShellComponent implements OnInit {
         this.errorMessage$ = this.store.pipe(select(fromDashboard.getError));
 
         this.oauthService.events.subscribe(e => {
-        // console.log('oauth/oidc event');
-        // console.log(e);
             this.appService.setWasLoggedIn();
         });
 

@@ -3,7 +3,6 @@ import { MatTableDataSource } from '@angular/material';
 import { ItemInsert, ItemImageInsert } from '../../../../shared/class/item';
 import { Observable } from 'rxjs';
 import { Store, select } from '@ngrx/store';
-import * as itemActions from '../../../state/item.actions';
 import * as fromItem from '../../../state';
 
 declare var $: any;

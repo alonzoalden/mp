@@ -22,7 +22,6 @@
             <div class="nav">
                 <div class="tab-pane active">
                     <div class="panel-body p-w-none p-t-none">
-                        <!-- <div class="ibox-title"><h5>Inbound Shipment Details</h5></div> -->
                         <div class="ibox-content border" style="padding: 10px 20px 10px 20px;" >
                             <div class="row">
                                 <div class="inbound-shipment-details">
@@ -60,25 +59,23 @@
                 <div class="steps animated fadeIn">
                     <ul>
                         <li routerLinkActive="active" class="first done">
-                            <a [routerLink]="['line/list']" 
-                                [ngClass]="{'complete':!isInboundShipmentPending() || !isLineList()}" 
+                            <a [routerLink]="['line/list']"
+                                [ngClass]="{'complete':!isInboundShipmentPending() || !isLineList()}"
                                 routerLinkActive="active">
-                                <span class="wiz-title"><span class="m-r-xs">1.</span>{{ 'Inbound Shipment Lines' | translate }}</span> 
+                                <span class="wiz-title"><span class="m-r-xs">1.</span>{{ 'Inbound Shipment Lines' | translate }}</span>
                                 <span [ngClass]="{'glyphicon glyphicon-exclamation-sign': qtyUpdated}"  matTooltip="{{ 'Save to Update Carton' | translate }}"></span>
                                 <span [ngClass]="{'glyphicon glyphicon-exclamation-sign': !qtyUpdated && !isValid('line/list') }" matTooltip="{{ 'Missing Products' | translate }}"></span>
-                                <!-- <span class="glyphicon glyphicon-exclamation-sign" *ngIf="!isValid('line/list')" title="Missing products"></span> -->
                             </a>
                         </li>
                         <li routerLinkActive="active" >
-                            <a [routerLink]="['carton/list/line']" routerLinkActive="active" 
+                            <a [routerLink]="['carton/list/line']" routerLinkActive="active"
                                 [ngClass]="{
                                     'complete':!isInboundShipmentPending() || ( isInboundShipmentPending() && (isShippingInstruction() || isShipping()) ),
                                     'disabled':isInboundShipmentPending() && isLineList()
-                                }" 
+                                }"
                                 [ngStyle]="{'pointer-events': isInboundShipmentPending() && isLineList() ? 'none' : 'auto'}">
                                 <span class="wiz-title"><span class="number m-r-xs">2.</span>{{ 'Carton' | translate }}</span>
                                 <span [ngClass]="{'glyphicon glyphicon-exclamation-sign': !isValid('carton/list/line') }" matTooltip="{{ 'Must Include All Products' | translate }}" attr.aria-label="{{ 'Must Include All Products' | translate}}" ></span>
-                                <!-- <span class="glyphicon glyphicon-exclamation-sign" *ngIf="!isValid('carton/list/line')" title="Must include all products"></span> -->
                             </a>
                         </li>
                         <li routerLinkActive="active">
@@ -100,7 +97,6 @@
                                 [ngStyle]="{'pointer-events': isInboundShipmentPending() && !isShipping() ? 'none' : 'auto'}">
                                 <span class="wiz-title"><span class="number m-r-xs">4.</span>{{ 'Shipping' | translate }}</span>
                                 <span [ngClass]="{'glyphicon glyphicon-exclamation-sign': !isValid('shipping')}" matTooltip="{{ 'Missing shipping info' | translate }}" attr.aria-label="{{ 'Missing shipping info' | translate}}" ></span>
-                                <!-- <span class="glyphicon glyphicon-exclamation-sign" *ngIf="!isValid('shipping')" title="Missing shipping info"></span> -->
                             </a>
                         </li>
                     </ul>
@@ -118,12 +114,12 @@
                     </ng-container>
                 </div>
             </div>
-        </div>        
+        </div>
     </div>
     <br />
     <div class="row animated fadeIn">
         <div class="col-md-12">
-            <div class="pull-left">  
+            <div class="pull-left">
                 <mat-menu #saveMenu="matMenu" width="250px">
                     <button mat-menu-item (click)="openDialogPrintAllItemLabel()">{{ 'Print All Item Labels' | translate }}</button>
                     <button mat-menu-item (click)="saveInboundShipment(true)">{{ 'Print Packing Slip' | translate }}</button>
@@ -136,7 +132,7 @@
                         [disabled]="pendingSave"
                         [matMenuTriggerFor]="saveMenu"><span class="m-r-xs">{{ 'Menu' | translate }}</span> <span class="caret"></span>
                 </button>
-            </div> 
+            </div>
             <div class="pull-right" *ngIf="isInboundShipmentPending()">
                 <button type="button"
                         class="btn btn-remove m-r-sm"
@@ -158,24 +154,19 @@
                         *ngIf="isShipping()"
                         [disabled]="pendingSave || !(purchaseOrder.Status === 'Pending' && isValidShipment)"
                         (click)="saveAndShipInboundShipment()">{{ 'Save & Ship' | translate }}
-                </button>                            
+                </button>
             </div>
         </div>
         <div class="col-md-2">
 
-        </div>        
-        <div class="col-md-2"> 
-
-        </div>                        
-        <div class="col-md-2"> 
+        </div>
+        <div class="col-md-2">
 
         </div>
-        <div class="col-md-2">  
-            <!-- <button type="button"
-                class="btn btn-danger max"
-                *ngIf="purchaseOrder.Status == 'Shipping'"
-                (click)="cancelPurchaseOrder()">Cancel Shipping
-            </button> -->
+        <div class="col-md-2">
+
+        </div>
+        <div class="col-md-2">
         </div>
     </div>
 </div>

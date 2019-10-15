@@ -1,5 +1,4 @@
 import { Routes, RouterModule } from '@angular/router';
-
 import { CompanyComponent } from './company.component';
 import { CompanyAttachmentShellComponent } from './company-attachment/containers/company-attachment-shell/company-attachment-shell.component';
 import { CompanyAttachmentListShellComponent } from './company-attachment/containers/company-attachment-list-shell/company-attachment-list-shell.component';
@@ -13,7 +12,7 @@ const COMPANY_ROUTES: Routes = [
     {
         path: '',
         component: CompanyComponent,
-        children: [ {
+        children: [{
             path: 'attachment',
             component: CompanyAttachmentShellComponent,
             children: [ {
@@ -32,20 +31,21 @@ const COMPANY_ROUTES: Routes = [
         {
             path: 'info',
             component: CompanyInfoShellComponent,
-            children: [ {
-                path: 'description',
-                component: CompanyInfoDescriptionShellComponent
-            },
-            {
-                path: 'brand',
-                component: CompanyInfoBrandShellComponent
-            },
-            {
-                path: 'trademark',
-                component: CompanyInfoTrademarkRegistrationShellComponent
-            }
-        ]
-        } ]
+            children: [
+                {
+                    path: 'description',
+                    component: CompanyInfoDescriptionShellComponent
+                },
+                {
+                    path: 'brand',
+                    component: CompanyInfoBrandShellComponent
+                },
+                {
+                    path: 'trademark',
+                    component: CompanyInfoTrademarkRegistrationShellComponent
+                }
+            ]
+        }]
     }
 ];
 

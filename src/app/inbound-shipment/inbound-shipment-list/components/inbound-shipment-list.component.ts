@@ -1,15 +1,11 @@
 import { Component, OnInit, ViewChild, Input, SimpleChanges, OnChanges, Output, EventEmitter } from '@angular/core';
-import { Router } from '@angular/router';
 import { MatPaginator, MatSort, MatTableDataSource } from '@angular/material';
 import { PurchaseOrder } from '../../../shared/class/purchase-order';
-import { PurchaseOrderService } from '../../purchase-order.service';
-import { AppService } from '../../../app.service';
 import { Member } from 'app/shared/class/member';
 
 @Component({
   selector: 'o-inbound-shipment-list',
   templateUrl: './inbound-shipment-list.component.html',
-  styleUrls: ['./inbound-shipment-list.component.css']
 })
 
 export class InboundShipmentListComponent implements OnInit, OnChanges {

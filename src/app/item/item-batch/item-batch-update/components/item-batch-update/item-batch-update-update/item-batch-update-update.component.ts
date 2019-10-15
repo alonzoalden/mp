@@ -24,10 +24,9 @@ export class ItemBatchUpdateUpdateComponent implements OnInit, OnChanges {
     selectedBatchUpdate: BatchUpdate;
     batchUpdateField: string;
     batchUpdateValue: string;
-
-    private imageURL = environment.imageURL;
-    private linkURL = environment.linkURL;
-    private previewURL = environment.previewURL;
+    imageURL = environment.imageURL;
+    linkURL = environment.linkURL;
+    previewURL = environment.previewURL;
 
     displayedColumns = ['ProductDetails', 'FulfilledBy', 'Price', 'Quantity', 'MerchantQuantity', 'Approval', 'Remove'];
     loading: boolean;
@@ -93,7 +92,7 @@ export class ItemBatchUpdateUpdateComponent implements OnInit, OnChanges {
     }
 
     validate(): boolean {
-        if (this.selectedBatchUpdate && this.selectedBatchUpdate.FieldType && this.selectedBatchUpdate.FieldType.Type == 'number' && isNaN(Number(this.batchUpdateValue)) ) {
+        if (this.selectedBatchUpdate && this.selectedBatchUpdate.FieldType && this.selectedBatchUpdate.FieldType.Type === 'number' && isNaN(Number(this.batchUpdateValue)) ) {
             this.itemService.sendNotification({ type: 'error', title: 'Error', content: 'Invalid Format' });
             return false;
         } else {

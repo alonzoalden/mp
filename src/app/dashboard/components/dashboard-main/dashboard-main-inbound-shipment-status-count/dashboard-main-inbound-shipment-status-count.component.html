@@ -19,15 +19,8 @@
                     <th mat-header-cell *matHeaderCellDef style="text-align: center !important;">{{ 'Count' | translate }}</th>
                     <td mat-cell *matCellDef="let inboundShipmentStatusCount"  style="text-align: center;"><span [ngClass]="inboundShipmentStatusCount.Status === 'Complete' ? 'badge badge-info' : inboundShipmentStatusCount.Status === 'Pending' ? 'badge badge-info' : 'badge badge-info'">{{inboundShipmentStatusCount.Count}}</span></td>
                 </ng-container>
-                <!-- <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr> -->
                 <tr @smoothOpen style="height: 28px" class="animated fadeIn" mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
             </table>
-            <!-- <ng-container *ngIf="dataSource">
-                <div class="col-xs-4 animated fadeIn" *ngFor="let inboundShipmentStatusCount of dataSource.data">
-                    <h1 @smoothOpen class="no-margins animated fadeIn">{{inboundShipmentStatusCount.Count}}</h1>
-                    <div @smoothOpen class="font-bold text-navy">{{inboundShipmentStatusCount.Status}}</div>
-                </div>
-            </ng-container> -->
         </div>
     </div>
 </div>

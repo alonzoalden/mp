@@ -21,7 +21,6 @@ export class DashboardMainVendorNotificationComponent implements OnInit {
     displayedColumns = ['Status', 'Count'];
     displayedMerchantColumns = ['Unshipped', 'Shipped'];
     displayedToolotsColumns = ['Unshipped', 'Shipped'];
-
     @Input() userInfo: Member;
     @Input() dashboard: Dashboard;
     @Input() dashboardVendorNotification: DashboardVendorNotification;

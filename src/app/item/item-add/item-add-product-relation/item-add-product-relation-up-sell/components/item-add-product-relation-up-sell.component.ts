@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, Output, EventEmitter, SimpleChanges } from '@angular/core';
+import { Component, OnInit, Input, Output, EventEmitter, SimpleChanges, OnChanges } from '@angular/core';
 import { MatTableDataSource } from '@angular/material';
 import { ItemInsert, ItemList, ItemUpSellInsert } from '../../../../../shared/class/item';
 import { ItemService } from '../../../../item.service';
@@ -9,18 +9,17 @@ import { environment } from 'environments/environment';
     templateUrl: './item-add-product-relation-up-sell.component.html'
   })
 
-export class ItemAddProductRelationUpSellComponent implements OnInit {
+export class ItemAddProductRelationUpSellComponent implements OnInit, OnChanges {
     @Input() errorMessage: string;
     @Input() item: ItemInsert;
     @Input() upSellItemlist: ItemList[];
     @Input() itemUpSellsMatTable: MatTableDataSource<ItemUpSellInsert>;
     @Output() getAllItemUpSell = new EventEmitter<ItemUpSellInsert>();
-
     upSellDisplayedColumns = ['Add', 'Down', 'Position', 'Up', 'ItemName', 'SKU', 'TPIN', 'Remove'];
     upSellPendingAdd: boolean;
     currentItemUpSellIndex: number;
     formDirty = false;
-    private imageURL = environment.imageURL;
+    imageURL = environment.imageURL;
 
     constructor(private itemService: ItemService) { }
 
@@ -93,7 +92,7 @@ export class ItemAddProductRelationUpSellComponent implements OnInit {
         let counter: number = 0;
         this.item.ItemUpSells.forEach((value, index) => {
                 if (value.UpSellItemID === itemID) {
-                    if (isNew || index != this.item.ItemUpSells.length - 1) {
+                    if (isNew || index !== this.item.ItemUpSells.length - 1) {
                         counter += 1;
                     }
                 }
@@ -141,7 +140,5 @@ export class ItemAddProductRelationUpSellComponent implements OnInit {
     clearFields(ItemUpSellInsert: ItemUpSellInsert) {
         ItemUpSellInsert.UpSellItemID = null;
         this.formDirty = false;
-
-        //this.selectionCategoriesRef.nativeElement.value = "0: null";
     }
 }

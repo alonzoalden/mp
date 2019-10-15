@@ -20,7 +20,7 @@ import { environment } from '../../../../../environments/environment';
 
 
 export class DashboardMainItemSalesTotalListComponent implements OnInit {
-    private linkURL = environment.linkURL;
+    linkURL = environment.linkURL;
     displayedColumns = ['ItemName', 'Quantity', 'Amount'];
 
     @Input() itemSalesTotalsMatTable: MatTableDataSource<ItemSalesTotal>;

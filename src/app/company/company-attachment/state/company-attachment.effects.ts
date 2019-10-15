@@ -113,7 +113,6 @@ export class CompanyAttachmentEffects {
         mergeMap((id: number) =>
             this.companyService.getVendorAttachment(id).pipe(
                 map((vendorattachment: VendorAttachment) => {
-                    // this.companyService.sendNotification({ type: 'success', title: 'Successfully Updated', content: 'Attachment Saved' });
                     // this.router.navigate(['/company/attachment']);
                     return (new companyActions.GetVendorAttachmentSuccess(vendorattachment));
                 }),

@@ -29,7 +29,6 @@ export class CompanyInfoDescriptionComponent implements OnInit {
     }
 
     getShippingAddressState() {
-        console.log('hey')
         this.loadShippingAddressState.emit(this.companyInfo.ShippingCountryID);
     }
 
@@ -77,10 +76,10 @@ export class CompanyInfoDescriptionComponent implements OnInit {
     }
 
     onShippingCountryChange() {
-        if (this.companyInfo.ShippingCountryID == 'US') {
+        if (this.companyInfo.ShippingCountryID === 'US') {
             this.getShippingAddressState();
             this.companyInfo.ShippingState = 'Alabama';
-        } else if (this.companyInfo.ShippingCountryID == 'CA') {
+        } else if (this.companyInfo.ShippingCountryID === 'CA') {
             this.getShippingAddressState();
             this.companyInfo.ShippingState = 'Alberta';
         } else {
@@ -89,10 +88,10 @@ export class CompanyInfoDescriptionComponent implements OnInit {
     }
 
     onBillingCountryChange() {
-        if (this.companyInfo.BillingCountryID == 'US') {
+        if (this.companyInfo.BillingCountryID === 'US') {
             this.getBillingAddressState();
             this.companyInfo.BillingState = 'Alabama';
-        } else if (this.companyInfo.BillingCountryID == 'CA') {
+        } else if (this.companyInfo.BillingCountryID === 'CA') {
             this.getBillingAddressState();
             this.companyInfo.BillingState = 'Alberta';
         } else {

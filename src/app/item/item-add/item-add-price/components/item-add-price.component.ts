@@ -10,23 +10,16 @@ import { Member } from 'app/shared/class/member';
     templateUrl: './item-add-price.component.html'
 })
 
-
 export class ItemAddPriceComponent implements OnInit, OnChanges {
     @Input() userInfo: Member;
     @Input() errorMessage: string;
     @Input() item: ItemInsert;
     @Input() itemTierPricesMatTable: MatTableDataSource<ItemTierPriceInsert>;
-
-    //isDropship: boolean;
-
     minDate = new Date(2000, 0, 1);
     maxDate = new Date(2020, 0, 1);
-
-    PendingAdd: boolean;
+    pendingAdd: boolean;
     currentItemTierPriceIndex: number;
-
     displayedColumns = ['Add', 'Quantity', 'Price',  'Remove'];
-
     dataSource: any = null;
     formDirty = false;
     canAdd = false;
@@ -37,39 +30,14 @@ export class ItemAddPriceComponent implements OnInit, OnChanges {
     ngOnChanges(changes: SimpleChanges) {
         if (changes.item && changes.item.currentValue && changes.item.currentValue.ItemTierPrices.length === 0) {
             if (changes.item.currentValue.ItemTierPrices.length === 0) {
-                this.PendingAdd = true;
+                this.pendingAdd = true;
                 const _temp = new ItemTierPriceInsert(0, 0, 0);
                 this.item.ItemTierPrices.push(_temp);
             }
         }
-
-        // this.dataSource.sort = this.sort;
     }
 
     ngOnInit(): void {
-        //this.item = this.itemService.currentItemInsert;
-
-        // this.appService.getCurrentMember()
-        //         .subscribe(
-        //             (data) => {
-        //                 this.appService.currentMember = data;
-        //                 this.isDropship = data.IsDropship;
-        //             },
-        //             (error: any) => {
-        //                 this.errorMessage = <any>error;
-        //             }
-        //         );
-
-        //this.refreshItemTierPriceDataSource(this.item.ItemTierPrices);
-
-
-        // if(this.item.ItemTierPrices.length === 0) {
-        //     this.PendingAdd = true;
-        //     const _temp = new ItemTierPriceInsert(0, 0, 0);
-        //     this.item.ItemTierPrices.push(_temp);
-        //     //this.refreshItemTierPriceDataSource(this.item.ItemTierPrices);
-        // }
-
         this.currentItemTierPriceIndex = this.item.ItemTierPrices.length - 1;
     }
 
@@ -89,7 +57,7 @@ export class ItemAddPriceComponent implements OnInit, OnChanges {
         if (counter > 1) {
             this.itemService.sendNotification({ type: 'error', title: 'Error', content: 'Tier Pricing already exists for this Quantity' });
         } else {
-            this.PendingAdd = true;
+            this.pendingAdd = true;
             const _temp = new ItemTierPriceInsert(null, null, null);
             this.item.ItemTierPrices.push(_temp);
             this.refreshItemTierPriceDataSource(this.item.ItemTierPrices);
@@ -97,9 +65,9 @@ export class ItemAddPriceComponent implements OnInit, OnChanges {
     }
 
     onEditItemTierPrice(index: number) {
-        if (this.PendingAdd) {
+        if (this.pendingAdd) {
             this.currentItemTierPriceIndex = this.item.ItemTierPrices.length - 1;
-            this.PendingAdd = false;
+            this.pendingAdd = false;
         } else {
             this.currentItemTierPriceIndex = index;
         }

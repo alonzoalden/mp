@@ -108,7 +108,6 @@ import { ItemVariationDetailComponent } from './item-variation/item-variation-de
 import { ItemEditVariationComponent } from './item-edit/item-edit-variation.component';
 import { itemRouting } from './item.routing';
 import { ItemService } from '../item/item.service';
-// /* NgRx */
 // import { itemreducer } from './item-variation/state/item-variation.reducer';
 // import { ItemVariationEffects } from './item-variation/state/item-variation.effects';
 import { StoreModule } from '@ngrx/store';
@@ -126,11 +125,9 @@ import { ItemEffects } from './state/item.effects';
         ItemComponent,
         ItemListComponent,
         ItemAddComponent,
-
         ItemListShellComponent,
         ItemPrintLabelShellComponent,
         ItemPartListShellComponent,
-
         ItemAddShellComponent,
         ItemAddDescriptionShellComponent,
         ItemAddDimensionShellComponent,

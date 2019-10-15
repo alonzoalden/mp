@@ -1,6 +1,5 @@
-import { Component, ViewChild, OnInit, OnDestroy } from '@angular/core';
-import { ActivatedRoute, Router } from '@angular/router';
-import { DeviceDetectorService } from 'ngx-device-detector';
+import { Component, OnInit } from '@angular/core';
+
 @Component({
     selector: 'browser-compatibility',
     templateUrl: './browser-compatibility.component.html',
@@ -8,8 +7,7 @@ import { DeviceDetectorService } from 'ngx-device-detector';
 
 export class BrowserCompatibilityComponent implements OnInit {
 
-    constructor(private deviceService: DeviceDetectorService, private router: Router) {
-    }
+    constructor() { }
 
     ngOnInit() {
         const mainNav = (<HTMLElement>document.getElementById('main-nav'));

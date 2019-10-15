@@ -3,6 +3,7 @@ import { ActivatedRoute } from '@angular/router';
 import { MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material';
 import { PurchaseOrderService } from '../../../purchase-order.service';
 import { PurchaseOrder } from '../../../../shared/class/purchase-order';
+import { InboundShipmentEditShippingInstructionCartonPrintDialogComponent } from './inbound-shipment-edit-shipping-instruction.component-carton-print-dialog';
 
 @Component({
     selector: 'o-inbound-shipment-edit-shipping-instruction',
@@ -32,7 +33,7 @@ export class InboundShipmentEditShippingInstructionComponent implements OnInit {
     }
 
     openDialogPrintCartonLabel() {
-        const dialogRef = this.cartonPrintDialog.open(InboundShipmentEditShippingInstructionComponentCartonPrintDialog, {
+        const dialogRef = this.cartonPrintDialog.open(InboundShipmentEditShippingInstructionCartonPrintDialogComponent, {
           width: '250px',
           data: this.purchaseorder
         });
@@ -46,20 +47,10 @@ export class InboundShipmentEditShippingInstructionComponent implements OnInit {
         this.purchaseOrderService.downloadAllCartonLabel(this.purchaseorderid, border).subscribe(
             (data) => {
                 const blob = new Blob([data], {type: 'application/pdf'});
-                const blobUrl = URL.createObjectURL(blob);
                 if (window.navigator.msSaveOrOpenBlob) {
                     const fileName = 'Carton_' +  this.purchaseorder.PackingSlipNumber;
-                    window.navigator.msSaveOrOpenBlob(data, fileName + '.pdf'); // IE is the worst!!!
+                    window.navigator.msSaveOrOpenBlob(data, fileName + '.pdf');
                 } else {
-                    // const iframe = document.createElement('iframe');
-                    // iframe.style.display = 'none';
-                    // iframe.src = blobUrl;
-                    // document.body.appendChild(iframe);
-
-                    // iframe.onload = (function() {
-                    //     iframe.contentWindow.focus();
-                    //     iframe.contentWindow.print();
-                    // });
                     const fileURL = window.URL.createObjectURL(blob);
                     const a: HTMLAnchorElement = document.createElement('a') as HTMLAnchorElement;
                     a.href = fileURL;
@@ -67,7 +58,6 @@ export class InboundShipmentEditShippingInstructionComponent implements OnInit {
                     document.body.appendChild(a);
                     a.target = '_blank';
                     a.click();
-
                     document.body.removeChild(a);
                     URL.revokeObjectURL(fileURL);
                 }
@@ -75,35 +65,3 @@ export class InboundShipmentEditShippingInstructionComponent implements OnInit {
         );
     }
 }
-
-
-export class CartonAllLabelPrintDialog {
-    constructor(
-        public Border: string
-    ) {}
-}
-
-@Component({
-    selector: 'inbound-shipment-edit-shipping-instruction.component-carton-print-dialog',
-    templateUrl: 'inbound-shipment-edit-shipping-instruction.component-carton-print-dialog.html',
-  })
-
-export class InboundShipmentEditShippingInstructionComponentCartonPrintDialog implements OnInit {
-    cartonLabelPrintDialog: CartonAllLabelPrintDialog;
-
-    constructor(
-        public dialogRef: MatDialogRef<InboundShipmentEditShippingInstructionComponentCartonPrintDialog>,
-        @Inject(MAT_DIALOG_DATA) public data: PurchaseOrder) {
-            //console.log(data);
-        }
-
-    ngOnInit() {
-        //this.quantity = this.data.LabelQty;
-        this.cartonLabelPrintDialog = new CartonAllLabelPrintDialog('yes');
-    }
-
-    onCancelClick(): void {
-        this.dialogRef.close();
-    }
-}
-

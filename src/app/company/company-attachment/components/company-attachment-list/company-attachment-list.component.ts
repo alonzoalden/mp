@@ -9,7 +9,7 @@ import { environment } from '../../../../../environments/environment';
 })
 
 export class CompanyAttachmentListComponent implements OnInit, OnChanges, AfterViewInit {
-    private fileURL = environment.fileURL;
+    fileURL = environment.fileURL;
     displayedColumns = ['Menu', 'View', 'ID', 'Title', 'CreatedOn', 'Exclude'];
     currentIndex = null;
     @Input() userInfoDefaultPageSize: number;
