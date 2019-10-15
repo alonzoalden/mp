@@ -68,7 +68,7 @@ export const getItemCategories = createSelector(
 );
 export const getCategoryBreadCrumbs = createSelector(
     getItemFeatureState,
-    state => state.categoryBreadCrumbs
+    state => state.currentCategoryBreadCrumbs
 );
 export const getAllItemList = createSelector(
     getItemFeatureState,
@@ -149,6 +149,10 @@ export const getItemPrintLabelsMatTable = createSelector(
 export const getIsLoading = createSelector(
     getItemFeatureState,
     state => state.isLoading
+);
+export const getIsMainItemsListLoading = createSelector(
+    getItemFeatureState,
+    state => state.isMainItemsListLoading
 );
 export const getPendingDelete = createSelector(
     getItemFeatureState,

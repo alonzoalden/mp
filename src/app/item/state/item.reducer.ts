@@ -15,7 +15,7 @@ export interface ItemState {
     selectedBundleOption: ItemOptionInsert;
     selectedBundleOptionSelectionList: ItemSelectionInsert[];
     itemCategories: Array<Category[]>;
-    categoryBreadCrumbs: Array<Category[]>;
+    currentCategoryBreadCrumbs: Array<Category[]>;
     allItemList: ItemList[];
     allItem: Item;
     vendorAttachmentsList: VendorAttachmentList[];
@@ -25,6 +25,7 @@ export interface ItemState {
     itemBatchUpdates: BatchUpdate[];
     itemPrintLabels: ItemPrintLabel[];
     isLoading: boolean;
+    isMainItemsListLoading: boolean;
     isVendorAttachmentsListLoading: boolean;
     isItemListLoading: boolean;
     pendingDelete: boolean;
@@ -42,7 +43,7 @@ const initialState: ItemState = {
     selectedBundleOption: null,
     selectedBundleOptionSelectionList: [],
     itemCategories: [],
-    categoryBreadCrumbs: [],
+    currentCategoryBreadCrumbs: [],
     allItemList: [],
     allItem: null,
     vendorAttachmentsList: [],
@@ -52,6 +53,7 @@ const initialState: ItemState = {
     itemBatchUpdates: [],
     itemPrintLabels: [],
     isLoading: true,
+    isMainItemsListLoading: false,
     isVendorAttachmentsListLoading: false,
     isItemListLoading: false,
     pendingDelete: false,
@@ -67,7 +69,9 @@ export function itemReducer(state = initialState, action: ItemActions): ItemStat
         case ItemActionTypes.SetItem:
             return {
                 ...state,
-                item: action.payload
+                item: action.payload,
+                currentCategoryBreadCrumbs: [],
+                categoryAssignments: []
             };
         case ItemActionTypes.SetSelectedBundleOption:
             return {
@@ -134,10 +138,10 @@ export function itemReducer(state = initialState, action: ItemActions): ItemStat
                 error: action.payload,
             };
         case ItemActionTypes.LoadCategoryBreadCrumbsSuccess:
-            state.categoryBreadCrumbs.push(action.payload);
+            state.currentCategoryBreadCrumbs.push(action.payload);
             return {
                 ...state,
-                categoryBreadCrumbs: [...state.categoryBreadCrumbs],
+                currentCategoryBreadCrumbs: [...state.currentCategoryBreadCrumbs],
                 error: '',
             };
         case ItemActionTypes.LoadAllItemListSuccess:
@@ -174,6 +178,7 @@ export function itemReducer(state = initialState, action: ItemActions): ItemStat
             };
 
         case ItemActionTypes.LoadItemCategoryAssignmentsSuccess:
+            state.item.ItemCategoryAssignments = action.payload;
             return {
                 ...state,
                 categoryAssignments: action.payload,
@@ -211,6 +216,8 @@ export function itemReducer(state = initialState, action: ItemActions): ItemStat
                 ...state,
                 isLoading: false,
                 item: action.payload,
+                currentCategoryBreadCrumbs: [],
+                categoryAssignments: [],
                 error: '',
             };
         case ItemActionTypes.LoadItemFail:
@@ -227,8 +234,10 @@ export function itemReducer(state = initialState, action: ItemActions): ItemStat
                 pendingAdd: true,
             };
         case ItemActionTypes.AddItemSuccess:
+            const _itemExists = state.items.find(item => item.ItemID === action.payload.ItemID);
             return {
                 ...state,
+                items: _itemExists ? [...state.items] : [action.payload, ...state.items],
                 itemBatchItems: [action.payload, ...state.itemBatchItems],
                 pendingAdd: false,
                 error: '',
@@ -345,14 +354,14 @@ export function itemReducer(state = initialState, action: ItemActions): ItemStat
         case ItemActionTypes.LoadMainItems:
             return {
                 ...state,
-                isLoading: true,
+                isMainItemsListLoading: true,
             };
         case ItemActionTypes.LoadMainItemsSuccess:
             return {
                 ...state,
                 items: action.payload,
                 itemBatchItems: action.payload,
-                isLoading: false,
+                isMainItemsListLoading: false,
                 error: '',
             };
         case ItemActionTypes.LoadMainItemsFail:
@@ -360,7 +369,7 @@ export function itemReducer(state = initialState, action: ItemActions): ItemStat
                 ...state,
                 items: [],
                 itemBatchItems: [],
-                isLoading: false,
+                isMainItemsListLoading: false,
                 error: action.payload,
             };
         case ItemActionTypes.LoadRefreshItemsSuccess:

@@ -1,18 +1,16 @@
-import { Component, OnInit, ViewChild, ElementRef, Input, EventEmitter, Output, SimpleChanges } from '@angular/core';
-import { Router } from '@angular/router';
+import { Component, ViewChild, Input, EventEmitter, Output, SimpleChanges, OnChanges } from '@angular/core';
 import { MatTableDataSource } from '@angular/material';
 import { ItemInsert, ItemCategoryAssignment } from '../../../../shared/class/item';
 import { Category } from '../../../../shared/class/category';
-
 import { ItemService } from '../../../item.service';
-import { Observable } from 'rxjs';
+import { NgSelectComponent } from '@ng-select/ng-select';
 
 @Component({
   selector: 'o-item-add-category',
   templateUrl: './item-add-category.component.html'
 })
 
-export class ItemAddCategoryComponent implements OnInit {
+export class ItemAddCategoryComponent implements OnChanges {
     @Input() userInfo: string;
     @Input() errorMessage: string;
     @Input() item: ItemInsert;
@@ -26,7 +24,7 @@ export class ItemAddCategoryComponent implements OnInit {
     dataSource: any = null;
     formDirty = false;
 
-    @ViewChild('selectionCategories', { static: false }) selectionCategoriesRef: ElementRef;
+    @ViewChild('selectionCategories', { static: false }) selectionCategoriesRef: NgSelectComponent;
 
     constructor(private itemService: ItemService) { }
 
@@ -37,22 +35,6 @@ export class ItemAddCategoryComponent implements OnInit {
         if (changes.currentResult && changes.currentResult.currentValue) {
             this.refreshDataSource(this.currentResult);
         }
-
-    }
-
-    ngOnInit(): void {
-
-        // if (this.item && this.item.ItemCategoryAssignments.length > 0) {
-        //     this.item.ItemCategoryAssignments.forEach((value, index) => {
-        //         //this.getCategoryBreadCrumbs.emit(value.ItemCategoryID);
-        //         this.itemService.getCategoryBreadCrumbs(value.ItemCategoryID).subscribe(
-        //             (categories: Category[]) => {
-        //                 //this.currentResult.push(categories);
-        //                 this.refreshDataSource(this.currentResult);
-        //             }
-        //         );
-        //     });
-        // }
     }
 
     refreshDataSource(resultCategories: Array<Category[]>) {
@@ -88,25 +70,17 @@ export class ItemAddCategoryComponent implements OnInit {
         const categoryValue = this.currentResult[index][this.currentResult[index].length - 1].ItemCategoryID;
         this.currentResult.splice(index, 1);
         this.item.ItemCategoryAssignments.splice(this.item.ItemCategoryAssignments.findIndex(x => x.ItemCategoryID === categoryValue), 1);
-
-        //this.refreshDataSource(this.currentResult);
     }
 
     onAddCategory() {
-        // if (this.lastSelectedValue !== 0) {
-        //     this.getCategoryBreadCrumbs.emit(this.lastSelectedValue);
-        //     this.categoriesList.splice(1);
-        //     this.item.ItemCategoryAssignments.push(new ItemCategoryAssignment(this.lastSelectedValue));
-        //     this.lastSelectedValue = 0;
-        // }
         if (this.lastSelectedValue !== 0) {
             this.itemService.getCategoryBreadCrumbs(this.lastSelectedValue).subscribe(
                 (categories: Category[]) => {
                     this.currentResult.push(categories);
-                    this.categoriesList.splice(1);
                     this.item.ItemCategoryAssignments.push(new ItemCategoryAssignment(this.lastSelectedValue));
                     this.lastSelectedValue = 0;
-                    //this.selectionCategoriesRef.nativeElement.value = 0;
+                    this.categoriesList.splice(1);
+                    this.selectionCategoriesRef.clearModel();
                     this.refreshDataSource(this.currentResult);
                 },
                 (error: any) => this.errorMessage = <any>error
@@ -114,12 +88,11 @@ export class ItemAddCategoryComponent implements OnInit {
         } else {
             console.log('nothing selected');
         }
-
     }
     clearFields() {
         this.lastSelectedValue = 0;
         this.formDirty = false;
         this.categoriesList = this.categoriesList.splice(0, 1);
-        //this.selectionCategoriesRef.nativeElement.value = 0;
+        this.selectionCategoriesRef.clearModel();
     }
 }
