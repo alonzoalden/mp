@@ -5,11 +5,23 @@
             <div *ngIf="purchaseOrder && purchaseOrder.Cartons && purchaseOrder.Cartons.length > 0">
                 <div class="table-responsinve">
                     <table mat-table #table [dataSource]="dataSource">
-                        <!-- Add Button -->
+                      <!--Sort-->
+                      <ng-container matColumnDef="Sort">
+                        <th mat-header-cell *matHeaderCellDef width="45px">{{ 'Sort' | translate }}</th>
+                        <td mat-cell *matCellDef="let carton; let i = index">
+                          <div *ngIf="currentIndex === i && currentIndex != purchaseOrder.Cartons?.length - 1">
+                            <input class="form-control" id="sortInput" type="number"
+                                   (keyup.enter)='onKeyDown(carton)' min="0" [matTooltip]="'Press the Enter!' | translate"
+                                   [disabled]="purchaseOrder.Status != 'Pending'"
+                                   [(ngModel)]="sortNum"/>
+                          </div>
+                        </td>
+                      </ng-container>
+                      <!-- Add Button -->
                         <ng-container matColumnDef="Add">
                             <th mat-header-cell *matHeaderCellDef width="45px"></th>
-                            <td mat-cell *matCellDef="let carton; let i = index">                                                 
-                                <div *ngIf="i === purchaseOrder.Cartons.length-1 && purchaseOrder.Status === 'Pending'">                               
+                            <td mat-cell *matCellDef="let carton; let i = index">
+                                <div *ngIf="i === purchaseOrder.Cartons.length-1 && purchaseOrder.Status === 'Pending'">
                                     <a (click)='onAddCarton(carton, i); canAdd = false; formDirty = false;'>
                                         <span [matTooltip]="canAdd ? ( 'Add' | translate ) : ( 'Required fields must be complete' | translate )" attr.aria-label="{{ 'Add' | translate}}" class="glyphicon glyphicon-plus fs-20" [ngClass]="i === purchaseOrder.Cartons.length-1 && canAdd ? 'green' : 'gray'"></span>
                                     </a>
@@ -47,7 +59,7 @@
                                     </div>
                                 </div>
                             </td>
-                        </ng-container> 
+                        </ng-container>
                         <!-- Up Column -->
                         <ng-container matColumnDef="Up">
                             <th mat-header-cell *matHeaderCellDef width="40px"></th>
@@ -56,7 +68,7 @@
                                     <a (click)='moveUpCarton(carton)' *ngIf='i !== 0'><span class="glyphicon glyphicon-arrow-up"></span></a>
                                 </div>
                             </td>
-                        </ng-container>                    
+                        </ng-container>
                         <!-- Weight Column -->
                         <ng-container matColumnDef="Weight">
                             <th mat-header-cell *matHeaderCellDef width="80px">{{ 'Weight' | translate }}</th>
@@ -65,14 +77,14 @@
                                     {{carton.Weight}}
                                 </div>
                                 <div *ngIf="currentIndex === i || i === purchaseOrder.Cartons.length-1">
-                                    <input class="form-control" id="cartonWeightID" type="number" placeholder="{{ 'Weight' | translate }}" 
+                                    <input class="form-control" id="cartonWeightID" type="number" placeholder="{{ 'Weight' | translate }}"
                                         onkeydown="return event.keyCode == 69 || event.keyCode == 189 || event.keyCode == 190 ? false : true" min="0"
                                         [disabled]="purchaseOrder.Status != 'Pending'"
                                         [(ngModel)]=carton.Weight [ngModelOptions]="{standalone: true}"
                                         (focus)="formDirty = true;" (ngModelChange)="i === purchaseOrder.Cartons.length-1 && canAdd = true;"/>
                                 </div>
                             </td>
-                        </ng-container>        
+                        </ng-container>
                         <!-- Dimension Column -->
                         <ng-container matColumnDef="Dimension">
                             <th mat-header-cell *matHeaderCellDef width="240px">{{ 'Dimension' | translate }}</th>
@@ -95,7 +107,7 @@
                                         onkeydown="return event.keyCode == 69 || event.keyCode == 189 || event.keyCode == 190 ? false : true" min="0"
                                         [disabled]="purchaseOrder.Status != 'Pending'"
                                         [(ngModel)]=carton.Height [ngModelOptions]="{standalone: true}"
-                                        (focus)="formDirty = true;" (ngModelChange)="i === purchaseOrder.Cartons.length-1 && canAdd = true;"/>" 
+                                        (focus)="formDirty = true;" (ngModelChange)="i === purchaseOrder.Cartons.length-1 && canAdd = true;"/>"
                                 </div>
                             </td>
                         </ng-container>
@@ -107,7 +119,7 @@
                                     {{carton.LabelQty}}
                                 </div>
                                 <div *ngIf="currentIndex === i || i === purchaseOrder.Cartons.length-1">
-                                    <input class="form-control" id="cartonLabelQtyID" type="number" placeholder="{{ 'No. of Labels' | translate }}" 
+                                    <input class="form-control" id="cartonLabelQtyID" type="number" placeholder="{{ 'No. of Labels' | translate }}"
                                         onkeydown="return event.keyCode == 69 || event.keyCode == 189 || event.keyCode == 190 ? false : true" min="0"
                                         [disabled]="purchaseOrder.Status != 'Pending'"
                                         [(ngModel)]=carton.LabelQty [ngModelOptions]="{standalone: true}"
@@ -121,7 +133,7 @@
                             <td mat-cell *matCellDef="let carton; let i = index">
                                 <div *ngIf="i !== purchaseOrder.Cartons.length-1">
                                     {{carton.CartonNumber}}
-                                </div>                               
+                                </div>
                             </td>
                         </ng-container>
                         <!-- Total Units Column -->
@@ -132,7 +144,7 @@
                                     {{getTotalQuantity(carton.CartonLines)}}
                                 </div>
                             </td>
-                        </ng-container> 
+                        </ng-container>
                         <!-- Actions Column -->
                         <ng-container matColumnDef="Actions">
                             <th mat-header-cell *matHeaderCellDef  width="180px">{{ 'Actions' | translate }}</th>
@@ -144,7 +156,7 @@
                                         <span class="glyphicon glyphicon-print"></span>
                                     </a>
                                 </span>
-                                <span *ngIf="orderStatus === 'Pending' && i !== purchaseOrder.Cartons.length-1 && !pendingCopy"> 
+                                <span *ngIf="orderStatus === 'Pending' && i !== purchaseOrder.Cartons.length-1 && !pendingCopy">
                                     <a (click)="onCopyCarton(carton, i)"
                                         matTooltip="{{ 'Copy' | translate }}"
                                         attr.aria-label="{{ 'Copy' | translate}}">
@@ -174,7 +186,7 @@
                                     </a>
                                 </div>
                             </td>
-                        </ng-container>        
+                        </ng-container>
                         <!-- Copy Button -->
                         <ng-container matColumnDef="Copy">
                             <th mat-header-cell *matHeaderCellDef width="80px">{{ 'Copy' | translate }}</th>
@@ -206,7 +218,7 @@
                             [ngStyle]="{'background-color': purchaseOrderService.rowColorConditions(i, purchaseOrder?.Cartons, currentIndex, formDirty)}"
                             (click)="onShowCartonLine(carton, i)"></tr>
                         <!-- <tr mat-row *matRowDef="let carton; let i = index; columns: displayedColumns"
-                            [ngStyle]="{'background-color': i === purchaseOrder.Cartons.length-1 ? '#99CCFF' : currentIndex === i ? '#FF9933' : '#FFFFFF' }" 
+                            [ngStyle]="{'background-color': i === purchaseOrder.Cartons.length-1 ? '#99CCFF' : currentIndex === i ? '#FF9933' : '#FFFFFF' }"
                             (click)="onShowCartonLine(carton, i)"></tr> -->
                     </table>
                 </div>

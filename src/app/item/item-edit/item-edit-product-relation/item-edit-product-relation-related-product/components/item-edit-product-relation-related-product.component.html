@@ -44,7 +44,7 @@
                     <ng-container matColumnDef="ItemName">
                         <th mat-header-cell *matHeaderCellDef width="300px">{{ 'Item Description' | translate }}</th>
                         <td mat-cell *matCellDef="let itemRelatedProduct; let i = index">
-                            <div *ngIf="currentItemRelatedProductIndex !== i && i !== item.ItemRelatedProducts.length-1">
+                            <div >
                                 <div class="flex-details">
                                     <div class="img-detail">
                                         <div><img *ngIf='!itemRelatedProduct.ImagePath' class="opaque" src='https://content-merchantportal.toolots.net/assets/images/no-image-icon.png' matTooltip='Product has no image' matTooltipShowDelay="500"></div>
