@@ -121,7 +121,6 @@ export class AppComponent implements OnInit, OnDestroy {
 
     private configureWithNewConfigApi() {
         this.oauthService.configure(authConfig);
-        // this.oauthService.setStorage(localStorage);
         this.oauthService.tokenValidationHandler = new JwksValidationHandler();
         this.oauthService.setupAutomaticSilentRefresh();
         this.oauthService.loadDiscoveryDocumentAndTryLogin();
@@ -142,22 +141,9 @@ export class AppComponent implements OnInit, OnDestroy {
     manualSilentRefresh() {
         this.oauthService
             .silentRefresh()
-            .then(info => console.debug('refresh ok', info))
+            .then(info => console.error('refresh ok', info))
             .catch(err => console.error('refresh error', err));
     }
-
-    // getApi() {
-    //     this.httpClient
-    //         //.get("https://localhost:44383/api/WebApiResource", {
-    //         .get("https://login.toolots.com/api/WebApiResource", {
-    //             headers: new HttpHeaders(
-    //             {
-    //             'Authorization': 'Bearer ' + this.oauthService.getAccessToken()
-    //             }
-    //         )
-    //         })
-    //         .subscribe(data => this.apiResponse = data, error => this.apiResponse = {});
-    // }
 
     logout() {
         this.oauthService.logOut();
