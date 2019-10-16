@@ -45,17 +45,11 @@
                                         <div matTooltip="{{item.Name}}" matTooltipPosition="right" matTooltipShowDelay="400">{{item.Name}}</div>
                                     </ng-template>
                                     </ng-select>
-                                    <!-- <select class="form-control" (focus)="formDirty = true;" (change)="onChange($event.target.value, i); canAdd = true;" #selectionCategories>
-                                        <option value="0">-----SELECT-----</option>
-                                        <option [value]="category.ItemCategoryID" *ngFor="let category of categories">{{category.Name}}</option>
-                                    </select> -->
+
                                 </div>
                             </div>
                             <div [hidden]="!formDirty" class="float-right pb6">
                                 <a matTooltip="{{ 'Clear' | translate }}" attr.aria-label="{{ 'Clear' | translate}}" (click)="clearFields();"><i class="fa fa-eraser m-t-sm"></i></a>
-                                <!-- <button type="button"
-                                        class="btn btn-remove-sm"
-                                        (click)="clearFields();">Clear</button> -->
                             </div>
                         </div>
                     </div>

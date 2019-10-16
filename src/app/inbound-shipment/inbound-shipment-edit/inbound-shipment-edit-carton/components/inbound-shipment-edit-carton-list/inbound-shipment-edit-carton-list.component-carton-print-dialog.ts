@@ -12,8 +12,7 @@ export class CartonLabelPrintDialog {
 @Component({
     selector: 'inbound-shipment-edit-carton-list.component-carton-print-dialog',
     templateUrl: 'inbound-shipment-edit-carton-list.component-carton-print-dialog.html',
-  })
-
+})
 export class InboundShipmentEditCartonListCartonPrintDialogComponent implements OnInit {
     //quantity: number;
     cartonLabelPrintDialog: CartonLabelPrintDialog;

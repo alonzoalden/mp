@@ -1,10 +1,10 @@
-import { Component,  OnInit, Input, SimpleChanges, Output, EventEmitter } from '@angular/core';
+import { Component, OnInit, Input, SimpleChanges, Output, EventEmitter, OnChanges } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Item, ItemSelection } from '../../../shared/class/item';
 import { VendorBrand } from '../../../shared/class/vendor-brand';
 import { ItemService } from '../../item.service';
 import { AppService } from '../../../app.service';
-import { Member } from 'app/shared/class/member';
+import { Member } from '../../../shared/class/member';
 
 @Component({
   selector: 'o-item-edit',
@@ -12,7 +12,7 @@ import { Member } from 'app/shared/class/member';
   styleUrls: ['./item-edit.component.css']
 })
 
-export class ItemEditComponent implements OnInit {
+export class ItemEditComponent implements OnInit, OnChanges {
     private originalItem: Item;
     private currentItem: Item;
     itemName: string;
@@ -183,24 +183,13 @@ export class ItemEditComponent implements OnInit {
                     });
                 }
 
-                // newItem.ItemSections.splice(newItem.ItemSections.length - 1, 1);
-                // newItem.ItemSections.forEach((value, i) => {
-                //     value.Position = i + 1;
-
-                //     value.ItemParts.splice(value.ItemParts.length - 1, 1);
-                //     value.ItemParts.forEach((value, i) => {
-                //         value.Position = i + 1;
-                //     });
-
-                // });
-
                 if (newItem.FulfilledBy === 'Toolots') {
                     newItem.MerchantQuantity = 0;
                 }
-                if (!this.isPM && newItem.Approval != 'Pending') {
+                if (!this.isPM && newItem.Approval !== 'Pending') {
                     newItem.Approval = 'NotSubmitted';
                 }
-                if (newItem.Visibility == 'NotVisibleIndivisually') {
+                if (newItem.Visibility === 'NotVisibleIndivisually') {
                     newItem.Approval = 'Approved';
                 }
 
@@ -294,7 +283,7 @@ export class ItemEditComponent implements OnInit {
     }
     isItemNameValid(): boolean {
         if (this.item.VendorBrandID) {
-            if (this.item.Name.toLowerCase().includes(this.vendorBrandList.find(x => x.VendorBrandID == Number(this.item.VendorBrandID)).BrandName.toLowerCase())) {
+            if (this.item.Name.toLowerCase().includes(this.vendorBrandList.find(x => x.VendorBrandID === Number(this.item.VendorBrandID)).BrandName.toLowerCase())) {
                 this.itemService.sendNotification({ type: 'error', title: 'Invalid Entry', content: '"Brand" should not be included in "Item Name"' });
                 return false;
             } else {
@@ -305,7 +294,7 @@ export class ItemEditComponent implements OnInit {
         }
     }
     isSKUValid(): boolean {
-        let regex = /^[\w\-]*$/g;
+        const regex = /^[\w\-]*$/g;
 
         if (regex.test(this.item.VendorSKU)) {
             return true;
@@ -315,7 +304,7 @@ export class ItemEditComponent implements OnInit {
         }
     }
     isSubmitValid(): boolean {
-        if (this.originalItem.Approval != 'Pending' && this.item.Approval == 'Pending' && this.item.ItemImages.filter(x => !x.pendingAdd).length < 1) {
+        if (this.originalItem.Approval !== 'Pending' && this.item.Approval === 'Pending' && this.item.ItemImages.filter(x => !x.pendingAdd).length < 1) {
             this.itemService.sendNotification({ type: 'error', title: 'Invalid Entry', content: 'An image is required' });
             return false;
         } else {
@@ -323,7 +312,7 @@ export class ItemEditComponent implements OnInit {
         }
     }
     isBundleValid(): boolean {
-        if (this.item.ItemType == 'bundle') {
+        if (this.item.ItemType === 'bundle') {
             let _ret = true;
             this.item.ItemOptions.forEach((option, index) => {
                 if (!option.pendingAdd) {
@@ -397,7 +386,7 @@ export class ItemEditComponent implements OnInit {
     }
 
     validateDimension() {
-        return (this.item.ItemType != 'simple' || (
+        return (this.item.ItemType !== 'simple' || (
             this.item.ProductDimensionUOM &&
             this.item.Width &&
             this.item.Height &&
@@ -423,38 +412,7 @@ export class ItemEditComponent implements OnInit {
     }
 
     onPrintLabel() {
-
         this.downloadItemLabel.emit(this.item);
-        // this.itemService.downloadItemLabel(this.item).subscribe(
-        //     (data) => {
-        //         const blob = new Blob([data], {type: 'application/pdf'});
-        //         const blobUrl = URL.createObjectURL(blob);
-        //         if (window.navigator.msSaveOrOpenBlob) {
-        //             const fileName = this.item.TPIN;
-        //             window.navigator.msSaveOrOpenBlob(data, fileName + '.pdf'); // IE is the worst!!!
-        //         } else {
-        //             // const iframe = document.createElement('iframe');
-        //             // iframe.style.display = 'none';
-        //             // iframe.src = blobUrl;
-        //             // document.body.appendChild(iframe);
-
-        //             // iframe.onload = (function() {
-        //             //     iframe.contentWindow.focus();
-        //             //     iframe.contentWindow.print();
-        //             // });
-        //             const fileURL = window.URL.createObjectURL(blob);
-        //             const a: HTMLAnchorElement = document.createElement('a') as HTMLAnchorElement;
-        //             a.href = fileURL;
-        //             a.download = this.item.TPIN;
-        //             document.body.appendChild(a);
-        //             a.target = '_blank';
-        //             a.click();
-
-        //             document.body.removeChild(a);
-        //             URL.revokeObjectURL(fileURL);
-        //         }
-        //     }
-        // );
     }
 
     requestActive() {
@@ -463,9 +421,6 @@ export class ItemEditComponent implements OnInit {
     }
 
     submitApproval() {
-        // console.log(this.item.ItemImages);
-        // console.log(this.item.ItemImages.filter(x => !x.pendingAdd));
-
         if (this.item.ItemImages.filter(x => !x.pendingAdd).length < 1) {
             this.itemService.sendNotification({ type: 'error', title: 'Image Required', content: 'An image is required' });
         } else {
