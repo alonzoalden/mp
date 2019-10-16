@@ -28,8 +28,10 @@ export class ItemPrintLabelShellComponent implements OnInit  {
         this.userInfo$ = this.store.pipe(select(fromUser.getCurrentUser));
         this.itemList$ = this.store.pipe(select(fromItem.getItemList));
         this.itemPrintLabelsMatTable$ = this.store.pipe(select(fromItem.getItemPrintLabelsMatTable));
-        this.isLoading$ = this.store.pipe(select(fromItem.getIsLoading));
         this.errorMessage$ = this.store.pipe(select(fromItem.getError));
+        setTimeout(() => {
+            this.isLoading$ = this.store.pipe(select(fromItem.getIsLoading));
+        });
     }
     getItemList(): void {
         this.store.dispatch(new itemActions.LoadItemList());

@@ -25,8 +25,10 @@ export class ItemBatchApprovalShellComponent implements OnInit {
         this.userInfo$ = this.store.pipe(select(fromUser.getCurrentUser));
         this.itemBatch$ = this.store.pipe(select(fromItem.getItemBatch));
         this.itemBatchMatTable$ = this.store.pipe(select(fromItem.getItemBatchMatTable));
-        this.isLoading$ = this.store.pipe(select(fromItem.getIsLoading));
         this.errorMessage$ = this.store.pipe(select(fromItem.getError));
+        setTimeout(() => {
+            this.isLoading$ = this.store.pipe(select(fromItem.getIsLoading));
+        });
     }
     getPendingItems(): void {
         this.store.dispatch(new itemActions.LoadPendingItems());
