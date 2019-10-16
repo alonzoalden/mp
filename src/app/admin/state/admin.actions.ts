@@ -19,22 +19,6 @@ export enum AdminActionTypes {
   LoadVendorList = '[Admin] Load Vendor List',
   LoadVendorListSuccess = '[Admin] Load Vendor List Success',
   LoadVendorListFail = '[Admin] Load Vendor List Fail',
-  // SetVendorAttachmentID = '[Company] Set Vendor Attachment ID',
-  // DeleteVendorAttachment = '[Company] Delete Vendor Attachment',
-  // DeleteVendorAttachmentSuccess = '[Company] Delete Vendor Attachment Success',
-  // DeleteVendorAttachmentFail = '[Company] Delete Vendor Attachment Fail',
-  // UploadVendorAttachment = '[Company] Upload Vendor Attachment',
-  // UploadVendorAttachmentSuccess = '[Company] Upload Vendor Attachment Success',
-  // UploadVendorAttachmentFail = '[Company] Upload Vendor Attachment Fail',
-  // EditVendorAttachment = '[Company] Edit Vendor Attachment',
-  // EditVendorAttachmentSuccess = '[Company] Edit Vendor Attachment Success',
-  // EditVendorAttachmentFail = '[Company] Edit Vendor Attachment Fail',
-  // GetVendorAttachment = '[Company] Get Vendor Attachment',
-  // GetVendorAttachmentSuccess = '[Company] Get Vendor Attachment Success',
-  // GetVendorAttachmentFail = '[Company] Get Vendor Attachment Fail',
-  // UploadUpdateVendorAttachment = '[Company] Upload Update Vendor Attachment',
-  // UploadUpdateVendorAttachmentSuccess = '[Company] Upload Update Vendor Attachment Success',
-  // UploadUpdateVendorAttachmentFail = '[Company] Upload Update Vendor Attachment Fail'
 }
 
 // Action Creators
