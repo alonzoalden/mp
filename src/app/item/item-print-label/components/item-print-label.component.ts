@@ -1,18 +1,17 @@
-import { Component, OnInit, Input, EventEmitter, Output, SimpleChanges } from '@angular/core';
-import { Router, ActivatedRoute } from '@angular/router';
-import { MatTableDataSource, MatDialog, MatDialogRef } from '@angular/material';
+import { Component, OnInit, Input, EventEmitter, Output, SimpleChanges, OnChanges } from '@angular/core';
+import { MatTableDataSource, MatDialog } from '@angular/material';
 import { Item, ItemPrintLabel, ItemList } from '../../../shared/class/item';
 import { ItemService } from '../../item.service';
 import { environment } from '../../../../environments/environment';
 import { Member } from 'app/shared/class/member';
+import { ItemPrintLabelComponentPrintDialog } from './item-print-label.component-print-dialog';
 
 @Component({
     selector: 'o-item-print-label',
     templateUrl: './item-print-label.component.html'
 })
 
-export class ItemPrintLabelComponent implements OnInit  {
-
+export class ItemPrintLabelComponent implements OnInit, OnChanges {
     @Input() userInfo: Member;
     @Input() itemPrintLabelsMatTable: MatTableDataSource<ItemPrintLabel>;
     @Input() itemList: ItemList[];
@@ -21,15 +20,14 @@ export class ItemPrintLabelComponent implements OnInit  {
     @Output() getItemList = new EventEmitter<void>();
     @Output() downloadPrintItemLabels = new EventEmitter<{labels: ItemPrintLabel[], border: string}>();
     @Output() downloadPrintItemLargeLabels = new EventEmitter<{labels: ItemPrintLabel[], border: string}>();
-    private imageURL = environment.imageURL;
-    private linkURL = environment.linkURL;
+    imageURL = environment.imageURL;
+    linkURL = environment.linkURL;
     PendingAdd: boolean;
     currentIndex: number;
     displayedColumns = ['Add', 'ProductDetails', 'Quantity', 'Remove'];
     formDirty = false;
 
-    constructor(private route: ActivatedRoute,
-        private router: Router,
+    constructor(
         private itemService: ItemService,
         public printDialog: MatDialog) { }
 
@@ -124,103 +122,9 @@ export class ItemPrintLabelComponent implements OnInit  {
 
     onPrintLabels(border: string) {
         this.downloadPrintItemLabels.emit({labels: this.itemPrintLabelsMatTable.data, border: border});
-
-
-        // this.itemService.downloadPrintItemLabels(this.itemPrintLabels, border).subscribe(
-        //     (data) => {
-        //         const blob = new Blob([data], {type: 'application/pdf'});
-        //         const blobUrl = URL.createObjectURL(blob);
-        //         if (window.navigator.msSaveOrOpenBlob) {
-        //             const fileName = String(Date.now());
-        //             window.navigator.msSaveOrOpenBlob(data, fileName + '.pdf'); // IE is the worst!!!
-        //         } else {
-        //             // const iframe = document.createElement('iframe');
-        //             // iframe.style.display = 'none';
-        //             // iframe.src = blobUrl;
-        //             // document.body.appendChild(iframe);
-
-        //             // iframe.onload = (function() {
-        //             //     iframe.contentWindow.focus();
-        //             //     iframe.contentWindow.print();
-        //             // });
-        //             const fileURL = window.URL.createObjectURL(blob);
-        //             const a: HTMLAnchorElement = document.createElement('a') as HTMLAnchorElement;
-        //             a.href = fileURL;
-        //             a.download = String(Date.now());//this.datepipe.transform(date, 'yyyyMMddhhmmss');
-        //             document.body.appendChild(a);
-        //             a.target = '_blank';
-        //             a.click();
-
-        //             document.body.removeChild(a);
-        //             URL.revokeObjectURL(fileURL);
-        //         }
-        //     }
-        // );
     }
 
     onPrintLargeLabels(border: string) {
         this.downloadPrintItemLargeLabels.emit({labels: this.itemPrintLabelsMatTable.data, border: border});
-
-        // this.itemService.downloadPrintItemLargeLabels(this.itemPrintLabels, border).subscribe(
-        //     (data) => {
-        //         const blob = new Blob([data], {type: 'application/pdf'});
-        //         const blobUrl = URL.createObjectURL(blob);
-        //         if (window.navigator.msSaveOrOpenBlob) {
-        //             const fileName = String(Date.now());
-        //             window.navigator.msSaveOrOpenBlob(data, fileName + '.pdf'); // IE is the worst!!!
-        //         } else {
-        //             // const iframe = document.createElement('iframe');
-        //             // iframe.style.display = 'none';
-        //             // iframe.src = blobUrl;
-        //             // document.body.appendChild(iframe);
-
-        //             // iframe.onload = (function() {
-        //             //     iframe.contentWindow.focus();
-        //             //     iframe.contentWindow.print();
-        //             // });
-        //             const fileURL = window.URL.createObjectURL(blob);
-        //             const a: HTMLAnchorElement = document.createElement('a') as HTMLAnchorElement;
-        //             a.href = fileURL;
-        //             a.download = String(Date.now());
-        //             document.body.appendChild(a);
-        //             a.target = '_blank';
-        //             a.click();
-
-        //             document.body.removeChild(a);
-        //             URL.revokeObjectURL(fileURL);
-        //         }
-        //     }
-        // );
     }
 }
-
-export class ItemLabelPrintDialog {
-    constructor(
-        public Size: string,
-        public Border: string
-    ) {}
-}
-
-@Component({
-    selector: 'item-print-label.component-print-dialog',
-    templateUrl: 'item-print-label.component-print-dialog.html',
-    })
-
-export class ItemPrintLabelComponentPrintDialog implements OnInit {
-//quantity: number;
-    itemLabelPrintDialog: ItemLabelPrintDialog;
-
-    constructor(
-        public dialogRef: MatDialogRef<ItemPrintLabelComponentPrintDialog>) {
-
-        }
-    ngOnInit() {
-        this.itemLabelPrintDialog = new ItemLabelPrintDialog('small', 'yes');
-    }
-
-    onCancelClick(): void {
-        this.dialogRef.close();
-    }
-}
-
-

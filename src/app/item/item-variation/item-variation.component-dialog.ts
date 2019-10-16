@@ -1,4 +1,4 @@
-import { Component, OnInit, Inject, ViewChild, ElementRef } from '@angular/core';
+import { Component, OnInit, Inject, ViewChild, ElementRef, OnDestroy } from '@angular/core';
 import { ItemAttribute, ItemVariationListing, ItemAttributeVariation, ItemVariation, ItemVariationLine } from '../../shared/class/item';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material';
 import { ItemService } from '../item.service';
@@ -8,7 +8,7 @@ import { Subscription } from 'rxjs';
     selector: 'item-variation.component-dialog',
     templateUrl: 'item-variation.component-dialog.html',
 })
-export class ItemVariationComponentDialog implements OnInit {
+export class ItemVariationComponentDialog implements OnInit, OnDestroy {
     subscription: Subscription;
     attributesVariationsListData: ItemAttribute[];
     selectedItemAttributes: ItemAttribute[] = [];
@@ -183,7 +183,7 @@ export class ItemVariationComponentDialog implements OnInit {
             for (let j = 0, l = arg[i].length; j < l; j++) {
                 const a = arr.slice(0); // clone arr
                 a.push(arg[i][j]);
-                if (i == max) {
+                if (i === max) {
                     r.push(a);
                 } else {
                     helper(a, i + 1);

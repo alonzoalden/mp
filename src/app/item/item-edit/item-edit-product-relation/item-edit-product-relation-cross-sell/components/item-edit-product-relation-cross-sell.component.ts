@@ -1,9 +1,6 @@
-import { Component, OnInit, OnDestroy, ViewChild, ElementRef, Input, Output, EventEmitter, SimpleChanges } from '@angular/core';
-import { Router, ActivatedRoute } from '@angular/router';
+import { Component, OnInit, ViewChild, ElementRef, Input, Output, EventEmitter, SimpleChanges, OnChanges } from '@angular/core';
 import { MatTableDataSource } from '@angular/material';
-import { Subscription } from 'rxjs';
-
-import { Item, ItemList, ItemRelatedProduct, ItemUpSell, ItemCrossSell, ItemCrossSellInsert, ItemInsert } from '../../../../../shared/class/item';
+import { Item, ItemList, ItemCrossSell, ItemCrossSellInsert } from '../../../../../shared/class/item';
 import { ItemService } from '../../../../item.service';
 import { environment } from 'environments/environment';
 
@@ -12,27 +9,22 @@ import { environment } from 'environments/environment';
   templateUrl: './item-edit-product-relation-cross-sell.component.html'
 })
 
-
-export class ItemEditProductRelationCrossSellComponent implements OnInit {
+export class ItemEditProductRelationCrossSellComponent implements OnInit, OnChanges {
     @Input() errorMessage: string;
     @Input() item: Item;
     @Input() crossSellItemlist: ItemList[];
     @Input() crossSellMatTable: MatTableDataSource<ItemCrossSell>;
     @Output() getAllItemList = new EventEmitter<void>();
     @Output() getAllItemCrossSell = new EventEmitter<ItemCrossSell>();
-
-    //crossSellItemlist: ItemList[];
     crossSellDisplayedColumns = ['Add', 'Down', 'Position', 'Up', 'ItemName', 'SKU', 'TPIN', 'Remove'];
     crossSellPendingAdd: boolean;
     currentItemCrossSellIndex: number;
     formDirty = false;
-    private imageURL = environment.imageURL;
+    imageURL = environment.imageURL;
 
     @ViewChild('selectionCategoriesRef', { static: false }) selectionCategoriesRef: ElementRef;
 
-    constructor(private route: ActivatedRoute,
-        private itemService: ItemService) { }
-
+    constructor(private itemService: ItemService) { }
 
     ngOnChanges(changes: SimpleChanges) {
         if (changes.item && changes.item.currentValue && changes.item.currentValue.ItemCrossSells.length === 0) {
@@ -88,20 +80,6 @@ export class ItemEditProductRelationCrossSellComponent implements OnInit {
         if (this.isCrossSellRequirementValid(itemCrossSell)) {
             if (!this.existCrossSell(itemCrossSell.CrossSellItemID, true)) {
                 this.crossSellPendingAdd = true;
-                //this.getAllItemCrossSell.emit(itemCrossSell);
-                // this.itemService.getAllItem(itemCrossSell.CrossSellItemID).subscribe(
-                //     (item: Item) => {
-                //         itemCrossSell.PrevCrossSellItemID = item.ItemID;
-                //         itemCrossSell.CrossSellItemName = item.Name;
-                //         itemCrossSell.CrossSellItemVendorSKU = item.VendorSKU;
-                //         itemCrossSell.CrossSellTPIN = item.TPIN;
-                //         itemCrossSell.pendingAdd = false;
-                //     },
-                //     (error: any) => {
-                //         this.errorMessage = <any>error;
-                //         this.itemService.sendNotification({ type: 'error', title: 'Error', content: this.errorMessage });
-                //     }
-                // );
                 this.crossSellAddPendingLine();
                 this.crossSellRefreshDataSource(this.item.ItemCrossSells);
                 this.currentItemCrossSellIndex = this.item.ItemCrossSells.length - 1;
@@ -126,7 +104,7 @@ export class ItemEditProductRelationCrossSellComponent implements OnInit {
         let counter: number = 0;
         this.item.ItemCrossSells.forEach((value, index) => {
                 if (value.CrossSellItemID === itemID) {
-                    if (isNew || index != this.item.ItemCrossSells.length - 1) {
+                    if (isNew || index !== this.item.ItemCrossSells.length - 1) {
                         counter += 1;
                     }
                 }
@@ -148,20 +126,6 @@ export class ItemEditProductRelationCrossSellComponent implements OnInit {
         if (this.item.ItemCrossSells[index].CrossSellItemID) {
             if (!this.existCrossSell(this.item.ItemCrossSells[index].CrossSellItemID)) {
                 this.getAllItemCrossSell.emit(this.item.ItemCrossSells[index]);
-                // this.itemService.getAllItem(this.item.ItemCrossSells[index].CrossSellItemID).subscribe(
-                //     (item: Item) => {
-                //         this.item.ItemCrossSells[index].PrevCrossSellItemID = item.ItemID;
-                //         this.item.ItemCrossSells[index].CrossSellItemName = item.Name;
-                //         this.item.ItemCrossSells[index].CrossSellItemVendorSKU = item.VendorSKU;
-                //         this.item.ItemCrossSells[index].CrossSellTPIN = item.TPIN;
-                //         this.item.ItemCrossSells[index].ImagePath = item.ImagePath;
-                //         this.currentItemCrossSellIndex = this.item.ItemCrossSells.length - 1;
-                //     },
-                //     (error: any) => {
-                //         this.errorMessage = <any>error;
-                //         this.itemService.sendNotification({ type: 'error', title: 'Error', content: this.errorMessage });
-                //     }
-                // );
             } else {
                 this.item.ItemCrossSells[index].CrossSellItemID = this.item.ItemCrossSells[index].PrevCrossSellItemID;
                 this.currentItemCrossSellIndex = this.item.ItemCrossSells.length - 1;
@@ -176,7 +140,6 @@ export class ItemEditProductRelationCrossSellComponent implements OnInit {
         this.item.ItemCrossSells.forEach((value, index) => {
             value.Position = index + 1;
         });
-
         this.crossSellRefreshDataSource(this.item.ItemCrossSells);
     }
 
@@ -210,7 +173,5 @@ export class ItemEditProductRelationCrossSellComponent implements OnInit {
     clearFields(ItemCrossSellInsert: ItemCrossSellInsert) {
         ItemCrossSellInsert.CrossSellItemID = null;
         this.formDirty = false;
-
-        //this.selectionCategoriesRef.nativeElement.value = "0: null";
     }
 }

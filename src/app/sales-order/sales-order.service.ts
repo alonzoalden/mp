@@ -39,7 +39,6 @@ export class SalesOrderService {
         }
         return this.http.get<SalesOrder[]>(this.apiURL + '/salesorder')
                         .pipe(
-                            //tap(data => console.log(JSON.stringify(data))),
                             tap(data => this.salesorders = data),
                             catchError(this.handleError)
                         );
@@ -48,8 +47,6 @@ export class SalesOrderService {
     getSalesOrder(salesorderid: number): Observable<SalesOrder> {
         return this.http.get<SalesOrder>(this.apiURL + '/salesorder/' + salesorderid)
                         .pipe(
-                            //tap(data => console.log(JSON.stringify(data))),
-                            //tap(data => this.salesorder = data),
                             catchError(this.handleError)
                         );
     }
@@ -57,7 +54,6 @@ export class SalesOrderService {
     getSalesOrderByVendor(fulfilledby: string, status: string): Observable<SalesOrder[]> {
         return this.http.get<SalesOrder[]>(this.apiURL + '/salesorder/fulfilledby/' + fulfilledby + '/status/' + status)
                         .pipe(
-                            //tap(data => console.log(JSON.stringify(data))),
                             tap(data => this.salesorders = data),
                             catchError(this.handleError)
                         );
@@ -66,7 +62,6 @@ export class SalesOrderService {
     getStatusSalesOrders(status: string): Observable<SalesOrder[]> {
         return this.http.get<SalesOrder[]>(this.apiURL + '/salesorder/status/' + status)
                         .pipe(
-                            //tap(data => console.log(JSON.stringify(data))),
                             tap(data => this.salesorders = data),
                             catchError(this.handleError)
                         );
@@ -75,7 +70,6 @@ export class SalesOrderService {
     getFulfilledBySalesOrders(fulfilledby: string): Observable<SalesOrder[]> {
         return this.http.get<SalesOrder[]>(this.apiURL + '/salesorder/fulfilledby/' + fulfilledby)
                         .pipe(
-                            //tap(data => console.log(JSON.stringify(data))),
                             tap(data => this.salesorders = data),
                             catchError(this.handleError)
                         );
@@ -84,7 +78,6 @@ export class SalesOrderService {
     getFulfilledBySalesOrder(salesorderid: number, fulfilledby: string): Observable<SalesOrder> {
         return this.http.get<SalesOrder>(this.apiURL + '/salesorder/' + salesorderid + '/fulfilledby/' + fulfilledby)
                         .pipe(
-                            //tap(data => console.log(JSON.stringify(data))),
                             tap(data => this.currentSalesOrder = data),
                             catchError(this.handleError)
                         );
@@ -93,7 +86,6 @@ export class SalesOrderService {
     refreshSalesOrders(): Observable<SalesOrder[]> {
         return this.http.get<SalesOrder[]>(this.apiURL + '/salesorder')
                         .pipe(
-                            //tap(data => console.log(JSON.stringify(data))),
                             tap(data => this.salesorders = data),
                             catchError(this.handleError)
                         );
@@ -105,7 +97,6 @@ export class SalesOrderService {
         // }
         return this.http.get<SalesOrderLine[]>(this.apiURL + '/salesorderline/salesorder/' + salesorderid)
                         .pipe(
-                            //tap(data => console.log(JSON.stringify(data))),
                             tap(data => this.salesorderlines = data),
                             catchError(this.handleError)
                         );
@@ -114,7 +105,6 @@ export class SalesOrderService {
     getSalesOrderLineByVendor(salesorderid: number, fulfilledby: string): Observable<SalesOrderLine[]> {
         return this.http.get<SalesOrderLine[]>(this.apiURL + '/salesorderline/salesorder/' + salesorderid + '/fulfilledby/' + fulfilledby)
                         .pipe(
-                            //tap(data => console.log(JSON.stringify(data))),
                             tap(data => this.salesorderlines = data),
                             catchError(this.handleError)
                         );
@@ -128,8 +118,6 @@ export class SalesOrderService {
     getFulfillments(orderid: number): Observable<Fulfillment[]> {
         return this.http.get<Fulfillment[]>(this.apiURL + '/fulfillment/order/' + orderid)
                         .pipe(
-                            //tap(data => console.log(JSON.stringify(data))),
-                            //tap(data => this.salesorderlines = data),
                             catchError(this.handleError)
                         );
     }
@@ -137,8 +125,6 @@ export class SalesOrderService {
     getFulfilledByFulfillments(orderid: number, fulfilledby: string): Observable<Fulfillment[]> {
         return this.http.get<Fulfillment[]>(this.apiURL + '/fulfillment/order/' + orderid + '/fulfilledby/' + fulfilledby)
                         .pipe(
-                            //tap(data => console.log(JSON.stringify(data))),
-                            //tap(data => this.salesorderlines = data),
                             catchError(this.handleError)
                         );
     }
@@ -149,8 +135,6 @@ export class SalesOrderService {
         // }
         return this.http.get<Fulfillment>(this.apiURL + '/fulfillment/' + fulfillmentid)
                         .pipe(
-                            //tap(data => console.log(JSON.stringify(data))),
-                            //tap(data => this.salesorderlines = data),
                             catchError(this.handleError)
                         );
     }
@@ -158,8 +142,6 @@ export class SalesOrderService {
     getFulfilledByFulfillment(fulfillmentid: number, fulfilledby: string): Observable<Fulfillment> {
         return this.http.get<Fulfillment>(this.apiURL + '/fulfillment/' + fulfillmentid + '/fulfilledby/' + fulfilledby)
                         .pipe(
-                            //tap(data => console.log(JSON.stringify(data))),
-                            //tap(data => this.salesorderlines = data),
                             catchError(this.handleError)
                         );
     }
@@ -167,8 +149,6 @@ export class SalesOrderService {
     getFulfilmmentSalesOrderLines(orderid: number): Observable<FulfillmentSalesOrderLine[]> {
         return this.http.get<FulfillmentSalesOrderLine[]>(this.apiURL + '/fulfillment/salesorderline/order/' + orderid)
                         .pipe(
-                            //tap(data => console.log(JSON.stringify(data))),
-                            //tap(data => this.salesorderlines = data),
                             catchError(this.handleError)
                         );
     }
@@ -176,8 +156,6 @@ export class SalesOrderService {
     getFulfilledByFulfilmmentSalesOrderLines(orderid: number, fulfilledby: string): Observable<FulfillmentSalesOrderLine[]> {
         return this.http.get<FulfillmentSalesOrderLine[]>(this.apiURL + '/fulfillment/salesorderline/order/' + orderid + '/fulfilledby/' + fulfilledby)
                         .pipe(
-                            //tap(data => console.log(JSON.stringify(data))),
-                            //tap(data => this.salesorderlines = data),
                             catchError(this.handleError)
                         );
     }
@@ -188,7 +166,6 @@ export class SalesOrderService {
         });
         return this.http.post<Fulfillment>(this.apiURL + '/fulfillment', fulfillment, { headers: headers } )
                             .pipe(
-                                //tap(data => console.log('Add Fulfillment: ' + JSON.stringify(data))),
                                 catchError(this.handleError)
                             );
     }
@@ -199,7 +176,6 @@ export class SalesOrderService {
         });
         return this.http.put<Fulfillment>(this.apiURL + '/fulfillment/' + fulfillment.FulfillmentID, fulfillment, { headers: headers} )
                             .pipe(
-                                //tap(data => console.log('Update Item: ' + item.ItemID)),
                                 catchError(this.handleError)
                             );
     }
@@ -207,7 +183,6 @@ export class SalesOrderService {
     deleteFulfillment(id: number): Observable<Fulfillment>  {
         return this.http.delete<Fulfillment>(this.apiURL + '/fulfillment/' + id )
                             .pipe(
-                                //tap(data => console.log('Delete Item: ' + id)),
                                 catchError(this.handleError)
                             );
     }
@@ -215,7 +190,6 @@ export class SalesOrderService {
     getSalesOrderDelivery(salesorderid: number): Observable<string> {
         return this.http.get<string>(this.apiURL + '/salesorder/' + salesorderid + '/deliveryaddress')
                         .pipe(
-                            //tap(data => console.log(JSON.stringify(data))),
                             tap(data => this.deliveryaddress = data),
                             catchError(this.handleError)
                         );
@@ -224,7 +198,6 @@ export class SalesOrderService {
     getFulfilledBySalesOrderDelivery(salesorderid: number, fulfilledby: string): Observable<string> {
         return this.http.get<string>(this.apiURL + '/salesorder/' + salesorderid + '/fulfilledby/' + fulfilledby + '/deliveryaddress')
                         .pipe(
-                            //tap(data => console.log(JSON.stringify(data))),
                             tap(data => this.deliveryaddress = data),
                             catchError(this.handleError)
                         );
@@ -236,7 +209,6 @@ export class SalesOrderService {
         });
         return this.http.delete<SalesOrder>(this.apiURL + '/salesorderline/' + orderid + '/cancel', { headers: headers } )
                             .pipe(
-                                //tap(data => console.log('Update Item: ' + item.ItemID)),
                                 catchError(this.handleError)
                             );
     }
@@ -262,7 +234,6 @@ export class SalesOrderService {
         });
         return this.http.get<BOLRequest>(this.apiURL + '/bolrequest/purchaseorder/' + salesorderid, { headers: headers })
                         .pipe(
-                            //tap(data => console.log(JSON.stringify(data))),
                             catchError(this.handleError)
                         );
     }
@@ -273,7 +244,6 @@ export class SalesOrderService {
         });
         return this.http.post<BOLRequest>(this.apiURL + '/bolrequest', bolrequest, { headers: headers } )
                             .pipe(
-                                //tap(data => console.log('Add Fulfillment: ' + JSON.stringify(data))),
                                 catchError(this.handleError)
                             );
     }
@@ -281,31 +251,29 @@ export class SalesOrderService {
     uploadBOLAttachment(salesorderid: number, formdata: FormData): Observable<BOLRequest> {
         return this.http.post<BOLRequest>(this.apiURL + '/bolrequest/purchaseorder/' + salesorderid + '/upload', formdata )
                         .pipe(
-                            //tap(data => console.log('Add Fulfillment: ' + JSON.stringify(data))),
                             catchError(this.handleError)
                         );
     }
-    
 
     rowColorConditions(i: number, collection: Array<any>, currentIndex: number, formDirty: boolean): string {
         const inputRow = i === collection.length - 1 && currentIndex === i;
         const selectedInputRow = inputRow && formDirty;
-        if (selectedInputRow) { return '#F5F5F5'; }
-        else if (inputRow) { return '#E8E8E8'; }
-        else if (currentIndex === i) { return '#F5F5F5'; }
-        else { return '#FFFFFF'; }
+        if (selectedInputRow) {
+            return '#F5F5F5';
+        } else if (inputRow) {
+            return '#E8E8E8';
+        } else if (currentIndex === i) {
+            return '#F5F5F5';
+        } else {
+            return '#FFFFFF';
+        }
     }
 
     private handleError(err: HttpErrorResponse) {
-        // in a real world app, we may send the server to some remote logging infrastructure
-        // instead of just logging it to the console
         let errorMessage: string;
         if (err.error instanceof Error) {
-            // A client-side or network error occurred. Handle it accordingly.
             errorMessage = `An error occurred: ${err.error.message}`;
         } else {
-            // The backend returned an unsuccessful response code.
-            // The response body may contain clues as to what went wrong,
             errorMessage = `Backend returned code ${err.status}, body was: ${err.error.Message}`;
         }
         console.error(err);

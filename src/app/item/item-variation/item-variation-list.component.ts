@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, OnInit, ViewChild, OnDestroy } from '@angular/core';
 import { MatPaginator, MatSort, MatTableDataSource, MatDialog } from '@angular/material';
 import { Subscription } from 'rxjs';
 import { ItemVariationListing } from '../../shared/class/item';
@@ -11,7 +11,7 @@ import { environment } from '../../../environments/environment';
     templateUrl: './item-variation-list.component.html'
 })
 
-export class ItemVariationListComponent implements OnInit {
+export class ItemVariationListComponent implements OnInit, OnDestroy {
     subscription: Subscription;
     errorMessage: string;
     variationListings: ItemVariationListing[];
@@ -21,8 +21,8 @@ export class ItemVariationListComponent implements OnInit {
 
     @ViewChild(MatPaginator, { static: true }) paginator: MatPaginator;
     @ViewChild(MatSort, { static: true }) sort: MatSort;
-    private fileURL = environment.fileURL;
-    private imageURL = environment.imageURL;
+    fileURL = environment.fileURL;
+    imageURL = environment.imageURL;
     constructor(public selectDialog: MatDialog,
         private itemService: ItemService,
         private appService: AppService) { }

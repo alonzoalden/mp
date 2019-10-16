@@ -1,7 +1,7 @@
 import { Component, OnInit, ViewChildren, Input } from '@angular/core';
-import { Router, ActivatedRoute } from '@angular/router';
+import { ActivatedRoute } from '@angular/router';
 import { MatTableDataSource } from '@angular/material';
-import { Item, ItemInsert, ItemList, ItemPartInsert, ItemSectionInsert, ItemSection, ItemPart } from '../../../../../shared/class/item';
+import { Item, ItemList, ItemSection, ItemPart } from '../../../../../shared/class/item';
 import { ItemService } from '../../../../item.service';
 import { AppService } from '../../../../../app.service';
 import { environment } from '../../../../../../environments/environment';
@@ -12,32 +12,22 @@ import { environment } from '../../../../../../environments/environment';
 })
 
 export class ItemEditPartSectionComponent implements OnInit {
-    private imageURL = environment.imageURL;
-    isPM: boolean;
-
-    // errorMessage: string;
-    // item: Item;
     @Input() errorMessage: string;
     @Input() item: Item;
-
+    imageURL = environment.imageURL;
+    isPM: boolean;
     itemlist: ItemList[];
-    //displayedColumns = ['Add', 'Down', 'Position', 'Up', 'New', 'Select', 'ItemName', 'SKU', 'TPIN', 'Price', 'Remove'];
-    //displayedColumns = ['Add', 'Down', 'Position', 'Up', 'Thumbnail', 'Label', 'Select', 'ItemName', 'SKU', 'TPIN', 'Price', 'Remove'];
-
     displayedColumns = ['Add', 'Down', 'Position', 'Up', 'Thumbnail', 'ItemName', 'Remove'];
     dataSource: any = null;
-
     pendingAdd: boolean;
     pendingChange: boolean;
     currentIndex: number;
     itemid: number;
     formDirty = false;
-
     filesToUpload: Array<File> = [];
     selectedFileNames: string[] = [];
     res: Array<string>;
     pendingUpload: boolean;
-
     partFilesToUpload: Array<File> = [];
     partSelectedFileNames: string[] = [];
     partPendingUpload: boolean;
@@ -46,10 +36,14 @@ export class ItemEditPartSectionComponent implements OnInit {
 
     @ViewChildren('selectionCategoriesRef') selectionCategoriesRef: any;
 
-    constructor(private route: ActivatedRoute, private router: Router, private itemService: ItemService, private appService: AppService) { }
+    constructor(
+        private route: ActivatedRoute,
+        private itemService: ItemService,
+        private appService: AppService
+    ) { }
+
     ngOnInit(): void {
         this.itemid = this.route.parent.snapshot.params['id'];
-
         this.appService.getCurrentMember()
                 .subscribe(
                     (data) => {
@@ -61,15 +55,6 @@ export class ItemEditPartSectionComponent implements OnInit {
                     }
                 );
 
-        // this.itemService.getCurrentItemEdit(this.itemid).subscribe(
-        //     (item: Item) => {
-        //         this.itemService.currentItemEdit = item;
-        //         this.item = this.itemService.currentItemEdit;
-
-        //         this.initialize();
-        //     },
-        //     (error: any) => this.errorMessage = <any>error
-        // );
         if (this.item) {
             this.removePendingLine();
             this.addPendingLine();
@@ -88,26 +73,8 @@ export class ItemEditPartSectionComponent implements OnInit {
         );
     }
 
-    // initialize() {
-    //     if (this.itemService.currentItemEdit.ItemSections === null) {
-    //         this.itemService.getItemParts(this.itemid).subscribe(
-    //             (itemParts: ItemPart[]) => {
-    //                 this.currentIndex = this.item.ItemSections.length - 1;
-    //                 this.refreshDataSource(this.item.ItemSections);
-    //             },
-    //             (error: any) => this.errorMessage = <any>error
-    //         );
-    //     } else {
-    //         this.removePendingLine();
-    //         this.addPendingLine();
-    //         this.currentIndex = this.item.ItemSections.length - 1;
-    //         this.refreshDataSource(this.item.ItemSections);
-    //     }
-    // }
-
     addPendingLine() {
         const _temp = new ItemSection(0, this.item.ItemID, null, null, null, this.item.ItemSections.length + 1,  null,  null, [],  true, true);
-
         this.item.ItemSections.push(_temp);
     }
 
@@ -122,12 +89,10 @@ export class ItemEditPartSectionComponent implements OnInit {
         this.dataSource = new MatTableDataSource<ItemSection>(itemsections);
     }
     onAddItemPartSection(itemPart: ItemSection) {
-        // this.onChangeFOBPrice(itemPart);
         if (this.existName(itemPart.Name)) {
             this.itemService.sendNotification({ type: 'error', title: 'Error', content: 'Section name exists.  Please choose another.' });
             return;
         }
-
         if (this.isRequirementValid(itemPart)) {
                 this.pendingAdd = true;
                 itemPart.pendingAdd = false;
@@ -143,12 +108,10 @@ export class ItemEditPartSectionComponent implements OnInit {
         if (this.pendingChange) {
             return;
         }
-
         if (this.existName(section.Name)) {
             this.itemService.sendNotification({ type: 'error', title: 'Error', content: 'Section name exists.  Please choose another.' });
             section.Name = '';
         }
-
     }
 
     existName(name: string, isNew: boolean = false) {
@@ -175,7 +138,7 @@ export class ItemEditPartSectionComponent implements OnInit {
         let counter: number = 0;
         this.item.ItemSections.forEach((value, index) => {
                 if (value.ItemID === itemID) {
-                    if (isNew || index != this.item.ItemSections.length - 1) {
+                    if (isNew || index !== this.item.ItemSections.length - 1) {
                         counter += 1;
                     }
                 }
@@ -199,11 +162,10 @@ export class ItemEditPartSectionComponent implements OnInit {
     }
 
     onEditItemPart(index: number) {
-        if (this.currentIndex != index) {
+        if (this.currentIndex !== index) {
             this.item.ItemSections.forEach((itempart, i) => {
-                if (i != this.item.ItemSections.length - 1) {
-                    if (!itempart.Name || itempart.Name == '' ) {
-
+                if (i !== this.item.ItemSections.length - 1) {
+                    if (!itempart.Name || itempart.Name === '' ) {
                         this.item.ItemSections.splice(i, 1);
                         this.refreshDataSource(this.item.ItemSections);
                     }

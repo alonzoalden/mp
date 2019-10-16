@@ -1,4 +1,4 @@
-import { createSelector, createFeatureSelector, select } from '@ngrx/store';
+import { createSelector, createFeatureSelector } from '@ngrx/store';
 import * as fromRoot from '../../state/app.state';
 import * as fromItem from './item.reducer';
 import { MatTableDataSource } from '@angular/material';

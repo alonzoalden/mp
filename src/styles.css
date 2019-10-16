@@ -536,11 +536,6 @@ table {
 .ibox-content > .form-group {
     margin-top: 0px;
 }
-.ibox-content {
-    /* min-height: 420px; */
-    /* overflow-x: auto;
-    overflow-y: auto; */
-}
 .x-scroll {
     overflow-x: auto;
 }
@@ -928,11 +923,6 @@ table {
     padding-right: 30px;
     position: relative;
 }
-
-.home-forsticky.home-sticky .menu-sec {
-
-}
-
 .home-forsticky.home-sticky {
     position: fixed;
     left: 0;

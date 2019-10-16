@@ -11,8 +11,8 @@ import { Member } from '../../../shared/class/member';
 })
 
 export class SalesOrderListComponent implements OnInit, OnChanges {
-    private imageURL = environment.imageURL;
-    private linkURL = environment.linkURL;
+    imageURL = environment.imageURL;
+    linkURL = environment.linkURL;
     @Input() salesOrdersMatTable: MatTableDataSource<SalesOrder>;
     @Input() userInfo: Member;
     @Input() isLoading: boolean = true;
@@ -20,7 +20,6 @@ export class SalesOrderListComponent implements OnInit, OnChanges {
     @Output() getSalesOrderByVendor = new EventEmitter<{fulfilledby: string, status: string}>();
     @Output() downloadSalesOrderPackingSlip = new EventEmitter<{salesorder: SalesOrder, orderid: number}>();
     @Output() setSalesOrder = new EventEmitter<SalesOrder>();
-
     displayedColumns = ['Menu', 'ProductInfo', 'ItemImage', 'ItemName', 'ShippingMethod', 'Status', 'VendorTotal'];
     fulfilledby: string;
     status: string;
@@ -58,9 +57,6 @@ export class SalesOrderListComponent implements OnInit, OnChanges {
     }
     applyFilter(filterValue: string) {
         this.salesOrdersMatTable.filter = filterValue.trim().toLowerCase();
-        // if (this.salesOrdersMatTable.paginator) {
-        //     this.salesOrdersMatTable.paginator.firstPage();
-        // }
     }
     onFilterChange(fulfilledby: string, status: string) {
         this.router.navigate(['/sales-order/' + fulfilledby + '/status/' + status]);

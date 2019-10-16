@@ -77,7 +77,6 @@ export function memberReducer(state = initialState, action: MemberActions): Memb
                 isLoading: false,
                 error: action.payload,
             };
-        
         case MemberActionTypes.DeleteMember:
             return {
                 ...state,

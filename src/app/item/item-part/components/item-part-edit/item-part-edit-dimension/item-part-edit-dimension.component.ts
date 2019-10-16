@@ -1,8 +1,6 @@
 import { Component, OnInit } from '@angular/core';
-import { Router, ActivatedRoute } from '@angular/router';
-
+import { ActivatedRoute } from '@angular/router';
 import { Item } from '../../../../../shared/class/item';
-
 import { ItemService } from '../../../../item.service';
 
 @Component({
@@ -13,6 +11,16 @@ import { ItemService } from '../../../../item.service';
 export class ItemPartEditDimensionComponent implements OnInit {
     errorMessage: string;
     item: Item;
+    packagingTypes: any = [
+        {
+            Name: 'Small Parcel',
+            Value: 5
+        },
+        {
+            Name: 'Freight',
+            Value: 4
+        }
+    ];
 
     constructor(private route: ActivatedRoute,
                 private itemService: ItemService) { }

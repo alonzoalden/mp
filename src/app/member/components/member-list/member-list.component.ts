@@ -1,5 +1,5 @@
-import { Component, OnInit, ViewChild, Input, Output, EventEmitter, OnChanges, SimpleChange, SimpleChanges } from '@angular/core';
-import { Router, ActivatedRoute } from '@angular/router';
+import { Component, OnInit, ViewChild, Input, Output, EventEmitter, OnChanges, SimpleChanges } from '@angular/core';
+import { Router } from '@angular/router';
 import { MatPaginator, MatSort, MatTableDataSource } from '@angular/material';
 import { Member } from '../../../shared/class/member';
 import { MemberService } from '../../member.service';
@@ -20,21 +20,16 @@ export class MemberListComponent implements OnInit, OnChanges {
     @Output() getMembers = new EventEmitter<Member>();
     @Output() editMemberRegistration = new EventEmitter<Member>();
     @Output() deleteMember = new EventEmitter<Member>();
-    
     displayedColumns = ['Menu', 'Email', 'IsPM', 'IsAdmin', 'IsConfirmed', 'IsActive', 'CreatedOn'];
     dataSource: any = null;
     currentIndex: number;
-
     @ViewChild(MatPaginator, { static: true }) paginator: MatPaginator;
     @ViewChild(MatSort, { static: true }) sort: MatSort;
-
-    
     members: any[];
 
     constructor(
         private router: Router,
         private memberService: MemberService,
-        private appService: AppService
      ) { }
 
     ngOnChanges(changes: SimpleChanges): void {
@@ -88,7 +83,7 @@ export class MemberListComponent implements OnInit, OnChanges {
 
     onDeleteMember(member: Member): void {
         const confirmation = confirm(`Delete ${member.Email}?`);
-        
+
         if (confirmation) {
             this.deleteMember.emit(member);
         }

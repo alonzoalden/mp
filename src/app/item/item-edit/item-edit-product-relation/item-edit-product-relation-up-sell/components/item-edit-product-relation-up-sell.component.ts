@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy, ViewChild, ElementRef, EventEmitter, Input, Output, SimpleChanges } from '@angular/core';
+import { Component, OnInit, EventEmitter, Input, Output, SimpleChanges, OnChanges } from '@angular/core';
 import { MatTableDataSource } from '@angular/material';
 import { Item, ItemList, ItemUpSell, ItemUpSellInsert } from '../../../../../shared/class/item';
 import { ItemService } from '../../../../item.service';
@@ -9,19 +9,17 @@ import { environment } from 'environments/environment';
     templateUrl: './item-edit-product-relation-up-sell.component.html'
 })
 
-export class ItemEditProductRelationUpSellComponent implements OnInit {
+export class ItemEditProductRelationUpSellComponent implements OnInit, OnChanges {
     @Input() errorMessage: string;
     @Input() item: Item;
     @Input() upSellItemlist: ItemList[];
     @Input() itemUpSellsMatTable: MatTableDataSource<ItemUpSell>;
     @Output() getAllItemUpSell = new EventEmitter<ItemUpSell>();
-
     upSellDisplayedColumns = ['Add', 'Down', 'Position', 'Up', 'ItemName', 'SKU', 'TPIN', 'Remove'];
     upSellPendingAdd: boolean;
     currentItemUpSellIndex: number;
     formDirty = false;
-
-    private imageURL = environment.imageURL;
+    imageURL = environment.imageURL;
 
     constructor(private itemService: ItemService) { }
 
@@ -58,21 +56,6 @@ export class ItemEditProductRelationUpSellComponent implements OnInit {
         if (this.isUpSellRequirementValid(itemUpSell)) {
             if (!this.existUpSell(itemUpSell.UpSellItemID, true)) {
                 this.upSellPendingAdd = true;
-
-                // this.itemService.getAllItem(itemUpSell.UpSellItemID).subscribe(
-                //     (item: Item) => {
-                //         itemUpSell.PrevUpSellItemID = item.ItemID;
-                //         itemUpSell.UpSellItemName = item.Name;
-                //         itemUpSell.UpSellItemVendorSKU = item.VendorSKU;
-                //         itemUpSell.UpSellTPIN = item.TPIN;
-                //         itemUpSell.pendingAdd = false;
-                //     },
-                //     (error: any) => {
-                //         this.errorMessage = <any>error;
-                //         this.itemService.sendNotification({ type: 'error', title: 'Error', content: this.errorMessage });
-                //     }
-                // );
-
                 this.upSellAddPendingLine();
                 this.upSellRefreshDataSource(this.item.ItemUpSells);
             } else {
@@ -96,7 +79,7 @@ export class ItemEditProductRelationUpSellComponent implements OnInit {
         let counter: number = 0;
         this.item.ItemUpSells.forEach((value, index) => {
                 if (value.UpSellItemID === itemID) {
-                    if (isNew || index != this.item.ItemUpSells.length - 1) {
+                    if (isNew || index !== this.item.ItemUpSells.length - 1) {
                         counter += 1;
                     }
                 }
@@ -118,20 +101,6 @@ export class ItemEditProductRelationUpSellComponent implements OnInit {
         if (this.item.ItemUpSells[index].UpSellItemID) {
             if (!this.existUpSell(this.item.ItemUpSells[index].UpSellItemID)) {
                 this.getAllItemUpSell.emit(this.item.ItemUpSells[index]);
-                // this.itemService.getAllItem(this.item.ItemUpSells[index].UpSellItemID).subscribe(
-                //     (item: Item) => {
-                //         this.item.ItemUpSells[index].PrevUpSellItemID = item.ItemID;
-                //         this.item.ItemUpSells[index].UpSellItemName = item.Name;
-                //         this.item.ItemUpSells[index].UpSellItemVendorSKU = item.VendorSKU;
-                //         this.item.ItemUpSells[index].UpSellTPIN = item.TPIN;
-                //         this.item.ItemUpSells[index].ImagePath = item.ImagePath;
-                //         this.currentItemUpSellIndex = this.item.ItemUpSells.length - 1;
-                //     },
-                //     (error: any) => {
-                //         this.errorMessage = <any>error;
-                //         this.itemService.sendNotification({ type: 'error', title: 'Error', content: this.errorMessage });
-                //     }
-                // );
             } else {
                 this.item.ItemUpSells[index].UpSellItemID = this.item.ItemUpSells[index].PrevUpSellItemID;
                 this.currentItemUpSellIndex = this.item.ItemUpSells.length - 1;
@@ -181,8 +150,6 @@ export class ItemEditProductRelationUpSellComponent implements OnInit {
     clearFields(ItemUpSellInsert: ItemUpSellInsert) {
         ItemUpSellInsert.UpSellItemID = null;
         this.formDirty = false;
-
-        //this.selectionCategoriesRef.nativeElement.value = "0: null";
     }
 }
 

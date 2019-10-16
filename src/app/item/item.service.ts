@@ -1,28 +1,22 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpErrorResponse, HttpHeaders } from '@angular/common/http';
-
 import { Observable, Subject, of, throwError, BehaviorSubject } from 'rxjs';
 import { catchError, tap } from 'rxjs/operators';
-
 import { Item, ItemInsert, ItemOption, ItemOptionInsert, ItemSelection, ItemSelectionInsert, ItemTierPrice, ItemTierPriceInsert
     , ItemCategoryAssignment, ItemRelatedProduct, ItemRelatedProductInsert, ItemUpSell, ItemUpSellInsert, ItemCrossSell, ItemCrossSellInsert
-    , ItemAttachment, ItemAttachmentInsert, ItemVideo, ItemVideoInsert, ItemImage, ItemImageInsert, ItemPrintLabel, ItemBatch, ItemPart, ItemPartInsert, ItemSectionInsert, ItemSection, ItemGlobalAttribute, ItemGlobalAttributeVariation, ItemAttribute, ItemVariation, ItemVariationListing, ItemVariationLine } from '../shared/class/item';
-//import { ItemImage } from '../shared/class/item-image';
-import { URLVideo, URLVideoItems, URLVideoItemsSnippet, URLVideoItemsSnippetThumbnails, URLVideoItemsSnippetThumbnailsStandard } from '../shared/class/item-video';
-
+    , ItemAttachment, ItemAttachmentInsert, ItemVideo, ItemVideoInsert, ItemImage, ItemImageInsert, ItemPrintLabel, ItemBatch, ItemPart
+    , ItemPartInsert, ItemSectionInsert, ItemSection, ItemGlobalAttribute, ItemGlobalAttributeVariation, ItemAttribute
+    , ItemVariation, ItemVariationListing, ItemVariationLine } from '../shared/class/item';
+import { URLVideo } from '../shared/class/item-video';
 import { ItemList } from '../shared/class/item';
 import { Category } from '../shared/class/category';
 import { Member } from '../shared/class/member';
 import { VendorAttachmentList, VendorAttachment} from '../shared/class/vendor-attachment';
 import { VendorBrand } from '../shared/class/vendor-brand';
-
 import { BatchUpdate, BatchUpdateValue } from '../shared/class/batch-update';
-
 import { OAuthService } from 'angular-oauth2-oidc';
 import { AppService } from '../app.service';
-
 import { environment } from '../../environments/environment';
-import { ResponseContentType } from '@angular/http';
 
 @Injectable()
 export class ItemService {

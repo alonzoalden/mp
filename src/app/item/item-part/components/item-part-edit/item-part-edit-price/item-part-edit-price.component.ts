@@ -1,9 +1,7 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { MatTableDataSource } from '@angular/material';
-import { Router, ActivatedRoute } from '@angular/router';
-
+import { ActivatedRoute } from '@angular/router';
 import { Item, ItemTierPrice } from '../../../../../shared/class/item';
-
 import { ItemService } from '../../../../item.service';
 import { AppService } from '../../../../../app.service';
 
@@ -16,23 +14,16 @@ export class ItemPartEditPriceComponent implements OnInit {
     errorMessage: string;
     item: Item;
     itemid: number;
-
     isDropship: boolean;
-
     _itemTierPrices: ItemTierPrice[] = [];
-
     minDate = new Date(2000, 0, 1);
     maxDate = new Date(2020, 0, 1);
-
     specialFrom: Date;
     specialTo: Date;
-
     PendingAdd: boolean;
     currentItemTierPriceIndex: number;
-
     displayedColumns = ['Add', 'Quantity', 'Price', 'Remove'];
     dataSource: any = null;
-
     formDirty = false;
     canAdd = false;
 

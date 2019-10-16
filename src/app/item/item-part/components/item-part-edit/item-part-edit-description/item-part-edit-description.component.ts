@@ -55,7 +55,7 @@ export class ItemPartEditDescriptionComponent implements OnInit, AfterViewInit {
     }
 
     ngAfterViewInit() {
-        let self = this;
+        const self = this;
 
         $('.summernote').summernote( {
             height: 300,

@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild, Output, EventEmitter, SimpleChanges, Input } from '@angular/core';
+import { Component, OnInit, ViewChild, Output, EventEmitter, SimpleChanges, Input, OnChanges } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { MatTableDataSource} from '@angular/material';
 import { SalesOrder } from '../../../../../shared/class/sales-order';
@@ -9,7 +9,7 @@ import { Fulfillment } from '../../../../../shared/class/fulfillment';
   templateUrl: './sales-order-view-fulfillment-list.component.html'
 })
 
-export class SalesOrderFulfillmentListComponent implements OnInit {
+export class SalesOrderFulfillmentListComponent implements OnInit, OnChanges {
     @Input() fulfillmentsMatTable: MatTableDataSource<Fulfillment>;
     @Input() errorMessage: string;
     @Input() salesOrder: SalesOrder;
@@ -42,7 +42,7 @@ export class SalesOrderFulfillmentListComponent implements OnInit {
         this.orderid = this.route.parent.snapshot.params['id'];
         this.fulfilledby = this.route.parent.snapshot.params['fulfilledby'];
 
-        if (this.fulfilledby == 'merchant') {
+        if (this.fulfilledby === 'merchant') {
             this.isMerchant = true;
         } else {
             this.isMerchant = false;

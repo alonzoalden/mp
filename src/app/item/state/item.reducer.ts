@@ -1,9 +1,9 @@
 import { ItemActionTypes, ItemActions } from './item.actions';
 import { ItemInsert, ItemList, ItemOptionInsert, ItemSelectionInsert, ItemCategoryAssignment, Item, ItemBatch, ItemPrintLabel } from '../../shared/class/item';
 import { VendorBrand } from '../../shared/class/vendor-brand';
-import { Category } from 'app/shared/class/category';
-import { VendorAttachmentList } from 'app/shared/class/vendor-attachment';
-import { BatchUpdate } from 'app/shared/class/batch-update';
+import { Category } from '../../shared/class/category';
+import { VendorAttachmentList } from '../../shared/class/vendor-attachment';
+import { BatchUpdate } from '../../shared/class/batch-update';
 
 // State for this feature (Item Variation)
 export interface ItemState {

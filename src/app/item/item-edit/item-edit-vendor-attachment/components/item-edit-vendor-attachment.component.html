@@ -93,12 +93,6 @@
                                                             <div matTooltip="{{item.Label}}" matTooltipPosition="right" matTooltipShowDelay="400">{{item.Label}}</div>
                                                         </ng-template>
                                                     </ng-select>
-                                                    <!-- <select class="form-control" id="itemAttachmentIDId" name="itemAttachmentID"  required
-                                                        (change)="canAdd = true;" (focus)="formDirty = true;" #selectionCategoriesRef
-                                                        [(ngModel)]=itemAttachment.VendorAttachmentID #itemAttachmentIDVar="ngModel">
-                                                        <option [ngValue]="null" style="font-style: italic" disabled selected>--Select an attachment--</option>
-                                                        <option [value]="vendorattachment.Value" *ngFor="let vendorattachment of vendorattachmentlist">{{vendorattachment.Label}}</option>
-                                                    </select> -->
                                                 </div>
                                             </td>
                                         </ng-container>
@@ -122,10 +116,6 @@
                                                 </div>
                                                 <div [hidden]="!formDirty && i === item.ItemAttachments.length-1">
                                                     <a matTooltip="{{ 'Clear' | translate }}" attr.aria-label="{{ 'Clear' | translate}}"  (click)="clearFields(itemAttachment);"><i *ngIf="i === item.ItemAttachments.length-1" class="fa fa-eraser"></i></a>
-                                                    <!-- <button *ngIf="i === item.ItemAttachments.length-1"
-                                                            type="button"
-                                                            class="btn btn-remove-sm"
-                                                            (click)="clearFields();">Clear</button> -->
                                                 </div>
                                             </td>
                                         </ng-container>

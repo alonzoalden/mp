@@ -77,7 +77,7 @@ export class SalesOrderViewUploadBOLComponentDialog implements OnInit, OnDestroy
 
     uploadFiles() {
         if (this.filesToUpload.length > 0) {
-            var formData: FormData = new FormData();
+            const formData: FormData = new FormData();
             for (let i = 0; i < this.filesToUpload.length; i++) {
                 formData.append('uploadedFiles', this.filesToUpload[i], this.filesToUpload[i].name);
             }

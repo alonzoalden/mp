@@ -10,8 +10,8 @@ import * as fromSalesOrder from '../../../state';
 import * as fromUser from '../../../../shared/state/user-state.reducer';
 
 @Component({
-  templateUrl: './sales-order-view-cancel-shell.component.html',
-  styleUrls: ['../../../sales-order.component.css']
+    templateUrl: './sales-order-view-cancel-shell.component.html',
+    styleUrls: ['../../../sales-order.component.css']
 })
 
 export class SalesOrderViewCancelShellComponent implements OnInit {

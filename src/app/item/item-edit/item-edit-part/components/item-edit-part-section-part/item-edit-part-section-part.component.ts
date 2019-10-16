@@ -1,5 +1,4 @@
 import { Component, OnInit, ViewChildren } from '@angular/core';
-import { Router } from '@angular/router';
 import { MatTableDataSource } from '@angular/material';
 import { Item, ItemInsert, ItemList, ItemPartInsert, ItemPart, ItemSection } from '../../../../../shared/class/item';
 import { ItemService } from '../../../../item.service';
@@ -12,40 +11,34 @@ import { environment } from '../../../../../../environments/environment';
 })
 
 export class ItemEditPartSectionPartComponent implements OnInit {
-    private imageURL = environment.imageURL;
+    imageURL = environment.imageURL;
     isPM: boolean;
     errorMessage: string;
     itemlist: ItemList[];
     displayedColumns = ['Add', 'Down', 'Position', 'Up', 'Thumbnail', 'Label', 'Select', 'ItemName', 'SKU', 'TPIN', 'Price', 'Remove'];
-
     currentItemPartSelection: ItemSection;
-
-
     dataSource: any = null;
     dataSourceGroups: any = null;
-
     pendingAdd: boolean;
     pendingLoad: boolean;
     currentIndex: number;
     currentIndexGroup: number;
-
-
     formDirty = false;
-
     filesToUpload: Array<File> = [];
     selectedFileNames: string[] = [];
     res: Array<string>;
     pendingUpload: boolean;
-
     partFilesToUpload: Array<File> = [];
     partSelectedFileNames: string[] = [];
     partPendingUpload: boolean;
-
     public isLoadingData: Boolean = false;
 
     @ViewChildren('selectionCategoriesRef') selectionCategoriesRef: any;
 
-    constructor(private router: Router, private itemService: ItemService, private appService: AppService) { }
+    constructor(
+        private itemService: ItemService,
+        private appService: AppService
+    ) { }
 
     ngOnInit() {
         this.appService.getCurrentMember()
@@ -58,24 +51,17 @@ export class ItemEditPartSectionPartComponent implements OnInit {
                         this.errorMessage = <any>error;
                     }
                 );
-
-
         this.itemService.currentItemPartSelection.subscribe(partselection => {
             this.currentItemPartSelection = partselection;
             if (partselection) {
                 if (partselection.ItemParts.length === 0 || partselection.ItemParts[partselection.ItemParts.length - 1].PartItemID) {
                     const _temp = new ItemPart(null, partselection.ItemSectionID, null, null, null, null, null, null, null, null, null, null, null, this.currentItemPartSelection.ItemParts.length + 1, null, null, true, true);
                     this.currentItemPartSelection.ItemParts.push(_temp);
-
                 }
-
                 this.refreshDataSource(this.currentItemPartSelection.ItemParts);
                 this.currentIndex = this.currentItemPartSelection.ItemParts.length - 1;
             }
-
         });
-
-
         //make this based off group
         this.itemService.getPartItemList().subscribe(
             (itemlist: ItemList[]) => {
@@ -95,12 +81,10 @@ export class ItemEditPartSectionPartComponent implements OnInit {
     onAddItemPart(itemPart: ItemPart) {
         itemPart.pendingAdd = false;
         this.onChangeFOBPrice(itemPart);
-
         if (this.isRequirementValid(itemPart)) {
             if (!this.existVendorSKU(itemPart.PartItemVendorSKU, true)) {
                 this.pendingAdd = true;
-
-                if (itemPart.PartItemID && itemPart.PartItemID != 0) {
+                if (itemPart.PartItemID && itemPart.PartItemID !== 0) {
                     this.itemService.getItem(itemPart.PartItemID).subscribe(
                         (item: Item) => {
                             itemPart.PrevPartItemID = item.ItemID;
@@ -111,7 +95,6 @@ export class ItemEditPartSectionPartComponent implements OnInit {
                         }
                     );
                 }
-
                 const _temp = new ItemPart(null, this.currentItemPartSelection.ItemSectionID, null, null, null, null, null, null, null, null, null, null, null, this.currentItemPartSelection.ItemParts.length + 1, null, null, true, true);
                 this.currentItemPartSelection.ItemParts.push(_temp);
                 this.refreshDataSource(this.currentItemPartSelection.ItemParts);
@@ -138,7 +121,7 @@ export class ItemEditPartSectionPartComponent implements OnInit {
         let counter: number = 0;
         this.currentItemPartSelection.ItemParts.forEach((value, index) => {
                 if (value.PartItemID === itemID) {
-                    if (isNew || index != this.currentItemPartSelection.ItemParts.length - 1) {
+                    if (isNew || index !== this.currentItemPartSelection.ItemParts.length - 1) {
                         counter += 1;
                     }
                 }
@@ -151,7 +134,7 @@ export class ItemEditPartSectionPartComponent implements OnInit {
         let counter: number = 0;
         this.currentItemPartSelection.ItemParts.forEach((value, index) => {
                 if (value.PartItemVendorSKU === vendorSKU) {
-                    if (isNew || index != this.currentItemPartSelection.ItemParts.length - 1) {
+                    if (isNew || index !== this.currentItemPartSelection.ItemParts.length - 1) {
                         counter += 1;
                     }
                 }
@@ -162,15 +145,15 @@ export class ItemEditPartSectionPartComponent implements OnInit {
 
     onEditItemPart(index: number) {
         if (this.pendingLoad) { return; }
-        if (this.currentIndex != index) {
+        if (this.currentIndex !== index) {
             this.currentItemPartSelection.ItemParts.forEach((itempart, i) => {
 
                 this.onChangeFOBPrice(itempart);
 
-                if (i != this.currentItemPartSelection.ItemParts.length - 1) {
-                    if (!itempart.PartItemName || itempart.PartItemName == ''
-                        || !itempart.PartItemVendorSKU || itempart.PartItemVendorSKU == ''
-                        || !itempart.PartFOBPrice || itempart.PartFOBPrice == 0 ) {
+                if (i !== this.currentItemPartSelection.ItemParts.length - 1) {
+                    if (!itempart.PartItemName || itempart.PartItemName === ''
+                        || !itempart.PartItemVendorSKU || itempart.PartItemVendorSKU === ''
+                        || !itempart.PartFOBPrice || itempart.PartFOBPrice === 0 ) {
 
                         this.currentItemPartSelection.ItemParts.splice(i, 1);
                         this.refreshDataSource(this.currentItemPartSelection.ItemParts);
@@ -188,9 +171,9 @@ export class ItemEditPartSectionPartComponent implements OnInit {
     }
 
     onPartItemChange(index: number, itemPart: any) {
-        if (this.currentItemPartSelection.ItemParts[index] && this.currentItemPartSelection.ItemParts[index].PartItemID && this.currentItemPartSelection.ItemParts[index].PartItemID != 0) {
+        if (this.currentItemPartSelection.ItemParts[index] && this.currentItemPartSelection.ItemParts[index].PartItemID && this.currentItemPartSelection.ItemParts[index].PartItemID !== 0) {
             if (!this.existItemID(this.currentItemPartSelection.ItemParts[index].PartItemID)) {
-                if (this.currentItemPartSelection.ItemParts[index].PartItemID && this.currentItemPartSelection.ItemParts[index].PartItemID != 0) {
+                if (this.currentItemPartSelection.ItemParts[index].PartItemID && this.currentItemPartSelection.ItemParts[index].PartItemID !== 0) {
                     this.pendingLoad = true;
                     this.itemService.getItem(this.currentItemPartSelection.ItemParts[index].PartItemID).subscribe(
                         (item: Item) => {
@@ -235,13 +218,11 @@ export class ItemEditPartSectionPartComponent implements OnInit {
             }
         } else {
             this.currentItemPartSelection.ItemParts[index].isNew = true;
-
             this.currentItemPartSelection.ItemParts[index].PartItemName = null;
             this.currentItemPartSelection.ItemParts[index].PartItemVendorSKU = null;
             this.currentItemPartSelection.ItemParts[index].PartTPIN = null;
             this.currentItemPartSelection.ItemParts[index].PartFOBPrice = null;
             this.currentItemPartSelection.ItemParts[index].PartPrice = null;
-
             this.refreshDataSource(this.currentItemPartSelection.ItemParts);
         }
     }
@@ -315,7 +296,6 @@ export class ItemEditPartSectionPartComponent implements OnInit {
         }
     }
 
-
     fileChangeEvent(fileInput: any, itemPart: ItemPart) {
         // Clear Uploaded Files result message
         this.filesToUpload = <Array<File>>fileInput.target.files;
@@ -335,7 +315,6 @@ export class ItemEditPartSectionPartComponent implements OnInit {
                 const reader = new FileReader();
                 formData.append('uploadedFiles', this.filesToUpload[i], this.filesToUpload[i].name);
             }
-
             this.itemService.uploadTempImage(this.newGuid(), formData)
                 .subscribe (
                     (data: string) => {
@@ -418,7 +397,6 @@ export class ItemEditPartSectionPartComponent implements OnInit {
             itemPart.PartPrice = itemPart.PartFOBPrice * 3;
             itemPart.PartPrice = Number(itemPart.PartPrice.toFixed(2));
         }
-
     }
 
     newGuid() {

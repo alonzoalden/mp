@@ -1,25 +1,21 @@
 import { Component } from '@angular/core';
 import { Router } from '@angular/router';
-import { ItemInsert, ItemTierPriceInsert, ItemRelatedProductInsert, ItemUpSellInsert, ItemCrossSellInsert, ItemAttachmentInsert, ItemVideoInsert } from '../../../../shared/class/item';
+import { ItemInsert } from '../../../../shared/class/item';
 import { VendorBrand } from '../../../../shared/class/vendor-brand';
-
 import { ItemService } from '../../../item.service';
 
 @Component({
-  selector: 'o-item-part-add',
-  templateUrl: './item-part-add.component.html',
-  styleUrls: ['./item-part-add.component.css']
+    selector: 'o-item-part-add',
+    templateUrl: './item-part-add.component.html',
+    styleUrls: ['./item-part-add.component.css']
 })
 
 export class ItemPartAddComponent {
     errorMessage: string;
     _item: ItemInsert;
     pendingAdd: boolean;
-
     loading: boolean;
-
     vendorBrandList: VendorBrand[];
-
     private dataIsValid: { [key: string]: boolean } = {};
 
     constructor(private router: Router,
@@ -60,13 +56,10 @@ export class ItemPartAddComponent {
 
     onAddItem() {
         if (this.isItemNameValid() && this.isSKUValid()) {
-                if (this.isValid(null) && this.isShipWithinDaysValid()) {
-                    this.pendingAdd = true;
-
+            if (this.isValid(null) && this.isShipWithinDaysValid()) {
+                this.pendingAdd = true;
                 const newItem = this.itemService.copyItemInsert(this.item);
-
                 newItem.ItemTierPrices.splice(newItem.ItemTierPrices.length - 1, 1);
-
                 newItem.ItemImages.splice(newItem.ItemImages.length - 1, 1);
                 newItem.ItemImages.forEach((value, i) => {
                     value.Position = i + 1;
@@ -124,7 +117,7 @@ export class ItemPartAddComponent {
 
     isItemNameValid(): boolean {
         if (this.item.VendorBrandID) {
-            if (this.item.Name.toLowerCase().includes(this.vendorBrandList.find(x => x.VendorBrandID == Number(this.item.VendorBrandID)).BrandName.toLowerCase())) {
+            if (this.item.Name.toLowerCase().includes(this.vendorBrandList.find(x => x.VendorBrandID === Number(this.item.VendorBrandID)).BrandName.toLowerCase())) {
                 this.itemService.sendNotification({ type: 'error', title: 'Invalid Entry', content: '"Brand" should not be included in "Item Name"' });
                 return false;
             } else {
@@ -136,7 +129,7 @@ export class ItemPartAddComponent {
     }
 
     isSKUValid(): boolean {
-        let regex = /^[\w\-]*$/g;
+        const regex = /^[\w\-]*$/g;
 
         if (regex.test(this.item.VendorSKU)) {
             return true;
@@ -180,7 +173,7 @@ export class ItemPartAddComponent {
     }
 
     validateDimension() {
-        return (this.item.ItemType != 'simple' || (this.item.Width &&
+        return (this.item.ItemType !== 'simple' || (this.item.Width &&
             this.item.Height &&
             this.item.Weight &&
             this.item.Length &&

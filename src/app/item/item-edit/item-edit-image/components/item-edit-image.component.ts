@@ -1,6 +1,7 @@
-import { Component, OnInit, ViewChild, Inject, Input, SimpleChanges } from '@angular/core';
+import { ItemEditImageComponentUploadDialog } from './item-edit-image.component-upload-dialog';
+import { Component, OnInit, Input, SimpleChanges, OnChanges } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { MatTableDataSource, MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material';
+import { MatTableDataSource, MatDialog } from '@angular/material';
 import { Item, ItemImage } from '../../../../shared/class/item';
 import { ItemService } from '../../../item.service';
 import { environment } from '../../../../../environments/environment';
@@ -11,12 +12,11 @@ declare var $: any;
     templateUrl: './item-edit-image.component.html'
 })
 
-export class ItemEditImageComponent implements OnInit {
+export class ItemEditImageComponent implements OnInit, OnChanges {
     private imageURL = environment.imageURL;
     @Input() errorMessage: string;
     @Input() item: Item;
     @Input() itemImagesMatTable: MatTableDataSource<ItemImage>;
-
     displayedColumns = ['Add', 'Down', 'Position', 'Up', 'Thumbnail', 'Label', 'IsBaseImage', 'IsSmallImage', 'IsThumbnail', 'IsRotatorImage', 'Exclude', 'Remove'];
     pendingAdd: boolean;
     currentIndex: number;
@@ -25,13 +25,15 @@ export class ItemEditImageComponent implements OnInit {
     filesToUpload: Array<File> = [];
     selectedFileNames: string[] = [];
     res: Array<string>;
-
     pendingUpload: boolean;
     public isLoadingData: Boolean = false;
     public isLoadingMultipleData: Boolean = false;
 
-    constructor(private route: ActivatedRoute,
-        private itemService: ItemService, public itemUploadDialog: MatDialog) { }
+    constructor(
+        private route: ActivatedRoute,
+        private itemService: ItemService,
+        public itemUploadDialog: MatDialog
+    ) { }
 
 
     guid: string;
@@ -64,9 +66,7 @@ export class ItemEditImageComponent implements OnInit {
         } else {
             this.removePendingLine();
             this.addPendingLine();
-
             this.currentIndex = this.item.ItemImages.length - 1;
-
             this.refreshDataSource(this.item.ItemImages);
         }
     }
@@ -153,10 +153,8 @@ export class ItemEditImageComponent implements OnInit {
     }
 
     isBaseImageClick(image: ItemImage, index: number) {
-        // this.item.ItemImages.forEach((value, index) => value.IsBaseImage = false);
-        // image.IsBaseImage = true;
         this.item.ItemImages.forEach((value, i) => {
-            if (i != index) {
+            if (i !== index) {
                 value.IsBaseImage = false;
             }
         });
@@ -164,10 +162,8 @@ export class ItemEditImageComponent implements OnInit {
     }
 
     isSmallImageClick(image: ItemImage, index: number) {
-        // this.item.ItemImages.forEach((value, index) => value.IsSmallImage = false);
-        // image.IsSmallImage = true;
         this.item.ItemImages.forEach((value, i) => {
-            if (i != index) {
+            if (i !== index) {
                 value.IsSmallImage = false;
             }
         });
@@ -175,10 +171,8 @@ export class ItemEditImageComponent implements OnInit {
     }
 
     isThumbnailClick(image: ItemImage, index: number) {
-        // this.item.ItemImages.forEach((value, index) => value.IsThumbnail = false);
-        // image.IsThumbnail = true;
         this.item.ItemImages.forEach((value, i) => {
-            if (i != index) {
+            if (i !== index) {
                 value.IsThumbnail = false;
             }
         });
@@ -186,10 +180,8 @@ export class ItemEditImageComponent implements OnInit {
     }
 
     isRotatorImageClick(image: ItemImage, index: number) {
-        // this.item.ItemImages.forEach((value, index) => value.IsRotatorImage = false);
-        // image.IsRotatorImage = true;
         this.item.ItemImages.forEach((value, i) => {
-            if (i != index) {
+            if (i !== index) {
                 value.IsRotatorImage = false;
             }
         });
@@ -223,7 +215,6 @@ export class ItemEditImageComponent implements OnInit {
             this.isLoadingData = true;
             const formData: FormData = new FormData();
             for (let i = 0; i < this.filesToUpload.length; i++) {
-                let reader = new FileReader();
                 formData.append('uploadedFiles', this.filesToUpload[i], this.filesToUpload[i].name);
             }
 
@@ -307,7 +298,7 @@ export class ItemEditImageComponent implements OnInit {
                             newItemImage.Raw = this.imageURL + '/temp' + data + '_' + i + '.' + result[i].name.substr(result[i].name.lastIndexOf('.') + 1).toLowerCase();
                             this.item.ItemImages.push(newItemImage);
 
-                            if (i == result.length - 1) {
+                            if (i === result.length - 1) {
                                 this.addPendingLine();
                                 this.currentIndex = this.item.ItemImages.length - 1;
                                 this.refreshDataSource(this.item.ItemImages);
@@ -323,53 +314,5 @@ export class ItemEditImageComponent implements OnInit {
             this.addPendingLine();
             this.itemService.sendNotification({ type: 'error', title: 'Error', content: error });
         });
-    }
-}
-
-@Component({
-    selector: 'item-edit-image.component-upload-dialog',
-    templateUrl: 'item-edit-image.component-upload-dialog.html',
-})
-
-export class ItemEditImageComponentUploadDialog implements OnInit {
-    filesToUpload: Array<File> = [];
-    selectedFiles: Array<File> = [];
-    selectedFileNames: string[] = [];
-
-    @ViewChild('fileUpload', { static: true }) fileUploadVar: any;
-
-    constructor( public dialogRef: MatDialogRef<ItemEditImageComponentUploadDialog>,
-        private itemService: ItemService,
-        @Inject(MAT_DIALOG_DATA) public data: number ) {
-    }
-
-    ngOnInit() {
-    }
-
-    onCancelClick(): void {
-        this.dialogRef.close();
-    }
-
-    fileChangeEvent(fileInput: any) {
-        this.selectedFiles = <Array<File>>fileInput.target.files;
-
-        if (this.selectedFileNames.length + this.data + this.selectedFiles.length > 8) {
-            this.itemService.sendNotification({ type: 'error', title: 'Maximum of 8 images', content: '' });
-        } else {
-            for (let i = 0; i < this.selectedFiles.length; i++) {
-                this.filesToUpload.push(this.selectedFiles[i]);
-                this.selectedFileNames.push(this.selectedFiles[i].name);
-            }
-        }
-    }
-
-    removeFile(index: number) {
-        this.filesToUpload.splice(index, 1);
-        this.selectedFileNames.splice(index, 1);
-    }
-
-    cancelUpload() {
-        this.filesToUpload = [];
-        this.selectedFileNames = [];
     }
 }

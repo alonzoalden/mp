@@ -17,11 +17,8 @@ import { MemberRegistrationShellComponent } from './containers/member-registrati
 //import { MerchantAgreementComponentShellDialog } from './containers/member-registration-shell/member-registration-shell.component';
 
 import { memberRouting } from './member.routing';
-
 import { MemberService } from './member.service';
 import { TranslateModule } from '@ngx-translate/core';
-
-/* NgRx */
 import { StoreModule } from '@ngrx/store';
 import { EffectsModule } from '@ngrx/effects';
 import { MemberEffects } from './state/member.effects';

@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild, SimpleChanges, Input, Output, EventEmitter } from '@angular/core';
+import { Component, OnInit, ViewChild, SimpleChanges, Input, Output, EventEmitter, OnChanges } from '@angular/core';
 import { MatPaginator, MatSort, MatTableDataSource } from '@angular/material';
 import { MemberVendor, Member } from '../../../shared/class/member';
 
@@ -7,7 +7,7 @@ import { MemberVendor, Member } from '../../../shared/class/member';
     templateUrl: './setting-vendor-list.component.html'
 })
 
-export class SettingVendorListComponent implements OnInit {
+export class SettingVendorListComponent implements OnInit, OnChanges {
     @Input() userInfo: Member;
     @Input() memberVendorsMatTable: MatTableDataSource<MemberVendor>;
     @Input() pendingSave: boolean;

@@ -104,6 +104,7 @@ export class MemberRegistrationComponent implements OnInit {
     }
 
     openDialogMerchantAgreement() {
+        // tslint:disable-next-line: no-use-before-declare
         const dialogRef = this.printDialog.open(MerchantAgreementComponentDialog, {
         });
 

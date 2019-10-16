@@ -1,56 +1,39 @@
-import { Component, OnInit, ViewChild, Input, SimpleChanges, Output, EventEmitter } from '@angular/core';
+import { Component, OnInit, Input, SimpleChanges, Output, EventEmitter, OnChanges } from '@angular/core';
 import { MatTableDataSource } from '@angular/material';
-import { Router, ActivatedRoute } from '@angular/router';
-
-import { Item, ItemTierPrice, ItemInsert, ItemTierPriceInsert } from '../../../../shared/class/item';
-
+import { Item, ItemTierPrice } from '../../../../shared/class/item';
 import { ItemService } from '../../../item.service';
-import { AppService } from '../../../../app.service';
-import { Member } from 'app/shared/class/member';
+import { Member } from '../../../../shared/class/member';
 
 @Component({
     selector: 'o-item-edit-price',
     templateUrl: './item-edit-price.component.html'
 })
 
-export class ItemEditPriceComponent implements OnInit {
-    // errorMessage: string;
-    // item: Item;
-    // itemid: number;
+export class ItemEditPriceComponent implements OnInit, OnChanges {
     @Input() userInfo: Member;
     @Input() errorMessage: string;
     @Input() item: Item;
     @Input() itemTierPricesMatTable: MatTableDataSource<ItemTierPrice>;
     @Output() getItemTierPrices = new EventEmitter<number>();
-    //isDropship: boolean;
-
     _itemTierPrices: ItemTierPrice[] = [];
-
     minDate = new Date(2000, 0, 1);
     maxDate = new Date(2020, 0, 1);
-
     specialFrom: Date;
     specialTo: Date;
-
-    PendingAdd: boolean;
+    pendingAdd: boolean;
     currentItemTierPriceIndex: number;
-
     displayedColumns = ['Add', 'Quantity', 'Price', 'Remove'];
     dataSource: any = null;
-
     formDirty = false;
     canAdd = false;
 
-    constructor(private route: ActivatedRoute,
-                private itemService: ItemService,
-                private appService: AppService) { }
+    constructor(private itemService: ItemService) { }
 
     ngOnChanges(changes: SimpleChanges) {
         if (changes.itemTierPricesMatTable && !changes.itemTierPricesMatTable.currentValue.data.length) {
             this.addPendingLine();
         }
         this.currentItemTierPriceIndex = this.item.ItemTierPrices.length - 1;
-        // this.dataSource.sort = this.sort;
     }
 
     ngOnInit(): void {
@@ -102,7 +85,7 @@ export class ItemEditPriceComponent implements OnInit {
         if (existItemTierPrice) {
             this.itemService.sendNotification({ type: 'error', title: 'Error', content: 'Tier Pricing already exists for this Quantity' });
         } else {
-            this.PendingAdd = true;
+            this.pendingAdd = true;
             itemTierPrice.pendingAdd = false;
             this.addPendingLine();
             this.refreshItemTierPriceDataSource(this.item.ItemTierPrices);
@@ -110,9 +93,9 @@ export class ItemEditPriceComponent implements OnInit {
     }
 
     onEditItemTierPrice(index: number) {
-        if (this.PendingAdd) {
+        if (this.pendingAdd) {
             this.currentItemTierPriceIndex = this.item.ItemTierPrices.length - 1;
-            this.PendingAdd = false;
+            this.pendingAdd = false;
         } else {
             this.currentItemTierPriceIndex = index;
         }

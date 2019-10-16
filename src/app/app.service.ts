@@ -1,13 +1,10 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpErrorResponse, HttpHeaders } from '@angular/common/http';
 import { Router } from '@angular/router';
-
 import { Observable, Subject, of, throwError } from 'rxjs';
 import { catchError, tap } from 'rxjs/operators';
-
 import { Member } from './shared/class/member';
 import { PurchaseOrder } from './shared/class/purchase-order';
-
 import { OAuthService } from 'angular-oauth2-oidc';
 import { environment } from './../environments/environment';
 

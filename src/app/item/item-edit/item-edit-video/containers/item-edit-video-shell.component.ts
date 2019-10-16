@@ -26,5 +26,3 @@ export class ItemEditVideoShellComponent implements OnInit {
         this.store.dispatch(new itemActions.LoadVideoURLDetail(payload));
     }
 }
-
-

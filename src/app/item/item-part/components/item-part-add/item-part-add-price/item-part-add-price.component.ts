@@ -1,5 +1,5 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
-import { MatTableDataSource, MatSort, MatSortable } from '@angular/material';
+import { MatTableDataSource, MatSort } from '@angular/material';
 import { ItemInsert, ItemTierPriceInsert } from '../../../../../shared/class/item';
 import { ItemService } from '../../../../item.service';
 import { AppService } from '../../../../../app.service';
@@ -22,14 +22,12 @@ export class ItemPartAddPriceComponent implements OnInit {
     dataSource: any = null;
     formDirty = false;
     canAdd = false;
-
     constructor(private itemService: ItemService, private appService: AppService) { }
 
     @ViewChild(MatSort, { static: false }) sort: MatSort;
 
     ngOnInit(): void {
         this.item = this.itemService.currentItemInsert;
-
         this.appService.getCurrentMember()
                 .subscribe(
                     (data) => {
@@ -49,7 +47,6 @@ export class ItemPartAddPriceComponent implements OnInit {
             this.item.ItemTierPrices.push(_temp);
             this.refreshItemTierPriceDataSource(this.item.ItemTierPrices);
         }
-
         this.currentItemTierPriceIndex = this.item.ItemTierPrices.length - 1;
     }
 

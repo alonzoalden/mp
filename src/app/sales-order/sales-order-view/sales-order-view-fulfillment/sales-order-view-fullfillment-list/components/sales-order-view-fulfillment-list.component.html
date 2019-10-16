@@ -2,7 +2,7 @@
     <div class="tab-pane active">
         <div class="panel-body p-w-none" style="min-height: 400px;">
             <ng-container *ngIf="isLoading">
-                <div class="spinner-full-page"> 
+                <div class="spinner-full-page">
                     <div>
                         <div>
                             <div class="spinner-container">
@@ -17,13 +17,6 @@
                 </div>
                 <div class="gray-cover-bg1"></div>
             </ng-container>
-            <!-- <div class="ibox-content hide-y m-t-lg" *ngIf="!salesorder || isLoading" class="spinner-container">
-                <div class="sk-spinner sk-spinner-three-bounce big-spinner">
-                    <div class="sk-bounce1"></div>
-                    <div class="sk-bounce2"></div>
-                    <div class="sk-bounce3"></div>
-                </div>
-            </div> -->
             <ng-container *ngIf="salesOrder && !isLoading">
                 <div class="ibox-title"><h5>{{ 'Shipments' | translate }}</h5></div>
                 <div class="ibox-content hide-y">
@@ -35,9 +28,9 @@
                                 <td mat-cell *matCellDef="let fulfillment; let i = index">
                                     <button mat-button [matMenuTriggerFor]="menu"><i class="fa fa-bars fa-2x"></i></button>
                                     <mat-menu #menu="matMenu">
-                                        <button mat-menu-item (click)="setFulfillment.emit(fulfillment)" [routerLink]="['/','sales-order', 'view', fulfilledby, orderid, 'fulfillment', 'edit',fulfillment.FulfillmentID]" *ngIf="isMerchant && !fulfillment.InternalID">{{ 'Edit' | translate }}</button> 
-                                        <button mat-menu-item (click)="onDeleteFulfillment(fulfillment)" *ngIf="isMerchant && !fulfillment.InternalID" >{{ 'Delete' | translate }}</button>                                                                         
-                                        <button mat-menu-item (click)="setFulfillment.emit(fulfillment)" [routerLink]="['/','sales-order', 'view', fulfilledby, orderid, 'fulfillment', 'edit',fulfillment.FulfillmentID]" *ngIf="!isMerchant || fulfillment.InternalID">{{ 'View Details' | translate }}</button> 
+                                        <button mat-menu-item (click)="setFulfillment.emit(fulfillment)" [routerLink]="['/','sales-order', 'view', fulfilledby, orderid, 'fulfillment', 'edit',fulfillment.FulfillmentID]" *ngIf="isMerchant && !fulfillment.InternalID">{{ 'Edit' | translate }}</button>
+                                        <button mat-menu-item (click)="onDeleteFulfillment(fulfillment)" *ngIf="isMerchant && !fulfillment.InternalID" >{{ 'Delete' | translate }}</button>
+                                        <button mat-menu-item (click)="setFulfillment.emit(fulfillment)" [routerLink]="['/','sales-order', 'view', fulfilledby, orderid, 'fulfillment', 'edit',fulfillment.FulfillmentID]" *ngIf="!isMerchant || fulfillment.InternalID">{{ 'View Details' | translate }}</button>
                                     </mat-menu>
                                 </td>
                             </ng-container>
@@ -73,7 +66,7 @@
                                 <th mat-header-cell *matHeaderCellDef width="150px">{{ 'Tracking Number' | translate }}</th>
                                 <td mat-cell *matCellDef="let fulfillment">{{fulfillment.TrackingNumber}}</td>
                             </ng-container>
-                            
+
                             <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
                             <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
                         </table>
@@ -89,16 +82,3 @@
         </div>
     </div>
 </div>
-        <!-- </div>
-    </div> -->
-    <!-- <div class="row m-t-md" *ngIf="salesorder && isMerchant">
-        <div class="col-md-2">
-            <button
-                type="button"
-                class="btn btn-primary max"
-                [routerLink]="['/','sales-order', 'view', fulfilledby,orderid,'fulfillment','add']">
-                <i class="fa fa-plus-circle"></i> {{ 'New Shipment' | translate }}
-            </button>
-        </div>
-    </div> -->
-<!-- </div> -->

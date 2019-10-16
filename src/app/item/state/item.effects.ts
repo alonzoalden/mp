@@ -4,16 +4,16 @@ import { mergeMap, map, catchError, take } from 'rxjs/operators';
 import { Action, Store } from '@ngrx/store';
 import { Actions, Effect, ofType } from '@ngrx/effects';
 import { ItemService } from '../item.service';
-import * as itemActions from './item.actions';
 import { Router } from '@angular/router';
 import { VendorBrand } from 'app/shared/class/vendor-brand';
-import { ItemList, Item, ItemUpSell, ItemRelatedProduct, ItemVideoInsert, ItemCategoryAssignment, ItemTierPrice, ItemBatch, ItemInsert, ItemCrossSell, ItemAttachment, ItemVideo } from 'app/shared/class/item';
+import { ItemList, Item, ItemUpSell, ItemRelatedProduct, ItemCategoryAssignment, ItemTierPrice, ItemBatch, ItemInsert, ItemCrossSell, ItemAttachment, ItemVideo } from 'app/shared/class/item';
 import { Category } from 'app/shared/class/category';
 import { VendorAttachment, VendorAttachmentList } from 'app/shared/class/vendor-attachment';
 import { URLVideo } from 'app/shared/class/item-video';
 import { environment } from 'environments/environment';
-import * as fromItem from '../state';
 import { BatchUpdate, BatchUpdateValue } from 'app/shared/class/batch-update';
+import * as itemActions from './item.actions';
+import * as fromItem from '../state';
 
 @Injectable()
 export class ItemEffects {
@@ -227,7 +227,7 @@ export class ItemEffects {
                         itemvideo.Thumbnail = urlvideo.items[0].snippet.thumbnails.medium.url;
                     }
                     itemvideo.Provider = 'youtube';
-                    if (!itemvideo.Label || itemvideo.Label == '') {
+                    if (!itemvideo.Label || itemvideo.Label === '') {
                         itemvideo.Label = urlvideo.items[0].snippet.title;
                     }
                     itemvideo.Description = urlvideo.items[0].snippet.description;
@@ -383,7 +383,7 @@ export class ItemEffects {
             this.itemService.editItemBatch(payload).pipe(
                 map((item: ItemBatch[]) => {
                     const _updateditems: ItemBatch[] = payload.filter(item => item.Approve);
-                    return (new itemActions.EditItemBatchSuccess({itembatch: item, updateditems: _updateditems}))
+                    return (new itemActions.EditItemBatchSuccess({itembatch: item, updateditems: _updateditems}));
                 }),
                 catchError(err => {
                     this.itemService.sendNotification({ type: 'error', title: 'Error', content: err });
@@ -494,15 +494,6 @@ export class ItemEffects {
                         const fileName = item.TPIN;
                         window.navigator.msSaveOrOpenBlob(data, fileName + '.pdf'); // IE is the worst!!!
                     } else {
-                        // const iframe = document.createElement('iframe');
-                        // iframe.style.display = 'none';
-                        // iframe.src = blobUrl;
-                        // document.body.appendChild(iframe);
-
-                        // iframe.onload = (function() {
-                        //     iframe.contentWindow.focus();
-                        //     iframe.contentWindow.print();
-                        // });
                         const fileURL = window.URL.createObjectURL(blob);
                         const a: HTMLAnchorElement = document.createElement('a') as HTMLAnchorElement;
                         a.href = fileURL;
@@ -539,15 +530,6 @@ export class ItemEffects {
                         const fileName = payload.item.TPIN;
                         window.navigator.msSaveOrOpenBlob(data, fileName + '.pdf'); // IE is the worst!!!
                     } else {
-                        // const iframe = document.createElement('iframe');
-                        // iframe.style.display = 'none';
-                        // iframe.src = blobUrl;
-                        // document.body.appendChild(iframe);
-
-                        // iframe.onload = (function() {
-                        //     iframe.contentWindow.focus();
-                        //     iframe.contentWindow.print();
-                        // });
                         const fileURL = window.URL.createObjectURL(blob);
                         const a: HTMLAnchorElement = document.createElement('a') as HTMLAnchorElement;
                         a.href = fileURL;
@@ -584,15 +566,6 @@ export class ItemEffects {
                         const fileName = payload.item.TPIN;
                         window.navigator.msSaveOrOpenBlob(data, fileName + '.pdf'); // IE is the worst!!!
                     } else {
-                        // const iframe = document.createElement('iframe');
-                        // iframe.style.display = 'none';
-                        // iframe.src = blobUrl;
-                        // document.body.appendChild(iframe);
-
-                        // iframe.onload = (function() {
-                        //     iframe.contentWindow.focus();
-                        //     iframe.contentWindow.print();
-                        // });
                         const fileURL = window.URL.createObjectURL(blob);
                         const a: HTMLAnchorElement = document.createElement('a') as HTMLAnchorElement;
                         a.href = fileURL;
@@ -628,15 +601,6 @@ export class ItemEffects {
                         const fileName = 'Item_Template';
                         window.navigator.msSaveOrOpenBlob(data, fileName + '.xlsx'); // IE is the worst!!!
                     } else {
-                        // const iframe = document.createElement('iframe');
-                        // iframe.style.display = 'none';
-                        // iframe.src = blobUrl;
-                        // document.body.appendChild(iframe);
-
-                        // iframe.onload = (function() {
-                        //     iframe.contentWindow.focus();
-                        //     iframe.contentWindow.print();
-                        // });
                         const fileURL = window.URL.createObjectURL(blob);
                         const a: HTMLAnchorElement = document.createElement('a') as HTMLAnchorElement;
                         a.href = fileURL;
@@ -671,15 +635,6 @@ export class ItemEffects {
                         const fileName = String(Date.now());
                         window.navigator.msSaveOrOpenBlob(data, fileName + '.pdf'); // IE is the worst!!!
                     } else {
-                        // const iframe = document.createElement('iframe');
-                        // iframe.style.display = 'none';
-                        // iframe.src = blobUrl;
-                        // document.body.appendChild(iframe);
-
-                        // iframe.onload = (function() {
-                        //     iframe.contentWindow.focus();
-                        //     iframe.contentWindow.print();
-                        // });
                         const fileURL = window.URL.createObjectURL(blob);
                         const a: HTMLAnchorElement = document.createElement('a') as HTMLAnchorElement;
                         a.href = fileURL;
@@ -714,15 +669,6 @@ export class ItemEffects {
                         const fileName = String(Date.now());
                         window.navigator.msSaveOrOpenBlob(data, fileName + '.pdf'); // IE is the worst!!!
                     } else {
-                        // const iframe = document.createElement('iframe');
-                        // iframe.style.display = 'none';
-                        // iframe.src = blobUrl;
-                        // document.body.appendChild(iframe);
-
-                        // iframe.onload = (function() {
-                        //     iframe.contentWindow.focus();
-                        //     iframe.contentWindow.print();
-                        // });
                         const fileURL = window.URL.createObjectURL(blob);
                         const a: HTMLAnchorElement = document.createElement('a') as HTMLAnchorElement;
                         a.href = fileURL;
@@ -744,9 +690,4 @@ export class ItemEffects {
             )
         )
     );
-
-
-
-
-
 }

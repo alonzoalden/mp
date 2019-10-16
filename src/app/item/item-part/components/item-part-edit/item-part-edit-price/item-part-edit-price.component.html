@@ -5,12 +5,12 @@
                 <fieldset>
                     <div class="ibox-title"><h5>{{ 'Item Price' | translate }}</h5></div>
                     <div class="ibox-content">
-                        <div class="form-group" *ngIf="item.PriceType !== 'Dynamic'" [ngClass]="{'has-error': (itemPriceVar.touched || 
-                                                                                    itemPriceVar.dirty) && 
+                        <div class="form-group" *ngIf="item.PriceType !== 'Dynamic'" [ngClass]="{'has-error': (itemPriceVar.touched ||
+                                                                                    itemPriceVar.dirty) &&
                                                                                     !itemPriceVar.valid }">
                             <label class="col-md-2 control-label" for="itemPriceId">{{ 'Selling Price' | translate }}</label>
                             <div class="col-md-8">
-                                <input class="form-control" type="number" id="itemPriceId" placeholder="{{ 'Selling Price' | translate }} ({{ 'Required' | translate }})" 
+                                <input class="form-control" type="number" id="itemPriceId" placeholder="{{ 'Selling Price' | translate }} ({{ 'Required' | translate }})"
                                     step="0.01" onchange="this.value = parseFloat(this.value).toFixed(2);" onkeydown="return event.keyCode == 69 || event.keyCode == 189 ? false : true" min="0"
                                     required [(ngModel)]="item.Price" name="itemPrice" #itemPriceVar="ngModel" />
                                 <span class="help-block" *ngIf="(itemPriceVar.touched ||
@@ -22,13 +22,13 @@
                                 </span>
                             </div>
                         </div>
-                        <div class="form-group" [ngClass]="{'has-error': (itemFOBPriceVar.touched || 
-                                                                                    itemFOBPriceVar.dirty) && 
+                        <div class="form-group" [ngClass]="{'has-error': (itemFOBPriceVar.touched ||
+                                                                                    itemFOBPriceVar.dirty) &&
                                                                                     !itemFOBPriceVar.valid }">
                             <label class="col-md-2 control-label" for="itemFOBPriceId">{{ 'FOB Price' | translate }}</label>
                             <div class="col-md-8">
-                                <input class="form-control" id="itemFOBPriceId" type="number" placeholder="{{ 'FOB Price' | translate }} ({{ 'Required' | translate }})" 
-                                    step="0.01" (change)="onChangeFOBPrice();" 
+                                <input class="form-control" id="itemFOBPriceId" type="number" placeholder="{{ 'FOB Price' | translate }} ({{ 'Required' | translate }})"
+                                    step="0.01" (change)="onChangeFOBPrice();"
                                     onkeydown="return event.keyCode == 69 || event.keyCode == 189 ? false : true" min="0"
                                     required [(ngModel)]=item.FOBPrice name="itemFOBPrice" #itemFOBPriceVar="ngModel" />
                                 <span class="help-block" *ngIf="(itemFOBPriceVar.touched ||
@@ -40,12 +40,12 @@
                                 </span>
                             </div>
                         </div>
-                        <!-- <div class="form-group" *ngIf="isDropship" [ngClass]="{'has-error': (itemDropshipPriceVar.touched || 
-                                                                                    itemDropshipPriceVar.dirty) && 
+                        <!-- <div class="form-group" *ngIf="isDropship" [ngClass]="{'has-error': (itemDropshipPriceVar.touched ||
+                                                                                    itemDropshipPriceVar.dirty) &&
                                                                                     !itemDropshipPriceVar.valid }">
                             <label class="col-md-2 control-label" for="itemDropshipPriceId">{{ 'Drop-ship Price' | translate }}</label>
                             <div class="col-md-8">
-                                <input class="form-control" id="itemDropshipPriceId" type="number" placeholder="{{ 'Dropship Price' | translate }} ({{ 'Required' | translate }})" 
+                                <input class="form-control" id="itemDropshipPriceId" type="number" placeholder="{{ 'Dropship Price' | translate }} ({{ 'Required' | translate }})"
                                     step="0.01" onchange="this.value = parseFloat(this.value).toFixed(2);" onkeydown="return event.keyCode == 69 || event.keyCode == 189 ? false : true" min="0"
                                     required [(ngModel)]=item.DropshipPrice name="itemDropshipPrice" #itemDropshipPriceVar="ngModel" />
                                 <span class="help-block" *ngIf="(itemDropshipPriceVar.touched ||
@@ -75,11 +75,11 @@
                                         <!-- Add Button -->
                                         <ng-container matColumnDef="Add">
                                             <th mat-header-cell *matHeaderCellDef width="45px"></th>
-                                            <td mat-cell *matCellDef="let itemTierPrice; let i = index">                                                 
+                                            <td mat-cell *matCellDef="let itemTierPrice; let i = index">
                                                 <div *ngIf="i === item.ItemTierPrices.length-1">
                                                     <a (click)='itemTierPrice.Quantity > 0  && itemTierPrice.Price > 0 ? onAddItemTierPrice(itemTierPrice) : return; formDirty = false;'>
                                                         <span [matTooltip]="itemTierPrice.Quantity > 0  && itemTierPrice.Price > 0 ? ( 'Add' | translate ) : ( 'Required fields must be complete' | translate )"
-                                                            class="glyphicon glyphicon-plus fs-20" 
+                                                            class="glyphicon glyphicon-plus fs-20"
                                                             [ngClass]="i === item.ItemTierPrices.length-1 && itemTierPrice.Quantity > 0  && itemTierPrice.Price > 0 ? 'green' : 'gray'">
                                                         </span>
                                                     </a>
@@ -100,7 +100,7 @@
                                                         onkeydown="return event.keyCode == 69 || event.keyCode == 189 || event.keyCode == 190 ? false : true" min="0"
                                                         [(ngModel)]=itemTierPrice.Quantity [ngModelOptions]="{standalone: true}"
                                                         (focus)="formDirty = true;" (ngModelChange)="i === item.ItemTierPrices.length-1 && canAdd = true;"/>
-                                                </div>                                        
+                                                </div>
                                             </td>
                                         </ng-container>
                                         <!-- Price Column -->
@@ -109,7 +109,7 @@
                                             <td mat-cell *matCellDef="let itemTierPrice; let i = index">
                                                 <div *ngIf="currentItemTierPriceIndex !== i && i !== item.ItemTierPrices.length-1">
                                                     {{itemTierPrice.Price | currency}}
-                                                </div>                                                
+                                                </div>
                                                 <div *ngIf="currentItemTierPriceIndex === i || i === item.ItemTierPrices.length-1">
                                                     <input class="form-control" id="itemTierPriceID" type="number"
                                                         step="0.01" onchange="this.value = parseFloat(this.value).toFixed(2);" onkeydown="return event.keyCode == 69 || event.keyCode == 189 ? false : true" min="0"
@@ -125,16 +125,16 @@
                                                 <div *ngIf="i !== item.ItemTierPrices.length-1">
                                                     <a matTooltip="{{ 'Remove' | translate }}" attr.aria-label="{{ 'Remove' | translate }}" (click)='onRemoveItemTierPrice(i); currentItemTierPriceIndex = item.ItemTierPrices.length-1;'><span class="glyphicon glyphicon-trash"></span></a>
                                                 </div>
-                                                <div [hidden]="!formDirty && i === item.ItemTierPrices.length-1"> 
+                                                <div [hidden]="!formDirty && i === item.ItemTierPrices.length-1">
                                                     <a matTooltip="{{ 'Clear' | translate }}" attr.aria-label="{{ 'Clear' | translate}}" (click)="clearFields(itemTierPrice);"><i *ngIf="i === item.ItemTierPrices.length-1" class="fa fa-eraser"></i></a>
                                                 </div>
                                             </td>
                                         </ng-container>
 
                                         <tr mat-header-row *matHeaderRowDef="displayedColumns" ></tr>
-                                        <tr class="selected-row" mat-row *matRowDef="let row; let i = index; columns: displayedColumns" 
+                                        <tr class="selected-row" mat-row *matRowDef="let row; let i = index; columns: displayedColumns"
                                             [ngStyle]="{'background-color': itemService.rowColorConditions(i, item.ItemTierPrices, currentItemTierPriceIndex, formDirty)}"
-                                            (click)="onEditItemTierPrice(i)"></tr>                                
+                                            (click)="onEditItemTierPrice(i)"></tr>
                                     </table>
                                 </div>
                             </div>
@@ -142,8 +142,8 @@
                     </div>
                     <div class="ibox-title"><h5>{{ 'Special Price' | translate }}</h5></div>
                     <div class="ibox-content">
-                        <div class="form-group" [ngClass]="{'has-error': (itemSpecialPriceVar.touched || 
-                                                                                itemSpecialPriceVar.dirty) && 
+                        <div class="form-group" [ngClass]="{'has-error': (itemSpecialPriceVar.touched ||
+                                                                                itemSpecialPriceVar.dirty) &&
                                                                                 !itemSpecialPriceVar.valid }">
                             <label class="col-md-2 control-label" for="itemSpecialPriceId">{{ 'Special Price' | translate }}</label>
                             <div class="col-md-8">
@@ -156,8 +156,8 @@
                             </div>
                         </div>
 
-                        <div class="form-group" [ngClass]="{'has-error': (itemSpecialFromVar.touched || 
-                                                                                itemSpecialFromVar.dirty) && 
+                        <div class="form-group" [ngClass]="{'has-error': (itemSpecialFromVar.touched ||
+                                                                                itemSpecialFromVar.dirty) &&
                                                                                 !itemSpecialFromVar.valid }">
                             <label class="col-md-2 control-label" for="itemSpecialFromId">{{ 'Special Price From' | translate }}</label>
                             <div class="col-md-8">
@@ -174,8 +174,8 @@
                             </div>
                         </div>
 
-                        <div class="form-group" [ngClass]="{'has-error': (itemSpecialToVar.touched || 
-                                                                                itemSpecialToVar.dirty) && 
+                        <div class="form-group" [ngClass]="{'has-error': (itemSpecialToVar.touched ||
+                                                                                itemSpecialToVar.dirty) &&
                                                                                 !itemSpecialToVar.valid }">
                             <label class="col-md-2 control-label" for="itemSpecialToId">{{ 'Special Price To' | translate }}</label>
                             <div class="col-md-8">
@@ -188,7 +188,7 @@
                                 <span class="help-block" *ngIf="(itemSpecialToVar.touched ||
                                                                             itemSpecialToVar.dirty) &&
                                                                             itemSpecialToVar.errors">
-                
+
                                 </span>
                             </div>
                         </div>

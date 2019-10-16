@@ -40,19 +40,19 @@
                         </li>
                         <li routerLinkActive="active">
                             <a [routerLink]="['partdimension']" routerLinkActive="active" *ngIf="item.ItemType === 'simple'">
-                                {{ 'Dimension' | translate }} 
+                                {{ 'Dimension' | translate }}
                                 <span matTooltip="Required fields must be complete" attr.aria-label="{{ 'Required fields must be complete' | translate}}" [ngClass]="{'glyphicon glyphicon-exclamation-sign': !isValid('dimension')}"></span>
                             </a>
                         </li>
                         <li routerLinkActive="active">
                             <a [routerLink]="['partprice']" routerLinkActive="active">
-                                {{ 'Price' | translate }}  
+                                {{ 'Price' | translate }}
                                 <span matTooltip="Required fields must be complete" attr.aria-label="{{ 'Required fields must be complete' | translate}}" [ngClass]="{'glyphicon glyphicon-exclamation-sign': !isValid('price')}"></span>
                             </a>
                         </li>
                         <li routerLinkActive="active">
                             <a [routerLink]="['partimage']" routerLinkActive="active">
-                                {{ 'Image' | translate }} 
+                                {{ 'Image' | translate }}
                             </a>
                         </li>
                     </ul>
@@ -62,7 +62,7 @@
         </div>
     </div>
     <br />
-    
+
     <div class="button-bottom-row" *ngIf="!loading">
         <button mat-button
                 type="button"
@@ -74,6 +74,6 @@
                 class="btn button-add"
                 [disabled]="pendingAdd"
                 (click)="onAddItem()"><i class="fa fa-plus-circle"></i> {{ 'Add' | translate }}
-        </button>  
+        </button>
     </div>
 </div>

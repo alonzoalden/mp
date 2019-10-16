@@ -1,5 +1,4 @@
 import { Component, OnInit, Input, Output, EventEmitter, SimpleChanges, OnChanges } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
 import { MatTableDataSource } from '@angular/material';
 import { Item, ItemList, ItemRelatedProduct, ItemRelatedProductInsert } from '../../../../../shared/class/item';
 import { ItemService } from '../../../../item.service';
@@ -18,14 +17,12 @@ export class ItemEditProductRelationRelatedProductComponent implements OnInit, O
     @Input() itemRelatedProductsMatTable: MatTableDataSource<ItemRelatedProduct>;
     @Output() getItemRelatedProduct = new EventEmitter<ItemRelatedProduct>();
     @Output() addNewItemRelatedProductRow = new EventEmitter<ItemRelatedProduct>();
-
     relatedProductDisplayedColumns = ['Add', 'Down', 'Position', 'Up', 'ItemName', 'SKU', 'TPIN', 'Remove'];
     relatedProductPendingAdd: boolean;
     currentItemRelatedProductIndex: number;
     formDirty = false;
     canAdd = false;
-
-    private imageURL = environment.imageURL;
+    imageURL = environment.imageURL;
 
     constructor(private itemService: ItemService) { }
 
@@ -39,31 +36,11 @@ export class ItemEditProductRelationRelatedProductComponent implements OnInit, O
                 this.relatedProductAddPendingLine();
             }
         }
-
     }
 
     ngOnInit(): void {
         this.currentItemRelatedProductIndex = this.item.ItemRelatedProducts.length - 1;
     }
-
-    // initialize() {
-    //     if (this.itemService.currentItemEdit.ItemRelatedProducts === null) {
-    //         this.itemService.getItemRelatedProducts(this.itemid).subscribe(
-    //             (itemRelatedProducts: ItemRelatedProduct[]) => {
-    //                 this.item.ItemRelatedProducts = itemRelatedProducts;
-    //                 this.relatedProductAddPendingLine();
-    //                 this.currentItemRelatedProductIndex = this.item.ItemRelatedProducts.length - 1;
-    //                 this.relatedProductRefreshDataSource(this.item.ItemRelatedProducts);
-    //             },
-    //             (error: any) => this.errorMessage = <any>error
-    //         );
-    //     } else {
-    //         this.relatedProductRemovePendingLine();
-    //         this.relatedProductAddPendingLine();
-    //         this.currentItemRelatedProductIndex = this.item.ItemRelatedProducts.length - 1;
-    //         this.relatedProductRefreshDataSource(this.item.ItemRelatedProducts);
-    //     }
-    // }
 
     relatedProductAddPendingLine() {
         const _temp = new ItemRelatedProduct(0, this.item.ItemID, null, null, null, null, null, this.item.ItemRelatedProducts.length + 1, null, null, null, true);
@@ -85,21 +62,6 @@ export class ItemEditProductRelationRelatedProductComponent implements OnInit, O
         if (this.isRelatedProductRequirementValid(itemRelatedProduct)) {
             if (!this.existRelatedProduct(itemRelatedProduct.RelatedProductItemID, true)) {
                 this.relatedProductPendingAdd = true;
-                // this.getItemRelatedProduct.emit(itemRelatedProduct);
-                // this.itemService.getItem(itemRelatedProduct.RelatedProductItemID).subscribe(
-                //     (item: Item) => {
-                //         itemRelatedProduct.PrevRelatedProductItemID = item.ItemID;
-                //         itemRelatedProduct.RelatedItemName = item.Name;
-                //         itemRelatedProduct.RelatedItemVendorSKU = item.VendorSKU;
-                //         itemRelatedProduct.RelatedTPIN = item.TPIN;
-                //         itemRelatedProduct.pendingAdd = false;
-                //     },
-                //     (error: any) => {
-                //         this.errorMessage = <any>error;
-                //         this.itemService.sendNotification({ type: 'error', title: 'Error', content: this.errorMessage });
-                //     }
-                // );
-
                 this.relatedProductAddPendingLine();
                 this.relatedProductRefreshDataSource(this.item.ItemRelatedProducts);
             } else {
@@ -123,7 +85,7 @@ export class ItemEditProductRelationRelatedProductComponent implements OnInit, O
         let counter: number = 0;
         this.item.ItemRelatedProducts.forEach((value, index) => {
                 if (value.RelatedProductItemID === itemID) {
-                    if (isNew || index != this.item.ItemRelatedProducts.length - 1) {
+                    if (isNew || index !== this.item.ItemRelatedProducts.length - 1) {
                         counter += 1;
                     }
                 }
@@ -143,22 +105,7 @@ export class ItemEditProductRelationRelatedProductComponent implements OnInit, O
 
     onRelatedProductItemChange(index: number) {
         if (!this.existRelatedProduct(this.item.ItemRelatedProducts[index].RelatedProductItemID)) {
-
             this.getItemRelatedProduct.emit(this.item.ItemRelatedProducts[index]);
-            // this.itemService.getItem(this.item.ItemRelatedProducts[index].RelatedProductItemID).subscribe(
-            //     (item: Item) => {
-            //         this.item.ItemRelatedProducts[index].PrevRelatedProductItemID = item.ItemID;
-            //         this.item.ItemRelatedProducts[index].RelatedItemName = item.Name;
-            //         this.item.ItemRelatedProducts[index].RelatedItemVendorSKU = item.VendorSKU;
-            //         this.item.ItemRelatedProducts[index].RelatedTPIN = item.TPIN;
-            //         this.item.ItemRelatedProducts[index].ImagePath = item.ImagePath;
-            //         this.currentItemRelatedProductIndex = this.item.ItemRelatedProducts.length - 1;
-            //     },
-            //     (error: any) => {
-            //         this.errorMessage = <any>error;
-            //         this.itemService.sendNotification({ type: 'error', title: 'Error', content: this.errorMessage });
-            //     }
-            // );
         } else {
             this.item.ItemRelatedProducts[index].RelatedProductItemID = this.item.ItemRelatedProducts[index].PrevRelatedProductItemID;
             this.currentItemRelatedProductIndex = this.item.ItemRelatedProducts.length - 1;
@@ -181,7 +128,6 @@ export class ItemEditProductRelationRelatedProductComponent implements OnInit, O
         this.item.ItemRelatedProducts.forEach((value, index) => {
             value.Position = index + 1;
         });
-
         this.relatedProductRefreshDataSource(this.item.ItemRelatedProducts);
     }
 

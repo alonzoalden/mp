@@ -293,7 +293,7 @@ export function salesOrderReducer(state = initialState, action: SalesOrderAction
                 BOLRequest: null,
                 error: action.payload,
             };
-        
+
         case SalesOrderActionTypes.EditFulfillment:
             return {
                 ...state,
@@ -326,7 +326,7 @@ export function salesOrderReducer(state = initialState, action: SalesOrderAction
             const _updatedFulfillmentList = state.fulfillments.filter(fulfillment => fulfillment.FulfillmentID !== action.payload);
             return {
                 ...state,
-                fulfillments: _updatedFulfillmentList,                
+                fulfillments: _updatedFulfillmentList,
                 pendingDelete: false,
                 error: '',
             };

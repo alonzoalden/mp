@@ -39,7 +39,7 @@ export class ItemAddDescriptionComponent implements AfterViewInit {
                 },
                 onPaste: function (e) {
                     let bufferText = ((e.originalEvent || e).clipboardData ).getData('text/html');
-                    if(!bufferText){
+                    if (!bufferText) {
                         return;
                     }
                     e.preventDefault ? e.preventDefault() : (e.returnValue = false);

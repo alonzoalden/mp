@@ -1,5 +1,4 @@
 import { Routes, RouterModule } from '@angular/router';
-
 import { SettingShellComponent } from './containers/setting-shell/setting-shell.component';
 import { SettingVendorListShellComponent } from './containers/setting-vendor-list-shell/setting-vendor-list-shell.component';
 import { SettingMemberPreferenceShellComponent } from './containers/setting-member-preference-shell/setting-member-preference-shell.component';

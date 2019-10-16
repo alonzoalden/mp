@@ -1,24 +1,18 @@
-import { Component, OnInit, ViewChild, Inject } from '@angular/core';
-import { ActivatedRoute, Router } from '@angular/router';
-import { MatMenuModule, MatPaginator, MatSort, MatTableDataSource, MatDialog, MatDialogRef, MAT_DIALOG_DATA} from '@angular/material';
-
+import { Component, OnInit } from '@angular/core';
+import { MatTableDataSource } from '@angular/material';
 import { SalesOrderLine } from '../../../../shared/class/sales-order-line';
 import { SalesOrder } from '../../../../shared/class/sales-order';
-
-import { SalesOrderService } from '../../../sales-order.service';
-import { AppService } from '../../../../app.service';
-
-import { environment } from '../../../../../environments/environment';
 import { Observable } from 'rxjs';
 import { Member } from 'app/shared/class/member';
+import { BOLRequest } from 'app/shared/class/bol-request';
 import { select, Store } from '@ngrx/store';
 import * as salesOrderActions from '../../../state/sales-order.actions';
 import * as fromSalesOrder from '../../../state';
 import * as fromUser from '../../../../shared/state/user-state.reducer';
-import { BOLRequest } from 'app/shared/class/bol-request';
+
 @Component({
-  templateUrl: './sales-order-view-detail-shell.component.html',
-  styleUrls: ['../../../sales-order.component.css']
+    templateUrl: './sales-order-view-detail-shell.component.html',
+    styleUrls: ['../../../sales-order.component.css']
 })
 
 export class SalesOrderViewDetailShellComponent implements OnInit {
@@ -32,7 +26,6 @@ export class SalesOrderViewDetailShellComponent implements OnInit {
     errorMessage$: Observable<string>;
     isMerchant: boolean;
     orderID: number;
-
     constructor(private store: Store<fromSalesOrder.State>) { }
 
     ngOnInit() {
