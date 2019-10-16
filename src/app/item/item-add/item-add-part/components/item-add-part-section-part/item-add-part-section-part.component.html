@@ -5,11 +5,11 @@
                 <fieldset>
                     <div class="ibox-title"><h5>{{ 'Item Parts' | translate }} {{ 'for' | translate }} {{ currentItemPartSelectionInsert.Name }}</h5>
                         <!-- <div class="ibox-tools">{{ currentItemPartSelectionInsert.PartSelectionName }}</div> -->
-                    </div>                  
-                    <div class="ibox-content x-scroll" style="min-height: 330px;">  
+                    </div>
+                    <div class="ibox-content x-scroll" style="min-height: 330px;">
                         <div class="form-group row">
                             <!-- <div class="col-md-2">
-                                <button *ngIf="!partPendingUpload" type="button" class="m-t-md btn btn-primary" (click)="partFileUpload.click()"> <i class="fa fa-files-o"></i> {{ 'Upload Part Image' | translate }}</button> 
+                                <button *ngIf="!partPendingUpload" type="button" class="m-t-md btn btn-primary" (click)="partFileUpload.click()"> <i class="fa fa-files-o"></i> {{ 'Upload Part Image' | translate }}</button>
                                 <div *ngIf="partPendingUpload" class="m-t-md pt-5 w165">
                                     <div class="sk-spinner sk-spinner-three-bounce">
                                         <div class="sk-bounce1"></div>
@@ -21,13 +21,13 @@
                             <!-- <div class="col-md-6 part-image-upload">
                                 <div>
                                     <input type="file" id="partFileUpload" class="hidden"
-                                        (change)="partFileChangeEvent($event, item); formDirty = true;" 
-                                        accept="image/gif,image/jpeg,image/png,.jpeg,.jpg,.png" 
+                                        (change)="partFileChangeEvent($event, item); formDirty = true;"
+                                        accept="image/gif,image/jpeg,image/png,.jpeg,.jpg,.png"
                                         #partFileUpload>
-                                </div> 
+                                </div>
                                 <div *ngIf="item && !partPendingUpload" class="part-image-display thumbnail-container flex-va-center">
                                     <a (click)="partFileUpload.click()">
-                                        <img class="part-image" src="{{item.PartImageRaw}}" title='Part Diagram' *ngIf="item && item.PartImageRaw"> 
+                                        <img class="part-image" src="{{item.PartImageRaw}}" title='Part Diagram' *ngIf="item && item.PartImageRaw">
                                         <img src='https://content-merchantportal.toolots.net/assets/images/no-image-icon.png' title='Product has no image' class="opaque" *ngIf="(item && !item.PartImageRaw)" >
                                     </a>
                                     <span *ngIf="item && !item.PartImageRaw && !partPendingUpload" class="text-muted">{{ 'No Image Selected' | translate }}</span>
@@ -40,9 +40,9 @@
                                         <!-- Add Button -->
                                         <ng-container matColumnDef="Add">
                                             <th mat-header-cell *matHeaderCellDef width="45px"></th>
-                                            <td mat-cell *matCellDef="let itemPart; let i = index">                                                 
+                                            <td mat-cell *matCellDef="let itemPart; let i = index">
                                                 <div *ngIf="i === currentItemPartSelectionInsert.ItemParts.length-1">
-                                                    <a (click)='onAddItemPart(itemPart); formDirty = false;'><span [matTooltip]="itemPart.PartItemName && itemPart.PartItemName != '' ? ( 'Add' | translate ) : ( 'Required fields must be complete' | translate )" class="glyphicon glyphicon-plus fs-20" 
+                                                    <a (click)='onAddItemPart(itemPart); formDirty = false;'><span [matTooltip]="itemPart.PartItemName && itemPart.PartItemName != '' ? ( 'Add' | translate ) : ( 'Required fields must be complete' | translate )" class="glyphicon glyphicon-plus fs-20"
                                                         [ngClass]="!pendingLoad && itemPart.PartItemName && itemPart.PartItemName != '' && itemPart.PartItemVendorSKU && itemPart.PartItemVendorSKU != '' && itemPart.PartFOBPrice && itemPart.PartFOBPrice != '' ? 'green' : 'gray'"></span></a>
                                                 </div>
                                             </td>
@@ -53,7 +53,7 @@
                                             <td mat-cell *matCellDef="let itemPart; let i = index">
                                                 <div *ngIf="i < currentItemPartSelectionInsert.ItemParts.length-2">
                                                     <a (click)='moveDownPosition(itemPart);' *ngIf='i !== currentItemPartSelectionInsert.ItemParts.length - 1'><span class="glyphicon glyphicon-arrow-down"></span></a>
-                                                </div>                                            
+                                                </div>
                                             </td>
                                         </ng-container>
                                         <!-- Position Column -->
@@ -65,7 +65,7 @@
                                                 </div>
                                             </td>
                                         </ng-container>
-                                        
+
                                         <!-- Up Column -->
                                         <ng-container matColumnDef="Up">
                                             <th mat-header-cell *matHeaderCellDef width="40px"></th>
@@ -79,26 +79,26 @@
                                         <!-- Thumbnail Column -->
                                         <ng-container matColumnDef="Thumbnail">
                                             <th mat-header-cell *matHeaderCellDef width="100px">{{ 'Image' | translate }}</th>
-                                            <td mat-cell *matCellDef="let itemPart; let i = index" width="100px" height="80px" class="thumbnail-col">      
+                                            <td mat-cell *matCellDef="let itemPart; let i = index" width="100px" height="80px" class="thumbnail-col">
                                                 <input type="file" id="fileUpload" class="hidden"
-                                                    (change)="fileChangeEvent($event, itemPart); formDirty = true;" 
-                                                    accept="image/gif,image/jpeg,image/png,.jpeg,.jpg,.png" 
+                                                    (change)="fileChangeEvent($event, itemPart); formDirty = true;"
+                                                    accept="image/gif,image/jpeg,image/png,.jpeg,.jpg,.png"
                                                     #fileUpload>
 
                                                 <div *ngIf="(i === currentItemPartSelectionInsert.ItemParts.length-1 && !itemPart.ImageRaw && !itemPart.PartItemID && !pendingUpload)
                                                             || (i === currentItemPartSelectionInsert.ItemParts.length-1 && i !== currentIndex && pendingUpload)">
                                                     <button [disabled]="pendingUpload || pendingLoad && currentIndex === i" type="button" class="btn btn-primary" (click)="fileUpload.click();"><i class="fa fa-file-image-o"></i>  {{ 'Browse' | translate }}</button>
-                                                </div>    
+                                                </div>
                                                 <!-- <div *ngIf="(itemPart.ImageRaw || itemPart.PartItemID) && ( !pendingUpload || i != currentIndex )" class="thumbnail-container">                                                         -->
                                                 <div *ngIf="(i != currentItemPartSelectionInsert.ItemParts.length-1 || itemPart.PartItemID) && ( !pendingUpload || i != currentIndex )" class="thumbnail-container flex-va-center">
                                                     <a (click)="fileUpload.click()">
                                                         <!-- <img src="{{itemPart.ImageRaw}}" [title]='itemPart.PartItemName'> -->
-                                                        <img src="{{imageURL + itemPart.ImageFilePath}}" [title]='itemPart.PartItemName' *ngIf="!itemPart.IsNewImage && itemPart.ImageFilePath"> 
-                                                        <img src='https://content-merchantportal.toolots.net/assets/images/no-image-icon.png' title='Product has no image' class="opaque" 
-                                                            *ngIf='(!itemPart.IsNewImage && !itemPart.ImageFilePath) || (itemPart.IsNewImage && !itemPart.ImageRaw )' >                                                                                                               
+                                                        <img src="{{imageURL + itemPart.ImageFilePath}}" [title]='itemPart.PartItemName' *ngIf="!itemPart.IsNewImage && itemPart.ImageFilePath">
+                                                        <img src='https://content-merchantportal.toolots.net/assets/images/no-image-icon.png' title='Product has no image' class="opaque"
+                                                            *ngIf='(!itemPart.IsNewImage && !itemPart.ImageFilePath) || (itemPart.IsNewImage && !itemPart.ImageRaw )' >
                                                         <img src="{{itemPart.ImageRaw}}" [title]='itemPart.PartItemName' *ngIf="itemPart.IsNewImage && itemPart.ImageRaw">
                                                     </a>
-                                                </div>  
+                                                </div>
                                                 <div *ngIf="pendingUpload && i == currentIndex" class="loading-container">
                                                     <div class="sk-spinner sk-spinner-three-bounce">
                                                         <div class="sk-bounce1"></div>
@@ -112,14 +112,14 @@
                                         <!-- Label Column -->
                                         <ng-container matColumnDef="Label">
                                             <th mat-header-cell *matHeaderCellDef width="80px">{{ 'Label' | translate }}</th>
-                                            <td mat-cell *matCellDef="let itemPart; let i = index">                                                
+                                            <td mat-cell *matCellDef="let itemPart; let i = index">
                                                 <div *ngIf="currentIndex !== i && i !== currentItemPartSelectionInsert.ItemParts.length-1">
                                                     {{itemPart.PartLabel}}
                                                 </div>
                                                 <div *ngIf="(currentIndex === i || i === currentItemPartSelectionInsert.ItemParts.length-1)">
-                                                    <input [disabled]="pendingLoad && currentIndex === i" class="form-control" id="PartLabelId" type="text" placeholder="{{ 'Label' | translate }}" 
+                                                    <input [disabled]="pendingLoad && currentIndex === i" class="form-control" id="PartLabelId" type="text" placeholder="{{ 'Label' | translate }}"
                                                         [(ngModel)]=itemPart.PartLabel [ngModelOptions]="{standalone: true}" name="itemPartLabel" #itemPartLabelVar="ngModel" maxlength="10"/>
-                                                </div>                  
+                                                </div>
                                             </td>
                                         </ng-container>
 
@@ -163,7 +163,7 @@
                                                             <ng-template ng-option-tmp let-item="item">
                                                                 <div matTooltip="{{item.Description}}" matTooltipPosition="right" matTooltipShowDelay="400">{{item.Description}}</div>
                                                             </ng-template>
-                                                        </ng-select>                                                    
+                                                        </ng-select>
                                                     </div>
                                                 </div>
                                             </td>
@@ -172,14 +172,14 @@
                                         <!-- Item Name Column -->
                                         <ng-container matColumnDef="ItemName">
                                             <th mat-header-cell *matHeaderCellDef width="300px">{{ 'Part Name' | translate }}</th>
-                                            <td mat-cell *matCellDef="let itemPart; let i = index">                                                
+                                            <td mat-cell *matCellDef="let itemPart; let i = index">
                                                 <div *ngIf="currentIndex !== i && i !== currentItemPartSelectionInsert.ItemParts.length-1">
                                                     {{itemPart.PartItemName}}
                                                 </div>
                                                 <div *ngIf="(currentIndex === i || i === currentItemPartSelectionInsert.ItemParts.length-1)">
-                                                    <input class="form-control" id="PartItemNameId" type="text" placeholder="{{ 'Part Name' | translate }} ({{ 'Required' | translate }})" required 
+                                                    <input class="form-control" id="PartItemNameId" type="text" placeholder="{{ 'Part Name' | translate }} ({{ 'Required' | translate }})" required
                                                         [disabled]="pendingLoad && currentIndex === i" [(ngModel)]=itemPart.PartItemName name="itemPartItemName" #itemPartNameVar="ngModel" maxlength="70"/>
-                                                </div>                  
+                                                </div>
                                             </td>
                                         </ng-container>
                                         <!-- SKU Column -->
@@ -188,23 +188,23 @@
                                             <td mat-cell *matCellDef="let itemPart; let i = index">
                                                 <div *ngIf="currentIndex !== i && i !== currentItemPartSelectionInsert.ItemParts.length-1">
                                                     {{itemPart.PartItemVendorSKU}}
-                                                </div>      
+                                                </div>
                                                 <div *ngIf="currentIndex === i || i === currentItemPartSelectionInsert.ItemParts.length-1">
                                                     <input class="form-control" id="itemPartVendorSKUId" type="text" [disabled]="pendingLoad && currentIndex === i"
-                                                        pattern="^[\w\-]*$" ng-pattern-restrict placeholder="SKU ({{ 'Required' | translate }})" required 
+                                                        pattern="^[\w\-]*$" ng-pattern-restrict placeholder="SKU ({{ 'Required' | translate }})" required
                                                         [(ngModel)]=itemPart.PartItemVendorSKU name="itemPartVendorSKU" #itemPartVendorSKUVar="ngModel" maxlength="30" />
-                                                </div>                                   
-                                            </td>                   
-                                        </ng-container>  
+                                                </div>
+                                            </td>
+                                        </ng-container>
                                         <!-- TPIN Column -->
                                         <ng-container matColumnDef="TPIN">
                                             <th mat-header-cell *matHeaderCellDef width="100px">{{ 'TPIN' | translate }}</th>
                                             <td mat-cell *matCellDef="let itemPart; let i = index">
                                                 <div>
                                                     {{itemPart.PartTPIN}}
-                                                </div>     
-                                            </td>                    
-                                        </ng-container>       
+                                                </div>
+                                            </td>
+                                        </ng-container>
                                         <!-- Price Column -->
                                         <ng-container matColumnDef="Price">
                                             <th mat-header-cell *matHeaderCellDef [attr.width]="!isPM ? '100px' : '250px'">{{ 'Price' | translate }}</th>
@@ -215,31 +215,31 @@
                                                     </div>
                                                     <div *ngIf="!isPM">
                                                             {{itemPart.PartFOBPrice}}
-                                                    </div>                                                       
-                                                </div> 
+                                                    </div>
+                                                </div>
                                                 <div *ngIf="currentIndex === i || i === currentItemPartSelectionInsert.ItemParts.length-1">
                                                     <div *ngIf="isPM" class="flex">
-                                                        <input class="form-control m-r-smi" id="itemPartFOBPriceId" type="number" placeholder="{{ 'FOB Price' | translate }} ({{ 'Required' | translate }})" 
+                                                        <input class="form-control m-r-smi" id="itemPartFOBPriceId" type="number" placeholder="{{ 'FOB Price' | translate }} ({{ 'Required' | translate }})"
                                                             step="0.01" (change)="onChangeFOBPrice(itemPart);" onkeydown="return event.keyCode == 69 || event.keyCode == 189 ? false : true" min="0"
-                                                            required [(ngModel)]=itemPart.PartFOBPrice name="itemPartFOBPrice" #itemPartFOBPriceVar="ngModel" [disabled]="pendingLoad && currentIndex === i"/>                                                        
-                                                        <input class="form-control percent-80" id="itemPartPriceId" type="number" placeholder="{{ 'Selling Price' | translate }} ({{ 'Required' | translate }})" 
+                                                            required [(ngModel)]=itemPart.PartFOBPrice name="itemPartFOBPrice" #itemPartFOBPriceVar="ngModel" [disabled]="pendingLoad && currentIndex === i"/>
+                                                        <input class="form-control percent-80" id="itemPartPriceId" type="number" placeholder="{{ 'Selling Price' | translate }} ({{ 'Required' | translate }})"
                                                             step="0.01" onchange="this.value = parseFloat(this.value).toFixed(2);" onkeydown="return event.keyCode == 69 || event.keyCode == 189 ? false : true" min="0"
                                                             required [(ngModel)]=itemPart.PartPrice name="itemPartPrice" #itemPartPriceVar="ngModel" [disabled]="pendingLoad && currentIndex === i"/>
-                                                    </div> 
+                                                    </div>
                                                     <div *ngIf="!isPM">
-                                                        <input class="form-control percent-80" id="itemPartFOBPriceId" type="number" placeholder="{{ 'FOB Price' | translate }} ({{ 'Required' | translate }})" 
+                                                        <input class="form-control percent-80" id="itemPartFOBPriceId" type="number" placeholder="{{ 'FOB Price' | translate }} ({{ 'Required' | translate }})"
                                                             step="0.01" (change)="onChangeFOBPrice(itemPart);" onkeydown="return event.keyCode == 69 || event.keyCode == 189 ? false : true" min="0"
                                                             required [(ngModel)]=itemPart.PartFOBPrice name="itemPartFOBPrice" #itemPartFOBPriceVar="ngModel" [disabled]="pendingLoad && currentIndex === i"/>
                                                     </div>
-                                                    
-                                                </div>    
-                                            </td>                                                                
-                                        </ng-container>        
+
+                                                </div>
+                                            </td>
+                                        </ng-container>
                                         <!-- Remove Column -->
                                         <ng-container matColumnDef="Remove">
                                             <th mat-header-cell *matHeaderCellDef width="100px">{{ 'Remove' | translate }}</th>
                                             <td mat-cell *matCellDef="let itemPart; let i = index;">
-                                                <div *ngIf="i !== currentItemPartSelectionInsert.ItemParts.length-1">    
+                                                <div *ngIf="i !== currentItemPartSelectionInsert.ItemParts.length-1">
                                                     <a (click)="onRemove(itemPart); currentIndex = currentItemPartSelectionInsert.ItemParts.length-1;">
                                                         <span matTooltip="{{ 'Remove' | translate }}" attr.aria-label="{{ 'Remove' | translate}}" class="glyphicon glyphicon-trash"></span>
                                                     </a>
@@ -249,7 +249,7 @@
                                                 </div>
                                             </td>
                                         </ng-container>
-                                                        
+
                                         <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
                                         <tr class="selected-row" mat-row *matRowDef="let itemPart; let i = index; columns: displayedColumns;"
                                             [ngStyle]="{'background-color': itemService.rowColorConditions(i, currentItemPartSelectionInsert.ItemParts, currentIndex, formDirty)}"
@@ -261,8 +261,8 @@
                             </div>
                         </div>
                     </div>
-                </fieldset>                
+                </fieldset>
             </form>
-        </div>            
-    </div>    
+        </div>
+    </div>
 </div>

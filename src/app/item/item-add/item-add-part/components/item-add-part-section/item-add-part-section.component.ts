@@ -49,9 +49,9 @@ export class ItemAddPartSectionComponent implements OnInit, OnChanges {
     @ViewChildren('selectionCategoriesRef') selectionCategoriesRef: any;
 
     constructor(private router: Router, private itemService: ItemService, private appService: AppService) { }
-    ngOnChanges(changes: SimpleChanges) {
-        if (changes.item && changes.item.currentValue && changes.item.currentValue.ItemImages.length === 0) {
 
+    ngOnChanges(changes: SimpleChanges) {
+        if (changes.item && changes.item.currentValue && changes.item.currentValue.ItemSections.length === 0) {
             this.addPendingLine();
         }
     }
@@ -67,14 +67,13 @@ export class ItemAddPartSectionComponent implements OnInit, OnChanges {
                     }
                 );
 
-        //this.item = this.itemService.currentItemInsert;
+        // this.item = this.itemService.currentItemInsert;
 
+        // if (this.item.ItemSections.length === 0) {
+        //     const _temp = new ItemSectionInsert(0, null, null, null, null, []);
+        //     this.item.ItemSections.push(_temp);
 
-        if (this.item.ItemSections.length === 0) {
-            const _temp = new ItemSectionInsert(0, null, null, null, null, []);
-            this.item.ItemSections.push(_temp);
-
-        }
+        // }
         this.refreshDataSource(this.item.ItemSections);
 
         this.currentIndex = this.item.ItemSections.length - 1;
@@ -101,7 +100,7 @@ export class ItemAddPartSectionComponent implements OnInit, OnChanges {
 
     onAddItemPartSection(itemPart: ItemSectionInsert) {
 
-        //this.onChangeFOBPrice(itemPart);
+        // this.onChangeFOBPrice(itemPart);
         if (this.existName(itemPart.Name)) {
             this.itemService.sendNotification({ type: 'error', title: 'Error', content: 'Section name exists.  Please choose another.' });
             return;

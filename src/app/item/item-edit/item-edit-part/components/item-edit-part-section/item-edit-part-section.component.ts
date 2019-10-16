@@ -61,15 +61,21 @@ export class ItemEditPartSectionComponent implements OnInit {
                     }
                 );
 
-        this.itemService.getCurrentItemEdit(this.itemid).subscribe(
-            (item: Item) => {
-                this.itemService.currentItemEdit = item;
-                this.item = this.itemService.currentItemEdit;
+        // this.itemService.getCurrentItemEdit(this.itemid).subscribe(
+        //     (item: Item) => {
+        //         this.itemService.currentItemEdit = item;
+        //         this.item = this.itemService.currentItemEdit;
 
-                this.initialize();
-            },
-            (error: any) => this.errorMessage = <any>error
-        );
+        //         this.initialize();
+        //     },
+        //     (error: any) => this.errorMessage = <any>error
+        // );
+        if (this.item) {
+            this.removePendingLine();
+            this.addPendingLine();
+            this.currentIndex = this.item.ItemSections.length - 1;
+            this.refreshDataSource(this.item.ItemSections);
+        }
 
         this.itemService.getPartItemList().subscribe(
             (itemlist: ItemList[]) => {
@@ -82,22 +88,22 @@ export class ItemEditPartSectionComponent implements OnInit {
         );
     }
 
-    initialize() {
-        if (this.itemService.currentItemEdit.ItemSections === null) {
-            this.itemService.getItemParts(this.itemid).subscribe(
-                (itemParts: ItemPart[]) => {
-                    this.currentIndex = this.item.ItemSections.length - 1;
-                    this.refreshDataSource(this.item.ItemSections);
-                },
-                (error: any) => this.errorMessage = <any>error
-            );
-        } else {
-            this.removePendingLine();
-            this.addPendingLine();
-            this.currentIndex = this.item.ItemSections.length - 1;
-            this.refreshDataSource(this.item.ItemSections);
-        }
-    }
+    // initialize() {
+    //     if (this.itemService.currentItemEdit.ItemSections === null) {
+    //         this.itemService.getItemParts(this.itemid).subscribe(
+    //             (itemParts: ItemPart[]) => {
+    //                 this.currentIndex = this.item.ItemSections.length - 1;
+    //                 this.refreshDataSource(this.item.ItemSections);
+    //             },
+    //             (error: any) => this.errorMessage = <any>error
+    //         );
+    //     } else {
+    //         this.removePendingLine();
+    //         this.addPendingLine();
+    //         this.currentIndex = this.item.ItemSections.length - 1;
+    //         this.refreshDataSource(this.item.ItemSections);
+    //     }
+    // }
 
     addPendingLine() {
         const _temp = new ItemSection(0, this.item.ItemID, null, null, null, this.item.ItemSections.length + 1,  null,  null, [],  true, true);
@@ -116,18 +122,15 @@ export class ItemEditPartSectionComponent implements OnInit {
         this.dataSource = new MatTableDataSource<ItemSection>(itemsections);
     }
     onAddItemPartSection(itemPart: ItemSection) {
-        itemPart.pendingAdd = false;
-        //this.onChangeFOBPrice(itemPart);
+        // this.onChangeFOBPrice(itemPart);
         if (this.existName(itemPart.Name)) {
             this.itemService.sendNotification({ type: 'error', title: 'Error', content: 'Section name exists.  Please choose another.' });
             return;
         }
 
         if (this.isRequirementValid(itemPart)) {
-
                 this.pendingAdd = true;
-
-
+                itemPart.pendingAdd = false;
                 const _temp = new ItemSection(0, this.item.ItemID, null, null,  null, this.item.ItemSections.length + 1, null, null, [], true, true);
                 this.item.ItemSections.push(_temp);
                 this.refreshDataSource(this.item.ItemSections);
