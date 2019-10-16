@@ -21,7 +21,7 @@ export class InboundShipmentEditCartonListComponent implements OnInit, OnChanges
     orderStatus: string;
     pendingAdd: boolean;
     currentIndex: number;
-    displayedColumns = ['Add', 'Position', 'Weight', 'Dimension', 'LabelQty', 'CartonNumber', 'TotalUnits', 'Actions'];
+    displayedColumns = ['Sort','Add', 'Position', 'Weight', 'Dimension', 'LabelQty', 'CartonNumber', 'TotalUnits', 'Actions'];
     dataSource: any = null;
     formDirty = false;
     canAdd = false;
