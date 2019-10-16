@@ -2236,6 +2236,6 @@ th.mat-header-cell {
 .fa-close {
     cursor: pointer;
 }
-td.mat-cell > div {
+td.mat-cell > div.overflowhidden {
     overflow: hidden;
 }
