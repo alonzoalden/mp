@@ -26,6 +26,7 @@ export class InboundShipmentEditCartonListComponent implements OnInit, OnChanges
     dataSource: any = null;
     formDirty = false;
     canAdd = false;
+    sortNum: number;
 
     @ViewChild(MatSort, { static: false }) sort: MatSort;
 
@@ -299,5 +300,58 @@ export class InboundShipmentEditCartonListComponent implements OnInit, OnChanges
         form.Width = '';
         form.Height = '';
         form.LabelQty = 1;
+    }
+
+    onKeyDown(carton:Carton){
+        if(typeof this.sortNum === 'number' && !isNaN(this.sortNum) && Number(this.sortNum) > 0){
+          this.sortInput(carton);
+        }else{
+          this.sortNum = null;
+          this.refreshDataSource(this.purchaseOrder.Cartons);
+        }
+    }
+
+    sortInput(carton:Carton){
+      let index = this.purchaseOrder.Cartons.indexOf(carton);
+      this.purchaseOrder.Cartons.splice(index,1);
+      let insertIndex = (this.sortNum > this.purchaseOrder.Cartons.length) ?  this.purchaseOrder.Cartons.length - 1 : this.sortNum - 1;
+      this.purchaseOrder.Cartons.splice(insertIndex,0,carton);
+      this.purchaseOrder.Cartons.forEach((value, i) => {
+        value.Position = i + 1;
+      });
+      this.sortNum = null;
+      this.currentIndex = insertIndex;
+      this.refreshDataSource(this.purchaseOrder.Cartons);
+    }
+
+}
+
+export class CartonLabelPrintDialog {
+    constructor(
+        public Quantity: number,
+        public Border: string
+    ) {}
+}
+
+@Component({
+    selector: 'inbound-shipment-edit-carton-list.component-carton-print-dialog',
+    templateUrl: 'inbound-shipment-edit-carton-list.component-carton-print-dialog.html',
+  })
+
+export class InboundShipmentEditCartonListComponentCartonPrintDialog implements OnInit {
+    //quantity: number;
+    cartonLabelPrintDialog: CartonLabelPrintDialog;
+
+    constructor(
+        public dialogRef: MatDialogRef<InboundShipmentEditCartonListComponentCartonPrintDialog>,
+        @Inject(MAT_DIALOG_DATA) public data: Carton) {}
+
+    ngOnInit() {
+        //this.quantity = this.data.LabelQty;
+        this.cartonLabelPrintDialog = new CartonLabelPrintDialog(this.data.LabelQty, 'yes');
+    }
+
+    onCancelClick(): void {
+        this.dialogRef.close();
     }
 }

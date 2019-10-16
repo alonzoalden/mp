@@ -1,8 +1,9 @@
-import { Component, ViewChild, ElementRef, Input, EventEmitter, Output, SimpleChanges, OnChanges } from '@angular/core';
+import { Component, ViewChild, Input, EventEmitter, Output, SimpleChanges, OnChanges } from '@angular/core';
 import { MatTableDataSource } from '@angular/material';
 import { ItemInsert, ItemCategoryAssignment } from '../../../../shared/class/item';
 import { Category } from '../../../../shared/class/category';
 import { ItemService } from '../../../item.service';
+import { NgSelectComponent } from '@ng-select/ng-select';
 
 @Component({
   selector: 'o-item-add-category',
@@ -23,7 +24,7 @@ export class ItemAddCategoryComponent implements OnChanges {
     dataSource: any = null;
     formDirty = false;
 
-    @ViewChild('selectionCategories', { static: false }) selectionCategoriesRef: ElementRef;
+    @ViewChild('selectionCategories', { static: false }) selectionCategoriesRef: NgSelectComponent;
 
     constructor(private itemService: ItemService) { }
 
@@ -71,9 +72,10 @@ export class ItemAddCategoryComponent implements OnChanges {
             this.itemService.getCategoryBreadCrumbs(this.lastSelectedValue).subscribe(
                 (categories: Category[]) => {
                     this.currentResult.push(categories);
-                    this.categoriesList.splice(1);
                     this.item.ItemCategoryAssignments.push(new ItemCategoryAssignment(this.lastSelectedValue));
                     this.lastSelectedValue = 0;
+                    this.categoriesList.splice(1);
+                    this.selectionCategoriesRef.clearModel();
                     this.refreshDataSource(this.currentResult);
                 },
                 (error: any) => this.errorMessage = <any>error
@@ -81,11 +83,11 @@ export class ItemAddCategoryComponent implements OnChanges {
         } else {
             console.log('nothing selected');
         }
-
     }
     clearFields() {
         this.lastSelectedValue = 0;
         this.formDirty = false;
         this.categoriesList = this.categoriesList.splice(0, 1);
+        this.selectionCategoriesRef.clearModel();
     }
 }

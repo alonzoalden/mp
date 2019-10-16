@@ -17,7 +17,7 @@ export class ItemListComponent implements OnInit, OnChanges {
     @Input() userInfo: Member;
     @Input() itemsMatTable: MatTableDataSource<Item>;
     @Input() errorMessage: string;
-    @Input() isLoading: boolean;
+    @Input() isMainItemsListLoading: boolean;
     @Input() pendingDelete: boolean;
     @Output() getItems = new EventEmitter<void>();
     @Output() refreshItems = new EventEmitter<void>();
@@ -56,7 +56,7 @@ export class ItemListComponent implements OnInit, OnChanges {
             this.itemsMatTable.paginator = this.paginator;
             this.itemsMatTable.sort = this.sort;
         }
-        if (changes.itemsMatTable && !changes.itemsMatTable.currentValue.data.length && changes.itemsMatTable.firstChange) {
+        if (changes.itemsMatTable && (!changes.itemsMatTable.currentValue.data.length || changes.itemsMatTable.currentValue.data.length === 1) && changes.itemsMatTable.firstChange) {
             this.getItems.emit();
         }
         if (changes.userInfo && changes.userInfo.currentValue) {

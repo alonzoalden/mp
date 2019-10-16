@@ -4,9 +4,36 @@
             <form class="form-horizontal" #itemForm="ngForm">
                 <fieldset>
                     <div class="ibox-title"><h5>{{ 'Item Parts' | translate }} {{ 'for' | translate }} {{ currentItemPartSelectionInsert.Name }}</h5>
+                        <!-- <div class="ibox-tools">{{ currentItemPartSelectionInsert.PartSelectionName }}</div> -->
                     </div>
                     <div class="ibox-content x-scroll" style="min-height: 330px;">
                         <div class="form-group row">
+                            <!-- <div class="col-md-2">
+                                <button *ngIf="!partPendingUpload" type="button" class="m-t-md btn btn-primary" (click)="partFileUpload.click()"> <i class="fa fa-files-o"></i> {{ 'Upload Part Image' | translate }}</button>
+                                <div *ngIf="partPendingUpload" class="m-t-md pt-5 w165">
+                                    <div class="sk-spinner sk-spinner-three-bounce">
+                                        <div class="sk-bounce1"></div>
+                                        <div class="sk-bounce2"></div>
+                                        <div class="sk-bounce3"></div>
+                                    </div>
+                                </div>
+                            </div> -->
+                            <!-- <div class="col-md-6 part-image-upload">
+                                <div>
+                                    <input type="file" id="partFileUpload" class="hidden"
+                                        (change)="partFileChangeEvent($event, item); formDirty = true;"
+                                        accept="image/gif,image/jpeg,image/png,.jpeg,.jpg,.png"
+                                        #partFileUpload>
+                                </div>
+                                <div *ngIf="item && !partPendingUpload" class="part-image-display thumbnail-container flex-va-center">
+                                    <a (click)="partFileUpload.click()">
+                                        <img class="part-image" src="{{item.PartImageRaw}}" title='Part Diagram' *ngIf="item && item.PartImageRaw">
+                                        <img src='https://content-merchantportal.toolots.net/assets/images/no-image-icon.png' title='Product has no image' class="opaque" *ngIf="(item && !item.PartImageRaw)" >
+                                    </a>
+                                    <span *ngIf="item && !item.PartImageRaw && !partPendingUpload" class="text-muted">{{ 'No Image Selected' | translate }}</span>
+                                    <div *ngIf="item && !item.PartImageRaw && partPendingUpload" class="text-muted">{{ 'Uploading Image...' | translate }}</div>
+                                </div>
+                            </div> -->
                             <div class="col-md-12">
                                 <div *ngIf="currentItemPartSelectionInsert?.ItemParts.length && currentItemPartSelectionInsert?.ItemParts.length > 0">
                                     <table mat-table #table [dataSource]="dataSource">

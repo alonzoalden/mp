@@ -64,7 +64,9 @@ import { StoreModule } from '@ngrx/store';
 import { EffectsModule } from '@ngrx/effects';
 import { userreducer } from './shared/state/user-state.reducer';
 import { UserEffects } from './shared/state/user-state.effects';
-
+import zh from '@angular/common/locales/zh';
+import {registerLocaleData} from '@angular/common';
+registerLocaleData(zh);
 export function HttpLoaderFactory(http: HttpClient) {
     return new TranslateHttpLoader(http);
   }
@@ -103,7 +105,7 @@ export function HttpLoaderFactory(http: HttpClient) {
         EffectsModule.forFeature([UserEffects]),
         // StoreDevtoolsModule.instrument({
         //     name: 'Toolots Merchant Portal DevTools',
-        //     maxAge: 10,
+        //     maxAge: 20,
         //     logOnly: environment.production,
         // }),
     ],

@@ -15,7 +15,7 @@ import { Member } from 'app/shared/class/member';
 export class ItemListShellComponent implements OnInit {
     itemsMatTable$: Observable<MatTableDataSource<Item>>;
     userInfo$: Observable<Member>;
-    isLoading$: Observable<Boolean>;
+    isMainItemsListLoading$: Observable<Boolean>;
     pendingDelete$: Observable<Boolean>;
     errorMessage$: Observable<string>;
 
@@ -27,7 +27,7 @@ export class ItemListShellComponent implements OnInit {
         this.pendingDelete$ = this.store.pipe(select(fromItem.getPendingDelete));
         this.errorMessage$ = this.store.pipe(select(fromItem.getError));
         setTimeout(() => {
-            this.isLoading$ = this.store.pipe(select(fromItem.getIsLoading));
+            this.isMainItemsListLoading$ = this.store.pipe(select(fromItem.getIsMainItemsListLoading));
         });
     }
     getItems(): void {

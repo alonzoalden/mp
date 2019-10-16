@@ -81,7 +81,6 @@ export class ItemAddComponent implements OnInit {
                     });
 
                 });
-
                 this.addItem.emit(newItem);
             } else {
                 this.itemService.sendNotification({ type: 'error', title: 'Invalid Entry', content: 'Please enter all required fields' });

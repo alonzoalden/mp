@@ -183,16 +183,16 @@ export class ItemEditComponent implements OnInit {
                     });
                 }
 
-                newItem.ItemSections.splice(newItem.ItemSections.length - 1, 1);
-                newItem.ItemSections.forEach((value, i) => {
-                    value.Position = i + 1;
+                // newItem.ItemSections.splice(newItem.ItemSections.length - 1, 1);
+                // newItem.ItemSections.forEach((value, i) => {
+                //     value.Position = i + 1;
 
-                    value.ItemParts.splice(value.ItemParts.length - 1, 1);
-                    value.ItemParts.forEach((value, i) => {
-                        value.Position = i + 1;
-                    });
+                //     value.ItemParts.splice(value.ItemParts.length - 1, 1);
+                //     value.ItemParts.forEach((value, i) => {
+                //         value.Position = i + 1;
+                //     });
 
-                });
+                // });
 
                 if (newItem.FulfilledBy === 'Toolots') {
                     newItem.MerchantQuantity = 0;
@@ -206,7 +206,6 @@ export class ItemEditComponent implements OnInit {
 
                 this.editItem.emit({item: newItem, displayPreview: displayPreview, printLabel: printLabel});
                 this.onSaveComplete(`${this.item.Name} was saved`);
-               
             } else {
                 this.itemService.sendNotification({ type: 'error', title: 'Invalid Entry', content: 'Please enter all required fields' });
             }

@@ -14,7 +14,7 @@ export class ItemEditCategoryShellComponent implements OnInit {
     item$: Observable<ItemInsert>;
     categoriesList$: Observable<Array<Category[]>>;
     categoryAssignments$: Observable<ItemCategoryAssignment[]>;
-    currentResult$: Observable<Array<Category[]>>;
+    currentCategoryBreadCrumbs$: Observable<Array<Category[]>>;
     errorMessage$: Observable<string>;
 
     constructor(private store: Store<fromItem.State>) { }
@@ -23,7 +23,7 @@ export class ItemEditCategoryShellComponent implements OnInit {
         this.item$ = this.store.pipe(select(fromItem.getItem));
         this.categoriesList$ = this.store.pipe(select(fromItem.getItemCategories));
         this.categoryAssignments$ = this.store.pipe(select(fromItem.getCategoryAssignments));
-        this.currentResult$ = this.store.pipe(select(fromItem.getCategoryBreadCrumbs));
+        this.currentCategoryBreadCrumbs$ = this.store.pipe(select(fromItem.getCategoryBreadCrumbs));
         this.errorMessage$ = this.store.pipe(select(fromItem.getError));
     }
     getCategories(value: number) {

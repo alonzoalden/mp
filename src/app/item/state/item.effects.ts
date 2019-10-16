@@ -424,7 +424,7 @@ export class ItemEffects {
         mergeMap((item: ItemInsert) =>
             this.itemService.addItem(item).pipe(
                 map((item: Item) => {
-                    this.itemService.sendNotification({ type: 'success', title: 'Successfully Updated', content: `${item.Name} was saved` });
+                    this.itemService.sendNotification({ type: 'success', title: 'Successfully Created', content: `${item.Name} was saved` });
                     this.router.navigate(['/item']);
                     return (new itemActions.AddItemSuccess(item));
                 }),

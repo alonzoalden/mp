@@ -1656,7 +1656,7 @@ table {
 @media(max-width: 374px) {
     .nav-mobile-resize > div.vendor-name > a {
         font-size: 12px;
-        
+
     }
     .navigation-button > a {
         padding: 15px 10px 15px 0;
@@ -1910,7 +1910,7 @@ label .example-margin {
     color: #ed5565 !important;
     margin: 0;
     font-weight: 500;
-} 
+}
 
 .ng-select .ng-select-container .ng-value-container .ng-placeholder,
 input::-webkit-input-placeholder {
@@ -1939,7 +1939,7 @@ th.mat-header-cell {
 }
 /* ----------- New STYLES for tables ----------- */
 
-/* 
+/*
 .table2 tr.mat-row:nth-child(odd) {
     background-color: #fafafa !important;
 }
@@ -1959,7 +1959,7 @@ th.mat-header-cell {
 .table2.table > thead > tr > th {
     padding-bottom: 10px !important;
     border-bottom: 2px solid #DDDDDD;
-    
+
     font-size: 12px !important;
 }
 .table2.table > tbody > tr > td {
@@ -2063,7 +2063,7 @@ th.mat-header-cell {
 
 /* Material Tab */
 .mat-tab-labels {
-    
+
     border-right: 0;
     flex-direction: column;
     border-radius: 2px 0 0 2px;
@@ -2083,7 +2083,7 @@ th.mat-header-cell {
     border-color: #e7eaec;
     /* border-right: 1px solid #e7eaec; */
     border: 0;
-    
+
     border-right: 1px solid #e7eaec;
     transition: background-color 40ms ease-in-out, color 40ms ease-in-out;
 }
@@ -2105,10 +2105,10 @@ th.mat-header-cell {
     color: #555;
     border: 1px solid #e7eaec;
     border-right: 0;
-    
+
     border-radius: 4px 0 0 4px;
     transition: background-color 40ms ease-out, color 40ms ease-out;
-    
+
     border-color: #e7eaec;
 }
 .mat-tab-group.mat-primary .mat-tab-label:not(.mat-tab-disabled):focus .mat-tab-label-content {
@@ -2131,7 +2131,7 @@ th.mat-header-cell {
     font-weight: 600;
     font-family: "open sans", "Helvetica Neue", Helvetica, Arial, sans-serif;
 }
-.md-strong, 
+.md-strong,
 .item-variation .mat-list-text {
     font-weight: 700;
 }
@@ -2235,4 +2235,7 @@ th.mat-header-cell {
 }
 .fa-close {
     cursor: pointer;
+}
+td.mat-cell > div {
+    overflow: hidden;
 }
