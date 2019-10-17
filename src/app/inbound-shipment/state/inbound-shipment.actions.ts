@@ -68,7 +68,6 @@ export enum InboundShipmentActionTypes {
     LoadCartonsFail = '[InboundShipment] Load Cartons Fail',
     SetSelectedCarton = '[InboundShipment] Set Selected Carton',
     SetSelectedPurchaseOrder = '[InboundShipment] Set Selected Purchase Order',
-    UpdatePurchaseLineCartonQuantity = '[InboundShipment] Update Purchase Line Carton Quantity',
     LoadInboundShippingMethods = '[InboundShipment] Load Inbound Shipping Methods',
     LoadInboundShippingMethodsSuccess = '[InboundShipment] Load Inbound Shipping Methods Success',
     LoadInboundShippingMethodsFail = '[InboundShipment] Load Inbound Shipping Methods Fail',
@@ -79,10 +78,6 @@ export enum InboundShipmentActionTypes {
 
 // Action Creators
 
-export class UpdatePurchaseLineCartonQuantity implements Action {
-    readonly type = InboundShipmentActionTypes.UpdatePurchaseLineCartonQuantity;
-    constructor(public payload: PurchaseOrder) {}
-}
 export class LoadPurchaseOrderOverview implements Action {
     readonly type = InboundShipmentActionTypes.LoadPurchaseOrderOverview;
 }
@@ -444,5 +439,4 @@ export type InboundShipmentActions =
     | DeletePurchaseOrderFail
     | LoadSimpleItemList
     | LoadSimpleItemListSuccess
-    | LoadSimpleItemListFail
-    | UpdatePurchaseLineCartonQuantity;
+    | LoadSimpleItemListFail;

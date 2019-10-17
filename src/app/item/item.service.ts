@@ -28,25 +28,16 @@ export class ItemService {
     private allSimpleItemList: ItemList[];
     private itemVariationListings: ItemVariationListing[];
     private partItemList: ItemList[];
-
     currentMember: Member;
-
     currentItem: Item;
-
     currentItemInsert: ItemInsert;
     currentItemEdit: Item;
-
     public currentItemPartSelectionInsert: Subject<ItemSectionInsert> = new Subject<ItemSectionInsert>();
     public currentItemPartSelection: Subject<ItemSection> = new Subject<ItemSection>();
-
     duplicateItemInsert: ItemInsert;
-
     private vendorattachmentlist: VendorAttachmentList[];
-
     public subject = new Subject<string>();
-
     batchUpdateItems: Item[];
-
     public currentProductItemInsert: BehaviorSubject<any>;
 
     constructor(private http: HttpClient,

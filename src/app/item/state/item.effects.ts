@@ -492,7 +492,7 @@ export class ItemEffects {
                     const blobUrl = URL.createObjectURL(blob);
                     if (window.navigator.msSaveOrOpenBlob) {
                         const fileName = item.TPIN;
-                        window.navigator.msSaveOrOpenBlob(data, fileName + '.pdf'); // IE is the worst!!!
+                        window.navigator.msSaveOrOpenBlob(data, fileName + '.pdf');
                     } else {
                         const fileURL = window.URL.createObjectURL(blob);
                         const a: HTMLAnchorElement = document.createElement('a') as HTMLAnchorElement;
@@ -501,7 +501,6 @@ export class ItemEffects {
                         document.body.appendChild(a);
                         a.target = '_blank';
                         a.click();
-
                         document.body.removeChild(a);
                         URL.revokeObjectURL(fileURL);
                     }
@@ -528,7 +527,7 @@ export class ItemEffects {
                     const blobUrl = URL.createObjectURL(blob);
                     if (window.navigator.msSaveOrOpenBlob) {
                         const fileName = payload.item.TPIN;
-                        window.navigator.msSaveOrOpenBlob(data, fileName + '.pdf'); // IE is the worst!!!
+                        window.navigator.msSaveOrOpenBlob(data, fileName + '.pdf');
                     } else {
                         const fileURL = window.URL.createObjectURL(blob);
                         const a: HTMLAnchorElement = document.createElement('a') as HTMLAnchorElement;
@@ -564,7 +563,7 @@ export class ItemEffects {
                     const blobUrl = URL.createObjectURL(blob);
                     if (window.navigator.msSaveOrOpenBlob) {
                         const fileName = payload.item.TPIN;
-                        window.navigator.msSaveOrOpenBlob(data, fileName + '.pdf'); // IE is the worst!!!
+                        window.navigator.msSaveOrOpenBlob(data, fileName + '.pdf');
                     } else {
                         const fileURL = window.URL.createObjectURL(blob);
                         const a: HTMLAnchorElement = document.createElement('a') as HTMLAnchorElement;
@@ -599,7 +598,7 @@ export class ItemEffects {
                     const blobUrl = URL.createObjectURL(blob);
                     if (window.navigator.msSaveOrOpenBlob) {
                         const fileName = 'Item_Template';
-                        window.navigator.msSaveOrOpenBlob(data, fileName + '.xlsx'); // IE is the worst!!!
+                        window.navigator.msSaveOrOpenBlob(data, fileName + '.xlsx');
                     } else {
                         const fileURL = window.URL.createObjectURL(blob);
                         const a: HTMLAnchorElement = document.createElement('a') as HTMLAnchorElement;
@@ -633,12 +632,12 @@ export class ItemEffects {
                     const blobUrl = URL.createObjectURL(blob);
                     if (window.navigator.msSaveOrOpenBlob) {
                         const fileName = String(Date.now());
-                        window.navigator.msSaveOrOpenBlob(data, fileName + '.pdf'); // IE is the worst!!!
+                        window.navigator.msSaveOrOpenBlob(data, fileName + '.pdf');
                     } else {
                         const fileURL = window.URL.createObjectURL(blob);
                         const a: HTMLAnchorElement = document.createElement('a') as HTMLAnchorElement;
                         a.href = fileURL;
-                        a.download = String(Date.now()); //this.datepipe.transform(date, 'yyyyMMddhhmmss');
+                        a.download = String(Date.now());
                         document.body.appendChild(a);
                         a.target = '_blank';
                         a.click();
@@ -667,12 +666,12 @@ export class ItemEffects {
                     const blobUrl = URL.createObjectURL(blob);
                     if (window.navigator.msSaveOrOpenBlob) {
                         const fileName = String(Date.now());
-                        window.navigator.msSaveOrOpenBlob(data, fileName + '.pdf'); // IE is the worst!!!
+                        window.navigator.msSaveOrOpenBlob(data, fileName + '.pdf');
                     } else {
                         const fileURL = window.URL.createObjectURL(blob);
                         const a: HTMLAnchorElement = document.createElement('a') as HTMLAnchorElement;
                         a.href = fileURL;
-                        a.download = String(Date.now()); //this.datepipe.transform(date, 'yyyyMMddhhmmss');
+                        a.download = String(Date.now());
                         document.body.appendChild(a);
                         a.target = '_blank';
                         a.click();
