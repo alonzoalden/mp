@@ -419,7 +419,7 @@ export class PurchaseOrderService {
             purchaseorder.Cartons.forEach((carton, ci) => {
                 carton.CartonLines.forEach((cartonline2, cli) => {
                     if (!cartonline2.pendingAdd) {
-                        if (cartonline2.PurchaseOrderLineID == cartonline.PurchaseOrderLineID) {
+                        if (cartonline2.PurchaseOrderLineID === cartonline.PurchaseOrderLineID) {
                             cartonline.RemainingQuantity = cartonline.RemainingQuantity - cartonline2.Quantity;
                         }
                     }

@@ -286,5 +286,7 @@ export function inboundShipmentReducer(state = initialState, action: InboundShip
                 isSimpleItemListLoading: false,
                 error: action.payload,
             };
+        default:
+            return state;
     }
 }
