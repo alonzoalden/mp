@@ -11,7 +11,7 @@
                         <td mat-cell *matCellDef="let carton; let i = index">
                           <div *ngIf="currentIndex === i && currentIndex != purchaseOrder.Cartons?.length - 1">
                             <input class="form-control" id="sortInput" type="number"
-                                   (keyup.enter)='onKeyDown(carton)' min="0" [matTooltip]="'Press the Enter!' | translate"
+                                   (keyup.enter)='onKeyDown(carton)' min="0" [matTooltip]="'Press the Enter to sort' | translate"
                                    [disabled]="purchaseOrder.Status != 'Pending'"
                                    [(ngModel)]="sortNum"/>
                           </div>
