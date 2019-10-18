@@ -80,40 +80,18 @@ export function companyAttachmentReducer(state = initialState, action: CompanyAt
             } else {
                 _attachmentsList = [...state.vendorAttachments, action.payload];
             }
-
             return {
                 ...state,
                 vendorAttachments: _attachmentsList,
                 pendingUpload: false,
                 error: ''
             };
-
-            // const _updatedAttachments = state.vendorAttachments.map(
-            //     item => action.payload.VendorAttachmentID === item.VendorAttachmentID ? action.payload : item);
-            // return {
-            //     ...state,
-            //     vendorAttachments: _updatedAttachments,
-            //     pendingUpload: false,
-            //     error: ''
-            // };
-
         case CompanyAttachmentActionTypes.EditVendorAttachmentFail:
             return {
                 ...state,
                 error: action.payload,
                 pendingUpload: false,
             };
-        // case CompanyAttachmentActionTypes.UploadVendorAttachmentSuccess:
-        //     return {
-        //         ...state
-        //     };
-
-        // case CompanyAttachmentActionTypes.UploadVendorAttachmentFail:
-        //     return {
-        //         ...state,
-        //     };
-
-
         case CompanyAttachmentActionTypes.GetVendorAttachmentSuccess:
             return {
                 ...state,
