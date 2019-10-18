@@ -1,5 +1,5 @@
 import { Component, OnInit, ViewChild, Output, Input, EventEmitter, SimpleChanges, OnChanges } from '@angular/core';
-import { ActivatedRoute, Router, NavigationEnd } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { MatPaginator, MatSort, MatTableDataSource, MatDialog } from '@angular/material';
 import { SalesOrderLine } from '../../../../shared/class/sales-order-line';
 import { SalesOrder } from '../../../../shared/class/sales-order';
@@ -10,7 +10,6 @@ import { SalesOrderService } from './../../../sales-order.service';
 import { SalesOrderViewBOLRequestComponentDialog } from '../../sales-order-view-bol/sales-order-view-bol-request/components/sales-order-view-bol.component.request-dialog';
 import { SalesOrderViewUploadBOLComponentDialog } from '../../sales-order-view-bol/sales-order-view-bol-upload/components/sales-order-view-bol.component.upload-dialog';
 import { SalesOrderCancelComponentPrintDialog } from './../../sales-order-view-cancel/components/sales-order-view-cancel.component-cancel-dialog';
-import { NotificationsService } from 'angular2-notifications';
 import { NotificationComponent } from '../../../../shared/tool/notification/notification.component';
 
 @Component({
@@ -46,8 +45,7 @@ export class SalesOrderDetailComponent implements OnInit, OnChanges {
     isMerchant: boolean;
 
     constructor(
-        private not: NotificationComponent,
-        private notificationService: NotificationsService,
+        private notificationComponent: NotificationComponent,
         private salesorderService: SalesOrderService,
         private router: Router,
         private route: ActivatedRoute,
@@ -69,8 +67,8 @@ export class SalesOrderDetailComponent implements OnInit, OnChanges {
         }
         this.getSalesOrderLineByVendor.emit({orderid: this.orderid, fulfilledby: this.fulfilledby});
         this.getBOLRequest.emit(this.orderid);
-        this.not.subject.subscribe((val) => {
-            this.salesorderService.test = val.id;
+        this.notificationComponent.subject.subscribe((val) => {
+            this.salesorderService.currentNotificationID = val.id;
         });
     }
 
@@ -130,10 +128,6 @@ export class SalesOrderDetailComponent implements OnInit, OnChanges {
 
     navigateToFulfillments() {
         this.router.navigate(['/sales-order/view/merchant/' + this.orderid + '/fulfillment']);
-        //this.salesorderService.sendNotification({ type: 'info', title: 'Fulfillments page', content: 'You are now here!' }, { timeOut: 0 });
-        //this.notificationService.info('Fulfillments page', 'You are now here!', { timeOut: 0 });
-        this.not.notify({ type: 'info', title: 'Fulfillments page', content: 'You are now here!' }, { timeOut: 0 });
-
+        this.notificationComponent.notify({ type: 'info', title: 'Fulfillments page', content: 'You are now here!' }, { timeOut: 0 }, true);
     }
-
 }
