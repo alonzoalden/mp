@@ -33,7 +33,6 @@ export class SalesOrderFulfillmentListComponent implements OnInit, OnChanges, On
     constructor(
         private notificationComponent: NotificationComponent,
         private route: ActivatedRoute,
-        private router: Router,
         private salesorderSerivce: SalesOrderService
     ) { }
 
