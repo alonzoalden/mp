@@ -8,11 +8,12 @@ import { Fulfillment, FulfillmentSalesOrderLine } from '../shared/class/fulfillm
 import { OAuthService } from 'angular-oauth2-oidc';
 import { environment } from '../../environments/environment';
 import { BOLRequest } from 'app/shared/class/bol-request';
+import { NotificationComponent } from '../shared/tool/notification/notification.component';
 
 @Injectable()
 export class SalesOrderService {
+    public test: string;
     private apiURL = environment.webapiURL;
-
     private salesorders: SalesOrder[];
     private salesorderlines: SalesOrderLine[];
     currentSalesOrderLine: SalesOrderLine;
@@ -22,11 +23,12 @@ export class SalesOrderService {
     public subject = new Subject<string>();
 
     constructor(
+        private notificationComponent: NotificationComponent,
         private http: HttpClient,
         private oauthService: OAuthService ) { }
 
-    sendNotification(notification: any) {
-        this.subject.next(notification);
+    sendNotification(notification: any, options: any = {}) {
+        this.notificationComponent.notify(notification, options);
     }
 
     resetSalesOrders() {

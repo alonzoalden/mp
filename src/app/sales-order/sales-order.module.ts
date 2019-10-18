@@ -34,6 +34,8 @@ import { SalesOrderEffects } from './state/sales-order.effects';
 import { companyInfoReducer } from '../company/company-info/state/company-info.reducer';
 import { CompanyInfoEffects } from '../company/company-info/state/company-info.effects';
 import { CompanyService } from 'app/company/company.service';
+import { SimpleNotificationsModule } from 'angular2-notifications';
+
 
 @NgModule({
     declarations: [
@@ -81,7 +83,8 @@ import { CompanyService } from 'app/company/company.service';
         StoreModule.forFeature('SalesOrder', salesOrderReducer),
         EffectsModule.forFeature([SalesOrderEffects]),
         StoreModule.forFeature('CompanyInfo', companyInfoReducer),
-        EffectsModule.forFeature([CompanyInfoEffects])
+        EffectsModule.forFeature([CompanyInfoEffects]),
+        SimpleNotificationsModule
     ],
     providers: [
         SalesOrderService, CompanyService

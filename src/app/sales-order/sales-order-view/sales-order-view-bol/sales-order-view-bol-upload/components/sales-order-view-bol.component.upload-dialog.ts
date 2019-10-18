@@ -30,7 +30,8 @@ export class SalesOrderViewUploadBOLComponentDialog implements OnInit, OnDestroy
         @Inject(MAT_DIALOG_DATA) public data: {salesorder: SalesOrder, orderid: number},
         public dialogRef: MatDialogRef<SalesOrderViewUploadBOLComponentDialog>,
         private store: Store<fromSalesOrder.State>,
-        private salesorderService: SalesOrderService) {}
+        private salesorderService: SalesOrderService
+    ) {}
 
     ngOnInit() {
         this.orderid = this.data.orderid;
