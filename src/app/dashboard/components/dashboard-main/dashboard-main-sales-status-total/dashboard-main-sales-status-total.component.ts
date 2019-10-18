@@ -1,4 +1,4 @@
-import { Component, ViewChild, OnInit, Input, Output, EventEmitter } from '@angular/core';
+import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 import { MatTableDataSource } from '@angular/material';
 import { SalesStatusTotal } from '../../../../shared/class/dashboard';
 import { growContainerAnimation } from '../smooth-open-animation.component';

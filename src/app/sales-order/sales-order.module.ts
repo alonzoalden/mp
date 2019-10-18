@@ -15,7 +15,8 @@ import { SalesOrderFulfillmentAddShellComponent } from './sales-order-view/sales
 import { SalesOrderFulfillmentEditShellComponent } from './sales-order-view/sales-order-view-fulfillment/sales-order-view-fullfillment-edit/containers/sales-order-view-fulfillment-edit-shell.component';
 import { SalesOrderFulfillmentListShellComponent } from './sales-order-view/sales-order-view-fulfillment/sales-order-view-fullfillment-list/containers/sales-order-view-fulfillment-list-shell.component';
 import { SalesOrderListComponent } from './sales-order-list/components/sales-order-list.component';
-import { SalesOrderDetailComponent, SalesOrderCancelComponentPrintDialog } from './sales-order-view/sales-order-view-detail/components/sales-order-view-detail.component';
+import { SalesOrderDetailComponent } from './sales-order-view/sales-order-view-detail/components/sales-order-view-detail.component';
+import { SalesOrderCancelComponentPrintDialog } from './sales-order-view/sales-order-view-cancel/components/sales-order-view-cancel.component-cancel-dialog';
 import { SalesOrderViewBOLRequestComponentDialog } from './sales-order-view/sales-order-view-bol/sales-order-view-bol-request/components/sales-order-view-bol.component.request-dialog';
 import { SalesOrderViewUploadBOLComponentDialog } from './sales-order-view/sales-order-view-bol/sales-order-view-bol-upload/components/sales-order-view-bol.component.upload-dialog';
 import { SalesOrderViewComponent } from './sales-order-view/components/sales-order-view.component';
@@ -33,6 +34,8 @@ import { SalesOrderEffects } from './state/sales-order.effects';
 import { companyInfoReducer } from '../company/company-info/state/company-info.reducer';
 import { CompanyInfoEffects } from '../company/company-info/state/company-info.effects';
 import { CompanyService } from 'app/company/company.service';
+import { SimpleNotificationsModule } from 'angular2-notifications';
+
 
 @NgModule({
     declarations: [
@@ -80,7 +83,8 @@ import { CompanyService } from 'app/company/company.service';
         StoreModule.forFeature('SalesOrder', salesOrderReducer),
         EffectsModule.forFeature([SalesOrderEffects]),
         StoreModule.forFeature('CompanyInfo', companyInfoReducer),
-        EffectsModule.forFeature([CompanyInfoEffects])
+        EffectsModule.forFeature([CompanyInfoEffects]),
+        SimpleNotificationsModule
     ],
     providers: [
         SalesOrderService, CompanyService

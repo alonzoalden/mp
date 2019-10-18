@@ -1,4 +1,4 @@
-import { Component , OnInit, OnDestroy} from '@angular/core';
+import { Component, OnInit, OnDestroy} from '@angular/core';
 import { MatTableDataSource } from '@angular/material';
 import { Store, select } from '@ngrx/store';
 import * as itemActions from '../../../state/item.actions';
@@ -35,15 +35,12 @@ export class ItemEditProductRelationShellComponent implements OnInit, OnDestroy 
 
     ngOnInit() {
         this.item$ = this.store.pipe(select(fromItem.getItem));
-
         this.itemList$ = this.store.pipe(select(fromItem.getItemList));
         this.allItemList$ = this.store.pipe(select(fromItem.getAllItemList));
-
         this.itemRelatedProductsMatTable$ = this.store.pipe(select(fromItem.getItemRelatedProductsMatTable));
         this.itemCrossSellsMatTable$ = this.store.pipe(select(fromItem.getItemCrossSellsMatTable));
         this.itemUpSellsMatTable$ = this.store.pipe(select(fromItem.getItemUpSellsMatTable));
         this.itemUpSells$ = this.store.pipe(select(fromItem.getItemUpSells));
-
         this.errorMessage$ = this.store.pipe(select(fromItem.getError));
         this.userInfo$ = this.store.pipe(select(fromUser.getCurrentUser));
         this.isItemListLoading$ = this.store.pipe(select(fromItem.getIsItemListLoading));

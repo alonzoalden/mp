@@ -1,5 +1,4 @@
 import { Routes, RouterModule } from '@angular/router';
-
 import { MemberComponent } from './member.component';
 import { MemberListShellComponent } from './containers/member-list-shell/member-list-shell.component';
 import { MemberConfirmShellComponent } from './containers/member-confirm-shell/member-confirm-shell.component';

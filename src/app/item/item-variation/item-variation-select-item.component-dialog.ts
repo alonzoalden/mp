@@ -11,12 +11,11 @@ import { environment } from '../../../environments/environment';
 export class ItemVariationSelectItemComponentDialog implements OnInit {
     itemLists: ItemList[];
     itemList: ItemList;
-    private imageURL = environment.imageURL;
+    imageURL = environment.imageURL;
     formInvalid: boolean = false;
 
     constructor(
         public dialogRef: MatDialogRef<ItemVariationSelectItemComponentDialog>,
-        private itemService: ItemService,
         @Inject(MAT_DIALOG_DATA) public data: any) {}
 
     ngOnInit() {

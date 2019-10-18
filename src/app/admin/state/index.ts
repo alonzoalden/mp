@@ -18,12 +18,10 @@ export const getMembers = createSelector(
     getAdminFeatureState,
     state => state.members
 );
-
 export const getCurrentMemberID = createSelector(
     getAdminFeatureState,
     state => state.currentMemberID
 );
-
 export const getMember = createSelector(
     getAdminFeatureState,
     getCurrentMemberID,
@@ -53,25 +51,3 @@ export const getVendorList = createSelector(
     getAdminFeatureState,
     state => state.vendorList
 );
-
-// export const getCurrentVendorAttachment = createSelector(
-//     getCompanyFeatureState,
-//     state => state.vendorAttachments.find(item => item.VendorAttachmentID === state.currentVendorAttachmentID)
-// );
-
-// export const getVendorAttachmentsMatTable = createSelector(
-//     getCompanyFeatureState,
-//     state => new MatTableDataSource<VendorAttachment>(state.vendorAttachments)
-// );
-// export const getPendingUpload = createSelector(
-//     getCompanyFeatureState,
-//     state => state.pendingUpload
-// );
-// export const getPendingDelete = createSelector(
-//     getCompanyFeatureState,
-//     state => state.pendingDelete
-// );
-// export const getError = createSelector(
-//     getCompanyFeatureState,
-//     state => state.error
-// );

@@ -8,9 +8,13 @@ import { NgSelectModule } from '@ng-select/ng-select';
 import { CdkTableModule } from '@angular/cdk/table';
 import { ToolModule } from '../shared/tool/tool.module';
 import { ItemComponent } from './item.component';
-import { ItemListComponent, ItemListComponentItemPrintDialog, ItemListComponentImportDialog } from './item-list/components/item-list.component';
-import { ItemPrintLabelComponent, ItemPrintLabelComponentPrintDialog} from './item-print-label/components/item-print-label.component';
-import { ItemPartListComponent, ItemPartListComponentItemPrintDialog } from './item-part/components/item-part-list/item-part-list.component';
+import { ItemListComponent } from './item-list/components/item-list.component';
+import { ItemListComponentImportDialog } from './item-list/components/item-list.component-import-dialog';
+import { ItemListComponentItemPrintDialog } from './item-list/components/item-list.component-item-print-dialog';
+import { ItemPrintLabelComponent } from './item-print-label/components/item-print-label.component';
+import { ItemPrintLabelComponentPrintDialog } from './item-print-label/components/item-print-label.component-print-dialog';
+import { ItemPartListComponent } from './item-part/components/item-part-list/item-part-list.component';
+import { ItemPartListComponentItemPrintDialog } from './item-part/components/item-part-list/item-part-list.component-item-print-dialog';
 import { ItemListShellComponent } from './item-list/containers/item-list-shell/item-list-shell.component';
 import { ItemPrintLabelShellComponent } from './item-print-label/containers/item-print-label-shell.component';
 import { ItemPartListShellComponent } from './item-part/containers/item-part-list-shell/item-part-list-shell.component';
@@ -53,7 +57,8 @@ import { ItemEditProductRelationUpSellComponent } from './item-edit/item-edit-pr
 import { ItemEditProductRelationCrossSellComponent } from './item-edit/item-edit-product-relation/item-edit-product-relation-cross-sell/components/item-edit-product-relation-cross-sell.component';
 import { ItemEditVendorAttachmentComponent } from './item-edit/item-edit-vendor-attachment/components/item-edit-vendor-attachment.component';
 import { ItemEditVideoComponent } from './item-edit/item-edit-video/components/item-edit-video.component';
-import { ItemEditImageComponent, ItemEditImageComponentUploadDialog } from './item-edit/item-edit-image/components/item-edit-image.component';
+import { ItemEditImageComponent } from './item-edit/item-edit-image/components/item-edit-image.component';
+import { ItemEditImageComponentUploadDialog } from './item-edit/item-edit-image/components/item-edit-image.component-upload-dialog';
 import { ItemEditShellComponent } from './item-edit/containers/item-edit-shell.component';
 import { ItemEditDescriptionShellComponent } from './item-edit/item-edit-description/containers/item-edit-description-shell.component';
 import { ItemEditInventoryShellComponent } from './item-edit/item-edit-inventory/containers/item-edit-inventory-shell.component';
@@ -108,14 +113,13 @@ import { ItemVariationDetailComponent } from './item-variation/item-variation-de
 import { ItemEditVariationComponent } from './item-edit/item-edit-variation.component';
 import { itemRouting } from './item.routing';
 import { ItemService } from '../item/item.service';
-// /* NgRx */
-// import { itemreducer } from './item-variation/state/item-variation.reducer';
-// import { ItemVariationEffects } from './item-variation/state/item-variation.effects';
 import { StoreModule } from '@ngrx/store';
 import { EffectsModule } from '@ngrx/effects';
 import { itemReducer } from './state/item.reducer';
 import { ItemEffects } from './state/item.effects';
-import {SharePipeModule} from "../shared/pipe/share.pipe";
+import { SharePipeModule } from '../shared/pipe/share.pipe';
+// import { ItemVariationEffects } from './item-variation/state/item-variation.effects';
+// import { itemreducer } from './item-variation/state/item-variation.reducer';
 
 @NgModule({
     declarations: [
@@ -127,11 +131,9 @@ import {SharePipeModule} from "../shared/pipe/share.pipe";
         ItemComponent,
         ItemListComponent,
         ItemAddComponent,
-
         ItemListShellComponent,
         ItemPrintLabelShellComponent,
         ItemPartListShellComponent,
-
         ItemAddShellComponent,
         ItemAddDescriptionShellComponent,
         ItemAddDimensionShellComponent,
@@ -229,7 +231,7 @@ import {SharePipeModule} from "../shared/pipe/share.pipe";
         ItemVariationSelectItemComponentDialog
 
     ],
-    entryComponents: [ItemListComponent, ItemListComponentItemPrintDialog, ItemPrintLabelComponentPrintDialog, ItemAddImageComponentUploadDialog, ItemEditImageComponentUploadDialog, ItemListComponentImportDialog, ItemVariationComponentDialog, ItemVariationSelectItemComponentDialog],
+    entryComponents: [ItemListComponent, ItemListComponentItemPrintDialog, ItemPrintLabelComponentPrintDialog, ItemAddImageComponentUploadDialog, ItemEditImageComponentUploadDialog, ItemListComponentImportDialog, ItemVariationComponentDialog, ItemVariationSelectItemComponentDialog, ItemPartListComponentItemPrintDialog],
     imports: [
         TranslateModule,
         ReactiveFormsModule,

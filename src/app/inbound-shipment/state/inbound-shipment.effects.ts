@@ -5,16 +5,9 @@ import { Action, Store } from '@ngrx/store';
 import { Actions, Effect, ofType } from '@ngrx/effects';
 import { PurchaseOrderService } from '../purchase-order.service';
 import { Router } from '@angular/router';
-import { Member, MemberVendor } from '../../shared/class/member';
-import { VendorBrand } from '../../shared/class/vendor-brand';
-import { ItemList, Item, ItemCrossSellInsert, ItemUpSell, ItemUpSellInsert, ItemRelatedProduct, ItemRelatedProductInsert, ItemAttachmentInsert, ItemVideoInsert, ItemCategoryAssignment, ItemTierPrice, ItemBatch } from '../../shared/class/item';
-import { Category } from '../../shared/class/category';
-import { VendorAttachment, VendorAttachmentList } from '../../shared/class/vendor-attachment';
-import { URLVideo } from '../../shared/class/item-video';
-import { environment } from '../../../environments/environment';
+import { ItemList } from '../../shared/class/item';
 import * as inboundShipmentActions from './inbound-shipment.actions';
 import * as fromInboundShipment from '.';
-import { BatchUpdate, BatchUpdateValue } from '../../shared/class/batch-update';
 import { PurchaseOrder, PurchaseOrderLine, InboundShippingMethod, PurchaseOrderLineList, Carton } from '../../shared/class/purchase-order';
 import { ItemService } from '../../item/item.service';
 
@@ -212,7 +205,7 @@ export class InboundShipmentEffects {
                     this.inboundShipmentService.currentPurchaseOrderEdit = payload.purchaseOrder;
                     this.inboundShipmentService.currentPurchaseLineIsUpdated = false;
                     this.inboundShipmentService.sendNotification({ type: 'success', title: 'Successfully Updated', content: `${purchaseOrder.PurchaseOrderID} was saved` });
-                    if (payload.size == 'small') {
+                    if (payload.size === 'small') {
                         this.store.dispatch(new inboundShipmentActions.DownloadAllItemLabel({purchaseOrder: purchaseOrder, border: payload.border}));
                     } else {
                         this.store.dispatch(new inboundShipmentActions.DownloadAllItemLargeLabel({purchaseOrder: purchaseOrder, border: payload.border}));
@@ -298,17 +291,8 @@ export class InboundShipmentEffects {
                     const blobUrl = URL.createObjectURL(blob);
                     if (window.navigator.msSaveOrOpenBlob) {
                         const fileName = purchaseOrder.PackingSlipNumber;
-                        window.navigator.msSaveOrOpenBlob(data, fileName + '.pdf'); // IE is the worst!!!
+                        window.navigator.msSaveOrOpenBlob(data, fileName + '.pdf');
                     } else {
-                        // const iframe = document.createElement('iframe');
-                        // iframe.style.display = 'none';
-                        // iframe.src = blobUrl;
-                        // document.body.appendChild(iframe);
-
-                        // iframe.onload = (function() {
-                        //     iframe.contentWindow.focus();
-                        //     iframe.contentWindow.print();
-                        // });
                         const fileURL = window.URL.createObjectURL(blob);
                         const a: HTMLAnchorElement = document.createElement('a') as HTMLAnchorElement;
                         a.href = fileURL;
@@ -341,17 +325,8 @@ export class InboundShipmentEffects {
                 const blobUrl = URL.createObjectURL(blob);
                 if (window.navigator.msSaveOrOpenBlob) {
                     const fileName = 'Carton_' +  purchaseOrder.PurchaseOrderID;
-                    window.navigator.msSaveOrOpenBlob(data, fileName + '.pdf'); // IE is the worst!!!
+                    window.navigator.msSaveOrOpenBlob(data, fileName + '.pdf');
                 } else {
-                    // const iframe = document.createElement('iframe');
-                    // iframe.style.display = 'none';
-                    // iframe.src = blobUrl;
-                    // document.body.appendChild(iframe);
-
-                    // iframe.onload = (function() {
-                    //     iframe.contentWindow.focus();
-                    //     iframe.contentWindow.print();
-                    // });
                     const fileURL = window.URL.createObjectURL(blob);
                     const a: HTMLAnchorElement = document.createElement('a') as HTMLAnchorElement;
                     a.href = fileURL;
@@ -384,17 +359,8 @@ export class InboundShipmentEffects {
                     const blobUrl = URL.createObjectURL(blob);
                     if (window.navigator.msSaveOrOpenBlob) {
                         const fileName = 'Item_' +  payload.purchaseOrder.PackingSlipNumber;
-                        window.navigator.msSaveOrOpenBlob(data, fileName + '.pdf'); // IE is the worst!!!
+                        window.navigator.msSaveOrOpenBlob(data, fileName + '.pdf');
                     } else {
-                        // const iframe = document.createElement('iframe');
-                        // iframe.style.display = 'none';
-                        // iframe.src = blobUrl;
-                        // document.body.appendChild(iframe);
-
-                        // iframe.onload = (function() {
-                        //     iframe.contentWindow.focus();
-                        //     iframe.contentWindow.print();
-                        // });
                         const fileURL = window.URL.createObjectURL(blob);
                         const a: HTMLAnchorElement = document.createElement('a') as HTMLAnchorElement;
                         a.href = fileURL;
@@ -428,17 +394,8 @@ export class InboundShipmentEffects {
                     const blobUrl = URL.createObjectURL(blob);
                     if (window.navigator.msSaveOrOpenBlob) {
                         const fileName = 'Item_' + payload.purchaseOrder.PackingSlipNumber + '_Large';
-                        window.navigator.msSaveOrOpenBlob(data, fileName + '.pdf'); // IE is the worst!!!
+                        window.navigator.msSaveOrOpenBlob(data, fileName + '.pdf');
                     } else {
-                        // const iframe = document.createElement('iframe');
-                        // iframe.style.display = 'none';
-                        // iframe.src = blobUrl;
-                        // document.body.appendChild(iframe);
-
-                        // iframe.onload = (function() {
-                        //     iframe.contentWindow.focus();
-                        //     iframe.contentWindow.print();
-                        // });
                         const fileURL = window.URL.createObjectURL(blob);
                         const a: HTMLAnchorElement = document.createElement('a') as HTMLAnchorElement;
                         a.href = fileURL;
@@ -471,17 +428,8 @@ export class InboundShipmentEffects {
                     const blobUrl = URL.createObjectURL(blob);
                     if (window.navigator.msSaveOrOpenBlob) {
                         const fileName = payload.carton.CartonNumber;
-                        window.navigator.msSaveOrOpenBlob(data, fileName + '.pdf'); // IE is the worst!!!
+                        window.navigator.msSaveOrOpenBlob(data, fileName + '.pdf');
                     } else {
-                        // const iframe = document.createElement('iframe');
-                        // iframe.style.display = 'none';
-                        // iframe.src = blobUrl;
-                        // document.body.appendChild(iframe);
-
-                        // iframe.onload = (function() {
-                        //     iframe.contentWindow.focus();
-                        //     iframe.contentWindow.print();
-                        // });
                         const fileURL = window.URL.createObjectURL(blob);
                         const a: HTMLAnchorElement = document.createElement('a') as HTMLAnchorElement;
                         a.href = fileURL;
@@ -514,17 +462,8 @@ export class InboundShipmentEffects {
                     const blobUrl = URL.createObjectURL(blob);
                     if (window.navigator.msSaveOrOpenBlob) {
                         const fileName = payload.purchaseorderline.TPIN;
-                        window.navigator.msSaveOrOpenBlob(data, fileName + '.pdf'); // IE is the worst!!!
+                        window.navigator.msSaveOrOpenBlob(data, fileName + '.pdf');
                     } else {
-                        // const iframe = document.createElement('iframe');
-                        // iframe.style.display = 'none';
-                        // iframe.src = blobUrl;
-                        // document.body.appendChild(iframe);
-
-                        // iframe.onload = (function() {
-                        //     iframe.contentWindow.focus();
-                        //     iframe.contentWindow.print();
-                        // });
                         const fileURL = window.URL.createObjectURL(blob);
                         const a: HTMLAnchorElement = document.createElement('a') as HTMLAnchorElement;
                         a.href = fileURL;
@@ -557,17 +496,8 @@ export class InboundShipmentEffects {
                     const blobUrl = URL.createObjectURL(blob);
                     if (window.navigator.msSaveOrOpenBlob) {
                         const fileName = payload.purchaseorderline.TPIN;
-                        window.navigator.msSaveOrOpenBlob(data, fileName + '.pdf'); // IE is the worst!!!
+                        window.navigator.msSaveOrOpenBlob(data, fileName + '.pdf');
                     } else {
-                        // const iframe = document.createElement('iframe');
-                        // iframe.style.display = 'none';
-                        // iframe.src = blobUrl;
-                        // document.body.appendChild(iframe);
-
-                        // iframe.onload = (function() {
-                        //     iframe.contentWindow.focus();
-                        //     iframe.contentWindow.print();
-                        // });
                         const fileURL = window.URL.createObjectURL(blob);
                         const a: HTMLAnchorElement = document.createElement('a') as HTMLAnchorElement;
                         a.href = fileURL;
@@ -602,49 +532,4 @@ export class InboundShipmentEffects {
             )
         )
     );
-
-    @Effect()
-    updatePurchaseLineCartonQuantity$: Observable<Action> = this.actions$.pipe(
-        ofType(inboundShipmentActions.InboundShipmentActionTypes.UpdatePurchaseLineCartonQuantity),
-        map((action: inboundShipmentActions.UpdatePurchaseLineCartonQuantity) => {
-            console.log(action.payload);
-            // state.currentPurchaseOrder.PurchaseOrderLines.forEach((purchaseorderline) => {
-            //     purchaseorderline.CartonQuantity = 0;
-            // });
-
-            // state.currentPurchaseOrder.Cartons.forEach((carton, ci) => {
-            //     carton.CartonLines.forEach((cartonline, cli) => {
-            //         if (!cartonline.pendingAdd) {
-            //             const purchaseorderline = state.currentPurchaseOrder.PurchaseOrderLines.find(x => x.PurchaseOrderLineID === cartonline.PurchaseOrderLineID);
-            //             if (purchaseorderline) {
-            //                 purchaseorderline.CartonQuantity += cartonline.Quantity;
-            //                 this.replacePurchaseOrderLine(cartonline.PurchaseOrderLineID, purchaseorderline);
-
-            //                 state.currentPurchaseOrder.PurchaseOrderLines[state.currentPurchaseOrder.PurchaseOrderLines.findIndex(i => i.PurchaseOrderLineID === cartonline.PurchaseOrderLineID)] = purchaseorderline;
-            //             }
-            //         }
-            //     });
-            // })
-            return (new inboundShipmentActions.UpdatePurchaseLineCartonQuantity(action.payload));
-        }),
-        // mergeMap((purchaseorder) =>
-
-        //     (new inboundShipmentActions.UpdatePurchaseLineCartonQuantity(purchaseorder))
-
-
-        //     // this.itemService.getSimpleItemList().pipe(
-        //     //     map((itemlists: ItemList[]) => (new inboundShipmentActions.UpdatePurchaseLineCartonQuantitySuccess(itemlists))),
-        //     //     catchError(err => {
-        //     //         of(new inboundShipmentActions.LoadSimpleItemListFail(err))
-        //     //         return EMPTY;
-        //     //     })
-        //     // )
-        // )
-    );
-
-
-
-
-
-
 }

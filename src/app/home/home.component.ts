@@ -20,8 +20,6 @@ export class HomeComponent implements OnInit {
             private oauthService: OAuthService,
             private appService: AppService,
             private deviceService: DeviceDetectorService, ) {
-        // this.oauthService.configure(authConfig);
-        // this.oauthService.loadDiscoveryDocumentAndTryLogin();
 
         this.loadAPI = new Promise((resolve) => {
             this.loadScript();
@@ -54,18 +52,8 @@ export class HomeComponent implements OnInit {
     }
 
     ngOnInit() {
-        //this.detectBrowser();
-        // console.log(this.oauthService.hasValidIdToken());
-        // console.log(this.oauthService.hasValidAccessToken());
-        // console.log('log in: ');
-        // console.log(this.isLoggedin);
-        // const claims = this.oauthService.getIdentityClaims();
-
         if (this.isLoggedin) {
-            //console.log('To Dashboard');
             this.router.navigate(['/dashboard']);
-            // window.location.href = window.location.href.replace('/home', '/dashboard');
-            // window.location.reload();
         }
 
         this.oauthService.events.subscribe(e => {
@@ -78,8 +66,6 @@ export class HomeComponent implements OnInit {
 
     detectBrowser() {
         const isIEOrEdge = /msie\s|trident\/|edge\//i.test(window.navigator.userAgent);
-        //console.log(isIEOrEdge);
-        //console.log(window.navigator.userAgent);
     }
 
     redirectToDashboard() {

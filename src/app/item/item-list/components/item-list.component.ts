@@ -1,10 +1,12 @@
-import { Component, OnInit, ViewChild, Inject, Input, Output, EventEmitter, SimpleChanges, OnChanges } from '@angular/core';
+import { Component, OnInit, ViewChild, Input, Output, EventEmitter, SimpleChanges, OnChanges } from '@angular/core';
 import { Router } from '@angular/router';
-import { MatPaginator, MatSort, MatTableDataSource, MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material';
+import { MatPaginator, MatSort, MatTableDataSource, MatDialog } from '@angular/material';
 import { Item, ItemInsert, ItemCategoryAssignment, ItemOption, ItemSelection, ItemTierPrice, ItemRelatedProduct, ItemUpSell, ItemCrossSell, ItemAttachment, ItemVideo } from '../../../shared/class/item';
 import { ItemService } from '../../item.service';
 import { environment } from '../../../../environments/environment';
 import { Member } from 'app/shared/class/member';
+import { ItemListComponentItemPrintDialog } from './item-list.component-item-print-dialog';
+import { ItemListComponentImportDialog } from './item-list.component-import-dialog';
 
 @Component({
     selector: 'o-item-list',
@@ -12,8 +14,6 @@ import { Member } from 'app/shared/class/member';
 })
 
 export class ItemListComponent implements OnInit, OnChanges {
-    private imageURL = environment.imageURL;
-    private linkURL = environment.linkURL;
     @Input() userInfo: Member;
     @Input() itemsMatTable: MatTableDataSource<Item>;
     @Input() errorMessage: string;
@@ -25,10 +25,8 @@ export class ItemListComponent implements OnInit, OnChanges {
     @Output() downloadItemLabelCount = new EventEmitter<{item: Item, count: number, border: string}>();
     @Output() downloadItemLargeLabelCount = new EventEmitter<{item: Item, count: number, border: string}>();
     @Output() downloadItemTemplate = new EventEmitter<void>();
-
     selectedItem: Item;
     currentIndex: number;
-
     duplicateItemInsert: ItemInsert;
     duplicateItemCategoryAssignments: ItemCategoryAssignment[];
     duplicateItemOptions: ItemOption[];
@@ -38,18 +36,19 @@ export class ItemListComponent implements OnInit, OnChanges {
     duplicateItemCrossSells: ItemCrossSell[];
     duplicateItemAttachments: ItemAttachment[];
     duplicateItemVideos: ItemVideo[];
-
     displayedColumns = ['Menu', 'ItemID', 'ProductDetails', 'FulfilledBy', 'Price', 'Quantity', 'MerchantQuantity', 'Approval', 'Visibility', 'UpdatedOn'];
-
+    imageURL = environment.imageURL;
+    linkURL = environment.linkURL;
     @ViewChild(MatPaginator, { static: true }) paginator: MatPaginator;
     @ViewChild(MatSort, { static: true }) sort: MatSort;
-
     loading: boolean;
 
-    constructor(private router: Router,
+    constructor(
+        private router: Router,
         private itemService: ItemService,
         public itemPrintDialog: MatDialog,
-        public itemImportDialog: MatDialog) { }
+        public itemImportDialog: MatDialog
+    ) { }
 
     ngOnChanges(changes: SimpleChanges): void {
         if (changes.itemsMatTable && changes.itemsMatTable.currentValue.data) {
@@ -131,20 +130,15 @@ export class ItemListComponent implements OnInit, OnChanges {
     onConvertToPart(item: Item) {
         const confirmation = confirm(`${item.ItemID}: ${item.Name} -Selected Item will be converted as a part item. Would you like to continue?`);
         if (confirmation) {
-
             this.loading = true;
-
             this.itemService.getItem(item.ItemID).subscribe(
                 (item: Item) => {
                     this.selectedItem = item;
 
                     if (this.isValidPart(this.selectedItem)) {
                         this.selectedItem.IsPartItem = true;
-                        // this.selectedItem.FulfilledBy = 'Toolots';
-                        // this.selectedItem.ItemType = 'simple';
                         this.selectedItem.Visibility = 'Search';
                         this.selectedItem.Approval = 'Approved';
-
                         this.itemService.editItem(this.selectedItem).subscribe(
                             () => {
                                 this.refresh();
@@ -167,16 +161,14 @@ export class ItemListComponent implements OnInit, OnChanges {
                     this.loading = false;
                 }
             );
-
-
         }
     }
 
     isValidPart(item: Item): boolean {
-        if (item.ItemType != 'simple') {
+        if (item.ItemType !== 'simple') {
             this.itemService.sendNotification({ type: 'error', title: 'Error', content: 'Item must be a \'Simple\' item' });
             return false;
-        } else if (item.FulfilledBy != 'Toolots') {
+        } else if (item.FulfilledBy !== 'Toolots') {
             this.itemService.sendNotification({ type: 'error', title: 'Error', content: 'Item must be fulfilled by \'Toolots\'' });
             return false;
         } else {
@@ -185,9 +177,7 @@ export class ItemListComponent implements OnInit, OnChanges {
     }
 
     onDuplicate(itemid: number) {
-
         this.loading = true;
-
         this.itemService.getItemDuplicate(itemid).subscribe(
             (item: Item) => {
                 this.duplicateItemCategoryAssignments = item.ItemCategoryAssignments;
@@ -235,9 +225,8 @@ export class ItemListComponent implements OnInit, OnChanges {
                 this.router.navigate(['/item', 'add']);
             },
             error => {
-                //this.errorMessage = <any>error;
                 this.loading = false;
-                this.itemService.sendNotification({ type: 'error', title: 'Error', content: this.errorMessage });
+                this.itemService.sendNotification({ type: 'error', title: 'Error', content: error });
                 this.router.navigate(['/item']);
             }
         );
@@ -257,139 +246,5 @@ export class ItemListComponent implements OnInit, OnChanges {
         if (this.itemsMatTable.paginator) {
             this.itemsMatTable.paginator.firstPage();
         }
-    }
-}
-
-export class ItemLabelPrintDialog {
-    constructor(
-        public Size: string,
-        public Quantity: number,
-        public Border: string
-    ) {}
-}
-
-@Component({
-selector: 'item-list.component-item-print-dialog',
-templateUrl: 'item-list.component-item-print-dialog.html',
-})
-
-export class ItemListComponentItemPrintDialog implements OnInit {
-//quantity: number;
-    itemLabelPrintDialog: ItemLabelPrintDialog;
-
-    constructor(
-        public dialogRef: MatDialogRef<ItemListComponentItemPrintDialog>,
-        @Inject(MAT_DIALOG_DATA) public data: Item) {
-
-        }
-    ngOnInit() {
-        this.itemLabelPrintDialog = new ItemLabelPrintDialog('small', 1, 'yes');
-    }
-
-    onCancelClick(): void {
-        this.dialogRef.close();
-    }
-}
-
-
-@Component({
-selector: 'item-list.component-import-dialog',
-templateUrl: 'item-list.component-import-dialog.html',
-})
-
-export class ItemListComponentImportDialog implements OnInit {
-    filesToUpload: Array<File> = [];
-    selectedFiles: Array<File> = [];
-    selectedFileNames: string[] = [];
-
-    loading: boolean;
-    updated: boolean;
-
-    @ViewChild('fileUpload', { static: true }) fileUploadVar: any;
-
-    constructor(
-        public dialogRef: MatDialogRef<ItemListComponentImportDialog>,
-        private itemService: ItemService,
-        @Inject(MAT_DIALOG_DATA) public data: any) {}
-
-    ngOnInit() {
-        this.updated = false;
-    }
-
-    onCancelClick(): void {
-        this.dialogRef.close();
-    }
-
-    fileChangeEvent(fileInput: any) {
-        this.filesToUpload = [];
-        this.selectedFileNames = [];
-
-        this.selectedFiles = <Array<File>>fileInput.target.files;
-        for (let i = 0; i < this.selectedFiles.length; i++) {
-            this.filesToUpload.push(this.selectedFiles[i]);
-            this.selectedFileNames.push(this.selectedFiles[i].name);
-        }
-    }
-
-    removeFile(index: number) {
-        this.filesToUpload.splice(index, 1);
-        this.selectedFileNames.splice(index, 1);
-    }
-
-    onImportClick() {
-        const formData: FormData = new FormData();
-        this.loading = true;
-        formData.append('uploadedFiles', this.filesToUpload[0], this.filesToUpload[0].name);
-        this.itemService.importItemFile(formData).subscribe (
-            (data: string) => {
-                this.loading = false;
-                this.updated = true;
-                this.dialogRef.close(this.updated);
-            },
-            (error: any) => {
-                this.loading = false;
-                this.itemService.sendNotification({ type: 'error', title: 'Error', content: error });
-                this.dialogRef.close();
-            });
-    }
-
-    onTemplateClick() {
-        //this.downloadItemTemplate.emit();
-
-        this.itemService.downloadItemTemplate().subscribe(
-            (data) => {
-                const blob = new Blob([data], {type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'});
-                const blobUrl = URL.createObjectURL(blob);
-                if (window.navigator.msSaveOrOpenBlob) {
-                    const fileName = 'Item_Template';
-                    window.navigator.msSaveOrOpenBlob(data, fileName + '.xlsx'); // IE is the worst!!!
-                } else {
-                    // const iframe = document.createElement('iframe');
-                    // iframe.style.display = 'none';
-                    // iframe.src = blobUrl;
-                    // document.body.appendChild(iframe);
-
-                    // iframe.onload = (function() {
-                    //     iframe.contentWindow.focus();
-                    //     iframe.contentWindow.print();
-                    // });
-                    const fileURL = window.URL.createObjectURL(blob);
-                    const a: HTMLAnchorElement = document.createElement('a') as HTMLAnchorElement;
-                    a.href = fileURL;
-                    a.download = 'Item_Template';
-                    document.body.appendChild(a);
-                    a.target = '_blank';
-                    a.click();
-
-                    document.body.removeChild(a);
-                    URL.revokeObjectURL(fileURL);
-                }
-            }
-        );
-    }
-
-    cancelUpload() {
-        this.filesToUpload = [];
-        this.selectedFileNames = [];
     }
 }

@@ -1,12 +1,7 @@
-import { Component, OnInit, Inject } from '@angular/core';
-import { ActivatedRoute, Router } from '@angular/router';
-import { FormBuilder, Validators, FormGroup, FormControl } from '@angular/forms';
+import { Component, OnInit } from '@angular/core';
 import { Member } from '../../../shared/class/member';
-import { MemberService } from '../../member.service';
 import 'rxjs/add/operator/filter';
-import { MatDialog, MAT_DIALOG_DATA, MatDialogRef } from '@angular/material';
 import * as fromMember from '../../state';
-import * as fromUser from '../../../shared/state/user-state.reducer';
 import * as memberActions from '../../state/member.actions';
 import { Store, select } from '@ngrx/store';
 import { Observable } from 'rxjs';

@@ -1,12 +1,5 @@
 import { InboundShipmentActionTypes, InboundShipmentActions } from './inbound-shipment.actions';
-import { SalesOrder } from '../../shared/class/sales-order';
-import { SalesOrderLine } from '../../shared/class/sales-order-line';
-import { Fulfillment, FulfillmentSalesOrderLine } from '../../shared/class/fulfillment';
-import { ItemInsert, ItemList, ItemOption, ItemOptionInsert, ItemSelectionInsert, ItemCategoryAssignment, Item, ItemCrossSellInsert, ItemUpSellInsert, ItemRelatedProductInsert, ItemBatch, ItemPrintLabel } from '../../shared/class/item';
-import { VendorBrand } from '../../shared/class/vendor-brand';
-import { Category } from '../../shared/class/category';
-import { VendorAttachment, VendorAttachmentList } from '../../shared/class/vendor-attachment';
-import { BatchUpdate } from '../../shared/class/batch-update';
+import { ItemList } from '../../shared/class/item';
 import { PurchaseOrder, PurchaseOrderLine, InboundShippingMethod, PurchaseOrderLineList, Carton } from '../../shared/class/purchase-order';
 
 // State for this feature (Item Variation)
@@ -293,12 +286,6 @@ export function inboundShipmentReducer(state = initialState, action: InboundShip
                 isSimpleItemListLoading: false,
                 error: action.payload,
             };
-
-        case InboundShipmentActionTypes.UpdatePurchaseLineCartonQuantity:
-        return {
-                ...state,
-            };
-
         default:
             return state;
     }

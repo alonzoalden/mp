@@ -78,12 +78,6 @@
                                         <div matTooltip="{{item.Description}}" matTooltipPosition="right" matTooltipShowDelay="400">{{item.Description}}</div>
                                     </ng-template>
                                 </ng-select>
-                                <!-- <select class="form-control" id="itemRelatedProductRelatedProductItemIDId" name="itemRelatedProductItemID" required
-                                    [(ngModel)]="itemRelatedProduct.RelatedProductItemID" (change)="onRelatedProductItemChange(i)" #selectionCategoriesRef
-                                    #itemRelatedProductRelatedProductItemIDVar="ngModel" (ngModelChange)="i === item.ItemRelatedProducts.length-1 && canAdd = true;" (focus)="formDirty = true;">
-                                    <option [ngValue]="null" style="font-style: italic" disabled selected>--Select an item--</option>
-                                    <option [value]="rpi.ItemID" *ngFor="let rpi of relatedProductItemlist">{{rpi.Description}}</option>
-                                </select> -->
                             </div>
                         </td>
                     </ng-container>
@@ -116,10 +110,6 @@
                             </div>
                             <div [hidden]="!formDirty && i === item.ItemRelatedProducts.length-1">
                                 <a matTooltip="{{ 'Clear' | translate }}" attr.aria-label="{{ 'Clear' | translate}}" (click)="clearFields(itemRelatedProduct);"><i *ngIf="i === item.ItemRelatedProducts.length-1" class="fa fa-eraser"></i></a>
-                                <!-- <button *ngIf="i === item.ItemRelatedProducts.length-1"
-                                        type="button"
-                                        class="btn btn-remove-sm"
-                                        (click)="clearFields();">Clear</button> -->
                             </div>
                         </td>
                     </ng-container>

@@ -33,22 +33,18 @@ export class ItemAddBundleComponent implements OnInit, OnChanges {
     ];
 
     optionDisplayedColumns = ['Add', 'Down', 'Position', 'Up', 'Title', 'Type', 'Required', 'Remove'];
-
     selectionDisplayedColumns = ['Add', 'Down', 'Position', 'Up', 'Item', 'Quantity', 'IsDefault', 'Remove'];
-
     pendingOptionAdd: boolean;
     currentOptionIndex: number;
     formBundleDirty = false;
-
     pendingSelectionAdd: boolean;
     currentSelectionIndex: number;
-
     formSelectionDirty = false;
 
     constructor(private itemService: ItemService) { }
 
     getOptionTypeLabel(value: string) {
-        return this.optionTypes.find(x => x.value == value).label;
+        return this.optionTypes.find(x => x.value === value).label;
 
     }
     get hasEmptySelection(): boolean {
@@ -57,7 +53,7 @@ export class ItemAddBundleComponent implements OnInit, OnChanges {
             option.ItemSelections.forEach((selection, index) => {
                 if (
                     (selection.ItemID === 0 || String(selection.ItemID) === '0')
-                    && index != option.ItemSelections.length - 1) {
+                    && index !== option.ItemSelections.length - 1) {
                     result = true;
                 }
             });
@@ -68,7 +64,7 @@ export class ItemAddBundleComponent implements OnInit, OnChanges {
     get hasEmptyTitle(): boolean {
         let result = false;
         this.item.ItemOptions.forEach((option, index) => {
-            if (!option.Title && index != this.item.ItemOptions.length - 1) {
+            if (!option.Title && index !== this.item.ItemOptions.length - 1) {
                 result = true;
             }
         });
@@ -93,21 +89,12 @@ export class ItemAddBundleComponent implements OnInit, OnChanges {
         this.currentOptionIndex = this.item.ItemOptions.length - 1;
     }
 
-    // refreshOptionDataSource(options: ItemOptionInsert[]) {
-    //     this.optionDataSource = new MatTableDataSource<ItemOptionInsert>(options);
-    // }
-
-    // refreshSelectionDataSource(selections: ItemSelectionInsert[]) {
-    //     this.itemBundleOptionSelectionsMatTable = new MatTableDataSource<ItemSelectionInsert>(selections);
-    // }
-
     addOption(itemOption: ItemOptionInsert) {
         if (this.isOptionRequirementValid(itemOption)) {
             this.pendingOptionAdd = true;
             itemOption.Position = this.item.ItemOptions.length;
             const _temp = new ItemOptionInsert(true, null, null, 'select', []);
             this.item.ItemOptions.push(_temp);
-            //this.refreshOptionDataSource(this.item.ItemOptions);
         } else {
             this.itemService.sendNotification({ type: 'error', title: 'Error', content: 'Title is required' });
         }
@@ -149,20 +136,17 @@ export class ItemAddBundleComponent implements OnInit, OnChanges {
     moveDownOption(option: ItemOptionInsert) {
         this.move(this.item.ItemOptions, option, 1);
         this.item.ItemOptions.forEach((value, index) => value.Position = index + 1);
-        //this.refreshOptionDataSource(this.item.ItemOptions);
     }
 
     moveUpOption(option: ItemOptionInsert) {
         this.move(this.item.ItemOptions, option, -1);
         this.item.ItemOptions.forEach((value, index) => value.Position = index + 1);
-        //this.refreshOptionDataSource(this.item.ItemOptions);
     }
 
     removeOption(index: number) {
         this.item.ItemOptions.splice(index, 1);
         this.item.ItemOptions.forEach((value, i) => value.Position = i + 1);
         this.selectedOption = null;
-        //this.refreshOptionDataSource(this.item.ItemOptions);
     }
 
     onOptionTypeChange(index: number) {
@@ -170,15 +154,12 @@ export class ItemAddBundleComponent implements OnInit, OnChanges {
             value.IsDefault = false;
             value.CanChangeQty = false;
         });
-        //this.refreshSelectionDataSource(this.selectedOption.ItemSelections);
     }
 
     onSelectOption(option: ItemOptionInsert, index: number) {
         this.currentOptionIndex = index;
 
-        //this.selectedOption = option;
         this.setSelectedBundleOption.emit(index);
-        //this.selections =  option.ItemSelections;
         this.selectedOptionLabel = this.optionTypes[this.optionTypes.findIndex(type => type.value === option.Type)].label;
 
         if (option.ItemSelections.length === 0 && this.currentOptionIndex !== this.item.ItemOptions.length - 1) {
@@ -198,32 +179,28 @@ export class ItemAddBundleComponent implements OnInit, OnChanges {
     moveDownSelection(selection: ItemSelectionInsert) {
         this.move(this.selectedOption.ItemSelections, selection, 1);
         this.selectedOption.ItemSelections.forEach((value, index) => value.Position = index + 1);
-        //this.refreshSelectionDataSource(this.selectedOption.ItemSelections);
         this.setSelectedBundleOption.emit(this.currentOptionIndex);
     }
 
     moveUpSelection(selection: ItemSelectionInsert) {
         this.move(this.selectedOption.ItemSelections, selection, -1);
         this.selectedOption.ItemSelections.forEach((value, index) => value.Position = index + 1);
-        //this.refreshSelectionDataSource(this.selectedOption.ItemSelections);
         this.setSelectedBundleOption.emit(this.currentOptionIndex);
     }
 
     removeSelection(index: number) {
         this.selectedOption.ItemSelections.splice(index, 1);
         this.selectedOption.ItemSelections.forEach((value, i) => value.Position = i + 1);
-        //this.refreshSelectionDataSource(this.selectedOption.ItemSelections);
         this.setSelectedBundleOption.emit(this.currentOptionIndex);
     }
 
     isDefaultClick(selection: ItemSelectionInsert, index: number) {
-        if (this.selectedOption.Type == 'radio' || this.selectedOption.Type == 'select') {
+        if (this.selectedOption.Type === 'radio' || this.selectedOption.Type === 'select') {
             this.selectedOption.ItemSelections.forEach((value, i) => {
-                if (i != index) {
+                if (i !== index) {
                     value.IsDefault = false;
                 }
             });
-            //this.refreshSelectionDataSource(this.selectedOption.ItemSelections);
             this.setSelectedBundleOption.emit(this.currentOptionIndex);
         }
     }

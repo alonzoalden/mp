@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, Output, EventEmitter, SimpleChanges } from '@angular/core';
+import { Component, OnInit, Input, Output, EventEmitter, SimpleChanges, OnChanges } from '@angular/core';
 import { MatTableDataSource } from '@angular/material';
 import { ItemInsert, ItemVideoInsert } from '../../../../shared/class/item';
 import { ItemService } from '../../../item.service';
@@ -8,7 +8,7 @@ import { ItemService } from '../../../item.service';
     templateUrl: './item-add-video.component.html'
 })
 
-export class ItemAddVideoComponent implements OnInit {
+export class ItemAddVideoComponent implements OnInit, OnChanges {
     @Input() errorMessage: string;
     @Input() item: ItemInsert;
     @Input() itemVideosMatTable: MatTableDataSource<ItemVideoInsert>;
@@ -57,31 +57,6 @@ export class ItemAddVideoComponent implements OnInit {
                 const _temp = new ItemVideoInsert(null, null, null, null, null, null, this.item.ItemVideos.length, null);
                 this.item.ItemVideos.push(_temp);
                 this.refreshDataSource(this.item.ItemVideos);
-                // this.itemService.getVideoURLDetail(videoID).subscribe(
-                //     (URLVideo: URLVideo) => {
-                //         if(URLVideo.items[0].snippet.thumbnails.standard) {
-                //             itemVideo.Thumbnail = URLVideo.items[0].snippet.thumbnails.standard.url;
-                //         }
-                //         else if(URLVideo.items[0].snippet.thumbnails.medium) {
-                //             itemVideo.Thumbnail = URLVideo.items[0].snippet.thumbnails.medium.url;
-                //         }
-
-
-                //         itemVideo.Provider = 'youtube';
-                //         if(!itemVideo.Label || itemVideo.Label == '')
-                //             itemVideo.Label = URLVideo.items[0].snippet.title;
-                //         itemVideo.Description = URLVideo.items[0].snippet.description;
-
-                //         const _temp = new ItemVideoInsert(null, null, null, null, null, null, this.item.ItemVideos.length, null);
-                //         this.item.ItemVideos.push(_temp);
-                //         this.refreshDataSource(this.item.ItemVideos);
-                //     },
-                //     (error: any) => {
-                //         this.pendingAdd = false;
-                //         this.errorMessage = <any>error;
-                //         this.itemService.sendNotification({ type: 'error', title: 'Error', content: this.errorMessage });
-                //     }
-                // );
             }
         } else {
             this.itemService.sendNotification({ type: 'error', title: 'Error', content: 'Please select a Video' });
@@ -107,12 +82,6 @@ export class ItemAddVideoComponent implements OnInit {
             return value;
         }
     }
-
-    // getQueryString(field: string, url: string) {
-    //     const reg = new RegExp( '[?&]' + field + '=([^&#]*)', 'i' );
-    //     const value = reg.exec(url);
-    //     return value[1];
-    // }
 
     isRequirementValid(itemVideo: ItemVideoInsert): boolean {
         if (itemVideo

@@ -13,17 +13,22 @@ declare var $: any;
 
 export class ItemPartEditImageComponent implements OnInit {
     private imageURL = environment.imageURL;
+
     errorMessage: string;
     item: Item;
     itemid: number;
+
     displayedColumns = ['Add', 'Down', 'Position', 'Up', 'Thumbnail', 'Label', 'IsBaseImage', 'IsSmallImage', 'IsThumbnail', 'IsRotatorImage', 'Exclude', 'Remove'];
     dataSource: any = null;
     pendingAdd: boolean;
     currentIndex: number;
+
     formDirty = false;
+
     filesToUpload: Array<File> = [];
     selectedFileNames: string[] = [];
     res: Array<string>;
+
     pendingUpload: boolean;
     public isLoadingData: Boolean = false;
     public isLoadingMultipleData: Boolean = false;
@@ -155,7 +160,7 @@ export class ItemPartEditImageComponent implements OnInit {
 
     isBaseImageClick(image: ItemImage, index: number) {
         this.item.ItemImages.forEach((value, i) => {
-            if (i != index) {
+            if (i !== index) {
                 value.IsBaseImage = false;
             }
         });
@@ -164,7 +169,7 @@ export class ItemPartEditImageComponent implements OnInit {
 
     isSmallImageClick(image: ItemImage, index: number) {
         this.item.ItemImages.forEach((value, i) => {
-            if (i != index) {
+            if (i !== index) {
                 value.IsSmallImage = false;
             }
         });
@@ -173,7 +178,7 @@ export class ItemPartEditImageComponent implements OnInit {
 
     isThumbnailClick(image: ItemImage, index: number) {
         this.item.ItemImages.forEach((value, i) => {
-            if (i != index) {
+            if (i !== index) {
                 value.IsThumbnail = false;
             }
         });
@@ -182,7 +187,7 @@ export class ItemPartEditImageComponent implements OnInit {
 
     isRotatorImageClick(image: ItemImage, index: number) {
         this.item.ItemImages.forEach((value, i) => {
-            if (i != index) {
+            if (i !== index) {
                 value.IsRotatorImage = false;
             }
         });
@@ -216,7 +221,6 @@ export class ItemPartEditImageComponent implements OnInit {
             this.isLoadingData = true;
             const formData: FormData = new FormData();
             for (let i = 0; i < this.filesToUpload.length; i++) {
-                let reader = new FileReader();
                 formData.append('uploadedFiles', this.filesToUpload[i], this.filesToUpload[i].name);
             }
 

@@ -12,8 +12,6 @@ import { NotificationComponent } from '../shared/tool/notification/notification.
 export class AdminService {
     private apiURL = environment.webapiURL;
     private members: Member[];
-    //public subject = new Subject<string>();
-
     private vendorList: VendorList[];
     currentMember: Member;
 
@@ -23,7 +21,6 @@ export class AdminService {
 
     sendNotification(notification: any) {
         this.notificationComponent.notify(notification);
-        //this.subject.next(notification);
     }
 
     getMembers(): Observable<Member[]> {
@@ -32,7 +29,6 @@ export class AdminService {
         }
         return this.http.get<Member[]>(this.apiURL + '/member/admin')
                         .pipe(
-                            //tap(data => console.log(JSON.stringify(data))),
                             tap(data => this.members = data),
                             catchError(this.handleError)
                         );
@@ -45,10 +41,9 @@ export class AdminService {
             return of(foundMember);
         }
         return this.http.get<Member>(this.apiURL + '/member/' + id)
-                    .pipe(
-                        //tap(data => console.log(JSON.stringify(data))),
-                        catchError(this.handleError)
-                    );
+                        .pipe(
+                            catchError(this.handleError)
+                        );
     }
 
     addMember(member: MemberInsert): Observable<MemberInsert> {
@@ -56,13 +51,12 @@ export class AdminService {
             'Content-Type': 'application/json'
         });
         return this.http.post<Member>(this.apiURL + '/member/admin', member, { headers: headers } )
-                            .pipe(
-                                //tap(data => console.log('Add Member: ' + JSON.stringify(data))),
-                                tap(data => {
-                                    this.members.push(data);
-                                }),
-                                catchError(this.handleError)
-                            );
+                        .pipe(
+                            tap(data => {
+                                this.members.push(data);
+                            }),
+                            catchError(this.handleError)
+                        );
     }
 
     editMember(member: Member): Observable<Member>  {
@@ -70,10 +64,9 @@ export class AdminService {
             'Content-Type': 'application/json'
         });
         return this.http.put<Member>(this.apiURL + '/member/' + member.MemberID, member, { headers: headers} )
-                            .pipe(
-                                //tap(data => console.log('Update Member: ' + member.MemberID)),
-                                catchError(this.handleError)
-                            );
+                        .pipe(
+                            catchError(this.handleError)
+                        );
     }
 
     replaceMember(id: number, member: Member) {
@@ -91,24 +84,16 @@ export class AdminService {
         });
         return this.http.get<VendorList[]>(this.apiURL + '/vendor/simplevendorlist', { headers: headers} )
                             .pipe(
-                                //tap(data => console.log(JSON.stringify(data))),
                                 tap(data => this.vendorList = data),
                                 catchError(this.handleError)
                             );
     }
 
     private handleError(err: HttpErrorResponse) {
-        // in a real world app, we may send the server to some remote logging infrastructure
-        // instead of just logging it to the console
         let errorMessage: string;
         if (err.error instanceof Error) {
-            // A client-side or network error occurred. Handle it accordingly.
-            // errorMessage = `An error occurred: ${err.error.message}`;
             errorMessage = `Network error: ${err.error.message}`;
         } else {
-            // The backend returned an unsuccessful response code.
-            // The response body may contain clues as to what went wrong,
-            // errorMessage = `Backend returned code ${err.status}, body was: ${err.error.Message}`;
             errorMessage = `Response error: ${err.error.Message}`;
         }
         return throwError(errorMessage);

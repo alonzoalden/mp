@@ -12,38 +12,24 @@ import { environment } from '../../../../../../environments/environment';
 })
 
 export class ItemAddPartSectionComponent implements OnInit, OnChanges {
-    private imageURL = environment.imageURL;
+    imageURL = environment.imageURL;
     isPM: boolean;
-
-    //errorMessage: string;
-    //item: ItemInsert;
-
     @Input() errorMessage: string;
     @Input() item: ItemInsert;
-
     itemlist: ItemList[];
-    //displayedColumns = ['Add', 'Down', 'Position', 'Up', 'New', 'Select', 'ItemName', 'SKU', 'TPIN', 'Price', 'Remove'];
-    //displayedColumns = ['Add', 'Down', 'Position', 'Up', 'Thumbnail', 'Label', 'Select', 'ItemName', 'SKU', 'TPIN', 'Price', 'Remove'];
-
     displayedColumns = ['Add', 'Down', 'Position', 'Up', 'Thumbnail', 'ItemName', 'Remove'];
-
     dataSource: any = null;
-
     pendingAdd: boolean;
     pendingChange: boolean;
     currentIndex: number;
-
     formDirty = false;
-
     filesToUpload: Array<File> = [];
     selectedFileNames: string[] = [];
     res: Array<string>;
     pendingUpload: boolean;
-
     partFilesToUpload: Array<File> = [];
     partSelectedFileNames: string[] = [];
     partPendingUpload: boolean;
-
     public isLoadingData: Boolean = false;
 
     @ViewChildren('selectionCategoriesRef') selectionCategoriesRef: any;
@@ -154,7 +140,7 @@ export class ItemAddPartSectionComponent implements OnInit, OnChanges {
         let counter: number = 0;
         this.item.ItemSections.forEach((value, index) => {
                 if (value.ItemID === itemID) {
-                    if (isNew || index != this.item.ItemSections.length - 1) {
+                    if (isNew || index !== this.item.ItemSections.length - 1) {
                         counter += 1;
                     }
                 }
@@ -243,7 +229,6 @@ export class ItemAddPartSectionComponent implements OnInit, OnChanges {
             this.isLoadingData = true;
             const formData: FormData = new FormData();
             for (let i = 0; i < this.filesToUpload.length; i++) {
-                let reader = new FileReader();
                 formData.append('uploadedFiles', this.filesToUpload[i], this.filesToUpload[i].name);
             }
 

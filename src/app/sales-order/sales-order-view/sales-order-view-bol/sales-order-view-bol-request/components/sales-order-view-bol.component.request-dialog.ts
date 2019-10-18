@@ -20,8 +20,8 @@ import { AddressCountry, AddressState } from 'app/shared/class/address';
 })
 
 export class SalesOrderViewBOLRequestComponentDialog implements OnInit, OnDestroy {
-    private imageURL = environment.imageURL;
-    private linkURL = environment.linkURL;
+    imageURL = environment.imageURL;
+    linkURL = environment.linkURL;
     errorMessage: string;
     fulfilledby: string;
     orderid: number;
@@ -96,7 +96,7 @@ export class SalesOrderViewBOLRequestComponentDialog implements OnInit, OnDestro
                 if (addresscountries) {
                     this.addressCountries = addresscountries;
                     this.bolRequest.CountryID = 'US';
-                }   
+                }
             }
         );
         this.companyStore.pipe(
@@ -141,10 +141,9 @@ export class SalesOrderViewBOLRequestComponentDialog implements OnInit, OnDestro
             this.bolRequest.BOLRequestLines.splice(_lastIndex, 1);
         }
         if (this.isUpBOLRequestRequirementValid()) {
-            
+
             this.store.dispatch(new salesOrderActions.AddBOLRequest(this.bolRequest));
-        }
-        else {
+        } else {
             this.salesorderService.sendNotification({ type: 'error', title: 'Error', content: 'Please make sure your BOL Request is complete' });
         }
     }
@@ -156,7 +155,7 @@ export class SalesOrderViewBOLRequestComponentDialog implements OnInit, OnDestro
             this.refreshDataSource(this.bolRequest.BOLRequestLines);
             this.currentIndex = this.bolRequest.BOLRequestLines.length - 1;
             this.formDirty = false;
-        
+
         } else {
             this.salesorderService.sendNotification({ type: 'error', title: 'Error', content: 'Please input all fields' });
         }
@@ -193,10 +192,10 @@ export class SalesOrderViewBOLRequestComponentDialog implements OnInit, OnDestro
         }
     }
     onShippingCountryChange() {
-        if (this.companyInfo.ShippingCountryID == 'US') {
+        if (this.companyInfo.ShippingCountryID === 'US') {
             this.getShippingAddressState();
             this.companyInfo.ShippingState = 'Alabama';
-        } else if (this.companyInfo.ShippingCountryID == 'CA') {
+        } else if (this.companyInfo.ShippingCountryID === 'CA') {
             this.getShippingAddressState();
             this.companyInfo.ShippingState = 'Alberta';
         } else {

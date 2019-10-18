@@ -17,10 +17,8 @@ export class ItemEditBundleComponent implements OnInit {
     @Input() selectionsMatTable: MatTableDataSource<ItemSelection>;
     @Input() itemBundleOptionsMatTable: MatTableDataSource<ItemOption>;
     @Input() itemBundleOptionSelectionsMatTable: MatTableDataSource<ItemSelection>;
-
     @Output() getItemList = new EventEmitter<void>();
     @Output() setSelectedBundleOption = new EventEmitter<number>();
-
     selectedOptionLabel: string;
 
     optionTypes: any = [
@@ -34,25 +32,20 @@ export class ItemEditBundleComponent implements OnInit {
         }
     ];
 
-    getOptionTypeLabel(value: string) {
-        return this.optionTypes.find(x => x.value == value).label;
-    }
-
     optionDisplayedColumns = ['Add', 'Down', 'Position', 'Up', 'Title', 'Type', 'Required', 'Remove'];
     optionDataSource: any = null;
     selectionDisplayedColumns = ['Add', 'Down', 'Position', 'Up', 'Item', 'Quantity', 'IsDefault', 'Remove'];
     selectionDataSource: any = null;
-
     pendingOptionAdd: boolean;
     currentOptionIndex: number = 0;
-
     formBundleDirty = false;
-
     pendingSelectionAdd: boolean;
     currentSelectionIndex: number;
-
     formSelectionDirty = false;
 
+    getOptionTypeLabel(value: string) {
+        return this.optionTypes.find(x => x.value === value).label;
+    }
     constructor(
             private route: ActivatedRoute,
             private itemService: ItemService) { }
@@ -64,7 +57,7 @@ export class ItemEditBundleComponent implements OnInit {
             option.ItemSelections.forEach((selection, index) => {
                 if (
                     (selection.ItemID === 0 || String(selection.ItemID) === '0')
-                    && index != option.ItemSelections.length - 1) {
+                    && index !== option.ItemSelections.length - 1) {
                     result = true;
                 }
             });
@@ -75,19 +68,15 @@ export class ItemEditBundleComponent implements OnInit {
     get hasEmptyTitle(): boolean {
         let result = false;
         this.item.ItemOptions.forEach((option, index) => {
-            if (!option.Title && index != this.item.ItemOptions.length - 1) {
+            if (!option.Title && index !== this.item.ItemOptions.length - 1) {
                 result = true;
             }
         });
         return result;
     }
 
-    ngOnChanges(changes: SimpleChanges) {
-    }
-
     ngOnInit(): void {
         this.initialize();
-        
         this.currentOptionIndex = this.item.ItemOptions.length - 1;
     }
 
@@ -117,13 +106,12 @@ export class ItemEditBundleComponent implements OnInit {
                 (error: any) => this.errorMessage = <any>error
             );
         } else {
-           
             this.removeOptionPendingLine();
             this.addOptionPendingLine();
             this.refreshOptionDataSource(this.item.ItemOptions);
         }
         this.getItemList.emit();
-        
+
     }
 
     addOptionPendingLine() {
@@ -225,7 +213,6 @@ export class ItemEditBundleComponent implements OnInit {
         this.addSelectionPendingLine();
 
         this.currentSelectionIndex = this.selectedOption.ItemSelections.length - 1;
-
         //this.refreshSelectionDataSource(this.selectedOption.ItemSelections);
         this.setSelectedBundleOption.emit(this.currentOptionIndex);
     }
@@ -271,9 +258,9 @@ export class ItemEditBundleComponent implements OnInit {
     }
 
     isDefaultClick(selection: ItemSelection, index: number) {
-        if (this.selectedOption.Type == 'radio' || this.selectedOption.Type == 'select') {
+        if (this.selectedOption.Type === 'radio' || this.selectedOption.Type === 'select') {
             this.selectedOption.ItemSelections.forEach((value, i) => {
-                if (i != index) {
+                if (i !== index) {
                     value.IsDefault = false;
                 }
             });

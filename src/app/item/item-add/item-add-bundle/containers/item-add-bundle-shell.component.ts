@@ -35,5 +35,4 @@ export class ItemAddBundleShellComponent implements OnInit {
     setSelectedBundleOption(option: number) {
         this.store.dispatch(new itemActions.SetSelectedBundleOption(option));
     }
-
 }

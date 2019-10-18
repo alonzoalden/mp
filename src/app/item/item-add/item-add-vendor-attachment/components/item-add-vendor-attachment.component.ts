@@ -11,7 +11,7 @@ import { environment } from '../../../../../environments/environment';
   })
 
 export class ItemAddVendorAttachmentComponent implements OnInit, OnChanges {
-    public fileURL = environment.fileURL;
+    fileURL = environment.fileURL;
     @Input() errorMessage: string;
     @Input() isVendorAttachmentsListLoading: boolean;
     @Input() item: ItemInsert;
@@ -39,7 +39,6 @@ export class ItemAddVendorAttachmentComponent implements OnInit, OnChanges {
     }
     ngOnInit(): void {
         this.currentIndex = this.item.ItemAttachments.length - 1;
-
     }
 
     refreshDataSource(itemAttachments: ItemAttachmentInsert[]) {

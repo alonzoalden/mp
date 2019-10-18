@@ -7,7 +7,6 @@ import * as fromUser from '../../../shared/state/user-state.reducer';
 import { MatTableDataSource } from '@angular/material';
 import { Store, select } from '@ngrx/store';
 
-
 @Component({
     selector: 'o-admin',
     templateUrl: './admin-member-list-shell.component.html',

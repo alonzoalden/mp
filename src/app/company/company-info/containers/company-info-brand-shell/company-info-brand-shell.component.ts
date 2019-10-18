@@ -1,9 +1,10 @@
 import { Component, OnInit } from '@angular/core';
-import { VendorBrand } from 'app/shared/class/vendor-brand';
 import { Store, select } from '@ngrx/store';
-import * as fromCompany from '../../state';
 import { Observable } from 'rxjs';
+import { VendorBrand } from 'app/shared/class/vendor-brand';
 import * as companyActions from '../../state/company-info.actions';
+import * as fromCompany from '../../state';
+
 @Component({
     templateUrl: './company-info-brand-shell.component.html',
 })
@@ -20,6 +21,7 @@ export class CompanyInfoBrandShellComponent implements OnInit {
         this.isVendorBrandLoading$ = this.store.pipe(select(fromCompany.isVendorBrandLoading));
         this.errorMessage$ = this.store.pipe(select(fromCompany.getError));
     }
+
     loadCompanyInfoVendorBrands() {
         this.store.dispatch(new companyActions.LoadVendorBrands());
     }

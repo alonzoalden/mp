@@ -1,29 +1,28 @@
-import { Component, OnInit, ViewChild, OnDestroy, Inject, Output, Input, EventEmitter, SimpleChanges, OnChanges } from '@angular/core';
-import { ActivatedRoute, Router } from '@angular/router';
-import { MatPaginator, MatSort, MatTableDataSource, MatDialog, MatDialogRef, MAT_DIALOG_DATA} from '@angular/material';
+import { Component, OnInit, ViewChild, Output, Input, EventEmitter, SimpleChanges, OnChanges } from '@angular/core';
+import { ActivatedRoute, Router, NavigationEnd } from '@angular/router';
+import { MatPaginator, MatSort, MatTableDataSource, MatDialog } from '@angular/material';
 import { SalesOrderLine } from '../../../../shared/class/sales-order-line';
 import { SalesOrder } from '../../../../shared/class/sales-order';
 import { BOLRequest } from '../../../../shared/class/bol-request';
-import { SalesOrderService } from '../../../sales-order.service';
 import { environment } from '../../../../../environments/environment';
 import { Member } from '../../../../shared/class/member';
-import * as salesOrderActions from '../../../state/sales-order.actions';
-import * as fromSalesOrder from '../../../state';
-import { Store, select } from '@ngrx/store';
-import { takeWhile } from 'rxjs/operators';
+import { SalesOrderService } from './../../../sales-order.service';
 import { SalesOrderViewBOLRequestComponentDialog } from '../../sales-order-view-bol/sales-order-view-bol-request/components/sales-order-view-bol.component.request-dialog';
 import { SalesOrderViewUploadBOLComponentDialog } from '../../sales-order-view-bol/sales-order-view-bol-upload/components/sales-order-view-bol.component.upload-dialog';
+import { SalesOrderCancelComponentPrintDialog } from './../../sales-order-view-cancel/components/sales-order-view-cancel.component-cancel-dialog';
+import { NotificationsService } from 'angular2-notifications';
+import { NotificationComponent } from '../../../../shared/tool/notification/notification.component';
 
 @Component({
-  selector: 'o-sales-order-detail',
-  templateUrl: './sales-order-view-detail.component.html',
-  styleUrls: ['../../../sales-order.component.css']
+    selector: 'o-sales-order-detail',
+    templateUrl: './sales-order-view-detail.component.html',
+    styleUrls: ['../../../sales-order.component.css']
 })
 
 export class SalesOrderDetailComponent implements OnInit, OnChanges {
-    private imageURL = environment.imageURL;
-    private linkURL = environment.linkURL;
-    private bolURL = environment.bolURL;
+    imageURL = environment.imageURL;
+    linkURL = environment.linkURL;
+    bolURL = environment.bolURL;
     @Input() userInfo: Member;
     @Input() salesOrder: SalesOrder;
     @Input() salesOrderLinesMatTable: MatTableDataSource<SalesOrderLine>;
@@ -46,7 +45,12 @@ export class SalesOrderDetailComponent implements OnInit, OnChanges {
     @ViewChild(MatSort, { static: false }) sort: MatSort;
     isMerchant: boolean;
 
-    constructor(private route: ActivatedRoute,
+    constructor(
+        private not: NotificationComponent,
+        private notificationService: NotificationsService,
+        private salesorderService: SalesOrderService,
+        private router: Router,
+        private route: ActivatedRoute,
         public printDialog: MatDialog) { }
 
     ngOnChanges(changes: SimpleChanges): void {
@@ -54,19 +58,20 @@ export class SalesOrderDetailComponent implements OnInit, OnChanges {
             this.salesOrderLinesMatTable.paginator = this.paginator;
             this.salesOrderLinesMatTable.sort = this.sort;
         }
-        if (changes.BOLRequest && changes.BOLRequest.currentValue) {
-        }
     }
     ngOnInit() {
         this.orderid = this.route.parent.snapshot.params['id'];
         this.fulfilledby = this.route.parent.snapshot.params['fulfilledby'];
-        if (this.fulfilledby == 'merchant') {
+        if (this.fulfilledby === 'merchant') {
             this.isMerchant = true;
         } else {
             this.isMerchant = false;
         }
         this.getSalesOrderLineByVendor.emit({orderid: this.orderid, fulfilledby: this.fulfilledby});
         this.getBOLRequest.emit(this.orderid);
+        this.not.subject.subscribe((val) => {
+            this.salesorderService.test = val.id;
+        });
     }
 
     onPrintPackingSlip() {
@@ -78,7 +83,6 @@ export class SalesOrderDetailComponent implements OnInit, OnChanges {
             data: salesorder,
             width: '840px'
         });
-
         dialogRef.afterClosed().subscribe((data) => {
             if (data) {
                 this.getFulfilledBySalesOrder.emit({orderid: this.orderid, fulfilledby: this.fulfilledby});
@@ -91,7 +95,7 @@ export class SalesOrderDetailComponent implements OnInit, OnChanges {
         const _data = {
             salesorder,
             orderid: this.orderid
-        }
+        };
         const dialogRef = this.printDialog.open(SalesOrderViewBOLRequestComponentDialog, {
             data: _data,
             width: '1040px'
@@ -104,7 +108,7 @@ export class SalesOrderDetailComponent implements OnInit, OnChanges {
         const _data = {
             salesorder,
             orderid: this.orderid
-        }
+        };
         const dialogRef = this.printDialog.open(SalesOrderViewUploadBOLComponentDialog, {
             data: _data,
             width: '1040px'
@@ -123,102 +127,13 @@ export class SalesOrderDetailComponent implements OnInit, OnChanges {
         }
         return null;
     }
-}
 
-export class SalesOrderCancelDialog {
-    constructor(
-        public Size: string,
-        public Border: string
-    ) {}
-}
-@Component({
-    selector: 'sales-order-cancel.component-print-dialog',
-    templateUrl: '../../sales-order-view-cancel/components/sales-order-view-cancel.component-cancel-dialog.html',
-})
+    navigateToFulfillments() {
+        this.router.navigate(['/sales-order/view/merchant/' + this.orderid + '/fulfillment']);
+        //this.salesorderService.sendNotification({ type: 'info', title: 'Fulfillments page', content: 'You are now here!' }, { timeOut: 0 });
+        //this.notificationService.info('Fulfillments page', 'You are now here!', { timeOut: 0 });
+        this.not.notify({ type: 'info', title: 'Fulfillments page', content: 'You are now here!' }, { timeOut: 0 });
 
-export class SalesOrderCancelComponentPrintDialog implements OnInit, OnDestroy {
-    itemLabelPrintDialog: SalesOrderCancelDialog;
-    errorMessage: string;
-    fulfilledby: string;
-    orderid: number;
-    salesOrder: SalesOrder;
-    hasCancellationQty: boolean = false;
-    salesOrderLinesMatTable: MatTableDataSource<SalesOrderLine>;
-    deliveryDetail: string;
-    private imageURL = environment.imageURL;
-    private linkURL = environment.linkURL;
-
-    dataSource: MatTableDataSource<any>;
-    displayedColumns = ['ItemImage', 'ProductDetails', 'ProductInfo', 'CancellationReason'];
-    componentActive: boolean = true;
-    @ViewChild(MatPaginator, { static: false }) paginator: MatPaginator;
-    @ViewChild(MatSort, { static: true }) sort: MatSort;
-
-    constructor(
-        @Inject(MAT_DIALOG_DATA) public data: SalesOrder,
-        public dialogRef: MatDialogRef<SalesOrderCancelComponentPrintDialog>,
-        private route: ActivatedRoute,
-        private router: Router,
-        private store: Store<fromSalesOrder.State>,
-        private salesorderService: SalesOrderService) {}
-
-    ngOnInit() {
-        this.salesOrder = this.data;
-        this.orderid = this.data.OrderID;
-        this.fulfilledby = 'merchant';
-
-        //this.store.dispatch(new salesOrderActions.LoadSalesOrderLines({orderid: this.orderid, fulfilledby: this.fulfilledby}));
-        this.store.pipe(
-            select(fromSalesOrder.getSalesOrderLines),
-            takeWhile(() => this.componentActive)
-          ).subscribe(
-            salesorderlines => {
-                salesorderlines.forEach((salesorderline) => {
-                    if (salesorderline.Quantity - salesorderline.FulfilledQuantity > 0) {
-                        this.hasCancellationQty = true;
-                    }
-                });
-                return this.salesOrderLinesMatTable = new MatTableDataSource<SalesOrderLine>(salesorderlines);
-            }
-          );
     }
 
-    onCancel() {
-        if (this.isValid()) {
-            const confirmation = confirm(`Are you sure you want to cancel this order?`);
-            if (confirmation) {
-                this.store.dispatch(new salesOrderActions.CancelSalesOrderLines(this.salesOrderLinesMatTable.data));
-            }
-        }
-    }
-
-    isValid() {
-        let _ret = false;
-        let _count = 0;
-
-        this.salesOrderLinesMatTable.data.forEach((salesorderline) => {
-            _count++;
-
-            if (_count == 1) {
-                _ret = true;
-            }
-
-            if (salesorderline.Quantity - salesorderline.FulfilledQuantity > 0 && !salesorderline.CancellationReason) {
-                this.salesorderService.sendNotification({ type: 'error', title: 'Error', content: 'Cancellation Reasons are required' });
-                _ret = false;
-            }
-        });
-
-        if (_count == 0) {
-            this.salesorderService.sendNotification({ type: 'error', title: 'Error', content: 'No Lines to cancel' });
-        }
-
-        return _ret;
-    }
-    onCloseClick(): void {
-        this.dialogRef.close();
-    }
-    ngOnDestroy(): void {
-        this.componentActive = false;
-    }
 }

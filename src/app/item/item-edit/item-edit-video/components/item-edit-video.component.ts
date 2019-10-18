@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, Output, EventEmitter, SimpleChanges } from '@angular/core';
+import { Component, OnInit, Input, Output, EventEmitter, SimpleChanges, OnChanges } from '@angular/core';
 import { MatTableDataSource } from '@angular/material';
 import { Item, ItemVideo } from '../../../../shared/class/item';
 import { ItemService } from '../../../item.service';
@@ -9,14 +9,12 @@ import { environment } from '../../../../../environments/environment';
     templateUrl: './item-edit-video.component.html'
 })
 
-export class ItemEditVideoComponent implements OnInit {
+export class ItemEditVideoComponent implements OnInit, OnChanges {
     @Input() errorMessage: string;
     @Input() item: Item;
     @Input() itemVideosMatTable: MatTableDataSource<ItemVideo>;
     @Output() getVideoURLDetail = new EventEmitter<ItemVideo>();
-
-    private imageURL = environment.imageURL;
-
+    imageURL = environment.imageURL;
     displayedColumns = ['Add', 'Down', 'Position', 'Up', 'Thumbnail', 'Label', 'Description', 'Exclude', 'Remove'];
     pendingAdd: boolean;
     currentIndex: number;
@@ -29,13 +27,11 @@ export class ItemEditVideoComponent implements OnInit {
         if (changes.item && changes.item.currentValue) {
             if (this.item.ItemVideos.length === 0 || this.item.ItemVideos[this.item.ItemVideos.length - 1].ItemVideoID) {
                 this.addPendingLine();
-                //this.currentIndex = this.item.ItemVideos.length - 1;
             }
         }
         if (changes.itemVideosMatTable && changes.itemVideosMatTable.currentValue.data.length) {
             this.currentIndex = this.item.ItemVideos.length - 1;
         }
-
     }
 
     ngOnInit(): void {
@@ -60,7 +56,6 @@ export class ItemEditVideoComponent implements OnInit {
 
     onAddItemVideo(itemVideo: ItemVideo) {
         if (this.isRequirementValid(itemVideo)) {
-            //const videoID = this.getQueryString('v', itemVideo.URL);
             const videoID = this.getYoutubeQueryString(itemVideo.URL);
             if (!videoID) { return this.itemService.sendNotification({ type: 'error', title: 'Error', content: 'Incorrect Youtube URL' }); }
 

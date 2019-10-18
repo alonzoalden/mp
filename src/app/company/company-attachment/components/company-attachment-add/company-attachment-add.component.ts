@@ -11,7 +11,6 @@ export class CompanyAttachmentAddComponent implements OnInit {
     vendorAttachment: VendorAttachmentInsert;
     filesToUpload: Array<File> = [];
     selectedFileNames: string[] = [];
-
     @Input() pendingUpload: boolean = false;
     @Input() errorMessage: string;
     @Output() uploadVendorAttachment = new EventEmitter<{ form: FormData, title: string }>();

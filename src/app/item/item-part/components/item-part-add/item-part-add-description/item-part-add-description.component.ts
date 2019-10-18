@@ -1,12 +1,8 @@
 import { Component, OnInit, AfterViewInit } from '@angular/core';
-import { Router } from '@angular/router';
-
 import { ItemInsert } from '../../../../../shared/class/item';
 import { VendorBrand } from '../../../../../shared/class/vendor-brand';
-
 import { ItemService } from '../../../../item.service';
 import { AppService } from '../../../../../app.service';
-
 declare var $: any;
 
 @Component({
@@ -17,7 +13,6 @@ declare var $: any;
 export class ItemPartAddDescriptionComponent implements OnInit, AfterViewInit {
     errorMessage: string;
     isPM: boolean;
-
     item: ItemInsert;
     vendorBrandList: VendorBrand[];
 
@@ -47,8 +42,7 @@ export class ItemPartAddDescriptionComponent implements OnInit, AfterViewInit {
     }
 
     ngAfterViewInit() {
-        let self = this;
-
+        const self = this;
         $('.summernote').summernote( {
             height: 300,
             tabsize: 2,
@@ -68,7 +62,6 @@ export class ItemPartAddDescriptionComponent implements OnInit, AfterViewInit {
                 }
               }
         });
-
         $('#itemDescriptionId').summernote('code', this.item.Description);
         $('#itemShortDescriptionId').summernote('code', this.item.ShortDescription);
         $('#itemTechnicalDetailId').summernote('code', this.item.TechnicalDetail);
@@ -97,7 +90,7 @@ export class ItemPartAddDescriptionComponent implements OnInit, AfterViewInit {
                console.log('Invalid choice');
                break;
             }
-         }
+        }
     }
 
     updateTextEditorFields() {

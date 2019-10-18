@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild, SimpleChanges, Input, Output, EventEmitter } from '@angular/core';
+import { Component, OnInit, ViewChild, SimpleChanges, Input, Output, EventEmitter, OnChanges } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { MatPaginator, MatSort, MatTableDataSource} from '@angular/material';
 import { SalesOrderLine } from '../../../../shared/class/sales-order-line';
@@ -7,16 +7,15 @@ import { SalesOrderService } from '../../../sales-order.service';
 import { environment } from '../../../../../environments/environment';
 import { Member } from 'app/shared/class/member';
 
-
 @Component({
-  selector: 'o-sales-order-cancel',
-  templateUrl: './sales-order-view-cancel.component.html',
-  styleUrls: ['../../../sales-order.component.css']
+    selector: 'o-sales-order-cancel',
+    templateUrl: './sales-order-view-cancel.component.html',
+    styleUrls: ['../../../sales-order.component.css']
 })
 
-export class SalesOrderCancelComponent implements OnInit {
-    private imageURL = environment.imageURL;
-    private linkURL = environment.linkURL;
+export class SalesOrderCancelComponent implements OnInit, OnChanges {
+    imageURL = environment.imageURL;
+    linkURL = environment.linkURL;
     @Input() userInfo: Member;
     @Input() salesOrder: SalesOrder;
     @Input() salesOrderLinesMatTable: MatTableDataSource<SalesOrderLine>;
@@ -73,7 +72,7 @@ export class SalesOrderCancelComponent implements OnInit {
         this.salesOrderLinesMatTable.data.forEach((salesorderline) => {
             _count++;
 
-            if (_count == 1) {
+            if (_count === 1) {
                 _ret = true;
             }
 
@@ -83,7 +82,7 @@ export class SalesOrderCancelComponent implements OnInit {
             }
         });
 
-        if (_count == 0) {
+        if (_count === 0) {
             this.salesorderService.sendNotification({ type: 'error', title: 'Error', content: 'No Lines to cancel' });
         }
 

@@ -1,14 +1,8 @@
-import { Component, OnInit, OnDestroy, ViewChild, Inject } from '@angular/core';
-import { Router, ActivatedRoute } from '@angular/router';
-import { MatTableDataSource, MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material';
-import { Subscription } from 'rxjs';
-
-import { Item, ItemInsert, ItemImageInsert } from '../../../../../shared/class/item';
+import { Component, OnInit } from '@angular/core';
+import { MatTableDataSource } from '@angular/material';
+import { ItemInsert, ItemImageInsert } from '../../../../../shared/class/item';
 import { ItemService } from '../../../../item.service';
-import { NgForm } from '@angular/forms';
-
 import { environment } from '../../../../../../environments/environment';
-
 declare var $: any;
 
 @Component({
@@ -17,21 +11,17 @@ declare var $: any;
 })
 
 export class ItemPartAddImageComponent implements OnInit {
-    private imageURL = environment.imageURL;
-
+    imageURL = environment.imageURL;
     errorMessage: string;
     item: ItemInsert;
-
     displayedColumns = ['Add', 'Down', 'Position', 'Up', 'Thumbnail', 'Label', 'IsBaseImage', 'IsSmallImage', 'IsThumbnail', 'IsRotatorImage', 'Exclude', 'Remove'];
     dataSource: any = null;
     pendingAdd: boolean;
     currentIndex: number;
     formDirty = false;
-
     filesToUpload: Array<File> = [];
     selectedFileNames: string[] = [];
     res: Array<string>;
-
     pendingUpload: boolean;
     public isLoadingData: Boolean = false;
 
@@ -39,11 +29,9 @@ export class ItemPartAddImageComponent implements OnInit {
 
     ngOnInit(): void {
         this.item = this.itemService.currentItemInsert;
-
         if (this.item.ItemImages.length === 0) {
             this.addPendingLine();
         }
-
         this.currentIndex = this.item.ItemImages.length - 1;
         this.refreshDataSource(this.item.ItemImages);
     }
@@ -108,7 +96,7 @@ export class ItemPartAddImageComponent implements OnInit {
 
     isBaseImageClick(image: ItemImageInsert, index: number) {
         this.item.ItemImages.forEach((value, i) => {
-            if (i != index) {
+            if (i !== index) {
                 value.IsBaseImage = false;
             }
         });
@@ -117,7 +105,7 @@ export class ItemPartAddImageComponent implements OnInit {
 
     isSmallImageClick(image: ItemImageInsert, index: number) {
         this.item.ItemImages.forEach((value, i) => {
-            if (i != index) {
+            if (i !== index) {
                 value.IsSmallImage = false;
             }
         });
@@ -126,7 +114,7 @@ export class ItemPartAddImageComponent implements OnInit {
 
     isThumbnailClick(image: ItemImageInsert, index: number) {
         this.item.ItemImages.forEach((value, i) => {
-            if (i != index) {
+            if (i !== index) {
                 value.IsThumbnail = false;
             }
         });
@@ -135,7 +123,7 @@ export class ItemPartAddImageComponent implements OnInit {
 
     isRotatorImageClick(image: ItemImageInsert, index: number) {
         this.item.ItemImages.forEach((value, i) => {
-            if (i != index) {
+            if (i !== index) {
                 value.IsRotatorImage = false;
             }
         });
@@ -169,7 +157,6 @@ export class ItemPartAddImageComponent implements OnInit {
             this.isLoadingData = true;
             const formData: FormData = new FormData();
             for (let i = 0; i < this.filesToUpload.length; i++) {
-                let reader = new FileReader();
                 formData.append('uploadedFiles', this.filesToUpload[i], this.filesToUpload[i].name);
             }
 
@@ -202,6 +189,7 @@ export class ItemPartAddImageComponent implements OnInit {
             return v.toString(16);
         });
     }
+
     clearFields(form) {
         this.formDirty = false;
         form.Label = '';
@@ -217,14 +205,12 @@ export class ItemPartAddImageComponent implements OnInit {
 
     addPendingLine() {
         const _temp = new ItemImageInsert(null, null, null, null, this.item.ItemImages.length, false, false, false, false, false, false, true);
-
         if (this.item.ItemImages.length === 0) {
             _temp.IsBaseImage = true;
             _temp.IsSmallImage = true;
             _temp.IsThumbnail = true;
             _temp.IsRotatorImage = true;
         }
-
         this.item.ItemImages.push(_temp);
     }
 

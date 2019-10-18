@@ -8,11 +8,15 @@ import { ToolModule } from '../shared/tool/tool.module';
 import { NgSelectModule } from '@ng-select/ng-select';
 import { InboundShipmentComponent } from './inbound-shipment.component';
 import { InboundShipmentListComponent } from './inbound-shipment-list/components/inbound-shipment-list.component';
-import { InboundShipmentEditComponent, InboundShipmentEditComponentItemPrintDialog } from './inbound-shipment-edit/components/inbound-shipment-edit.component';
-import { InboundShipmentEditLineListComponent, InboundShipmentEditLineComponentItemPrintDialog } from './inbound-shipment-edit/inbound-shipment-edit-line-list/components/inbound-shipment-edit-line-list.component';
-import { InboundShipmentEditCartonListComponent, InboundShipmentEditCartonListComponentCartonPrintDialog } from './inbound-shipment-edit/inbound-shipment-edit-carton/components/inbound-shipment-edit-carton-list/inbound-shipment-edit-carton-list.component';
+import { InboundShipmentEditComponent } from './inbound-shipment-edit/components/inbound-shipment-edit.component';
+import { InboundShipmentEditItemPrintDialogComponent } from './inbound-shipment-edit/components/inbound-shipment-edit.component-item-print-dialog';
+import { InboundShipmentEditLineListComponent } from './inbound-shipment-edit/inbound-shipment-edit-line-list/components/inbound-shipment-edit-line-list.component';
+import { InboundShipmentEditLineItemPrintDialogComponent } from './inbound-shipment-edit/inbound-shipment-edit-line-list/components/inbound-shipment-edit-line-list.component-item-print-dialog';
+import { InboundShipmentEditCartonListComponent } from './inbound-shipment-edit/inbound-shipment-edit-carton/components/inbound-shipment-edit-carton-list/inbound-shipment-edit-carton-list.component';
+import { InboundShipmentEditCartonListCartonPrintDialogComponent } from './inbound-shipment-edit/inbound-shipment-edit-carton/components/inbound-shipment-edit-carton-list/inbound-shipment-edit-carton-list.component-carton-print-dialog';
 import { InboundShipmentEditCartonLineListComponent } from './inbound-shipment-edit/inbound-shipment-edit-carton/components/inbound-shipment-edit-carton-line-list/inbound-shipment-edit-carton-line-list.component';
-import { InboundShipmentEditShippingInstructionComponent, InboundShipmentEditShippingInstructionComponentCartonPrintDialog } from './inbound-shipment-edit/inbound-shipment-edit-shipping-instruction/components/inbound-shipment-edit-shipping-instruction.component';
+import { InboundShipmentEditShippingInstructionComponent } from './inbound-shipment-edit/inbound-shipment-edit-shipping-instruction/components/inbound-shipment-edit-shipping-instruction.component';
+import { InboundShipmentEditShippingInstructionCartonPrintDialogComponent } from './inbound-shipment-edit/inbound-shipment-edit-shipping-instruction/components/inbound-shipment-edit-shipping-instruction.component-carton-print-dialog';
 import { InboundShipmentEditShippingComponent } from './inbound-shipment-edit/inbound-shipment-edit-shipping/components/inbound-shipment-edit-shipping.component';
 import { InboundShipmentListShellComponent } from './inbound-shipment-list/containers/inbound-shipment-list-shell.component';
 import { InboundShipmentEditShellComponent } from './inbound-shipment-edit/containers/inbound-shipment-edit-shell.component';
@@ -40,10 +44,10 @@ import { ItemService } from '../item/item.service';
         InboundShipmentEditCartonLineListComponent,
         InboundShipmentEditShippingInstructionComponent,
         InboundShipmentEditShippingComponent,
-        InboundShipmentEditComponentItemPrintDialog,
-        InboundShipmentEditCartonListComponentCartonPrintDialog,
-        InboundShipmentEditLineComponentItemPrintDialog,
-        InboundShipmentEditShippingInstructionComponentCartonPrintDialog,
+        InboundShipmentEditItemPrintDialogComponent,
+        InboundShipmentEditCartonListCartonPrintDialogComponent,
+        InboundShipmentEditLineItemPrintDialogComponent,
+        InboundShipmentEditShippingInstructionCartonPrintDialogComponent,
         InboundShipmentListShellComponent,
         InboundShipmentListShellComponent,
         InboundShipmentEditShellComponent,
@@ -54,10 +58,10 @@ import { ItemService } from '../item/item.service';
     ],
     entryComponents: [InboundShipmentEditCartonListComponent
         , InboundShipmentEditLineListComponent
-        , InboundShipmentEditComponentItemPrintDialog
-        , InboundShipmentEditCartonListComponentCartonPrintDialog
-        , InboundShipmentEditLineComponentItemPrintDialog
-        , InboundShipmentEditShippingInstructionComponentCartonPrintDialog],
+        , InboundShipmentEditItemPrintDialogComponent
+        , InboundShipmentEditCartonListCartonPrintDialogComponent
+        , InboundShipmentEditLineItemPrintDialogComponent
+        , InboundShipmentEditShippingInstructionCartonPrintDialogComponent],
     imports: [
         TranslateModule,
         ReactiveFormsModule,

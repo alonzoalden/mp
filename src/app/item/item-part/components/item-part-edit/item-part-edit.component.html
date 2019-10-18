@@ -31,33 +31,33 @@
                     <ul class="nav nav-tabs">
                         <li routerLinkActive="active">
                             <a [routerLink]="['partdescription']">
-                                {{ 'Product Description' | translate }}  
+                                {{ 'Product Description' | translate }}
                                 <span matTooltip="{{'Required fields must be complete' | translate}}" attr.aria-label="{{ 'Required fields must be complete' | translate}}" [ngClass]="{'glyphicon glyphicon-exclamation-sign': !isValid('description') }"></span>
                             </a>
-                        </li>                        
+                        </li>
                         <li routerLinkActive="active">
                             <a [routerLink]="['partinventory']" routerLinkActive="active">
-                                {{ 'Inventory' | translate }} 
+                                {{ 'Inventory' | translate }}
                             </a>
                         </li>
                         <li routerLinkActive="active">
                             <a [routerLink]="['partdimension']" routerLinkActive="active" *ngIf="item.ItemType === 'simple'">
-                                {{ 'Dimension' | translate }} 
+                                {{ 'Dimension' | translate }}
                                 <span matTooltip="{{'Required fields must be complete' | translate}}" attr.aria-label="{{ 'Required fields must be complete' | translate}}" [ngClass]="{'glyphicon glyphicon-exclamation-sign': !isValid('dimension')}"></span>
                             </a>
                         </li>
                         <li routerLinkActive="active">
                             <a [routerLink]="['partprice']" routerLinkActive="active">
-                                {{ 'Price' | translate }}  
+                                {{ 'Price' | translate }}
                                 <span matTooltip="{{'Required fields must be complete' | translate}}" attr.aria-label="{{ 'Required fields must be complete' | translate}}" [ngClass]="{'glyphicon glyphicon-exclamation-sign': !isValid('price')}"></span>
                             </a>
                         </li>
                         <li routerLinkActive="active">
                             <a [routerLink]="['partimage']" routerLinkActive="active">
-                                {{ 'Image' | translate }} 
+                                {{ 'Image' | translate }}
                             </a>
-                        </li>                         
-                    </ul>                
+                        </li>
+                    </ul>
                     <router-outlet></router-outlet>
                 </div>
             </div>
@@ -86,8 +86,8 @@
                         class="btn button-add button-add-options"
                         [disabled]="pendingSave"
                         [matMenuTriggerFor]="saveMenu"> <span class="fs-16 caret"></span>
-                </button> 
+                </button>
             </div>
         </div>
     </div>
-</div>    
+</div>

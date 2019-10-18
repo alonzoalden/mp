@@ -12,7 +12,7 @@ import { environment } from '../../../../../../environments/environment';
 })
 
 export class ItemAddPartSectionPartComponent implements OnInit {
-    private imageURL = environment.imageURL;
+    imageURL = environment.imageURL;
     isPM: boolean;
     errorMessage: string;
     itemlist: ItemList[];
@@ -82,7 +82,7 @@ export class ItemAddPartSectionPartComponent implements OnInit {
             if (!this.existVendorSKU(itemPart.PartItemVendorSKU, true)) {
                 this.pendingAdd = true;
 
-                if (itemPart.PartItemID && itemPart.PartItemID != 0) {
+                if (itemPart.PartItemID && itemPart.PartItemID !== 0) {
                     this.itemService.getItem(itemPart.PartItemID).subscribe(
                         (item: Item) => {
                             itemPart.PrevPartItemID = item.ItemID;
@@ -120,7 +120,7 @@ export class ItemAddPartSectionPartComponent implements OnInit {
         let counter: number = 0;
         this.currentItemPartSelectionInsert.ItemParts.forEach((value, index) => {
                 if (value.PartItemID === itemID) {
-                    if (isNew || index != this.currentItemPartSelectionInsert.ItemParts.length - 1) {
+                    if (isNew || index !== this.currentItemPartSelectionInsert.ItemParts.length - 1) {
                         counter += 1;
                     }
                 }
@@ -133,7 +133,7 @@ export class ItemAddPartSectionPartComponent implements OnInit {
         let counter: number = 0;
         this.currentItemPartSelectionInsert.ItemParts.forEach((value, index) => {
                 if (value.PartItemVendorSKU === vendorSKU) {
-                    if (isNew || index != this.currentItemPartSelectionInsert.ItemParts.length - 1) {
+                    if (isNew || index !== this.currentItemPartSelectionInsert.ItemParts.length - 1) {
                         counter += 1;
                     }
                 }
@@ -143,15 +143,15 @@ export class ItemAddPartSectionPartComponent implements OnInit {
     }
 
     onEditItemPart(index: number) {
-        if (this.currentIndex != index) {
+        if (this.currentIndex !== index) {
             this.currentItemPartSelectionInsert.ItemParts.forEach((itempart, i) => {
 
                 this.onChangeFOBPrice(itempart);
 
-                if (i != this.currentItemPartSelectionInsert.ItemParts.length - 1) {
-                    if (!itempart.PartItemName || itempart.PartItemName == ''
-                        || !itempart.PartItemVendorSKU || itempart.PartItemVendorSKU == ''
-                        || !itempart.PartFOBPrice || itempart.PartFOBPrice == 0 ) {
+                if (i !== this.currentItemPartSelectionInsert.ItemParts.length - 1) {
+                    if (!itempart.PartItemName || itempart.PartItemName === ''
+                        || !itempart.PartItemVendorSKU || itempart.PartItemVendorSKU === ''
+                        || !itempart.PartFOBPrice || itempart.PartFOBPrice === 0 ) {
 
                         this.currentItemPartSelectionInsert.ItemParts.splice(i, 1);
                         this.refreshDataSource(this.currentItemPartSelectionInsert.ItemParts);
@@ -168,9 +168,9 @@ export class ItemAddPartSectionPartComponent implements OnInit {
     }
 
     onPartItemChange(index: number, itemPart: any) {
-        if (this.currentItemPartSelectionInsert.ItemParts[index] && this.currentItemPartSelectionInsert.ItemParts[index].PartItemID && this.currentItemPartSelectionInsert.ItemParts[index].PartItemID != 0) {
+        if (this.currentItemPartSelectionInsert.ItemParts[index] && this.currentItemPartSelectionInsert.ItemParts[index].PartItemID && this.currentItemPartSelectionInsert.ItemParts[index].PartItemID !== 0) {
             if (!this.existItemID(this.currentItemPartSelectionInsert.ItemParts[index].PartItemID)) {
-                if (this.currentItemPartSelectionInsert.ItemParts[index].PartItemID && this.currentItemPartSelectionInsert.ItemParts[index].PartItemID != 0) {
+                if (this.currentItemPartSelectionInsert.ItemParts[index].PartItemID && this.currentItemPartSelectionInsert.ItemParts[index].PartItemID !== 0) {
                     this.pendingLoad = true;
                     this.itemService.getItem(this.currentItemPartSelectionInsert.ItemParts[index].PartItemID).subscribe(
                         (item: Item) => {
@@ -180,10 +180,8 @@ export class ItemAddPartSectionPartComponent implements OnInit {
                             this.currentItemPartSelectionInsert.ItemParts[index].PartTPIN = item.TPIN;
                             this.currentItemPartSelectionInsert.ItemParts[index].PartFOBPrice = item.FOBPrice;
                             this.currentItemPartSelectionInsert.ItemParts[index].PartPrice = item.Price;
-
                             this.currentItemPartSelectionInsert.ItemParts[index].ImageFilePath = item.ImagePath;
                             this.currentItemPartSelectionInsert.ItemParts[index].IsNewImage = false;
-
                             this.refreshDataSource(this.currentItemPartSelectionInsert.ItemParts);
                             this.pendingLoad = false;
                         },
@@ -195,8 +193,8 @@ export class ItemAddPartSectionPartComponent implements OnInit {
                     );
                 }
             } else {
-                //This prevents select input value from changing into an existing value
-                let originalItem = this.selectionCategoriesRef._results[index].itemsList.items
+                // This prevents select input value from changing into an existing value
+                const originalItem = this.selectionCategoriesRef._results[index].itemsList.items
                             .find(item => item.value.ItemID === this.currentItemPartSelectionInsert.ItemParts[index].PrevPartItemID);
                 this.selectionCategoriesRef._results[index].itemsList.select(originalItem);
 
@@ -305,7 +303,6 @@ export class ItemAddPartSectionPartComponent implements OnInit {
             this.isLoadingData = true;
             const formData: FormData = new FormData();
             for (let i = 0; i < this.filesToUpload.length; i++) {
-                let reader = new FileReader();
                 formData.append('uploadedFiles', this.filesToUpload[i], this.filesToUpload[i].name);
             }
 

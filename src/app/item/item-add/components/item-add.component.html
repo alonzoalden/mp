@@ -19,16 +19,6 @@
 <div class="wrapper wrapper-content animated fadeIn">
     <div class="row">
         <div class="col-lg-12">
-            <!-- <div *ngIf="loading" style="text-align:center">
-                <img src="../../../assets/images/loader.gif" alt="Loading" />
-            </div> -->
-            <!-- <div *ngIf="isLoading" class="m-t-xl">
-                <div class="sk-spinner sk-spinner-three-bounce big-spinner">
-                    <div class="sk-bounce1"></div>
-                    <div class="sk-bounce2"></div>
-                    <div class="sk-bounce3"></div>
-                </div>
-            </div> -->
             <div>
                 <div class="tabs-container">
                     <ul class="nav nav-tabs">
@@ -46,45 +36,45 @@
                         </li>
                         <li routerLinkActive="active">
                             <a [routerLink]="['dimension']" routerLinkActive="active" *ngIf="item?.ItemType === 'simple'">
-                                {{ 'Dimension' | translate }} 
+                                {{ 'Dimension' | translate }}
                                 <span matTooltip="Required fields must be complete" attr.aria-label="{{ 'Required fields must be complete' | translate}}" [ngClass]="{'glyphicon glyphicon-exclamation-sign': !isValid('dimension')}"></span>
                             </a>
                         </li>
                         <li routerLinkActive="active">
                             <a [routerLink]="['price']" routerLinkActive="active">
-                                {{ 'Price' | translate }}  
+                                {{ 'Price' | translate }}
                                 <span matTooltip="Required fields must be complete" attr.aria-label="{{ 'Required fields must be complete' | translate}}" [ngClass]="{'glyphicon glyphicon-exclamation-sign': !isValid('price')}"></span>
                             </a>
                         </li>
                         <li routerLinkActive="active">
                             <a [routerLink]="['productrelation']" routerLinkActive="active">
-                                {{ 'Product Relation' | translate }} 
+                                {{ 'Product Relation' | translate }}
                             </a>
                         </li>
                         <li routerLinkActive="active">
                             <a [routerLink]="['category']" routerLinkActive="active">
-                                {{ 'Category' | translate }} 
+                                {{ 'Category' | translate }}
                                 <span matTooltip="Required fields must be complete" attr.aria-label="{{ 'Required fields must be complete' | translate}}" [ngClass]="{'glyphicon glyphicon-exclamation-sign': !isValid('category')}"></span>
                             </a>
                         </li>
                         <li routerLinkActive="active">
                             <a [routerLink]="['attachment']" routerLinkActive="active">
-                                {{ 'Attachment' | translate }} 
+                                {{ 'Attachment' | translate }}
                             </a>
                         </li>
                         <li routerLinkActive="active">
                             <a [routerLink]="['video']" routerLinkActive="active">
-                                {{ 'Video' | translate }} 
+                                {{ 'Video' | translate }}
                             </a>
                         </li>
                         <li routerLinkActive="active">
                             <a [routerLink]="['image']" routerLinkActive="active">
-                                {{ 'Image' | translate }} 
+                                {{ 'Image' | translate }}
                             </a>
                         </li>
                         <li routerLinkActive="active">
                             <a [routerLink]="['part']" routerLinkActive="active">
-                                {{ 'Part' | translate }} 
+                                {{ 'Part' | translate }}
                             </a>
                         </li>
                     </ul>
@@ -94,7 +84,7 @@
         </div>
     </div>
     <br />
-    
+
     <div class="button-bottom-row" >
         <button mat-button
                 type="button"
@@ -110,7 +100,6 @@
                 <div *ngIf="pendingAdd">
                     <i class="fa fa-spinner fa-spin"></i>
                 </div>
-        </button>  
+        </button>
     </div>
 </div>
-<!-- <div *ngIf="errorMessage">{{errorMessage}}</div> -->

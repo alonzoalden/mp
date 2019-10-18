@@ -1,4 +1,4 @@
-import { Component, Input, Output, EventEmitter, OnInit, OnChanges, SimpleChanges } from '@angular/core';
+import { Component, Input, Output, EventEmitter, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { ItemInsert } from '../../../shared/class/item';
 import { VendorBrand } from '../../../shared/class/vendor-brand';
@@ -10,13 +10,12 @@ import { ItemService } from '../../item.service';
   styleUrls: ['./item-add.component.css']
 })
 
-export class ItemAddComponent implements OnInit, OnChanges {
+export class ItemAddComponent implements OnInit {
     @Input() vendorBrandList: VendorBrand[];
     @Input() isLoading: boolean;
     @Input() item: ItemInsert;
     @Input() errorMessage: string;
     @Input() pendingAdd: boolean;
-
     @Output() addItem = new EventEmitter<ItemInsert>();
     @Output() setItem = new EventEmitter<ItemInsert>();
 
@@ -25,7 +24,6 @@ export class ItemAddComponent implements OnInit, OnChanges {
     constructor(private router: Router,
                 private itemService: ItemService) {
     }
-    ngOnChanges(changes: SimpleChanges) { }
     ngOnInit() {
         this.setItem.emit(this.itemService.defaultCurrentItemInsert());
     }
@@ -122,7 +120,7 @@ export class ItemAddComponent implements OnInit, OnChanges {
 
     isItemNameValid(): boolean {
         if (this.item.VendorBrandID) {
-            if (this.item.Name.toLowerCase().includes(this.vendorBrandList.find(x => x.VendorBrandID == Number(this.item.VendorBrandID)).BrandName.toLowerCase())) {
+            if (this.item.Name.toLowerCase().includes(this.vendorBrandList.find(x => x.VendorBrandID === Number(this.item.VendorBrandID)).BrandName.toLowerCase())) {
                 this.itemService.sendNotification({ type: 'error', title: 'Invalid Entry', content: '"Brand" should not be included in "Item Name"' });
                 return false;
             } else {
@@ -134,7 +132,7 @@ export class ItemAddComponent implements OnInit, OnChanges {
     }
 
     isSKUValid(): boolean {
-        let regex = /^[\w\-]*$/g;
+        const regex = /^[\w\-]*$/g;
 
         if (regex.test(this.item.VendorSKU)) {
             return true;
@@ -145,10 +143,10 @@ export class ItemAddComponent implements OnInit, OnChanges {
     }
 
     isBundleValid(): boolean {
-        if (this.item.ItemType == 'bundle') {
+        if (this.item.ItemType === 'bundle') {
             let _ret = true;
             this.item.ItemOptions.forEach((option, index) => {
-                if ( (!option.ItemSelections || option.ItemSelections.length === 1) && index != this.item.ItemOptions.length - 1) {
+                if ( (!option.ItemSelections || option.ItemSelections.length === 1) && index !== this.item.ItemOptions.length - 1) {
                     this.itemService.sendNotification({ type: 'error', title: 'Invalid Entry', content: 'Selection is required for a Bundle Option "' + option.Title + '"' });
                     _ret = false;
                 }
@@ -213,7 +211,7 @@ export class ItemAddComponent implements OnInit, OnChanges {
     }
 
     validateDimension() {
-        return (this.item.ItemType != 'simple' || (this.item.Width &&
+        return (this.item.ItemType !== 'simple' || (this.item.Width &&
             this.item.Height &&
             this.item.Weight &&
             this.item.Length &&
@@ -226,7 +224,6 @@ export class ItemAddComponent implements OnInit, OnChanges {
 
     validatePrice() {
         return (this.item.PriceType === 'Dynamic' || this.item.Price) && (this.item.FOBPrice || this.item.DropshipPrice);
-        //return (this.item.Price && this.item.FOBPrice);
     }
 
     validateCategory() {

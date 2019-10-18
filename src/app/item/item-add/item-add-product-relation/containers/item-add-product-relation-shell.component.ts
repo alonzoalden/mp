@@ -2,7 +2,7 @@ import { Component, OnDestroy, OnInit } from '@angular/core';
 import { takeWhile } from 'rxjs/operators';
 import { Member } from 'app/shared/class/member';
 import { Observable } from 'rxjs';
-import { ItemInsert, ItemList, ItemTierPriceInsert, ItemCrossSellInsert, ItemUpSellInsert, ItemRelatedProductInsert, ItemUpSell } from 'app/shared/class/item';
+import { ItemInsert, ItemList, ItemCrossSellInsert, ItemUpSellInsert, ItemRelatedProductInsert } from 'app/shared/class/item';
 import { MatTableDataSource } from '@angular/material';
 import { Store, select } from '@ngrx/store';
 import * as itemActions from '../../../state/item.actions';
@@ -16,19 +16,15 @@ import * as fromUser from '../../../../shared/state/user-state.reducer';
 export class ItemAddProductRelationShellComponent implements OnInit, OnDestroy {
     componentActive: boolean = true;
     currentMember: Member;
-
     item$: Observable<ItemInsert>;
     errorMessage$: Observable<string>;
     isItemListLoading$: Observable<boolean>;
     userInfo$: Observable<Member>;
     itemList$: Observable<ItemList[]>;
     allItemList$: Observable<ItemList[]>;
-
     itemRelatedProductsMatTable$: Observable<MatTableDataSource<ItemRelatedProductInsert>>;
     itemCrossSellsMatTable$: Observable<MatTableDataSource<ItemCrossSellInsert>>;
-
     itemUpSellsMatTable$: Observable<MatTableDataSource<ItemUpSellInsert>>;
-
     itemUpSells$: Observable<ItemUpSellInsert[]>;
 
     constructor(

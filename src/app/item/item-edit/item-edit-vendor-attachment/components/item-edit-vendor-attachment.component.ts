@@ -1,9 +1,8 @@
 import { Component, OnInit, OnChanges, Input, Output, EventEmitter, SimpleChanges } from '@angular/core';
 import { MatTableDataSource } from '@angular/material';
-import { Item, ItemList, ItemAttachment, ItemInsert, ItemAttachmentInsert } from '../../../../shared/class/item';
+import { Item, ItemAttachment } from '../../../../shared/class/item';
 import { ItemService } from '../../../item.service';
-import { VendorAttachmentList, VendorAttachment } from '../../../../shared/class/vendor-attachment';
-
+import { VendorAttachmentList } from '../../../../shared/class/vendor-attachment';
 import { environment } from '../../../../../environments/environment';
 
 @Component({
@@ -12,7 +11,6 @@ import { environment } from '../../../../../environments/environment';
 })
 
 export class ItemEditVendorAttachmentComponent implements OnInit, OnChanges {
-    private fileURL = environment.fileURL;
     @Input() errorMessage: string;
     @Input() isVendorAttachmentsListLoading: boolean;
     @Input() item: Item;
@@ -20,7 +18,7 @@ export class ItemEditVendorAttachmentComponent implements OnInit, OnChanges {
     @Input() vendorAttachmentsList: VendorAttachmentList[];
     @Output() getVendorAttachmentList = new EventEmitter<void>();
     @Output() getAttachment = new EventEmitter<ItemAttachment>();
-
+    fileURL = environment.fileURL;
     displayedColumns = ['Add', 'Down', 'Position', 'Up', 'View', 'AttachmentID', 'Title', 'FileName', 'Remove'];
     pendingAdd: boolean;
     currentIndex: number;
@@ -65,21 +63,6 @@ export class ItemEditVendorAttachmentComponent implements OnInit, OnChanges {
             if (!this.existAttachment(itemAttachment.VendorAttachmentID, true)) {
                 this.pendingAdd = true;
                 this.getAttachment.emit(itemAttachment);
-                // this.itemService.getAttachment(itemAttachment.VendorAttachmentID).subscribe(
-                //     (attachment: VendorAttachment) => {
-                //         itemAttachment.Title = attachment.Title;
-                //         if(attachment.UploadedFile) {
-                //             itemAttachment.FileName = attachment.UploadedFile.substring(5);
-                //         }
-                //         itemAttachment.UploadedFile = attachment.UploadedFile;
-                //         itemAttachment.pendingAdd = false;
-                //     },
-                //     (error: any) => {
-                //         this.errorMessage = <any>error;
-                //         this.itemService.sendNotification({ type: 'error', title: 'Error', content: this.errorMessage });
-                //     }
-                // );
-
                 this.addPendingLine();
                 this.refreshDataSource(this.item.ItemAttachments);
             } else {
@@ -112,7 +95,7 @@ export class ItemEditVendorAttachmentComponent implements OnInit, OnChanges {
         let counter: number = 0;
         this.item.ItemAttachments.forEach((value, index) => {
                 if (value.VendorAttachmentID === vendorAttachmentID) {
-                    if (isNew || index != this.item.ItemRelatedProducts.length - 1) {
+                    if (isNew || index !== this.item.ItemRelatedProducts.length - 1) {
                         counter += 1;
                     }
                 }

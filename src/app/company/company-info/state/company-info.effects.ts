@@ -105,7 +105,7 @@ export class CompanyInfoEffects {
         map((action: companyInfoActions.UpdateCompanyInfoShippingAddress) => action.payload),
         mergeMap((companyinfo) =>
             this.companyService.editCompanyInfoShippingAddress(companyinfo).pipe(
-                map(companyinfo => {
+                map(() => {
                     this.companyService.sendNotification({ type: 'success', title: 'Successfully Updated', content: 'Shipping address has been updated' });
                     return (new companyInfoActions.UpdateCompanyInfoShippingAddressSuccess(companyinfo));
                 }),
@@ -124,7 +124,7 @@ export class CompanyInfoEffects {
         map((action: companyInfoActions.UpdateCompanyInfoBillingAddress) => action.payload),
         mergeMap((companyinfo) =>
             this.companyService.editCompanyInfoBillingAddress(companyinfo).pipe(
-                map(companyinfo => {
+                map(() => {
                     this.companyService.sendNotification({ type: 'success', title: 'Successfully Updated', content: 'Billing address has been updated' });
                     return (new companyInfoActions.UpdateCompanyInfoBillingAddressSuccess(companyinfo));
                 }),

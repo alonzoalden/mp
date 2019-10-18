@@ -33,7 +33,6 @@ import { ItemBatchUpdateSelectShellComponent } from './item-batch/item-batch-upd
 import { ItemBatchUpdateUpdateShellComponent } from './item-batch/item-batch-update/containers/item-batch-update-shell/item-batch-update-update-shell/item-batch-update-update-shell.component';
 import { ItemAddPartShellComponent } from './item-add/item-add-part/containers/item-add-part-shell.component';
 import { ItemEditPartShellComponent } from './item-edit/item-edit-part/containers/item-edit-part-shell.component';
-import { ItemPartListComponentItemPrintDialog } from './item-part/components/item-part-list/item-part-list.component';
 import { ItemPartListShellComponent } from './item-part/containers/item-part-list-shell/item-part-list-shell.component';
 import { ItemPartAddShellComponent } from './item-part/containers/item-part-add-shell/item-part-add-shell/item-part-add-shell.component';
 import { ItemPartAddDescriptionShellComponent } from './item-part/containers/item-part-add-shell/item-part-add-description-shell/item-part-add-description-shell.component';
@@ -47,8 +46,6 @@ import { ItemPartEditPriceShellComponent } from './item-part/containers/item-par
 import { ItemPartEditImageShellComponent } from './item-part/containers/item-part-edit-shell/item-part-edit-image-shell/item-part-edit-image-shell.component';
 import { ItemPartEditInventoryShellComponent } from './item-part/containers/item-part-edit-shell/item-part-edit-inventory-shell/item-part-edit-inventory-shell.component';
 import { PageNotFoundComponent } from './page-not-found.component';
-import { ItemVariationSelectItemComponentDialog } from './item-variation/item-variation-select-item.component-dialog';
-import { ItemVariationComponentDialog } from './item-variation/item-variation.component-dialog';
 import { ItemVariationListComponent } from './item-variation/item-variation-list.component';
 import { ItemVariationDetailComponent } from './item-variation/item-variation-detail.component';
 import { ItemEditVariationComponent } from './item-edit/item-edit-variation.component';
@@ -64,10 +61,6 @@ const ITEM_ROUTES: Routes = [
             {
                 path: 'printlabel',
                 component: ItemPrintLabelShellComponent
-            },
-            {
-                path: 'printlabel',
-                component: ItemPartListComponentItemPrintDialog
             },
             {
                 path: 'add',

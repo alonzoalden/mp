@@ -42,7 +42,4 @@ export class InboundShipmentEditCartonShellComponent  implements OnInit {
     downloadCartonLabelCount(payload: { carton: Carton, count: number, border: string}): void {
         this.store.dispatch(new inboundShipmentActions.DownloadCartonLabelCount(payload));
     }
-
-
-
 }

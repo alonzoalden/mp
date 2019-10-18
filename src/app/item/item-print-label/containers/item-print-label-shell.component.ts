@@ -1,6 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { Router, ActivatedRoute } from '@angular/router';
-import { MatDialog, MatTableDataSource } from '@angular/material';
+import { MatTableDataSource } from '@angular/material';
 
 import { Observable } from 'rxjs';
 import { Store, select } from '@ngrx/store';
@@ -29,8 +28,10 @@ export class ItemPrintLabelShellComponent implements OnInit  {
         this.userInfo$ = this.store.pipe(select(fromUser.getCurrentUser));
         this.itemList$ = this.store.pipe(select(fromItem.getItemList));
         this.itemPrintLabelsMatTable$ = this.store.pipe(select(fromItem.getItemPrintLabelsMatTable));
-        this.isLoading$ = this.store.pipe(select(fromItem.getIsLoading));
         this.errorMessage$ = this.store.pipe(select(fromItem.getError));
+        setTimeout(() => {
+            this.isLoading$ = this.store.pipe(select(fromItem.getIsLoading));
+        });
     }
     getItemList(): void {
         this.store.dispatch(new itemActions.LoadItemList());

@@ -20,8 +20,8 @@
 }
 .center-block .sales-order-actions > button,
 .center-block .sales-order-actions > a {
-    width: 170px;
-    /* margin: 0 auto; */
+    width: 100%;
+    min-width: 190px;
     margin-bottom: 20px;
     display: block;
 }

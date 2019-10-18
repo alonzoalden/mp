@@ -1,8 +1,6 @@
 <div class="row wrapper border-bottom white-bg page-heading">
     <div class="col-lg-10">
-        <!-- <h2 *ngIf="fulfilledby =='merchant'">
-            Sales Orders: Fulfilled By {{fulfilledby | titlecase}}
-        </h2> -->
+
         <h2 *ngIf="fulfilledby =='merchant'">
             {{ 'Sales Orders: Fulfilled By Merchant' | translate }}
         </h2>
@@ -14,7 +12,6 @@
                 <a [routerLink]="['/dashboard']" >{{ 'Home' | translate }}</a>
             </li>
             <li class="active">
-                <!-- <strong>Sales Orders ({{fulfilledby | titlecase}})</strong> -->
                 <strong *ngIf="fulfilledby =='merchant'">{{ 'Sales Orders (Merchant)' | translate }}</strong>
                 <strong *ngIf="fulfilledby !='merchant'">{{ 'Sales Orders (Toolots)' | translate }}</strong>
             </li>
@@ -25,34 +22,34 @@
     <div class="row">
         <div class="col-lg-12">
             <div class="tabs-container">
-                <ul class="nav nav-tabs" >                    
-                    <li [ngClass]="{'active': fulfilledby =='merchant' && status == 'unshipped', 'disabled': disabledWhileLoading('unshipped')}" *ngIf="fulfilledby =='merchant'">         
+                <ul class="nav nav-tabs" >
+                    <li [ngClass]="{'active': fulfilledby =='merchant' && status == 'unshipped', 'disabled': disabledWhileLoading('unshipped')}" *ngIf="fulfilledby =='merchant'">
                         <a (click)="disabledWhileLoading('unshipped') ? '' : onFilterChange('merchant','unshipped')">{{ 'Unshipped' | translate }}</a>
                     </li>
-                    <li [ngClass]="{'active': fulfilledby =='merchant' && status == 'shipped', 'disabled': disabledWhileLoading('shipped')}" *ngIf="fulfilledby =='merchant'">         
+                    <li [ngClass]="{'active': fulfilledby =='merchant' && status == 'shipped', 'disabled': disabledWhileLoading('shipped')}" *ngIf="fulfilledby =='merchant'">
                         <a (click)="disabledWhileLoading('shipped') ? '' : onFilterChange('merchant','shipped')">{{ 'Shipped' | translate }}</a>
                     </li>
-                    <li [ngClass]="{'active': fulfilledby =='merchant' && status == 'canceled', 'disabled': disabledWhileLoading('canceled')}" *ngIf="fulfilledby =='merchant'">         
+                    <li [ngClass]="{'active': fulfilledby =='merchant' && status == 'canceled', 'disabled': disabledWhileLoading('canceled')}" *ngIf="fulfilledby =='merchant'">
                         <a (click)="disabledWhileLoading('canceled') ? '' : onFilterChange('merchant','canceled')">{{ 'Canceled' | translate }}</a>
                     </li>
-                    <li [ngClass]="{'active': fulfilledby =='toolots' && status == 'unshipped', 'disabled': disabledWhileLoading('unshipped')}" *ngIf="fulfilledby =='toolots'">         
+                    <li [ngClass]="{'active': fulfilledby =='toolots' && status == 'unshipped', 'disabled': disabledWhileLoading('unshipped')}" *ngIf="fulfilledby =='toolots'">
                         <a (click)="disabledWhileLoading('unshipped') ? '' : onFilterChange('toolots','unshipped')">{{ 'Unshipped' | translate }}</a>
                     </li>
-                    <li [ngClass]="{'active': fulfilledby =='toolots' && status == 'shipped', 'disabled': disabledWhileLoading('shipped')}" *ngIf="fulfilledby =='toolots'">         
+                    <li [ngClass]="{'active': fulfilledby =='toolots' && status == 'shipped', 'disabled': disabledWhileLoading('shipped')}" *ngIf="fulfilledby =='toolots'">
                         <a (click)="disabledWhileLoading('shipped') ? '' : onFilterChange('toolots','shipped')">{{ 'Shipped' | translate }}</a>
                     </li>
-                    <li [ngClass]="{'active': fulfilledby =='toolots' && status == 'canceled', 'disabled': disabledWhileLoading('canceled')}" *ngIf="fulfilledby =='toolots'">         
+                    <li [ngClass]="{'active': fulfilledby =='toolots' && status == 'canceled', 'disabled': disabledWhileLoading('canceled')}" *ngIf="fulfilledby =='toolots'">
                         <a (click)="disabledWhileLoading('canceled') ? '' : onFilterChange('toolots','canceled')">{{ 'Canceled' | translate }}</a>
                     </li>
                 </ul>
-                
+
                 <div class="tab-content">
                     <div class="tab-pane active">
                         <div class="panel-body p-w-none">
                             <div class="ibox float-e-margins">
                                 <div class="ibox-title"><h5>{{ 'View Sales Orders' | translate }}</h5></div>
                                 <div class="toolbar-search-1">
-                                    <i class="fa fa-search search-icon-adjust" [ngClass]="this.salesOrdersMatTable?.filter ? 'selected' : ''" aria-label="Icon for Filter By Input Bar" (click)="FilterBy.select()"></i> 
+                                    <i class="fa fa-search search-icon-adjust" [ngClass]="this.salesOrdersMatTable?.filter ? 'selected' : ''" aria-label="Icon for Filter By Input Bar" (click)="FilterBy.select()"></i>
                                     <input (keyup)="applyFilter($event.target.value)" placeholder="{{ 'Filter By' | translate }}" class="form-control" #FilterBy>
                                 </div>
                                 <div class="ibox-content">
@@ -66,7 +63,7 @@
                                     <div class="table-responsive" *ngIf="!isLoading">
                                         <p *ngIf="!salesOrdersMatTable || (salesOrdersMatTable && salesOrdersMatTable.data && salesOrdersMatTable.data.length < 1)" class="m-l-xl m-t-md">{{ 'There are no sales orders to display.' | translate }}</p>
                                         <table mat-table #table [dataSource]="salesOrdersMatTable" class="table animated fadeIn" matSort>
-                                            
+
                                             <!-- Menu Column -->
                                             <ng-container matColumnDef="Menu">
                                                 <th mat-header-cell *matHeaderCellDef width="120px"></th>
@@ -74,22 +71,22 @@
                                                     <div *ngIf="fulfilledby == 'merchant'">
                                                         <button mat-button [matMenuTriggerFor]="menu"><i class="fa fa-bars fa-2x"></i></button>
                                                         <mat-menu #menu="matMenu">
-                                                            <button mat-menu-item [routerLink]="['/', 'sales-order', 'view', fulfilledby, salesorder.OrderID, 'detail']">{{ 'View Details' | translate }}</button> 
-                                                            <button mat-menu-item (click)="onPrintPackingSlip(salesorder)">{{ 'Print Packing Slip' | translate }}</button> 
-                                                            <button mat-menu-item [routerLink]="['/', 'sales-order', 'view', fulfilledby, salesorder.OrderID, 'fulfillment']" *ngIf="salesorder.Status != 'Canceled'">{{ 'Manage Shipments' | translate }}</button> 
-                                                            <button mat-menu-item (click)="setSalesOrder.emit(salesorder)" [routerLink]="['/', 'sales-order', salesorder.OrderID, 'cancellation']" *ngIf="salesorder.Status != 'Canceled'">{{ 'Cancel Order' | translate }}</button>                                                                          
+                                                            <button mat-menu-item [routerLink]="['/', 'sales-order', 'view', fulfilledby, salesorder.OrderID, 'detail']">{{ 'View Details' | translate }}</button>
+                                                            <button mat-menu-item (click)="onPrintPackingSlip(salesorder)">{{ 'Print Packing Slip' | translate }}</button>
+                                                            <button mat-menu-item [routerLink]="['/', 'sales-order', 'view', fulfilledby, salesorder.OrderID, 'fulfillment']" *ngIf="salesorder.Status != 'Canceled'">{{ 'Manage Shipments' | translate }}</button>
+                                                            <button mat-menu-item (click)="setSalesOrder.emit(salesorder)" [routerLink]="['/', 'sales-order', salesorder.OrderID, 'cancellation']" *ngIf="salesorder.Status != 'Canceled'">{{ 'Cancel Order' | translate }}</button>
                                                         </mat-menu>
                                                     </div>
                                                     <div *ngIf="fulfilledby != 'merchant'">
                                                         <button mat-button [matMenuTriggerFor]="menu"><i class="fa fa-bars fa-2x"></i></button>
                                                         <mat-menu #menu="matMenu">
                                                             <button mat-menu-item [routerLink]="['/', 'sales-order', 'view', fulfilledby, salesorder.OrderID, 'detail']">{{ 'View Detail' | translate }}</button>
-                                                            <button mat-menu-item [routerLink]="['/', 'sales-order', 'view', fulfilledby, salesorder.OrderID, 'fulfillment']" *ngIf="salesorder.Status != 'Canceled'">{{ 'View Shipments' | translate }}</button> 
+                                                            <button mat-menu-item [routerLink]="['/', 'sales-order', 'view', fulfilledby, salesorder.OrderID, 'fulfillment']" *ngIf="salesorder.Status != 'Canceled'">{{ 'View Shipments' | translate }}</button>
                                                         </mat-menu>
                                                     </div>
                                                 </td>
                                             </ng-container>
-                                            
+
                                             <!-- Product Info Column -->
                                             <ng-container matColumnDef="ProductInfo">
                                                 <th mat-header-cell *matHeaderCellDef width="240px">{{ 'Product Info' | translate }}</th>
@@ -98,7 +95,7 @@
                                                         <div class="col-xs-12">
                                                             <div class="flex">
                                                                 <div class="col-label">
-                                                                    <span class="sm-text2">Order #</span>                                                                    
+                                                                    <span class="sm-text2">Order #</span>
                                                                     <span class="sm-text2">Transaction Date</span>
                                                                     <span class="sm-text2">Ship By</span>
                                                                     <span class="sm-text2">Customer Name</span>
@@ -112,16 +109,6 @@
                                                             </div>
                                                         </div>
                                                     </div>
-<!-- 
-                                                    <div class="row">
-                                                        <div class="col-xs-6"><span class="sm-text2">Order #</span></div><div class="col-xs-5"><a class="sm-strong" [routerLink]="['/', 'sales-order', fulfilledby, salesorder.OrderID, 'detail']">{{salesorder.IncrementID}}</a></div> 
-                                                    </div>
-                                                    <div class="row">
-                                                        <div class="col-xs-6"><span class="sm-text2">Transaction Date</span></div><div class="col-xs-5"><span>{{salesorder.TransactionDate | date}}</span></div> 
-                                                    </div>
-                                                    <div class="row">
-                                                        <div class="col-xs-6"><span class="sm-text2">Ship By</span></div><div class="col-xs-5"><span>{{salesorder.ShipByDate | date}}</span></div> 
-                                                    </div> -->
                                                 </td>
                                             </ng-container>
 
@@ -137,10 +124,10 @@
                                                             <div class="col-xs-12 "><span class="sm-strong"><a [href]="linkURL + '/' + salesorderline.URLKey + '.html'" target="_blank">{{salesorderline.ItemName}}</a></span></div>
                                                         </div>
                                                         <div class="row">
-                                                            <div class="col-xs-12 "> <span class="sm-text m-r-xs">SKU: </span> {{salesorderline.ItemVendorSKU}}</div> 
+                                                            <div class="col-xs-12 "> <span class="sm-text m-r-xs">SKU: </span> {{salesorderline.ItemVendorSKU}}</div>
                                                         </div>
                                                         <div class="row">
-                                                            <div class="col-xs-12 "><span class="sm-text m-r-xs">TPIN: </span> {{salesorderline.TPIN}}</div>                                         
+                                                            <div class="col-xs-12 "><span class="sm-text m-r-xs">TPIN: </span> {{salesorderline.TPIN}}</div>
                                                         </div>
                                                     </div>
                                                 </td>
@@ -151,7 +138,7 @@
                                                 <th mat-header-cell *matHeaderCellDef mat-sort-header width="100px">{{ 'Order #' | translate }}</th>
                                                 <td mat-cell *matCellDef="let salesorder"><a [routerLink]="['/', 'sales-order', fulfilledby, salesorder.OrderID, 'detail']">{{salesorder.IncrementID}}</a></td>
                                             </ng-container>
-                                    
+
                                             <!-- Transaction Date Column -->
                                             <ng-container matColumnDef="TransactionDate">
                                                 <th mat-header-cell *matHeaderCellDef mat-sort-header width="100px">{{ 'Transaction Date' | translate }}</th>
@@ -178,7 +165,7 @@
                                             <!-- Item Name Column -->
                                             <ng-container matColumnDef="ItemName">
                                                 <th mat-header-cell *matHeaderCellDef width="240px"></th>
-                                                <td mat-cell *matCellDef="let salesorder" class="wrap">                                    
+                                                <td mat-cell *matCellDef="let salesorder" class="wrap">
                                                     <div *ngIf="salesorder.LineCount == 1">
                                                         <a class="sm-strong" [href]="linkURL + '/' + salesorder.URLKey + '.html'" target="_blank">{{salesorder.ItemName}}</a>
                                                     </div>
@@ -187,34 +174,28 @@
                                                     </div>
                                                 </td>
                                             </ng-container>
-                                            
+
                                             <!-- Shipping Method Column -->
                                             <ng-container matColumnDef="ShippingMethod">
                                                 <th mat-header-cell *matHeaderCellDef mat-sort-header width="190px">{{ 'Shipping Method' | translate }}</th>
                                                 <td mat-cell *matCellDef="let salesorder" class="wrap col-ellipsis">{{salesorder.ShippingMethod}}</td>
                                             </ng-container>
-                                    
+
                                             <!-- Sales Status Column -->
                                             <ng-container matColumnDef="Status">
                                                 <th mat-header-cell *matHeaderCellDef mat-sort-header width="120px">{{ 'Status' | translate }}</th>
                                                 <td mat-cell *matCellDef="let salesorder">
-                                                    <div *ngIf="fulfilledby =='merchant' && status === 'unshipped' && isShipmentLate(salesorder.ShipByDate)" class="block label label-danger max-100"> {{ 'Shipment Late' | translate }} <span matTooltip="Warning! Shipment late" class="glyphicon glyphicon-info-sign"></span> </div>  
+                                                    <div *ngIf="fulfilledby =='merchant' && status === 'unshipped' && isShipmentLate(salesorder.ShipByDate)" class="block label label-danger max-100"> {{ 'Shipment Late' | translate }} <span matTooltip="Warning! Shipment late" class="glyphicon glyphicon-info-sign"></span> </div>
                                                     <div class="m-t-xs block label max-100">{{ salesorder.Status | translate }}</div>
                                                 </td>
                                             </ng-container>
 
-                                            <!-- Fulfilled By Column -->
-                                            <!-- <ng-container matColumnDef="FulfilledBy">
-                                                <th mat-header-cell *matHeaderCellDef mat-sort-header width="100px">Fulfilled By</th>
-                                                <td mat-cell *matCellDef="let salesorder">{{salesorder.FulfilledBy}}</td>
-                                            </ng-container> -->
-                                    
                                             <!-- Vendor Total Column -->
                                             <ng-container matColumnDef="VendorTotal">
                                                 <th mat-header-cell *matHeaderCellDef mat-sort-header width="110px">{{ 'Vendor Total' | translate }}</th>
                                                 <td mat-cell *matCellDef="let salesorder">{{salesorder.VendorTotal | currency}}</td>
                                             </ng-container>
-                                    
+
                                             <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
                                             <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
                                         </table>

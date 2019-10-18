@@ -7,15 +7,13 @@
                     <div class="ibox-content animated fadeIn" style="min-height: 300px;">
                         <div class="form-group row">
                             <div class="col-md-12">
-                                    
                                 <div *ngIf="item.ItemImages.length && item.ItemImages.length > 0">
-                                    
                                     <table class="animated fadeIn" mat-table #table [dataSource]="dataSource">
                                         <!-- Add Button -->
                                         <ng-container matColumnDef="Add">
                                             <th mat-header-cell *matHeaderCellDef width="45px"></th>
                                             <td mat-cell *matCellDef="let itemImage; let i = index">
-                                                <div *ngIf="i === item.ItemImages.length-1 && i < 8">                               
+                                                <div *ngIf="i === item.ItemImages.length-1 && i < 8">
                                                     <a (click)='onAddItemImage(itemImage); formDirty = false;'><span [matTooltip]="itemImage.Raw ? ('Add' | translate) : ('Required fields must be complete' | translate)" class="glyphicon glyphicon-plus fs-20" [ngClass]="itemImage.Raw ? 'green' : 'gray'"></span></a>
                                                 </div>
                                                 <div *ngIf="i === item.ItemImages.length-1 && i >= 8">
@@ -29,7 +27,7 @@
                                             <td mat-cell *matCellDef="let itemImage; let i = index">
                                                 <div *ngIf="i < item.ItemImages.length-2">
                                                     <a (click)='moveDownPosition(itemImage)' *ngIf='i !== item.ItemImages.length - 1'><span class="glyphicon glyphicon-arrow-down"></span></a>
-                                                </div>                                            
+                                                </div>
                                             </td>
                                         </ng-container>
                                         <!-- Position Column -->
@@ -49,25 +47,24 @@
                                                     <a (click)='moveUpPosition(itemImage)' *ngIf='i !== 0'><span class="glyphicon glyphicon-arrow-up"></span></a>
                                                 </div>
                                             </td>
-                                        </ng-container> 
+                                        </ng-container>
                                         <!-- Thumbnail Column -->
                                         <ng-container matColumnDef="Thumbnail">
                                             <th mat-header-cell *matHeaderCellDef width="100px"></th>
-                                            <td mat-cell *matCellDef="let itemImage; let i = index" width="100px" height="80px" class="thumbnail-col">      
-                                                <!-- <input type="file" id="fileUpload" style="display: none;" (change)="fileChangeEvent($event, itemImage);  i === item.ItemImages.length-1 && canAdd = true; formDirty = true;" accept=".*" #fileUpload> -->
+                                            <td mat-cell *matCellDef="let itemImage; let i = index" width="100px" height="80px" class="thumbnail-col">
                                                 <input type="file" id="fileUpload" class="hidden"
-                                                    (change)="fileChangeEvent($event, itemImage); formDirty = true;" 
-                                                    accept="image/gif,image/jpeg,image/png,.jpeg,.jpg,.png" 
+                                                    (change)="fileChangeEvent($event, itemImage); formDirty = true;"
+                                                    accept="image/gif,image/jpeg,image/png,.jpeg,.jpg,.png"
                                                     #fileUpload>
 
                                                 <div *ngIf="i === item.ItemImages.length-1 && !itemImage.Raw && !pendingUpload">
                                                     <button type="button" class="btn btn-primary" (click)="fileUpload.click();"><i class="fa fa-file-image-o"></i>  {{ 'Browse' | translate }}</button>
-                                                </div>    
-                                                <div *ngIf="itemImage.Raw && ( !pendingUpload || i != currentIndex )" class="thumbnail-container">                                                        
+                                                </div>
+                                                <div *ngIf="itemImage.Raw && ( !pendingUpload || i != currentIndex )" class="thumbnail-container">
                                                     <a (click)="fileUpload.click()">
                                                         <img src="{{itemImage.Raw}}" [title]='itemImage.Label'>
                                                     </a>
-                                                </div>  
+                                                </div>
                                                 <div *ngIf="pendingUpload && i == currentIndex" class="loading-container">
                                                     <div class="sk-spinner sk-spinner-three-bounce">
                                                         <div class="sk-bounce1"></div>
@@ -83,7 +80,7 @@
                                             <td mat-cell *matCellDef="let itemImage; let i = index">
                                                 <div *ngIf="currentIndex !== i && i !== item.ItemImages.length-1">
                                                     {{itemImage.Label}}
-                                                </div>  
+                                                </div>
                                                 <div *ngIf="currentIndex === i || i === item.ItemImages.length-1">
                                                     <input class="form-control" id="itemImageLabelId" type="text" placeholder="{{ 'Title (Optional)' | translate }}"
                                                         (focus)="formDirty = true;" [(ngModel)]=itemImage.Label [ngModelOptions]="{standalone: true}" />
@@ -94,9 +91,6 @@
                                         <ng-container matColumnDef="IsBaseImage">
                                             <th mat-header-cell *matHeaderCellDef width="85px">{{ 'Base Image' | translate }}</th>
                                             <td mat-cell *matCellDef="let image; let i = index;">
-                                                <!-- <div class="i-checks">
-                                                    <label (click)="formDirty = true;"><input id="isBaseImage" type="checkbox" [(ngModel)]="image.IsBaseImage" (click)="isBaseImageClick(image); formDirty = true;" [ngModelOptions]="{standalone: true}"/><i></i></label>
-                                                </div> -->
                                                 <mat-checkbox [(ngModel)]="image.IsBaseImage" (click)="isBaseImageClick(image, i); formDirty = true;" [ngModelOptions]="{standalone: true}"></mat-checkbox>
                                             </td>
                                         </ng-container>
@@ -104,9 +98,6 @@
                                         <ng-container matColumnDef="IsSmallImage">
                                             <th mat-header-cell *matHeaderCellDef width="85px">{{ 'Small Image' | translate }}</th>
                                             <td mat-cell *matCellDef="let image; let i = index;">
-                                                <!-- <div class="i-checks">
-                                                    <input id="isSmallImage" type="checkbox" [(ngModel)]="image.IsSmallImage" (focus)="formDirty = true;" (click)="isSmallImageClick(image)" [ngModelOptions]="{standalone: true}"/>
-                                                </div> -->
                                                 <mat-checkbox [(ngModel)]="image.IsSmallImage" (click)="isSmallImageClick(image, i); formDirty = true;" [ngModelOptions]="{standalone: true}"></mat-checkbox>
                                             </td>
                                         </ng-container>
@@ -114,9 +105,6 @@
                                         <ng-container matColumnDef="IsThumbnail">
                                             <th mat-header-cell *matHeaderCellDef width="85px">{{ 'Thumbnail' | translate }}</th>
                                             <td mat-cell *matCellDef="let image; let i = index;">
-                                                <!-- <div class="i-checks">
-                                                    <input id="isThumbnail" type="checkbox" [(ngModel)]="image.IsThumbnail" (focus)="formDirty = true;" (click)="isThumbnailClick(image)" [ngModelOptions]="{standalone: true}"/>
-                                                </div> -->
                                                 <mat-checkbox [(ngModel)]="image.IsThumbnail" (click)="isThumbnailClick(image, i); formDirty = true;" [ngModelOptions]="{standalone: true}"></mat-checkbox>
                                             </td>
                                         </ng-container>
@@ -124,19 +112,13 @@
                                         <ng-container matColumnDef="IsRotatorImage">
                                             <th mat-header-cell *matHeaderCellDef width="90px">{{ 'Rotator Image' | translate }}</th>
                                             <td mat-cell *matCellDef="let image; let i = index;">
-                                                <!-- <div class="i-checks">
-                                                    <input id="isRotatorImage" type="checkbox" [(ngModel)]="image.IsRotatorImage" (focus)="formDirty = true;" (click)="isRotatorImageClick(image)" [ngModelOptions]="{standalone: true}"/>
-                                                </div> -->
                                                 <mat-checkbox [(ngModel)]="image.IsRotatorImage" (click)="isRotatorImageClick(image, i); formDirty = true;" [ngModelOptions]="{standalone: true}"></mat-checkbox>
                                             </td>
-                                        </ng-container>              
+                                        </ng-container>
                                         <!-- Exclude Column -->
                                         <ng-container matColumnDef="Exclude">
                                             <th mat-header-cell *matHeaderCellDef width="85px">{{ 'Exclude' | translate }}</th>
                                             <td mat-cell *matCellDef="let image; let i = index;">
-                                                <!-- <div *ngIf="i !== item.ItemImages.length-1">
-                                                    <input class="i-checks" type="checkbox" name="itemImageExclude" [(ngModel)]="itemImage.Exclude" [ngModelOptions]="{standalone: true}"/>
-                                                </div> -->
                                                 <mat-checkbox [(ngModel)]="image.Exclude" [ngModelOptions]="{standalone: true}"></mat-checkbox>
                                             </td>
                                         </ng-container>
@@ -144,17 +126,13 @@
                                         <ng-container matColumnDef="Remove">
                                             <th mat-header-cell *matHeaderCellDef width="85px">{{ 'Remove' | translate }}</th>
                                             <td mat-cell *matCellDef="let itemImage; let i = index;">
-                                                <div *ngIf="i !== item.ItemImages.length-1"> 
+                                                <div *ngIf="i !== item.ItemImages.length-1">
                                                     <a (click)="onRemoveImage(itemImage); currentIndex = item.ItemImages.length-1;">
                                                         <span matTooltip="{{ 'Remove' | translate }}" attr.aria-label="{{ 'Remove' | translate}}" class="glyphicon glyphicon-trash"></span>
                                                     </a>
                                                 </div>
-                                                <div [hidden]="!formDirty && i === item.ItemImages.length-1"> 
+                                                <div [hidden]="!formDirty && i === item.ItemImages.length-1">
                                                     <a matTooltip="{{ 'Clear' | translate }}" attr.aria-label="{{ 'Clear' | translate}}" (click)="clearFields(itemImage);"><i *ngIf="i === item.ItemImages.length-1" class="fa fa-eraser"></i></a>
-                                                    <!-- <button *ngIf="i === item.ItemImages.length-1"
-                                                            type="button" 
-                                                            class="btn btn-remove-sm"
-                                                            (click)="clearFields(itemImage);">Clear</button> -->
                                                 </div>
                                             </td>
                                         </ng-container>
@@ -171,5 +149,5 @@
                 </fieldset>
             </form>
         </div>
-    </div>    
+    </div>
 </div>

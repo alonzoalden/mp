@@ -3,7 +3,6 @@ import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { Observable, Subject, of, throwError } from 'rxjs';
 import { catchError, tap } from 'rxjs/operators';
 import { Dashboard, ItemSalesTotal, InboundShipmentStatusCount, SalesStatusTotal, SalesOrderSummary, CurrentSalesOrderSummary, DashboardVendorNotification, DashboardSalesOrderSummary } from '../shared/class/dashboard';
-import { OAuthService } from 'angular-oauth2-oidc';
 import { environment } from '../../environments/environment';
 import { NotificationComponent } from '../shared/tool/notification/notification.component';
 
@@ -16,12 +15,10 @@ export class DashboardService {
     private currentSalesOrderSummary: CurrentSalesOrderSummary[];
     private salesOrderSummary: SalesOrderSummary[];
     private dashboard: Dashboard;
-    private dashboarVendorNotification: DashboardVendorNotification;
 
     public subject = new Subject<string>();
 
     constructor(private http: HttpClient,
-                private oauthService: OAuthService,
                 private notificationComponent: NotificationComponent) { }
 
     sendNotification(notification: any) {
@@ -33,7 +30,6 @@ export class DashboardService {
         this.inboundShipmentStatusCounts = null;
         this.salesStatusTotals = null;
         this.dashboard = null;
-        this.dashboarVendorNotification = null;
         this.currentSalesOrderSummary = null;
         this.salesOrderSummary = null;
     }
@@ -44,7 +40,6 @@ export class DashboardService {
         }
         return this.http.get<Dashboard>(this.apiURL + '/dashboard/dashboard')
                         .pipe(
-                            //tap(data => console.log(JSON.stringify(data))),
                             tap(data => this.dashboard = data),
                             catchError(this.handleError)
                         );
@@ -53,8 +48,6 @@ export class DashboardService {
     getDashboarVendorNotification(): Observable<DashboardVendorNotification> {
         return this.http.get<DashboardVendorNotification>(this.apiURL + '/dashboard/dashboardvendornotification')
                         .pipe(
-                            //tap(data => console.log(JSON.stringify(data))),
-                            //tap(data => this.dashboard = data),
                             catchError(this.handleError)
                         );
     }
@@ -65,7 +58,6 @@ export class DashboardService {
         }
         return this.http.get<ItemSalesTotal[]>(this.apiURL + '/dashboard/itemsalestotal')
                         .pipe(
-                            //tap(data => console.log(JSON.stringify(data))),
                             tap(data => this.itemSalesTotals = data),
                             catchError(this.handleError)
                         );
@@ -77,7 +69,6 @@ export class DashboardService {
         }
         return this.http.get<InboundShipmentStatusCount[]>(this.apiURL + '/dashboard/inboundshipmentstatuscount')
                         .pipe(
-                            //tap(data => console.log(JSON.stringify(data))),
                             tap(data => this.inboundShipmentStatusCounts = data),
                             catchError(this.handleError)
                         );
@@ -89,7 +80,6 @@ export class DashboardService {
         }
         return this.http.get<SalesStatusTotal[]>(this.apiURL + '/dashboard/salesstatustotal')
                         .pipe(
-                            //tap(data => console.log(JSON.stringify(data))),
                             tap(data => this.salesStatusTotals = data),
                             catchError(this.handleError)
                         );
@@ -101,7 +91,6 @@ export class DashboardService {
         }
         return this.http.get<SalesOrderSummary[]>(this.apiURL + '/dashboard/salesordersummary')
                         .pipe(
-                            //tap(data => console.log(JSON.stringify(data))),
                             tap(data => this.salesOrderSummary = data),
                             catchError(this.handleError)
                         );
@@ -113,7 +102,6 @@ export class DashboardService {
         }
         return this.http.get<CurrentSalesOrderSummary[]>(this.apiURL + '/dashboard/currentsalesordersummary')
                         .pipe(
-                            //tap(data => console.log(JSON.stringify(data))),
                             tap(data => this.currentSalesOrderSummary = data),
                             catchError(this.handleError)
                         );
@@ -123,25 +111,16 @@ export class DashboardService {
 
         return this.http.get<DashboardSalesOrderSummary[]>(this.apiURL + '/dashboard/dashboardsalesordersummary/' + fulfilledby)
                         .pipe(
-                            //tap(data => console.log(JSON.stringify(data))),
-                            //tap(data => this.currentSalesOrderSummary = data),
                             catchError(this.handleError)
                         );
     }
 
 
     private handleError(err: HttpErrorResponse) {
-        // in a real world app, we may send the server to some remote logging infrastructure
-        // instead of just logging it to the console
         let errorMessage: string;
         if (err.error instanceof Error) {
-            // A client-side or network error occurred. Handle it accordingly.
-            // errorMessage = `An error occurred: ${err.error.message}`;
             errorMessage = `Network error: ${err.error.message}`;
         } else {
-            // The backend returned an unsuccessful response code.
-            // The response body may contain clues as to what went wrong,
-            // errorMessage = `Backend returned code ${err.status}, body was: ${err.error.Message}`;
             errorMessage = `Response error: ${err.error.Message}`;
         }
         return throwError(errorMessage);

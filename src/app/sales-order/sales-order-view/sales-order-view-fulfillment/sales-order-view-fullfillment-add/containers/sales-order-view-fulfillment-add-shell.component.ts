@@ -6,11 +6,9 @@ import { Observable } from 'rxjs';
 import { Store, select } from '@ngrx/store';
 import * as salesOrderActions from '../../../../state/sales-order.actions';
 import * as fromSalesOrder from '../../../../state';
-import * as fromUser from '../../../../../shared/state/user-state.reducer';
-import { Member } from 'app/shared/class/member';
 
 @Component({
-  templateUrl: './sales-order-view-fulfillment-add-shell.component.html'
+    templateUrl: './sales-order-view-fulfillment-add-shell.component.html'
 })
 
 export class SalesOrderFulfillmentAddShellComponent implements OnInit {
@@ -25,10 +23,9 @@ export class SalesOrderFulfillmentAddShellComponent implements OnInit {
     ngOnInit() {
         this.salesOrder$ = this.store.pipe(select(fromSalesOrder.getSalesOrder));
         this.fulfillment$ = this.store.pipe(select(fromSalesOrder.getFulfilledByFulfillment));
-        
         this.fulfillmentSalesOrderLinesMatTable$ = this.store.pipe(select(fromSalesOrder.getFulfillmentSalesOrderLinesMatTable));
         this.errorMessage$ = this.store.pipe(select(fromSalesOrder.getError));
-        setTimeout(()=> {
+        setTimeout(() => {
             this.isLoading$ = this.store.pipe(select(fromSalesOrder.getIsLoading));
         });
     }

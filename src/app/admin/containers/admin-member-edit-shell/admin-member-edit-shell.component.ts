@@ -7,7 +7,6 @@ import * as fromUser from '../../../shared/state/user-state.reducer';
 import { Member  } from '../../../shared/class/member';
 import { VendorList } from 'app/shared/class/vendor';
 
-
 @Component({
     selector: 'o-admin',
     templateUrl: './admin-member-edit-shell.component.html',

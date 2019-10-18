@@ -5,7 +5,6 @@
                 <fieldset>
                     <div class="ibox-title"><h5>{{ 'Variations' | translate }}</h5></div>
                     <div class="ibox-content animated fadeIn min-h-300">
-
                         <div *ngIf="isLoading" class="m-t-xl">
                             <div class="sk-spinner sk-spinner-three-bounce big-spinner">
                                 <div class="sk-bounce1"></div>
@@ -20,15 +19,14 @@
                         <div *ngIf="!isLoading && item.ItemVariations.length">
                             <div class="form-group row">
                                 <div class="col-md-12">
-                                    <h4><span class="m-r-sm" >{{ 'Listing Name' | translate }}:</span></h4> 
+                                    <h4><span class="m-r-sm" >{{ 'Listing Name' | translate }}:</span></h4>
                                     <div class="form-group flex-va-">
-                                        <!-- <h4><span class="m-r-sm" >{{ 'Listing' | translate }}:</span></h4> -->
                                         <h3><a [routerLink]="['/item', 'variation-listing', 'detail', item.ItemVariations[0].ItemVariationListingID]" class="sm-strong"> {{ item.ItemVariations[0].ItemVariationListingName }}</a></h3>
                                     </div>
                                 </div>
                             </div>
                             <div class="form-group row">
-                                <div class="col-md-12"> 
+                                <div class="col-md-12">
                                     <h4>{{ 'Item Variations' | translate }} ({{ item.ItemVariations.length }})</h4>
                                     <ng-container *ngFor="let itemVariation of item.ItemVariations">
                                         <div class="border-list flex-details">
@@ -48,17 +46,17 @@
                                                     </div>
                                                 </div>
                                                 <div class="row">
-                                                    <div class="col-xs-12 "> <span class="sm-text m-r-xs">SKU: </span> {{itemVariation.ItemVendorSKU}}</div> 
+                                                    <div class="col-xs-12 "> <span class="sm-text m-r-xs">SKU: </span> {{itemVariation.ItemVendorSKU}}</div>
                                                 </div>
                                                 <div class="row">
-                                                    <div class="col-xs-12 "><span class="sm-text m-r-xs">TPIN: </span> {{itemVariation.ItemTPIN}}</div>                                         
+                                                    <div class="col-xs-12 "><span class="sm-text m-r-xs">TPIN: </span> {{itemVariation.ItemTPIN}}</div>
                                                 </div>
                                             </div>
                                         </div>
                                     </ng-container>
                                 </div>
                             </div>
-                        </div>                               
+                        </div>
                     </div>
                 </fieldset>
             </form>

@@ -158,8 +158,6 @@ export class SalesOrderEffects {
 
         )
     );
-    
-    
     @Effect()
     uploadBOLAttachment$: Observable<Action> = this.actions$.pipe(
         ofType(salesOrderActions.SalesOrderActionTypes.UploadBOLAttachment),
@@ -196,7 +194,6 @@ export class SalesOrderEffects {
             )
         )
     );
-    
     @Effect()
     addFulfillment$: Observable<Action> = this.actions$.pipe(
         ofType(salesOrderActions.SalesOrderActionTypes.AddFulfillment),
@@ -269,15 +266,6 @@ export class SalesOrderEffects {
                         const fileName = payload.salesorder.IncrementID;
                         window.navigator.msSaveOrOpenBlob(data, fileName + '.pdf'); // IE is the worst!!!
                     } else {
-                        // const iframe = document.createElement('iframe');
-                        // iframe.style.display = 'none';
-                        // iframe.src = blobUrl;
-                        // document.body.appendChild(iframe);
-
-                        // iframe.onload = (function() {
-                        //     iframe.contentWindow.focus();
-                        //     iframe.contentWindow.print();
-                        // });
                         const fileURL = window.URL.createObjectURL(blob);
                         const a: HTMLAnchorElement = document.createElement('a') as HTMLAnchorElement;
                         a.href = fileURL;

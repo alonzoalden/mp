@@ -28,7 +28,7 @@ export class MemberListShellComponent implements OnInit {
         this.membersMatTable$ = this.store.pipe(select(fromMember.getMembersMatTable));
         this.pendingDelete$ = this.store.pipe(select(fromMember.getPendingDelete));
         this.errorMessage$ = this.store.pipe(select(fromMember.getError));
-        setTimeout(()=> {
+        setTimeout(() => {
             this.isLoading$ = this.store.pipe(select(fromMember.getIsLoading));
         });
     }

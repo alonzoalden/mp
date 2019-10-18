@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild} from '@angular/core';
+import { Component, OnInit, ViewChild, OnDestroy } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 import { ItemList, ItemVariationListing, ItemAttribute, ItemVariation } from '../../shared/class/item';
 import { MatDialog, MatPaginator, MatSort, MatTableDataSource, Sort } from '@angular/material';
@@ -13,22 +13,19 @@ import { environment } from '../../../environments/environment';
   templateUrl: './item-variation-detail.component.html',
 })
 
-export class ItemVariationDetailComponent implements OnInit {
+export class ItemVariationDetailComponent implements OnInit, OnDestroy {
     subscriptionItemList: Subscription;
     subscriptionItemVariationListing: Subscription;
     subscriptionItemAttributes: Subscription;
-
     itemVariationListing: ItemVariationListing;
     errorMessage: string;
     displayedColumns = [];
     columns = [];
     dataSource: any = null;
-
     selectedItemAttributes: ItemAttribute[] = [];
     originalItemAttributes: ItemAttribute[] = [];
     variationCount: number;
-
-    private imageURL = environment.imageURL;
+    imageURL = environment.imageURL;
     isEdit: boolean = false;
     itemLists: ItemList[];
     loading: boolean = false;
@@ -218,7 +215,7 @@ export class ItemVariationDetailComponent implements OnInit {
         this.refreshDataSource(data);
     }
     setPrimaryItem(listing) {
-        if (listing.PrimaryItemID && listing.PrimaryItemID != '' && listing.PrimaryItemID != 0) {
+        if (listing.PrimaryItemID && listing.PrimaryItemID !== '' && listing.PrimaryItemID !== 0) {
             listing.ItemVariations.forEach((itemvariation) => {
                 if (listing.PrimaryItemID === itemvariation.ItemID) { itemvariation.IsPrimary = true; }
             });

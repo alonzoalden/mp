@@ -22,18 +22,14 @@ export const getPurchaseOrder = createSelector(
     getInboundShipmentFeatureState,
     state => state.currentPurchaseOrder
 );
-
 export const getPurchaseOrderLineList = createSelector(
     getInboundShipmentFeatureState,
     state => state.purchaseOrderLineList
 );
-
-
 export const getSelectedCarton = createSelector(
     getInboundShipmentFeatureState,
     state => state.selectedCarton
 );
-
 export const getSimpleItemList = createSelector(
     getInboundShipmentFeatureState,
     state => state.simpleItemList

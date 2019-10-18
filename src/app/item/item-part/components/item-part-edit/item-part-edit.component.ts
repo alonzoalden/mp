@@ -1,13 +1,10 @@
-import { Component, ViewChild, OnInit, OnDestroy } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Subscription } from 'rxjs';
-
 import { Item, ItemSelection } from '../../../../shared/class/item';
 import { VendorBrand } from '../../../../shared/class/vendor-brand';
-
 import { ItemService } from '../../../item.service';
 import { AppService } from '../../../../app.service';
-
 import { environment } from '../../../../../environments/environment';
 
 @Component({
@@ -18,17 +15,13 @@ import { environment } from '../../../../../environments/environment';
 
 export class ItemPartEditComponent implements OnInit, OnDestroy {
     private subscription: Subscription;
-
     private originalItem: Item;
     private currentItem: Item;
     itemName: string;
     isPM: boolean;
-
     errorMessage: string;
     pendingSave: boolean;
-
     loading: boolean;
-
     vendorBrandList: VendorBrand[];
 
     private dataIsValid: { [key: string]: boolean } = {};
@@ -40,9 +33,7 @@ export class ItemPartEditComponent implements OnInit, OnDestroy {
 
     ngOnInit() {
         const param = this.route.snapshot.params['id'];
-
         this.loading = true;
-
         this.subscription = this.itemService.getItem(param).subscribe(
             (item: Item) => {
                 this.itemService.currentItemEdit = item;
@@ -57,7 +48,6 @@ export class ItemPartEditComponent implements OnInit, OnDestroy {
                 this.router.navigate(['/item']);
             }
         );
-
         this.itemService.getVendorBrands().subscribe(
             (vendorBrands: VendorBrand[]) => {
                 this.vendorBrandList = vendorBrands;
@@ -66,7 +56,6 @@ export class ItemPartEditComponent implements OnInit, OnDestroy {
                 this.errorMessage = <any>error;
             }
         );
-
         this.appService.getCurrentMember().subscribe(
             (data) => {
                 this.appService.currentMember = data;
@@ -196,22 +185,35 @@ export class ItemPartEditComponent implements OnInit, OnDestroy {
                 }
 
                 if (newItem.ItemSections) {
-                    const pendingItemPartIndex = newItem.ItemSections.findIndex(i => i.pendingAdd === true);
-                    if (pendingItemPartIndex > -1) {
-                        newItem.ItemSections.splice(pendingItemPartIndex, 1);
+                    const pendingItemSectionIndex = newItem.ItemSections.findIndex(i => i.pendingAdd === true);
+                    if (pendingItemSectionIndex > -1) {
+                        newItem.ItemSections.splice(pendingItemSectionIndex, 1);
                     }
-                    newItem.ItemSections.forEach((value, i) => {
-                        value.Position = i + 1;
-                    });
+                    if (newItem.ItemSections) {
+                        newItem.ItemSections.forEach((value, i) => {
+                            value.Position = i + 1;
+
+                            if (value.ItemParts) {
+                                const pendingItemPartIndex = value.ItemParts.findIndex(i => i.pendingAdd === true);
+                                if (pendingItemPartIndex > -1) {
+                                    value.ItemParts.splice(pendingItemPartIndex, 1);
+                                }
+                                value.ItemParts.forEach((value2, i) => {
+                                    value2.Position = i + 1;
+                                });
+                            }
+                        });
+                    }
                 }
+
 
                 if (newItem.FulfilledBy === 'Toolots') {
                     newItem.MerchantQuantity = 0;
                 }
-                if (!this.isPM && newItem.Approval != 'Pending') {
+                if (!this.isPM && newItem.Approval !== 'Pending') {
                     newItem.Approval = 'NotSubmitted';
                 }
-                if (newItem.Visibility == 'NotVisibleIndivisually') {
+                if (newItem.Visibility === 'NotVisibleIndivisually') {
                     newItem.Approval = 'Approved';
                 }
 
@@ -344,7 +346,7 @@ export class ItemPartEditComponent implements OnInit, OnDestroy {
     }
     isItemNameValid(): boolean {
         if (this.item.VendorBrandID) {
-            if (this.item.Name.toLowerCase().includes(this.vendorBrandList.find(x => x.VendorBrandID == Number(this.item.VendorBrandID)).BrandName.toLowerCase())) {
+            if (this.item.Name.toLowerCase().includes(this.vendorBrandList.find(x => x.VendorBrandID === Number(this.item.VendorBrandID)).BrandName.toLowerCase())) {
                 this.itemService.sendNotification({ type: 'error', title: 'Invalid Entry', content: '"Brand" should not be included in "Item Name"' });
                 return false;
             } else {
@@ -355,7 +357,7 @@ export class ItemPartEditComponent implements OnInit, OnDestroy {
         }
     }
     isSKUValid(): boolean {
-        let regex = /^[\w\-]*$/g;
+        const regex = /^[\w\-]*$/g;
 
         if (regex.test(this.item.VendorSKU)) {
             return true;
@@ -365,7 +367,7 @@ export class ItemPartEditComponent implements OnInit, OnDestroy {
         }
     }
     isSubmitValid(): boolean {
-        if (this.originalItem.Approval != 'Pending' && this.item.Approval == 'Pending' && this.item.ItemImages.filter(x => !x.pendingAdd).length < 1) {
+        if (this.originalItem.Approval !== 'Pending' && this.item.Approval === 'Pending' && this.item.ItemImages.filter(x => !x.pendingAdd).length < 1) {
             this.itemService.sendNotification({ type: 'error', title: 'Invalid Entry', content: 'An image is required' });
             return false;
         } else {
@@ -373,7 +375,7 @@ export class ItemPartEditComponent implements OnInit, OnDestroy {
         }
     }
     isBundleValid(): boolean {
-        if (this.item.ItemType == 'bundle') {
+        if (this.item.ItemType === 'bundle') {
             let _ret = true;
             this.item.ItemOptions.forEach((option, index) => {
                 if (!option.pendingAdd) {
@@ -446,7 +448,7 @@ export class ItemPartEditComponent implements OnInit, OnDestroy {
     }
 
     validateDimension() {
-        return (this.item.ItemType != 'simple' || (
+        return (this.item.ItemType !== 'simple' || (
             this.item.ProductDimensionUOM &&
             this.item.Width &&
             this.item.Height &&

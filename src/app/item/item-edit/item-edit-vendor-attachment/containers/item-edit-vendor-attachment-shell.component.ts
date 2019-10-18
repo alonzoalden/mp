@@ -1,7 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { MatTableDataSource } from '@angular/material';
 import { Observable } from 'rxjs';
-
 import { Item, ItemAttachment, ItemInsert, ItemAttachmentInsert } from '../../../../shared/class/item';
 import { VendorAttachmentList } from '../../../../shared/class/vendor-attachment';
 import { Store, select } from '@ngrx/store';
@@ -37,4 +36,3 @@ export class ItemEditVendorAttachmentShellComponent implements OnInit {
         this.store.dispatch(new itemActions.LoadItemAttachment(itemattachment));
     }
 }
-

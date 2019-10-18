@@ -80,7 +80,6 @@ export class InboundShipmentEditShippingComponent implements OnInit, OnChanges {
                 );
             }
         } else {
-            //alert('Shipment Date, B/L, and Container Number is required!');
             this.purchaseOrderService.sendNotification({ type: 'error', title: 'Invalid Data', content: 'Shipment Date, B/L, and Container Number is required!' });
         }
     }
@@ -101,7 +100,5 @@ export class InboundShipmentEditShippingComponent implements OnInit, OnChanges {
 
     onSaveComplete(message?: string): void {
         this.purchaseOrderService.sendNotification({ type: 'success', title: 'Successfully Updated', content: message });
-        // Navigate back to the purchase order list
-        // this.router.navigate(['/purchase-order', this.purchaseorderline.PurchaseOrderID, 'detail', 'line']);
     }
 }

@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { Observable, of, EMPTY } from 'rxjs';
-import { mergeMap, map, catchError, take } from 'rxjs/operators';
+import { mergeMap, map, catchError } from 'rxjs/operators';
 import { Action } from '@ngrx/store';
 import { Actions, Effect, ofType } from '@ngrx/effects';
 import { DashboardService } from '../dashboard.service';

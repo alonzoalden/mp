@@ -30,7 +30,8 @@ export class SalesOrderViewUploadBOLComponentDialog implements OnInit, OnDestroy
         @Inject(MAT_DIALOG_DATA) public data: {salesorder: SalesOrder, orderid: number},
         public dialogRef: MatDialogRef<SalesOrderViewUploadBOLComponentDialog>,
         private store: Store<fromSalesOrder.State>,
-        private salesorderService: SalesOrderService) {}
+        private salesorderService: SalesOrderService
+    ) {}
 
     ngOnInit() {
         this.orderid = this.data.orderid;
@@ -77,7 +78,7 @@ export class SalesOrderViewUploadBOLComponentDialog implements OnInit, OnDestroy
 
     uploadFiles() {
         if (this.filesToUpload.length > 0) {
-            var formData: FormData = new FormData();
+            const formData: FormData = new FormData();
             for (let i = 0; i < this.filesToUpload.length; i++) {
                 formData.append('uploadedFiles', this.filesToUpload[i], this.filesToUpload[i].name);
             }

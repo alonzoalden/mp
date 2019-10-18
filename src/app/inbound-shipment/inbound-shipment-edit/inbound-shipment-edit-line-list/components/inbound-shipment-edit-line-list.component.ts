@@ -1,11 +1,12 @@
-import { Component, OnInit, OnChanges, ViewChild, Inject, ElementRef, Input, Output, EventEmitter} from '@angular/core';
+import { Component, OnInit, OnChanges, ViewChild, ElementRef, Input, Output, EventEmitter} from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { MatPaginator, MatSort, MatTableDataSource, MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material';
+import { MatPaginator, MatSort, MatTableDataSource, MatDialog } from '@angular/material';
 import { PurchaseOrder, PurchaseOrderLine } from '../../../../shared/class/purchase-order';
 import { PurchaseOrderService } from '../../../purchase-order.service';
 import { environment } from '../../../../../environments/environment';
 import { ItemList } from '../../../../shared/class/item';
 import { SimpleChanges } from '@angular/core';
+import { InboundShipmentEditLineItemPrintDialogComponent } from './inbound-shipment-edit-line-list.component-item-print-dialog';
 
 @Component({
 selector: 'o-inbound-shipment-edit-line-list',
@@ -13,7 +14,6 @@ templateUrl: './inbound-shipment-edit-line-list.component.html',
 })
 
 export class InboundShipmentEditLineListComponent implements OnInit, OnChanges {
-
     @Input() purchaseOrder: PurchaseOrder;
     @Input() errorMessage: string;
     @Input() isLoading: boolean;
@@ -25,18 +25,14 @@ export class InboundShipmentEditLineListComponent implements OnInit, OnChanges {
     @Output() downloadItemLargeLabelCount = new EventEmitter<{purchaseorderline: PurchaseOrderLine, count: number, border: string}>();
     @Output() setSelectedPurchaseOrder = new EventEmitter<PurchaseOrder>();
     purchaseorderid: number;
-    public linkURL = environment.linkURL;
-    public imageURL = environment.imageURL;
-
+    linkURL = environment.linkURL;
+    imageURL = environment.imageURL;
     displayedColumns = ['Add', 'Incomplete', 'ProductDetails', 'FOBPrice', 'Quantity', 'CartonQuantity', 'ReceivedQty', 'Actions'];
     dataSource: any = null;
-
-    PendingAdd: boolean;
+    pendingAdd: boolean;
     currentIndex: number;
     formDirty = false;
-
     @ViewChild('lineItemIDRef', { static: false }) lineItemIDRef: ElementRef;
-
     @ViewChild(MatPaginator, { static: false }) paginator: MatPaginator;
     @ViewChild(MatSort, { static: false }) sort: MatSort;
 
@@ -75,7 +71,7 @@ export class InboundShipmentEditLineListComponent implements OnInit, OnChanges {
     }
 
     removePendingLine() {
-        const foundIndex = this.purchaseOrder.PurchaseOrderLines.findIndex(i => i.pendingAdd === true);
+        const foundIndex = this.purchaseOrder.PurchaseOrderLines.findIndex(purchaseorderlines => purchaseorderlines.pendingAdd === true);
         if (foundIndex > -1) {
             this.purchaseOrder.PurchaseOrderLines.splice(foundIndex, 1);
         }
@@ -84,7 +80,7 @@ export class InboundShipmentEditLineListComponent implements OnInit, OnChanges {
     onAddPurchaseOrderLine(purchaseorderline: PurchaseOrderLine) {
         if (this.isRequirementValid(purchaseorderline)) {
             if (!this.existItem(purchaseorderline.ItemID, true)) {
-                this.PendingAdd = true;
+                this.pendingAdd = true;
                 purchaseorderline.pendingAdd = false;
                 purchaseorderline.PrevItemID = purchaseorderline.ItemID;
 
@@ -113,9 +109,9 @@ export class InboundShipmentEditLineListComponent implements OnInit, OnChanges {
     }
 
     onEditPurchaseOrderLine(index: number) {
-        if (this.PendingAdd) {
+        if (this.pendingAdd) {
             this.currentIndex = this.purchaseOrder.PurchaseOrderLines.length - 1;
-            this.PendingAdd = false;
+            this.pendingAdd = false;
         } else {
             this.currentIndex = index;
         }
@@ -162,7 +158,7 @@ export class InboundShipmentEditLineListComponent implements OnInit, OnChanges {
     }
 
     openDialogPrintItemLabel(purchaseorderline: PurchaseOrderLine) {
-        const dialogRef = this.itemPrintDialog.open(InboundShipmentEditLineComponentItemPrintDialog, {
+        const dialogRef = this.itemPrintDialog.open(InboundShipmentEditLineItemPrintDialogComponent, {
           width: '250px',
           data: purchaseorderline
         });
@@ -218,34 +214,4 @@ export class InboundShipmentEditLineListComponent implements OnInit, OnChanges {
         }
     }
 
-}
-
-export class ItemLabelPrintDialog {
-    constructor(
-        public Size: string,
-        public Quantity: number,
-        public Border: string
-    ) {}
-}
-
-@Component({
-selector: 'inbound-shipment-edit-line-list.component-item-print-dialog',
-templateUrl: 'inbound-shipment-edit-line-list.component-item-print-dialog.html',
-})
-
-export class InboundShipmentEditLineComponentItemPrintDialog implements OnInit {
-itemLabelPrintDialog: ItemLabelPrintDialog;
-
-    constructor(
-        public dialogRef: MatDialogRef<InboundShipmentEditLineComponentItemPrintDialog>,
-        @Inject(MAT_DIALOG_DATA) public data: PurchaseOrderLine) {
-
-        }
-    ngOnInit() {
-        this.itemLabelPrintDialog = new ItemLabelPrintDialog('small', this.data.Quantity, 'yes');
-    }
-
-    onCancelClick(): void {
-        this.dialogRef.close();
-    }
 }

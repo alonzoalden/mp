@@ -1,6 +1,5 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
-import { HttpModule } from '@angular/http';
 import { HttpClientModule, HttpClient } from '@angular/common/http';
 import { TranslateModule, TranslateLoader } from '@ngx-translate/core';
 import { TranslateHttpLoader } from '@ngx-translate/http-loader';
@@ -64,8 +63,8 @@ import { StoreModule } from '@ngrx/store';
 import { EffectsModule } from '@ngrx/effects';
 import { userreducer } from './shared/state/user-state.reducer';
 import { UserEffects } from './shared/state/user-state.effects';
+import { registerLocaleData } from '@angular/common';
 import zh from '@angular/common/locales/zh';
-import {registerLocaleData} from '@angular/common';
 registerLocaleData(zh);
 export function HttpLoaderFactory(http: HttpClient) {
     return new TranslateHttpLoader(http);
@@ -79,7 +78,6 @@ export function HttpLoaderFactory(http: HttpClient) {
     ],
     imports: [
         BrowserModule,
-        HttpModule,
         HttpClientModule,
         TranslateModule.forRoot({
             loader: {

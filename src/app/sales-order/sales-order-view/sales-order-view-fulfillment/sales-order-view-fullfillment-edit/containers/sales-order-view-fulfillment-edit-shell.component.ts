@@ -7,7 +7,7 @@ import { Fulfillment } from '../../../../../shared/class/fulfillment';
 import { SalesOrder } from '../../../../../shared/class/sales-order';
 
 @Component({
-  templateUrl: './sales-order-view-fulfillment-edit-shell.component.html'
+    templateUrl: './sales-order-view-fulfillment-edit-shell.component.html'
 })
 
 export class SalesOrderFulfillmentEditShellComponent implements OnInit {
@@ -22,7 +22,7 @@ export class SalesOrderFulfillmentEditShellComponent implements OnInit {
         this.salesOrder$ = this.store.pipe(select(fromSalesOrder.getSalesOrder));
         this.fulfillment$ = this.store.pipe(select(fromSalesOrder.getFulfilledByFulfillment));
         this.errorMessage$ = this.store.pipe(select(fromSalesOrder.getError));
-        setTimeout(()=> {
+        setTimeout(() => {
             this.isLoading$ = this.store.pipe(select(fromSalesOrder.getIsLoading));
         });
     }

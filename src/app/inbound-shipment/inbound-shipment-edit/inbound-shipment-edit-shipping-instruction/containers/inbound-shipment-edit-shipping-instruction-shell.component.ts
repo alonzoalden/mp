@@ -8,4 +8,3 @@ export class InboundShipmentEditShippingInstructionShellComponent implements OnI
     constructor() { }
     ngOnInit() { }
 }
-

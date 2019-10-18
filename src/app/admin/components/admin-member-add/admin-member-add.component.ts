@@ -66,20 +66,15 @@ export class AdminMemberAddComponent implements OnInit, OnChanges {
             return true;
         } else {
             if (!this.member.Email || !this.member.FirstName || !this.member.LastName || !this.member.Password) {
-                //alert('Please enter all required fields');
                 this.adminService.sendNotification({ type: 'error', title: 'Invalid Data', content: 'Please enter all required fields' });
             } else if (!this.memberForm.controls['memberData'].controls['memberEmail'].valid) {
-                //alert('Invalid email');
                 this.adminService.sendNotification({ type: 'error', title: 'Invalid Email', content: '' });
             } else if (!this.memberForm.controls['memberData'].controls['memberPassword'].valid) {
-                //alert('Invalid Password');
                 this.adminService.sendNotification({ type: 'error', title: 'Invalid Password'
                     , content: 'Must contain the following:<br>-Minimum of 6 characters<br>-Number<br>-Lower case letter<br>-Upper case letter<br>-Special character(non-letter/non-numeric)' });
             } else if (this.member.Password !== this.member.ConfirmPassword) {
-                //alert('Confirm Password must match the Password');
                 this.adminService.sendNotification({ type: 'error', title: 'Confirm Password must match the Password', content: '' });
             } else {
-                //alert('Invalid entry');
                 this.adminService.sendNotification({ type: 'error', title: 'Invalid entry', content: '' });
             }
             return false;

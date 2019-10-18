@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { MatTableDataSource } from '@angular/material';
 import { Item } from '../../../../../../shared/class/item';
 import { Store, select } from '@ngrx/store';
@@ -12,7 +12,7 @@ import { Member } from 'app/shared/class/member';
     templateUrl: './item-batch-update-select-shell.component.html'
 })
 
-export class ItemBatchUpdateSelectShellComponent {
+export class ItemBatchUpdateSelectShellComponent implements OnInit {
     itemBatchItemsMatTable$: Observable<MatTableDataSource<Item>>;
     userInfo$: Observable<Member>;
     isLoading$: Observable<Boolean>;
@@ -23,8 +23,10 @@ export class ItemBatchUpdateSelectShellComponent {
     ngOnInit() {
         this.userInfo$ = this.store.pipe(select(fromUser.getCurrentUser));
         this.itemBatchItemsMatTable$ = this.store.pipe(select(fromItem.getItemBatchItemsMatTable));
-        this.isLoading$ = this.store.pipe(select(fromItem.getIsLoading));
         this.errorMessage$ = this.store.pipe(select(fromItem.getError));
+        setTimeout(() => {
+            this.isLoading$ = this.store.pipe(select(fromItem.getIsLoading));
+        });
     }
     getItems(): void {
         this.store.dispatch(new itemActions.LoadItemBatchItems());

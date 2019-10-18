@@ -30,8 +30,7 @@ export class RegistrationComponent implements OnInit, OnDestroy {
     private  notificationComponent: NotificationComponent;
 
 
-    constructor(private route: ActivatedRoute,
-        private router: Router,
+    constructor(
         private formBuilder: FormBuilder,
         private oauthService: OAuthService,
         private registrationService: RegistrationService) {

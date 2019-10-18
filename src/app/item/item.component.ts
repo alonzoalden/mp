@@ -2,7 +2,6 @@ import { Component, ViewChild, OnInit, OnDestroy } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { ItemService } from './item.service';
 import { Subscription } from 'rxjs';
-
 import { NotificationComponent } from '../shared/tool/notification/notification.component';
 
 @Component({
@@ -11,12 +10,13 @@ import { NotificationComponent } from '../shared/tool/notification/notification.
 })
 export class ItemComponent implements OnInit, OnDestroy {
     subscription: Subscription;
-
     @ViewChild(NotificationComponent, { static: true })
-    private  notificationComponent: NotificationComponent;
 
-    constructor(private route: ActivatedRoute, private itemService: ItemService) {
-    }
+    private notificationComponent: NotificationComponent;
+    constructor(
+        private route: ActivatedRoute,
+        private itemService: ItemService
+    ) { }
 
     ngOnInit() {
         if (this.route.snapshot.queryParams['init']) {
@@ -25,7 +25,6 @@ export class ItemComponent implements OnInit, OnDestroy {
         this.subscription = this.itemService.subject.subscribe(
             notification => this.doNotification(notification)
         );
-
     }
 
     ngOnDestroy(): void {

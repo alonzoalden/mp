@@ -1,4 +1,4 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, Input } from '@angular/core';
 import { ItemInsert } from '../../../../shared/class/item';
 
 @Component({
@@ -6,7 +6,7 @@ import { ItemInsert } from '../../../../shared/class/item';
     templateUrl: './item-add-dimension.component.html'
 })
 
-export class ItemAddDimensionComponent implements OnInit {
+export class ItemAddDimensionComponent {
     @Input() item: ItemInsert;
     @Input() errorMessage: string;
 
@@ -19,12 +19,7 @@ export class ItemAddDimensionComponent implements OnInit {
             Name: 'Freight',
             Value: 4
         }
-    ]
+    ];
 
     constructor() { }
-    
-    ngOnInit() {
-        //this.item.PackagingType = this.packagingTypes[0].Value;
-    }
-
 }

@@ -20,7 +20,6 @@ import { EffectsModule } from '@ngrx/effects';
 import { adminReducer } from './state/admin.reducer';
 import { AdminEffects } from './state/admin.effects';
 
-
 @NgModule({
     declarations: [
         AdminShellComponent,

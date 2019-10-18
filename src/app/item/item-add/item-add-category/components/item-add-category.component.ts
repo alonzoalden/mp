@@ -36,7 +36,6 @@ export class ItemAddCategoryComponent implements OnChanges {
             this.refreshDataSource(this.currentResult);
         }
     }
-
     refreshDataSource(resultCategories: Array<Category[]>) {
         this.dataSource = new MatTableDataSource<Category[]>(resultCategories);
     }
@@ -48,10 +47,6 @@ export class ItemAddCategoryComponent implements OnChanges {
                 this.lastSelectedValue = this.categoriesList[this.categoriesList.length - 1][0].ParentItemCategoryID;
             } else {
                 this.lastSelectedValue = categoryValue;
-
-
-                // this.getCategories.emit(categoryValue);
-                // this.categoriesList = this.categoriesList.slice(0, index + 1);
 
                 this.itemService.getCategories(categoryValue).subscribe(
                     (categories: Category[]) => {

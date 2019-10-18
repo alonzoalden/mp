@@ -1,3 +1,4 @@
+import { ItemPartListComponentItemPrintDialog } from './item-part-list.component-item-print-dialog';
 import { Component, OnInit, ViewChild, Inject } from '@angular/core';
 import { Router } from '@angular/router';
 import { MatPaginator, MatSort, MatTableDataSource, MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material';
@@ -5,7 +6,6 @@ import { Item, ItemInsert, ItemCategoryAssignment, ItemOption, ItemSelection, It
 import { ItemService } from '../../../item.service';
 import { AppService } from '../../../../app.service';
 import { environment } from '../../../../../environments/environment';
-
 
 @Component({
     selector: 'o-item-part-list',
@@ -83,8 +83,8 @@ export class ItemPartListComponent implements OnInit {
 
     openDialogPrintItemLabel(item: Item) {
         const dialogRef = this.itemPrintDialog.open(ItemPartListComponentItemPrintDialog, {
-          width: '250px',
-          data: item,
+            width: '250px',
+            data: item,
         });
 
         dialogRef.afterClosed().subscribe(result => {
@@ -262,34 +262,3 @@ export class ItemPartListComponent implements OnInit {
         }
     }
 }
-
-export class ItemLabelPrintDialog {
-    constructor(
-        public Size: string,
-        public Quantity: number,
-        public Border: string
-    ) {}
-}
-
-@Component({
-selector: 'item-part-list.component-item-print-dialog',
-templateUrl: 'item-part-list.component-item-print-dialog.html',
-})
-
-export class ItemPartListComponentItemPrintDialog implements OnInit {
-    itemLabelPrintDialog: ItemLabelPrintDialog;
-
-    constructor(
-        public dialogRef: MatDialogRef<ItemPartListComponentItemPrintDialog>,
-        @Inject(MAT_DIALOG_DATA) public data: Item) {
-
-        }
-    ngOnInit() {
-        this.itemLabelPrintDialog = new ItemLabelPrintDialog('small', 1, 'yes');
-    }
-
-    onCancelClick(): void {
-        this.dialogRef.close();
-    }
-}
-

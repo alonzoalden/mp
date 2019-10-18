@@ -1,4 +1,3 @@
-import { getIsLoading } from './../../../../sales-order/state/index';
 import { Component, OnInit } from '@angular/core';
 import { Store, select } from '@ngrx/store';
 import * as fromCompany from '../../state';

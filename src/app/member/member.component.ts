@@ -1,9 +1,7 @@
 import { Component, ViewChild, OnInit, OnDestroy } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { MemberService } from './member.service';
-
 import { Subscription } from 'rxjs';
-
 import { NotificationComponent } from '../shared/tool/notification/notification.component';
 
 @Component({

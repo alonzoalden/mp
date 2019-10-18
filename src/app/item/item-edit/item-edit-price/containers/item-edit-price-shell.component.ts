@@ -1,11 +1,7 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { MatTableDataSource } from '@angular/material';
-import { Router, ActivatedRoute } from '@angular/router';
-
 import { Item, ItemTierPrice, ItemTierPriceInsert, ItemInsert } from '../../../../shared/class/item';
 import {  Observable } from 'rxjs';
-import { ItemService } from '../../../item.service';
-import { AppService } from '../../../../app.service';
 import { Store, select } from '@ngrx/store';
 import * as itemActions from '../../../state/item.actions';
 import * as fromItem from '../../../state';
@@ -29,9 +25,8 @@ export class ItemEditPriceShellComponent implements OnInit {
         this.itemTierPricesMatTable$ = this.store.pipe(select(fromItem.getItemTierPricesMatTable));
         this.errorMessage$ = this.store.pipe(select(fromItem.getError));
         this.userInfo$ = this.store.pipe(select(fromUser.getCurrentUser));
-   }
-   getItemTierPrices(id: number): void {
-    this.store.dispatch(new itemActions.LoadItemTierPrices(id));
-   }
-
+    }
+    getItemTierPrices(id: number): void {
+        this.store.dispatch(new itemActions.LoadItemTierPrices(id));
+    }
 }

@@ -19,13 +19,9 @@
             <div class="ibox float-e-margins">
                 <div class="ibox-title">
                     <h5>{{ 'Select Company' | translate }}</h5>
-                    <!-- <div class="toolbar-search">
-                        <span>{{ 'Filter By' | translate }}</span>
-                        <input (keyup)="applyFilter($event.target.value)" placeholder="{{ 'Filter By' | translate }}" class="form-control">
-                    </div> -->
                 </div>
                 <div class="toolbar-search-1">
-                    <i class="fa fa-search" aria-label="Icon for Filter By Input Bar"></i> 
+                    <i class="fa fa-search" aria-label="Icon for Filter By Input Bar"></i>
                     <input (keyup)="applyFilter($event.target.value)" placeholder="{{ 'Filter By' | translate }}" class="form-control">
                 </div>
                 <div class="ibox-content">
@@ -50,13 +46,13 @@
                             <ng-container matColumnDef="CreatedOn">
                                 <th mat-header-cell *matHeaderCellDef mat-sort-header>{{ 'Created On' | translate }}</th>
                                 <td mat-cell *matCellDef="let memberVendor">{{memberVendor.CreatedOn | date}}</td>
-                            </ng-container>  
-                                
+                            </ng-container>
+
                             <!-- Switch Button -->
                             <ng-container matColumnDef="Switch">
                                 <th mat-header-cell *matHeaderCellDef></th>
                                 <td mat-cell *matCellDef="let memberVendor">
-                                    <button type="button" class="btn btn-primary btn-sm" style="margin: 0;" 
+                                    <button type="button" class="btn btn-primary btn-sm" style="margin: 0;"
                                         (click)="switchMemberVendor(memberVendor)" *ngIf='!isCurrentVendor(memberVendor.VendorID)'>
                                         <span class="glyphicon glyphicon-refresh"></span> {{ 'Switch' | translate }}
                                     </button>
