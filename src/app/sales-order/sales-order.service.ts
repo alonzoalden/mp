@@ -12,12 +12,12 @@ import { NotificationComponent } from '../shared/tool/notification/notification.
 
 @Injectable()
 export class SalesOrderService {
-    public test: string;
     private apiURL = environment.webapiURL;
     private salesorders: SalesOrder[];
     private salesorderlines: SalesOrderLine[];
     currentSalesOrderLine: SalesOrderLine;
     currentSalesOrder: SalesOrder;
+    public currentNotificationID: string;
     private deliveryaddress: string;
 
     public subject = new Subject<string>();

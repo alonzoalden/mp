@@ -1,11 +1,10 @@
 import { SalesOrderService } from './../../../../sales-order.service';
-import { Component, OnInit, ViewChild, Output, EventEmitter, SimpleChanges, Input, OnChanges, OnDestroy } from '@angular/core';
-import { ActivatedRoute, Router, NavigationStart, NavigationEnd } from '@angular/router';
+import { Component, OnInit, Output, EventEmitter, SimpleChanges, Input, OnChanges, OnDestroy } from '@angular/core';
+import { ActivatedRoute, Router } from '@angular/router';
 import { MatTableDataSource} from '@angular/material';
 import { SalesOrder } from '../../../../../shared/class/sales-order';
 import { Fulfillment } from '../../../../../shared/class/fulfillment';
 import { NotificationComponent } from '../../../../../shared/tool/notification/notification.component';
-import { filter } from 'rxjs/operators';
 
 @Component({
   selector: 'o-sales-order-fulfillment-list',
@@ -31,7 +30,11 @@ export class SalesOrderFulfillmentListComponent implements OnInit, OnChanges, On
     isMerchant: boolean;
     notificationID: string;
 
-    constructor(private not: NotificationComponent, private route: ActivatedRoute, private router: Router, private salesorderSerivce: SalesOrderService) { }
+    constructor(
+        private notificationComponent: NotificationComponent,
+        private route: ActivatedRoute,
+        private salesorderSerivce: SalesOrderService
+    ) { }
 
     ngOnChanges(changes: SimpleChanges): void {
         if (changes.salesOrder && !changes.salesOrder.currentValue && changes.salesOrder.firstChange) {
@@ -51,23 +54,6 @@ export class SalesOrderFulfillmentListComponent implements OnInit, OnChanges, On
         } else {
             this.isMerchant = false;
         }
-        this.not.subject.subscribe((val) => {
-            this.salesorderSerivce.test = val.id;
-            console.log(val);
-        });
-        // this.not.subject.subscribe((val) => {
-        //     this.salesorderSerivce.test = val.id;
-        //     this.notificationID = val.id;
-        //     console.log(this.salesorderSerivce.test);
-        // });
-
-    //     this.route.url.subscribe(url => {
-    //         console.log(url);
-    //         if (url[0].path !== 'fulfillment' && this.notificationID) {
-    //             this.not.remove(this.notificationID);
-    //         }
-    //    });
-
     }
     onDeleteFulfillment(fulfillment: Fulfillment) {
         const confirmation = confirm(`Remove Shipment ID# ${fulfillment.FulfillmentID}?`);
@@ -76,9 +62,8 @@ export class SalesOrderFulfillmentListComponent implements OnInit, OnChanges, On
         }
     }
     ngOnDestroy() {
-        console.log(this.salesorderSerivce.test);
-        if (this.salesorderSerivce.test) {
-            this.not.remove(this.salesorderSerivce.test);
+        if (this.salesorderSerivce.currentNotificationID) {
+            this.notificationComponent.remove(this.salesorderSerivce.currentNotificationID);
         }
     }
 }

@@ -36,8 +36,7 @@ export class ItemEditComponent implements OnInit, OnChanges {
 
     constructor(private route: ActivatedRoute,
         private router: Router,
-        private itemService: ItemService,
-        private appService: AppService) { }
+        private itemService: ItemService) { }
 
     ngOnChanges(changes: SimpleChanges) {
         if (changes.item && changes.item.currentValue) {
@@ -316,12 +315,10 @@ export class ItemEditComponent implements OnInit, OnChanges {
             let _ret = true;
             this.item.ItemOptions.forEach((option, index) => {
                 if (!option.pendingAdd) {
-                    if ( !option.ItemSelections || ( option.ItemSelections && option.ItemSelections.filter(
-                            (selection: ItemSelection) => selection.ItemID
-                        ).length === 0 )
-                    ) {
-                        this.itemService.sendNotification({ type: 'error', title: 'Invalid Entry', content: 'Selection is required for a Bundle Option "' + option.Title + '"' });
-                        _ret = false;
+                    if (!option.ItemSelections || ( option.ItemSelections && option.ItemSelections.filter((selection: ItemSelection) =>
+                        selection.ItemID).length === 0 )) {
+                            this.itemService.sendNotification({ type: 'error', title: 'Invalid Entry', content: 'Selection is required for a Bundle Option "' + option.Title + '"' });
+                            _ret = false;
                     }
                 }
             });

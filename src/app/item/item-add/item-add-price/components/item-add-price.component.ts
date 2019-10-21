@@ -46,20 +46,14 @@ export class ItemAddPriceComponent implements OnInit, OnChanges {
         this.itemTierPricesMatTable.sort = this.sort;
     }
 
-    onAddItemTierPrice(itemTierPrice: ItemTierPriceInsert) {
-        let counter: number = 0;
-        this.item.ItemTierPrices.forEach((p) => {
-            if (p.Quantity === itemTierPrice.Quantity) {
-                counter++;
-            }
-        });
-
-        if (counter > 1) {
+    onAddItemTierPrice(itemtierpriceinsert: ItemTierPriceInsert): void {
+        const existingTierPrices = this.item.ItemTierPrices.filter(itemtierprice => itemtierprice.Quantity === itemtierpriceinsert.Quantity);
+        if (existingTierPrices.length > 1) {
             this.itemService.sendNotification({ type: 'error', title: 'Error', content: 'Tier Pricing already exists for this Quantity' });
         } else {
             this.pendingAdd = true;
-            const _temp = new ItemTierPriceInsert(null, null, null);
-            this.item.ItemTierPrices.push(_temp);
+            const temp = new ItemTierPriceInsert(null, null, null);
+            this.item.ItemTierPrices.push(temp);
             this.refreshItemTierPriceDataSource(this.item.ItemTierPrices);
         }
     }
