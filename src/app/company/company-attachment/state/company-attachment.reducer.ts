@@ -14,7 +14,7 @@ export interface CompanyAttachmentState {
 const initialState: CompanyAttachmentState = {
     vendorAttachments: [],
     currentVendorAttachmentID: null,
-    isVendorAttachmentsLoading: true,
+    isVendorAttachmentsLoading: false,
     pendingDelete: false,
     pendingUpload: false,
     error: ''
