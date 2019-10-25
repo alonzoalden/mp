@@ -2,12 +2,6 @@ import { Component, OnInit, Inject } from '@angular/core';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material';
 import { PurchaseOrder } from '../../../shared/class/purchase-order';
 
-@Component({
-  selector: 'o-inbound-shipment-edit',
-  templateUrl: './inbound-shipment-edit.component.html',
-  styleUrls: ['./inbound-shipment-edit.component.css']
-})
-
 export class LineItemLabelPrintDialogComponent {
     constructor(
         public Size: string,
