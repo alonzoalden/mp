@@ -128,6 +128,6 @@ export class SalesOrderDetailComponent implements OnInit, OnChanges {
 
     navigateToFulfillments() {
         this.router.navigate(['/sales-order/view/merchant/' + this.orderid + '/fulfillment']);
-        this.notificationComponent.notify({ type: 'info', title: 'Fulfillments page', content: 'You are now here!' }, { timeOut: 0 }, true);
+        this.notificationComponent.notify({ type: 'info', title: 'Tracking Information Required', content: 'Please input tracking to complete order.' }, { timeOut: 0 }, true);
     }
 }
