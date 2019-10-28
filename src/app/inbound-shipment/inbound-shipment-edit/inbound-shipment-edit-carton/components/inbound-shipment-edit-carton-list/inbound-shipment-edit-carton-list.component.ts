@@ -335,9 +335,7 @@ export class InboundShipmentEditCartonListComponent
     }
 
     isValidQuantity(cartonline: CartonLine) {
-        const foundPurchaseOrderLine = this.purchaseOrder.PurchaseOrderLines.find(
-            x => x.PurchaseOrderLineID === cartonline.PurchaseOrderLineID
-        );
+        const foundPurchaseOrderLine = this.purchaseOrder.PurchaseOrderLines.find(x => x.PurchaseOrderLineID === cartonline.PurchaseOrderLineID);
         if (foundPurchaseOrderLine) {
             let _remainingQuantity: number = foundPurchaseOrderLine.Quantity;
 
