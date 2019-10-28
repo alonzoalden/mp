@@ -401,7 +401,7 @@ export class PurchaseOrderService {
                     if (purchaseorderline) {
                         purchaseorderline.CartonQuantity += cartonline.Quantity;
                         this.replacePurchaseOrderLine(cartonline.PurchaseOrderLineID, purchaseorderline);
-
+                        this.updateCartonLineRemainingQuantity(cartonline, purchaseorder);
                         purchaseorder.PurchaseOrderLines[purchaseorder.PurchaseOrderLines.findIndex(i => i.PurchaseOrderLineID === cartonline.PurchaseOrderLineID)] = purchaseorderline;
                     }
                 }
