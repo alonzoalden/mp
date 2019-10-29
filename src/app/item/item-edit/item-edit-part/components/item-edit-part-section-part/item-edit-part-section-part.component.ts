@@ -272,7 +272,7 @@ export class ItemEditPartSectionPartComponent implements OnInit {
             this.refreshDataSource(this.currentItemPartSelection.ItemParts);
         }
     }
-    clearFields(ItemPartInsert: ItemPart) {
+    clearFields(ItemPartInsert: ItemPart, i: number) {
         ItemPartInsert.PartItemID = null;
         ItemPartInsert.PartFOBPrice = null;
         ItemPartInsert.PartPrice = null;
@@ -280,6 +280,8 @@ export class ItemEditPartSectionPartComponent implements OnInit {
         ItemPartInsert.PartItemName = null;
         ItemPartInsert.isNew = null;
         ItemPartInsert.PartTPIN = null;
+        ItemPartInsert.ImageFilePath = null;
+        ItemPartInsert.ItemSectionID = null;
         this.formDirty = false;
     }
     overflowFix(bool: Boolean): void {

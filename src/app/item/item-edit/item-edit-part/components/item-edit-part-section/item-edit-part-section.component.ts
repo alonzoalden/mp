@@ -226,15 +226,11 @@ export class ItemEditPartSectionComponent implements OnInit {
             this.refreshDataSource(this.item.ItemSections);
         }
     }
-    clearFields(ItemPartInsert: ItemPart) {
-        ItemPartInsert.PartItemID = null;
-        ItemPartInsert.PartFOBPrice = null;
-        ItemPartInsert.PartPrice = null;
-        ItemPartInsert.PartItemVendorSKU = null;
-        ItemPartInsert.PartItemName = null;
-        ItemPartInsert.isNew = null;
-        ItemPartInsert.PartTPIN = null;
-
+    clearFields(itemsectioninsert: ItemSection) {
+        itemsectioninsert.Name = null;
+        itemsectioninsert.ImageFilePath = null;
+        itemsectioninsert.ImageRaw = null;
+        itemsectioninsert = null;
         this.formDirty = false;
     }
     overflowFix(bool: Boolean): void {

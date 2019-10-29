@@ -275,6 +275,7 @@ export class ItemAddPartSectionPartComponent implements OnInit {
         ItemPartInsert.PartItemName = null;
         ItemPartInsert.isNew = null;
         ItemPartInsert.PartTPIN = null;
+        ItemPartInsert.ImageFilePath = null;
         this.formDirty = false;
     }
 

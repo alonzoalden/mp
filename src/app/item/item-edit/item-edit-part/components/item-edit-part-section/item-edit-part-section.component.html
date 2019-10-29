@@ -100,7 +100,7 @@
                                                     {{itemPart.Name}}
                                                 </div>
                                                 <div *ngIf="(currentIndex === i || i === item.ItemSections.length-1)">
-                                                    <input class="form-control" id="PartSectionNameID" type="text" (change)="formDirty = true;"
+                                                    <input class="form-control" id="PartSectionNameID" type="text" (focus)="formDirty = true;"
                                                         placeholder="{{ 'Part Section Name' | translate }} ({{ 'Required' | translate }})" required
                                                         [(ngModel)]=itemPart.Name (change)="onChangeSectionName(itemPart)" name="Name" [ngModelOptions]="{standalone: true}"/>
                                                 </div>

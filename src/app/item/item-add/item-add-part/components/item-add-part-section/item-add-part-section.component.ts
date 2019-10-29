@@ -203,13 +203,11 @@ export class ItemAddPartSectionComponent implements OnInit, OnChanges {
             this.refreshDataSource(this.item.ItemSections);
         }
     }
-    clearFields(ItemPartInsert: ItemSectionInsert) {
-
-        ItemPartInsert.Name = null;
-        ItemPartInsert.ImageFilePath = null;
-        ItemPartInsert.ImageRaw = null;
-        ItemPartInsert = null;
-
+    clearFields(itemsectioninsert: ItemSectionInsert) {
+        itemsectioninsert.Name = null;
+        itemsectioninsert.ImageFilePath = null;
+        itemsectioninsert.ImageRaw = null;
+        itemsectioninsert = null;
         this.formDirty = false;
     }
 
