@@ -56,9 +56,8 @@ export class ItemEditVideoComponent implements OnInit, OnChanges {
 
     onAddItemVideo(itemVideo: ItemVideo) {
         if (this.isRequirementValid(itemVideo)) {
-            const videoID = this.getYoutubeQueryString(itemVideo.URL);
+            const videoID = this.itemService.getYoutubeQueryString(itemVideo.URL);
             if (!videoID) { return this.itemService.sendNotification({ type: 'error', title: 'Error', content: 'Incorrect Youtube URL' }); }
-
             const existVideo = this.item.ItemVideos.find(x => x.Value === videoID);
             if (existVideo) {
                 itemVideo.URL = '';
@@ -73,16 +72,6 @@ export class ItemEditVideoComponent implements OnInit, OnChanges {
             }
         } else {
             this.itemService.sendNotification({ type: 'error', title: 'Error', content: 'Please select an Video' });
-        }
-    }
-    getYoutubeQueryString(url: string) {
-        if (url.includes('?v=')) {
-            const reg = new RegExp( '[?&]' + 'v' + '=([^&#]*)', 'i' );
-            const value = reg.exec(url);
-            return value[1];
-        } else if (url.includes('/embed/')) {
-            const value = url.split('/embed/')[1].split('?')[0];
-            return value;
         }
     }
 
