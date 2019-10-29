@@ -62,7 +62,7 @@
                                                     <button [disabled]="pendingUpload" type="button" class="btn btn-primary" (click)="fileUpload.click();"><i class="fa fa-file-image-o"></i>  {{ 'Browse' | translate }}</button>
                                                 </div>
                                                 <!-- <div *ngIf="(itemPart.ImageRaw || itemPart.PartItemID) && ( !pendingUpload || i != currentIndex )" class="thumbnail-container">                                                         -->
-                                                <div *ngIf="(i != item.ItemSections.length-1 || itemPart.PartItemID) && ( !pendingUpload || i != currentIndex )" class="thumbnail-container flex-va-center">
+                                                <div *ngIf="itemPart.ImageRaw && ( !pendingUpload || i != currentIndex )" class="thumbnail-container flex-va-center">
                                                     <a (click)="fileUpload.click()">
                                                         <!-- <img src="{{itemPart.ImageRaw}}" [title]='itemPart.PartItemName'> -->
                                                         <img src="{{imageURL + itemPart.ImageFilePath}}" [title]='itemPart.PartItemName' *ngIf="!itemPart.IsNewImage && itemPart.ImageFilePath">

@@ -12,10 +12,10 @@ import { environment } from '../../../../../../environments/environment';
 })
 
 export class ItemAddPartSectionComponent implements OnInit, OnChanges {
-    imageURL = environment.imageURL;
-    isPM: boolean;
     @Input() errorMessage: string;
     @Input() item: ItemInsert;
+    imageURL = environment.imageURL;
+    isPM: boolean;
     itemlist: ItemList[];
     displayedColumns = ['Add', 'Down', 'Position', 'Up', 'Thumbnail', 'ItemName', 'Remove'];
     dataSource: any = null;
