@@ -25,12 +25,10 @@ export class CompanyAttachmentEffects {
             this.companyService.getVendorAttachments().pipe(
                 map(vendorattachments => (new companyActions.LoadVendorAttachmentsSuccess(vendorattachments))),
                 catchError(err => {
-                    of(new companyActions.LoadVendorAttachmentsFail(err));
-                    return EMPTY;
+                    return of(new companyActions.LoadVendorAttachmentsFail(err));
                 })
             )
-        ),
-        take(1)
+        )
     );
 
     @Effect()

@@ -120,7 +120,8 @@ export class ItemAddComponent implements OnInit {
 
     isItemNameValid(): boolean {
         if (this.item.VendorBrandID) {
-            if (this.item.Name.toLowerCase().includes(this.vendorBrandList.find(x => x.VendorBrandID === Number(this.item.VendorBrandID)).BrandName.toLowerCase())) {
+            // tslint:disable-next-line: triple-equals
+            if (this.item.Name.toLowerCase().includes(this.vendorBrandList.find(x => x.VendorBrandID == Number(this.item.VendorBrandID)).BrandName.toLowerCase())) {
                 this.itemService.sendNotification({ type: 'error', title: 'Invalid Entry', content: '"Brand" should not be included in "Item Name"' });
                 return false;
             } else {

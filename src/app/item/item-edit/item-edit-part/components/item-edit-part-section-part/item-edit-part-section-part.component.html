@@ -62,7 +62,8 @@
                                                             || i === currentItemPartSelection.ItemParts.length-1 && itemPart.PartItemID && !itemPart.ImageRaw && !itemPart.ImageFilePath">
                                                     <button [disabled]="pendingUpload || pendingLoad && currentIndex === i" type="button" class="btn btn-primary" (click)="fileUpload.click();"><i class="fa fa-file-image-o"></i>  {{ 'Browse' | translate }}</button>
                                                 </div>
-                                                <div *ngIf="(i != currentItemPartSelection.ItemParts.length-1 || itemPart.ImageRaw || itemPart.ImageFilePath) && ( !pendingUpload || i != currentIndex )" class="thumbnail-container flex-va-center">
+                                                <!-- <div *ngIf="(i != currentItemPartSelection.ItemParts.length-1 || itemPart.ImageRaw || itemPart.ImageFilePath) && ( !pendingUpload || i != currentIndex )" class="thumbnail-container flex-va-center"> -->
+                                                    <div *ngIf="(i != currentItemPartSelection.ItemParts.length-1 || itemPart.ImageRaw || itemPart.ImageFilePath) && ( !pendingUpload || i != currentIndex )" class="thumbnail-container flex-va-center">
                                                     <a (click)="fileUpload.click()">
                                                         <img src="{{imageURL + itemPart.ImageFilePath}}" [title]='itemPart.PartItemName' *ngIf="!itemPart.IsNewImage && itemPart.ImageFilePath">
                                                         <img src='https://content-merchantportal.toolots.net/assets/images/no-image-icon.png' title='Product has no image' class="opaque"
@@ -189,7 +190,7 @@
                                                     </div>
                                                 </div>
                                                 <div *ngIf="currentIndex === i || i === currentItemPartSelection.ItemParts.length-1">
-                                                    <div *ngIf="isPM" class="flex">
+                                                    <div *ngIf="isPM" class="flex m-r-md">
                                                         <input class="form-control m-r-smi" id="itemPartFOBPriceId" type="number" placeholder="{{ 'FOB Price' | translate }} ({{ 'Required' | translate }})"
                                                             step="0.01" (change)="onChangeFOBPrice(itemPart);" onkeydown="return event.keyCode == 69 || event.keyCode == 189 ? false : true" min="0"
                                                             required [(ngModel)]=itemPart.PartFOBPrice name="itemPartFOBPrice" #itemPartFOBPriceVar="ngModel" [disabled]="pendingLoad && currentIndex === i"/>

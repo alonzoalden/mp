@@ -524,7 +524,6 @@ export class ItemEffects {
             this.itemService.downloadItemLabelCount(payload.item.ItemID, payload.count, payload.border).pipe(
                 map((data: Blob) => {
                     const blob = new Blob([data], {type: 'application/pdf'});
-                    const blobUrl = URL.createObjectURL(blob);
                     if (window.navigator.msSaveOrOpenBlob) {
                         const fileName = payload.item.TPIN;
                         window.navigator.msSaveOrOpenBlob(data, fileName + '.pdf');
@@ -557,10 +556,9 @@ export class ItemEffects {
         ofType(itemActions.ItemActionTypes.DownloadItemLargeLabelCount),
         map((action: itemActions.DownloadItemLargeLabelCount) => action.payload),
         mergeMap((payload) =>
-            this.itemService.downloadItemLabelCount(payload.item.ItemID, payload.count, payload.border).pipe(
+            this.itemService.downloadItemLargeLabelCount(payload.item.ItemID, payload.count, payload.border).pipe(
                 map((data: Blob) => {
                     const blob = new Blob([data], {type: 'application/pdf'});
-                    const blobUrl = URL.createObjectURL(blob);
                     if (window.navigator.msSaveOrOpenBlob) {
                         const fileName = payload.item.TPIN;
                         window.navigator.msSaveOrOpenBlob(data, fileName + '.pdf');

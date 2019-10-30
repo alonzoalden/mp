@@ -1,4 +1,4 @@
-import { Component, ViewChild, Input, Output, EventEmitter, SimpleChanges, OnInit, OnChanges, AfterViewInit } from '@angular/core';
+import { Component, ViewChild, Input, Output, EventEmitter, SimpleChanges, OnInit, OnChanges } from '@angular/core';
 import { MatTableDataSource, MatPaginator, MatSort } from '@angular/material';
 import { VendorAttachment } from '../../../../shared/class/vendor-attachment';
 import { environment } from '../../../../../environments/environment';
@@ -8,7 +8,7 @@ import { environment } from '../../../../../environments/environment';
     templateUrl: './company-attachment-list.component.html'
 })
 
-export class CompanyAttachmentListComponent implements OnInit, OnChanges, AfterViewInit {
+export class CompanyAttachmentListComponent implements OnInit, OnChanges {
     fileURL = environment.fileURL;
     displayedColumns = ['Menu', 'View', 'ID', 'Title', 'CreatedOn', 'Exclude'];
     currentIndex = null;
@@ -37,12 +37,10 @@ export class CompanyAttachmentListComponent implements OnInit, OnChanges, AfterV
     }
     ngOnInit() {
         this.applyFilter('');
+        this.getVendorAttachments.emit();
     }
     onSetVendorAttachmentID(id: number) {
         this.setVendorAttachmentID.emit(id);
-    }
-    ngAfterViewInit(): void {
-        this.getVendorAttachments.emit();
     }
     onDeleteAttachment(vendorattachment: VendorAttachment, index: number) {
         this.currentIndex = index;

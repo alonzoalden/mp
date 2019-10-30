@@ -218,7 +218,7 @@
                                                     </div>
                                                 </div>
                                                 <div *ngIf="currentIndex === i || i === currentItemPartSelectionInsert.ItemParts.length-1">
-                                                    <div *ngIf="isPM" class="flex">
+                                                    <div *ngIf="isPM" class="flex m-r-sm">
                                                         <input class="form-control m-r-smi" id="itemPartFOBPriceId" type="number" placeholder="{{ 'FOB Price' | translate }} ({{ 'Required' | translate }})"
                                                             step="0.01" (change)="onChangeFOBPrice(itemPart);" onkeydown="return event.keyCode == 69 || event.keyCode == 189 ? false : true" min="0"
                                                             required [(ngModel)]=itemPart.PartFOBPrice name="itemPartFOBPrice" #itemPartFOBPriceVar="ngModel" [disabled]="pendingLoad && currentIndex === i"/>

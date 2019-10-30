@@ -238,7 +238,7 @@ export function itemReducer(state = initialState, action: ItemActions): ItemStat
             return {
                 ...state,
                 items: _itemExists ? [...state.items] : [action.payload, ...state.items],
-                itemBatchItems: [action.payload, ...state.itemBatchItems],
+                //itemBatchItems: [action.payload, ...state.itemBatchItems],
                 pendingAdd: false,
                 error: '',
             };

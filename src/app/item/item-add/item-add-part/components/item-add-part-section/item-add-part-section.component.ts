@@ -12,10 +12,10 @@ import { environment } from '../../../../../../environments/environment';
 })
 
 export class ItemAddPartSectionComponent implements OnInit, OnChanges {
-    imageURL = environment.imageURL;
-    isPM: boolean;
     @Input() errorMessage: string;
     @Input() item: ItemInsert;
+    imageURL = environment.imageURL;
+    isPM: boolean;
     itemlist: ItemList[];
     displayedColumns = ['Add', 'Down', 'Position', 'Up', 'Thumbnail', 'ItemName', 'Remove'];
     dataSource: any = null;
@@ -203,13 +203,11 @@ export class ItemAddPartSectionComponent implements OnInit, OnChanges {
             this.refreshDataSource(this.item.ItemSections);
         }
     }
-    clearFields(ItemPartInsert: ItemSectionInsert) {
-
-        ItemPartInsert.Name = null;
-        ItemPartInsert.ImageFilePath = null;
-        ItemPartInsert.ImageRaw = null;
-        ItemPartInsert = null;
-
+    clearFields(itemsectioninsert: ItemSectionInsert) {
+        itemsectioninsert.Name = null;
+        itemsectioninsert.ImageFilePath = null;
+        itemsectioninsert.ImageRaw = null;
+        itemsectioninsert = null;
         this.formDirty = false;
     }
 

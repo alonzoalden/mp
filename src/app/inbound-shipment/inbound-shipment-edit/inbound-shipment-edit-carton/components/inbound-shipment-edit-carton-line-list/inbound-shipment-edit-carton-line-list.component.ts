@@ -4,6 +4,7 @@ import { MatSort, MatTableDataSource } from '@angular/material';
 import { PurchaseOrder, PurchaseOrderLineList, Carton, CartonLine} from '../../../../../shared/class/purchase-order';
 import { PurchaseOrderService } from '../../../../purchase-order.service';
 import { environment } from 'environments/environment';
+import { NgSelectComponent } from '@ng-select/ng-select';
 
 @Component({
     selector: 'o-inbound-shipment-edit-carton-line-list',
@@ -28,6 +29,7 @@ export class InboundShipmentEditCartonLineListComponent implements OnInit, OnCha
     canAdd = false;
     cartonlines: CartonLine[];
     @ViewChild(MatSort, { static: false }) sort: MatSort;
+    @ViewChild('productSelectRef', { static: false }) productSelectRef: NgSelectComponent;
 
     constructor(private route: ActivatedRoute,
                 private purchaseOrderService: PurchaseOrderService) { }
@@ -54,9 +56,9 @@ export class InboundShipmentEditCartonLineListComponent implements OnInit, OnCha
     }
 
     removePendingLine() {
-        const foundIndex = this.cartonlines.findIndex(i => i.pendingAdd === true);
+        const foundIndex = this.carton.CartonLines.findIndex(i => i.pendingAdd === true);
         if (foundIndex > -1) {
-            this.cartonlines.splice(foundIndex, 1);
+            this.carton.CartonLines.splice(foundIndex, 1);
         }
     }
 
@@ -201,11 +203,15 @@ export class InboundShipmentEditCartonLineListComponent implements OnInit, OnCha
         }
     }
 
-    clearFields() {
+    clearFields(cartonline: CartonLine) {
         this.formDirty = false;
         this.canAdd = false;
-        this.removePendingLine();
-        this.addPendingLine();
+        cartonline.ItemName = null;
+        cartonline.ItemVendorSKU = null;
+        cartonline.TPIN = null;
+        cartonline.RemainingQuantity = 0;
+        cartonline.Quantity = 1;
+        this.productSelectRef.clearModel();
     }
 
     scrollToElement($element): void {

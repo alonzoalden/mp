@@ -73,7 +73,7 @@ export class CompanyService {
         });
         return this.http.put<CompanyInfo>(this.apiURL + '/company/shippingaddress', companyInfo, { headers: headers} )
                             .pipe(
-                                tap(data => console.log(data)),
+                                // tap(data => console.log(data)),
                                 catchError(this.handleError)
                             );
     }
@@ -90,10 +90,6 @@ export class CompanyService {
     }
 
     uploadAttachment(formData: FormData) {
-
-
-        console.log(formData);
-
         return this.http.post<VendorAttachment>(this.apiURL + '/vendorattachment/upload', formData )
             .pipe(
                 //tap(data => console.log(JSON.stringify(data))),

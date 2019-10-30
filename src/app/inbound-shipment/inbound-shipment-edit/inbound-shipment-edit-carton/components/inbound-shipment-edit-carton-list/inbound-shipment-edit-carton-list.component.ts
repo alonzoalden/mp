@@ -326,49 +326,35 @@ export class InboundShipmentEditCartonListComponent
             }
 
             if (i === newCarton.CartonLines.length - 1 && isValid) {
-                this.purchaseOrder.Cartons.splice(
-                    this.purchaseOrder.Cartons.length - 1,
-                    0,
-                    newCarton
-                );
+                this.purchaseOrder.Cartons.splice(this.purchaseOrder.Cartons.length - 1, 0, newCarton);
                 this.refreshDataSource(this.purchaseOrder.Cartons);
             }
         });
-        this.purchaseOrderService.updatePurchaseLineCartonQuantity(
-            this.purchaseOrder
-        );
+        this.purchaseOrderService.updatePurchaseLineCartonQuantity(this.purchaseOrder);
         this.pendingCopy = false;
     }
 
     isValidQuantity(cartonline: CartonLine) {
-        const foundPurchaseOrderLine = this.purchaseOrder.PurchaseOrderLines.find(
-            x => x.PurchaseOrderLineID === cartonline.PurchaseOrderLineID
-        );
+        const foundPurchaseOrderLine = this.purchaseOrder.PurchaseOrderLines.find(x => x.PurchaseOrderLineID === cartonline.PurchaseOrderLineID);
         if (foundPurchaseOrderLine) {
             let _remainingQuantity: number = foundPurchaseOrderLine.Quantity;
 
             this.purchaseOrder.Cartons.forEach((carton, ci) => {
                 carton.CartonLines.forEach((cartonline2, cli) => {
-                    if (
-                        cartonline2.PurchaseOrderLineID ===
-                        cartonline.PurchaseOrderLineID
-                    ) {
-                        _remainingQuantity =
-                            _remainingQuantity - cartonline2.Quantity;
+                    if (cartonline2.PurchaseOrderLineID === cartonline.PurchaseOrderLineID) {
+                        _remainingQuantity = _remainingQuantity - cartonline2.Quantity;
                     }
                 });
             });
 
             if (_remainingQuantity - cartonline.Quantity < 0) {
-                this.purchaseOrderService.sendNotification({
-                    type: 'error',
-                    title: 'Error',
-                    content: 'Exceeded line quantity'
-                });
+                this.purchaseOrderService.sendNotification({ type: 'error', title: 'Error', content: 'Exceeded line quantity' });
                 return false;
             } else {
                 return true;
             }
+        } else {
+            return true;
         }
     }
 
@@ -393,15 +379,10 @@ export class InboundShipmentEditCartonListComponent
                 }
             }
 
-            this.purchaseOrderService.currentCartonLines.next(
-                carton.CartonLines
-            );
+            this.purchaseOrderService.currentCartonLines.next(carton.CartonLines);
             this.purchaseOrderService.currentCartonID = carton.CartonID;
 
-            if (
-                !carton.CartonNumber &&
-                this.currentIndex !== this.purchaseOrder.Cartons.length - 1
-            ) {
+            if (!carton.CartonNumber && this.currentIndex !== this.purchaseOrder.Cartons.length - 1) {
                 this.removePendingLine();
                 this.addPendingLine();
                 this.refreshDataSource(this.purchaseOrder.Cartons);

@@ -33,7 +33,6 @@ export class AdminEffects {
                 })
             )
         ),
-        take(1)
     );
     @Effect()
     loadVendorList$: Observable<Action> = this.actions$.pipe(

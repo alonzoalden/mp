@@ -459,7 +459,6 @@ export class InboundShipmentEffects {
             this.inboundShipmentService.downloadItemLabelCount(payload.purchaseorderline.ItemID, payload.count, payload.border).pipe(
                 map((data: Blob) => {
                     const blob = new Blob([data], {type: 'application/pdf'});
-                    const blobUrl = URL.createObjectURL(blob);
                     if (window.navigator.msSaveOrOpenBlob) {
                         const fileName = payload.purchaseorderline.TPIN;
                         window.navigator.msSaveOrOpenBlob(data, fileName + '.pdf');
@@ -490,10 +489,9 @@ export class InboundShipmentEffects {
         ofType(inboundShipmentActions.InboundShipmentActionTypes.DownloadItemLargeLabelCount),
         map((action: inboundShipmentActions.DownloadItemLargeLabelCount) => action.payload),
         mergeMap((payload: { purchaseorderline: PurchaseOrderLine, count: number, border: string}) =>
-            this.inboundShipmentService.downloadItemLabelCount(payload.purchaseorderline.ItemID, payload.count, payload.border).pipe(
+            this.inboundShipmentService.downloadItemLargeLabelCount(payload.purchaseorderline.ItemID, payload.count, payload.border).pipe(
                 map((data: Blob) => {
                     const blob = new Blob([data], {type: 'application/pdf'});
-                    const blobUrl = URL.createObjectURL(blob);
                     if (window.navigator.msSaveOrOpenBlob) {
                         const fileName = payload.purchaseorderline.TPIN;
                         window.navigator.msSaveOrOpenBlob(data, fileName + '.pdf');
