@@ -1,0 +1,33 @@
+<div class="ibox float-e-margins" *ngIf="itemSalesTotalsMatTable?.data.length > 0">
+    <mat-expansion-panel [expanded]="true">
+        <mat-expansion-panel-header class="ibox-title">
+            <mat-panel-title>
+            <h5>{{ 'Top Item Sales' | translate }}</h5>
+            </mat-panel-title>
+        </mat-expansion-panel-header>
+        <div class="ibox-content" style="min-height: 338px;">
+                <table mat-table #table [dataSource]="itemSalesTotalsMatTable" style="width: 100%;" class="table-striped">
+                    <!-- Item Name -->
+                    <ng-container matColumnDef="ItemName">
+                        <th mat-header-cell *matHeaderCellDef width="200px" style="align-items: left">{{ 'Item Name' | translate }}</th>
+                        <td mat-cell *matCellDef="let itemSalesTotal">
+                            <p style="overflow: hidden; white-space: nowrap; text-overflow: ellipsis; padding: 0;"><a [href]="linkURL + '/' + itemSalesTotal.URLKey + '.html'" target="_blank">{{itemSalesTotal.ItemName}}</a></p>
+                        </td>
+                    </ng-container>
+                    <!-- Total Qty-->
+                    <ng-container matColumnDef="Quantity">
+                        <th mat-header-cell *matHeaderCellDef width="70px" class="" style="text-align: center !important">{{ 'Quantity' | translate }}</th>
+                        <td mat-cell *matCellDef="let itemSalesTotal" class="" style="text-align: center !important"><span class="badge badge-info">{{itemSalesTotal.Quantity}}</span></td>
+                    </ng-container>
+                    <!-- Total Amount -->
+                    <ng-container matColumnDef="Amount">
+                        <th mat-header-cell *matHeaderCellDef width="100px" class="text-td-right">{{ 'Amount' | translate }}</th>
+                        <!-- <td mat-cell *matCellDef="let itemSalesTotal"><span class="label label-primary">{{itemSalesTotal.Amount | currency}}</span></td> -->
+                        <td mat-cell *matCellDef="let itemSalesTotal" class="text-td-right"><strong>{{itemSalesTotal.Amount | currency}}</strong></td>
+                    </ng-container>
+                    <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+                    <tr @smoothOpen class="animated fadeIn" mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+                </table>
+            </div>
+    </mat-expansion-panel>
+</div>

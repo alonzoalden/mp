@@ -1,0 +1,9 @@
+<o-item-add-category
+    [item]="item$ | async"
+    [categoriesList]="categoriesList$ | async"
+    [currentResult]="currentResult$ | async"
+    [errorMessage]="errorMessage$ | async"
+    [item]="item$ | async"
+    (getCategories)="getCategories($event)"
+    (getCategoryBreadCrumbs)="getCategoryBreadCrumbs($event)"
+></o-item-add-category>

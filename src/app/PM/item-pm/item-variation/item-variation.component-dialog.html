@@ -1,0 +1,71 @@
+<h3 class="ibox-title dialog-title">{{ 'Create Item Variations' | translate }}</h3>
+<div mat-dialog-content class="lightgray-bg">
+    <mat-tab-group class="item-variation" [@.disabled]="true" [disableRipple]="true" [dynamicHeight]="false" (selectedTabChange)="canShowDefaultOldSettings($event.tab.textLabel)">        
+        <mat-tab *ngFor="let tab of selectedItemAttributes; let i = index" [label]="tab">
+            <ng-container>
+                <ng-template mat-tab-label>
+                    <span>{{ tab.Name | translate }}</span>
+                </ng-template>
+                <div class="item-variation-content">
+                    <h5 class="text-left m-t-sm">{{ 'Select' | translate }} {{tab.Name}} {{ 'Variations' | translate }}</h5> 
+                    <h5 class="skinny1">{{ 'Options selected' | translate }}: {{properties?.selectedOptions.selected.length}}</h5>
+                    <mat-selection-list #properties [(ngModel)]="tab.SelectedItemAttributeVariations" (ngModelChange)="onNgModelChange(tab)">
+                        <mat-list-option *ngFor="let property of tab.ItemAttributeVariations" [value]="property"> {{property.Name}}</mat-list-option>
+                    </mat-selection-list>
+                    <div class="m-t-lg" *ngIf="canShowDefaultOldSettingsInput && tab.SelectedItemAttributeVariations" #oldDefaultRef>
+                        <h5>{{ 'Default old settings to' | translate }}:</h5>
+                        <ng-select [items]="tab.SelectedItemAttributeVariations"
+                                    bindLabel="Name"
+                                    placeholder="{{ 'Choose Variation for new default' | translate }}"
+                                    [(ngModel)]="tab.OldDefault"
+                                    (change)="validateItemVariation()"
+                                    [clearable]="false"
+                                    name="selectAttribute"
+                                    required
+                                    loadingText="Loading..."
+                                    class="inbound-line max-width">
+                                    <ng-template ng-notfound-tmp let-searchTerm="searchTerm">
+                                        <div class="ng-option disabled">
+                                            {{ 'Please select a ' | translate }} {{ tab.attributeName }} {{ ' Variation' | translate }}
+                                        </div>
+                                    </ng-template>
+                        </ng-select>
+                        <!-- <p class="m-t-xs" *ngIf="this.oldDefaultRef && !this.oldDefault"> * Required </p> -->
+                    </div>
+                </div>
+            </ng-container>
+        </mat-tab>
+        <mat-tab>
+            <ng-template mat-tab-label>
+                <i class="fa fa-plus m-r-sm"></i>
+                <span>{{ 'Add Attribute' | translate }}</span>
+            </ng-template>
+            <div class="item-variation-content">
+                <div class="m-b-md">
+                    <h5 class="m-t-sm">Select Item Attribute</h5> 
+                    <ng-select [items]="attributesVariationsListData"
+                                bindLabel="Name"
+                                placeholder="{{ 'Select Attribute' | translate }}"
+                                [(ngModel)]="newAttribute"
+                                name="selectAttribute"
+                                required
+                                [loading]="!attributesVariationsListData"
+                                loadingText="Loading..."
+                                class="inbound-line max-width">
+                    </ng-select>
+                </div>
+
+                <div class="text-left m-t-lg">
+                    <button [disabled]="!newAttribute" (click)="createAttribute()" mat-raised-button color="primary">
+                        <span>{{ 'Add' | translate }}</span>
+                    </button>
+                </div>
+            </div>
+        </mat-tab>
+    </mat-tab-group>
+    
+</div>
+<mat-dialog-actions>
+    <button [disabled]="addItemVariationInvalid" (click)="onAddItemVariationClick()" mat-button class="btn btn-success-xs btn-main" cdkFocusInitial>{{ 'Update' | translate }}</button>
+    <button (click)="onCancelClick()" mat-button class="btn btn-remove-xs">{{ 'Cancel' | translate }}</button>
+</mat-dialog-actions>

@@ -1,0 +1,9 @@
+<o-item-batch-update-update
+    [itemBatchItemsMatTable]="itemBatchItemsMatTable$ | async"
+    [batchUpdates]="batchUpdates$ | async"
+    [userInfo]="userInfo$ | async"
+    [isLoading]="isLoading$ | async"
+    [errorMessage]="errorMessage$ | async"
+    (getItemBatchUpdates)="getItemBatchUpdates()"
+    (editItemBatchUpdate)="editItemBatchUpdate($event)"
+></o-item-batch-update-update>

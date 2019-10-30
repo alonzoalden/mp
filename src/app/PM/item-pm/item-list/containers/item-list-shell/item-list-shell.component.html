@@ -1,0 +1,12 @@
+<o-item-list
+    [itemsMatTable]="itemsMatTable$ | async"
+    [userInfo]="userInfo$ | async"
+    [errorMessage]="errorMessage$ | async"
+    [isMainItemsListLoading]="isMainItemsListLoading$ | async"
+    [pendingDelete]="pendingDelete$ | async"
+    (getItems)="getItems()"
+    (downloadItemLabelCount)="downloadItemLabelCount($event)"
+    (downloadItemLargeLabelCount)="downloadItemLargeLabelCount($event)"
+    (downloadItemTemplate)="downloadItemTemplate()"
+    (deleteItem)="deleteItem($event)"
+></o-item-list>

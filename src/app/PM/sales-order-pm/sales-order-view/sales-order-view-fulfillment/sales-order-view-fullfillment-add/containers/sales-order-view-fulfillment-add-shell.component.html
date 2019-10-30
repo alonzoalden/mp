@@ -1,0 +1,10 @@
+<o-sales-order-fulfillment-add
+    [errorMessage]="errorMessage$ | async"
+    [fulfillmentSalesOrderLinesMatTable]="fulfillmentSalesOrderLinesMatTable$ | async"
+    [fulfillment]="fulfillment$ | async"
+    [salesOrder]="salesOrder$ | async"
+    [isLoading]="isLoading$ | async"
+    (getFulfilledBySalesOrder)="getFulfilledBySalesOrder($event)"
+    (getFulfilmmentSalesOrderLines)="getFulfilmmentSalesOrderLines($event)"
+    (addFulfillment)="addFulfillment($event)"
+></o-sales-order-fulfillment-add>

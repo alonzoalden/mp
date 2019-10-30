@@ -1,138 +1,141 @@
-<div class="top-navigation">
-    <div id="wrapper">
-        <div id="page-wrapper" class="gray-bg">
-            <div class="border-bottom white-bg" *ngIf="wasLoggedIn">
-                <nav id="main-nav" class="navbar navbar-static-top nav-mobile-resize" style="width: 100%" role="navigation">
-                    <!-- SP shows when small-->
-                    <div class="navigation-button pull-right">
-                        <a class="hide-large" aria-expanded="false" role="menu" href="#" data-toggle="dropdown"><i class="fa fa-cog m-r-none fs-16"></i> <span class="m-l-xs caret"></span></a>
-                        <ul role="menu" class="dropdown-menu menu-fix" aria-labelledby="dropdownMenu">
-                            <li><a [routerLink]="['setting']">{{ 'Change Merchant' | translate }}</a></li>
-                            <li><a [routerLink]="['setting','memberpreference']">{{ 'Member Preference' | translate }}</a></li>
-                            <li><a *ngIf="appService.currentMember?.IsDropship" [routerLink]="['setting','merchantagreement']">{{ 'Merchant Agreement' | translate }}</a></li>
-                            <li class="divider"></li>
-                            <li *ngIf="isLoggedin">
-                                <a (click)="logout()">
-                                    <i class="fa fa-sign-out m-r-xs"></i> <span>{{ 'Log Out' | translate }}</span>
-                                </a>
-                            </li>
-                        </ul>
-                    </div>
-                    <!-- SP -->
-                    <div class="navbar-top-links">
-                        <button aria-expanded="false" role="button" href="#" class="dropdown-toggle navbar-toggle collapsed nav-button clear-btn  m-r-none" data-toggle="dropdown"> <span class="flag-icon flag-icon-squared m-r-xs" [ngClass]="currentLanguage === 'en' ? 'flag-icon-us' : 'flag-icon-' + currentLanguage"></span><span class="skinny-label">{{ currentLanguage }}</span> <span class="hide-mobile m-l-xs caret"></span></button>
-                        <ul role="menu" class="dropdown-menu menu-fix pull-right">
-                            <li><a (click)="switchLanguage('en')"><span class="flag-icon flag-icon-us flag-icon-squared"></span> English <span class="skinny-label">(en)</span></a></li>
-                            <li><a (click)="switchLanguage('cn')"><span class="flag-icon flag-icon-cn flag-icon-squared"></span> 中文 <span class="skinny-label">(cn)</span></a></li>
-                        </ul>
-                    </div>
+<!--<div class="top-navigation">-->
+<!--    <div id="wrapper">-->
+<!--        <div id="page-wrapper" class="gray-bg">-->
+<!--            <div class="border-bottom white-bg" *ngIf="wasLoggedIn">-->
+<!--                <nav id="main-nav" class="navbar navbar-static-top nav-mobile-resize" style="width: 100%" role="navigation">-->
+<!--                    &lt;!&ndash; SP shows when small&ndash;&gt;-->
+<!--                    <div class="navigation-button pull-right">-->
+<!--                        <a class="hide-large" aria-expanded="false" role="menu" href="#" data-toggle="dropdown"><i class="fa fa-cog m-r-none fs-16"></i> <span class="m-l-xs caret"></span></a>-->
+<!--                        <ul role="menu" class="dropdown-menu menu-fix" aria-labelledby="dropdownMenu">-->
+<!--                            <li><a [routerLink]="['setting']">{{ 'Change Merchant' | translate }}</a></li>-->
+<!--                            <li><a [routerLink]="['setting','memberpreference']">{{ 'Member Preference' | translate }}</a></li>-->
+<!--                            <li><a *ngIf="appService.currentMember?.IsDropship" [routerLink]="['setting','merchantagreement']">{{ 'Merchant Agreement' | translate }}</a></li>-->
+<!--                            <li class="divider"></li>-->
+<!--                            <li *ngIf="isLoggedin">-->
+<!--                                <a (click)="logout()">-->
+<!--                                    <i class="fa fa-sign-out m-r-xs"></i> <span>{{ 'Log Out' | translate }}</span>-->
+<!--                                </a>-->
+<!--                            </li>-->
+<!--                        </ul>-->
+<!--                    </div>-->
+<!--                    &lt;!&ndash; SP &ndash;&gt;-->
+<!--                    <div class="navbar-top-links">-->
+<!--                        <button aria-expanded="false" role="button" href="#" class="dropdown-toggle navbar-toggle collapsed nav-button clear-btn  m-r-none" data-toggle="dropdown"> <span class="flag-icon flag-icon-squared m-r-xs" [ngClass]="currentLanguage === 'en' ? 'flag-icon-us' : 'flag-icon-' + currentLanguage"></span><span class="skinny-label">{{ currentLanguage }}</span> <span class="hide-mobile m-l-xs caret"></span></button>-->
+<!--                        <ul role="menu" class="dropdown-menu menu-fix pull-right">-->
+<!--                            <li><a (click)="switchLanguage('en')"><span class="flag-icon flag-icon-us flag-icon-squared"></span> English <span class="skinny-label">(en)</span></a></li>-->
+<!--                            <li><a (click)="switchLanguage('cn')"><span class="flag-icon flag-icon-cn flag-icon-squared"></span> 中文 <span class="skinny-label">(cn)</span></a></li>-->
+<!--                        </ul>-->
+<!--                    </div>-->
 
-                   <div class="navigation-button pull-right vendor-name">
-                        <a class="hide-large" [routerLink]="['setting']">
-                            {{ DisplayVendorName }}
-                        </a>
-                    </div>
-                    <div class="navbar-header toolots-icon">
-                        <a [routerLink]="['dashboard']" class="navbar-brand bg-orange">{{ 'Toolots' | translate }}</a>
-                        <button type="button" class="navbar-toggle collapsed pull-left m-l-sm" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
-                            <span class="sr-only">Toggle navigation</span>
-                            <span class="icon-bar"></span>
-                            <span class="icon-bar"></span>
-                            <span class="icon-bar"></span>
-                            <span class="icon-bar"></span>
-                        </button>
-                    </div>
-                    <div class="navbar-collapse collapse" id="navbar">
-                        <ul class="nav navbar-nav navbar-center dropdown-resp">
-                            <li class="dropdown">
-                                <a aria-expanded="false" type="button" href="#" class="dropdown-toggle" data-toggle="dropdown"> {{ 'Company' | translate }} <span class="caret"></span></a>
-                                <ul role="menu" class="dropdown-menu">
-                                    <li><a [routerLink]="['company','info','description']">{{ 'Company Info' | translate }}</a></li>
-                                    <li><a [routerLink]="['company','attachment','add']" [queryParams]="{init: true}">{{ 'New Attachment' | translate }}</a></li>
-                                    <li><a [routerLink]="['company','attachment']" [queryParams]="{init: true}">{{ 'Manage Attachments' | translate }}</a></li>
-                                </ul>
-                            </li>
-                            <li class="dropdown">
-                                <a aria-expanded="false" type="button" href="#" class="dropdown-toggle" data-toggle="dropdown"> {{ 'Items' | translate }} <span class="caret"></span></a>
-                                <ul role="menu" class="dropdown-menu">
-                                    <li><a [routerLink]="['item','add']">{{ 'New Item' | translate }}</a></li>
-                                    <li><a [routerLink]="['item']" [queryParams]="{init: true}">{{ 'Manage Items' | translate }}</a></li>
-                                    <li><a [routerLink]="['item','partadd']">{{ 'New Item Part' | translate }}</a></li>
-                                    <li><a [routerLink]="['item','part']" [queryParams]="{init: true}">{{ 'Manage Item Parts' | translate }}</a></li>
-                                    <li><a [routerLink]="['item','printlabel']">{{ 'Print Item Labels' | translate }}</a></li>
-                                    <li><a [routerLink]="['item','batch']" [queryParams]="{init: true}" *ngIf="isPM">{{ 'Batch Approval' | translate }}</a></li>
-                                    <li><a [routerLink]="['item','batchupdate']" [queryParams]="{init: true}" *ngIf="isPM">{{ 'Batch Update' | translate }}</a></li>
-                                </ul>
-                            </li>
-                            <li class="dropdown">
-                                <a aria-expanded="false" role="button" href="#" class="dropdown-toggle" data-toggle="dropdown"> {{ 'Inbound Shipment' | translate }} <span class="caret"></span></a>
-                                <ul role="menu" class="dropdown-menu">
-                                    <li><a (click)="addPurchaseOrder()">{{ 'New Inbound Shipment' | translate }}</a></li>
-                                    <li><a [routerLink]="['inbound-shipment']" [queryParams]="{init: true}">{{ 'Manage Inbound Shipments' | translate }}</a></li>
-                                </ul>
-                            </li>
-                            <li class="dropdown">
-                                <a aria-expanded="false" role="button" href="#" class="dropdown-toggle" data-toggle="dropdown"> {{ 'Sales Order' | translate }} <span class="caret"></span></a>
-                                <ul role="menu" class="dropdown-menu">
-                                    <li><a [routerLink]="['sales-order','merchant','status','unshipped']">{{ 'Fulfilled By Merchant' | translate }}</a></li>
-                                    <li><a [routerLink]="['sales-order','toolots','status','unshipped']">{{ 'Fulfilled By Toolots' | translate }}</a></li>
-                                </ul>
-                            </li>
-                            <li class="dropdown" *ngIf="isAdmin">
-                                <a aria-expanded="false" role="button" href="#" class="dropdown-toggle" data-toggle="dropdown"> {{ 'Member' | translate }} <span class="caret"></span></a>
-                                <ul role="menu" class="dropdown-menu">
-                                    <li><a [routerLink]="['member','invite']">{{ 'Invite Member' | translate }}</a></li>
-                                    <li><a [routerLink]="['member']" [queryParams]="{init: true}">{{ 'Manage Members' | translate }}</a></li>
-                                </ul>
-                            </li>
-                            <li class="dropdown" *ngIf="isSuperAdmin">
-                                <a aria-expanded="false" role="button" href="#" class="dropdown-toggle" data-toggle="dropdown"> {{ 'Admin' | translate }} <span class="caret"></span></a>
-                                <ul role="menu" class="dropdown-menu">
-                                    <li><a [routerLink]="['admin','member-add']">{{ 'New Admin' | translate }}</a></li>
-                                    <li><a [routerLink]="['admin']" [queryParams]="{init: true}">{{ 'Manage Admins' | translate }}</a></li>
-                                </ul>
-                            </li>
-                        </ul>
-                        <ul class="nav navbar-right navbar-top-links">
-                            <li *ngIf="!isLoggedin">
-                                <a (click)="login()">
-                                    <i class="fa fa-sign-in"></i> {{ 'Log In' | translate }}
-                                </a>
-                            </li>
-                            <li class="hide-res" *ngIf="isLoggedin">
-                                <a *ngIf="DisplayVendorName" [routerLink]="['setting']">
-                                    {{ DisplayVendorName }}
-                                </a>
-                            </li>
-                            <li class="dropdown" *ngIf="isLoggedin">
-                                <a aria-expanded="false" role="button" href="#" class="hide-res dropdown-toggle" data-toggle="dropdown"><span class="flag-icon flag-icon-squared" [ngClass]="currentLanguage === 'en' ? 'flag-icon-us' : 'flag-icon-' + currentLanguage"></span> <span class="skinny-label"> {{ currentLanguage }} </span> <span class="caret"></span> </a>
-                                <ul role="menu" class="dropdown-menu">
-                                    <li><a (click)="switchLanguage('en')"><span class="flag-icon flag-icon-us flag-icon-squared"></span> English <span class="skinny-label">(en)</span></a></li>
-                                    <li><a (click)="switchLanguage('cn')"><span class="flag-icon flag-icon-cn flag-icon-squared"></span> 中文 <span class="skinny-label">(cn)</span></a></li>
-                                </ul>
-                            </li>
-                            <!-- SP shows when large -->
-                            <li class="hide-res navigation-button vendor-name">
-                                <a class="hide-large" aria-expanded="false" role="button" href="#" class="dropdown-toggle" data-toggle="dropdown"><i class="m-r-none fa fs-16 fa-cog"></i>
-                                    <span class="m-l-xs caret"></span>
-                                </a>
-                                <ul role="menu" class="dropdown-menu">
-                                    <li><a [routerLink]="['setting']">{{ 'Change Merchant' | translate }}</a></li>
-                                    <li><a [routerLink]="['setting','memberpreference']">{{ 'Member Preference' | translate }}</a></li>
-                                    <li><a *ngIf="appService.currentMember?.IsDropship" [routerLink]="['setting','merchantagreement']">{{ 'Merchant Agreement' | translate }}</a></li>
-                                    <li class="divider"></li>
-                                    <li *ngIf="isLoggedin">
-                                        <a (click)="logout()">
-                                            <i class="fa fa-sign-out m-r-xs"></i> <span>{{ 'Log Out' | translate }}</span>
-                                        </a>
-                                    </li>
-                                </ul>
-                            </li>
-                        </ul>
-                    </div>
-                </nav>
-            </div>
-            <router-outlet></router-outlet>
-        </div>
-    </div>
-</div>
+<!--                   <div class="navigation-button pull-right vendor-name">-->
+<!--                        <a class="hide-large" [routerLink]="['setting']">-->
+<!--                            {{ DisplayVendorName }}-->
+<!--                        </a>-->
+<!--                    </div>-->
+<!--                    <div class="navbar-header toolots-icon">-->
+<!--                        <a [routerLink]="['dashboard']" class="navbar-brand bg-orange">{{ 'Toolots' | translate }}</a>-->
+<!--                        <button type="button" class="navbar-toggle collapsed pull-left m-l-sm" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">-->
+<!--                            <span class="sr-only">Toggle navigation</span>-->
+<!--                            <span class="icon-bar"></span>-->
+<!--                            <span class="icon-bar"></span>-->
+<!--                            <span class="icon-bar"></span>-->
+<!--                            <span class="icon-bar"></span>-->
+<!--                        </button>-->
+<!--                    </div>-->
+<!--                    <div class="navbar-collapse collapse" id="navbar">-->
+<!--                        <ul class="nav navbar-nav navbar-center dropdown-resp">-->
+<!--                            <li class="dropdown">-->
+<!--                                <a aria-expanded="false" type="button" href="#" class="dropdown-toggle" data-toggle="dropdown"> {{ 'Company' | translate }} <span class="caret"></span></a>-->
+<!--                                <ul role="menu" class="dropdown-menu">-->
+<!--                                    <li><a [routerLink]="['company','info','description']">{{ 'Company Info' | translate }}</a></li>-->
+<!--                                    <li><a [routerLink]="['company','attachment','add']" [queryParams]="{init: true}">{{ 'New Attachment' | translate }}</a></li>-->
+<!--                                    <li><a [routerLink]="['company','attachment']" [queryParams]="{init: true}">{{ 'Manage Attachments' | translate }}</a></li>-->
+<!--                                </ul>-->
+<!--                            </li>-->
+<!--                            <li class="dropdown">-->
+<!--                                <a aria-expanded="false" type="button" href="#" class="dropdown-toggle" data-toggle="dropdown"> {{ 'Items' | translate }} <span class="caret"></span></a>-->
+<!--                                <ul role="menu" class="dropdown-menu">-->
+<!--                                    <li><a [routerLink]="['item','add']">{{ 'New Item' | translate }}</a></li>-->
+<!--                                    <li><a [routerLink]="['item']" [queryParams]="{init: true}">{{ 'Manage Items' | translate }}</a></li>-->
+<!--                                    <li><a [routerLink]="['item','partadd']">{{ 'New Item Part' | translate }}</a></li>-->
+<!--                                    <li><a [routerLink]="['item','part']" [queryParams]="{init: true}">{{ 'Manage Item Parts' | translate }}</a></li>-->
+<!--                                    <li><a [routerLink]="['item','printlabel']">{{ 'Print Item Labels' | translate }}</a></li>-->
+<!--                                    <li><a [routerLink]="['item','batch']" [queryParams]="{init: true}" *ngIf="isPM">{{ 'Batch Approval' | translate }}</a></li>-->
+<!--                                    <li><a [routerLink]="['item','batchupdate']" [queryParams]="{init: true}" *ngIf="isPM">{{ 'Batch Update' | translate }}</a></li>-->
+<!--                                </ul>-->
+<!--                            </li>-->
+<!--                            <li class="dropdown">-->
+<!--                                <a aria-expanded="false" role="button" href="#" class="dropdown-toggle" data-toggle="dropdown"> {{ 'Inbound Shipment' | translate }} <span class="caret"></span></a>-->
+<!--                                <ul role="menu" class="dropdown-menu">-->
+<!--                                    <li><a (click)="addPurchaseOrder()">{{ 'New Inbound Shipment' | translate }}</a></li>-->
+<!--                                    <li><a [routerLink]="['inbound-shipment']" [queryParams]="{init: true}">{{ 'Manage Inbound Shipments' | translate }}</a></li>-->
+<!--                                </ul>-->
+<!--                            </li>-->
+<!--                            <li class="dropdown">-->
+<!--                                <a aria-expanded="false" role="button" href="#" class="dropdown-toggle" data-toggle="dropdown"> {{ 'Sales Order' | translate }} <span class="caret"></span></a>-->
+<!--                                <ul role="menu" class="dropdown-menu">-->
+<!--                                    <li><a [routerLink]="['sales-order','merchant','status','unshipped']">{{ 'Fulfilled By Merchant' | translate }}</a></li>-->
+<!--                                    <li><a [routerLink]="['sales-order','toolots','status','unshipped']">{{ 'Fulfilled By Toolots' | translate }}</a></li>-->
+<!--                                </ul>-->
+<!--                            </li>-->
+<!--                            <li class="dropdown" *ngIf="isAdmin">-->
+<!--                                <a aria-expanded="false" role="button" href="#" class="dropdown-toggle" data-toggle="dropdown"> {{ 'Member' | translate }} <span class="caret"></span></a>-->
+<!--                                <ul role="menu" class="dropdown-menu">-->
+<!--                                    <li><a [routerLink]="['member','invite']">{{ 'Invite Member' | translate }}</a></li>-->
+<!--                                    <li><a [routerLink]="['member']" [queryParams]="{init: true}">{{ 'Manage Members' | translate }}</a></li>-->
+<!--                                </ul>-->
+<!--                            </li>-->
+<!--                            <li class="dropdown" *ngIf="isSuperAdmin">-->
+<!--                                <a aria-expanded="false" role="button" href="#" class="dropdown-toggle" data-toggle="dropdown"> {{ 'Admin' | translate }} <span class="caret"></span></a>-->
+<!--                                <ul role="menu" class="dropdown-menu">-->
+<!--                                    <li><a [routerLink]="['admin','member-add']">{{ 'New Admin' | translate }}</a></li>-->
+<!--                                    <li><a [routerLink]="['admin']" [queryParams]="{init: true}">{{ 'Manage Admins' | translate }}</a></li>-->
+<!--                                </ul>-->
+<!--                            </li>-->
+<!--                        </ul>-->
+<!--                        <ul class="nav navbar-right navbar-top-links">-->
+<!--                            <li *ngIf="!isLoggedin">-->
+<!--                                <a (click)="login()">-->
+<!--                                    <i class="fa fa-sign-in"></i> {{ 'Log In' | translate }}-->
+<!--                                </a>-->
+<!--                            </li>-->
+<!--                            <li class="hide-res" *ngIf="isLoggedin">-->
+<!--                                <a *ngIf="DisplayVendorName" [routerLink]="['setting']">-->
+<!--                                    {{ DisplayVendorName }}-->
+<!--                                </a>-->
+<!--                            </li>-->
+<!--                            <li class="dropdown" *ngIf="isLoggedin">-->
+<!--                                <a aria-expanded="false" role="button" href="#" class="hide-res dropdown-toggle" data-toggle="dropdown"><span class="flag-icon flag-icon-squared" [ngClass]="currentLanguage === 'en' ? 'flag-icon-us' : 'flag-icon-' + currentLanguage"></span> <span class="skinny-label"> {{ currentLanguage }} </span> <span class="caret"></span> </a>-->
+<!--                                <ul role="menu" class="dropdown-menu">-->
+<!--                                    <li><a (click)="switchLanguage('en')"><span class="flag-icon flag-icon-us flag-icon-squared"></span> English <span class="skinny-label">(en)</span></a></li>-->
+<!--                                    <li><a (click)="switchLanguage('cn')"><span class="flag-icon flag-icon-cn flag-icon-squared"></span> 中文 <span class="skinny-label">(cn)</span></a></li>-->
+<!--                                </ul>-->
+<!--                            </li>-->
+<!--                            &lt;!&ndash; SP shows when large &ndash;&gt;-->
+<!--                            <li class="hide-res navigation-button vendor-name">-->
+<!--                                <a class="hide-large" aria-expanded="false" role="button" href="#" class="dropdown-toggle" data-toggle="dropdown"><i class="m-r-none fa fs-16 fa-cog"></i>-->
+<!--                                    <span class="m-l-xs caret"></span>-->
+<!--                                </a>-->
+<!--                                <ul role="menu" class="dropdown-menu">-->
+<!--                                    <li><a [routerLink]="['setting']">{{ 'Change Merchant' | translate }}</a></li>-->
+<!--                                    <li><a [routerLink]="['setting','memberpreference']">{{ 'Member Preference' | translate }}</a></li>-->
+<!--                                    <li><a *ngIf="appService.currentMember?.IsDropship" [routerLink]="['setting','merchantagreement']">{{ 'Merchant Agreement' | translate }}</a></li>-->
+<!--                                    <li class="divider"></li>-->
+<!--                                    <li *ngIf="isLoggedin">-->
+<!--                                        <a (click)="logout()">-->
+<!--                                            <i class="fa fa-sign-out m-r-xs"></i> <span>{{ 'Log Out' | translate }}</span>-->
+<!--                                        </a>-->
+<!--                                    </li>-->
+<!--                                </ul>-->
+<!--                            </li>-->
+<!--                        </ul>-->
+<!--                    </div>-->
+<!--                </nav>-->
+<!--            </div>-->
+<!--<button class="btn btn-default btn-home-signup animated fadeInLeft" [routerLink]="['/PM']">Go to PM</button>-->
+<!--<button class="btn btn-default btn-home-signup animated fadeInLeft" [routerLink]="['/']">Go to Original</button>-->
+
+<router-outlet></router-outlet>
+<!--        </div>-->
+<!--    </div>-->
+<!--</div>-->

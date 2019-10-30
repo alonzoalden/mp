@@ -36,7 +36,12 @@
     "HOME":"主页",
     "FEATURES":"买家服务",
     "SIGN UP":"立即注册",
-
+    "Change Merchant": "切换商家",
+    "Special From": "特价起始日",
+    "Special To": "特价终止日",
+    "MerchantID": "商家ID",
+    "ItemImage": "产品图片",
+    "ItemName": "产品名称",
     "REGISTER TO MERCHANT PORTAL":"注册卖家账户",
     "Create an Account to begin":"创建一个帐户即可开始",
     "Register":"立即注册",

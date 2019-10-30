@@ -1,0 +1,163 @@
+<div class="row wrapper border-bottom white-bg page-heading">
+    <div class="col-lg-12">
+        <h2>
+            {{ 'Inbound Shipment' | translate }}: <span *ngIf="!isLoading">{{ purchaseOrder?.PackingSlipNumber }}</span>
+        </h2>
+        <ol class="breadcrumb">
+            <li>
+                <a [routerLink]="['/PM/dashboard']" >{{ 'Home' | translate }}</a>
+            </li>
+            <li>
+                <a [routerLink]="['/PM/inbound-shipment']" >{{ 'Manage Inbound Shipments' | translate }}</a>
+            </li>
+            <li class="active">
+                <strong>{{ 'Edit Inbound Shipment' | translate }}</strong>
+            </li>
+        </ol>
+    </div>
+</div>
+<div class="wrapper wrapper-content animated fadeIn" *ngIf='purchaseOrder'>
+    <div class="row m-b-md">
+        <div class="col-lg-12">
+            <div class="nav">
+                <div class="tab-pane active">
+                    <div class="panel-body p-w-none p-t-none">
+                        <div class="ibox-content border" style="padding: 10px 20px 10px 20px;" >
+                            <div class="row">
+                                <div class="inbound-shipment-details">
+                                    <ng-container *ngIf="!isLoading">
+                                        <div>
+                                            <div>
+                                                <strong class="">{{ 'Transaction Date' | translate }}</strong>
+                                                <p class="no-margins">{{purchaseOrder?.TransactionDate | localizedDate}}</p>
+                                            </div>
+                                        </div>
+                                        <div>
+                                            <div>
+                                                <strong class="">{{ 'Status' | translate }}</strong>
+                                                <p class="no-margins">{{ purchaseOrder?.Status | translate }}</p>
+                                            </div>
+                                        </div>
+                                        <div *ngIf="purchaseOrder?.ShipmentDate">
+                                            <div>
+                                                <strong class="">{{ 'Shipment Date' | translate }}</strong>
+                                                <p class="no-margins ">{{purchaseOrder?.ShipmentDate | date}}</p>
+                                            </div>
+                                        </div>
+                                    </ng-container>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-lg-12">
+            <div class="wizard">
+                <div class="steps animated fadeIn">
+                    <ul>
+                        <li  class="first done">
+                            <a [routerLink]="['line/list']"
+                               class="active"
+                               >
+                                <span class="wiz-title"><span class="m-r-xs">1.</span>{{ 'Inbound Shipment Lines' | translate }}</span>
+                                <span [ngClass]="{'glyphicon glyphicon-exclamation-sign': qtyUpdated}"  matTooltip="{{ 'Save to Update Carton' | translate }}"></span>
+                                <span [ngClass]="{'glyphicon glyphicon-exclamation-sign': !qtyUpdated && !isValid('line/list') }" matTooltip="{{ 'Missing Products' | translate }}"></span>
+                            </a>
+                        </li>
+                        <li  >
+                            <a [routerLink]="['carton/list/line']"
+                               class="active"
+                                >
+                                <span class="wiz-title"><span class="number m-r-xs">2.</span>{{ 'Carton' | translate }}</span>
+                                <span [ngClass]="{'glyphicon glyphicon-exclamation-sign': !isValid('carton/list/line') }" matTooltip="{{ 'Must Include All Products' | translate }}" attr.aria-label="{{ 'Must Include All Products' | translate}}" ></span>
+                            </a>
+                        </li>
+                        <li >
+                            <a [routerLink]="['shippinginstruction']"
+                               class="active"
+                                >
+                                <span class="wiz-title"><span class="number m-r-xs">3.</span>{{ 'Shipping Instruction' | translate }}</span>
+                            </a>
+                        </li>
+                        <li>
+                            <a [routerLink]="['shipping']"
+                               class="active"
+                                >
+                                <span class="wiz-title"><span class="number m-r-xs">4.</span>{{ 'Shipping' | translate }}</span>
+                                <span [ngClass]="{'glyphicon glyphicon-exclamation-sign': !isValid('shipping')}" matTooltip="{{ 'Missing shipping info' | translate }}" attr.aria-label="{{ 'Missing shipping info' | translate}}" ></span>
+                            </a>
+                        </li>
+                    </ul>
+                    <div *ngIf="pendingSave" class="ibox-content border" style="min-height: 332px">
+                        <div class="spinner-container">
+                            <div class="sk-spinner sk-spinner-three-bounce big-spinner">
+                                <div class="sk-bounce1"></div>
+                                <div class="sk-bounce2"></div>
+                                <div class="sk-bounce3"></div>
+                            </div>
+                        </div>
+                    </div>
+                    <ng-container *ngIf="!pendingSave">
+                        <router-outlet></router-outlet>
+                    </ng-container>
+                </div>
+            </div>
+        </div>
+    </div>
+    <br />
+    <div class="row animated fadeIn">
+        <div class="col-md-12">
+            <div class="pull-left">
+                <mat-menu #saveMenu="matMenu" width="250px">
+                    <button mat-menu-item (click)="openDialogPrintAllItemLabel()">{{ 'Print All Item Labels' | translate }}</button>
+                    <button mat-menu-item (click)="saveInboundShipment(true)">{{ 'Print Packing Slip' | translate }}</button>
+                    <button mat-menu-item [disabled]="purchaseOrder.Status != 'Shipping'" (click)="cancelPurchaseOrder()">{{ 'Cancel Shipping' | translate }}
+            </button>
+                </mat-menu>
+                <button type="button"
+                        class="btn btn-primary"
+                        style="width: 100px !important;"
+                        [disabled]="pendingSave"
+                        [matMenuTriggerFor]="saveMenu"><span class="m-r-xs">{{ 'Menu' | translate }}</span> <span class="caret"></span>
+                </button>
+            </div>
+            <div class="pull-right" *ngIf="isInboundShipmentPending()">
+<!--                <button type="button"-->
+<!--                        class="btn btn-remove m-r-sm"-->
+<!--                        style="width: 100px !important;"-->
+<!--                        *ngIf="!isLineList()"-->
+<!--                        [disabled]="pendingSave"-->
+<!--                        (click)="goBack()"><i class="fa fa-arrow-left m-r-xs"></i> {{ 'Previous' | translate }}-->
+<!--                </button>-->
+<!--                <button type="button"-->
+<!--                        class="btn btn-primary"-->
+<!--                        style="width: 100px !important;"-->
+<!--                        *ngIf="!isShipping()"-->
+<!--                        [disabled]="pendingSave"-->
+<!--                        (click)="saveInboundShipment()">{{ 'Next' | translate }} <i class="fa fa-arrow-right m-l-xs"></i>-->
+<!--                </button>-->
+<!--                <button type="button"-->
+<!--                        class="btn btn-primary"-->
+<!--                        style="width: 100px !important;"-->
+<!--                        *ngIf="isShipping()"-->
+<!--                        [disabled]="pendingSave || !(purchaseOrder.Status === 'Pending' && isValidShipment)"-->
+<!--                        (click)="saveAndShipInboundShipment()">{{ 'Save & Ship' | translate }}-->
+<!--                </button>-->
+            </div>
+        </div>
+        <div class="col-md-2">
+
+        </div>
+        <div class="col-md-2">
+
+        </div>
+        <div class="col-md-2">
+
+        </div>
+        <div class="col-md-2">
+        </div>
+    </div>
+</div>

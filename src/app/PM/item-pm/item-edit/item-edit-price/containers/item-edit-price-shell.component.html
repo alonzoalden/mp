@@ -1,0 +1,7 @@
+<o-item-edit-price
+    [item]="item$ | async"
+    [userInfo]="userInfo$ | async"
+    [itemTierPricesMatTable]="itemTierPricesMatTable$ | async"
+    [errorMessage]="errorMessage$ | async"
+    (getItemTierPrices)="getItemTierPrices($event)"
+></o-item-edit-price>

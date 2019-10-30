@@ -1,0 +1,266 @@
+<div class="tab-content">
+    <div class="tab-pane active">
+        <div class="panel-body p-w-none">
+            <div class="ibox-title"><h5>{{ 'Bundle Options' | translate }}</h5></div>
+            <div class="ibox-content">
+                <div class="form-group row">
+                    <div class="col-md-12">
+                        <div *ngIf="item && item.ItemOptions.length && item.ItemOptions.length > 0">
+                            <table mat-table #table [dataSource]="itemBundleOptionsMatTable" *ngIf='item.ItemOptions.length > 0'>
+                                <!-- Add Button -->
+                                <ng-container matColumnDef="Add">
+                                    <th mat-header-cell *matHeaderCellDef width="45px"></th>
+                                    <td mat-cell *matCellDef="let option; let i = index">                                                 
+                                        <div *ngIf="i === item.ItemOptions.length-1">
+                                            <a (click)='addOption(option); formBundleDirty = false; '><span [matTooltip]="option.Title ? ('Add' | translate) : ('Required fields must be complete' | translate)" class="glyphicon glyphicon-plus fs-20" [ngClass]="option.Title ? 'green' : 'gray'"></span></a>
+                                        </div>
+                                    </td>
+                                </ng-container>
+                                <!-- Position Column -->
+                                <ng-container matColumnDef="Position">
+                                    <th mat-header-cell *matHeaderCellDef width="15px"></th>
+                                    <td mat-cell *matCellDef="let option; let i = index">
+                                        <div *ngIf="i !== item.ItemOptions.length-1">
+                                            {{i + 1}}
+                                        </div>
+                                    </td>
+                                </ng-container>
+                                <!-- Down Column -->
+                                <ng-container matColumnDef="Down">
+                                    <th mat-header-cell *matHeaderCellDef width="17px">{{ 'Position' | translate }}</th>
+                                    <td mat-cell *matCellDef="let option; let i = index">
+                                        <div *ngIf="i < item.ItemOptions.length-2">
+                                            <a (click)='moveDownOption(option)' *ngIf='i !== item.ItemOptions.length - 1'><span class="glyphicon glyphicon-arrow-down"></span></a>
+                                        </div>                                            
+                                    </td>
+                                </ng-container>
+                                <!-- Up Column -->
+                                <ng-container matColumnDef="Up">
+                                    <th mat-header-cell *matHeaderCellDef width="40px"></th>
+                                    <td mat-cell *matCellDef="let option; let i = index">
+                                        <div *ngIf="i !== item.ItemOptions.length-1">
+                                            <a (click)='moveUpOption(option)' *ngIf='i !== 0'><span class="glyphicon glyphicon-arrow-up"></span></a>
+                                        </div>
+                                    </td>
+                                </ng-container>
+                                <!-- Title Column -->
+                                <ng-container matColumnDef="Title">
+                                    <th mat-header-cell *matHeaderCellDef width="180px">{{ 'Title' | translate }}</th>
+                                    <td mat-cell *matCellDef="let option; let i = index">
+                                        <div *ngIf="currentOptionIndex !== i && i !== item.ItemOptions.length-1">
+                                            {{option.Title}}
+                                        </div>  
+                                        <div *ngIf="currentOptionIndex === i || i === item.ItemOptions.length-1">
+                                            <input class="form-control" id="titleId" type="text" placeholder="{{ 'Title' | translate }} ({{ 'Required' | translate }})" required 
+                                                [(ngModel)]=option.Title [ngModelOptions]="{standalone: true}"
+                                                (focus)="formBundleDirty = true;"/>
+                                        </div>                                
+                                    </td>
+                                </ng-container>
+                                <!-- Type Column -->
+                                <ng-container matColumnDef="Type">
+                                    <th mat-header-cell *matHeaderCellDef width="120px">{{ 'Type' | translate }}</th>
+                                    <td mat-cell *matCellDef="let option; let i = index">
+                                        <div *ngIf="currentOptionIndex !== i && i !== item.ItemOptions.length-1">
+                                            {{ getOptionTypeLabel(option.Type) | translate }}
+                                        </div>         
+                                        <div *ngIf="currentOptionIndex === i || i === item.ItemOptions.length-1">                         
+                                            <select class="form-control" id="optionTypeId" [(ngModel)]='option.Type' (focus)="formBundleDirty = true;"
+                                                (change)="onOptionTypeChange()">
+                                                <option [value]="type.value" *ngFor="let type of optionTypes">{{ type.label | translate }}</option>
+                                            </select>
+                                        </div>                                                                 
+                                    </td>                            
+                                </ng-container>
+                                <!-- Required Column -->
+                                <ng-container matColumnDef="Required">
+                                    <th mat-header-cell *matHeaderCellDef width="100px">{{ 'Required?' | translate }}</th>
+                                    <td mat-cell *matCellDef="let option">
+                                        <!-- <input type="checkbox" [(ngModel)]="option.IsRequired" [ngModelOptions]="{standalone: true}"/> -->
+                                        <mat-checkbox [(ngModel)]="option.IsRequired" [ngModelOptions]="{standalone: true}"></mat-checkbox>
+                                    </td>
+                                </ng-container>         
+                                
+                                <!-- Remove Column -->
+                                <ng-container matColumnDef="Remove">
+                                    <th mat-header-cell *matHeaderCellDef width="100px">{{ 'Remove' | translate }}</th>
+                                    <td mat-cell *matCellDef="let option; let i = index">
+                                        <div *ngIf="i !== item.ItemOptions.length-1">    
+                                            <a (click)='removeOption(i)'><span matTooltip="{{ 'Remove' | translate }}" attr.aria-label="{{ 'Remove' | translate}}" class="glyphicon glyphicon-trash"></span></a>
+                                        </div>
+                                        <div [hidden]="!formBundleDirty && i === item.ItemOptions.length-1"> 
+                                            <a matTooltip="{{ 'Clear' | translate }}" attr.aria-label="{{ 'Clear' | translate}}" (click)="clearBundleFields(option);"><i *ngIf="i === item.ItemOptions.length-1" class="fa fa-eraser"></i></a>
+                                            <!-- <button *ngIf="i === item.ItemOptions.length-1"
+                                                    type="button" 
+                                                    class="btn btn-remove-sm"
+                                                    (click)="clearBundleFields(option);">Clear</button> -->
+                                        </div>
+                                    </td>
+                                </ng-container>
+                                <tr mat-header-row *matHeaderRowDef="optionDisplayedColumns"></tr>
+                                <tr mat-row 
+                                    *matRowDef="let option; let i = index; columns: optionDisplayedColumns" 
+                                    [ngStyle]="{'background-color': itemService.rowColorConditions(i, item?.ItemOptions, currentOptionIndex, formBundleDirty)}"
+                                    (click)='onSelectOption(option, i);'></tr>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <ng-container *ngIf="item && selectedOption && currentOptionIndex != item.ItemOptions.length-1;">
+                <!-- <ng-container *ngIf="selectedOption"> -->
+                <div class="ibox-title"><h5>{{ 'Bundle Option Selections' | translate }}</h5></div>
+                <div class="ibox-content">
+                    <div class="col-md-12 m-t-lg p-w-none">                            
+                        <div>
+                            <table mat-table #table [dataSource]="itemBundleOptionSelectionsMatTable" *ngIf='selectedOption.ItemSelections.length > 0'>                            
+                                <!-- Add Button -->
+                                <ng-container matColumnDef="Add">
+                                    <th mat-header-cell *matHeaderCellDef width="45px"></th>
+                                    <td mat-cell *matCellDef="let selection; let i = index">                                                 
+                                        <div *ngIf="i === selectedOption.ItemSelections.length-1">                               
+                                            <a (click)='selection.ItemID && selection.Qty ? addSelection(selection) : return; formSelectionDirty = false;'>
+                                                <span [matTooltip]="selection.ItemID && selection.PriceValue > 0 && selection.Qty > 0 ? ('Add' | translate) : ('Required fields must be complete' | translate)"
+                                                    class="glyphicon glyphicon-plus fs-20"
+                                                    [ngClass]="selection.ItemID && selection.Qty > 0 ? 'green' : 'gray'">
+                                                </span>
+                                            </a>
+                                        </div>
+                                    </td>
+                                </ng-container>
+                                <!-- Down Column -->
+                                <ng-container matColumnDef="Down">
+                                    <th mat-header-cell *matHeaderCellDef width="17px">{{ 'Position' | translate }}</th>
+                                    <td mat-cell *matCellDef="let selection; let i = index">
+                                        <div *ngIf="i < selectedOption.ItemSelections.length-2">
+                                            <a (click)='moveDownSelection(selection)' *ngIf='i !== selectedOption.ItemSelections.length - 1'><span class="glyphicon glyphicon-arrow-down"></span></a>
+                                        </div>                                            
+                                    </td>
+                                </ng-container>
+                                <!-- Position Column -->
+                                <ng-container matColumnDef="Position">
+                                    <th mat-header-cell *matHeaderCellDef width="15px"></th>
+                                    <td mat-cell *matCellDef="let selection; let i = index">
+                                        <div *ngIf="i !== selectedOption.ItemSelections.length-1">
+                                            {{i + 1}}
+                                        </div>
+                                    </td>
+                                </ng-container>
+                                <!-- Up Column -->
+                                <ng-container matColumnDef="Up">
+                                    <th mat-header-cell *matHeaderCellDef width="40px"></th>
+                                    <td mat-cell *matCellDef="let selection; let i = index">
+                                        <div *ngIf="i !== selectedOption.ItemSelections.length-1">
+                                            <a (click)='moveUpSelection(selection)' *ngIf='i !== 0'><span class="glyphicon glyphicon-arrow-up"></span></a>
+                                        </div>
+                                    </td>
+                                </ng-container>
+                                <!-- Item Column -->
+                                <ng-container matColumnDef="Item">
+                                    <th mat-header-cell *matHeaderCellDef width="300px">{{ 'Item' | translate }}</th>
+                                    <td mat-cell *matCellDef="let selection; let i = index">
+                                        <div class="col-fit" *ngIf="currentSelectionIndex !== i && i !== selectedOption.ItemSelections.length-1">
+                                            {{getItemName(selection.ItemID)}}
+                                        </div>         
+                                        <div *ngIf="currentSelectionIndex === i || i === selectedOption.ItemSelections.length-1">
+                                            <ng-select  [items]="itemList"
+                                                        [virtualScroll]="true"
+                                                        bindLabel="Description"
+                                                        bindValue="ItemID"
+                                                        placeholder="{{ 'Search Item' | translate }}"
+                                                        [(ngModel)]="selection.ItemID"
+                                                        (focus)="formSelectionDirty = true;"
+                                                        dropdownPosition="top"
+                                                        #selectionCategoriesRef
+                                                        [loading]="!itemList"
+                                                        loadingText="Loading..."
+                                                        #mySelect
+                                                        >
+                                                <ng-template ng-option-tmp let-item="item">
+                                                    <div matTooltip="{{item.Description}}" matTooltipPosition="right" matTooltipShowDelay="400">{{item.Description}}</div>
+                                                </ng-template>
+                                            </ng-select>
+                                            <!-- <select class="form-control" [(ngModel)]='selection.ItemID'
+                                                (ngModelChange)="i === selectedOption.ItemSelections.length-1 && canAddSelection = true;"
+                                                (focus)="formSelectionDirty = true;">
+                                                <option [value]="item.ItemID" *ngFor="let item of itemList">{{item.Description}}</option>
+                                            </select> -->
+                                        </div>
+                                    </td>  
+                                </ng-container>
+                                <!-- Price Column -->
+                                <ng-container matColumnDef="Price">
+                                    <th mat-header-cell *matHeaderCellDef width="100px">{{ 'Price' | translate }}</th>
+                                    <td mat-cell *matCellDef="let selection; let i = index">
+                                        <div *ngIf="currentSelectionIndex !== i && i !== selectedOption.ItemSelections.length-1">
+                                            {{selection.PriceValue | currency}}
+                                        </div>  
+                                        <div *ngIf="currentSelectionIndex === i || i === selectedOption.ItemSelections.length-1">
+                                            <input (focus)="formSelectionDirty = true;" class="form-control" id="selectionPriceId" type="number" 
+                                                step="0.01" onchange="this.value = parseFloat(this.value).toFixed(2);" onkeydown="return event.keyCode == 69 || event.keyCode == 189 ? false : true" min="0" 
+                                                [(ngModel)]=selection.PriceValue/>
+                                        </div>                                
+                                    </td>
+                                </ng-container>
+                                <!-- Quantity Column -->
+                                <ng-container matColumnDef="Quantity">
+                                    <th mat-header-cell *matHeaderCellDef width="85px">{{ 'Quantity' | translate }}</th>
+                                    <td mat-cell *matCellDef="let selection; let i = index">
+                                        <div *ngIf="currentSelectionIndex !== i && i !== selectedOption.ItemSelections.length-1">
+                                            {{selection.Qty}}
+                                        </div>  
+                                        <div *ngIf="currentSelectionIndex === i || i === selectedOption.ItemSelections.length-1">
+                                            <input (focus)="formSelectionDirty = true;" class="form-control" id="selectionQtyId" type="number" 
+                                                onkeydown="return event.keyCode == 69 || event.keyCode == 189 || event.keyCode == 190 ? false : true" min="0"
+                                                [(ngModel)]="selection.Qty "/>
+                                        </div>                                
+                                    </td>
+                                </ng-container>
+                                <!-- User Defined Qty Column -->
+                                <ng-container matColumnDef="CanChangeQty">
+                                    <th mat-header-cell *matHeaderCellDef width="85px">{{ 'User Defined Qty?' | translate }}</th>
+                                    <td mat-cell *matCellDef="let selection;"> 
+                                        <!-- <div class="i-checks">
+                                            User Defined Qty: <input type="checkbox" [(ngModel)]="selection.CanChangeQty" [ngModelOptions]="{standalone: true}"/>                                             
+                                        </div> -->
+                                        <mat-checkbox [(ngModel)]="selection.CanChangeQty" [ngModelOptions]="{standalone: true}" *ngIf="selectedOption.Type !== 'multi'"></mat-checkbox>
+                                    </td>
+                                </ng-container>
+                                <!-- Is Default Column -->
+                                <ng-container matColumnDef="IsDefault">
+                                    <th mat-header-cell *matHeaderCellDef width="85px">{{ 'Default?' | translate }}</th>
+                                    <td mat-cell *matCellDef="let selection; let i = index">
+                                        <!-- <div class="i-checks">Default: <input type="checkbox" [(ngModel)]="selection.IsDefault" [ngModelOptions]="{standalone: true}"/></div> -->
+                                        <mat-checkbox [(ngModel)]="selection.IsDefault" [ngModelOptions]="{standalone: true}" (click)="isDefaultClick(selection, i)"></mat-checkbox>
+                                    </td>
+                                </ng-container>
+                                <!-- Remove Button -->
+                                <ng-container matColumnDef="Remove">
+                                    <th mat-header-cell *matHeaderCellDef width="55px">{{ 'Remove' | translate }}</th>
+                                    <td mat-cell *matCellDef="let selection; let i = index" >
+                                        <div *ngIf="i !== selectedOption.ItemSelections.length-1">    
+                                            <a (click)='removeSelection(i)'><span matTooltip="{{ 'Remove' | translate }}" attr.aria-label="{{ 'Remove' | translate}}" class="glyphicon glyphicon-trash"></span></a>
+                                        </div>
+                                        <div [hidden]="!formSelectionDirty && i === selectedOption.ItemSelections.length-1"> 
+                                            <a matTooltip="{{ 'Clear' | translate }}" attr.aria-label="{{ 'Clear' | translate}}" (click)="clearSelectionFields(selection);"><i *ngIf="i === selectedOption.ItemSelections.length-1" class="fa fa-eraser"></i></a>
+                                            <!-- <button *ngIf="i === selectedOption.ItemSelections.length-1"
+                                                    type="button" 
+                                                    class="btn btn-remove-sm"
+                                                    (click)="clearSelectionFields(selection);">Clear</button> -->
+                                        </div>
+                                    </td>
+                                </ng-container>
+                                <tr mat-header-row *matHeaderRowDef="selectionDisplayedColumns"></tr>
+                                <tr mat-row *matRowDef="let selection; let i = index; columns: selectionDisplayedColumns;"
+                                    [ngStyle]="{'background-color': itemService.rowColorConditions(i, selectedOption.ItemSelections, currentSelectionIndex, formSelectionDirty)}"
+                                    (click)="onSelectSelection(i);"></tr>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </ng-container>
+        </div>
+    </div>
+</div>
+
+

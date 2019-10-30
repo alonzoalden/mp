@@ -1,0 +1,12 @@
+<o-item-edit
+    [vendorBrandList]="vendorBrandList$ | async"
+    [item]="item$ | async"
+    [userInfo]="userInfo$ | async"
+    [isLoading]="isLoading$ | async"
+    [pendingSave]="pendingSave$ | async"
+    [errorMessage]="errorMessage$ | async"
+    (getVendorBrands)="getVendorBrands()"
+    (getItem)="getItem($event)"
+    (editItem)="editItem($event)"
+    (downloadItemLabel)="downloadItemLabel($event)"
+></o-item-edit>

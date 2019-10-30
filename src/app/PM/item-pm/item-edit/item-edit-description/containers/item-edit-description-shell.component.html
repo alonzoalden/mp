@@ -1,0 +1,10 @@
+<o-item-edit-description
+    [userInfo]="userInfo$ | async"
+    [vendorBrandList]="vendorBrandList$ | async"
+    [item]="item$ | async"
+    [isLoading]="isLoading$ | async"
+    [pendingSave]="pendingAdd$ | async"
+    [errorMessage]="errorMessage$ | async"
+    (getVendorBrands)="getVendorBrands()"
+    (getItem)="getItem($event)"
+></o-item-edit-description>

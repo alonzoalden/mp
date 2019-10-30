@@ -1,0 +1,26 @@
+<div class="animated fadeIn" *ngIf="inboundShipmentStatusCountsMatTable?.data.length > 0">
+    <div class="ibox ibox-gray float-e-margins">
+        <div class="ibox-title">
+            <h5>{{ 'Inbound Shipment Status Count' | translate }}</h5>
+        </div>
+        <div class="ibox-content" style="min-height: 87px">
+            <table mat-table #table [dataSource]="inboundShipmentStatusCountsMatTable">
+                {{ 'Status' | translate }}
+                <ng-container matColumnDef="Status">
+                    <th mat-header-cell *matHeaderCellDef width="60%">{{ 'Status' | translate }}</th>
+                    <td width="60%" height="20px" mat-cell *matCellDef="let inboundShipmentStatusCount">
+                        <div class="p-xxs">
+                            <a class="label-link" [routerLink]="['/inbound-shipment']">{{ inboundShipmentStatusCount.Status | translate }}</a>
+                        </div>
+                    </td>
+                </ng-container>
+                {{ 'Total Count' | translate }}
+                <ng-container matColumnDef="Count">
+                    <th mat-header-cell *matHeaderCellDef style="text-align: center !important;">{{ 'Count' | translate }}</th>
+                    <td mat-cell *matCellDef="let inboundShipmentStatusCount"  style="text-align: center;"><span [ngClass]="inboundShipmentStatusCount.Status === 'Complete' ? 'badge badge-info' : inboundShipmentStatusCount.Status === 'Pending' ? 'badge badge-info' : 'badge badge-info'">{{inboundShipmentStatusCount.Count}}</span></td>
+                </ng-container>
+                <tr @smoothOpen style="height: 28px" class="animated fadeIn" mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+            </table>
+        </div>
+    </div>
+</div>

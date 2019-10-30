@@ -1,0 +1,8 @@
+<o-setting-vendor-list
+    [memberVendorsMatTable]="memberVendorsMatTable$ | async"
+    [userInfo]="userInfo$ | async"
+    [pendingSave]="pendingSave$ | async"
+    [errorMessage]="errorMessage$ | async"
+    (getMembersVendors)="getMembersVendors()"
+    (editCurrentMember)="editCurrentMember($event)"
+></o-setting-vendor-list>

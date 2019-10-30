@@ -1,0 +1,267 @@
+<div class="tab-content animated fadeIn">
+    <div class="tab-pane active">
+        <div class="panel-body p-w-none">
+            <form class="form-horizontal" #itemForm="ngForm">
+                <fieldset>
+                    <div class="ibox-title"><h5>{{ 'Product Dimension' | translate }}</h5></div>
+                    <div class="ibox-content input-style-2">
+                        <div class="form-group">
+                            <label class="col-md-2 control-label pt25 m-b-resp">{{ 'Dimensions' | translate }}</label>
+                            <div class="col-md-8 flex flex-res-column">
+                                <div class="form-label-section" [ngClass]="{'has-error': (itemLengthVar.touched ||
+                                                                                        itemLengthVar.dirty) &&
+                                                                                        !itemLengthVar.valid }">
+                                    <div class="form-label">
+                                        {{ 'Length' | translate }}
+                                        <span class="pull-right help-block animated fadeInLeft" *ngIf="(itemLengthVar.touched ||
+                                                                                    itemLengthVar.dirty) &&
+                                                                                    itemLengthVar.errors">
+                                            <span *ngIf="itemLengthVar.errors.required">
+                                                *{{ 'Required' | translate }}
+                                            </span>
+                                    </span>
+                                    </div>
+                                    <input class="form-control" id="itemLengthId" type="number" placeholder="{{ 'Length' | translate }} ({{ 'Required' | translate }})"
+                                        onkeydown="return event.keyCode == 69 || event.keyCode == 189 ? false : true" min="0"
+                                        required [(ngModel)]=item.Length name="itemLength" #itemLengthVar="ngModel" />
+
+                                </div>
+                                <div class="form-label-section" [ngClass]="{'has-error': (itemWidthVar.touched ||
+                                                                                        itemWidthVar.dirty) &&
+                                                                                        !itemWidthVar.valid }">
+                                    <div class="form-label">
+                                        {{ 'Width' | translate }}
+                                        <span class="pull-right help-block animated fadeInLeft" *ngIf="(itemWidthVar.touched ||
+                                                                                    itemWidthVar.dirty) &&
+                                                                                    itemWidthVar.errors">
+                                            <span *ngIf="itemWidthVar.errors.required">
+                                                *{{ 'Required' | translate }}
+                                            </span>
+                                        </span>
+                                    </div>
+                                    <input class="form-control" id="itemWidthId" type="number" placeholder="{{ 'Width' | translate }} ({{ 'Required' | translate }})"
+                                        onkeydown="return event.keyCode == 69 || event.keyCode == 189 ? false : true" min="0"
+                                        required [(ngModel)]=item.Width name="itemWidth" #itemWidthVar="ngModel" />
+                                </div>
+                                <div class="form-label-section" [ngClass]="{'has-error': (itemHeightVar.touched ||
+                                                                                        itemHeightVar.dirty) &&
+                                                                                        !itemHeightVar.valid }">
+                                    <div class="form-label">
+                                        {{ 'Height' | translate }}
+                                        <span class="pull-right help-block animated fadeInLeft" *ngIf="(itemHeightVar?.touched ||
+                                                                                        itemHeightVar?.dirty) &&
+                                                                                        itemHeightVar?.errors">
+                                            <span *ngIf="itemHeightVar.errors.required">
+                                                *{{ 'Required' | translate }}
+                                            </span>
+                                        </span>
+                                    </div>
+                                    <input class="form-control" id="itemHeightId" type="number" placeholder="{{ 'Height' | translate }} ({{ 'Required' | translate }})"
+                                        onkeydown="return event.keyCode == 69 || event.keyCode == 189 ? false : true" min="0"
+                                        required [(ngModel)]=item.Height name="itemHeight" #itemHeightVar="ngModel"  />
+
+                                </div>
+                                <div class="form-label-section unit" [ngClass]="{'has-error': (itemProductDimensionUOMVar.touched ||
+                                                                                                itemProductDimensionUOMVar.dirty) &&
+                                                                                                !itemProductDimensionUOMVar.valid }">
+                                    <div class="form-label">
+                                        {{ 'Dimension Unit' | translate }}
+                                        <span class="pull-right help-block animated fadeInLeft" *ngIf="itemProductDimensionUOMVar.errors">
+                                            <span *ngIf="itemProductDimensionUOMVar.errors.required">
+                                                *{{ 'Required' | translate }}
+                                            </span>
+                                        </span>
+                                    </div>
+                                    <select id="itemProductDimensionUOMId" name="itemProductDimensionUOM" class="form-control" [(ngModel)]=item.ProductDimensionUOM #itemProductDimensionUOMVar="ngModel">
+                                        <option value="IN">IN</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-md-2 control-label pt25">{{ 'Weight' | translate }}</label>
+                            <div class="col-md-8 flex flex-res-column">
+                                <div class="form-label-section" [ngClass]="{'has-error': (itemWeightVar.touched ||
+                                                                                            itemWeightVar.dirty) &&
+                                                                                            !itemWeightVar.valid }">
+                                    <div class="form-label hide-700-993" for="itemProductWeightUOMId">
+                                        {{ 'Weight' | translate }}
+                                        <span class="pull-right help-block animated fadeInLeft" *ngIf="(itemWeightVar.touched ||
+                                                                itemWeightVar.dirty) &&
+                                                                itemWeightVar.errors">
+                                            <span *ngIf="itemWeightVar.errors.required">
+                                                *{{ 'Required' | translate }}
+                                            </span>
+                                        </span>
+                                    </div>
+                                    <input class="form-control" id="itemWeightId" type="number" placeholder="{{ 'Weight' | translate }} ({{ 'Required' | translate }})"
+                                        onkeydown="return event.keyCode == 69 || event.keyCode == 189 ? false : true" min="0"
+                                        required [(ngModel)]=item.Weight name="itemWeight" #itemWeightVar="ngModel" />
+                                </div>
+                                <div class="form-label-section unit mtn20" [ngClass]="{'has-error': (itemProductWeightUOMVar.touched ||
+                                                                                            itemProductWeightUOMVar.dirty) &&
+                                                                                            !itemProductWeightUOMVar.valid }">
+                                    <div class="form-label" for="itemProductWeightUOMId">
+                                            {{ 'Weight Unit' | translate }}
+                                            <span class="pull-right help-block animated fadeInLeft" *ngIf="itemProductWeightUOMVar.errors">
+                                                    <span *ngIf="itemProductWeightUOMVar.errors.required">
+                                                        *{{ 'Required' | translate }}
+                                                    </span>
+                                                </span>
+                                    </div>
+                                    <select id="itemProductWeightUOMId" name="itemProductWeightUOM" class="form-control" [(ngModel)]=item.ProductWeightUOM #itemProductWeightUOMVar="ngModel">
+                                        <!-- <option value="OZ">OZ</option> -->
+                                        <option value="LB">LB</option>
+                                        <!-- <option value="G">G</option>
+                                        <option value="KG">KG</option> -->
+                                    </select>
+                                </div>
+                                <div class="form-label-section"></div>
+                                <div class="form-label-section"></div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="ibox-title"><h5>{{ 'Package Dimension' | translate }}</h5></div>
+                    <div class="ibox-content input-style-2">
+                        <div class="form-group">
+                            <label class="col-md-2 control-label pt25 m-b-resp">{{ 'Dimensions' | translate }}</label>
+                            <div class="col-md-8 flex flex-res-column">
+                                <div class="form-label-section" [ngClass]="{'has-error': (itemPackageLengthVar.touched ||
+                                                                                            itemPackageLengthVar.dirty) &&
+                                                                                            !itemPackageLengthVar.valid }">
+                                    <div class="form-label">
+                                        {{ 'Length' | translate }}
+                                        <span class="pull-right help-block animated fadeInLeft" *ngIf="(itemPackageLengthVar.touched ||
+                                                                                    itemPackageLengthVar.dirty) &&
+                                                                                    itemPackageLengthVar.errors">
+                                            <span *ngIf="itemPackageLengthVar.errors.required">
+                                                *{{ 'Required' | translate }}
+                                            </span>
+                                        </span>
+                                    </div>
+                                    <input class="form-control" id="itemPackageLengthId" type="number" placeholder="{{ 'Package Length' | translate }} ({{ 'Required' | translate }})"
+                                        onkeydown="return event.keyCode == 69 || event.keyCode == 189 ? false : true" min="0"
+                                        required [(ngModel)]=item.PackageLength name="itemPackageLength" #itemPackageLengthVar="ngModel" />
+                                </div>
+                                <div class="form-label-section" [ngClass]="{'has-error': (itemPackageWidthVar.touched ||
+                                                                                            itemPackageWidthVar.dirty) &&
+                                                                                            !itemPackageWidthVar.valid }">
+                                    <div class="form-label">
+                                        {{ 'Width' | translate }}
+                                        <span class="pull-right help-block animated fadeInLeft" *ngIf="(itemPackageWidthVar.touched ||
+                                                                                    itemPackageWidthVar.dirty) &&
+                                                                                    itemPackageWidthVar.errors">
+                                            <span *ngIf="itemPackageWidthVar.errors.required">
+                                                *{{ 'Required' | translate }}
+                                            </span>
+                                        </span>
+                                    </div>
+                                    <input class="form-control" id="itemPackageWidthId" type="number" placeholder="{{ 'Package Width' | translate }} ({{ 'Required' | translate }})"
+                                        onkeydown="return event.keyCode == 69 || event.keyCode == 189 ? false : true" min="0"
+                                        required [(ngModel)]=item.PackageWidth name="itemPackageWidth" #itemPackageWidthVar="ngModel" />
+                                </div>
+                                <div class="form-label-section" [ngClass]="{'has-error': (itemPackageHeightVar.touched ||
+                                                                                            itemPackageHeightVar.dirty) &&
+                                                                                            !itemPackageHeightVar.valid }">
+                                    <div class="form-label">
+                                        {{ 'Height' | translate }}
+                                        <span class="pull-right help-block animated fadeInLeft" *ngIf="(itemPackageHeightVar.touched ||
+                                                                                    itemPackageHeightVar.dirty) &&
+                                                                                    itemPackageHeightVar.errors">
+                                            <span *ngIf="itemPackageHeightVar.errors.required">
+                                                *{{ 'Required' | translate }}
+                                            </span>
+                                        </span>
+                                    </div>
+                                    <input class="form-control" id="itemPackageHeightId" type="number" placeholder="{{ 'Package Height' | translate }} ({{ 'Required' | translate }})"
+                                        onkeydown="return event.keyCode == 69 || event.keyCode == 189 ? false : true" min="0"
+                                        required [(ngModel)]=item.PackageHeight name="itemPackageHeight" #itemPackageHeightVar="ngModel" />
+                                </div>
+                                <div class="form-label-section unit" [ngClass]="{'has-error': (itemPackageDimensionUOMVar.touched ||
+                                                                                            itemPackageDimensionUOMVar.dirty) &&
+                                                                                            !itemPackageDimensionUOMVar.valid }">
+                                    <div class="form-label">
+                                        {{ 'Dimension Unit' | translate }}
+                                        <span class="pull-right help-block animated fadeInLeft" *ngIf="itemPackageDimensionUOMVar.errors">
+                                            <span *ngIf="itemPackageDimensionUOMVar.errors.required">
+                                                *{{ 'Required' | translate }}
+                                            </span>
+                                        </span>
+                                    </div>
+                                    <select id="itemPackageDimensionUOMId" name="itemPackageDimensionUOM" class="form-control" [(ngModel)]=item.PackageDimensionUOM #itemPackageDimensionUOMVar="ngModel">
+                                        <option value="IN">IN</option>
+                                        <!-- <option value="FT">FT</option>
+                                        <option value="CM">CM</option>
+                                        <option value="M">M</option> -->
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-md-2 control-label pt25">{{ 'Weight' | translate }}</label>
+                            <div class="col-md-8 flex flex-res-column">
+                                <div class="form-label-section" [ngClass]="{'has-error': (itemPackageWeightVar.touched ||
+                                                                                            itemPackageWeightVar.dirty) &&
+                                                                                            !itemPackageWeightVar.valid }">
+                                    <div class="form-label hide-700-993">
+                                        {{ 'Weight' | translate }}
+                                        <span class="pull-right help-block animated fadeInLeft" *ngIf="(itemPackageWeightVar.touched ||
+                                                                                    itemPackageWeightVar.dirty) &&
+                                                                                    itemPackageWeightVar.errors">
+                                        <span *ngIf="itemPackageWeightVar.errors.required">
+                                            *{{ 'Required' | translate }}
+                                        </span>
+                                    </span>
+                                    </div>
+                                    <input class="form-control" id="itemPackageWeightId" type="number" placeholder="{{ 'Package Weight' | translate }} ({{ 'Required' | translate }})"
+                                        onkeydown="return event.keyCode == 69 || event.keyCode == 189 ? false : true" min="0"
+                                        required [(ngModel)]=item.PackageWeight name="itemPackageWeight" #itemPackageWeightVar="ngModel" />
+                                </div>
+                                <div class="form-label-section unit mtn20" [ngClass]="{'has-error': (itemPackageWeightUOMVar.touched ||
+                                                                                            itemPackageWeightUOMVar.dirty) &&
+                                                                                            !itemPackageWeightUOMVar.valid }">
+                                    <div class="form-label" for="itemProductWeightUOMId">
+                                        {{ 'Weight Unit' | translate }}
+                                        <span class="pull-right help-block animated fadeInLeft" *ngIf="itemPackageWeightUOMVar.errors">
+                                            <span *ngIf="itemPackageWeightUOMVar.errors.required">
+                                                *{{ 'Required' | translate }}
+                                            </span>
+                                        </span>
+                                    </div>
+                                    <select id="itemPackageWeightUOMId" name="itemPackageWeightUOM" class="form-control" [(ngModel)]=item.PackageWeightUOM #itemPackageWeightUOMVar="ngModel">
+                                        <!-- <option value="OZ">OZ</option> -->
+                                        <option value="LB">LB</option>
+                                        <!-- <option value="G">G</option>
+                                        <option value="KG">KG</option> -->
+                                    </select>
+                                </div>
+                                <div class="form-label-section"></div>
+                                <div class="form-label-section"></div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="ibox-title"><h5>{{ 'Package Type' | translate }}</h5></div>
+                    <div class="ibox-content">
+                        <div class="form-group" [ngClass]="{'has-error': (packagingTypeVar.touched ||
+                                                                        packagingTypeVar.dirty) &&
+                                                                        !packagingTypeVar.valid }">
+                            <label class="col-md-2 control-label">{{ 'Packaging Type' | translate }}</label>
+                            <div class="col-md-2">
+                                <select class="form-control" id="packagingTypeId" name="packagingType"
+                                    [(ngModel)]=item.PackagingType #packagingTypeVar="ngModel">
+                                    <option [value]="type.Value" *ngFor="let type of packagingTypes">{{type.Name}}</option>
+                                </select>
+
+                                <span class="help-block" *ngIf=!item.PackagingType>
+                                    *{{ 'Packaging Type Required' | translate }}
+                                </span>
+
+                            </div>
+                        </div>
+                    </div>
+                </fieldset>
+                <div class="has-error" *ngIf="errorMessage">{{errorMessage}}</div>
+            </form>
+        </div>
+    </div>
+</div>

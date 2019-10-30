@@ -1,0 +1,11 @@
+<o-item-edit-category
+    [item]="item$ | async"
+    [categoriesList]="categoriesList$ | async"
+    [categoryAssignments]="categoryAssignments$ | async"
+    [currentCategoryBreadCrumbs]="currentCategoryBreadCrumbs$ | async"
+    [errorMessage]="errorMessage$ | async"
+    [item]="item$ | async"
+    (getCategories)="getCategories($event)"
+    (getCategoryBreadCrumbs)="getCategoryBreadCrumbs($event)"
+    (getItemCategoryAssignments)="getItemCategoryAssignments($event)"
+></o-item-edit-category>

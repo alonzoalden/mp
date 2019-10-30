@@ -1,0 +1,11 @@
+<o-sales-order-fulfillment-list
+    [errorMessage]="errorMessage$ | async"
+    [salesOrder]="salesOrder$ | async"
+    [isLoading]="isLoading$ | async"
+    [fulfillmentsMatTable]="fulfillmentsMatTable$ | async"
+    (getFulfilledBySalesOrder)="getFulfilledBySalesOrder($event)"
+    (getFulfilledByFulfillments)="getFulfilledByFulfillments($event)"
+    (getSalesOrderDelivery)="getSalesOrderDelivery($event)"
+    (setFulfillment)="setFulfillment($event)"
+    (deleteFulfillment)="deleteFulfillment($event)"
+></o-sales-order-fulfillment-list>

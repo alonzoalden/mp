@@ -1,0 +1,9 @@
+<o-item-batch-approval
+    [items]="itemBatch$ | async"
+    [itemBatchMatTable]="itemBatchMatTable$ | async"
+    [userInfo]="userInfo$ | async"
+    [isLoading]="isLoading$ | async"
+    [errorMessage]="errorMessage$ | async"
+    (getPendingItems)="getPendingItems()"
+    (editItemBatch)="editItemBatch($event)"
+></o-item-batch-approval>

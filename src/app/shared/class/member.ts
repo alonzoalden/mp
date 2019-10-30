@@ -46,5 +46,6 @@ export class MemberVendor {
         public MerchantID: string,
         public UpdatedOn: string,
         public CreatedOn: string,
+        public CompanyName: string
     ) {}
 }

@@ -1,0 +1,7 @@
+<o-item-batch-update-select
+    [itemBatchItemsMatTable]="itemBatchItemsMatTable$ | async"
+    [userInfo]="userInfo$ | async"
+    [errorMessage]="errorMessage$ | async"
+    [isLoading]="isLoading$ | async"
+    (getItems)="getItems()"
+></o-item-batch-update-select>

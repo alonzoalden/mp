@@ -1,0 +1,10 @@
+<o-item-print-label
+    [itemPrintLabelsMatTable]="itemPrintLabelsMatTable$ | async"
+    [itemList]="itemList$ | async"
+    [userInfo]="userInfo$ | async"
+    [isLoading]="isLoading$ | async"
+    [errorMessage]="errorMessage$ | async"
+    (getItemList)="getItemList()"
+    (downloadPrintItemLabels)="downloadPrintItemLabels($event)"
+    (downloadPrintItemLargeLabels)="downloadPrintItemLargeLabels($event)"
+></o-item-print-label>

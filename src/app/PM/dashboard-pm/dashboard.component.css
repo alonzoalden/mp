@@ -1,0 +1,94 @@
+
+.feed-element {
+    border-bottom: 1px solid #e7eaec !important;
+}
+
+.feed-element:first-child {
+    margin-top: 0;
+}
+
+.feed-element {
+    padding-bottom: 15px;
+}
+
+    .feed-element,
+    .feed-element .media {
+        margin-top: 15px;
+    }
+
+.feed-element,
+.media-body {
+    overflow: hidden;
+}
+.m-t-xl {
+    margin-top: 40px;
+}
+.alert {
+    margin-bottom: 0;
+}
+.m-t-9 {
+    margin-top: 9px;
+}
+.m-t-sm {
+    margin-top: 10px;
+}
+
+#gradient {
+    position:absolute;
+    z-index:2;
+    right:20px;
+    top:20px;
+    left:20px;
+    /* height:400px; adjust it to your needs */
+    
+    background: -moz-linear-gradient(top,  rgba(255,255,255,0) 0%, rgba(255,255,255,1) 70%);
+    background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,rgba(255,255,255,0)), color-stop(70%,rgba(255,255,255,1)));
+    background: -webkit-linear-gradient(top,  rgba(255,255,255,0) 0%,rgba(255,255,255,1) 70%);
+    background: -o-linear-gradient(top,  rgba(255,255,255,0) 0%,rgba(255,255,255,1) 70%);
+    background: -ms-linear-gradient(top,  rgba(255,255,255,0) 0%,rgba(255,255,255,1) 70%);
+    background: linear-gradient(to bottom,  rgba(255,255,255,0) 0%,rgba(255,255,255,1) 70%);
+}
+.skinny {
+    font-weight: 400;
+}
+
+.no-scroll-bar::-webkit-scrollbar {
+    display: none;
+}
+.alert {
+    border-radius: 4px;
+    margin-top: 10px;
+}
+
+.mat-drawer.mat-drawer-side {
+    width: 300px;
+    padding: 25px;
+}
+.mat-drawer.mat-drawer-side .fa-angle-left,
+.mat-drawer-content .fa-angle-right,
+.mat-drawer.mat-drawer-side .fa-arrow-circle-o-left,
+.mat-drawer-content .fa-arrow-circle-o-right {
+    cursor: pointer;
+    position: absolute;
+    z-index: 99999;
+}
+.mat-drawer.mat-drawer-side .fa-angle-left,
+.mat-drawer.mat-drawer-side .fa-arrow-circle-o-left {
+    font-size: 20px;
+    right: 10px;
+    top: 7px;
+    color: #dddddd;
+}
+
+.mat-drawer-content .fa-angle-right,
+.mat-drawer-content .fa-arrow-circle-o-right {
+    font-size: 24px;
+    top: 4px;
+    left: 12px;
+    color: #cccccc;
+}
+.mobile-header {
+    text-align: center;
+    font-size: 24px;
+    padding: 20px;
+}

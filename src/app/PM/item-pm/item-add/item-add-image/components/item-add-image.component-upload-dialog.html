@@ -1,0 +1,31 @@
+<h3 class="ibox-title dialog-title">{{ 'Upload Images' | translate }}</h3>
+<div mat-dialog-content>
+    <div>
+        <button mat-button class="btn btn-primary btn-cover-label max">
+            <label class="font-normal">
+                <i class="fa fa-files-o"></i> {{ 'Browse' | translate }}&hellip; <input type="file" style="display: none;" (change)="fileChangeEvent($event)"
+                    accept="image/jpeg,image/png,.jpeg,.jpg,.png" multiple #fileUpload>
+            </label>
+        </button>
+        <!-- <label class="btn btn-primary max">
+            <i class="fa fa-files-o"></i> {{ 'Browse' | translate }}&hellip; <input type="file" style="display: none;" (change)="fileChangeEvent($event)"
+                accept="image/jpeg,image/png,.jpeg,.jpg,.png" multiple #fileUpload>
+        </label> -->
+    </div>
+    <div class="m-t-md">
+        <div class="sm-strong">{{ 'Files Selected' | translate }}</div>
+        <ul class="item-single-action">
+            <li *ngIf="!selectedFileNames || selectedFileNames.length < 1" class="text-info white-bg">{{ 'No files selected' | translate }}</li>
+            <li *ngFor="let fileName of selectedFileNames; let i = index"><div matTooltip="{{fileName}}">{{fileName}}</div><a (click)='removeFile(i)'><span matTooltip="{{ 'Remove' | translate }}" attr.aria-label="{{ 'Remove' | translate}}" class="glyphicon glyphicon-trash m-l-md"></span></a></li>
+        </ul>
+    </div>
+    <div class="pull-right" *ngIf="selectedFileNames && selectedFileNames.length > 0">
+        <a class="text-danger" type="button" (click)="cancelUpload()">{{ 'Remove All Files' | translate }}</a>           
+    </div>
+</div>
+<mat-dialog-actions>
+    <!-- <button class="btn btn-success" [mat-dialog-close]="filesToUpload" cdkFocusInitial><i class="fa fa-upload"></i>  {{ 'Upload' | translate }}</button> -->
+    <!-- <button class="btn btn-info m-l-sm" (click)="onCancelClick()"><i class="fa fa-remove"></i>  {{ 'Cancel' | translate }}</button> -->
+    <button mat-button class="btn btn-success-sm" [mat-dialog-close]="filesToUpload"><i class="fa fa-upload"></i>  {{ 'Upload' | translate }}</button>
+    <button mat-button class="btn btn-remove-sm" (click)="onCancelClick()"><i class="fa fa-remove"></i>  {{ 'Cancel' | translate }}</button>
+</mat-dialog-actions>

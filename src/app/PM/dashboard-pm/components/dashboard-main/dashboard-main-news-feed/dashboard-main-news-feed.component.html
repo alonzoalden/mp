@@ -1,0 +1,28 @@
+<div class="ibox float-e-margins">
+    <div *ngIf="dashboardNews">
+        <mat-expansion-panel [expanded]="true">
+            <mat-expansion-panel-header class="ibox-title">
+                <mat-panel-title>
+                    <h5>{{ 'News' | translate }} <span class="m-l-10imp label label-primary pull-right animated fadeIn">{{ 'Updated' | translate }} {{ newsDisplay.CreatedOn | date:'MMMM yyyy'}}</span> </h5>
+                </mat-panel-title>
+            </mat-expansion-panel-header>
+            <div class="ibox-content no-scroll-bar" >
+                <div class="profile-content">
+                    <div class="feed-element animated fadeInDown">
+                        <div *ngIf="newsDisplay" @smoothOpen>
+                            <h3>{{newsDisplay.Subject}}</h3>
+                            <p><span class="text-muted"> <i class="fa fa-clock-o"></i>  {{newsDisplay.CreatedOn | date:'fullDate'}}</span></p>
+                            <p style="white-space: pre-wrap">{{newsDisplay.News}} </p>
+                        </div>
+                    </div>
+                    <div class="m-t-sm">
+                        <h4>{{ 'Latest News' | translate }}</h4>
+                        <h5> <a (click)="newsDisplay = dashboardNews[0]">{{dashboardNews[0].Subject}} <span class="text-muted skinny"> - {{dashboardNews[1].CreatedOn | date:'fullDate'}}</span></a></h5>
+                        <h5> <a *ngIf="dashboardNews.length > 1" (click)="newsDisplay = dashboardNews[1]">{{dashboardNews[1].Subject}} <span class="text-muted skinny"> - {{dashboardNews[1].CreatedOn | date:'fullDate'}}</span></a></h5>
+                        <h5> <a *ngIf="dashboardNews.length > 2" (click)="newsDisplay = dashboardNews[2]">{{dashboardNews[2].Subject}}<span class="text-muted skinny"> - {{dashboardNews[1].CreatedOn | date:'fullDate'}}</span></a></h5>
+                    </div>
+                </div>
+            </div>
+        </mat-expansion-panel>
+    </div>
+</div>
