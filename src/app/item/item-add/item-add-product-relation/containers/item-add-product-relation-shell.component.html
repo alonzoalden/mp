@@ -12,13 +12,13 @@
                         (getItemRelatedProduct)="getItemRelatedProduct($event)"
                         (addNewItemRelatedProductRow)="addNewItemRelatedProductRow($event)"
                     ></o-item-add-product-relation-related-product>
-                     <o-item-add-product-relation-up-sell *ngIf="currentMember?.IsPM"
+                     <!-- <o-item-add-product-relation-up-sell *ngIf="currentMember?.IsPM"
                         [upSellItemlist]="allItemList$ | async"
                         [item]="item$ | async"
                         [itemUpSellsMatTable]="itemUpSellsMatTable$ | async"
                         [errorMessage]="errorMessage$ | async"
                         (getAllItemUpSell)="getAllItemUpSell($event)"
-                    ></o-item-add-product-relation-up-sell>
+                    ></o-item-add-product-relation-up-sell> -->
                     <o-item-add-product-relation-cross-sell *ngIf="currentMember?.IsPM"
                         [crossSellItemlist]="allItemList$ | async"
                         [item]="item$ | async"
