@@ -22,4 +22,15 @@ export class ItemAddDimensionComponent {
     ];
 
     constructor() { }
+
+    setPackagingType() {
+        if (!this.item.PackagingType && this.item.PackageWeight && this.item.Weight) {
+            const min = 120;
+            if (this.item.PackageWeight >= min || this.item.Weight >= min) {
+                this.item.PackagingType = '4';
+            } else {
+                this.item.PackagingType = '5';
+            }
+        }
+    }
 }
