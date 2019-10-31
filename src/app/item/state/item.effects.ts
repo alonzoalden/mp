@@ -451,7 +451,6 @@ export class ItemEffects {
                     if (payload.printLabel) {
                         this.store.dispatch(new itemActions.DownloadItemLabel(item));
                     }
-                    this.router.navigate(['/item']);
                     return (new itemActions.EditItemSuccess(item));
                 }),
                 catchError(err => {

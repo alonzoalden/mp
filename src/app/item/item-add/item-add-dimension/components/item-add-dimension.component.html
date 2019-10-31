@@ -97,7 +97,8 @@
                                     </div>
                                     <input class="form-control" id="itemWeightId" type="number" placeholder="{{ 'Weight' | translate }} ({{ 'Required' | translate }})"
                                         onkeydown="return event.keyCode == 69 || event.keyCode == 189 ? false : true" min="0"
-                                        required [(ngModel)]=item.Weight name="itemWeight" #itemWeightVar="ngModel" />
+                                        required [(ngModel)]=item.Weight name="itemWeight" #itemWeightVar="ngModel"
+                                        (change)="setPackagingType()"/>
                                 </div>
                                 <div class="form-label-section unit mtn20" [ngClass]="{'has-error': (itemProductWeightUOMVar.touched ||
                                                                                             itemProductWeightUOMVar.dirty) &&
@@ -211,7 +212,8 @@
                                     </div>
                                     <input class="form-control" id="itemPackageWeightId" type="number" placeholder="{{ 'Package Weight' | translate }} ({{ 'Required' | translate }})"
                                         onkeydown="return event.keyCode == 69 || event.keyCode == 189 ? false : true" min="0"
-                                        required [(ngModel)]=item.PackageWeight name="itemPackageWeight" #itemPackageWeightVar="ngModel" />
+                                        required [(ngModel)]=item.PackageWeight name="itemPackageWeight" #itemPackageWeightVar="ngModel"
+                                        (change)="setPackagingType()"/>
                                 </div>
                                 <div class="form-label-section unit mtn20" [ngClass]="{'has-error': (itemPackageWeightUOMVar.touched ||
                                                                                             itemPackageWeightUOMVar.dirty) &&
