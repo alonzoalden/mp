@@ -1,5 +1,4 @@
-import { Component, ViewChild, OnInit, OnDestroy } from '@angular/core';
-import { Subscription } from 'rxjs';
+import { Component, OnInit, OnDestroy, AfterViewInit } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { TranslateService } from '@ngx-translate/core';
 import { Router } from '@angular/router';
@@ -7,7 +6,6 @@ import { OAuthService } from 'angular-oauth2-oidc';
 import { JwksValidationHandler } from 'angular-oauth2-oidc';
 import { authConfig } from './auth/auth.config';
 import { AppService } from './app.service';
-import { NotificationComponent } from './shared/tool/notification/notification.component';
 import { DeviceDetectorService } from 'ngx-device-detector';
 import * as fromUser from './shared/state/user-state.reducer';
 import { Store, select } from '@ngrx/store';
@@ -21,57 +19,46 @@ declare var $: any;
     templateUrl: './app.component.html',
     styleUrls: ['./app.component.css']
 })
-export class AppComponent implements OnInit, OnDestroy {
-    errorMessage: string;
-    subscription: Subscription;
-    componentActive: boolean = true;
-
-    @ViewChild(NotificationComponent, { static: false })
-    private notificationComponent: NotificationComponent;
-    title = 'app';
-    apiResponse: any;
+export class AppComponent implements OnInit, OnDestroy, AfterViewInit {
     claims: any;
-
-    currentLanguage: string;
+    componentActive: boolean = true;
+    appLoading: boolean;
 
     constructor(
         private userStore: Store<fromUser.State>,
         private oauthService: OAuthService,
-        private httpClient: HttpClient,
         private router: Router,
-        public appService: AppService,
-        private translate: TranslateService,
-        private deviceService: DeviceDetectorService) {
+        public appService: AppService) {
     }
 
     ngOnInit() {
-
+        this.appLoading = true;
         this.configureWithNewConfigApi();
-        this.translate.setDefaultLang('en');
-        this.currentLanguage = 'en';
-
         this.initInterval();
-
         this.userStore.pipe(
             select(fromUser.getCurrentUser),
             takeWhile(() => this.componentActive)
         ).subscribe(
-            data => {
-                if (data) {
-                    this.appService.currentMember = data;
-                    console.log(this.appService.currentMember);
-                    //Set Default Language
-                    this.currentLanguage = this.appService.currentMember.DefaultLanguage;
-                    this.translate.setDefaultLang(this.currentLanguage);
-
-                    // change vendor if not active
-                    if (!this.appService.currentMember.IsActive) {
-                        this.changeVendor();
+            member => {
+                if (member) {
+                    this.appLoading = false;
+                    if (member.IsPM && this.router.url === '/dashboard') {
+                        this.router.navigate(['/PM']);
                     }
                 }
             }
         );
-
+        this.userStore.pipe(
+            select(fromUser.getIsLoading),
+            takeWhile(() => this.componentActive)
+        ).subscribe(
+            loading => {
+                if (!loading) {
+                    this.appLoading = loading;
+                    console.log('off');
+                }
+            }
+        );
         // this.appService.verifyBrowserCompatibility()
         //     .subscribe((data) => {
         //         const browser = this.deviceService.getDeviceInfo().browser;
@@ -82,13 +69,12 @@ export class AppComponent implements OnInit, OnDestroy {
         //         }
         //     });
 
-        this.subscription = this.appService.subject.subscribe(
-            notification => this.doNotification(notification)
-        );
-
         if (this.isLoggedin) {
             this.userStore.dispatch(new userActions.LoadCurrentUser());
         }
+
+    }
+    ngAfterViewInit() {
 
     }
 
@@ -100,25 +86,6 @@ export class AppComponent implements OnInit, OnDestroy {
         }, 5000);
     }
 
-    changeVendor() {
-        this.appService.editToFirstVendor()
-            .subscribe(
-                (data) => {
-                    if (data && data.VendorID) {
-                        this.appService.currentMember = data;
-                        // this.appService.sendNotification({ type: 'alert', title: 'Vendor Changed', content: '' });
-                    } else {
-                        this.logout();
-                    }
-                },
-                (error: any) => {
-                    this.errorMessage = <any>error;
-                    // this.appService.sendNotification({ type: 'error', title: 'Error', content: this.errorMessage });
-                    window.location.reload();
-                }
-            );
-    }
-
     private configureWithNewConfigApi() {
         this.oauthService.configure(authConfig);
         this.oauthService.tokenValidationHandler = new JwksValidationHandler();
@@ -126,107 +93,36 @@ export class AppComponent implements OnInit, OnDestroy {
         this.oauthService.loadDiscoveryDocumentAndTryLogin();
     }
 
-    get wasLoggedIn() {
-        return (this.appService.wasLoggedIn || this.isLoggedin) && !(this.router.url === '/home' || this.router.url === '/');
+    ngOnDestroy() {
     }
-
     login() {
         this.oauthService.initImplicitFlow();
     }
-
     showClaims() {
         this.claims = this.oauthService.getIdentityClaims();
     }
-
     manualSilentRefresh() {
         this.oauthService
-            .silentRefresh()
-            .then(info => console.error('refresh ok', info))
-            .catch(err => console.error('refresh error', err));
+        .silentRefresh()
+        .then(info => console.error('refresh ok', info))
+        .catch(err => console.error('refresh error', err));
     }
-
     logout() {
         this.oauthService.logOut();
     }
-
-
-    addPurchaseOrder() {
-        this.router.navigate(['/inbound-shipment', 0, 'edit']);
+    get wasLoggedIn() {
+        return (this.appService.wasLoggedIn || this.isLoggedin) && !(this.router.url === '/home' || this.router.url === '/');
     }
-
-    isInboundShipmentPage() {
-        return this.router.url.indexOf('inbound-shipment/') > 0;
-    }
-
-    get givenName() {
-        const claims = this.oauthService.getIdentityClaims();
-        if (!claims) {
-            return null;
-        }
-        return claims['given_name'];
-    }
-
-    get familyName() {
-        const claims = this.oauthService.getIdentityClaims();
-        if (!claims) {
-            return null;
-        }
-        return claims['family_name'];
-    }
-
-    get email() {
-        const claims = this.oauthService.getIdentityClaims();
-        if (!claims) {
-            return null;
-        }
-        return claims['preferred_username'];
-    }
-
     get isLoggedin() {
         return (this.oauthService.hasValidIdToken() && this.oauthService.hasValidAccessToken());
     }
-
     get isAdmin() {
         return (this.appService.currentMember && this.appService.currentMember.IsAdmin);
     }
-
     get isSuperAdmin() {
         return (this.appService.currentMember && this.appService.currentMember.IsSuperAdmin);
     }
-
     get isPM() {
         return (this.appService.currentMember && this.appService.currentMember.IsPM);
-    }
-
-    get VendorID() {
-        if (this.appService.currentMember) {
-            return this.appService.currentMember.VendorID;
-        } else {
-            return '';
-        }
-    }
-
-    get DisplayVendorName() {
-        if (this.appService.currentMember && this.appService.currentMember.VendorName) {
-            return this.appService.currentMember.VendorName.length > 15
-                ? this.appService.currentMember.VendorName.substring(0, 15) + '...'
-                : this.appService.currentMember.VendorName.substring(0, 15);
-        } else {
-            return '';
-        }
-    }
-
-    ngOnDestroy(): void {
-        this.componentActive = false;
-        this.subscription.unsubscribe();
-    }
-
-    doNotification(notification) {
-        this.notificationComponent.notify(notification);
-    }
-
-    switchLanguage(language: string) {
-        this.translate.use(language);
-        this.currentLanguage = language;
     }
 }

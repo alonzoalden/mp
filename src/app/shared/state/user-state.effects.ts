@@ -17,10 +17,12 @@ export class UserEffects {
         ofType(userActions.UserActionTypes.LoadCurrentUser),
         mergeMap(() =>
             this.appService.getCurrentMember().pipe(
-                map(member => (new userActions.LoadCurrentUserSuccess(member))),
+                map(member => {
+                    this.appService.currentMember = member;
+                    return (new userActions.LoadCurrentUserSuccess(member));
+                }),
                 catchError(err => {
-                    of(new userActions.LoadCurrentUserFail(err));
-                    return EMPTY;
+                    return of(new userActions.LoadCurrentUserFail(err));
                 })
             )
         )
@@ -32,12 +34,11 @@ export class UserEffects {
             this.appService.editToFirstVendor().pipe(
                 map(member => (new userActions.LoadCurrentUserSuccess(member))),
                 catchError(err => {
-                    of(new userActions.LoadCurrentUserFail(err));
-                    return EMPTY;
+                    return of(new userActions.LoadCurrentUserFail(err));
                 })
             )
         )
     );
-    
+
 
 }

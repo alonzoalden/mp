@@ -7,11 +7,13 @@ import { Member } from './shared/class/member';
 import { PurchaseOrder } from './shared/class/purchase-order';
 import { OAuthService } from 'angular-oauth2-oidc';
 import { environment } from './../environments/environment';
+import { NotificationComponent } from './shared/tool/notification/notification.component';
 
 @Injectable()
 
 export class AppService {
     private apiURL = environment.webapiURL;
+    private notificationComponent: NotificationComponent;
     currentMember: Member;
     wasLoggedIn: boolean;
 
@@ -26,7 +28,7 @@ export class AppService {
         private oauthService: OAuthService) { }
 
     sendNotification(notification: any) {
-        this.subject.next(notification);
+        this.notificationComponent.notify(notification);
     }
 
     setWasLoggedIn() {

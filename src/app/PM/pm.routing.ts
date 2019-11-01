@@ -16,27 +16,27 @@ const APP_ROUTES: Routes = [
         children: [
             {
                 path: 'dashboard',
-                loadChildren: 'app/PM/dashboard-pm/dashboard-pm.module#DashboardPMModule',
+                loadChildren: 'app/pm/dashboard-pm/dashboard-pm.module#DashboardPMModule',
                 canLoad: [PMAuthGuard]
             },
             {
                 path: 'item',
-                loadChildren: 'app/PM/item-pm/item-pm.module#ItemPmModule',
+                loadChildren: 'app/pm/item-pm/item-pm.module#ItemPmModule',
                 canLoad: [PMAuthGuard]
             },
             {
                 path: 'sales-order',
-                loadChildren: 'app/PM/sales-order-pm/sales-order-pm.module#SalesOrderPmModule',
+                loadChildren: 'app/pm/sales-order-pm/sales-order-pm.module#SalesOrderPmModule',
                 canLoad: [PMAuthGuard]
             },
             {
                 path: 'inbound-shipment',
-                loadChildren: 'app/PM/inbound-shipment-pm/inbound-shipment-pm.module#InboundShipmentPmModule',
+                loadChildren: 'app/pm/inbound-shipment-pm/inbound-shipment-pm.module#InboundShipmentPmModule',
                 canLoad: [PMAuthGuard]
             },
             {
                 path: 'setting',
-                loadChildren: 'app/PM/setting-pm/setting-pm.module#SettingPmModule',
+                loadChildren: 'app/pm/setting-pm/setting-pm.module#SettingPmModule',
                 canLoad: [PMAuthGuard]
             },
             {

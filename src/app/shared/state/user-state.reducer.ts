@@ -11,12 +11,14 @@ export interface State extends fromRoot.State {
 export interface UserState {
     currentUser: Member;
     currentUserDefaultPageSize: Number;
+    isLoading: boolean;
     error: string;
 }
 
 const initialState: UserState = {
     currentUser: null,
     currentUserDefaultPageSize: null,
+    isLoading: false,
     error: ''
 };
 
@@ -31,13 +33,22 @@ export const getCurrentUserDefaultPageSize = createSelector(
     getUserFeatureState,
     state => state.currentUserDefaultPageSize
 );
+export const getIsLoading = createSelector(
+    getUserFeatureState,
+    state => state.isLoading
+);
 
 export function userreducer(state = initialState, action: UserActions): UserState {
     switch (action.type) {
-        
+        case UserActionTypes.LoadCurrentUser:
+            return {
+                ...state,
+                isLoading: true,
+            };
         case UserActionTypes.LoadCurrentUserSuccess:
             return {
                 ...state,
+                isLoading: false,
                 currentUser: action.payload,
                 currentUserDefaultPageSize: action.payload.DefaultPageSize,
                 error: ''
@@ -46,6 +57,7 @@ export function userreducer(state = initialState, action: UserActions): UserStat
         case UserActionTypes.LoadCurrentUserFail:
             return {
                 ...state,
+                isLoading: false,
                 currentUser: null,
                 currentUserDefaultPageSize: null,
                 error: action.payload

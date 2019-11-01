@@ -35,7 +35,7 @@ import { companyInfoReducer } from '../../original/company/company-info/state/co
 import { CompanyInfoEffects } from '../../original/company/company-info/state/company-info.effects';
 import { CompanyService } from '../../original/company/company.service';
 import { SimpleNotificationsModule } from 'angular2-notifications';
-import { SharePipeModule } from '../../shared/pipe/share.pipe';
+import {SharePipeModule} from '../../shared/pipe/share.pipe';
 
 
 @NgModule({

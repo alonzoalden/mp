@@ -1,63 +1,43 @@
-import {Component, OnInit, ViewChild, OnDestroy} from '@angular/core';
-import {Subscription} from 'rxjs';
-import {NotificationComponent} from '../shared/tool/notification/notification.component';
-import {select, Store} from '@ngrx/store';
-import * as fromUser from '../shared/state/user-state.reducer';
-import {JwksValidationHandler, OAuthService} from 'angular-oauth2-oidc';
-import {HttpClient} from '@angular/common/http';
-import {Router} from '@angular/router';
-import {AppService} from '../app.service';
-import {TranslateService} from '@ngx-translate/core';
-import {DeviceDetectorService} from 'ngx-device-detector';
-import {takeWhile} from 'rxjs/operators';
-import * as userActions from '../shared/state/user-state.actions';
-import {authConfig} from '../auth/auth.config';
+import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Router } from '@angular/router';
+import { TranslateService } from '@ngx-translate/core';
+import { OAuthService } from 'angular-oauth2-oidc';
+import { AppService } from '../../app.service';
+import { Store, select } from '@ngrx/store';
+import { takeWhile } from 'rxjs/operators';
+import * as fromUser from '../../shared/state/user-state.reducer';
+import * as userActions from '../../shared/state/user-state.actions';
+declare var $: any;
 
 @Component({
-  selector: 'app-pm',
-  templateUrl: './pm.component.html',
-
+    selector: 'header-original',
+    templateUrl: './header-original.component.html',
+    styleUrls: ['../../app.component.css']
 })
-export class PmComponent implements OnInit, OnDestroy {
+export class HeaderOriginalComponent implements OnInit, OnDestroy {
     errorMessage: string;
-    subscription: Subscription;
     componentActive: boolean = true;
-
-    @ViewChild(NotificationComponent, { static: false })
-    private notificationComponent: NotificationComponent;
-    title = 'app';
-    apiResponse: any;
     claims: any;
-
     currentLanguage: string;
 
     constructor(
         private userStore: Store<fromUser.State>,
         private oauthService: OAuthService,
-        private httpClient: HttpClient,
         private router: Router,
-        public appService: AppService,
         private translate: TranslateService,
-        private deviceService: DeviceDetectorService) {
+        public appService: AppService) {
     }
 
     ngOnInit() {
-
-        this.configureWithNewConfigApi();
         this.translate.setDefaultLang('en');
         this.currentLanguage = 'en';
-
-        this.initInterval();
-
         this.userStore.pipe(
             select(fromUser.getCurrentUser),
             takeWhile(() => this.componentActive)
         ).subscribe(
             data => {
-                console.log(this.router.url);
                 if (data) {
                     this.appService.currentMember = data;
-
                     //Set Default Language
                     this.currentLanguage = this.appService.currentMember.DefaultLanguage;
                     this.translate.setDefaultLang(this.currentLanguage);
@@ -70,32 +50,9 @@ export class PmComponent implements OnInit, OnDestroy {
             }
         );
 
-        // this.appService.verifyBrowserCompatibility()
-        //     .subscribe((data) => {
-        //         const browser = this.deviceService.getDeviceInfo().browser;
-        //         if (window.location.href !== environment.siteURL && window.location.href !== environment.siteURL + '/home') {
-        //             if (this.appService.disabledBrowsers[browser] && data.country_code !== 'US') {
-        //                 this.router.navigate(['/browser-invalid']);
-        //             }
-        //         }
-        //     });
-
-        this.subscription = this.appService.subject.subscribe(
-            notification => this.doNotification(notification)
-        );
-
         if (this.isLoggedin) {
             this.userStore.dispatch(new userActions.LoadCurrentUser());
         }
-
-    }
-
-    initInterval() {
-        setInterval(() => {
-            if (this.wasLoggedIn && !this.isLoggedin) {
-                this.logout();
-            }
-        }, 5000);
     }
 
     changeVendor() {
@@ -117,13 +74,6 @@ export class PmComponent implements OnInit, OnDestroy {
             );
     }
 
-    private configureWithNewConfigApi() {
-        this.oauthService.configure(authConfig);
-        this.oauthService.tokenValidationHandler = new JwksValidationHandler();
-        this.oauthService.setupAutomaticSilentRefresh();
-        this.oauthService.loadDiscoveryDocumentAndTryLogin();
-    }
-
     get wasLoggedIn() {
         return (this.appService.wasLoggedIn || this.isLoggedin) && !(this.router.url === '/home' || this.router.url === '/');
     }
@@ -136,20 +86,13 @@ export class PmComponent implements OnInit, OnDestroy {
         this.claims = this.oauthService.getIdentityClaims();
     }
 
-    manualSilentRefresh() {
-        this.oauthService
-            .silentRefresh()
-            .then(info => console.error('refresh ok', info))
-            .catch(err => console.error('refresh error', err));
-    }
-
     logout() {
         this.oauthService.logOut();
     }
 
 
     addPurchaseOrder() {
-        this.router.navigate(['PM/inbound-shipment', 0, 'edit']);
+        this.router.navigate(['/inbound-shipment', 0, 'edit']);
     }
 
     isInboundShipmentPage() {
@@ -216,11 +159,6 @@ export class PmComponent implements OnInit, OnDestroy {
 
     ngOnDestroy(): void {
         this.componentActive = false;
-        this.subscription.unsubscribe();
-    }
-
-    doNotification(notification) {
-        this.notificationComponent.notify(notification);
     }
 
     switchLanguage(language: string) {

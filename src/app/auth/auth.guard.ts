@@ -1,11 +1,16 @@
 import { Injectable } from '@angular/core';
 import { CanLoad, Router, ActivatedRouteSnapshot, RouterStateSnapshot } from '@angular/router';
 import { OAuthService } from 'angular-oauth2-oidc';
+import { AppService } from 'app/app.service';
 
 @Injectable()
 export class AuthGuard implements CanLoad {
 
-    constructor(private oauthService: OAuthService, private router: Router) { }
+    constructor(
+        private oauthService: OAuthService,
+        private router: Router,
+        private appService: AppService
+    ) { }
 
     canLoad() {
         //console.log(this.oauthService.hasValidIdToken());
