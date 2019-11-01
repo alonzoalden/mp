@@ -34,7 +34,6 @@ export const getCurrentUserDefaultPageSize = createSelector(
 
 export function userreducer(state = initialState, action: UserActions): UserState {
     switch (action.type) {
-        
         case UserActionTypes.LoadCurrentUserSuccess:
             return {
                 ...state,
