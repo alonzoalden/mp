@@ -9,8 +9,8 @@ import * as salesOrderActions from '../../../../state/sales-order.actions';
 import * as fromSalesOrder from '../../../../state';
 import { Store, select } from '@ngrx/store';
 import { takeWhile } from 'rxjs/operators';
-import * as companyActions from '../../../../../../company/company-info/state/company-info.actions';
-import * as fromCompany from '../../../../../../company/company-info/state/';
+import * as companyActions from '../../../../../../original/company/company-info/state/company-info.actions';
+import * as fromCompany from '../../../../../../original/company/company-info/state/';
 import { CompanyInfo } from '../../../../../../shared/class/company-info';
 import { AddressCountry, AddressState } from 'app/shared/class/address';
 

@@ -9,7 +9,7 @@ import { ItemList } from '../../../shared/class/item';
 import * as inboundShipmentActions from './inbound-shipment.actions';
 import * as fromInboundShipment from '.';
 import { PurchaseOrder, PurchaseOrderLine, InboundShippingMethod, PurchaseOrderLineList, Carton } from '../../../shared/class/purchase-order';
-import { ItemService } from '../../../item/item.service';
+import { ItemService } from '../../../original/item/item.service';
 
 @Injectable()
 export class InboundShipmentEffects {

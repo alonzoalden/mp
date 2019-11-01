@@ -39,7 +39,7 @@ export class AppComponent implements OnInit, OnDestroy {
         private oauthService: OAuthService,
         private httpClient: HttpClient,
         private router: Router,
-        private appService: AppService,
+        public appService: AppService,
         private translate: TranslateService,
         private deviceService: DeviceDetectorService) {
     }
@@ -59,7 +59,7 @@ export class AppComponent implements OnInit, OnDestroy {
             data => {
                 if (data) {
                     this.appService.currentMember = data;
-
+                    console.log(this.appService.currentMember);
                     //Set Default Language
                     this.currentLanguage = this.appService.currentMember.DefaultLanguage;
                     this.translate.setDefaultLang(this.currentLanguage);

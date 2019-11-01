@@ -1,9 +1,8 @@
-<div class="top-navigation">
+<!-- <div class="top-navigation">
     <div id="wrapper">
         <div id="page-wrapper" style="padding: 0;" class="gray-bg">
             <div class="border-bottom white-bg" *ngIf="wasLoggedIn">
                 <nav id="main-nav" class="navbar navbar-static-top nav-mobile-resize" style="width: 100%" role="navigation">
-                    <!-- SP shows when small-->
                     <div class="navigation-button pull-right">
                         <a class="hide-large" aria-expanded="false" role="menu" href="#" data-toggle="dropdown"><i class="fa fa-cog m-r-none fs-16"></i> <span class="m-l-xs caret"></span></a>
                         <ul role="menu" class="dropdown-menu menu-fix" aria-labelledby="dropdownMenu">
@@ -18,7 +17,6 @@
                             </li>
                         </ul>
                     </div>
-                    <!-- SP -->
                     <div class="navbar-top-links">
                         <button aria-expanded="false" role="button" href="#" class="dropdown-toggle navbar-toggle collapsed nav-button clear-btn  m-r-none" data-toggle="dropdown"> <span class="flag-icon flag-icon-squared m-r-xs" [ngClass]="currentLanguage === 'en' ? 'flag-icon-us' : 'flag-icon-' + currentLanguage"></span><span class="skinny-label">{{ currentLanguage }}</span> <span class="hide-mobile m-l-xs caret"></span></button>
                         <ul role="menu" class="dropdown-menu menu-fix pull-right">
@@ -83,7 +81,6 @@
                                     <li><a (click)="switchLanguage('cn')"><span class="flag-icon flag-icon-cn flag-icon-squared"></span> 中文 <span class="skinny-label">(cn)</span></a></li>
                                 </ul>
                             </li>
-                            <!-- SP shows when large -->
                             <li class="hide-res navigation-button vendor-name">
                                 <a class="hide-large" aria-expanded="false" role="button" href="#" class="dropdown-toggle" data-toggle="dropdown"><i class="m-r-none fa fs-16 fa-cog"></i>
                                     <span class="m-l-xs caret"></span>
@@ -103,8 +100,8 @@
                         </ul>
                     </div>
                 </nav>
-            </div>
+            </div> -->
             <router-outlet></router-outlet>
-        </div>
+        <!-- </div>
     </div>
-</div>
+</div> -->

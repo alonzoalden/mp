@@ -31,11 +31,11 @@ import { StoreModule } from '@ngrx/store';
 import { EffectsModule } from '@ngrx/effects';
 import { salesOrderReducer } from './state/sales-order.reducer';
 import { SalesOrderEffects } from './state/sales-order.effects';
-import { companyInfoReducer } from '../../company/company-info/state/company-info.reducer';
-import { CompanyInfoEffects } from '../../company/company-info/state/company-info.effects';
-import { CompanyService } from 'app/company/company.service';
+import { companyInfoReducer } from '../../original/company/company-info/state/company-info.reducer';
+import { CompanyInfoEffects } from '../../original/company/company-info/state/company-info.effects';
+import { CompanyService } from '../../original/company/company.service';
 import { SimpleNotificationsModule } from 'angular2-notifications';
-import {SharePipeModule} from '../../shared/pipe/share.pipe';
+import { SharePipeModule } from '../../shared/pipe/share.pipe';
 
 
 @NgModule({

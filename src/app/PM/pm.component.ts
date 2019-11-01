@@ -1,24 +1,23 @@
-import {Component, OnInit, ViewChild} from '@angular/core';
-import {Subscription} from 'rxjs';
-import {NotificationComponent} from '../shared/tool/notification/notification.component';
-import {select, Store} from '@ngrx/store';
+import { Component, OnInit, ViewChild, OnDestroy } from '@angular/core';
+import { Subscription } from 'rxjs';
+import { NotificationComponent } from '../shared/tool/notification/notification.component';
+import { select, Store } from '@ngrx/store';
 import * as fromUser from '../shared/state/user-state.reducer';
-import {JwksValidationHandler, OAuthService} from 'angular-oauth2-oidc';
-import {HttpClient} from '@angular/common/http';
-import {Router} from '@angular/router';
-import {AppService} from '../app.service';
-import {TranslateService} from '@ngx-translate/core';
-import {DeviceDetectorService} from 'ngx-device-detector';
-import {takeWhile} from 'rxjs/operators';
+import { JwksValidationHandler, OAuthService } from 'angular-oauth2-oidc';
+import { HttpClient } from '@angular/common/http';
+import { Router } from '@angular/router';
+import { AppService } from '../app.service';
+import { TranslateService } from '@ngx-translate/core';
+import { DeviceDetectorService } from 'ngx-device-detector';
+import { takeWhile } from 'rxjs/operators';
 import * as userActions from '../shared/state/user-state.actions';
-import {authConfig} from '../auth/auth.config';
+import { authConfig } from '../auth/auth.config';
 
 @Component({
-  selector: 'app-pm',
-  templateUrl: './pm.component.html',
-
+    selector: 'app-pm',
+    templateUrl: './pm.component.html',
 })
-export class PmComponent implements OnInit {
+export class PmComponent implements OnInit, OnDestroy {
     errorMessage: string;
     subscription: Subscription;
     componentActive: boolean = true;
