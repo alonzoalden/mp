@@ -22,7 +22,7 @@ export class InboundShipmentEditShippingComponent implements OnInit, OnChanges {
     ) {}
 
     minDate = new Date(2000, 0, 1);
-    maxDate = new Date(2020, 0, 1);
+    maxDate = new Date(2040, 0, 1);
 
     get isValidShipment() {
         if (this.purchaseOrderService.getCurrentPurchaseOrderLines()) {

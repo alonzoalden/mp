@@ -1,17 +1,17 @@
 import { Component, OnInit, ViewChild, OnDestroy, Inject } from '@angular/core';
 import { MatPaginator, MatSort, MatTableDataSource, MatDialogRef, MAT_DIALOG_DATA} from '@angular/material';
-import { SalesOrderLine } from '../../../../../shared/class/sales-order-line';
-import { SalesOrder } from '../../../../../shared/class/sales-order';
-import { BOLRequest, BOLRequestLine } from '../../../../../shared/class/bol-request';
+import { SalesOrderLine } from '../../../../../../shared/class/sales-order-line';
+import { SalesOrder } from '../../../../../../shared/class/sales-order';
+import { BOLRequest, BOLRequestLine } from '../../../../../../shared/class/bol-request';
 import { SalesOrderService } from '../../../../sales-order.service';
-import { environment } from '../../../../../../environments/environment';
+import { environment } from '../../../../../../../environments/environment';
 import * as salesOrderActions from '../../../../state/sales-order.actions';
 import * as fromSalesOrder from '../../../../state';
 import { Store, select } from '@ngrx/store';
 import { takeWhile } from 'rxjs/operators';
-import * as companyActions from '../../../../../company/company-info/state/company-info.actions';
-import * as fromCompany from '../../../../../company/company-info/state/';
-import { CompanyInfo } from '../../../../../shared/class/company-info';
+import * as companyActions from '../../../../../../original/company/company-info/state/company-info.actions';
+import * as fromCompany from '../../../../../../original/company/company-info/state/';
+import { CompanyInfo } from '../../../../../../shared/class/company-info';
 import { AddressCountry, AddressState } from 'app/shared/class/address';
 
 @Component({

@@ -16,7 +16,7 @@ export class ItemAddPriceComponent implements OnInit, OnChanges {
     @Input() item: ItemInsert;
     @Input() itemTierPricesMatTable: MatTableDataSource<ItemTierPriceInsert>;
     minDate = new Date(2000, 0, 1);
-    maxDate = new Date(2020, 0, 1);
+    maxDate = new Date(2040, 0, 1);
     pendingAdd: boolean;
     currentItemTierPriceIndex: number;
     displayedColumns = ['Add', 'Quantity', 'Price',  'Remove'];

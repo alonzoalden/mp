@@ -31,7 +31,7 @@ export class SalesOrderFulfillmentEditComponent implements OnInit, OnChanges {
     displayedColumns = ['ProductDetails', 'RemainingQuantity', 'PackageQuantity'];
     isMerchant: boolean;
     minDate = new Date(2000, 0, 1);
-    maxDate = new Date(2020, 0, 1);
+    maxDate = new Date(2040, 0, 1);
 
     constructor(
         private route: ActivatedRoute,
