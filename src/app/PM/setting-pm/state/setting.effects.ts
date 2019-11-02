@@ -17,7 +17,7 @@ export class SettingEffects {
         private router: Router,
         private settingService: SettingService,
         private actions$: Actions,
-        private userStore: Store<fromUser.State>,) { }
+        private userStore: Store<fromUser.State>) { }
 
     @Effect()
     loadMemberVendors$: Observable<Action> = this.actions$.pipe(

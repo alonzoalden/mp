@@ -373,7 +373,6 @@ export class InboundShipmentEditCartonListComponent
     }
 
     onShowCartonLine(carton: Carton, index: number) {
-        console.log(carton)
         this.setSelectedCarton.emit(null);
         if (this.pendingAdd) {
             this.currentIndex = this.purchaseOrder.Cartons.length - 1;
