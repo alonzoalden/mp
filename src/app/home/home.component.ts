@@ -1,25 +1,33 @@
-import { Component, OnInit } from '@angular/core';
+import { getIsLoading } from './../shared/state/user-state.reducer';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 import { OAuthService } from 'angular-oauth2-oidc';
 import { authConfig } from '../auth/auth.config';
 import { AppService } from '../app.service';
 import { DeviceDetectorService } from 'ngx-device-detector';
 import { environment } from '../../environments/environment';
+import * as fromUser from '../shared/state/user-state.reducer';
+import { Store, select } from '@ngrx/store';
+import * as userActions from '../shared/state/user-state.actions';
+import { takeWhile } from 'rxjs/operators';
+import { Member } from 'app/shared/class/member';
 
 @Component({
     templateUrl: './home.component.html',
     styleUrls: ['./home.component.scss']
 })
 
-export class HomeComponent implements OnInit {
-
+export class HomeComponent implements OnInit, OnDestroy {
+    componentActive: boolean = true;
+    appLoading: boolean = true;
     loadAPI: Promise<any>;
     id: any;
     constructor(activatedRoute: ActivatedRoute,
             private router: Router,
             private oauthService: OAuthService,
             private appService: AppService,
-            private deviceService: DeviceDetectorService, ) {
+            private deviceService: DeviceDetectorService,
+            private userStore: Store<fromUser.State>) {
 
         this.loadAPI = new Promise((resolve) => {
             this.loadScript();
@@ -38,7 +46,6 @@ export class HomeComponent implements OnInit {
 
         if (!isFound) {
             const dynamicScripts = [''];
-
             for (let i = 0; i < dynamicScripts.length; i++) {
                 const node = document.createElement('script');
                 node.src = dynamicScripts [i];
@@ -47,14 +54,35 @@ export class HomeComponent implements OnInit {
                 node.charset = 'utf-8';
                 document.getElementsByTagName('head')[0].appendChild(node);
             }
-
         }
     }
 
     ngOnInit() {
-        if (this.isLoggedin) {
-            this.router.navigate(['/dashboard']);
-        }
+        this.userStore.pipe(
+            select(fromUser.getCurrentUser),
+            takeWhile(() => this.componentActive)
+        ).subscribe(
+            (member: Member) => {
+                if (member && this.isLoggedin) {
+                    if (member.IsPM) {
+                        this.router.navigate(['/PM']);
+                    }
+                    else {
+                        this.router.navigate(['/dashboard']);
+                    }
+                }
+            }
+        );
+        this.userStore.pipe(
+            select(fromUser.getIsLoading),
+            takeWhile(() => this.componentActive)
+        ).subscribe(
+            (loading: boolean) => {
+                if (!loading) {
+                    this.appLoading = loading;
+                }
+            }
+        );
 
         this.oauthService.events.subscribe(e => {
             if (e.type === 'token_received') {
@@ -62,6 +90,10 @@ export class HomeComponent implements OnInit {
                 this.redirectToDashboard();
             }
         });
+    }
+
+    ngOnDestroy() {
+        this.componentActive = false;
     }
 
     detectBrowser() {

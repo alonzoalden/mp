@@ -86,7 +86,7 @@
                         <span class="m-l-xs caret"></span>
                     </a>
                     <ul role="menu" class="dropdown-menu">
-                        <li><a [routerLink]="['/']">{{ 'Back To Original' | translate }}</a></li>
+                        <li><a [routerLink]="['/dashboard']">{{ 'Back To Original' | translate }}</a></li>
                         <li><a [routerLink]="['setting','memberpreference']">{{ 'Member Preference' | translate }}</a></li>
                         <li><a *ngIf="appService?.currentMember?.IsDropship" [routerLink]="['setting','merchantagreement']">{{ 'Merchant Agreement' | translate }}</a></li>
                         <li class="divider"></li>

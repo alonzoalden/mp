@@ -43,7 +43,7 @@ export class AppComponent implements OnInit, OnDestroy, AfterViewInit {
                 if (member) {
                     this.appLoading = false;
                     if (member.IsPM && this.router.url === '/dashboard') {
-                        this.router.navigate(['/PM']);
+                        //this.router.navigate(['/PM']);
                     }
                 }
             }
@@ -55,7 +55,6 @@ export class AppComponent implements OnInit, OnDestroy, AfterViewInit {
             loading => {
                 if (!loading) {
                     this.appLoading = loading;
-                    console.log('off');
                 }
             }
         );

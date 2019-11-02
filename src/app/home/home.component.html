@@ -1,4 +1,15 @@
-<div class="home-theme-layout" id="page-top" #home *ngIf='!isLoggedin'>
+<div *ngIf="isLoggedin" class="spinner-container" style="width: 100%;">
+    <div class="sk-spinner sk-spinner-three-bounce big-spinner">
+        <div class="sk-bounce1"></div>
+        <div class="sk-bounce2"></div>
+        <div class="sk-bounce3"></div>
+    </div>
+    <br>
+    <p class="text-center" style="letter-spacing: 1px;">LOADING</p>
+</div>
+
+
+<div class="home-theme-layout" id="page-top" #home *ngIf="!isLoggedin">
         <div class="navbar-wrapper">
             <nav class="navbar navbar-default navbar-fixed-top" role="navigation">
                 <div class="container">

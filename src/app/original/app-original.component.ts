@@ -25,7 +25,6 @@ export class AppOriginalComponent implements OnInit, OnDestroy {
             takeWhile(() => this.componentActive)
         ).subscribe(
             loading => {
-                console.log(loading);
                 if (!loading) {
                     this.appLoading = loading;
                 }
