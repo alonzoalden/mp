@@ -2,7 +2,7 @@ import {Injectable} from '@angular/core';
 import {CanLoad, Router, ActivatedRouteSnapshot, RouterStateSnapshot, CanActivate} from '@angular/router';
 import {OAuthService} from 'angular-oauth2-oidc';
 import {AppService} from '../../app.service';
-import {mergeMap} from 'rxjs/operators';
+import {catchError, mergeMap} from 'rxjs/operators';
 import {Member} from '../../shared/class/member';
 import {of} from 'rxjs';
 
@@ -26,7 +26,8 @@ export class PMAuthGuard implements CanLoad, CanActivate {
                         } else {
                             this.router.navigate(['/home']);
                         }
-                    })
+                    }),
+                    catchError(err => this.router.navigate(['home']))
                 );
             } else {
                 if (this.appService.currentMember.IsPM === true) {

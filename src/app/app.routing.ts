@@ -23,7 +23,7 @@ const APP_ROUTES: Routes = [
     },
     {
         // PM App
-        path: 'PM', loadChildren: 'app/pm/pm.module#PMModule', canLoad: [ AuthGuard ]
+        path: 'PM', loadChildren: 'app/PM/pm.module#PMModule', canLoad: [ AuthGuard ]
     }
 ];
 
