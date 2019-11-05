@@ -93,21 +93,21 @@ export class ItemEditBundleComponent implements OnInit {
             this.itemService.getItemOptions(this.item.ItemID).subscribe(
                 (itemOption: ItemOption[]) => {
                     this.item.ItemOptions = itemOption;
-                    this.item.ItemOptions.forEach(value => {
-                        const _temp = new ItemSelection(null, null, 0, null, null, null, this.selectedOption.ItemSelections.length + 1, false, 0, 0, false, null, null, true);
-                        if (this.selectedOption.ItemSelections.length === 0) {
-                            _temp.IsDefault = true;
-                        }
-                        value.ItemSelections.push(_temp);
-                    });
-                    this.addOptionPendingLine();
+                    // this.item.ItemOptions.forEach(value => {
+                    //     const _temp = new ItemSelection(null, null, 0, null, null, null, this.selectedOption.ItemSelections.length + 1, false, 0, 0, false, null, null, true);
+                    //     if (this.selectedOption.ItemSelections.length === 0) {
+                    //         _temp.IsDefault = true;
+                    //     }
+                    //     value.ItemSelections.push(_temp);
+                    // });
+                    // this.addOptionPendingLine();
                     this.refreshOptionDataSource(this.item.ItemOptions);
                 },
                 (error: any) => this.errorMessage = <any>error
             );
         } else {
             this.removeOptionPendingLine();
-            this.addOptionPendingLine();
+            // this.addOptionPendingLine();
             this.refreshOptionDataSource(this.item.ItemOptions);
         }
         this.getItemList.emit();
@@ -132,7 +132,7 @@ export class ItemEditBundleComponent implements OnInit {
             this.pendingOptionAdd = true;
             itemOption.Position = this.item.ItemOptions.length;
             itemOption.pendingAdd = false;
-            this.addOptionPendingLine();
+            // this.addOptionPendingLine();
             this.refreshOptionDataSource(this.item.ItemOptions);
         } else {
             this.itemService.sendNotification({ type: 'error', title: 'Error', content: 'Title is required' });
@@ -153,7 +153,7 @@ export class ItemEditBundleComponent implements OnInit {
             this.pendingSelectionAdd = true;
             itemSelection.Position = this.selectedOption.ItemSelections.length;
             itemSelection.pendingAdd = false;
-            this.addSelectionPendingLine();
+            // this.addSelectionPendingLine();
             this.currentSelectionIndex = this.selectedOption.ItemSelections.length - 1;
             this.setSelectedBundleOption.emit(this.currentOptionIndex);
         } else {
@@ -206,11 +206,11 @@ export class ItemEditBundleComponent implements OnInit {
         this.selectedOptionLabel = this.optionTypes[this.optionTypes.findIndex(type => type.value === option.Type)].label;
 
         if (this.selectedOption.ItemSelections.length === 0 && this.currentOptionIndex !== this.item.ItemOptions.length - 1) {
-            this.addSelectionPendingLine();
+            // this.addSelectionPendingLine();
         }
 
         this.removeSelectionPendingLine();
-        this.addSelectionPendingLine();
+        // this.addSelectionPendingLine();
 
         this.currentSelectionIndex = this.selectedOption.ItemSelections.length - 1;
         //this.refreshSelectionDataSource(this.selectedOption.ItemSelections);
@@ -272,6 +272,7 @@ export class ItemEditBundleComponent implements OnInit {
     getItemName(id: number) {
         const item = this.itemList[this.itemList.findIndex(item => item.ItemID === id)];
         if (item) {
+            console.log(item)
             return item.Description;
         } else {
             return '';

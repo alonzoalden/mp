@@ -30,6 +30,7 @@ export enum ItemActionTypes {
     LoadItemListSuccess = '[Item Print Label] Load Item List Success',
     LoadItemListFail = '[Item Print Label] Load Item List Fail',
     LoadSimpleItemList = '[Item] Load Simple Item List',
+    LoadAllSimpleItemList = '[Item] Load All Simple Item List',
     LoadSimpleItemListSuccess = '[Item] Load Simple Item List Success',
     LoadSimpleItemListFail = '[Item] Load Simple Item List Fail',
     LoadItemCategories = '[Item] Load Item Categories',
@@ -190,6 +191,9 @@ export class LoadItemListFail implements Action {
 }
 export class LoadSimpleItemList implements Action {
     readonly type = ItemActionTypes.LoadSimpleItemList;
+}
+export class LoadAllSimpleItemList implements Action {
+    readonly type = ItemActionTypes.LoadAllSimpleItemList;
 }
 export class LoadSimpleItemListSuccess implements Action {
     readonly type = ItemActionTypes.LoadSimpleItemListSuccess;
@@ -558,6 +562,7 @@ export type ItemActions =
     | LoadItemListSuccess
     | LoadItemListFail
     | LoadSimpleItemList
+    | LoadAllSimpleItemList
     | LoadSimpleItemListSuccess
     | LoadSimpleItemListFail
     | LoadAllItemList

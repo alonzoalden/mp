@@ -51,6 +51,19 @@ export class ItemEffects {
         )
     );
     @Effect()
+    loadAllSimpleItemList$: Observable<Action> = this.actions$.pipe(
+        ofType(itemActions.ItemActionTypes.LoadAllSimpleItemList),
+        mergeMap(() =>
+            this.itemService.getAllSimpleItemList().pipe(
+                map((itemlists: ItemList[]) => (new itemActions.LoadSimpleItemListSuccess(itemlists))),
+                catchError(err => {
+                    of(new itemActions.LoadSimpleItemListFail(err));
+                    return EMPTY;
+                })
+            )
+        )
+    );
+    @Effect()
     loadItemCategories$: Observable<Action> = this.actions$.pipe(
         ofType(itemActions.ItemActionTypes.LoadItemCategories),
         map((action: itemActions.LoadItemCategories) => action.payload),
