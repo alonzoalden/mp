@@ -49,4 +49,7 @@ export class ItemEditShellComponent implements OnInit {
     downloadItemLabel(item: Item) {
         this.store.dispatch(new itemActions.DownloadItemLabel(item));
     }
+    resetItem() {
+        this.store.dispatch(new itemActions.ResetItem());
+    }
 }

@@ -40,7 +40,9 @@ export enum ItemActionTypes {
     LoadCategoryBreadCrumbsSuccess = '[Item] Load Category Bread Crumbs Success',
     LoadCategoryBreadCrumbsFail = '[Item] Load Category Bread Crumbs Fail',
     SetItem = '[Item] Set Item',
+    ResetItem = '[Item] Reset Item',
     SetSelectedBundleOption = '[Item] Set Selected Bundle Option',
+    ResetSelectedBundleOption = '[Item] Reset Selected Bundle Option',
     SetSelectedBundleOptionList = '[Item] Set Selected Bundle Option List',
     LoadAllItemList = '[Item] Load All Item List',
     LoadAllItemListSuccess = '[Item] Load All Item List Success',
@@ -432,6 +434,10 @@ export class AddItemFail implements Action {
     readonly type = ItemActionTypes.AddItemFail;
     constructor(public payload: string) {}
 }
+export class ResetItem implements Action {
+    readonly type = ItemActionTypes.ResetItem;
+    constructor() {}
+}
 export class EditItem implements Action {
     readonly type = ItemActionTypes.EditItem;
     constructor(
@@ -469,6 +475,10 @@ export class AddNewItemRelatedProductRow implements Action {
 export class SetSelectedBundleOption implements Action {
     readonly type = ItemActionTypes.SetSelectedBundleOption;
     constructor(public payload: number) {}
+}
+export class ResetSelectedBundleOption implements Action {
+    readonly type = ItemActionTypes.ResetSelectedBundleOption;
+    constructor() {}
 }
 export class SetItem implements Action {
     readonly type = ItemActionTypes.SetItem;
@@ -655,4 +665,6 @@ export type ItemActions =
     | EditItemBatchUpdate
     | EditItemBatchUpdateSuccess
     | EditItemBatchUpdateFail
-    | AddNewItemRelatedProductRow;
+    | AddNewItemRelatedProductRow
+    | ResetSelectedBundleOption
+    | ResetItem;

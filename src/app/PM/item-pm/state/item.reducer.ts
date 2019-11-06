@@ -65,7 +65,14 @@ const initialState: ItemState = {
 export function itemReducer(state = initialState, action: ItemActions): ItemState {
 
     switch (action.type) {
-
+        case ItemActionTypes.ResetItem:
+            return {
+                ...state,
+                item: null,
+                currentCategoryBreadCrumbs: [],
+                categoryAssignments: [],
+                selectedBundleOption: null
+            };
         case ItemActionTypes.SetItem:
             return {
                 ...state,
@@ -79,7 +86,11 @@ export function itemReducer(state = initialState, action: ItemActions): ItemStat
                 selectedBundleOption: state.item.ItemOptions[action.payload],
                 selectedBundleOptionSelectionList: state.item.ItemOptions[action.payload].ItemSelections
             };
-
+        case ItemActionTypes.ResetSelectedBundleOption:
+            return {
+                ...state,
+                selectedBundleOption: null,
+            };
         case ItemActionTypes.LoadVendorBrandsSuccess:
             return {
                 ...state,

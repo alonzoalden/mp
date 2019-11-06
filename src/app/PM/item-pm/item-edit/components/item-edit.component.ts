@@ -29,7 +29,7 @@ export class ItemEditComponent implements OnInit, OnChanges {
     @Output() editItem = new EventEmitter<{item: Item, displayPreview: boolean, printLabel: boolean}>();
     @Output() downloadItemLabel = new EventEmitter<Item>();
     @Output() getVendorBrands = new EventEmitter<void>();
-
+    @Output() resetItem = new EventEmitter<void>();
     loading: boolean;
 
     private dataIsValid: { [key: string]: boolean } = {};
@@ -49,6 +49,7 @@ export class ItemEditComponent implements OnInit, OnChanges {
     }
 
     ngOnInit() {
+        this.resetItem.emit();
         this.isLoading = true;
         this.getVendorBrands.emit();
         const param = this.route.snapshot.params['id'];
