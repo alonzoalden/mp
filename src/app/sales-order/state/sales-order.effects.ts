@@ -58,8 +58,9 @@ export class SalesOrderEffects {
             this.salesOrderService.getSalesOrderLineByVendor(payload.orderid, payload.fulfilledby).pipe(
                 map((salesorderlines: SalesOrderLine[]) => (new salesOrderActions.LoadSalesOrderLinesSuccess(salesorderlines))),
                 catchError(err => {
-                    of(new salesOrderActions.LoadSalesOrderLinesFail(err));
-                    return EMPTY;
+                    this.salesOrderService.sendNotification({ type: 'error', title: 'Error', content: err });
+                    this.router.navigate(['/sales-order', payload.fulfilledby, 'status', 'unshipped']);
+                    return of(new salesOrderActions.LoadSalesOrderLinesFail(err));
                 })
             )
         )
@@ -118,8 +119,8 @@ export class SalesOrderEffects {
             this.salesOrderService.getFulfilmmentSalesOrderLines(payload).pipe(
                 map((fullfillments: FulfillmentSalesOrderLine[]) => (new salesOrderActions.LoadFulfilmmentSalesOrderLinesSuccess(fullfillments))),
                 catchError(err => {
-                    of(new salesOrderActions.LoadFulfilmmentSalesOrderLinesFail(err));
-                    return EMPTY;
+                    this.salesOrderService.sendNotification({ type: 'error', title: 'Error', content: err });
+                    return of(new salesOrderActions.LoadFulfilmmentSalesOrderLinesFail(err));
                 })
             )
 
