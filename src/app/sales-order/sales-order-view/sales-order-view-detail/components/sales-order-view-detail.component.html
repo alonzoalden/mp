@@ -74,19 +74,23 @@
                             <button type="button" class="btn btn-info" (click)="onPrintPackingSlip()">
                                 <i class="fa fa-print m-r-xs"></i><span> {{ 'Print Packing Slip' | translate }} </span>
                             </button>
-
                             <button type="button" class="btn" [ngClass]="BOLRequest.BOLPath ? 'btn-info' : 'btn-primary'"
                                 *ngIf="fulfilledby === 'merchant' && salesOrder?.MerchantStatus === 'Unshipped' && BOLRequest"
                                 (click)="openDialogUploadBOLRequest(salesOrder)">
                                     <i class="fa fa-upload m-r-xs"></i><span> {{ 'Upload BOL/Label' | translate }} </span>
                             </button>
-                            <button type="button" class="btn btn-danger" *ngIf="fulfilledby =='merchant' && salesOrder?.MerchantStatus === 'Unshipped'" (click)="openDialogCancelOrder(salesOrder)">
-                                <i class="fa fa-remove m-r-xs"></i><span> {{ 'Cancel Order' | translate }} </span>
+                            <button type="button" class="btn" [ngClass]="BOLRequest?.BOLPath ? 'btn-info' : 'btn-primary'"
+                                *ngIf="fulfilledby === 'merchant' && salesOrder?.MerchantStatus === 'Unshipped' && !BOLRequest && !isBOLRequestLoading && userInfo?.IsPM"
+                                (click)="onNotifyBOLRequest(salesOrder)">
+                                    <i class="fa fa-bell-o m-r-xs"></i><span> {{ 'Send Order Notification' | translate }} </span>
                             </button>
                             <button type="button" class="btn btn-primary"
                                 *ngIf="fulfilledby === 'merchant' && salesOrder?.MerchantStatus === 'Unshipped' && !BOLRequest && !isBOLRequestLoading"
                                 (click)="openDialogBOL(salesOrder)">
                                     <i class="fa fa-edit m-r-xs"></i><span> {{ 'Request BOL/Label' | translate }} </span>
+                            </button>
+                            <button type="button" class="btn btn-danger" *ngIf="fulfilledby =='merchant' && salesOrder?.MerchantStatus === 'Unshipped'" (click)="openDialogCancelOrder(salesOrder)">
+                                <i class="fa fa-remove m-r-xs"></i><span> {{ 'Cancel Order' | translate }} </span>
                             </button>
                         </div>
                     </div>

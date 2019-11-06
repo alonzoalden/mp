@@ -257,6 +257,16 @@ export class SalesOrderService {
                         );
     }
 
+    notifyBOLRequest(id: number): Observable<BOLRequest> {
+        const headers = new HttpHeaders({
+            'Content-Type': 'application/json'
+        });
+        return this.http.post<BOLRequest>(this.apiURL + '/bolrequest/purchaseorder/' + id + '/notify', {}, { headers: headers } )
+                            .pipe(
+                                catchError(this.handleError)
+                            );
+    }
+
     rowColorConditions(i: number, collection: Array<any>, currentIndex: number, formDirty: boolean): string {
         const inputRow = i === collection.length - 1 && currentIndex === i;
         const selectedInputRow = inputRow && formDirty;
