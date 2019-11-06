@@ -177,6 +177,23 @@ export class SalesOrderEffects {
         )
     );
     @Effect()
+    notifyBOLRequest$: Observable<Action> = this.actions$.pipe(
+        ofType(salesOrderActions.SalesOrderActionTypes.LoadBOLRequestNotification),
+        map((action: salesOrderActions.LoadBOLRequestNotification) => action.payload),
+        mergeMap((payload: number) =>
+            this.salesOrderService.notifyBOLRequest(payload).pipe(
+                map(() => {
+                    this.salesOrderService.sendNotification({ type: 'success', title: 'Notification Successful', content: `Notification sent for Order ${payload}.` });
+                    return (new salesOrderActions.LoadBOLRequestNotificationSuccess());
+                }),
+                catchError(err => {
+                    this.salesOrderService.sendNotification({ type: 'error', title: 'Error', content: err });
+                    return of(new salesOrderActions.LoadBOLRequestNotificationFail(err));
+                })
+            )
+        )
+    );
+    @Effect()
     addBOLRequest$: Observable<Action> = this.actions$.pipe(
         ofType(salesOrderActions.SalesOrderActionTypes.AddBOLRequest),
         map((action: salesOrderActions.AddBOLRequest) => action.payload),

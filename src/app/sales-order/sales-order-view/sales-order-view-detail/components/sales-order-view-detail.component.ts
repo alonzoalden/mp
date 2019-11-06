@@ -32,6 +32,7 @@ export class SalesOrderDetailComponent implements OnInit, OnChanges {
     @Input() BOLRequest: BOLRequest;
     @Output() addBOLRequest = new EventEmitter<BOLRequest>();
     @Output() getBOLRequest = new EventEmitter<number>();
+    @Output() notifyBOLRequest = new EventEmitter<number>();
     @Output() getFulfilledBySalesOrder = new EventEmitter<{orderid: number, fulfilledby: string}>();
     @Output() getSalesOrderLineByVendor = new EventEmitter<{orderid: number, fulfilledby: string}>();
     @Output() cancelSalesOrderLines = new EventEmitter<SalesOrderLine[]>();
@@ -128,6 +129,12 @@ export class SalesOrderDetailComponent implements OnInit, OnChanges {
 
     navigateToFulfillments() {
         this.router.navigate(['/sales-order/view/merchant/' + this.orderid + '/fulfillment']);
-        this.notificationComponent.notify({ type: 'info', title: 'Tracking Information Required', content: 'Please input tracking to complete order.' }, { timeOut: 0 }, true);
+        this.notificationComponent.notify({ type: 'info', title: 'YOUR ORDER IS NOT COMPLETE', content: 'Please create a Shipment and input tracking information' }, { timeOut: 0 }, true);
+    }
+    onNotifyBOLRequest() {
+        const confirmation = confirm('Are you sure you want to send a notification to other members?');
+        if (confirmation) {
+            this.notifyBOLRequest.emit(this.orderid);
+        }
     }
 }
