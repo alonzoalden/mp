@@ -206,6 +206,7 @@ export class SalesOrderEffects {
                 }),
                 catchError(err => {
                     this.salesOrderService.sendNotification({ type: 'error', title: 'Error', content: err });
+                    window.location.reload();
                     return of(new salesOrderActions.AddBOLRequestFail(err));
                 })
             )
