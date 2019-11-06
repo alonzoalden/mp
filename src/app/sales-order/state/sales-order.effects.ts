@@ -30,8 +30,7 @@ export class SalesOrderEffects {
             this.salesOrderService.getSalesOrderByVendor(payload.fulfilledby, payload.status).pipe(
                 map((members: SalesOrder[]) => (new salesOrderActions.LoadSalesOrdersSuccess(members))),
                 catchError(err => {
-                    of(new salesOrderActions.LoadSalesOrdersFail(err));
-                    return EMPTY;
+                    return of(new salesOrderActions.LoadSalesOrdersFail(err));
                 })
             )
         )
@@ -44,8 +43,9 @@ export class SalesOrderEffects {
             this.salesOrderService.getFulfilledBySalesOrder(payload.orderid, payload.fulfilledby).pipe(
                 map((salesorder: SalesOrder) => (new salesOrderActions.LoadSalesOrderSuccess(salesorder))),
                 catchError(err => {
-                    of(new salesOrderActions.LoadSalesOrderFail(err));
-                    return EMPTY;
+                    this.salesOrderService.sendNotification({ type: 'error', title: 'Error', content: err });
+                    this.router.navigate(['/sales-order', payload.fulfilledby, 'status', 'unshipped']);
+                    return of(new salesOrderActions.LoadSalesOrderFail(err));
                 })
             )
         )
@@ -73,8 +73,8 @@ export class SalesOrderEffects {
             return this.salesOrderService.getFulfilledBySalesOrderDelivery(payload.orderid, payload.fulfilledby).pipe(
                 map((deliverydetail: string) => (new salesOrderActions.LoadFulfilledBySalesOrderDeliverySuccess(deliverydetail))),
                 catchError(err => {
-                    of(new salesOrderActions.LoadFulfilledBySalesOrderDeliveryFail(err));
-                    return EMPTY;
+                    this.salesOrderService.sendNotification({ type: 'error', title: 'Error', content: err });
+                    return of(new salesOrderActions.LoadFulfilledBySalesOrderDeliveryFail(err));
                 })
             );
         }
@@ -89,8 +89,8 @@ export class SalesOrderEffects {
             return this.salesOrderService.getFulfilledByFulfillments(payload.orderid, payload.fulfilledby).pipe(
                 map((fullfillment: Fulfillment[]) => (new salesOrderActions.LoadFulfilledByFulfillmentsSuccess(fullfillment))),
                 catchError(err => {
-                    of(new salesOrderActions.LoadFulfilledByFulfillmentsFail(err));
-                    return EMPTY;
+                    this.salesOrderService.sendNotification({ type: 'error', title: 'Error', content: err });
+                    return of(new salesOrderActions.LoadFulfilledByFulfillmentsFail(err));
                 })
             );
         }
@@ -104,8 +104,8 @@ export class SalesOrderEffects {
             return this.salesOrderService.getFulfilledByFulfillment(payload.fulfillmentid, payload.fulfilledby).pipe(
                 map((fullfillment: Fulfillment) => (new salesOrderActions.LoadFulfilledByFulfillmentSuccess(fullfillment))),
                 catchError(err => {
-                    of(new salesOrderActions.LoadFulfilledByFulfillmentFail(err));
-                    return EMPTY;
+                    this.salesOrderService.sendNotification({ type: 'error', title: 'Error', content: err });
+                    return of(new salesOrderActions.LoadFulfilledByFulfillmentFail(err));
                 })
             );
         }
@@ -139,8 +139,7 @@ export class SalesOrderEffects {
                 }),
                 catchError(err => {
                     this.salesOrderService.sendNotification({ type: 'error', title: 'Error', content: err });
-                    of(new salesOrderActions.CancelSalesOrderLinesFail(err));
-                    return EMPTY;
+                    return of(new salesOrderActions.CancelSalesOrderLinesFail(err));
                 })
             )
         )
@@ -153,6 +152,7 @@ export class SalesOrderEffects {
             this.salesOrderService.getBOLRequest(payload).pipe(
                 map((bolrequest: BOLRequest) => (new salesOrderActions.LoadBOLRequestSuccess(bolrequest))),
                 catchError(err => {
+                    this.salesOrderService.sendNotification({ type: 'error', title: 'Error', content: err });
                     return of(new salesOrderActions.LoadBOLRequestFail(err));
                 })
             )
@@ -206,8 +206,7 @@ export class SalesOrderEffects {
                 }),
                 catchError(err => {
                     this.salesOrderService.sendNotification({ type: 'error', title: 'Error', content: err });
-                    of(new salesOrderActions.AddBOLRequestFail(err));
-                    return EMPTY;
+                    return of(new salesOrderActions.AddBOLRequestFail(err));
                 })
             )
         )
@@ -227,8 +226,7 @@ export class SalesOrderEffects {
                 }),
                 catchError(err => {
                     this.salesOrderService.sendNotification({ type: 'error', title: 'Error', content: err });
-                    of(new salesOrderActions.AddFulfillmentFail(err));
-                    return EMPTY;
+                    return of(new salesOrderActions.AddFulfillmentFail(err));
                 })
             )
         )
@@ -247,8 +245,7 @@ export class SalesOrderEffects {
                 }),
                 catchError(err => {
                     this.salesOrderService.sendNotification({ type: 'error', title: 'Error', content: err });
-                    of(new salesOrderActions.EditFulfillmentFail(err));
-                    return EMPTY;
+                    return of(new salesOrderActions.EditFulfillmentFail(err));
                 })
             )
         )
@@ -265,8 +262,7 @@ export class SalesOrderEffects {
                 }),
                 catchError(err => {
                     this.salesOrderService.sendNotification({ type: 'error', title: 'Error', content: err });
-                    of(new salesOrderActions.DeleteFulfillmentFail(err));
-                    return EMPTY;
+                    return of(new salesOrderActions.DeleteFulfillmentFail(err));
                 })
             )
         )
@@ -298,8 +294,7 @@ export class SalesOrderEffects {
                     return (new salesOrderActions.DownloadSalesOrderPackingSlipSuccess(data));
                 }),
                 catchError(err => {
-                    of(new salesOrderActions.LoadSalesOrdersFail(err));
-                    return EMPTY;
+                    return of(new salesOrderActions.LoadSalesOrdersFail(err));
                 })
             )
         )
