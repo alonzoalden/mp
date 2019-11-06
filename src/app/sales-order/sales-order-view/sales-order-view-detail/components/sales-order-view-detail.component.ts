@@ -53,7 +53,7 @@ export class SalesOrderDetailComponent implements OnInit, OnChanges {
         public printDialog: MatDialog) { }
 
     ngOnChanges(changes: SimpleChanges): void {
-        if (changes.salesOrderLinesMatTable && changes.salesOrderLinesMatTable.currentValue.data.length) {
+        if (changes.salesOrderLinesMatTable && changes.salesOrderLinesMatTable.currentValue.data && changes.salesOrderLinesMatTable.currentValue.data.length) {
             this.salesOrderLinesMatTable.paginator = this.paginator;
             this.salesOrderLinesMatTable.sort = this.sort;
         }
