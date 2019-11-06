@@ -132,7 +132,7 @@ export class SalesOrderDetailComponent implements OnInit, OnChanges {
         this.notificationComponent.notify({ type: 'info', title: 'YOUR ORDER IS NOT COMPLETE', content: 'Please create a Shipment and input tracking information' }, { timeOut: 0 }, true);
     }
     onNotifyBOLRequest() {
-        const confirmation = confirm('Are you sure you want to send a notification to other members?');
+        const confirmation = confirm('Order notification will be sent to all users. Would you like to continue?');
         if (confirmation) {
             this.notifyBOLRequest.emit(this.orderid);
         }

@@ -80,7 +80,7 @@
                                     <i class="fa fa-upload m-r-xs"></i><span> {{ 'Upload BOL/Label' | translate }} </span>
                             </button>
                             <button type="button" class="btn" [ngClass]="BOLRequest?.BOLPath ? 'btn-info' : 'btn-primary'"
-                                *ngIf="fulfilledby === 'merchant' && salesOrder?.MerchantStatus === 'Unshipped' && !BOLRequest && !isBOLRequestLoading"
+                                *ngIf="fulfilledby === 'merchant' && salesOrder?.MerchantStatus === 'Unshipped' && !BOLRequest && !isBOLRequestLoading && userInfo?.IsPM"
                                 (click)="onNotifyBOLRequest(salesOrder)">
                                     <i class="fa fa-bell-o m-r-xs"></i><span> {{ 'Send Order Notification' | translate }} </span>
                             </button>
