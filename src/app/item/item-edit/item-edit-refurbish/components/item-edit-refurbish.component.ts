@@ -6,11 +6,11 @@ import { AppService } from '../../../../app.service';
 import { Member } from 'app/shared/class/member';
 
 @Component({
-    selector: 'o-item-add-price',
+    selector: 'o-item-edit-refurbish',
     templateUrl: './item-add-price.component.html'
 })
 
-export class ItemAddPriceComponent implements OnInit, OnChanges {
+export class ItemEditRefurbishComponent implements OnInit, OnChanges {
     @Input() userInfo: Member;
     @Input() errorMessage: string;
     @Input() item: ItemInsert;

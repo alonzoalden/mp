@@ -19,20 +19,20 @@
         <div class="panel-body p-w-none">
             <form class="form-horizontal" #itemForm="ngForm">
                 <fieldset>
-                    <div class="ibox-title"><h5>{{ 'Images' | translate }}</h5></div>
+                    <div class="ibox-title"><h5>{{ 'Item Refurbishes' | translate }}</h5></div>
                     <div class="ibox-content animated fadeIn" style="min-height: 300px;">
                         <div class="form-group row">
                             <div class="col-md-12">
-                                <div *ngIf="item.ItemImages && item.ItemImages.length && item.ItemImages.length > 0">
-                                    <table class="animated fadeIn" mat-table #table [dataSource]="itemImagesMatTable">
+                                <div *ngIf="item.ItemRefurbishes && item.ItemRefurbishes.length && item.ItemRefurbishes.length > 0">
+                                    <table class="animated fadeIn" mat-table #table [dataSource]="itemRefurbishesMatTable">
                                         <!-- Add Button -->
                                         <ng-container matColumnDef="Add">
                                             <th mat-header-cell *matHeaderCellDef width="45px"></th>
-                                            <td mat-cell *matCellDef="let itemImage; let i = index">
-                                                <div *ngIf="i === item.ItemImages.length-1 && i < 8">
-                                                    <a (click)='onAddItemImage(itemImage); formDirty = false;'><span [matTooltip]="itemImage.Raw ? ('Add' | translate) : ('Required fields must be complete' | translate)" class="glyphicon glyphicon-plus fs-20" [ngClass]="itemImage.Raw ? 'green' : 'gray'"></span></a>
+                                            <td mat-cell *matCellDef="let itemRefurbish; let i = index">
+                                                <div *ngIf="i === item.ItemRefurbishes.length-1 && i < 8">
+                                                    <a (click)='onAddItemImage(itemRefurbish); formDirty = false;'><span [matTooltip]="itemRefurbish.Raw ? ('Add' | translate) : ('Required fields must be complete' | translate)" class="glyphicon glyphicon-plus fs-20" [ngClass]="itemRefurbish.Raw ? 'green' : 'gray'"></span></a>
                                                 </div>
-                                                <div *ngIf="i === item.ItemImages.length-1 && i >= 8">
+                                                <div *ngIf="i === item.ItemRefurbishes.length-1 && i >= 8">
                                                     <span matTooltip="Maximum of 8 images" class="glyphicon glyphicon-exclamation-sign fs-20"></span>
                                                 </div>
                                             </td>
@@ -40,17 +40,17 @@
                                         <!-- Down Column -->
                                         <ng-container matColumnDef="Down">
                                             <th mat-header-cell *matHeaderCellDef width="17px">{{ 'Position' | translate }}</th>
-                                            <td mat-cell *matCellDef="let itemImage; let i = index">
-                                                <div *ngIf="i < item.ItemImages.length-2">
-                                                    <a (click)='moveDownPosition(itemImage)' *ngIf='i !== item.ItemImages.length - 1'><span class="glyphicon glyphicon-arrow-down"></span></a>
+                                            <td mat-cell *matCellDef="let itemRefurbish; let i = index">
+                                                <div *ngIf="i < item.ItemRefurbishes.length-2">
+                                                    <a (click)='moveDownPosition(itemRefurbish)' *ngIf='i !== item.ItemRefurbishes.length - 1'><span class="glyphicon glyphicon-arrow-down"></span></a>
                                                 </div>
                                             </td>
                                         </ng-container>
                                         <!-- Position Column -->
                                         <ng-container matColumnDef="Position">
                                             <th mat-header-cell *matHeaderCellDef width="15px"></th>
-                                            <td mat-cell *matCellDef="let itemImage; let i = index">
-                                                <div *ngIf="i !== item.ItemImages.length-1">
+                                            <td mat-cell *matCellDef="let itemRefurbish; let i = index">
+                                                <div *ngIf="i !== item.ItemRefurbishes.length-1">
                                                     {{i + 1}}
                                                 </div>
                                             </td>
@@ -58,28 +58,28 @@
                                         <!-- Up Column -->
                                         <ng-container matColumnDef="Up">
                                             <th mat-header-cell *matHeaderCellDef width="40px"></th>
-                                            <td mat-cell *matCellDef="let itemImage; let i = index">
-                                                <div *ngIf="i !== item.ItemImages.length-1">
-                                                    <a (click)='moveUpPosition(itemImage)' *ngIf='i !== 0'><span class="glyphicon glyphicon-arrow-up"></span></a>
+                                            <td mat-cell *matCellDef="let itemRefurbish; let i = index">
+                                                <div *ngIf="i !== item.ItemRefurbishes.length-1">
+                                                    <a (click)='moveUpPosition(itemRefurbish)' *ngIf='i !== 0'><span class="glyphicon glyphicon-arrow-up"></span></a>
                                                 </div>
                                             </td>
                                         </ng-container>
                                         <!-- Thumbnail Column -->
                                         <ng-container matColumnDef="Images">
-                                            <th mat-header-cell *matHeaderCellDef width="100px"></th>
-                                            <td mat-cell *matCellDef="let itemImage; let i = index" width="100px" height="80px" class="thumbnail-col">
+                                            <th mat-header-cell *matHeaderCellDef width="100px">Upload Images</th>
+                                            <td mat-cell *matCellDef="let itemRefurbish; let i = index" width="100px" height="80px" class="thumbnail-col">
                                                 <input type="file" id="fileUpload" style="display: none;"
-                                                    (change)="fileChangeEvent($event, itemImage); formDirty = true;"
+                                                    (change)="fileChangeEvent($event, itemRefurbish); formDirty = true;"
                                                     accept="image/gif,image/jpeg,image/png,.jpeg,.jpg,.png"
                                                     #fileUpload>
 
-                                                <div *ngIf="i === item.ItemImages.length-1 && !itemImage.Raw && !pendingUpload">
-                                                    <button type="button" class="btn btn-primary" (click)="fileUpload.click();"><i class="fa fa-file-image-o"></i> {{ 'Browse' | translate }}</button>
+                                                <div *ngIf="i === item.ItemRefurbishes.length-1 && !itemRefurbish.Raw && !pendingUpload">
+                                                    <button type="button" class="btn btn-primary" (click)="uploadMultipleImages()"><i class="fa fa-file-image-o"></i> {{ 'Upload' | translate }}</button>
                                                 </div>
-                                                <div *ngIf="(itemImage.FilePath || itemImage.Raw) && ( !pendingUpload || i != currentIndex )" class="thumbnail-container">
+                                                <div *ngIf="(itemRefurbish.FilePath || itemRefurbish.Raw) && ( !pendingUpload || i != currentIndex )" class="thumbnail-container">
                                                     <a (click)="fileUpload.click()">
-                                                        <img src="{{imageURL + itemImage.FilePath}}" [title]='itemImage.Label' *ngIf="!itemImage.IsNewImage">
-                                                        <img src="{{itemImage.Raw}}" [title]='itemImage.Label' *ngIf="itemImage.IsNewImage">
+                                                        <img src="{{imageURL + itemRefurbish.FilePath}}" [title]='itemRefurbish.Label' *ngIf="!itemRefurbish.IsNewImage">
+                                                        <img src="{{itemRefurbish.Raw}}" [title]='itemRefurbish.Label' *ngIf="itemRefurbish.IsNewImage">
                                                     </a>
                                                 </div>
                                                 <div *ngIf="pendingUpload && i == currentIndex" class="loading-container">
@@ -93,71 +93,79 @@
                                         </ng-container>
                                         <!-- SerialNumber Column -->
                                         <ng-container matColumnDef="SerialNumber">
-                                            <th mat-header-cell *matHeaderCellDef  width="180px">{{ 'Title' | translate }}</th>
-                                            <td mat-cell *matCellDef="let itemImage; let i = index">
-                                                <div *ngIf="currentIndex !== i && i !== item.ItemImages.length-1">
-                                                    {{itemImage.Label}}
+                                            <th mat-header-cell *matHeaderCellDef  width="190px">{{ 'Serial Number' | translate }}</th>
+                                            <td mat-cell *matCellDef="let itemRefurbish; let i = index">
+                                                <div *ngIf="currentIndex !== i && i !== item.ItemRefurbishes.length-1">
+                                                    {{itemRefurbish.SerialNumber}}
                                                 </div>
-                                                <div *ngIf="currentIndex === i || i === item.ItemImages.length-1">
-                                                    <input class="form-control" id="itemImageLabelId" type="text" placeholder="{{ 'Title (Optional)' | translate }}"
-                                                        (focus)="formDirty = true;" [(ngModel)]=itemImage.Label [ngModelOptions]="{standalone: true}" />
+                                                <div *ngIf="currentIndex === i || i === item.ItemRefurbishes.length-1" >
+                                                    <input (click)="formDirty = true" class="form-control" id="SerialNumberID" type="number" placeholder="{{ 'Serial Number' | translate }} ({{ 'Required' | translate }})"
+                                                        required [(ngModel)]=itemRefurbish.SerialNumber name="itemSerialNumber" #itemSerialNumberVar="ngModel" />
                                                 </div>
                                             </td>
                                         </ng-container>
                                         <!-- Condition Column -->
                                         <ng-container matColumnDef="Condition">
-                                            <th mat-header-cell *matHeaderCellDef  width="180px">{{ 'Title' | translate }}</th>
-                                            <td mat-cell *matCellDef="let itemImage; let i = index">
-                                                <div *ngIf="currentIndex !== i && i !== item.ItemImages.length-1">
-                                                    {{itemImage.Label}}
-                                                </div>
-                                                <div *ngIf="currentIndex === i || i === item.ItemImages.length-1">
-                                                    <input class="form-control" id="itemImageLabelId" type="text" placeholder="{{ 'Title (Optional)' | translate }}"
-                                                        (focus)="formDirty = true;" [(ngModel)]=itemImage.Label [ngModelOptions]="{standalone: true}" />
-                                                </div>
+                                            <th mat-header-cell *matHeaderCellDef  width="180px">{{ 'Condition' | translate }}</th>
+                                            <td mat-cell *matCellDef="let itemRefurbish; let i = index">
+                                                <ng-container *ngIf="userInfo">
+                                                    <div *ngIf="(currentIndex !== i && i !== item.ItemRefurbishes.length-1) || !userInfo.IsPM">
+                                                        {{itemRefurbish.Condition}}
+                                                    </div>
+                                                    <div *ngIf="(currentIndex === i || i === item.ItemRefurbishes.length-1) && userInfo.IsPM">
+                                                        <select (click)="formDirty = true" class="form-control" id="conditionID" name="condition"
+                                                            [(ngModel)]=itemRefurbish.Condition #conditionVar="ngModel">
+                                                            <option [ngValue]="null">{{ 'Please select' | translate }} {{ '(Required)' | translate }}</option>
+                                                            <option [ngValue]="condition.Value" *ngFor="let condition of conditionTypes">{{condition.Name}}</option>
+                                                        </select>
+                                                    </div>
+                                                </ng-container>
                                             </td>
                                         </ng-container>
                                        <!-- SerialNumber Column -->
                                         <ng-container matColumnDef="SellingPrice">
-                                            <th mat-header-cell *matHeaderCellDef  width="180px">{{ 'Title' | translate }}</th>
-                                            <td mat-cell *matCellDef="let itemImage; let i = index">
-                                                <div *ngIf="currentIndex !== i && i !== item.ItemImages.length-1">
-                                                    {{itemImage.Label}}
+                                            <th mat-header-cell *matHeaderCellDef  width="180px">{{ 'Selling Price' | translate }}</th>
+                                            <td mat-cell *matCellDef="let itemRefurbish; let i = index">
+                                                <div *ngIf="currentIndex !== i && i !== item.ItemRefurbishes.length-1">
+                                                    {{itemRefurbish.Label}}
                                                 </div>
-                                                <div *ngIf="currentIndex === i || i === item.ItemImages.length-1">
-                                                    <input class="form-control" id="itemImageLabelId" type="text" placeholder="{{ 'Title (Optional)' | translate }}"
-                                                        (focus)="formDirty = true;" [(ngModel)]=itemImage.Label [ngModelOptions]="{standalone: true}" />
+                                                <div *ngIf="currentIndex === i || i === item.ItemRefurbishes.length-1" >
+                                                    <input (click)="formDirty = true" class="form-control" id="itemSellingPriceID" type="number" placeholder="{{ 'Selling Price' | translate }} ({{ 'Required' | translate }})"
+                                                        step="0.01" onchange="this.value = parseFloat(this.value).toFixed(2);" onkeydown="return event.keyCode == 69 || event.keyCode == 189 ? false : true" min="0"
+                                                        required [(ngModel)]=itemRefurbish.SellingPrice name="itemSellingPrice" #itemSellingPriceVar="ngModel" />
                                                 </div>
                                             </td>
                                         </ng-container>
                                         <!-- Print Label Column -->
                                         <ng-container matColumnDef="PrintLabel">
-                                            <th mat-header-cell *matHeaderCellDef  width="180px">{{ 'Print Label' | translate }}</th>
-                                            <td mat-cell *matCellDef="let itemImage; let i = index">
-                                                <button mat-button class="btn btn-info">Print Label</button>
+                                            <th mat-header-cell *matHeaderCellDef  width="180px"><span *ngIf="item.ItemRefurbishes.length > 1">{{ 'Print Label' | translate }}</span></th>
+                                            <td mat-cell *matCellDef="let itemRefurbish; let i = index">
+                                                <div *ngIf="currentIndex !== i && i !== item.ItemRefurbishes.length-1">
+                                                    <button mat-icon-button color="info"><i class="fa fa-print fs-16"></i> </button>
+                                                </div>
                                             </td>
                                         </ng-container>
                                         <!-- Remove Column -->
                                         <ng-container matColumnDef="Remove">
                                             <th mat-header-cell *matHeaderCellDef width="85px">{{ 'Remove' | translate }}</th>
-                                            <td mat-cell *matCellDef="let itemImage; let i = index;">
-                                                <div *ngIf="i !== item.ItemImages.length-1">
-                                                    <a (click)="onRemoveImage(itemImage); currentIndex = item.ItemImages.length-1;">
+                                            <td mat-cell *matCellDef="let itemRefurbish; let i = index;">
+                                                <div *ngIf="i !== item.ItemRefurbishes.length-1">
+                                                    <a (click)="onRemoveImage(itemRefurbish); currentIndex = item.ItemRefurbishes.length-1;">
                                                         <span matTooltip="{{ 'Remove' | translate }}" attr.aria-label="{{ 'Remove' | translate}}" class="glyphicon glyphicon-trash"></span>
                                                     </a>
                                                 </div>
-                                                <div [hidden]="!formDirty && i === item.ItemImages.length-1">
-                                                    <a matTooltip="{{ 'Clear' | translate }}" attr.aria-label="{{ 'Clear' | translate}}" (click)="clearFields(itemImage);"><i *ngIf="i === item.ItemImages.length-1" class="fa fa-eraser"></i></a>
+                                                <div [hidden]="!formDirty && i === item.ItemRefurbishes.length-1">
+                                                    <a matTooltip="{{ 'Clear' | translate }}" attr.aria-label="{{ 'Clear' | translate}}" (click)="clearFields(itemRefurbish);"><i *ngIf="i === item.ItemRefurbishes.length-1" class="fa fa-eraser"></i></a>
                                                 </div>
                                             </td>
                                         </ng-container>
 
                                         <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-                                        <tr class="selected-row" mat-row *matRowDef="let itemImage; let i = index; columns: displayedColumns;"
-                                            [ngStyle]="{'background-color': itemService.rowColorConditions(i, item.ItemImages, currentIndex, formDirty)}"
+                                        <tr class="selected-row" mat-row *matRowDef="let itemRefurbish; let i = index; columns: displayedColumns;"
+                                            [ngStyle]="{'background-color': itemService.rowColorConditions(i, item.ItemRefurbishes, currentIndex, formDirty)}"
                                             (click)="onEditItemImage(i);"></tr>
                                     </table>
-                                    <button type="button" class="m-t-md btn btn-primary" (click)="uploadMultipleImages()"> <i class="fa fa-files-o"></i> {{ 'Multiple Images' | translate }}</button>
+                                    <!-- <button type="button" class="m-t-md btn btn-primary" (click)="uploadMultipleImages()"> <i class="fa fa-files-o"></i> {{ 'Multiple Images' | translate }}</button> -->
                                 </div>
                             </div>
                         </div>

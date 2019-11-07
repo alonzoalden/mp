@@ -1,24 +1,28 @@
 import { Component, OnInit } from '@angular/core';
 import { MatTableDataSource } from '@angular/material';
-import { Item, ItemImage, ItemImageInsert, ItemInsert } from '../../../../shared/class/item';
+import { Item, ItemRefurbishInsert, ItemRefurbish, ItemInsert } from '../../../../shared/class/item';
+import { Member } from '../../../../shared/class/member';
 import { Observable } from 'rxjs';
 import { Store, select } from '@ngrx/store';
 import * as fromItem from '../../../state';
+import * as fromUser from '../../../../shared/state/user-state.reducer';
 
 @Component({
-    templateUrl: './item-edit-image-shell.component.html'
+    templateUrl: './item-add-refurbish-shell.component.html'
 })
 
-export class ItemEditImageShellComponent implements OnInit {
-    errorMessage$: Observable<string>;
+export class ItemAddRefurbishShellComponent implements OnInit {
     item$: Observable<Item | ItemInsert>;
-    itemImagesMatTable$: Observable<MatTableDataSource<ItemImageInsert | ItemImage>>;
+    userInfo$: Observable<Member>;
+    errorMessage$: Observable<string>;
+    itemRefurbishesMatTable$: Observable<MatTableDataSource<ItemRefurbishInsert | ItemRefurbish>>;
 
     constructor(private store: Store<fromItem.State>) { }
 
     ngOnInit(): void {
         this.item$ = this.store.pipe(select(fromItem.getItem));
+        this.itemRefurbishesMatTable$ = this.store.pipe(select(fromItem.getItemRefurbishesMatTable));
+        this.userInfo$ = this.store.pipe(select(fromUser.getCurrentUser));
         this.errorMessage$ = this.store.pipe(select(fromItem.getError));
-        this.itemImagesMatTable$ = this.store.pipe(select(fromItem.getItemImagesMatTable));
     }
 }

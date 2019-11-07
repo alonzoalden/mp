@@ -1,3 +1,4 @@
+import { ItemRefurbish } from './../../shared/class/item';
 import { createSelector, createFeatureSelector } from '@ngrx/store';
 import * as fromRoot from '../../state/app.state';
 import * as fromItem from './item.reducer';
@@ -154,6 +155,10 @@ export const getIsMainItemsListLoading = createSelector(
     getItemFeatureState,
     state => state.isMainItemsListLoading
 );
+export const getItemRefurbishesMatTable = createSelector(
+    getItemFeatureState,
+    state => new MatTableDataSource<ItemRefurbish>(state.item.ItemRefurbishes)
+);
 export const getPendingDelete = createSelector(
     getItemFeatureState,
     state => state.pendingDelete
@@ -174,7 +179,6 @@ export const getIsItemListLoading = createSelector(
     getItemFeatureState,
     state => state.isItemListLoading
 );
-
 export const getError = createSelector(
     getItemFeatureState,
     state => state.error

@@ -1,3 +1,4 @@
+import { ItemAddRefurbishShellComponent } from './item-add/item-add-refurbish/containers/item-add-refurbish-shell.component';
 import { Routes, RouterModule } from '@angular/router';
 import { ItemComponent } from './item.component';
 import { ItemListShellComponent } from './item-list/containers/item-list-shell/item-list-shell.component';
@@ -111,7 +112,11 @@ const ITEM_ROUTES: Routes = [
                     {
                         path: 'part',
                         component: ItemAddPartShellComponent
-                    }
+                    },
+                    {
+                        path: 'refurbish',
+                        component: ItemAddRefurbishShellComponent
+                    },
                 ]
             },
             {

@@ -118,8 +118,14 @@ import { EffectsModule } from '@ngrx/effects';
 import { itemReducer } from './state/item.reducer';
 import { ItemEffects } from './state/item.effects';
 import { SharePipeModule } from '../shared/pipe/share.pipe';
+import { ItemAddRefurbishShellComponent } from './item-add/item-add-refurbish/containers/item-add-refurbish-shell.component';
+import { ItemAddRefurbishComponent } from './item-add/item-add-refurbish/components/item-add-refurbish.component';
+import { ItemAddRefurbishImageComponentUploadDialog } from './item-add/item-add-refurbish/components/item-add-refurbish.component-upload-dialog';
+
 // import { ItemVariationEffects } from './item-variation/state/item-variation.effects';
 // import { itemreducer } from './item-variation/state/item-variation.reducer';
+
+
 
 @NgModule({
     declarations: [
@@ -228,10 +234,23 @@ import { SharePipeModule } from '../shared/pipe/share.pipe';
         ItemVariationDetailComponent,
         ItemEditVariationComponent,
         ItemVariationComponentDialog,
-        ItemVariationSelectItemComponentDialog
-
+        ItemVariationSelectItemComponentDialog,
+        ItemAddRefurbishComponent,
+        ItemAddRefurbishShellComponent,
+        ItemAddRefurbishImageComponentUploadDialog
     ],
-    entryComponents: [ItemListComponent, ItemListComponentItemPrintDialog, ItemPrintLabelComponentPrintDialog, ItemAddImageComponentUploadDialog, ItemEditImageComponentUploadDialog, ItemListComponentImportDialog, ItemVariationComponentDialog, ItemVariationSelectItemComponentDialog, ItemPartListComponentItemPrintDialog],
+    entryComponents: [
+        ItemListComponent,
+        ItemListComponentItemPrintDialog,
+        ItemPrintLabelComponentPrintDialog,
+        ItemAddImageComponentUploadDialog,
+        ItemEditImageComponentUploadDialog,
+        ItemListComponentImportDialog,
+        ItemVariationComponentDialog,
+        ItemVariationSelectItemComponentDialog,
+        ItemPartListComponentItemPrintDialog,
+        ItemAddRefurbishImageComponentUploadDialog
+    ],
     imports: [
         TranslateModule,
         ReactiveFormsModule,

@@ -84,7 +84,7 @@ export class Item {
         public ItemImages: Array<ItemImage>,
         public ItemSections: Array<ItemSection>,
         public ItemVariations: Array<ItemVariation>,
-
+        public ItemRefurbishes: Array<ItemRefurbish>,
         public QtyOnHand: number,
         public QtyAvailable: number,
         public QtyOnOrder: number,
@@ -166,7 +166,8 @@ export class ItemInsert {
         public ItemAttachments: Array<ItemAttachmentInsert>,
         public ItemVideos: Array<ItemVideoInsert>,
         public ItemImages: Array<ItemImageInsert>,
-        public ItemSections: Array<ItemSectionInsert>
+        public ItemSections: Array<ItemSectionInsert>,
+        public ItemRefurbishes: Array<ItemRefurbish>,
     ) {}
 }
 
@@ -771,5 +772,68 @@ export class ItemVariationLine {
         public ItemAttributeVariationName: string,
         public UpdatedOn: string,
         public CreatedOn: string,
+    ) {}
+}
+
+export class ItemRefurbish {
+    constructor(
+        public ItemRefurbishID: number,
+        public ItemID: number,
+        public Serial: number,
+        public Condition: string,
+        public SellingPrice: string,
+        public CreatedOn: string,
+        public Images: Array<ItemRefurbishImage>,
+        public pendingAdd: boolean
+    ) {}
+}
+export class ItemRefurbishInsert {
+    constructor(
+        public ItemRefurbishID: number,
+        public ItemID: number,
+        public Serial: number,
+        public Condition: string,
+        public SellingPrice: string,
+        public CreatedOn: string,
+        public Images: Array<ItemRefurbishImage>,
+    ) {}
+}
+export class ItemRefurbishImage {
+    constructor(
+        public ItemRefurbishImageID: number,
+        public ItemRefurbishID: number,
+        public Label: string,
+        public Raw: string,
+        public FilePath: string,
+        public Position: number,
+        public IsBaseImage: boolean,
+        public IsSmallImage: boolean,
+        public IsThumbnail: boolean,
+        public IsRotatorImage: boolean,
+        public Exclude: boolean,
+        public Remove: boolean,
+        public UpdatedOn: string,
+        public CreatedOn: string,
+        public IsNewImage: boolean,
+        public pendingAdd: boolean
+    ) {}
+}
+export class ItemRefurbishImageInsert {
+    constructor(
+        public ItemRefurbishImageID: number,
+        public ItemRefurbishID: number,
+        public Label: string,
+        public Raw: string,
+        public FilePath: string,
+        public Position: number,
+        public IsBaseImage: boolean,
+        public IsSmallImage: boolean,
+        public IsThumbnail: boolean,
+        public IsRotatorImage: boolean,
+        public Exclude: boolean,
+        public Remove: boolean,
+        public UpdatedOn: string,
+        public CreatedOn: string,
+        public IsNewImage: boolean,
     ) {}
 }

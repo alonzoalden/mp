@@ -74,7 +74,7 @@ export class ItemService {
             this.duplicateItemInsert = null;
             return ItemInsert;
         } else {
-            return new ItemInsert(null, null, 'Toolots', 'simple', null, null, null, null, null, null, null, null, null, null, null, null, 'IN', null, 'LB', null, null, null, 'IN', null, 'LB', null, false, null, null, null, null, 'CN', '', null, false, null, 'CatalogAndSearch', null, null, null, null, null, 'NotSubmitted', false, null, null, true, false, [], [], [], [], [], [], [], [], [], []);
+            return new ItemInsert(null, null, 'Toolots', 'simple', null, null, null, null, null, null, null, null, null, null, null, null, 'IN', null, 'LB', null, null, null, 'IN', null, 'LB', null, false, null, null, null, null, 'CN', '', null, false, null, 'CatalogAndSearch', null, null, null, null, null, 'NotSubmitted', false, null, null, true, false, [], [], [], [], [], [], [], [], [], [], []);
         }
     }
 
@@ -175,7 +175,7 @@ export class ItemService {
             , item.IsFreeShipping, item.ShippingFee, item.MetaTitle, item.MetaKeywords, item.MetaDescription, item.Origin, item.Warranty
             , item.MerchantWarranty, item.AddProtectionPlan, item.URLKey, item.Visibility, item.Description, item.ShortDescription, item.TechnicalDetail, item.AdditionalInformation
             , item.VendorBrandID, item.RequestApproval, item.RejectionReason, item.Status, item.Approval, item.ImagePath, item.IsPartItem, item.PartImageRaw, item.PartImageFilePath, item.PartIsNewImage, item.ExcludeGoogleShopping, item.UpdatedOn, item.CreatedOn
-            , [], [], [], [], [], [], [], [], [], [], []
+            , [], [], [], [], [], [], [], [], [], [], [], []
             , item.QtyOnHand, item.QtyAvailable, item.QtyOnOrder, item.QtyBackOrdered, item.MerchantQtyOnHand, item.MerchantQtyAvailable, item.MerchantQtyOnOrder, false);
 
         item.ItemCategoryAssignments.forEach((itemCategoryAssignment) => {
@@ -290,7 +290,7 @@ export class ItemService {
             , item.IsFreeShipping, item.ShippingFee, item.MetaTitle, item.MetaKeywords, item.MetaDescription, item.Origin, item.Warranty, item.MerchantWarranty, item.AddProtectionPlan, item.URLKey
             , item.Visibility, item.Description, item.ShortDescription, item.TechnicalDetail, item.AdditionalInformation, item.VendorBrandID, item.Approval
             , item.IsPartItem, item.PartImageRaw, item.PartImageFilePath, item.PartIsNewImage, item.ExcludeGoogleShopping
-            , [], [], [], [], [], [], [], [], [], []);
+            , [], [], [], [], [], [], [], [], [], [], []);
 
         item.ItemCategoryAssignments.forEach((itemCategoryAssignment) => {
             const newItemCategoryAssignment = new ItemCategoryAssignment(itemCategoryAssignment.ItemCategoryID);
