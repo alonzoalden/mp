@@ -74,11 +74,20 @@
                             <button type="button" class="btn btn-info" (click)="onPrintPackingSlip()">
                                 <i class="fa fa-print m-r-xs"></i><span> {{ 'Print Packing Slip' | translate }} </span>
                             </button>
+
                             <button type="button" class="btn" [ngClass]="BOLRequest.BOLPath ? 'btn-info' : 'btn-primary'"
                                 *ngIf="fulfilledby === 'merchant' && salesOrder?.MerchantStatus === 'Unshipped' && BOLRequest"
                                 (click)="openDialogUploadBOLRequest(salesOrder)">
                                     <i class="fa fa-upload m-r-xs"></i><span> {{ 'Upload BOL/Label' | translate }} </span>
                             </button>
+
+                            <button type="button" class="btn btn-info"
+                                *ngIf="fulfilledby === 'merchant' && salesOrder?.MerchantStatus === 'Unshipped'"
+                                (click)="openDialogUploadBOLRequest(salesOrder)">
+                                    <i class="fa fa-upload m-r-xs"></i><span> {{ 'Upload Invoice' | translate }} </span>
+                            </button>
+
+
                             <button type="button" class="btn" [ngClass]="BOLRequest?.BOLPath ? 'btn-info' : 'btn-primary'"
                                 *ngIf="fulfilledby === 'merchant' && salesOrder?.MerchantStatus === 'Unshipped' && !BOLRequest && !isBOLRequestLoading && userInfo?.IsPM"
                                 (click)="onNotifyBOLRequest(salesOrder)">

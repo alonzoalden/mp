@@ -1,11 +1,11 @@
 import { Component, OnInit, OnDestroy, Inject } from '@angular/core';
 import { MatDialogRef, MAT_DIALOG_DATA} from '@angular/material';
-import { SalesOrder } from '../../../../../shared/class/sales-order';
-import { BOLRequest } from '../../../../../shared/class/bol-request';
-import { SalesOrderService } from '../../../../sales-order.service';
-import { environment } from '../../../../../../environments/environment';
-import * as salesOrderActions from '../../../../state/sales-order.actions';
-import * as fromSalesOrder from '../../../../state';
+import { SalesOrder } from '../../../../shared/class/sales-order';
+import { BOLRequest } from '../../../../shared/class/bol-request';
+import { SalesOrderService } from '../../../sales-order.service';
+import { environment } from '../../../../../environments/environment';
+import * as salesOrderActions from '../../../state/sales-order.actions';
+import * as fromSalesOrder from '../../../state';
 import { Store, select } from '@ngrx/store';
 import { takeWhile } from 'rxjs/operators';
 
@@ -14,7 +14,7 @@ import { takeWhile } from 'rxjs/operators';
     templateUrl: './sales-order-view-bol.component-upload-dialog.html',
 })
 
-export class SalesOrderViewUploadBOLComponentDialog implements OnInit, OnDestroy {
+export class SalesOrderViewUploadInvoiceComponentDialog implements OnInit, OnDestroy {
     bolURL = environment.bolURL;
     errorMessage: string;
     fulfilledby: string;
@@ -28,7 +28,7 @@ export class SalesOrderViewUploadBOLComponentDialog implements OnInit, OnDestroy
     name: string;
     constructor(
         @Inject(MAT_DIALOG_DATA) public data: {salesorder: SalesOrder, orderid: number},
-        public dialogRef: MatDialogRef<SalesOrderViewUploadBOLComponentDialog>,
+        public dialogRef: MatDialogRef<SalesOrderViewUploadInvoiceComponentDialog>,
         private store: Store<fromSalesOrder.State>,
         private salesorderService: SalesOrderService
     ) {}

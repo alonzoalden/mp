@@ -117,6 +117,20 @@ export class SalesOrderDetailComponent implements OnInit, OnChanges {
         });
     }
 
+    openDialogUploadInvoice(salesorder) {
+        const _data = {
+            salesorder,
+            orderid: this.orderid
+        };
+        const dialogRef = this.printDialog.open(SalesOrderViewUploadBOLComponentDialog, {
+            data: _data,
+            width: '1040px'
+        });
+
+        dialogRef.afterClosed().subscribe(() => {
+        });
+    }
+
     formatPhoneNumber(phoneNumberString) {
         if (!phoneNumberString) { return; }
         const cleaned = ('' + phoneNumberString).replace(/\D/g, '');
