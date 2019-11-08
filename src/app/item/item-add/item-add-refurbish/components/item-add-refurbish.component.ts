@@ -112,16 +112,21 @@ export class ItemAddRefurbishComponent implements OnInit, OnChanges {
     }
 
     isRequirementValid(itemrefurbish: ItemRefurbish): boolean {
-        if (itemrefurbish
+        return !!(itemrefurbish
+            && itemrefurbish.Images.length
             && itemrefurbish.SellingPrice
             && itemrefurbish.SerialNumber
-            && itemrefurbish.Condition) {
-            return true;
-        } else {
-            return false;
-        }
+            && itemrefurbish.Condition
+        );
     }
-
+    containsAnyValues(itemRefurbish: ItemRefurbish) {
+        return !!(itemRefurbish
+            || itemRefurbish.Images.length
+            || itemRefurbish.SellingPrice
+            || itemRefurbish.SerialNumber
+            || itemRefurbish.Condition
+        );
+    }
     moveDownPosition(itemrefurbish: ItemRefurbish) {
         this.positionMove(this.item.ItemRefurbishes, itemrefurbish, 1);
         this.item.ItemRefurbishes.forEach((value, index) => {
@@ -147,33 +152,6 @@ export class ItemAddRefurbishComponent implements OnInit, OnChanges {
         const indexes = [index, newIndex].sort((a, b) => a - b); // Sort the indixes
         array.splice(indexes[0], 2, array[indexes[1]], array[indexes[0]]); // Replace from lowest index, two elements, reverting the order
     }
-
-    // isBaseImageClick(image: ItemRefurbishImage, index: number) {
-    //     this.item.ItemRefurbishes.forEach((value, i) => {
-    //         if (i !== index) {
-    //             value.IsBaseImage = false;
-    //         }
-    //     });
-    //     this.refreshDataSource(this.item.ItemRefurbishes);
-    // }
-
-    // isSmallImageClick(image: ItemRefurbishImage, index: number) {
-    //     this.item.ItemRefurbishes.forEach((value, i) => {
-    //         if (i !== index) {
-    //             value.IsSmallImage = false;
-    //         }
-    //     });
-    //     this.refreshDataSource(this.item.ItemRefurbishes);
-    // }
-
-    // isThumbnailClick(image: ItemRefurbishImage, index: number) {
-    //     this.item.ItemRefurbishes.forEach((value, i) => {
-    //         if (i !== index) {
-    //             value.IsThumbnail = false;
-    //         }
-    //     });
-    //     this.refreshDataSource(this.item.ItemRefurbishes);
-    // }
 
     onRemoveRefurbish(itemrefurbish: ItemRefurbish) {
         const confirmation = confirm(`Remove ${itemrefurbish.SerialNumber}?`);
@@ -230,28 +208,37 @@ export class ItemAddRefurbishComponent implements OnInit, OnChanges {
     }
 
     clearFields(form) {
+        if (form.Images.length) {
+            const confirmation = confirm(`You currently have ${form.Images.length} uploaded images. Are you sure you want to clear?`);
+            if (!confirmation) {
+                return;
+            }
+        }
         this.formDirty = false;
-        form.Images = null;
+        form.Images.splice(0);
         form.SerialNumber = null;
         form.Condition = null;
         form.SellingPrice = null;
-
     }
 
-    uploadMultipleImages() {
+    uploadMultipleImages(index: number) {
         const dialogRef = this.itemUploadDialog.open(ItemAddRefurbishImageComponentUploadDialog, {
-            width: '650px',
+            width: '850px',
+            data: this.item.ItemRefurbishes[index].Images,
+            disableClose: true
         });
 
 
         dialogRef.afterClosed().subscribe(result => {
             if (result && result.length > 0) {
-                this.isLoadingMultipleData = true;
-                this.removePendingLine();
-                const formData: FormData = new FormData();
-                for (let i = 0; i < result.length; i++) {
-                    formData.append('uploadedFiles', result[i], result[i].name);
-                }
+                //this.isLoadingMultipleData = true;
+                this.item.ItemRefurbishes[index].Images = result;
+                this.formDirty = true;
+                //this.removePendingLine();
+                // const formData: FormData = new FormData();
+                // for (let i = 0; i < result.length; i++) {
+                //     formData.append('uploadedFiles', result[i], result[i].name);
+                // }
 
                 // this.itemService.uploadTempImages(this.newGuid(), formData).subscribe (
                 //     (data: string) => {

@@ -9,20 +9,20 @@
                 <button mat-flat-button cdkFocusInitial style="padding: 0; max-height: 36px;" class="btn btn-primary-main" [disabled]="isLoadingData" (click)="uploadError = null;">
                     <i class="fa fa-spinner fa-spin fs-16" *ngIf="isLoadingData"></i>
                     <label style="font-weight: initial; margin: 0; cursor: pointer; width: 100px;" *ngIf="!isLoadingData">
-                        <i class="fa fa-files-o"></i> {{ 'Browse' | translate }} &hellip; <input type="file" style="display: none;" (change)="fileChangeEvent($event)"
+                        <i class="fa fa-image-o"></i> {{ 'Browse' | translate }} &hellip; <input type="file" style="display: none;" (change)="fileChangeEvent($event)"
                             accept="image/jpeg,image/png,.jpeg,.jpg,.png" multiple #fileUpload>
                     </label>
                 </button>
             </div>
             <div style="display: flex; justify-content: center; flex-direction: column;">
                 <!-- <div *ngIf="uploadError" class="error m-l-md" >{{ 'Error:' | translate}} {{ 'File size exceeded (max is 2.3MB)' | translate }}</div> -->
-                <div *ngIf="uploadError" class="error m-l-md" >{{ uploadError }}</div>
+                <div *ngIf="uploadError" class="error m-l-md animated fadeInRight" >{{ uploadError }}</div>
 
                 <ng-container *ngIf="!uploadError && !isLoadingData">
-                    <div class="text-muted m-l-md" >{{ 'You may select 8 images at a time.' | translate }}</div>
-                    <div class="text-muted m-l-md" >{{ 'Max image size is 2.3MB.' | translate }}</div>
+                    <div class="text-info m-l-md" >{{ 'You may select 8 images at a time.' | translate }}</div>
+                    <div class="text-info m-l-md" >{{ 'Max image size is 2.3MB.' | translate }}</div>
                 </ng-container>
-                <div *ngIf="isLoadingData" class="text-muted m-l-md animated fadeInUp">{{ 'Loading images. Please wait...' | translate }}</div>
+                <div *ngIf="isLoadingData" class="text-info m-l-md animated fadeInUp">{{ 'Loading images. Please wait...' | translate }}</div>
             </div>
         </div>
         <div class="m-t-md animated fadeInUp" *ngIf="uploadImageErrors?.length">
@@ -37,12 +37,25 @@
             </ul>
         </div>
         <div class="m-t-md" >
-            <div class="sm-strong animated fadeIn">{{ 'Files Selected' | translate }} <span *ngIf="itemRefurbishImages.length" class="animated fadeInRight" >({{ 'Total' | translate }}: {{itemRefurbishImages.length}})</span></div>
+            <div class="sm-strong animated fadeIn">{{ 'Images Selected' | translate }} <span *ngIf="itemRefurbishImages.length" class="animated fadeInRight" >({{ 'Total' | translate }}: {{itemRefurbishImages.length}})</span></div>
             <ul class="item-single-action " style="overflow: scroll;">
                 <li *ngIf="!itemRefurbishImages || itemRefurbishImages.length < 1" class="text-info white-bg" style="display: flex; align-items: center; height: 70px;">
-                    <span>{{ 'No files selected' | translate }}</span>
+                    <span>{{ 'No images selected' | translate }}</span>
                 </li>
                 <li *ngFor="let image of itemRefurbishImages; let i = index" class="animated fadeInUp" style="display: flex; align-items: center; height: 75px;">
+                    <div style="width: 100px; display: flex; justify-content: space-evenly;">
+                        <div>
+                            <a (click)='moveDownPosition(image)' *ngIf="i !== itemRefurbishImages.length - 1"><span class="glyphicon glyphicon-arrow-down"></span></a>
+                            <div *ngIf="i === itemRefurbishImages.length - 1" style="width: 12px;"></div>
+                        </div>
+                        <div>
+                            {{i + 1}}
+                        </div>
+                        <div>
+                            <a (click)='moveUpPosition(image)' *ngIf='i !== 0'><span class="glyphicon glyphicon-arrow-up"></span></a>
+                            <div *ngIf="i === 0" style="width: 12px;"></div>
+                        </div>
+                    </div>
                     <div *ngIf="image.Raw" style="flex: 2; text-align: center;"><img (error)="errorUploadingImage(image, i)" style="max-width: 100px; max-height: 70px;" src="{{image.Raw}}" [title]="image.Label"></div>
                     <div *ngIf="!image.Raw" style="flex: 2; text-align: center;"><i class="fa fa-warning" style="font-size: 28;"></i></div>
                     <div class="p-w-sm" style="flex: 5;" matTooltipPosition="left" matTooltip="{{image.Label}}">{{image.Label}}</div>
@@ -57,6 +70,6 @@
 
 </div>
 <mat-dialog-actions>
-    <button mat-button class="btn btn-success-sm" [mat-dialog-close]="filesToUpload" [disabled]="isLoadingData || !itemRefurbishImages.length" [matTooltip]="!itemRefurbishImages.length ? 'Please select images' : '' "><i class="fa fa-upload"></i>  {{ 'Upload' | translate }}</button>
+    <button mat-button class="btn btn-success-sm" [mat-dialog-close]="itemRefurbishImages" [disabled]="isLoadingData || !itemRefurbishImages.length" [matTooltip]="!itemRefurbishImages.length ? 'Please select images' : '' "><i class="fa fa-upload"></i>  {{ 'Upload' | translate }}</button>
     <button mat-button class="btn btn-remove-sm" (click)="onCancelClick()"><i class="fa fa-remove"></i>  {{ 'Cancel' | translate }}</button>
 </mat-dialog-actions>

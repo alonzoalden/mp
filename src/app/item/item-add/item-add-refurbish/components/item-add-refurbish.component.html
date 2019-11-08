@@ -73,10 +73,18 @@
                                                     accept="image/gif,image/jpeg,image/png,.jpeg,.jpg,.png"
                                                     #fileUpload>
 
-                                                <div *ngIf="i === item.ItemRefurbishes.length-1 && !itemRefurbish.Raw && !pendingUpload">
-                                                    <button type="button" class="btn btn-primary" (click)="uploadMultipleImages()"><i class="fa fa-file-image-o"></i> {{ 'Upload' | translate }}</button>
+                                                <div *ngIf="i === item.ItemRefurbishes.length-1 && !itemRefurbish.Images.length && !pendingUpload">
+                                                    <button type="button" class="btn btn-primary" (click)="uploadMultipleImages(i)"><i class="fa fa-file-image-o"></i> {{ 'Upload' | translate }}</button>
                                                 </div>
-                                                <div *ngIf="(itemRefurbish.FilePath || itemRefurbish.Raw) && ( !pendingUpload || i != currentIndex )" class="thumbnail-container">
+
+                                                <div *ngIf="itemRefurbish.Images.length" class="p-xs" style="height: 100%; display: flex; flex-direction: column; justify-content: flex-end;">
+                                                    <a (click)="uploadMultipleImages(i);" style="height: inherit; display: flex; align-items: center;">
+                                                        <img [src]="itemRefurbish.Images[0].Raw" style="max-width: 70px; max-height: 70px;">
+                                                    </a>
+                                                    <div class="sm-strong"><a (click)="uploadMultipleImages(i);">View {{ itemRefurbish.Images.length }} Total</a></div>
+                                                </div>
+
+                                                <!-- <div *ngIf="(itemRefurbish.FilePath || itemRefurbish.Raw) && ( !pendingUpload || i != currentIndex )" class="thumbnail-container">
                                                     <a (click)="fileUpload.click()">
                                                         <img src="{{imageURL + itemRefurbish.FilePath}}" [title]='itemRefurbish.Label' *ngIf="!itemRefurbish.IsNewImage">
                                                         <img src="{{itemRefurbish.Raw}}" [title]='itemRefurbish.Label' *ngIf="itemRefurbish.IsNewImage">
@@ -88,7 +96,7 @@
                                                         <div class="sk-bounce2"></div>
                                                         <div class="sk-bounce3"></div>
                                                     </div>
-                                                </div>
+                                                </div> -->
                                             </td>
                                         </ng-container>
                                         <!-- Serial Number Column -->
@@ -99,7 +107,7 @@
                                                     {{itemRefurbish.SerialNumber}}
                                                 </div>
                                                 <div *ngIf="currentIndex === i || i === item.ItemRefurbishes.length-1" >
-                                                    <input (click)="formDirty = true" class="form-control" id="SerialNumberID" type="number" placeholder="{{ 'Serial Number' | translate }} ({{ 'Required' | translate }})"
+                                                    <input (click)="formDirty = true" class="form-control" id="SerialNumberID" placeholder="{{ 'Serial Number' | translate }} ({{ 'Required' | translate }})"
                                                         required [(ngModel)]=itemRefurbish.SerialNumber name="itemSerialNumber" #itemSerialNumberVar="ngModel" />
                                                 </div>
                                             </td>
@@ -154,14 +162,14 @@
                                                         <span matTooltip="{{ 'Remove' | translate }}" attr.aria-label="{{ 'Remove' | translate}}" class="glyphicon glyphicon-trash"></span>
                                                     </a>
                                                 </div>
-                                                <div [hidden]="!formDirty && i === item.ItemRefurbishes.length-1">
+                                                <div *ngIf="i === item.ItemRefurbishes.length-1 && containsAnyValues(itemRefurbish)">
                                                     <a matTooltip="{{ 'Clear' | translate }}" attr.aria-label="{{ 'Clear' | translate}}" (click)="clearFields(itemRefurbish);"><i *ngIf="i === item.ItemRefurbishes.length-1" class="fa fa-eraser"></i></a>
                                                 </div>
                                             </td>
                                         </ng-container>
 
                                         <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-                                        <tr class="selected-row" mat-row *matRowDef="let itemRefurbish; let i = index; columns: displayedColumns;"
+                                        <tr style="height: 108px;" class="selected-row" mat-row *matRowDef="let itemRefurbish; let i = index; columns: displayedColumns;"
                                             [ngStyle]="{'background-color': itemService.rowColorConditions(i, item.ItemRefurbishes, currentIndex, formDirty)}"
                                             (click)="onEditItemImage(i);"></tr>
                                     </table>

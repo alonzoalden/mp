@@ -1,5 +1,5 @@
 
-import { Component, ViewChild, Inject } from '@angular/core';
+import { Component, ViewChild, Inject, OnInit } from '@angular/core';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material';
 import { ItemRefurbishImageInsert } from '../../../../shared/class/item';
 import { ItemService } from '../../../item.service';
@@ -9,7 +9,7 @@ import { environment } from '../../../../../environments/environment';
     templateUrl: 'item-add-refurbish.component-upload-dialog.html',
 })
 
-export class ItemAddRefurbishImageComponentUploadDialog {
+export class ItemAddRefurbishImageComponentUploadDialog implements OnInit {
     filesToUpload: Array<File> = [];
     selectedFiles: Array<File> = [];
     itemRefurbishImages: ItemRefurbishImageInsert[] = [];
@@ -23,12 +23,25 @@ export class ItemAddRefurbishImageComponentUploadDialog {
 
     constructor( public dialogRef: MatDialogRef<ItemAddRefurbishImageComponentUploadDialog>,
         private itemService: ItemService,
-        @Inject(MAT_DIALOG_DATA) public data: number ) {
+        @Inject(MAT_DIALOG_DATA) public data: ItemRefurbishImageInsert[] ) {
+    }
+
+    ngOnInit() {
+        if (this.data.length) {
+            this.itemRefurbishImages = [...this.data];
+        }
+
     }
 
     onCancelClick(): void {
-        if (this.itemRefurbishImages.length) {
+        if (this.itemRefurbishImages.length && !this.data.length) {
             const confirmiation = confirm('You have images ready for upload. Are you sure you want to cancel?');
+            if (!confirmiation) {
+                return;
+            }
+        }
+        if (this.itemRefurbishImages.length !== this.data.length && this.data.length) {
+            const confirmiation = confirm('You\'ve made some changes. Are you sure you want to cancel?');
             if (!confirmiation) {
                 return;
             }
@@ -45,6 +58,7 @@ export class ItemAddRefurbishImageComponentUploadDialog {
             return;
         }
         if (this.exceedsFileSizeLimit(this.selectedFiles)) {
+            this.selectedFiles = [];
             return;
         }
         else {
@@ -98,6 +112,32 @@ export class ItemAddRefurbishImageComponentUploadDialog {
     removeFile(index: number) {
         this.itemRefurbishImages.splice(index, 1);
     }
+
+    moveDownPosition(itemrefurbishimage: ItemRefurbishImageInsert) {
+        this.positionMove(this.itemRefurbishImages, itemrefurbishimage, 1);
+        this.itemRefurbishImages.forEach((value, index) => {
+            value.Position = index + 1;
+        });
+
+        //this.refreshDataSource(this.item.ItemRefurbishes);
+    }
+
+    moveUpPosition(itemrefurbishimage: ItemRefurbishImageInsert) {
+        this.positionMove(this.itemRefurbishImages, itemrefurbishimage, -1);
+        this.itemRefurbishImages.forEach((value, index) => {
+            value.Position = index + 1;
+        });
+
+        //this.refreshDataSource(this.item.ItemRefurbishes);
+    }
+    positionMove(array, element, delta) {
+        const index = array.indexOf(element);
+        const newIndex = index + delta;
+        if (newIndex < 0  || newIndex === array.length) { return; } // Already at the top or bottom.
+        const indexes = [index, newIndex].sort((a, b) => a - b); // Sort the indixes
+        array.splice(indexes[0], 2, array[indexes[1]], array[indexes[0]]); // Replace from lowest index, two elements, reverting the order
+    }
+
 
     cancelUpload() {
         this.filesToUpload.splice(0);
