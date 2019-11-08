@@ -74,7 +74,7 @@ export class ItemAddRefurbishComponent implements OnInit, OnChanges {
     }
 
     addPendingLine() {
-        const _temp = new ItemRefurbish(0, this.itemid, null, null, null, null, [], null);
+        const _temp = new ItemRefurbish(0, this.itemid, null, null, null, null, null, [], null);
         this.item.ItemRefurbishes.push(_temp);
     }
 
@@ -89,31 +89,33 @@ export class ItemAddRefurbishComponent implements OnInit, OnChanges {
         this.itemRefurbishesMatTable = new MatTableDataSource<ItemRefurbish>(itemrefurbishes);
     }
 
-    onAddItemImage(itemImage: ItemImage) {
-        if (this.isRequirementValid(itemImage)) {
+    onAddItemImage(itemrefurbish: ItemRefurbish) {
+        if (this.isRequirementValid(itemrefurbish)) {
             this.pendingAdd = true;
 
-            itemImage.pendingAdd = false;
+            itemrefurbish.pendingAdd = false;
 
             this.addPendingLine();
             this.refreshDataSource(this.item.ItemRefurbishes);
         } else {
-            this.itemService.sendNotification({ type: 'error', title: 'Error', content: 'Please select an Image' });
+            this.itemService.sendNotification({ type: 'error', title: 'Error', content: 'Please fill in required fields' });
         }
     }
 
     onEditItemImage(index: number) {
         if (this.pendingAdd) {
-            this.currentIndex = this.item.ItemImages.length - 1;
+            this.currentIndex = this.item.ItemRefurbishes.length - 1;
             this.pendingAdd = false;
         } else {
             this.currentIndex = index;
         }
     }
 
-    isRequirementValid(itemImage: ItemImage): boolean {
-        if (itemImage
-            && itemImage.Raw) {
+    isRequirementValid(itemrefurbish: ItemRefurbish): boolean {
+        if (itemrefurbish
+            && itemrefurbish.SellingPrice
+            && itemrefurbish.SerialNumber
+            && itemrefurbish.Condition) {
             return true;
         } else {
             return false;
@@ -121,8 +123,8 @@ export class ItemAddRefurbishComponent implements OnInit, OnChanges {
     }
 
     moveDownPosition(itemrefurbish: ItemRefurbish) {
-        this.positionMove(this.item.ItemImages, itemrefurbish, 1);
-        this.item.ItemImages.forEach((value, index) => {
+        this.positionMove(this.item.ItemRefurbishes, itemrefurbish, 1);
+        this.item.ItemRefurbishes.forEach((value, index) => {
             value.Position = index + 1;
         });
 
@@ -130,8 +132,8 @@ export class ItemAddRefurbishComponent implements OnInit, OnChanges {
     }
 
     moveUpPosition(itemrefurbish: ItemRefurbish) {
-        this.positionMove(this.item.ItemImages, itemrefurbish, -1);
-        this.item.ItemImages.forEach((value, index) => {
+        this.positionMove(this.item.ItemRefurbishes, itemrefurbish, -1);
+        this.item.ItemRefurbishes.forEach((value, index) => {
             value.Position = index + 1;
         });
 
@@ -146,39 +148,39 @@ export class ItemAddRefurbishComponent implements OnInit, OnChanges {
         array.splice(indexes[0], 2, array[indexes[1]], array[indexes[0]]); // Replace from lowest index, two elements, reverting the order
     }
 
-    isBaseImageClick(image: ItemRefurbishImage, index: number) {
-        this.item.ItemImages.forEach((value, i) => {
-            if (i !== index) {
-                value.IsBaseImage = false;
-            }
-        });
-        this.refreshDataSource(this.item.ItemRefurbishes);
-    }
+    // isBaseImageClick(image: ItemRefurbishImage, index: number) {
+    //     this.item.ItemRefurbishes.forEach((value, i) => {
+    //         if (i !== index) {
+    //             value.IsBaseImage = false;
+    //         }
+    //     });
+    //     this.refreshDataSource(this.item.ItemRefurbishes);
+    // }
 
-    isSmallImageClick(image: ItemRefurbishImage, index: number) {
-        this.item.ItemImages.forEach((value, i) => {
-            if (i !== index) {
-                value.IsSmallImage = false;
-            }
-        });
-        this.refreshDataSource(this.item.ItemRefurbishes);
-    }
+    // isSmallImageClick(image: ItemRefurbishImage, index: number) {
+    //     this.item.ItemRefurbishes.forEach((value, i) => {
+    //         if (i !== index) {
+    //             value.IsSmallImage = false;
+    //         }
+    //     });
+    //     this.refreshDataSource(this.item.ItemRefurbishes);
+    // }
 
-    isThumbnailClick(image: ItemRefurbishImage, index: number) {
-        this.item.ItemImages.forEach((value, i) => {
-            if (i !== index) {
-                value.IsThumbnail = false;
-            }
-        });
-        this.refreshDataSource(this.item.ItemRefurbishes);
-    }
+    // isThumbnailClick(image: ItemRefurbishImage, index: number) {
+    //     this.item.ItemRefurbishes.forEach((value, i) => {
+    //         if (i !== index) {
+    //             value.IsThumbnail = false;
+    //         }
+    //     });
+    //     this.refreshDataSource(this.item.ItemRefurbishes);
+    // }
 
-    onRemoveImage(image: ItemRefurbishImage) {
-        const confirmation = confirm(`Remove ${image.Label}?`);
+    onRemoveRefurbish(itemrefurbish: ItemRefurbish) {
+        const confirmation = confirm(`Remove ${itemrefurbish.SerialNumber}?`);
         if (confirmation) {
-            const foundIndex = this.item.ItemImages.findIndex(i => i.Position === image.Position);
+            const foundIndex = this.item.ItemRefurbishes.findIndex(i => i.Position === itemrefurbish.Position);
             if (foundIndex > -1) {
-                this.item.ItemImages.splice(foundIndex, 1);
+                this.item.ItemRefurbishes.splice(foundIndex, 1);
             }
             this.refreshDataSource(this.item.ItemRefurbishes);
         }
@@ -229,16 +231,16 @@ export class ItemAddRefurbishComponent implements OnInit, OnChanges {
 
     clearFields(form) {
         this.formDirty = false;
-        form.Images = '';
-        form.Serial = null;
+        form.Images = null;
+        form.SerialNumber = null;
         form.Condition = null;
         form.SellingPrice = null;
-        form.ItemID = null;
+
     }
 
     uploadMultipleImages() {
         const dialogRef = this.itemUploadDialog.open(ItemAddRefurbishImageComponentUploadDialog, {
-            width: '350px',
+            width: '650px',
         });
 
 
@@ -254,8 +256,8 @@ export class ItemAddRefurbishComponent implements OnInit, OnChanges {
                 // this.itemService.uploadTempImages(this.newGuid(), formData).subscribe (
                 //     (data: string) => {
                 //         for (let i = 0; i < result.length; i++) {
-                //             const newItemImage = new ItemImage(0, this.itemid, null, null, null, this.item.ItemImages.length + 1, false, false, false, false, false, false, null, null, true, false);
-                //             if (this.item.ItemImages.length === 0) {
+                //             const newItemImage = new ItemImage(0, this.itemid, null, null, null, this.item.ItemRefurbishes.length + 1, false, false, false, false, false, false, null, null, true, false);
+                //             if (this.item.ItemRefurbishes.length === 0) {
                 //                 newItemImage.IsBaseImage = true;
                 //                 newItemImage.IsSmallImage = true;
                 //                 newItemImage.IsThumbnail = true;
@@ -263,12 +265,12 @@ export class ItemAddRefurbishComponent implements OnInit, OnChanges {
                 //             }
 
                 //             newItemImage.Raw = this.imageURL + '/temp' + data + '_' + i + '.' + result[i].name.substr(result[i].name.lastIndexOf('.') + 1).toLowerCase();
-                //             this.item.ItemImages.push(newItemImage);
+                //             this.item.ItemRefurbishes.push(newItemImage);
 
                 //             if (i === result.length - 1) {
                 //                 this.addPendingLine();
-                //                 this.currentIndex = this.item.ItemImages.length - 1;
-                //                 this.refreshDataSource(this.item.ItemImages);
+                //                 this.currentIndex = this.item.ItemRefurbishes.length - 1;
+                //                 this.refreshDataSource(this.item.ItemRefurbishes);
                 //             }
                 //         }
                 //         //this.isLoadingMultipleData = false;

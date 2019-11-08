@@ -238,6 +238,7 @@ export class ItemAddImageComponent implements OnInit, OnChanges {
                 for (let i = 0; i < result.length; i++) {
                     formData.append('uploadedFiles', result[i], result[i].name);
                 }
+                console.log(formData);
                 this.itemService.uploadTempImages(this.newGuid(), formData).subscribe (
                     (data: string) => {
                         for (let i = 0; i < result.length; i++) {

@@ -14,7 +14,7 @@
     </div>
     <div class="gray-cover-bg"></div>
 </ng-container>
-<div class="tab-content">
+<div class="tab-content animated fadeIn">
     <div class="tab-pane active">
         <div class="panel-body p-w-none">
             <form class="form-horizontal" #itemForm="ngForm">
@@ -30,7 +30,7 @@
                                             <th mat-header-cell *matHeaderCellDef width="45px"></th>
                                             <td mat-cell *matCellDef="let itemRefurbish; let i = index">
                                                 <div *ngIf="i === item.ItemRefurbishes.length-1 && i < 8">
-                                                    <a (click)='onAddItemImage(itemRefurbish); formDirty = false;'><span [matTooltip]="itemRefurbish.Raw ? ('Add' | translate) : ('Required fields must be complete' | translate)" class="glyphicon glyphicon-plus fs-20" [ngClass]="itemRefurbish.Raw ? 'green' : 'gray'"></span></a>
+                                                    <a (click)='onAddItemImage(itemRefurbish); formDirty = false;'><span [matTooltip]="isRequirementValid(itemRefurbish) ? ('Add' | translate) : ('Required fields must be complete' | translate)" class="glyphicon glyphicon-plus fs-20" [ngClass]="isRequirementValid(itemRefurbish) ? 'green' : 'gray'"></span></a>
                                                 </div>
                                                 <div *ngIf="i === item.ItemRefurbishes.length-1 && i >= 8">
                                                     <span matTooltip="Maximum of 8 images" class="glyphicon glyphicon-exclamation-sign fs-20"></span>
@@ -91,7 +91,7 @@
                                                 </div>
                                             </td>
                                         </ng-container>
-                                        <!-- SerialNumber Column -->
+                                        <!-- Serial Number Column -->
                                         <ng-container matColumnDef="SerialNumber">
                                             <th mat-header-cell *matHeaderCellDef  width="190px">{{ 'Serial Number' | translate }}</th>
                                             <td mat-cell *matCellDef="let itemRefurbish; let i = index">
@@ -110,7 +110,7 @@
                                             <td mat-cell *matCellDef="let itemRefurbish; let i = index">
                                                 <ng-container *ngIf="userInfo">
                                                     <div *ngIf="(currentIndex !== i && i !== item.ItemRefurbishes.length-1) || !userInfo.IsPM">
-                                                        {{itemRefurbish.Condition}}
+                                                        {{conditionTypes[itemRefurbish.Condition-1].Name}}
                                                     </div>
                                                     <div *ngIf="(currentIndex === i || i === item.ItemRefurbishes.length-1) && userInfo.IsPM">
                                                         <select (click)="formDirty = true" class="form-control" id="conditionID" name="condition"
@@ -122,12 +122,12 @@
                                                 </ng-container>
                                             </td>
                                         </ng-container>
-                                       <!-- SerialNumber Column -->
+                                       <!-- Selling Price Column -->
                                         <ng-container matColumnDef="SellingPrice">
                                             <th mat-header-cell *matHeaderCellDef  width="180px">{{ 'Selling Price' | translate }}</th>
                                             <td mat-cell *matCellDef="let itemRefurbish; let i = index">
                                                 <div *ngIf="currentIndex !== i && i !== item.ItemRefurbishes.length-1">
-                                                    {{itemRefurbish.Label}}
+                                                    {{ itemRefurbish.SellingPrice | currency }}
                                                 </div>
                                                 <div *ngIf="currentIndex === i || i === item.ItemRefurbishes.length-1" >
                                                     <input (click)="formDirty = true" class="form-control" id="itemSellingPriceID" type="number" placeholder="{{ 'Selling Price' | translate }} ({{ 'Required' | translate }})"
@@ -140,7 +140,7 @@
                                         <ng-container matColumnDef="PrintLabel">
                                             <th mat-header-cell *matHeaderCellDef  width="180px"><span *ngIf="item.ItemRefurbishes.length > 1">{{ 'Print Label' | translate }}</span></th>
                                             <td mat-cell *matCellDef="let itemRefurbish; let i = index">
-                                                <div *ngIf="currentIndex !== i && i !== item.ItemRefurbishes.length-1">
+                                                <div *ngIf="i !== item.ItemRefurbishes.length-1">
                                                     <button mat-icon-button color="info"><i class="fa fa-print fs-16"></i> </button>
                                                 </div>
                                             </td>
@@ -150,7 +150,7 @@
                                             <th mat-header-cell *matHeaderCellDef width="85px">{{ 'Remove' | translate }}</th>
                                             <td mat-cell *matCellDef="let itemRefurbish; let i = index;">
                                                 <div *ngIf="i !== item.ItemRefurbishes.length-1">
-                                                    <a (click)="onRemoveImage(itemRefurbish); currentIndex = item.ItemRefurbishes.length-1;">
+                                                    <a (click)="onRemoveRefurbish(itemRefurbish); currentIndex = item.ItemRefurbishes.length-1;">
                                                         <span matTooltip="{{ 'Remove' | translate }}" attr.aria-label="{{ 'Remove' | translate}}" class="glyphicon glyphicon-trash"></span>
                                                     </a>
                                                 </div>

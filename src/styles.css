@@ -438,6 +438,7 @@ table {
     height: 100% !important;
     color: #FFF !important;
 }
+
 .btn-danger-150 {
     background-color: #ed5565 ;
 }
@@ -446,6 +447,12 @@ table {
 }
 .btn-primary-150 {
     background-color: #1ab394;
+}
+.btn-primary-main {
+    height: 100% !important;
+    color: #FFF !important;
+    background-color: #1ab394;
+    width: 100px;
 }
 .btn-success-xs,
 .btn-success-sm {

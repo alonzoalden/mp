@@ -1,25 +1,62 @@
-<h3 class="ibox-title dialog-title">{{ 'Upload Images' | translate }}</h3>
-<div mat-dialog-content>
-    <div>
-        <button mat-button class="btn btn-primary btn-cover-label max">
-            <label class="font-normal">
-                <i class="fa fa-files-o"></i> {{ 'Browse' | translate }}&hellip; <input type="file" style="display: none;" (change)="fileChangeEvent($event)"
-                    accept="image/jpeg,image/png,.jpeg,.jpg,.png" multiple #fileUpload>
-            </label>
-        </button>
+<h3 class="ibox-title dialog-title">{{ 'Upload Refurbish Images' | translate }}</h3>
+<div mat-dialog-content class="dialog-content" style="min-height: 300px;">
+    <div class="ibox-title">
+        <h4>Select Images</h4>
     </div>
-    <div class="m-t-md">
-        <div class="sm-strong">{{ 'Files Selected' | translate }}</div>
-        <ul class="item-single-action">
-            <li *ngIf="!selectedFileNames || selectedFileNames.length < 1" class="text-info white-bg">{{ 'No files selected' | translate }}</li>
-            <li *ngFor="let fileName of selectedFileNames; let i = index"><div matTooltip="{{fileName}}">{{fileName}}</div><a (click)='removeFile(i)'><span matTooltip="{{ 'Remove' | translate }}" attr.aria-label="{{ 'Remove' | translate}}" class="glyphicon glyphicon-trash m-l-md"></span></a></li>
-        </ul>
+    <div class="ibox-content" style="height: 370px; overflow: scroll;">
+        <div class="flex">
+            <div>
+                <button mat-flat-button cdkFocusInitial style="padding: 0; max-height: 36px;" class="btn btn-primary-main" [disabled]="isLoadingData" (click)="uploadError = null;">
+                    <i class="fa fa-spinner fa-spin fs-16" *ngIf="isLoadingData"></i>
+                    <label style="font-weight: initial; margin: 0; cursor: pointer; width: 100px;" *ngIf="!isLoadingData">
+                        <i class="fa fa-files-o"></i> {{ 'Browse' | translate }} &hellip; <input type="file" style="display: none;" (change)="fileChangeEvent($event)"
+                            accept="image/jpeg,image/png,.jpeg,.jpg,.png" multiple #fileUpload>
+                    </label>
+                </button>
+            </div>
+            <div style="display: flex; justify-content: center; flex-direction: column;">
+                <!-- <div *ngIf="uploadError" class="error m-l-md" >{{ 'Error:' | translate}} {{ 'File size exceeded (max is 2.3MB)' | translate }}</div> -->
+                <div *ngIf="uploadError" class="error m-l-md" >{{ uploadError }}</div>
+
+                <ng-container *ngIf="!uploadError && !isLoadingData">
+                    <div class="text-muted m-l-md" >{{ 'You may select 8 images at a time.' | translate }}</div>
+                    <div class="text-muted m-l-md" >{{ 'Max image size is 2.3MB.' | translate }}</div>
+                </ng-container>
+                <div *ngIf="isLoadingData" class="text-muted m-l-md animated fadeInUp">{{ 'Loading images. Please wait...' | translate }}</div>
+            </div>
+        </div>
+        <div class="m-t-md animated fadeInUp" *ngIf="uploadImageErrors?.length">
+            <div class="sm-strong text-danger">* {{ 'Error' | translate }}: {{ 'The following files failed to upload. Please try to upload them again.' | translate }}</div>
+        </div>
+        <div class="m-t-md animated fadeInUp" *ngIf="uploadImageErrors?.length">
+            <div class="sm-strong text-danger">* {{ 'Error' | translate }}: {{ 'The following files failed to upload. Please try to upload them again.' | translate }}</div>
+            <ul>
+                <li *ngFor="let imageError of uploadImageErrors">
+                    {{imageError.Label}}
+                </li>
+            </ul>
+        </div>
+        <div class="m-t-md" >
+            <div class="sm-strong animated fadeIn">{{ 'Files Selected' | translate }} <span *ngIf="itemRefurbishImages.length" class="animated fadeInRight" >({{ 'Total' | translate }}: {{itemRefurbishImages.length}})</span></div>
+            <ul class="item-single-action " style="overflow: scroll;">
+                <li *ngIf="!itemRefurbishImages || itemRefurbishImages.length < 1" class="text-info white-bg" style="display: flex; align-items: center; height: 70px;">
+                    <span>{{ 'No files selected' | translate }}</span>
+                </li>
+                <li *ngFor="let image of itemRefurbishImages; let i = index" class="animated fadeInUp" style="display: flex; align-items: center; height: 75px;">
+                    <div *ngIf="image.Raw" style="flex: 2; text-align: center;"><img (error)="errorUploadingImage(image, i)" style="max-width: 100px; max-height: 70px;" src="{{image.Raw}}" [title]="image.Label"></div>
+                    <div *ngIf="!image.Raw" style="flex: 2; text-align: center;"><i class="fa fa-warning" style="font-size: 28;"></i></div>
+                    <div class="p-w-sm" style="flex: 5;" matTooltipPosition="left" matTooltip="{{image.Label}}">{{image.Label}}</div>
+                    <a style="flex: 1;" (click)='removeFile(i)'><span matTooltip="{{ 'Remove' | translate }}" attr.aria-label="{{ 'Remove' | translate}}" class="glyphicon glyphicon-trash m-l-md"></span></a>
+                </li>
+            </ul>
+        </div>
+        <div class="pull-right" *ngIf="itemRefurbishImages && itemRefurbishImages.length > 0">
+            <a class="text-danger" type="button" (click)="cancelUpload()">{{ 'Remove All Files' | translate }}</a>
+        </div>
     </div>
-    <div class="pull-right" *ngIf="selectedFileNames && selectedFileNames.length > 0">
-        <a class="text-danger" type="button" (click)="cancelUpload()">{{ 'Remove All Files' | translate }}</a>           
-    </div>
+
 </div>
 <mat-dialog-actions>
-    <button mat-button class="btn btn-success-sm" [mat-dialog-close]="filesToUpload"><i class="fa fa-upload"></i>  {{ 'Upload' | translate }}</button>
+    <button mat-button class="btn btn-success-sm" [mat-dialog-close]="filesToUpload" [disabled]="isLoadingData || !itemRefurbishImages.length" [matTooltip]="!itemRefurbishImages.length ? 'Please select images' : '' "><i class="fa fa-upload"></i>  {{ 'Upload' | translate }}</button>
     <button mat-button class="btn btn-remove-sm" (click)="onCancelClick()"><i class="fa fa-remove"></i>  {{ 'Cancel' | translate }}</button>
 </mat-dialog-actions>

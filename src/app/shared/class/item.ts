@@ -777,9 +777,10 @@ export class ItemVariationLine {
 
 export class ItemRefurbish {
     constructor(
+        public Position: number,
         public ItemRefurbishID: number,
         public ItemID: number,
-        public Serial: number,
+        public SerialNumber: number,
         public Condition: string,
         public SellingPrice: string,
         public CreatedOn: string,
@@ -789,9 +790,10 @@ export class ItemRefurbish {
 }
 export class ItemRefurbishInsert {
     constructor(
+        public Position: number,
         public ItemRefurbishID: number,
         public ItemID: number,
-        public Serial: number,
+        public SerialNumber: number,
         public Condition: string,
         public SellingPrice: string,
         public CreatedOn: string,
