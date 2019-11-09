@@ -1,33 +1,121 @@
-<h3 class="ibox-title dialog-title">{{ 'Upload BOL/Label for Sales Order: #' | translate }}{{salesOrder?.IncrementID}}
+<h3 class="ibox-title dialog-title">{{ 'Upload Invoice(s) for Sales Order: #' | translate }}{{salesOrder?.IncrementID}}
     <span class="pull-right"><i (click)="onCloseClick()" class="fa fa-close" matTooltip="{{ 'Close' | translate }}" aria-label="Close Icon for Cancel Order"></i></span>
 </h3>
 <div mat-dialog-content class="lightgray-bg animated fadeIn">
-    <div class="ibox-content" style="height: 86px;">
+    <div class="ibox-title">
+        <h4>Enter Invoice Information</h4>
+    </div>
+    <div class="ibox-content">
         <form class="form-horizontal" #purchaseorderForm="ngForm">
             <fieldset>
-                <div class="form-group" *ngIf="filesToUpload.length === 0 && selectedFileNames.length === 0" >
-                    <label class="col-md-2 control-label" for="cartonLengthId">{{ 'Upload File' | translate }}</label>
-                    <div class="col-md-3">
-                        <label class="btn btn-primary" style="width:100%; height:100%;">
-                            {{ 'Choose File…' | translate }} <input type="file" style="display: none;" (change)="fileChangeEvent($event)"
-                                accept="application/pdf,.pdf"
-                                #fileUpload>
-                        </label>
-                    </div>
+
+                <div class="table-responsive overflow-visible">
+                    <table mat-table #table [dataSource]="dataSource" class="table" matSort>
+                        <!-- Add Button -->
+                        <ng-container matColumnDef="Add">
+                            <th mat-header-cell *matHeaderCellDef width="45px"></th>
+                            <td mat-cell *matCellDef="let invoice; let i = index">
+                                <div *ngIf="i === invoices.length - 1">
+                                    <a (click)='onAdd(requestline); formDirty = false;'>
+                                        <span [matTooltip]="isInvoiceValid(invoice) ? ( 'Add' | translate ) : ( 'Required fields must be complete' | translate )"
+                                            class="glyphicon glyphicon-plus fs-20" [ngClass]="isInvoiceValid(invoice) ? 'green' : 'gray'">
+                                        </span>
+                                    </a>
+                                </div>
+                            </td>
+                        </ng-container>
+                        <!-- Invoice Column -->
+                        <ng-container matColumnDef="Invoice">
+                            <th mat-header-cell *matHeaderCellDef width="200px">{{ 'Invoice' | translate }}</th>
+                            <td mat-cell *matCellDef="let invoice; let i = index">
+
+                                <div *ngIf="!filesToUpload?.length && !selectedFileNames?.length">
+                                    <button mat-flat-button cdkFocusInitial style="padding: 0; max-height: 36px;" class="btn btn-primary-main" [disabled]="isLoadingData" (click)="uploadError = null;">
+                                        <i class="fa fa-spinner fa-spin fs-16" *ngIf="isLoadingData"></i>
+                                        <label class="btn btn-primary" style="width:100%; height:100%;">
+                                            {{ 'Choose File…' | translate }} <input type="file" style="display: none;" (change)="fileChangeEvent($event)"
+                                                accept="application/pdf,.pdf,.png,.jpeg,.jpg"
+                                                #fileUpload>
+                                        </label>
+                                    </button>
+
+
+
+
+                                </div>
+                                <i class="fa fa-spinner fa-spin fs-16" *ngIf="isLoadingData"></i>
+                                <div [hidden]="isLoadingData" *ngIf="filesToUpload?.length > 0 || selectedFileNames?.length > 0">
+                                    <ul style="margin: 0; list-style: none; padding-inline-start: 0px;">
+                                        <li *ngFor="let fileName of selectedFileNames; let i = index">{{ 'File Selected' | translate }}:
+                                            <a *ngIf="filesToUpload?.length < 1" href="{{bolURL}}{{invoice?.BOLPath}}" target="_blank">{{fileName}}</a>
+                                            <span *ngIf="filesToUpload?.length > 0">{{fileName}}</span>
+                                        </li>
+                                    </ul>
+                                    <div>
+                                        <a>
+                                            <label style="width:100%; height:100%;">
+                                                ({{ 'Change File...' | translate }}) <input type="file" style="display: none;" (change)="fileChangeEvent($event)"
+                                                    accept="application/pdf,.pdf,.png,.jpeg,.jpg"
+                                                    #fileUpload>
+                                            </label>
+                                        </a>
+
+                                    </div>
+                                </div>
+                            </td>
+                        </ng-container>
+                        <!-- Product Price Column -->
+                        <ng-container matColumnDef="ProductPrice">
+                            <th mat-header-cell *matHeaderCellDef width="140px">{{ 'Product Price' | translate }}</th>
+                            <td mat-cell *matCellDef="let invoice; let i = index">
+                                <div *ngIf="currentIndex !== i && i !== invoices.length-1">
+                                    {{invoice.Price | currency}}
+                                </div>
+                                <div *ngIf="currentIndex === i || i === invoices.length-1">
+                                    <input class="form-control" id="ProductPriceID" type="number"
+                                        step="0.01" onchange="this.value = parseFloat(this.value).toFixed(2);" onkeydown="return event.keyCode == 69 || event.keyCode == 189 ? false : true" min="0"
+                                        [(ngModel)]=invoice.ProductPrice [ngModelOptions]="{standalone: true}"
+                                        (focus)="formDirty = true;" (ngModelChange)="i === invoices.length-1 && canAdd = true;"/>
+                                </div>
+                            </td>
+                        </ng-container>
+                        <!-- Shipping Price Column -->
+                        <ng-container matColumnDef="ShippingPrice">
+                            <th mat-header-cell *matHeaderCellDef width="140px">{{ 'Shipping Price' | translate }}</th>
+                            <td mat-cell *matCellDef="let invoice; let i = index">
+                                <div *ngIf="currentIndex !== i && i !== invoices.length-1">
+                                    {{invoice.Price | currency}}
+                                </div>
+                                <div *ngIf="currentIndex === i || i === invoices.length-1">
+                                    <input class="form-control" id="ShippingPriceID" type="number"
+                                        step="0.01" onchange="this.value = parseFloat(this.value).toFixed(2);" onkeydown="return event.keyCode == 69 || event.keyCode == 189 ? false : true" min="0"
+                                        [(ngModel)]=invoice.ShippingPrice [ngModelOptions]="{standalone: true}"
+                                        (focus)="formDirty = true;" (ngModelChange)="i === invoices.length-1 && canAdd = true;"/>
+                                </div>
+                            </td>
+                        </ng-container>
+                        <!-- Remove Column -->
+                        <ng-container matColumnDef="Remove">
+                            <th mat-header-cell *matHeaderCellDef width="100px">{{ 'Remove' | translate }}</th>
+                            <td mat-cell *matCellDef="let invoice; let i = index;">
+                                <div *ngIf="i !== invoices.length-1">
+                                    <a (click)="onRemoveRequestline(requestline, i); curretIndex = invoices.length-1;">
+                                        <span matTooltip="{{ 'Remove' | translate }}" attr.aria-label="{{ 'Remove' | translate}}" class="glyphicon glyphicon-trash"></span>
+                                    </a>
+                                </div>
+                                <div [hidden]="!formDirty && i === invoices.length-1">
+                                    <a matTooltip="{{ 'Clear' | translate }}" attr.aria-label="{{ 'Clear' | translate}}" (click)="clearFields(invoice);"><i *ngIf="i === invoices.length-1" class="fa fa-eraser"></i></a>
+                                </div>
+                            </td>
+                        </ng-container>
+
+                        <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+                        <tr [ngStyle]="{'background-color': salesorderService.rowColorConditions(i, invoices, currentIndex, formDirty)}" style="height: 66px;"
+                            mat-row *matRowDef="let row; let i = index; columns: displayedColumns;" (click)='currentIndex = i;'>
+                        </tr>
+                    </table>
                 </div>
-                <div class="row" *ngIf="filesToUpload?.length > 0 || selectedFileNames?.length > 0">
-                    <div class="col-md-3">
-                        <ul>
-                            <li *ngFor="let fileName of selectedFileNames; let i = index">{{ 'File Selected' | translate }}:
-                                <a *ngIf="filesToUpload?.length < 1" href="{{bolURL}}{{BOLRequest?.BOLPath}}" target="_blank">{{fileName}}</a>
-                                <span *ngIf="filesToUpload?.length > 0">{{fileName}}</span>
-                            </li>
-                        </ul>
-                    </div>
-                    <div class="col-md-2 m-l-lg m-b-md">
-                        <button class="btn btn-danger btn-sm" type="button" (click)="cancelUpload()">{{ 'Change' | translate }}</button>
-                    </div>
-                </div>
+
             </fieldset>
         </form>
     </div>
@@ -39,3 +127,81 @@
     </button>
     <button mat-button class="btn btn-remove-150" (click)="onCloseClick()">Back</button>
 </mat-dialog-actions>
+
+
+<!--
+<h3 class="ibox-title dialog-title">{{ 'Upload Refurbish Images' | translate }}</h3>
+<div mat-dialog-content class="dialog-content" style="min-height: 300px;">
+    <div class="ibox-title">
+        <h4>Select Images</h4>
+    </div>
+    <div class="ibox-content" style="height: 370px; overflow: scroll;">
+        <div class="flex">
+            <div>
+                <button mat-flat-button cdkFocusInitial style="padding: 0; max-height: 36px;" class="btn btn-primary-main" [disabled]="isLoadingData" (click)="uploadError = null;">
+                    <i class="fa fa-spinner fa-spin fs-16" *ngIf="isLoadingData"></i>
+                    <label style="font-weight: initial; margin: 0; cursor: pointer; width: 100px;" *ngIf="!isLoadingData">
+                        <i class="fa fa-image-o"></i> {{ 'Browse' | translate }} &hellip; <input type="file" style="display: none;" (change)="fileChangeEvent($event)"
+                            accept="image/jpeg,image/png,.jpeg,.jpg,.png" multiple #fileUpload>
+                    </label>
+                </button>
+            </div>
+            <div style="display: flex; justify-content: center; flex-direction: column;">
+                <div *ngIf="uploadError" class="error m-l-md animated fadeInRight" >{{ uploadError }}</div>
+
+                <ng-container *ngIf="!uploadError && !isLoadingData">
+                    <div class="text-info m-l-md" >{{ 'You may select 8 images at a time.' | translate }}</div>
+                    <div class="text-info m-l-md" >{{ 'Max image size is 2.3MB.' | translate }}</div>
+                </ng-container>
+                <div *ngIf="isLoadingData" class="text-info m-l-md animated fadeInUp">{{ 'Loading images. Please wait...' | translate }}</div>
+            </div>
+        </div>
+        <div class="m-t-md animated fadeInUp" *ngIf="uploadImageErrors?.length">
+            <div class="sm-strong text-danger">* {{ 'Error' | translate }}: {{ 'The following files failed to upload. Please try to upload them again.' | translate }}</div>
+        </div>
+        <div class="m-t-md animated fadeInUp" *ngIf="uploadImageErrors?.length">
+            <div class="sm-strong text-danger">* {{ 'Error' | translate }}: {{ 'The following files failed to upload. Please try to upload them again.' | translate }}</div>
+            <ul>
+                <li *ngFor="let imageError of uploadImageErrors">
+                    {{imageError.Label}}
+                </li>
+            </ul>
+        </div>
+        <div class="m-t-md" >
+            <div class="sm-strong animated fadeIn">{{ 'Images Selected' | translate }} <span *ngIf="itemRefurbishImages.length" class="animated fadeInRight" >({{ 'Total' | translate }}: {{itemRefurbishImages.length}})</span></div>
+            <ul class="item-single-action " style="overflow: scroll;">
+                <li *ngIf="!itemRefurbishImages || itemRefurbishImages.length < 1" class="text-info white-bg" style="display: flex; align-items: center; height: 70px;">
+                    <span>{{ 'No images selected' | translate }}</span>
+                </li>
+                <li *ngFor="let image of itemRefurbishImages; let i = index" class="animated fadeInUp" style="display: flex; align-items: center; height: 75px;">
+                    <div style="width: 100px; display: flex; justify-content: space-evenly;">
+                        <div>
+                            <a (click)='moveDownPosition(image)' *ngIf="i !== itemRefurbishImages.length - 1"><span class="glyphicon glyphicon-arrow-down"></span></a>
+                            <div *ngIf="i === itemRefurbishImages.length - 1" style="width: 12px;"></div>
+                        </div>
+                        <div>
+                            {{i + 1}}
+                        </div>
+                        <div>
+                            <a (click)='moveUpPosition(image)' *ngIf='i !== 0'><span class="glyphicon glyphicon-arrow-up"></span></a>
+                            <div *ngIf="i === 0" style="width: 12px;"></div>
+                        </div>
+                    </div>
+                    <div *ngIf="image.Raw" style="flex: 2; text-align: center;"><img (error)="errorUploadingImage(image, i)" style="max-width: 100px; max-height: 70px;" src="{{image.Raw}}" [title]="image.Label"></div>
+                    <div *ngIf="!image.Raw" style="flex: 2; text-align: center;"><i class="fa fa-warning" style="font-size: 28;"></i></div>
+                    <div class="p-w-sm" style="flex: 5;" matTooltipPosition="left" matTooltip="{{image.Label}}">{{image.Label}}</div>
+                    <a style="flex: 1;" (click)='removeFile(i)'><span matTooltip="{{ 'Remove' | translate }}" attr.aria-label="{{ 'Remove' | translate}}" class="glyphicon glyphicon-trash m-l-md"></span></a>
+                </li>
+            </ul>
+        </div>
+        <div class="pull-right" *ngIf="itemRefurbishImages && itemRefurbishImages.length > 0">
+            <a class="text-danger" type="button" (click)="cancelUpload()">{{ 'Remove All Files' | translate }}</a>
+        </div>
+    </div>
+
+</div>
+<mat-dialog-actions>
+    <button mat-button class="btn btn-success-sm" [mat-dialog-close]="itemRefurbishImages" [disabled]="isLoadingData || !itemRefurbishImages.length" [matTooltip]="!itemRefurbishImages.length ? 'Please select images' : '' "><i class="fa fa-upload"></i>  {{ 'Upload' | translate }}</button>
+    <button mat-button class="btn btn-remove-sm" (click)="onCancelClick()"><i class="fa fa-remove"></i>  {{ 'Cancel' | translate }}</button>
+</mat-dialog-actions>
+ -->

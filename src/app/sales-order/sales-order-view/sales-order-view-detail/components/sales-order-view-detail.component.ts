@@ -9,6 +9,7 @@ import { Member } from '../../../../shared/class/member';
 import { SalesOrderService } from './../../../sales-order.service';
 import { SalesOrderViewBOLRequestComponentDialog } from '../../sales-order-view-bol/sales-order-view-bol-request/components/sales-order-view-bol.component.request-dialog';
 import { SalesOrderViewUploadBOLComponentDialog } from '../../sales-order-view-bol/sales-order-view-bol-upload/components/sales-order-view-bol.component.upload-dialog';
+import { SalesOrderViewUploadInvoiceComponentDialog } from '../../sales-order-view-upload-invoice/components/sales-order-view-upload-invoice.component.upload-dialog';
 import { SalesOrderCancelComponentPrintDialog } from './../../sales-order-view-cancel/components/sales-order-view-cancel.component-cancel-dialog';
 import { NotificationComponent } from '../../../../shared/tool/notification/notification.component';
 
@@ -122,7 +123,7 @@ export class SalesOrderDetailComponent implements OnInit, OnChanges {
             salesorder,
             orderid: this.orderid
         };
-        const dialogRef = this.printDialog.open(SalesOrderViewUploadBOLComponentDialog, {
+        const dialogRef = this.printDialog.open(SalesOrderViewUploadInvoiceComponentDialog, {
             data: _data,
             width: '1040px'
         });

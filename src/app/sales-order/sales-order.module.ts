@@ -24,6 +24,7 @@ import { SalesOrderCancelComponent } from './sales-order-view/sales-order-view-c
 import { SalesOrderFulfillmentListComponent } from './sales-order-view/sales-order-view-fulfillment/sales-order-view-fullfillment-list/components/sales-order-view-fulfillment-list.component';
 import { SalesOrderFulfillmentAddComponent } from './sales-order-view/sales-order-view-fulfillment/sales-order-view-fullfillment-add/components/sales-order-view-fulfillment-add.component';
 import { SalesOrderFulfillmentEditComponent } from './sales-order-view/sales-order-view-fulfillment/sales-order-view-fullfillment-edit/components/sales-order-view-fulfillment-edit.component';
+import { SalesOrderViewUploadInvoiceComponentDialog } from './sales-order-view/sales-order-view-upload-invoice/components/sales-order-view-upload-invoice.component.upload-dialog';
 import { SalesOrderService } from './sales-order.service';
 import { salesorderRouting } from './sales-order.routing';
 import { TranslateModule } from '@ngx-translate/core';
@@ -58,9 +59,10 @@ import { SimpleNotificationsModule } from 'angular2-notifications';
         SalesOrderFulfillmentEditComponent,
         SalesOrderCancelComponentPrintDialog,
         SalesOrderViewBOLRequestComponentDialog,
-        SalesOrderViewUploadBOLComponentDialog
+        SalesOrderViewUploadBOLComponentDialog,
+        SalesOrderViewUploadInvoiceComponentDialog
     ],
-    entryComponents: [SalesOrderCancelComponentPrintDialog, SalesOrderViewBOLRequestComponentDialog, SalesOrderViewUploadBOLComponentDialog],
+    entryComponents: [SalesOrderCancelComponentPrintDialog, SalesOrderViewBOLRequestComponentDialog, SalesOrderViewUploadBOLComponentDialog, SalesOrderViewUploadInvoiceComponentDialog],
     imports: [
         TranslateModule,
         ReactiveFormsModule,

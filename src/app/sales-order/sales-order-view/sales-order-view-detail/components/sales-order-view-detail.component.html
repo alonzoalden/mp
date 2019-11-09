@@ -83,7 +83,7 @@
 
                             <button type="button" class="btn btn-info"
                                 *ngIf="fulfilledby === 'merchant' && salesOrder?.MerchantStatus === 'Unshipped'"
-                                (click)="openDialogUploadBOLRequest(salesOrder)">
+                                (click)="openDialogUploadInvoice(salesOrder)">
                                     <i class="fa fa-upload m-r-xs"></i><span> {{ 'Upload Invoice' | translate }} </span>
                             </button>
 
