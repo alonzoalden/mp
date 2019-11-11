@@ -8,6 +8,7 @@ import { environment } from '../../../../../environments/environment';
 import { Member } from '../../../../shared/class/member';
 import { SalesOrderService } from './../../../sales-order.service';
 import { SalesOrderViewBOLRequestComponentDialog } from '../../sales-order-view-bol/sales-order-view-bol-request/components/sales-order-view-bol.component.request-dialog';
+import { SalesOrderViewBOLRequestViewComponentDialog } from '../../sales-order-view-bol/sales-order-view-bol-request-view/components/sales-order-view-bol-request-view.component.request-dialog';
 import { SalesOrderViewUploadBOLComponentDialog } from '../../sales-order-view-bol/sales-order-view-bol-upload/components/sales-order-view-bol.component.upload-dialog';
 import { SalesOrderViewUploadInvoiceComponentDialog } from '../../sales-order-view-upload-invoice/components/sales-order-view-upload-invoice.component.upload-dialog';
 import { SalesOrderCancelComponentPrintDialog } from './../../sales-order-view-cancel/components/sales-order-view-cancel.component-cancel-dialog';
@@ -91,12 +92,27 @@ export class SalesOrderDetailComponent implements OnInit, OnChanges {
         });
     }
 
-    openDialogBOL(salesorder) {
+    openDialogBOL(salesorder: SalesOrder, viewonly: boolean) {
         const _data = {
             salesorder,
-            orderid: this.orderid
+            viewonly,
+            orderid: this.orderid,
         };
         const dialogRef = this.printDialog.open(SalesOrderViewBOLRequestComponentDialog, {
+            data: _data,
+            width: '1040px'
+        });
+
+        dialogRef.afterClosed().subscribe(() => {
+        });
+    }
+    openDialogViewBOLRequest(salesorder: SalesOrder) {
+        const _data = {
+            salesorder,
+            bolRequest: this.BOLRequest,
+            orderid: this.orderid,
+        };
+        const dialogRef = this.printDialog.open(SalesOrderViewBOLRequestViewComponentDialog, {
             data: _data,
             width: '1040px'
         });

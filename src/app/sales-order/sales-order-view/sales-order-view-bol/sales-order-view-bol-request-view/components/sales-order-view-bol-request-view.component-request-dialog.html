@@ -1,0 +1,129 @@
+<h3 class="ibox-title dialog-title">{{ 'View Request BOL/Label for Sales Order: #' | translate }}{{salesOrder?.IncrementID}}
+    <span class="pull-right"><i (click)="onCloseClick()" class="fa fa-close" matTooltip="{{ 'Close' | translate }}" aria-label="Close Icon for Cancel Order"></i></span>
+</h3>
+
+<div *ngIf="bolRequest" mat-dialog-content class="lightgray-bg animated fadeIn form-horizontal">
+    <div class="ibox-title"><h5>{{ 'Date' | translate }}</h5></div>
+    <div class="ibox-content hide-y m-b-md">
+        <div class="row">
+            <div class="form-group col-md-12">
+                <label class="col-md-2 control-label" for="bolRequestPickUpDateID">{{ 'Pick Up Date' | translate }}</label>
+                <div id="bolRequestPickUpDateID" class="col-md-8 grey-highlight">
+                    {{ bolRequest.PickUpDate | date:'fullDate' }}
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="ibox-title"><h5>{{ 'BOL/Label Request Lines' | translate }}</h5></div>
+    <div class="ibox-content m-b-md overflow-visible p-t-none" style=" overflow: scroll; max-height: 290px;">
+        <div class="table-responsive overflow-visible">
+            <table mat-table #table [dataSource]="dataSource" class="table m-t-md">
+                <!-- Type Column -->
+                <ng-container matColumnDef="Type">
+                    <th mat-header-cell *matHeaderCellDef width="70px">{{ 'Type' | translate }}</th>
+                    <td mat-cell *matCellDef="let requestline" height="74px" class="wrap">
+                        {{requestline.PackageType}}
+                    </td>
+                </ng-container>
+                <!-- Weight Column -->
+                <ng-container matColumnDef="Weight">
+                    <th mat-header-cell *matHeaderCellDef width="70px">{{ 'Weight' | translate }}</th>
+                    <td mat-cell *matCellDef="let requestline; let i = index" class="wrap">
+                        {{requestline.Weight}}
+                    </td>
+                    </ng-container>
+                <!-- Dimension Column -->
+                <ng-container matColumnDef="Dimensions">
+                    <th mat-header-cell *matHeaderCellDef width="90px">{{ 'Dimension (in)' | translate }}</th>
+                    <td class="column-w-3input" mat-cell *matCellDef="let requestline; let i = index" >
+                        {{requestline.Length}}" X {{requestline.Width}}" X {{requestline.Height}}"
+                    </td>
+                </ng-container>
+                <!-- Pieces Column -->
+                <ng-container matColumnDef="Pieces">
+                    <th mat-header-cell *matHeaderCellDef width="70px">{{ 'Pieces' | translate }}</th>
+                    <td mat-cell *matCellDef="let requestline; let i = index;" class="wrap">
+                        {{requestline.Pieces}}
+                    </td>
+                </ng-container>
+                <!-- Remove Column -->
+                <ng-container matColumnDef="Remove">
+                    <th mat-header-cell *matHeaderCellDef width="100px">{{ 'Remove' | translate }}</th>
+                    <td mat-cell *matCellDef="let requestline; let i = index;">
+                        <div *ngIf="i !== bolRequest.BOLRequestLines.length-1">
+                            <a (click)="onRemoveRequestline(requestline, i); curretIndex = bolRequest.BOLRequestLines.length-1;">
+                                <span matTooltip="{{ 'Remove' | translate }}" attr.aria-label="{{ 'Remove' | translate}}" class="glyphicon glyphicon-trash"></span>
+                            </a>
+                        </div>
+                        <div [hidden]="!formDirty && i === bolRequest.BOLRequestLines.length-1">
+                            <a matTooltip="{{ 'Clear' | translate }}" attr.aria-label="{{ 'Clear' | translate}}" (click)="clearFields(requestline);"><i *ngIf="i === bolRequest.BOLRequestLines.length-1" class="fa fa-eraser"></i></a>
+                        </div>
+                    </td>
+                </ng-container>
+
+                <tr mat-header-row *matHeaderRowDef="displayedColumns; sticky: true"></tr>
+                <tr mat-row *matRowDef="let row; let i = index; columns: displayedColumns;"></tr>
+            </table>
+        </div>
+    </div>
+
+    <div class="ibox-title"><h5>{{ 'Shipping Address' | translate }}</h5></div>
+    <div class="ibox-content m-b-md">
+        <form class="form-horizontal animated fadeIn" #companyInfoForm="ngForm">
+            <fieldset>
+                <div class="form-group" *ngIf="bolRequest.Name">
+                    <label class="col-md-2 control-label">{{ 'Company Name' | translate }}</label>
+                    <div class="col-md-8 grey-highlight">
+                        {{ bolRequest.Name }}
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-md-2 control-label">{{ 'Address' | translate }}</label>
+                    <div class="col-md-8 grey-highlight">
+                        {{ bolRequest.AddressLine1 }}
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-md-2 control-label">{{ 'Address 2' | translate }}</label>
+                    <div class="col-md-8 grey-highlight">
+                        {{ bolRequest.AddressLine2 }}
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-md-2 control-label">{{ 'City' | translate }}</label>
+                    <div class="col-md-8 grey-highlight">
+                        {{ bolRequest.City }}
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-md-2 control-label">{{ 'State/Province' | translate }}</label>
+                    <div class="col-md-8 grey-highlight">
+                        {{ bolRequest.State }}
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-md-2 control-label">{{ 'Zip/Postal Code' | translate }}</label>
+                    <div class="col-md-8 grey-highlight">
+                        {{ bolRequest.PostalCode }}
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-md-2 control-label">{{ 'Phone Number' | translate }}</label>
+                    <div class="col-md-8 grey-highlight">
+                        {{ bolRequest.PhoneNumber }}
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-md-2 control-label">{{ 'Country/Region' | translate }}</label>
+                    <div class="col-md-8 grey-highlight">
+                        {{ bolRequest.CountryID }}
+                    </div>
+                </div>
+            </fieldset>
+        </form>
+    </div>
+</div>
+
+<mat-dialog-actions>
+    <button mat-button class="btn btn-remove-150" (click)="onCloseClick()">Back</button>
+</mat-dialog-actions>

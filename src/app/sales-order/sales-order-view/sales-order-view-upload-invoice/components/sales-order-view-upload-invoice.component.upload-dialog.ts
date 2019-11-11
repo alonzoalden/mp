@@ -46,6 +46,7 @@ export class SalesOrderViewUploadInvoiceComponentDialog implements OnInit, OnDes
     dataSource: MatTableDataSource<any>;
     currentIndex: number;
     isLoadingData: boolean = false;
+    formDirty: boolean;
 
     @ViewChild(MatSort, { static: false }) sort: MatSort;
 
@@ -96,12 +97,12 @@ export class SalesOrderViewUploadInvoiceComponentDialog implements OnInit, OnDes
     }
     onAdd() {
         this.addPendingLine();
-        this.currentIndex = this.invoices.length - 1;
     }
     addPendingLine() {
         const newInvoice = new InvoiceInsert(null, this.data.orderid, this.invoices.length - 1, null, null, 0, 0, true);
         this.invoices.push(newInvoice);
         this.refreshDataSource(this.invoices);
+        this.currentIndex = this.invoices.length - 1;
     }
     upload() {
         if (this.selectedFileNames.length === 0) {
@@ -123,7 +124,10 @@ export class SalesOrderViewUploadInvoiceComponentDialog implements OnInit, OnDes
                     this.salesorderService.sendNotification({ type: 'success', title: 'Upload Successful', content: `BOL Request Attachment saved` });
                     //this.dialogRef.close();
                     this.isLoadingData = false;
+                    this.currentIndex = this.invoices.length - 1;
                     //return;
+                    this.filesToUpload = [];
+                    this.selectedFileNames = [];
                 });
 
             // this.store.dispatch(new salesOrderActions.UploadBOLAttachment({
@@ -131,21 +135,22 @@ export class SalesOrderViewUploadInvoiceComponentDialog implements OnInit, OnDes
             //     form: formData,
             //     dialogRef: this.dialogRef
             // }));
-            this.filesToUpload = [];
+
         }
     }
 
     isInvoiceValid(invoice: InvoiceInsert) {
         return !!(invoice
-            && invoice.ShippingPrice
-            && invoice.ProductPrice
+            && invoice.ShippingPrice < 0
+            && invoice.ProductPrice < 0
             && invoice.BOLPath
         );
     }
     clearFields(invoice: InvoiceInsert) {
-        invoice.ShippingPrice = null;
-        invoice.ProductPrice = null;
+        invoice.ShippingPrice = 0;
+        invoice.ProductPrice = 0;
         invoice.InvoicePath = null;
+        this.formDirty = false;
     }
     refreshDataSource(invoices: InvoiceInsert[]) {
         this.dataSource = new MatTableDataSource<InvoiceInsert>(invoices);

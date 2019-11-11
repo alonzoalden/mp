@@ -38,13 +38,9 @@
                                                 #fileUpload>
                                         </label>
                                     </button>
-
-
-
-
                                 </div>
                                 <i class="fa fa-spinner fa-spin fs-16" *ngIf="isLoadingData"></i>
-                                <div [hidden]="isLoadingData" *ngIf="filesToUpload?.length > 0 || selectedFileNames?.length > 0">
+                                <div [hidden]="isLoadingData" *ngIf="(filesToUpload?.length > 0 || selectedFileNames?.length > 0) && currentIndex !== invoices.length - 1">
                                     <ul style="margin: 0; list-style: none; padding-inline-start: 0px;">
                                         <li *ngFor="let fileName of selectedFileNames; let i = index">{{ 'File Selected' | translate }}:
                                             <a *ngIf="filesToUpload?.length < 1" href="{{bolURL}}{{invoice?.BOLPath}}" target="_blank">{{fileName}}</a>
@@ -69,7 +65,7 @@
                             <th mat-header-cell *matHeaderCellDef width="140px">{{ 'Product Price' | translate }}</th>
                             <td mat-cell *matCellDef="let invoice; let i = index">
                                 <div *ngIf="currentIndex !== i && i !== invoices.length-1">
-                                    {{invoice.Price | currency}}
+                                    {{invoice.ProductPrice | currency}}
                                 </div>
                                 <div *ngIf="currentIndex === i || i === invoices.length-1">
                                     <input class="form-control" id="ProductPriceID" type="number"
@@ -84,7 +80,7 @@
                             <th mat-header-cell *matHeaderCellDef width="140px">{{ 'Shipping Price' | translate }}</th>
                             <td mat-cell *matCellDef="let invoice; let i = index">
                                 <div *ngIf="currentIndex !== i && i !== invoices.length-1">
-                                    {{invoice.Price | currency}}
+                                    {{invoice.ProductPrice | currency}}
                                 </div>
                                 <div *ngIf="currentIndex === i || i === invoices.length-1">
                                     <input class="form-control" id="ShippingPriceID" type="number"

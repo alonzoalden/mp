@@ -19,6 +19,7 @@ import { SalesOrderDetailComponent } from './sales-order-view/sales-order-view-d
 import { SalesOrderCancelComponentPrintDialog } from './sales-order-view/sales-order-view-cancel/components/sales-order-view-cancel.component-cancel-dialog';
 import { SalesOrderViewBOLRequestComponentDialog } from './sales-order-view/sales-order-view-bol/sales-order-view-bol-request/components/sales-order-view-bol.component.request-dialog';
 import { SalesOrderViewUploadBOLComponentDialog } from './sales-order-view/sales-order-view-bol/sales-order-view-bol-upload/components/sales-order-view-bol.component.upload-dialog';
+import { SalesOrderViewBOLRequestViewComponentDialog } from './sales-order-view/sales-order-view-bol/sales-order-view-bol-request-view/components/sales-order-view-bol-request-view.component.request-dialog';
 import { SalesOrderViewComponent } from './sales-order-view/components/sales-order-view.component';
 import { SalesOrderCancelComponent } from './sales-order-view/sales-order-view-cancel/components/sales-order-view-cancel.component';
 import { SalesOrderFulfillmentListComponent } from './sales-order-view/sales-order-view-fulfillment/sales-order-view-fullfillment-list/components/sales-order-view-fulfillment-list.component';
@@ -60,9 +61,16 @@ import { SimpleNotificationsModule } from 'angular2-notifications';
         SalesOrderCancelComponentPrintDialog,
         SalesOrderViewBOLRequestComponentDialog,
         SalesOrderViewUploadBOLComponentDialog,
-        SalesOrderViewUploadInvoiceComponentDialog
+        SalesOrderViewUploadInvoiceComponentDialog,
+        SalesOrderViewBOLRequestViewComponentDialog
     ],
-    entryComponents: [SalesOrderCancelComponentPrintDialog, SalesOrderViewBOLRequestComponentDialog, SalesOrderViewUploadBOLComponentDialog, SalesOrderViewUploadInvoiceComponentDialog],
+    entryComponents: [
+        SalesOrderCancelComponentPrintDialog,
+        SalesOrderViewBOLRequestComponentDialog,
+        SalesOrderViewUploadBOLComponentDialog,
+        SalesOrderViewUploadInvoiceComponentDialog,
+        SalesOrderViewBOLRequestViewComponentDialog
+    ],
     imports: [
         TranslateModule,
         ReactiveFormsModule,
