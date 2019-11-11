@@ -14,10 +14,19 @@
             </div>
         </div>
     </div>
-    <div class="ibox-title"><h5>{{ 'BOL/Label Request Lines' | translate }}</h5></div>
+    <div class="ibox-title">
+        <h5>{{ 'BOL/Label Request Lines' | translate }} ({{ bolRequest.BOLRequestLines.length }} {{ 'Total' | translate}}) </h5>
+    </div>
     <div class="ibox-content m-b-md overflow-visible p-t-none" style=" overflow: scroll; max-height: 290px;">
         <div class="table-responsive overflow-visible">
             <table mat-table #table [dataSource]="dataSource" class="table m-t-md">
+                <!-- Type Column -->
+                <ng-container matColumnDef="Position">
+                    <th mat-header-cell *matHeaderCellDef width="70px">{{ '' | translate }}</th>
+                    <td mat-cell *matCellDef="let requestline; let i = index;" height="74px" class="wrap">
+                        {{ i + 1 }}
+                    </td>
+                </ng-container>
                 <!-- Type Column -->
                 <ng-container matColumnDef="Type">
                     <th mat-header-cell *matHeaderCellDef width="70px">{{ 'Type' | translate }}</th>
@@ -44,20 +53,6 @@
                     <th mat-header-cell *matHeaderCellDef width="70px">{{ 'Pieces' | translate }}</th>
                     <td mat-cell *matCellDef="let requestline; let i = index;" class="wrap">
                         {{requestline.Pieces}}
-                    </td>
-                </ng-container>
-                <!-- Remove Column -->
-                <ng-container matColumnDef="Remove">
-                    <th mat-header-cell *matHeaderCellDef width="100px">{{ 'Remove' | translate }}</th>
-                    <td mat-cell *matCellDef="let requestline; let i = index;">
-                        <div *ngIf="i !== bolRequest.BOLRequestLines.length-1">
-                            <a (click)="onRemoveRequestline(requestline, i); curretIndex = bolRequest.BOLRequestLines.length-1;">
-                                <span matTooltip="{{ 'Remove' | translate }}" attr.aria-label="{{ 'Remove' | translate}}" class="glyphicon glyphicon-trash"></span>
-                            </a>
-                        </div>
-                        <div [hidden]="!formDirty && i === bolRequest.BOLRequestLines.length-1">
-                            <a matTooltip="{{ 'Clear' | translate }}" attr.aria-label="{{ 'Clear' | translate}}" (click)="clearFields(requestline);"><i *ngIf="i === bolRequest.BOLRequestLines.length-1" class="fa fa-eraser"></i></a>
-                        </div>
                     </td>
                 </ng-container>
 

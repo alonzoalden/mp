@@ -159,6 +159,7 @@ export class SalesOrderDetailComponent implements OnInit, OnChanges {
     }
 
     navigateToFulfillments() {
+        window.open(this.bolURL + this.BOLRequest.BOLPath, '_blank');
         this.router.navigate(['/sales-order/view/merchant/' + this.orderid + '/fulfillment']);
         this.notificationComponent.notify({ type: 'info', title: 'YOUR ORDER IS NOT COMPLETE', content: 'Please create a Shipment and input tracking information' }, { timeOut: 0 }, true);
     }
