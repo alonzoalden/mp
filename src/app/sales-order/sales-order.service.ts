@@ -9,10 +9,12 @@ import { OAuthService } from 'angular-oauth2-oidc';
 import { environment } from '../../environments/environment';
 import { BOLRequest } from 'app/shared/class/bol-request';
 import { NotificationComponent } from '../shared/tool/notification/notification.component';
+import { PurchaseOrderMerchantInvoice } from 'app/shared/class/purchase-order';
 
 @Injectable()
 export class SalesOrderService {
     private apiURL = environment.webapiURL;
+    private invoiceURL = environment.invoiceURL;
     private salesorders: SalesOrder[];
     private salesorderlines: SalesOrderLine[];
     currentSalesOrderLine: SalesOrderLine;
@@ -266,6 +268,22 @@ export class SalesOrderService {
                                 catchError(this.handleError)
                             );
     }
+    addMerchantInvoice(salesorderid: number, invoices: PurchaseOrderMerchantInvoice[]): Observable<BOLRequest> {
+        const headers = new HttpHeaders({
+            'Content-Type': 'application/json'
+        });
+        return this.http.post<BOLRequest>(this.apiURL + '/merchantinvoice/' + salesorderid, invoices, { headers: headers } )
+                            .pipe(
+                                catchError(this.handleError)
+                            );
+    }
+    uploadMerchantInvoiceAttachment(salesorderid: number, formdata: FormData): Observable<string> {
+        return this.http.post<string>(this.apiURL + '/merchantinvoice/purchaseorder/' + salesorderid + '/upload', formdata )
+                        .pipe(
+                            catchError(this.handleError)
+                        );
+    }
+
 
     rowColorConditions(i: number, collection: Array<any>, currentIndex: number, formDirty: boolean): string {
         const inputRow = i === collection.length - 1 && currentIndex === i;

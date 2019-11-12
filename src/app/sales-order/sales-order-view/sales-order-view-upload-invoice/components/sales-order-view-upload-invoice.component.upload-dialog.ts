@@ -8,21 +8,8 @@ import * as salesOrderActions from '../../../state/sales-order.actions';
 import * as fromSalesOrder from '../../../state';
 import { Store, select } from '@ngrx/store';
 import { takeWhile } from 'rxjs/operators';
+import { PurchaseOrderMerchantInvoice } from 'app/shared/class/purchase-order';
 
-
-export class InvoiceInsert {
-    constructor(
-        public InvoiceID: number,
-        public PurchaseOrderID: number,
-        public Position: number,
-        public InvoicePath: string,
-        public BOLPath: string,
-        public ProductPrice: number,
-        public ShippingPrice: number,
-        public pendingAdd: boolean,
-
-    ) {}
-}
 
 @Component({
     selector: 'sales-order-view-upload-invoice.component-upload-dialog',
@@ -31,6 +18,7 @@ export class InvoiceInsert {
 
 export class SalesOrderViewUploadInvoiceComponentDialog implements OnInit, OnDestroy {
     bolURL = environment.bolURL;
+    invoiceURL = environment.invoiceURL;
     errorMessage: string;
     fulfilledby: string;
     orderid: number;
@@ -39,7 +27,7 @@ export class SalesOrderViewUploadInvoiceComponentDialog implements OnInit, OnDes
     componentActive: boolean = true;
     BOLRequest: BOLRequest;
     invoices: any[] = [];
-    displayedColumns = ['Add', 'Invoice', 'ProductPrice', 'ShippingPrice', 'Remove'];
+    displayedColumns = ['Add', 'Invoice', 'InvoiceAmount', 'ShippingAmount', 'Remove'];
     filesToUpload: Array<File> = [];
     selectedFileNames: string[] = [];
     name: string;
@@ -97,9 +85,10 @@ export class SalesOrderViewUploadInvoiceComponentDialog implements OnInit, OnDes
     }
     onAdd() {
         this.addPendingLine();
+        this.pendingAdd = true;
     }
     addPendingLine() {
-        const newInvoice = new InvoiceInsert(null, this.data.orderid, this.invoices.length - 1, null, null, 0, 0, true);
+        const newInvoice = new PurchaseOrderMerchantInvoice(null, this.data.orderid, 0, 0, null, null, null, this.invoices.length + 1, true);
         this.invoices.push(newInvoice);
         this.refreshDataSource(this.invoices);
         this.currentIndex = this.invoices.length - 1;
@@ -119,16 +108,16 @@ export class SalesOrderViewUploadInvoiceComponentDialog implements OnInit, OnDes
                 formData.append('uploadedFiles', this.filesToUpload[i], this.filesToUpload[i].name);
             }
             this.isLoadingData = true;
-            this.salesorderService.uploadBOLAttachment(this.orderid, formData).subscribe((bolrequest: any) => {
-                    this.invoices[this.currentIndex].BOLPath = bolrequest.BOLPath;
-                    this.salesorderService.sendNotification({ type: 'success', title: 'Upload Successful', content: `BOL Request Attachment saved` });
-                    //this.dialogRef.close();
-                    this.isLoadingData = false;
-                    this.currentIndex = this.invoices.length - 1;
-                    //return;
-                    this.filesToUpload = [];
-                    this.selectedFileNames = [];
-                });
+            this.salesorderService.uploadMerchantInvoiceAttachment(this.orderid, formData).subscribe((filepath: string) => {
+                this.invoices[this.currentIndex].FilePath = filepath;
+                this.salesorderService.sendNotification({ type: 'success', title: 'Upload Successful', content: `Invoice Attachment saved` });
+                //this.dialogRef.close();
+                this.isLoadingData = false;
+                //this.currentIndex = this.invoices.length - 1;
+                //return;
+                this.filesToUpload = [];
+                this.selectedFileNames = [];
+            });
 
             // this.store.dispatch(new salesOrderActions.UploadBOLAttachment({
             //     id: this.orderid,
@@ -139,21 +128,24 @@ export class SalesOrderViewUploadInvoiceComponentDialog implements OnInit, OnDes
         }
     }
 
-    isInvoiceValid(invoice: InvoiceInsert) {
+    isInvoiceValid(invoice: PurchaseOrderMerchantInvoice) {
         return !!(invoice
-            && invoice.ShippingPrice < 0
-            && invoice.ProductPrice < 0
-            && invoice.BOLPath
+            && invoice.ShippingAmount !== null
+            && invoice.InvoiceAmount !== null
+            && invoice.FilePath
         );
     }
-    clearFields(invoice: InvoiceInsert) {
-        invoice.ShippingPrice = 0;
-        invoice.ProductPrice = 0;
-        invoice.InvoicePath = null;
+    clearFields(invoice: PurchaseOrderMerchantInvoice) {
+        if (invoice.FilePath) {
+            const confirmation = confirm(`Are you sure you want to remove?`);
+        }
+        invoice.ShippingAmount = 0;
+        invoice.InvoiceAmount = 0;
+        invoice.FilePath = null;
         this.formDirty = false;
     }
-    refreshDataSource(invoices: InvoiceInsert[]) {
-        this.dataSource = new MatTableDataSource<InvoiceInsert>(invoices);
+    refreshDataSource(invoices: PurchaseOrderMerchantInvoice[]) {
+        this.dataSource = new MatTableDataSource<PurchaseOrderMerchantInvoice>(invoices);
         this.dataSource.sort = this.sort;
     }
     cancelUpload() {
@@ -165,6 +157,23 @@ export class SalesOrderViewUploadInvoiceComponentDialog implements OnInit, OnDes
     }
     ngOnDestroy(): void {
         this.componentActive = false;
+    }
+
+    onEditCurrentInvoice(index: number) {
+        if (this.pendingAdd) {
+            this.currentIndex = this.invoices.length - 1;
+            this.pendingAdd = false;
+        } else {
+            this.currentIndex = index;
+        }
+    }
+    onRemoveInvoice(invoice: PurchaseOrderMerchantInvoice, index: number) {
+        const confirmation = confirm(`Remove invoice?`);
+        if (confirmation) {
+            this.invoices.splice(index, 1);
+            this.refreshDataSource(this.invoices);
+            this.currentIndex = this.invoices.length - 1;
+        }
     }
 }
 
