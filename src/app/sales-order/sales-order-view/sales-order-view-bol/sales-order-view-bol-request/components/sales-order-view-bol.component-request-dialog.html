@@ -146,7 +146,7 @@
                         <span class="help-block" *ngIf="(companyNameVar.touched ||
                                                         companyNameVar.dirty) &&
                                                         companyNameVar.errors">
-                            <span *ngIf="companyNameVar.errors.required">
+                            <span *ngIf="companyNameVar?.errors.required">
                                 {{ 'Company Name' | translate }} {{ 'is required' | translate }}
                             </span>
                         </span>
@@ -162,7 +162,7 @@
                         <span class="help-block" *ngIf="(shippingAddressVar.touched ||
                                                         shippingAddressVar.dirty) &&
                                                         shippingAddressVar.errors">
-                            <span *ngIf="shippingAddressVar.errors.required">
+                            <span *ngIf="shippingAddressVar?.errors.required">
                                 {{ 'Address' | translate }} {{ 'is required' | translate }}
                             </span>
                         </span>
@@ -184,7 +184,7 @@
                         <span class="help-block" *ngIf="(shippingCityVar.touched ||
                                                         shippingCityVar.dirty) &&
                                                         shippingCityVar.errors">
-                            <span *ngIf="shippingCityVar.errors.required">
+                            <span *ngIf="shippingCityVar?.errors.required">
                                 {{ 'City' | translate }} {{ 'is required' | translate }}
                             </span>
                         </span>
@@ -202,7 +202,7 @@
                         <span class="help-block" *ngIf="(shippingStateVar.touched ||
                                                         shippingStateVar.dirty) &&
                                                         shippingStateVar.errors">
-                            <span *ngIf="shippingStateVar.errors.required">
+                            <span *ngIf="shippingStateVar?.errors.required">
                                 {{ 'State/Province' | translate }} {{ 'is required' | translate }}
                             </span>
                         </span>
@@ -229,7 +229,7 @@
                         <span class="help-block" *ngIf="(shippingZipVar.touched ||
                                                         shippingZipVar.dirty) &&
                                                         shippingZipVar.errors">
-                            <span *ngIf="shippingZipVar.errors.required">
+                            <span *ngIf="shippingZipVar?.errors.required">
                                 {{ 'Zip/Postal Code' | translate }} {{ 'is required' | translate }}
                             </span>
                         </span>
@@ -245,7 +245,7 @@
                         <span class="help-block" *ngIf="(phoneNumberVar.touched ||
                                                         phoneNumberVar.dirty) &&
                                                         phoneNumberVar.errors">
-                            <span *ngIf="phoneNumberVar.errors.required">
+                            <span *ngIf="phoneNumberVar?.errors.required">
                                 {{ 'Phone Number' | translate }} {{ 'is required' | translate }}
                             </span>
                         </span>

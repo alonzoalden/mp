@@ -22,10 +22,9 @@ export class InboundShipmentEditCartonListComponent
     orderStatus: string;
     pendingAdd: boolean;
     currentIndex: number;
-    displayedColumns = [ 'Add', 'Position', 'Weight', 'Dimension', 'LabelQty', 'CartonNumber', 'TotalUnits', 'Actions'];
+    displayedColumns = [ 'Add', 'Position', 'LabelQty', 'CartonNumber', 'TotalUnits', 'Actions'];
     dataSource: any = null;
     formDirty = false;
-    canAdd = false;
     sortNum: number;
 
     @ViewChild(MatSort, { static: false }) sort: MatSort;
@@ -221,19 +220,17 @@ export class InboundShipmentEditCartonListComponent
     }
 
     isRequirementValid(carton: Carton) {
+        console.log(carton);
         if (
-            carton &&
-            carton.Weight &&
-            carton.Length &&
-            carton.Width &&
-            carton.Height
+            carton
+            && (carton.LabelQty === 0 || carton.LabelQty > 0)
         ) {
             return true;
         } else {
             this.purchaseOrderService.sendNotification({
                 type: 'error',
                 title: 'Error',
-                content: 'Please enter the weight and dimension'
+                content: 'Please enter a Label Quantity'
             });
             return false;
         }
@@ -394,12 +391,11 @@ export class InboundShipmentEditCartonListComponent
 
     clearFields(form) {
         this.formDirty = false;
-        this.canAdd = false;
         form.Weight = '';
         form.Length = '';
         form.Width = '';
         form.Height = '';
-        form.LabelQty = 1;
+        form.LabelQty = 4;
     }
 
     onKeyDown(carton: Carton) {

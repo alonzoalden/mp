@@ -8,9 +8,12 @@ import { environment } from '../../../../../environments/environment';
 import { Member } from '../../../../shared/class/member';
 import { SalesOrderService } from './../../../sales-order.service';
 import { SalesOrderViewBOLRequestComponentDialog } from '../../sales-order-view-bol/sales-order-view-bol-request/components/sales-order-view-bol.component.request-dialog';
+import { SalesOrderViewBOLRequestViewComponentDialog } from '../../sales-order-view-bol/sales-order-view-bol-request-view/components/sales-order-view-bol-request-view.component.request-dialog';
 import { SalesOrderViewUploadBOLComponentDialog } from '../../sales-order-view-bol/sales-order-view-bol-upload/components/sales-order-view-bol.component.upload-dialog';
+import { SalesOrderViewUploadInvoiceComponentDialog } from '../../sales-order-view-upload-invoice/components/sales-order-view-upload-invoice.component.upload-dialog';
 import { SalesOrderCancelComponentPrintDialog } from './../../sales-order-view-cancel/components/sales-order-view-cancel.component-cancel-dialog';
 import { NotificationComponent } from '../../../../shared/tool/notification/notification.component';
+import { PurchaseOrderMerchantInvoice } from 'app/shared/class/purchase-order';
 
 @Component({
     selector: 'o-sales-order-detail',
@@ -38,6 +41,8 @@ export class SalesOrderDetailComponent implements OnInit, OnChanges {
     @Output() cancelSalesOrderLines = new EventEmitter<SalesOrderLine[]>();
     @Output() getSalesOrderByVendor = new EventEmitter<{fulfilledby: string, status: string}>();
     @Output() downloadSalesOrderPackingSlip = new EventEmitter<{salesorder: SalesOrder, orderid: number}>();
+
+    invoices: PurchaseOrderMerchantInvoice;
     fulfilledby: string;
     orderid: number;
     displayedColumns = ['ItemImage', 'ProductDetails', 'Quantity', 'MerchantStatus', 'UnitPrice', 'LineSubTotal'];
@@ -71,6 +76,9 @@ export class SalesOrderDetailComponent implements OnInit, OnChanges {
         this.notificationComponent.subject.subscribe((val) => {
             this.salesorderService.currentNotificationID = val.id;
         });
+        this.salesorderService.getMerchantInvoices(this.orderid).subscribe(invoices => {
+            this.invoices = invoices;
+        });
     }
 
     onPrintPackingSlip() {
@@ -90,12 +98,27 @@ export class SalesOrderDetailComponent implements OnInit, OnChanges {
         });
     }
 
-    openDialogBOL(salesorder) {
+    openDialogBOL(salesorder: SalesOrder, viewonly: boolean) {
         const _data = {
             salesorder,
-            orderid: this.orderid
+            viewonly,
+            orderid: this.orderid,
         };
         const dialogRef = this.printDialog.open(SalesOrderViewBOLRequestComponentDialog, {
+            data: _data,
+            width: '1040px'
+        });
+
+        dialogRef.afterClosed().subscribe(() => {
+        });
+    }
+    openDialogViewBOLRequest(salesorder: SalesOrder) {
+        const _data = {
+            salesorder,
+            bolRequest: this.BOLRequest,
+            orderid: this.orderid,
+        };
+        const dialogRef = this.printDialog.open(SalesOrderViewBOLRequestViewComponentDialog, {
             data: _data,
             width: '1040px'
         });
@@ -117,6 +140,22 @@ export class SalesOrderDetailComponent implements OnInit, OnChanges {
         });
     }
 
+    openDialogUploadInvoice(salesorder) {
+        const _data = {
+            salesorder,
+            orderid: this.orderid,
+            invoices: this.invoices
+        };
+        const dialogRef = this.printDialog.open(SalesOrderViewUploadInvoiceComponentDialog, {
+            data: _data,
+            width: '1040px'
+        });
+
+        dialogRef.afterClosed().subscribe((invoices) => {
+            this.invoices = invoices;
+        });
+    }
+
     formatPhoneNumber(phoneNumberString) {
         if (!phoneNumberString) { return; }
         const cleaned = ('' + phoneNumberString).replace(/\D/g, '');
@@ -128,6 +167,7 @@ export class SalesOrderDetailComponent implements OnInit, OnChanges {
     }
 
     navigateToFulfillments() {
+        window.open(this.bolURL + this.BOLRequest.BOLPath, '_blank');
         this.router.navigate(['/sales-order/view/merchant/' + this.orderid + '/fulfillment']);
         this.notificationComponent.notify({ type: 'info', title: 'YOUR ORDER IS NOT COMPLETE', content: 'Please create a Shipment and input tracking information' }, { timeOut: 0 }, true);
     }

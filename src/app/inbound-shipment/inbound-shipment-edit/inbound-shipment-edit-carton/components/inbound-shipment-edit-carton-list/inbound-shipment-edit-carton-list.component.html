@@ -22,8 +22,8 @@
                             <th mat-header-cell *matHeaderCellDef width="45px"></th>
                             <td mat-cell *matCellDef="let carton; let i = index">
                                 <div *ngIf="i === purchaseOrder.Cartons.length-1 && purchaseOrder.Status === 'Pending'">
-                                    <a (click)='onAddCarton(carton, i); canAdd = false; formDirty = false;'>
-                                        <span [matTooltip]="canAdd ? ( 'Add' | translate ) : ( 'Required fields must be complete' | translate )" attr.aria-label="{{ 'Add' | translate}}" class="glyphicon glyphicon-plus fs-20" [ngClass]="i === purchaseOrder.Cartons.length-1 && canAdd ? 'green' : 'gray'"></span>
+                                    <a (click)='onAddCarton(carton, i); formDirty = false;'>
+                                        <span [matTooltip]=" (carton.LabelQty === 0 || carton.LabelQty > 0) ? ( 'Add' | translate ) : ( 'Please enter number of labels' | translate )" attr.aria-label="{{ 'Add' | translate}}" class="glyphicon glyphicon-plus fs-20" [ngClass]="i === purchaseOrder.Cartons.length-1 && (carton.LabelQty === 0 || carton.LabelQty > 0) ? 'green' : 'gray'"></span>
                                     </a>
                                 </div>
                             </td>
@@ -81,7 +81,7 @@
                                         onkeydown="return event.keyCode == 69 || event.keyCode == 189 || event.keyCode == 190 ? false : true" min="0"
                                         [disabled]="purchaseOrder.Status != 'Pending'"
                                         [(ngModel)]=carton.Weight [ngModelOptions]="{standalone: true}"
-                                        (focus)="formDirty = true;" (ngModelChange)="i === purchaseOrder.Cartons.length-1 && canAdd = true;"/>
+                                        (focus)="formDirty = true;" (ngModelChange)="i === purchaseOrder.Cartons.length-1;"/>
                                 </div>
                             </td>
                         </ng-container>
@@ -97,17 +97,17 @@
                                         onkeydown="return event.keyCode == 69 || event.keyCode == 189 || event.keyCode == 190 ? false : true" min="0"
                                         [disabled]="purchaseOrder.Status != 'Pending'"
                                         [(ngModel)]=carton.Length [ngModelOptions]="{standalone: true}"
-                                        (focus)="formDirty = true;" (ngModelChange)="i === purchaseOrder.Cartons.length-1 && canAdd = true;" />" X
+                                        (focus)="formDirty = true;" (ngModelChange)="i === purchaseOrder.Cartons.length-1;" />" X
                                     <input class="form-control" id="cartonWidthID" type="number" placeholder="{{ 'W' | translate }}"
                                         onkeydown="return event.keyCode == 69 || event.keyCode == 189 || event.keyCode == 190 ? false : true" min="0"
                                         [disabled]="purchaseOrder.Status != 'Pending'"
                                         [(ngModel)]=carton.Width [ngModelOptions]="{standalone: true}"
-                                        (focus)="formDirty = true;" (ngModelChange)="i === purchaseOrder.Cartons.length-1 && canAdd = true;" />" X
+                                        (focus)="formDirty = true;" (ngModelChange)="i === purchaseOrder.Cartons.length-1;" />" X
                                     <input class="form-control" id="cartonHeightID" type="number" placeholder="{{ 'H' | translate }}"
                                         onkeydown="return event.keyCode == 69 || event.keyCode == 189 || event.keyCode == 190 ? false : true" min="0"
                                         [disabled]="purchaseOrder.Status != 'Pending'"
                                         [(ngModel)]=carton.Height [ngModelOptions]="{standalone: true}"
-                                        (focus)="formDirty = true;" (ngModelChange)="i === purchaseOrder.Cartons.length-1 && canAdd = true;"/>"
+                                        (focus)="formDirty = true;" (ngModelChange)="i === purchaseOrder.Cartons.length-1;"/>"
                                 </div>
                             </td>
                         </ng-container>
@@ -171,7 +171,7 @@
                                     </a>
                                 </span>
                                 <span [hidden]="!formDirty && i === purchaseOrder.Cartons.length-1">
-                                    <a (click)="clearFields(carton); canAdd = false;"><i *ngIf="i === purchaseOrder.Cartons.length-1" class="fa fa-eraser" matTooltip="{{ 'Clear' | translate }}"
+                                    <a (click)="clearFields(carton);"><i *ngIf="i === purchaseOrder.Cartons.length-1" class="fa fa-eraser" matTooltip="{{ 'Clear' | translate }}"
                                         attr.aria-label="{{ 'Print Carton Label' | translate}}"></i></a>
                                 </span>
                             </td>

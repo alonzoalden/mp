@@ -65,30 +65,71 @@
                             </form>
                         </div>
                         <div class="sales-order-actions" *ngIf="isMerchant">
-                            <a class="button" class="btn btn-info"
-                                *ngIf="fulfilledby === 'merchant' && salesOrder?.MerchantStatus === 'Unshipped' && BOLRequest && BOLRequest.BOLPath"
-                                href="{{bolURL}}{{BOLRequest.BOLPath}}" target="_blank"
-                                (click)="navigateToFulfillments()">
-                                <i class="fa fa fa-file-pdf-o m-r-xs"></i><span> {{ 'Download BOL/Label' | translate }} </span>
-                            </a>
+
+                            <!-- // Menu for Manage BOL -->
+                            <mat-menu #saveMenu="matMenu" width="250px">
+
+
+                                <button mat-menu-item
+                                    *ngIf="fulfilledby === 'merchant' && salesOrder?.MerchantStatus === 'Unshipped' && BOLRequest && BOLRequest.BOLPath"
+                                    (click)="navigateToFulfillments()">
+                                    <i style="width: 20px;" class="text-center fa fa-file-pdf-o m-r-xs"></i>
+                                    <span> {{ 'Download BOL/Label' | translate }} </span>
+                                </button>
+
+
+                                <button mat-menu-item
+                                    *ngIf="fulfilledby === 'merchant' && salesOrder?.MerchantStatus === 'Unshipped' && BOLRequest"
+                                    (click)="openDialogUploadBOLRequest(salesOrder)">
+                                       <i style="width: 20px;" class="text-center fa fa-upload m-r-xs"></i>
+                                        <span> {{ 'Upload BOL/Label' | translate }} </span>
+                                </button>
+
+                                <button mat-menu-item
+                                    *ngIf="fulfilledby === 'merchant' && salesOrder?.MerchantStatus === 'Unshipped' && !BOLRequest && !isBOLRequestLoading"
+                                    (click)="openDialogBOL(salesOrder)">
+                                        <i style="width: 20px;" class="text-center fa fa-edit m-r-xs"></i>
+                                        <span> {{ 'Request BOL/Label' | translate }} </span>
+                                </button>
+
+                                <button mat-menu-item
+                                    *ngIf="fulfilledby === 'merchant' && salesOrder?.MerchantStatus === 'Unshipped' && BOLRequest && BOLRequest.BOLRequestID"
+                                    (click)="openDialogViewBOLRequest(salesOrder)">
+                                        <i style="width: 20px;" class="text-center fa fa-info-circle m-r-xs"></i>
+                                        <span> {{ 'View BOL/Label Request Info' | translate }} </span>
+                                </button>
+                            </mat-menu>
+
+                            <!-- // Menu button for Manage BOL -->
+                            <button type="button" class="btn btn-info" [matMenuTriggerFor]="saveMenu">
+                                    <span *ngIf="!pendingSave"><i class="fa fa-file-pdf-o m-r-xs"></i> {{ 'Manage BOL/Label' | translate }} <span class="fs-16 caret" style="margin-left: 5px !important;"></span></span>
+                                    <!-- <div *ngIf="pendingSave">
+                                        <i class="fa fa-spinner fa-spin"></i>
+                                    </div> -->
+                            </button>
+
+
+
+
+
                             <button type="button" class="btn btn-info" (click)="onPrintPackingSlip()">
                                 <i class="fa fa-print m-r-xs"></i><span> {{ 'Print Packing Slip' | translate }} </span>
                             </button>
-                            <button type="button" class="btn" [ngClass]="BOLRequest.BOLPath ? 'btn-info' : 'btn-primary'"
-                                *ngIf="fulfilledby === 'merchant' && salesOrder?.MerchantStatus === 'Unshipped' && BOLRequest"
-                                (click)="openDialogUploadBOLRequest(salesOrder)">
-                                    <i class="fa fa-upload m-r-xs"></i><span> {{ 'Upload BOL/Label' | translate }} </span>
+
+
+
+                            <button type="button" class="btn" [ngClass]="BOLRequest ? 'btn-info' : 'btn-info'"
+                                *ngIf="fulfilledby === 'merchant' && salesOrder?.MerchantStatus === 'Unshipped'"
+                                (click)="openDialogUploadInvoice(salesOrder)">
+                                    <i class="fa fa-upload m-r-xs"></i><span> {{ 'Upload Invoice' | translate }} </span>
                             </button>
+
                             <button type="button" class="btn" [ngClass]="BOLRequest?.BOLPath ? 'btn-info' : 'btn-primary'"
                                 *ngIf="fulfilledby === 'merchant' && salesOrder?.MerchantStatus === 'Unshipped' && !BOLRequest && !isBOLRequestLoading && userInfo?.IsPM"
                                 (click)="onNotifyBOLRequest(salesOrder)">
                                     <i class="fa fa-bell-o m-r-xs"></i><span> {{ 'Send Order Notification' | translate }} </span>
                             </button>
-                            <button type="button" class="btn btn-primary"
-                                *ngIf="fulfilledby === 'merchant' && salesOrder?.MerchantStatus === 'Unshipped' && !BOLRequest && !isBOLRequestLoading"
-                                (click)="openDialogBOL(salesOrder)">
-                                    <i class="fa fa-edit m-r-xs"></i><span> {{ 'Request BOL/Label' | translate }} </span>
-                            </button>
+
                             <button type="button" class="btn btn-danger" *ngIf="fulfilledby =='merchant' && salesOrder?.MerchantStatus === 'Unshipped'" (click)="openDialogCancelOrder(salesOrder)">
                                 <i class="fa fa-remove m-r-xs"></i><span> {{ 'Cancel Order' | translate }} </span>
                             </button>
