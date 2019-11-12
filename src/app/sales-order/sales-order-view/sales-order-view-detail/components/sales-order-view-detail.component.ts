@@ -13,6 +13,7 @@ import { SalesOrderViewUploadBOLComponentDialog } from '../../sales-order-view-b
 import { SalesOrderViewUploadInvoiceComponentDialog } from '../../sales-order-view-upload-invoice/components/sales-order-view-upload-invoice.component.upload-dialog';
 import { SalesOrderCancelComponentPrintDialog } from './../../sales-order-view-cancel/components/sales-order-view-cancel.component-cancel-dialog';
 import { NotificationComponent } from '../../../../shared/tool/notification/notification.component';
+import { PurchaseOrderMerchantInvoice } from 'app/shared/class/purchase-order';
 
 @Component({
     selector: 'o-sales-order-detail',
@@ -40,6 +41,8 @@ export class SalesOrderDetailComponent implements OnInit, OnChanges {
     @Output() cancelSalesOrderLines = new EventEmitter<SalesOrderLine[]>();
     @Output() getSalesOrderByVendor = new EventEmitter<{fulfilledby: string, status: string}>();
     @Output() downloadSalesOrderPackingSlip = new EventEmitter<{salesorder: SalesOrder, orderid: number}>();
+
+    invoices: PurchaseOrderMerchantInvoice;
     fulfilledby: string;
     orderid: number;
     displayedColumns = ['ItemImage', 'ProductDetails', 'Quantity', 'MerchantStatus', 'UnitPrice', 'LineSubTotal'];
@@ -72,6 +75,9 @@ export class SalesOrderDetailComponent implements OnInit, OnChanges {
         this.getBOLRequest.emit(this.orderid);
         this.notificationComponent.subject.subscribe((val) => {
             this.salesorderService.currentNotificationID = val.id;
+        });
+        this.salesorderService.getMerchantInvoices(this.orderid).subscribe(invoices => {
+            this.invoices = invoices;
         });
     }
 
@@ -137,14 +143,16 @@ export class SalesOrderDetailComponent implements OnInit, OnChanges {
     openDialogUploadInvoice(salesorder) {
         const _data = {
             salesorder,
-            orderid: this.orderid
+            orderid: this.orderid,
+            invoices: this.invoices
         };
         const dialogRef = this.printDialog.open(SalesOrderViewUploadInvoiceComponentDialog, {
             data: _data,
             width: '1040px'
         });
 
-        dialogRef.afterClosed().subscribe(() => {
+        dialogRef.afterClosed().subscribe((invoices) => {
+            this.invoices = invoices;
         });
     }
 

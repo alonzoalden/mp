@@ -268,11 +268,20 @@ export class SalesOrderService {
                                 catchError(this.handleError)
                             );
     }
-    addMerchantInvoice(salesorderid: number, invoices: PurchaseOrderMerchantInvoice[]): Observable<BOLRequest> {
+    addMerchantInvoices(salesorderid: number, invoices: PurchaseOrderMerchantInvoice[]): Observable<PurchaseOrderMerchantInvoice> {
         const headers = new HttpHeaders({
             'Content-Type': 'application/json'
         });
-        return this.http.post<BOLRequest>(this.apiURL + '/merchantinvoice/' + salesorderid, invoices, { headers: headers } )
+        return this.http.post<PurchaseOrderMerchantInvoice>(this.apiURL + '/merchantinvoice/' + salesorderid, invoices, { headers: headers } )
+                            .pipe(
+                                catchError(this.handleError)
+                            );
+    }
+    getMerchantInvoices(salesorderid: number): Observable<PurchaseOrderMerchantInvoice> {
+        const headers = new HttpHeaders({
+            'Content-Type': 'application/json'
+        });
+        return this.http.get<PurchaseOrderMerchantInvoice>(this.apiURL + '/merchantinvoice/purchaseorder/' + salesorderid, { headers: headers } )
                             .pipe(
                                 catchError(this.handleError)
                             );
@@ -283,7 +292,6 @@ export class SalesOrderService {
                             catchError(this.handleError)
                         );
     }
-
 
     rowColorConditions(i: number, collection: Array<any>, currentIndex: number, formDirty: boolean): string {
         const inputRow = i === collection.length - 1 && currentIndex === i;

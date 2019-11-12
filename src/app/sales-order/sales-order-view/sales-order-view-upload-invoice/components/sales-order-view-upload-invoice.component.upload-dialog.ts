@@ -26,7 +26,7 @@ export class SalesOrderViewUploadInvoiceComponentDialog implements OnInit, OnDes
     pendingAdd: boolean;
     componentActive: boolean = true;
     BOLRequest: BOLRequest;
-    invoices: any[] = [];
+    invoices: PurchaseOrderMerchantInvoice[] = [];
     displayedColumns = ['Add', 'Invoice', 'InvoiceAmount', 'ShippingAmount', 'Remove'];
     filesToUpload: Array<File> = [];
     selectedFileNames: string[] = [];
@@ -35,11 +35,12 @@ export class SalesOrderViewUploadInvoiceComponentDialog implements OnInit, OnDes
     currentIndex: number;
     isLoadingData: boolean = false;
     formDirty: boolean;
+    pendingSave: boolean;
 
     @ViewChild(MatSort, { static: false }) sort: MatSort;
 
     constructor(
-        @Inject(MAT_DIALOG_DATA) public data: {salesorder: SalesOrder, orderid: number},
+        @Inject(MAT_DIALOG_DATA) public data: {salesorder: SalesOrder, orderid: number, invoices: PurchaseOrderMerchantInvoice[] },
         public dialogRef: MatDialogRef<SalesOrderViewUploadInvoiceComponentDialog>,
         private store: Store<fromSalesOrder.State>,
         private salesorderService: SalesOrderService
@@ -50,6 +51,12 @@ export class SalesOrderViewUploadInvoiceComponentDialog implements OnInit, OnDes
         this.orderid = this.data.orderid;
         this.salesOrder = this.data.salesorder;
         this.currentIndex = this.invoices.length - 1;
+
+        if (this.data.invoices.length) {
+            this.invoices = [...this.data.invoices];
+            this.refreshDataSource(this.invoices);
+            this.addPendingLine();
+        }
         // this.store.pipe(
         //     select(fromSalesOrder.getBOLRequest),
         //     takeWhile(() => this.componentActive)
@@ -83,7 +90,8 @@ export class SalesOrderViewUploadInvoiceComponentDialog implements OnInit, OnDes
         }
         this.upload();
     }
-    onAdd() {
+    onAdd(invoice: PurchaseOrderMerchantInvoice) {
+        invoice.pendingAdd = false;
         this.addPendingLine();
         this.pendingAdd = true;
     }
@@ -110,11 +118,10 @@ export class SalesOrderViewUploadInvoiceComponentDialog implements OnInit, OnDes
             this.isLoadingData = true;
             this.salesorderService.uploadMerchantInvoiceAttachment(this.orderid, formData).subscribe((filepath: string) => {
                 this.invoices[this.currentIndex].FilePath = filepath;
+                console.log(this.invoices[this.currentIndex]);
+                console.log(this.invoices);
                 this.salesorderService.sendNotification({ type: 'success', title: 'Upload Successful', content: `Invoice Attachment saved` });
-                //this.dialogRef.close();
                 this.isLoadingData = false;
-                //this.currentIndex = this.invoices.length - 1;
-                //return;
                 this.filesToUpload = [];
                 this.selectedFileNames = [];
             });
@@ -128,6 +135,27 @@ export class SalesOrderViewUploadInvoiceComponentDialog implements OnInit, OnDes
         }
     }
 
+    saveInvoices() {
+        if (this.invoices.length === 0) {
+            this.salesorderService.sendNotification({ type: 'error', title: 'Invalid Upload', content: 'Please upload at least one invoice' });
+            return;
+        }
+        const pendingRowIndex = this.invoices.findIndex((invoice: PurchaseOrderMerchantInvoice) => {
+            return !invoice.FilePath;
+        });
+        if (pendingRowIndex > 0) {
+            this.invoices.splice(pendingRowIndex, 1);
+        }
+
+        this.pendingSave = true;
+        console.log(this.invoices);
+        this.salesorderService.addMerchantInvoices(this.orderid, this.invoices)
+                .subscribe((invoices) => {
+                    this.salesorderService.sendNotification({ type: 'success', title: 'Success', content: 'Merchant Invoices Saved' });
+                    this.pendingSave = false;
+                    this.dialogRef.close(invoices);
+                });
+    }
     isInvoiceValid(invoice: PurchaseOrderMerchantInvoice) {
         return !!(invoice
             && invoice.ShippingAmount !== null
@@ -137,7 +165,7 @@ export class SalesOrderViewUploadInvoiceComponentDialog implements OnInit, OnDes
     }
     clearFields(invoice: PurchaseOrderMerchantInvoice) {
         if (invoice.FilePath) {
-            const confirmation = confirm(`Are you sure you want to remove?`);
+            const confirmation = confirm(`Are you sure you want to clear?`);
         }
         invoice.ShippingAmount = 0;
         invoice.InvoiceAmount = 0;
@@ -168,7 +196,8 @@ export class SalesOrderViewUploadInvoiceComponentDialog implements OnInit, OnDes
         }
     }
     onRemoveInvoice(invoice: PurchaseOrderMerchantInvoice, index: number) {
-        const confirmation = confirm(`Remove invoice?`);
+        const filePathString = invoice.FilePath || '';
+        const confirmation = confirm(`Remove invoice? ${'(File: ' + filePathString + ')'}`);
         if (confirmation) {
             this.invoices.splice(index, 1);
             this.refreshDataSource(this.invoices);
@@ -176,4 +205,3 @@ export class SalesOrderViewUploadInvoiceComponentDialog implements OnInit, OnDes
         }
     }
 }
-
