@@ -1,9 +1,12 @@
-<h3 class="ibox-title dialog-title">{{ 'Upload Refurbish Images' | translate }}</h3>
+<h3 class="ibox-title dialog-title">{{ 'Upload Refurbish Images' | translate }}
+    <span class="pull-right"><i (click)="onCancelClick()" class="fa fa-close" matTooltip="{{ 'Close' | translate }}" aria-label="Close Icon for Cancel Order"></i></span>
+</h3>
 <div mat-dialog-content class="dialog-content" style="min-height: 300px;">
     <div class="ibox-title">
         <h4>Select Images</h4>
     </div>
     <div class="ibox-content" style="height: 370px; overflow: scroll;">
+        <div style="z-index: 99 !important; background-color: #fff; width: 100%; height: 10px;"></div>
         <div class="flex">
             <div>
                 <button mat-flat-button cdkFocusInitial style="padding: 0; max-height: 36px;" class="btn btn-primary-main" [disabled]="isLoadingData" (click)="uploadError = null;">
@@ -36,9 +39,91 @@
                 </li>
             </ul>
         </div>
-        <div class="m-t-md" >
+        <hr>
+        <div class="m-t-md" [ngStyle]="{ 'opacity': itemRefurbishImages.length ? '1' : '0.11' }">
             <div class="sm-strong animated fadeIn">{{ 'Images Selected' | translate }} <span *ngIf="itemRefurbishImages.length" class="animated fadeInRight" >({{ 'Total' | translate }}: {{itemRefurbishImages.length}})</span></div>
-            <ul class="item-single-action " style="overflow: scroll;">
+
+            <form class="form-horizontal m-t-md" #purchaseorderForm="ngForm">
+                <fieldset>
+                    <div class="table-responsive overflow-visible">
+                        <table mat-table #table [dataSource]="dataSource" class="table" matSort>
+
+                            <!-- Down Column -->
+                            <ng-container matColumnDef="Down">
+                                <th mat-header-cell *matHeaderCellDef width="17px"></th>
+                                <td mat-cell *matCellDef="let image; let i = index">
+                                    <div *ngIf="i < itemRefurbishImages.length-1">
+                                        <a (click)="moveDownPosition(image)"><span class="glyphicon glyphicon-arrow-down"></span></a>
+                                    </div>
+                                </td>
+                            </ng-container>
+                            <!-- Position Column -->
+                            <ng-container matColumnDef="Position">
+                                <th mat-header-cell *matHeaderCellDef width="15px"></th>
+                                <td mat-cell *matCellDef="let image; let i = index">
+                                    <div>
+                                        {{i + 1}}
+                                    </div>
+                                </td>
+                            </ng-container>
+                            <!-- Up Column -->
+                            <ng-container matColumnDef="Up">
+                                <th mat-header-cell *matHeaderCellDef width="40px"></th>
+                                <td mat-cell *matCellDef="let image; let i = index">
+                                    <div>
+                                        <a (click)='moveUpPosition(image)' *ngIf='i != 0'><span class="glyphicon glyphicon-arrow-up"></span></a>
+                                    </div>
+                                </td>
+                            </ng-container>
+                            <!-- Image Column -->
+                            <ng-container matColumnDef="Image">
+                                <th mat-header-cell *matHeaderCellDef width="100px">{{ 'Image' | translate }}</th>
+                                <td mat-cell *matCellDef="let image; let i = index">
+                                    <div class="p-xs" matTooltipPosition="left" matTooltip="{{image.Label}}">
+                                        <a href="{{image.Raw}}" target="_blank">
+                                            <img (error)="errorUploadingImage(image, i)" style="max-width: 100px; max-height: 70px;" src="{{image.Raw}}" [title]="image.Label">
+                                        </a>
+                                    </div>
+                                </td>
+                            </ng-container>
+                            <!-- Label -->
+                            <ng-container matColumnDef="Label">
+                                <th mat-header-cell *matHeaderCellDef width="200px">{{ 'Label' | translate }}</th>
+                                <td mat-cell *matCellDef="let image; let i = index">
+                                    <div *ngIf="image.Label" matTooltipPosition="left">
+                                        <a href="{{image.Raw}}" target="_blank">
+                                            {{image.Label}}
+                                        </a>
+                                    </div>
+                                </td>
+                            </ng-container>
+                            <!-- Base Image Column -->
+                            <ng-container matColumnDef="Base">
+                                <th mat-header-cell *matHeaderCellDef width="80px">{{ 'Base Image' | translate }}</th>
+                                <td mat-cell *matCellDef="let image; let i = index;">
+                                    <mat-checkbox [(ngModel)]="image.IsBaseImage" (click)="isBaseImageClick(image, i); formDirty = true;" [ngModelOptions]="{standalone: true}"></mat-checkbox>
+                                </td>
+                            </ng-container>
+
+                            <!-- Remove Column -->
+                            <ng-container matColumnDef="Remove">
+                                <th mat-header-cell *matHeaderCellDef width="80px">{{ 'Remove' | translate }}</th>
+                                <td mat-cell *matCellDef="let invoice; let i = index;">
+                                    <a style="flex: 1;" (click)='removeFile(i)'><span matTooltip="{{ 'Remove' | translate }}" attr.aria-label="{{ 'Remove' | translate}}" class="glyphicon glyphicon-trash m-l-md"></span></a>
+                                </td>
+                            </ng-container>
+
+                            <tr mat-header-row *matHeaderRowDef="displayedColumns; sticky: true;" class="testtt"></tr>
+                            <tr [ngStyle]="{'background-color': itemService.rowColorConditions(i, itemRefurbishImages, currentIndex, formDirty)}" style="max-height: 91px; height: 91px;"
+                                mat-row *matRowDef="let row; let i = index; columns: displayedColumns;">
+                            </tr>
+                        </table>
+                    </div>
+
+                </fieldset>
+            </form>
+
+            <!-- <ul class="item-single-action white" style="overflow: scroll;">
                 <li *ngIf="!itemRefurbishImages || itemRefurbishImages.length < 1" class="text-info white-bg" style="display: flex; align-items: center; height: 70px;">
                     <span>{{ 'No images selected' | translate }}</span>
                 </li>
@@ -56,12 +141,18 @@
                             <div *ngIf="i === 0" style="width: 12px;"></div>
                         </div>
                     </div>
-                    <div *ngIf="image.Raw" style="flex: 2; text-align: center;"><img (error)="errorUploadingImage(image, i)" style="max-width: 100px; max-height: 70px;" src="{{image.Raw}}" [title]="image.Label"></div>
+                    <div *ngIf="image.Raw" style="flex: 2; text-align: center;">
+                        <a href="{{image.Raw}}" target="_blank">
+                            <img (error)="errorUploadingImage(image, i)" style="max-width: 100px; max-height: 70px;" src="{{image.Raw}}" [title]="image.Label">
+                        </a>
+                    </div>
                     <div *ngIf="!image.Raw" style="flex: 2; text-align: center;"><i class="fa fa-warning" style="font-size: 28;"></i></div>
-                    <div class="p-w-sm" style="flex: 5;" matTooltipPosition="left" matTooltip="{{image.Label}}">{{image.Label}}</div>
+                    <div class="p-w-sm" style="flex: 5;" matTooltipPosition="left" matTooltip="{{image.Label}}">
+                        <a href="{{image.Raw}}" target="_blank">{{image.Label}}</a>
+                    </div>
                     <a style="flex: 1;" (click)='removeFile(i)'><span matTooltip="{{ 'Remove' | translate }}" attr.aria-label="{{ 'Remove' | translate}}" class="glyphicon glyphicon-trash m-l-md"></span></a>
                 </li>
-            </ul>
+            </ul> -->
         </div>
         <div class="pull-right" *ngIf="itemRefurbishImages && itemRefurbishImages.length > 0">
             <a class="text-danger" type="button" (click)="cancelUpload()">{{ 'Remove All Files' | translate }}</a>
@@ -70,6 +161,6 @@
 
 </div>
 <mat-dialog-actions>
-    <button mat-button class="btn btn-success-sm" [mat-dialog-close]="itemRefurbishImages" [disabled]="isLoadingData || !itemRefurbishImages.length" [matTooltip]="!itemRefurbishImages.length ? 'Please select images' : '' "><i class="fa fa-upload"></i>  {{ 'Upload' | translate }}</button>
+    <button mat-button class="btn btn-success-sm" (click)="onDialogClose()" [disabled]="isLoadingData || !itemRefurbishImages.length" [matTooltip]="!itemRefurbishImages.length ? 'Please select images' : '' "><i class="fa fa-upload"></i>  {{ 'Upload' | translate }}</button>
     <button mat-button class="btn btn-remove-sm" (click)="onCancelClick()"><i class="fa fa-remove"></i>  {{ 'Cancel' | translate }}</button>
 </mat-dialog-actions>

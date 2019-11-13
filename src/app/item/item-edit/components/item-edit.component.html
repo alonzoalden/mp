@@ -115,7 +115,12 @@
                             <a [routerLink]="['part']" routerLinkActive="active">
                                 {{ 'Part' | translate }} 
                             </a>
-                        </li>                       
+                        </li>
+                        <li routerLinkActive="active" *ngIf="item?.ItemRefurbishes?.length > 0 || userInfo?.IsPM">
+                            <a [routerLink]="['refurbish']" routerLinkActive="active">
+                                {{ 'Refurbishes' | translate }}
+                            </a>
+                        </li>
                     </ul>                
                     <router-outlet></router-outlet>
                 </div>

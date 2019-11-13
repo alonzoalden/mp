@@ -5,10 +5,10 @@ import { ItemRefurbishImageInsert } from '../../../../shared/class/item';
 import { environment } from '../../../../../environments/environment';
 
 @Component({
-    templateUrl: 'item-add-refurbish.component-upload-dialog.html',
+    templateUrl: 'item-edit-refurbish.component-upload-dialog.html',
 })
 
-export class ItemAddRefurbishImageComponentUploadDialog implements OnInit {
+export class ItemEditRefurbishImageComponentUploadDialog implements OnInit {
     filesToUpload: Array<File> = [];
     selectedFiles: Array<File> = [];
     itemRefurbishImages: ItemRefurbishImageInsert[] = [];
@@ -24,7 +24,7 @@ export class ItemAddRefurbishImageComponentUploadDialog implements OnInit {
     @ViewChild('fileUpload', { static: true }) fileUploadVar: any;
 
     constructor(
-        public dialogRef: MatDialogRef<ItemAddRefurbishImageComponentUploadDialog>,
+        public dialogRef: MatDialogRef<ItemEditRefurbishImageComponentUploadDialog>,
         private itemService: ItemService,
         @Inject(MAT_DIALOG_DATA) public data: ItemRefurbishImageInsert[] ) {
     }

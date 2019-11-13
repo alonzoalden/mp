@@ -121,6 +121,9 @@ import { SharePipeModule } from '../shared/pipe/share.pipe';
 import { ItemAddRefurbishShellComponent } from './item-add/item-add-refurbish/containers/item-add-refurbish-shell.component';
 import { ItemAddRefurbishComponent } from './item-add/item-add-refurbish/components/item-add-refurbish.component';
 import { ItemAddRefurbishImageComponentUploadDialog } from './item-add/item-add-refurbish/components/item-add-refurbish.component-upload-dialog';
+import { ItemEditRefurbishShellComponent } from './item-edit/item-edit-refurbish/containers/item-edit-refurbish-shell.component';
+import { ItemEditRefurbishComponent } from './item-edit/item-edit-refurbish/components/item-edit-refurbish.component';
+import { ItemEditRefurbishImageComponentUploadDialog } from './item-edit/item-edit-refurbish/components/item-edit-refurbish.component-upload-dialog';
 
 // import { ItemVariationEffects } from './item-variation/state/item-variation.effects';
 // import { itemreducer } from './item-variation/state/item-variation.reducer';
@@ -237,7 +240,10 @@ import { ItemAddRefurbishImageComponentUploadDialog } from './item-add/item-add-
         ItemVariationSelectItemComponentDialog,
         ItemAddRefurbishComponent,
         ItemAddRefurbishShellComponent,
-        ItemAddRefurbishImageComponentUploadDialog
+        ItemAddRefurbishImageComponentUploadDialog,
+        ItemEditRefurbishComponent,
+        ItemEditRefurbishImageComponentUploadDialog,
+        ItemEditRefurbishShellComponent
     ],
     entryComponents: [
         ItemListComponent,
@@ -249,7 +255,8 @@ import { ItemAddRefurbishImageComponentUploadDialog } from './item-add/item-add-
         ItemVariationComponentDialog,
         ItemVariationSelectItemComponentDialog,
         ItemPartListComponentItemPrintDialog,
-        ItemAddRefurbishImageComponentUploadDialog
+        ItemAddRefurbishImageComponentUploadDialog,
+        ItemEditRefurbishImageComponentUploadDialog
     ],
     imports: [
         TranslateModule,

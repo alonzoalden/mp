@@ -1705,10 +1705,12 @@ table {
     padding-inline-start: -20px;
     padding: 5px 20px;
     border-bottom: 1px solid #e7eaec;
-
 }
 .item-single-action > li:nth-child(odd) {
     background-color: #f9f9f9;
+}
+.item-single-action.white > li:nth-child(odd) {
+    background-color: #fff !important;
 }
 .item-single-action > li > div {
     width: 85%;
@@ -2235,4 +2237,7 @@ th.mat-header-cell {
 }
 td.mat-cell > div.overflowhidden {
     overflow: hidden;
+}
+.testtt th {
+    top: -20px !important;
 }

@@ -81,7 +81,7 @@
                                                     <a (click)="uploadMultipleImages(i);" style="height: inherit; display: flex; align-items: center;">
                                                         <img [src]="itemRefurbish.Images[0].Raw" style="max-width: 70px; max-height: 70px;">
                                                     </a>
-                                                    <div class="sm-strong"><a (click)="uploadMultipleImages(i);">View {{ itemRefurbish.Images.length }} Total</a></div>
+                                                    <div class="sm-strong"><a (click)="uploadMultipleImages(i);">View All ({{ itemRefurbish.Images.length }})</a></div>
                                                 </div>
 
                                                 <!-- <div *ngIf="(itemRefurbish.FilePath || itemRefurbish.Raw) && ( !pendingUpload || i != currentIndex )" class="thumbnail-container">
@@ -162,14 +162,14 @@
                                                         <span matTooltip="{{ 'Remove' | translate }}" attr.aria-label="{{ 'Remove' | translate}}" class="glyphicon glyphicon-trash"></span>
                                                     </a>
                                                 </div>
-                                                <div *ngIf="i === item.ItemRefurbishes.length-1 && containsAnyValues(itemRefurbish)">
+                                                <div *ngIf="i === item.ItemRefurbishes.length-1 && containsAnyValues(itemRefurbish) && formDirty">
                                                     <a matTooltip="{{ 'Clear' | translate }}" attr.aria-label="{{ 'Clear' | translate}}" (click)="clearFields(itemRefurbish);"><i *ngIf="i === item.ItemRefurbishes.length-1" class="fa fa-eraser"></i></a>
                                                 </div>
                                             </td>
                                         </ng-container>
 
-                                        <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-                                        <tr style="height: 108px;" class="selected-row" mat-row *matRowDef="let itemRefurbish; let i = index; columns: displayedColumns;"
+                                        <tr mat-header-row *matHeaderRowDef="displayedColumns;"></tr>
+                                        <tr style="height: 109px; max-height: 109px;" class="selected-row" mat-row *matRowDef="let itemRefurbish; let i = index; columns: displayedColumns;"
                                             [ngStyle]="{'background-color': itemService.rowColorConditions(i, item.ItemRefurbishes, currentIndex, formDirty)}"
                                             (click)="onEditItemImage(i);"></tr>
                                     </table>

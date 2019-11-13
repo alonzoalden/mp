@@ -1,4 +1,3 @@
-import { ItemAddRefurbishShellComponent } from './item-add/item-add-refurbish/containers/item-add-refurbish-shell.component';
 import { Routes, RouterModule } from '@angular/router';
 import { ItemComponent } from './item.component';
 import { ItemListShellComponent } from './item-list/containers/item-list-shell/item-list-shell.component';
@@ -50,6 +49,9 @@ import { PageNotFoundComponent } from './page-not-found.component';
 import { ItemVariationListComponent } from './item-variation/item-variation-list.component';
 import { ItemVariationDetailComponent } from './item-variation/item-variation-detail.component';
 import { ItemEditVariationComponent } from './item-edit/item-edit-variation.component';
+import { ItemAddRefurbishShellComponent } from './item-add/item-add-refurbish/containers/item-add-refurbish-shell.component';
+import { ItemEditRefurbishShellComponent } from './item-edit/item-edit-refurbish/containers/item-edit-refurbish-shell.component';
+
 
 const ITEM_ROUTES: Routes = [
     {
@@ -177,6 +179,10 @@ const ITEM_ROUTES: Routes = [
                     {
                         path: 'variation',
                         component: ItemEditVariationComponent
+                    },
+                    {
+                        path: 'refurbish',
+                        component: ItemEditRefurbishShellComponent
                     }
                 ]
             },

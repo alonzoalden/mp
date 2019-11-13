@@ -18,6 +18,7 @@ export class ItemAddRefurbishComponent implements OnInit, OnChanges {
     @Input() item: Item;
     @Input() userInfo: Member;
     @Input() itemRefurbishesMatTable: MatTableDataSource<ItemRefurbish>;
+    dataSource: MatTableDataSource<any>;
     displayedColumns = ['Add', 'Down', 'Position', 'Up', 'Images', 'SerialNumber', 'Condition', 'SellingPrice', 'PrintLabel', 'Remove'];
     pendingAdd: boolean;
     currentIndex: number;
@@ -223,7 +224,7 @@ export class ItemAddRefurbishComponent implements OnInit, OnChanges {
 
     uploadMultipleImages(index: number) {
         const dialogRef = this.itemUploadDialog.open(ItemAddRefurbishImageComponentUploadDialog, {
-            width: '850px',
+            width: '920px',
             data: this.item.ItemRefurbishes[index].Images,
             disableClose: true
         });
@@ -231,7 +232,6 @@ export class ItemAddRefurbishComponent implements OnInit, OnChanges {
 
         dialogRef.afterClosed().subscribe(result => {
             if (result && result.length > 0) {
-                //this.isLoadingMultipleData = true;
                 this.item.ItemRefurbishes[index].Images = result;
                 this.formDirty = true;
                 //this.removePendingLine();
