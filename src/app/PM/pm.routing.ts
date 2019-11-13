@@ -40,6 +40,11 @@ const APP_ROUTES: Routes = [
                 canLoad: [PMAuthGuard]
             },
             {
+                path: 'report',
+                loadChildren: 'app/PM/report-pm/report-pm.module#ReportPmModule',
+                canLoad: [PMAuthGuard]
+            },
+            {
                 path: '**',
                 redirectTo: 'dashboard'
             }

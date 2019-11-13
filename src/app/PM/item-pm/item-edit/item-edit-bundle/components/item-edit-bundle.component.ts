@@ -272,7 +272,6 @@ export class ItemEditBundleComponent implements OnInit {
     getItemName(id: number) {
         const item = this.itemList[this.itemList.findIndex(item => item.ItemID === id)];
         if (item) {
-            console.log(item)
             return item.Description;
         } else {
             return '';
