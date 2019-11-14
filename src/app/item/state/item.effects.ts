@@ -551,41 +551,6 @@ export class ItemEffects {
     );
 
     @Effect()
-    downloadItemLabelCountCustom$: Observable<Action> = this.actions$.pipe(
-        ofType(itemActions.ItemActionTypes.DownloadItemLabelCountCustom),
-        map((action: itemActions.DownloadItemLabelCountCustom) => action.payload),
-        mergeMap((payload) =>
-            this.itemService.downloadItemLabelCountCustom(payload.item.ItemID, payload.options).pipe(
-                map((data: Blob) => {
-                    const blob = new Blob([data], {type: 'application/pdf'});
-                    if (window.navigator.msSaveOrOpenBlob) {
-                        const fileName = payload.item.TPIN;
-                        window.navigator.msSaveOrOpenBlob(data, fileName + '.pdf');
-                    } else {
-                        const fileURL = window.URL.createObjectURL(blob);
-                        const a: HTMLAnchorElement = document.createElement('a') as HTMLAnchorElement;
-                        a.href = fileURL;
-                        a.download = payload.item.TPIN;
-                        document.body.appendChild(a);
-                        a.target = '_blank';
-                        a.click();
-                        document.body.removeChild(a);
-                        URL.revokeObjectURL(fileURL);
-                    }
-                    return (new itemActions.DownloadItemLabelCountSuccess(data));
-                }),
-                catchError(err => {
-                    this.itemService.sendNotification({ type: 'error', title: 'Error', content: err });
-                    of(new itemActions.DownloadItemLabelCountFail(err));
-                    return EMPTY;
-                })
-            )
-        )
-    );
-
-
-
-    @Effect()
     downloadItemLargeLabelCount$: Observable<Action> = this.actions$.pipe(
         ofType(itemActions.ItemActionTypes.DownloadItemLargeLabelCount),
         map((action: itemActions.DownloadItemLargeLabelCount) => action.payload),
@@ -620,6 +585,40 @@ export class ItemEffects {
         )
     );
 
+
+    @Effect()
+    downloadItemLabelCountCustom$: Observable<Action> = this.actions$.pipe(
+        ofType(itemActions.ItemActionTypes.DownloadItemLabelCountCustom),
+        map((action: itemActions.DownloadItemLabelCountCustom) => action.payload),
+        mergeMap((payload) =>
+            this.itemService.downloadItemLabelCountCustom(payload.item.ItemID, payload.options).pipe(
+                map((data: Blob) => {
+                    const blob = new Blob([data], {type: 'application/pdf'});
+                    if (window.navigator.msSaveOrOpenBlob) {
+                        const fileName = payload.item.TPIN;
+                        window.navigator.msSaveOrOpenBlob(data, fileName + '.pdf');
+                    } else {
+                        const fileURL = window.URL.createObjectURL(blob);
+                        const a: HTMLAnchorElement = document.createElement('a') as HTMLAnchorElement;
+                        a.href = fileURL;
+                        a.download = payload.item.TPIN;
+                        document.body.appendChild(a);
+                        a.target = '_blank';
+                        a.click();
+                        document.body.removeChild(a);
+                        URL.revokeObjectURL(fileURL);
+                    }
+                    return (new itemActions.DownloadItemLabelCountCustomSuccess(data));
+                }),
+                catchError(err => {
+                    this.itemService.sendNotification({ type: 'error', title: 'Error', content: err.message });
+                    return of(new itemActions.DownloadItemLabelCountCustomFail(err));
+                })
+            )
+        )
+    );
+
+
     @Effect()
     downloadItemLargeLabelCountCustom$: Observable<Action> = this.actions$.pipe(
         ofType(itemActions.ItemActionTypes.DownloadItemLargeLabelCountCustom),
@@ -648,8 +647,7 @@ export class ItemEffects {
                 }),
                 catchError(err => {
                     this.itemService.sendNotification({ type: 'error', title: 'Error', content: err });
-                    of(new itemActions.DownloadItemLargeLabelCountFail(err));
-                    return EMPTY;
+                    return of(new itemActions.DownloadItemLargeLabelCountFail(err));
                 })
             )
         )

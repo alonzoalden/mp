@@ -87,9 +87,7 @@ export class ItemListComponent implements OnInit, OnChanges {
         });
 
         dialogRef.afterClosed().subscribe(data => {
-            console.log(data)
-
-            if (data.customOptions && data.customOptions.Quantity > 0) {
+            if (data && data.customOptions && data.customOptions.Quantity > 0) {
                 if (data.size === 'small') {
                     if (data.isCustom) {
                         this.onPrintLabelCustom(item, data.customOptions);
@@ -99,8 +97,9 @@ export class ItemListComponent implements OnInit, OnChanges {
                 } else {
                     if (data.isCustom) {
                         this.onPrintLargeLabelCustom(item, data.customOptions);
+                    } else {
+                        this.onPrintLargeLabel(item, data.customOptions.Quantity, data.customOptions.Border);
                     }
-                    this.onPrintLargeLabel(item, data.customOptions.Quantity, data.customOptions.Border);
                 }
             }
         });
@@ -110,22 +109,21 @@ export class ItemListComponent implements OnInit, OnChanges {
         const dialogRef = this.itemPrintDialog.open(ItemListComponentImportDialog, {
             width: '320px',
             data: this.downloadItemLabelCount
-          });
+        });
 
-          dialogRef.afterClosed().subscribe(result => {
+        dialogRef.afterClosed().subscribe(result => {
             if (result) {
                 this.loading = true;
                 this.refreshItems.emit();
             }
 
-          });
+        });
     }
 
     onPrintLabel(item: Item, count: number, border: string) {
         this.downloadItemLabelCount.emit({item: item, count: count, border: border});
     }
     onPrintLabelCustom(item: Item, options: CustomPrintLabel) {
-        console.log('a');
         this.downloadItemLabelCountCustom.emit({ item: item, options: options });
     }
 

@@ -3,7 +3,6 @@ import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material';
 import { Item } from '../../../shared/class/item';
 import { CustomPrintLabel } from '../../../shared/class/label';
 
-
 export class ItemLabelPrintDialog {
     constructor(
         public Size: string,
@@ -18,11 +17,10 @@ export class ItemLabelPrintDialog {
 })
 
 export class ItemListComponentItemPrintDialog implements OnInit {
-    //itemLabelPrintDialog: ItemLabelPrintDialog;
     size: string = 'small';
     isCustom: boolean;
     customOptions: CustomPrintLabel;
-    metric: string = 'mm';
+    units: string = 'mm';
 
     constructor(
         public dialogRef: MatDialogRef<ItemListComponentItemPrintDialog>,
@@ -39,14 +37,29 @@ export class ItemListComponentItemPrintDialog implements OnInit {
                 return;
             }
         }
+        const updatedData = this.millimeterToInches(this.customOptions);
         const data = {
-            customOptions: this.customOptions,
+            customOptions: updatedData,
             size: this.size,
             isCustom: this.isCustom
         };
         this.dialogRef.close(data);
     }
-
+    millimeterToInches(data: CustomPrintLabel): CustomPrintLabel {
+        const dataCopy: CustomPrintLabel = Object.assign({}, data);
+        if (this.units === 'mm') {
+            const num = 25.4;
+            dataCopy.PageWidth = dataCopy.PageWidth / num;
+            dataCopy.PageHeight = dataCopy.PageHeight / num;
+            dataCopy.LabelWidth = dataCopy.LabelWidth / num;
+            dataCopy.LabelHeight = dataCopy.LabelHeight / num;
+            dataCopy.PageTopMargin = dataCopy.PageTopMargin / num;
+            dataCopy.PageLeftMargin  = dataCopy.PageLeftMargin / num;
+            dataCopy.GapDistanceX = dataCopy.GapDistanceX / num;
+            dataCopy.GapDistanceY = dataCopy.GapDistanceY / num;
+        }
+        return dataCopy;
+    }
     isOptionsValid(options: CustomPrintLabel) {
         return !!(options
             && options.Quantity !== null
@@ -58,7 +71,8 @@ export class ItemListComponentItemPrintDialog implements OnInit {
             && options.PageTopMargin !== null
             && options.PageLeftMargin !== null
             && options.GapDistanceX !== null
-            && options.GapDistanceY !== null);
+            && options.GapDistanceY !== null
+        );
     }
 
     onCancelClick(): void {

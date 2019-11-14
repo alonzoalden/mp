@@ -28,7 +28,7 @@
             <div class="m-t-md">
                 <h5>Metric</h5>
                 <mat-form-field class="block">
-                    <mat-select required [(ngModel)]="metric" placeholder="Unit">
+                    <mat-select required [(ngModel)]="units" placeholder="Unit">
                         <mat-option value="in">Inches (in)</mat-option>
                         <mat-option value="mm">Millimeters (mm)</mat-option>
                     </mat-select>
@@ -37,11 +37,11 @@
                 <div>
                     <h5>{{ 'Page Size' | translate }}</h5>
                     <mat-form-field class="m-r-sm">
-                        <input required matInput cdkFocusInitial [(ngModel)]="customOptions.PageWidth" type="number" placeholder="Width {{ metric ? '(' + metric + ')' : ''}}"
+                        <input required matInput cdkFocusInitial [(ngModel)]="customOptions.PageWidth" type="number" placeholder="Width {{ units ? '(' + units + ')' : ''}}"
                             onkeydown="return event.keyCode == 69 || event.keyCode == 189 ? false : true" min="0">
                     </mat-form-field>
                     <mat-form-field >
-                        <input matInput [(ngModel)]="customOptions.PageHeight" type="number" placeholder="Height {{ metric ? '(' + metric + ')' : ''}}"
+                        <input required matInput [(ngModel)]="customOptions.PageHeight" type="number" placeholder="Height {{ units ? '(' + units + ')' : ''}}"
                             onkeydown="return event.keyCode == 69 || event.keyCode == 189 ? false : true" min="0">
                     </mat-form-field>
 
@@ -49,34 +49,34 @@
                 <div>
                     <h5>{{ 'Label Size' | translate }}</h5>
                     <mat-form-field class="m-r-sm">
-                        <input required matInput [(ngModel)]="customOptions.LabelWidth" type="number" placeholder="Width {{ metric ? '(' + metric + ')' : ''}}"
+                        <input required matInput [(ngModel)]="customOptions.LabelWidth" type="number" placeholder="Width {{ units ? '(' + units + ')' : ''}}"
                             onkeydown="return event.keyCode == 69 || event.keyCode == 189 ? false : true" min="0">
                     </mat-form-field>
                     <mat-form-field>
-                        <input required matInput [(ngModel)]="customOptions.LabelHeight" type="number" placeholder="Height {{ metric ? '(' + metric + ')' : ''}}"
+                        <input required matInput [(ngModel)]="customOptions.LabelHeight" type="number" placeholder="Height {{ units ? '(' + units + ')' : ''}}"
                             onkeydown="return event.keyCode == 69 || event.keyCode == 189 ? false : true" min="0">
                     </mat-form-field>
                 </div>
                 <div>
                     <h5>{{ 'Page Margin' | translate }}</h5>
                     <mat-form-field class="m-r-sm">
-                        <input required matInput [(ngModel)]="customOptions.PageLeftMargin" type="number" placeholder="Left Margin {{ metric ? '(' + metric + ')' : ''}}"
+                        <input required matInput [(ngModel)]="customOptions.PageLeftMargin" type="number" placeholder="Left Margin {{ units ? '(' + units + ')' : ''}}"
                             onkeydown="return event.keyCode == 69 || event.keyCode == 189 ? false : true" min="0">
                     </mat-form-field>
                     <mat-form-field>
-                        <input required matInput [(ngModel)]="customOptions.PageTopMargin" type="number" placeholder="Top Margin {{ metric ? '(' + metric + ')' : ''}}"
+                        <input required matInput [(ngModel)]="customOptions.PageTopMargin" type="number" placeholder="Top Margin {{ units ? '(' + units + ')' : ''}}"
                             onkeydown="return event.keyCode == 69 || event.keyCode == 189 ? false : true" min="0">
                     </mat-form-field>
                 </div>
                 <div>
                     <h5>{{ 'Gap Distance' | translate }}</h5>
                     <mat-form-field class="m-r-sm">
-                        <input required matInput [(ngModel)]="customOptions.GapDistanceX" type="number" placeholder="Gap Distance X {{ metric ? '(' + metric + ')' : ''}}"
+                        <input required matInput [(ngModel)]="customOptions.GapDistanceX" type="number" placeholder="Gap Distance X {{ units ? '(' + units + ')' : ''}}"
                             onkeydown="return event.keyCode == 69 || event.keyCode == 189 ? false : true" min="0">
                     </mat-form-field>
 
                     <mat-form-field >
-                        <input required matInput [(ngModel)]="customOptions.GapDistanceY" type="number" placeholder="Gap Distance Y {{ metric ? '(' + metric + ')' : ''}}"
+                        <input required matInput [(ngModel)]="customOptions.GapDistanceY" type="number" placeholder="Gap Distance Y {{ units ? '(' + units + ')' : ''}}"
                             onkeydown="return event.keyCode == 69 || event.keyCode == 189 ? false : true" min="0">
                     </mat-form-field>
                 </div>
