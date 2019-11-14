@@ -5,6 +5,7 @@ import { Item, ItemInsert, ItemCategoryAssignment, ItemOption, ItemSelection, It
 import { ItemService } from '../../item.service';
 import { environment } from '../../../../environments/environment';
 import { Member } from 'app/shared/class/member';
+import { CustomPrintLabel } from 'app/shared/class/label';
 import { ItemListComponentItemPrintDialog } from './item-list.component-item-print-dialog';
 import { ItemListComponentImportDialog } from './item-list.component-import-dialog';
 
@@ -22,8 +23,10 @@ export class ItemListComponent implements OnInit, OnChanges {
     @Output() getItems = new EventEmitter<void>();
     @Output() refreshItems = new EventEmitter<void>();
     @Output() deleteItem = new EventEmitter<Item>();
-    @Output() downloadItemLabelCount = new EventEmitter<{item: Item, count: number, border: string}>();
-    @Output() downloadItemLargeLabelCount = new EventEmitter<{item: Item, count: number, border: string}>();
+    @Output() downloadItemLabelCount = new EventEmitter<{ item: Item, count: number, border: string }>();
+    @Output() downloadItemLargeLabelCount = new EventEmitter<{ item: Item, count: number, border: string }>();
+    @Output() downloadItemLabelCountCustom = new EventEmitter<{ item: Item, options: CustomPrintLabel }>();
+    @Output() downloadItemLargeLabelCountCustom = new EventEmitter<{ item: Item, options: CustomPrintLabel }>();
     @Output() downloadItemTemplate = new EventEmitter<void>();
     selectedItem: Item;
     currentIndex: number;
@@ -79,16 +82,25 @@ export class ItemListComponent implements OnInit, OnChanges {
 
     openDialogPrintItemLabel(item: Item) {
         const dialogRef = this.itemPrintDialog.open(ItemListComponentItemPrintDialog, {
-          width: '250px',
+          width: '350px',
           data: item,
         });
 
-        dialogRef.afterClosed().subscribe(result => {
-            if (result && result.Quantity > 0) {
-                if (result.Size === 'small') {
-                    this.onPrintLabel(item, result.Quantity, result.Border);
+        dialogRef.afterClosed().subscribe(data => {
+            console.log(data)
+
+            if (data.customOptions && data.customOptions.Quantity > 0) {
+                if (data.size === 'small') {
+                    if (data.isCustom) {
+                        this.onPrintLabelCustom(item, data.customOptions);
+                    } else {
+                        this.onPrintLabel(item, data.customOptions.Quantity, data.customOptions.Border);
+                    }
                 } else {
-                    this.onPrintLargeLabel(item, result.Quantity, result.Border);
+                    if (data.isCustom) {
+                        this.onPrintLargeLabelCustom(item, data.customOptions);
+                    }
+                    this.onPrintLargeLabel(item, data.customOptions.Quantity, data.customOptions.Border);
                 }
             }
         });
@@ -111,11 +123,17 @@ export class ItemListComponent implements OnInit, OnChanges {
 
     onPrintLabel(item: Item, count: number, border: string) {
         this.downloadItemLabelCount.emit({item: item, count: count, border: border});
-
+    }
+    onPrintLabelCustom(item: Item, options: CustomPrintLabel) {
+        console.log('a');
+        this.downloadItemLabelCountCustom.emit({ item: item, options: options });
     }
 
     onPrintLargeLabel(item: Item, count: number, border: string) {
         this.downloadItemLargeLabelCount.emit({item: item, count: count, border: border});
+    }
+    onPrintLargeLabelCustom(item: Item, options: CustomPrintLabel) {
+        this.downloadItemLargeLabelCountCustom.emit({ item: item, options: options });
     }
 
     onRemove(item: Item, index: number) {

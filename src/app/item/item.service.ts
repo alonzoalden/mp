@@ -11,6 +11,7 @@ import { URLVideo } from '../shared/class/item-video';
 import { ItemList } from '../shared/class/item';
 import { Category } from '../shared/class/category';
 import { Member } from '../shared/class/member';
+import { CustomPrintLabel } from '../shared/class/label';
 import { VendorAttachmentList, VendorAttachment} from '../shared/class/vendor-attachment';
 import { VendorBrand } from '../shared/class/vendor-brand';
 import { BatchUpdate, BatchUpdateValue } from '../shared/class/batch-update';
@@ -901,6 +902,14 @@ export class ItemService {
     }
     downloadItemLargeLabelCount(id: number, count: number, border: string) {
         return this.http.get(this.apiURL + '/item/' + id + '/largelabel/' + count + '/' + border, { responseType: 'blob' });
+    }
+
+    // Custom
+    downloadItemLabelCountCustom(id: number, options: CustomPrintLabel) {
+        return this.http.post(this.apiURL + '/item/' + id + '/label/custom', options, { responseType: 'blob' });
+    }
+    downloadItemLargeLabelCountCustom(id: number, options: CustomPrintLabel) {
+        return this.http.post(this.apiURL + '/item/' + id + '/largelabel/custom', options, { responseType: 'blob' });
     }
 
     downloadPrintItemLabels(itemPrintLabels: ItemPrintLabel[], border: string) {

@@ -15,10 +15,8 @@ import { environment } from '../../../../../environments/environment';
 export class ItemPartListComponent implements OnInit {
     errorMessage: string;
     items: Item[];
-
-    private imageURL = environment.imageURL;
-    private linkURL = environment.linkURL;
-
+    imageURL = environment.imageURL;
+    linkURL = environment.linkURL;
     duplicateItemInsert: ItemInsert;
     duplicateItemCategoryAssignments: ItemCategoryAssignment[];
     duplicateItemOptions: ItemOption[];

@@ -15,7 +15,7 @@
                                 <span class="help-block" *ngIf="(itemNameVar.touched ||
                                                                     itemNameVar.dirty) &&
                                                                     itemNameVar.errors">
-                                    <span *ngIf="itemNameVar.errors.required">
+                                    <span *ngIf="itemNameVar?.errors.required">
                                         {{ 'Item Name' | translate }} {{ 'is required' | translate }}
                                     </span>
                                 </span>
@@ -49,7 +49,7 @@
                                 <span class="help-block" *ngIf="(itemItemTypeVar.touched ||
                                                     itemItemTypeVar.dirty) &&
                                                     itemItemTypeVar.errors">
-                                    <span *ngIf="itemItemTypeVar.errors.required">
+                                    <span *ngIf="itemItemTypeVar?.errors.required">
                                         {{ 'Item Type' | translate }} {{ 'is required' | translate }}
                                     </span>
                                 </span>
@@ -61,14 +61,14 @@
                             <label class="col-md-2 control-label" for="itemFulfilledById">{{ 'Fulfilled By' | translate }}</label>
                             <div class="col-md-8 p-w-none m-t-responsive">
                                 <div class="col-md-8 min-height z-fix">
-                                    <select id="itemFulfilledById" name="itemFulfilledBy" class="form-control" required [(ngModel)]=item.FulfilledBy #itemFulfilledByVar="ngModel">
+                                    <select id="itemFulfilledById" name="itemFulfilledBy" class="form-control" required [(ngModel)]=item.FulfilledBy #itemFulfilledByVar="ngModel" (change)="onFulfilledByChange()">
                                         <option value="Toolots">{{ 'Toolots' | translate }}</option>
                                         <option value="Merchant">{{ 'Merchant' | translate }}</option>
                                     </select>
                                     <span class="help-block" *ngIf="(itemFulfilledByVar.touched ||
                                                                             itemFulfilledByVar.dirty) &&
                                                                             itemFulfilledByVar.errors">
-                                        <span *ngIf="itemFulfilledByVar.errors.required">
+                                        <span *ngIf="itemFulfilledByVar?.errors.required">
                                             {{ 'Fulfilled By' | translate }} {{ 'is required' | translate }}
                                         </span>
                                     </span>
@@ -109,7 +109,7 @@
                                     <option value="USA">USA</option>
                                 </select>
                                 <span class="help-block" *ngIf="itemOriginVar.errors">
-                                    <span *ngIf="itemOriginVar.errors.required">
+                                    <span *ngIf="itemOriginVar?.errors.required">
                                         Origin is required
                                     </span>
                                 </span>
@@ -199,45 +199,46 @@
                             <mat-checkbox [(ngModel)]="item.ExcludeGoogleShopping" [ngModelOptions]="{standalone: true}"></mat-checkbox>
                         </div>
                     </div>
-
                     <!-- Shipping -->
-                    <div class="ibox-title"><h5>{{ 'Shipping' | translate }}</h5></div>
-                    <div class="ibox-content">
-                        <div class="form-group">
-                            <label class="col-md-2 control-label" for="itemIsFreeShipping">{{ 'Free Shipping' | translate }}</label>
-                            <div class="col-md-8" style="padding-top:7px">
-                                <mat-checkbox [(ngModel)]="item.IsFreeShipping" [ngModelOptions]="{standalone: true}"></mat-checkbox>
+                    <ng-container *ngIf="item.FulfilledBy !== 'Toolots'">
+                        <div class="ibox-title"><h5>{{ 'Shipping' | translate }}</h5></div>
+                        <div class="ibox-content">
+                            <div class="form-group">
+                                <label class="col-md-2 control-label" for="itemIsFreeShipping">{{ 'Free Shipping' | translate }}</label>
+                                <div class="col-md-8" style="padding-top:7px">
+                                    <mat-checkbox [(ngModel)]="item.IsFreeShipping" [ngModelOptions]="{standalone: true}"></mat-checkbox>
+                                </div>
                             </div>
-                        </div>
-                        <div class="form-group" *ngIf="item.IsFreeShipping === false"
-                            [ngClass]="{'has-error': itemFulfilledByVar.value == 'Merchant' &&
-                                !itemShippingFeeVar.valid }">
-                            <label class="col-md-2 control-label" for="itemShippingFeeId">{{ 'Shipping Fee' | translate }}</label>
-                            <div class="col-md-8">
-                                <input class="form-control" id="itemShippingFeeId" type="number"
-                                    step="0.01" onchange="this.value = this.value && this.value == 0 ? '' : this.value; this.value = parseFloat(this.value).toFixed(2);" onkeydown="return event.keyCode == 69 || event.keyCode == 189 ? false : true" min="0.01"
-                                    [(ngModel)]=item.ShippingFee name="itemShippingFee" #itemShippingFeeVar="ngModel" />
-                            </div>
-                        </div>
-                        <div class="form-group" *ngIf="item.FulfilledBy === 'Merchant'"
+                            <div class="form-group" *ngIf="item.IsFreeShipping === false"
                                 [ngClass]="{'has-error': itemFulfilledByVar.value == 'Merchant' &&
-                                !itemShipWithinDaysVar.valid }">
-                            <label class="col-md-2 control-label" for="itemShipWithinDaysId">{{ 'Ship Within Days' | translate }}</label>
-                            <div class="col-md-8">
-                                <input class="form-control" id="itemShipWithinDaysId" type="number"
-                                    onkeydown="return event.keyCode == 69 || event.keyCode == 189 || event.keyCode == 190 ? false : true" min="0" required
-                                    [(ngModel)]=item.ShipWithinDays name="itemShipWithinDays" #itemShipWithinDaysVar="ngModel" />
+                                    !itemShippingFeeVar.valid }">
+                                <label class="col-md-2 control-label" for="itemShippingFeeId">{{ 'Shipping Fee' | translate }}</label>
+                                <div class="col-md-8">
+                                    <input class="form-control" id="itemShippingFeeId" type="number"
+                                        step="0.01" onchange="this.value = this.value && this.value == 0 ? '' : this.value; this.value = parseFloat(this.value).toFixed(2);" onkeydown="return event.keyCode == 69 || event.keyCode == 189 ? false : true" min="0.01"
+                                        [(ngModel)]=item.ShippingFee name="itemShippingFee" #itemShippingFeeVar="ngModel" />
+                                </div>
+                            </div>
+                            <div class="form-group" *ngIf="item.FulfilledBy === 'Merchant'"
+                                    [ngClass]="{'has-error': itemFulfilledByVar.value == 'Merchant' &&
+                                    !itemShipWithinDaysVar.valid }">
+                                <label class="col-md-2 control-label" for="itemShipWithinDaysId">{{ 'Ship Within Days' | translate }}</label>
+                                <div class="col-md-8">
+                                    <input class="form-control" id="itemShipWithinDaysId" type="number"
+                                        onkeydown="return event.keyCode == 69 || event.keyCode == 189 || event.keyCode == 190 ? false : true" min="0" required
+                                        [(ngModel)]=item.ShipWithinDays name="itemShipWithinDays" #itemShipWithinDaysVar="ngModel" />
 
-                                <span class="help-block" *ngIf="itemFulfilledByVar.value == 'Merchant' && (itemShipWithinDaysVar.touched ||
-                                                                itemShipWithinDaysVar.dirty) &&
-                                                                itemShipWithinDaysVar.errors">
-                                    <span *ngIf="itemShipWithinDaysVar.errors.required">
-                                        {{ 'Ship Within Days' | translate }} {{ 'is required' | translate }}
+                                    <span class="help-block" *ngIf="itemFulfilledByVar.value == 'Merchant' && (itemShipWithinDaysVar.touched ||
+                                                                    itemShipWithinDaysVar.dirty) &&
+                                                                    itemShipWithinDaysVar.errors">
+                                        <span *ngIf="itemShipWithinDaysVar?.errors.required">
+                                            {{ 'Ship Within Days' | translate }} {{ 'is required' | translate }}
+                                        </span>
                                     </span>
-                                </span>
+                                </div>
                             </div>
                         </div>
-                    </div>
+                    </ng-container>
                     <div class="ibox-title"><h5>{{ 'Meta Information' | translate }}</h5></div>
                     <div class="ibox-content">
                         <div class="form-group">

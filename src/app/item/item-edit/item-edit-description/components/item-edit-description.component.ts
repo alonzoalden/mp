@@ -103,4 +103,12 @@ export class ItemEditDescriptionComponent implements OnChanges, AfterViewInit {
         this.item.TechnicalDetail = $('#itemTechnicalDetailId').summernote('code');
         this.item.AdditionalInformation = $('#itemAdditionalInformationId').summernote('code');
     }
+
+    onFulfilledByChange() {
+        if (this.item.FulfilledBy === 'Toolots') {
+            this.item.IsFreeShipping = null;
+            this.item.ShippingFee = null;
+            this.item.ShipWithinDays = null;
+        }
+    }
 }

@@ -14,7 +14,7 @@
                         <ng-container matColumnDef="Add">
                             <th mat-header-cell *matHeaderCellDef width="45px"></th>
                             <td mat-cell *matCellDef="let invoice; let i = index">
-                                <div *ngIf="i === invoices.length - 1">
+                                <div *ngIf="i === invoices.length - 1 && !pendingSave">
                                     <a (click)='onAdd(invoice); formDirty = false;'>
                                         <span [matTooltip]="isInvoiceValid(invoice) ? ( 'Add' | translate ) : ( 'Required fields must be complete' | translate )"
                                             class="glyphicon glyphicon-plus fs-20" [ngClass]="isInvoiceValid(invoice) ? 'green' : 'gray'">
@@ -27,7 +27,6 @@
                         <ng-container matColumnDef="Invoice">
                             <th mat-header-cell *matHeaderCellDef width="200px">{{ 'Invoice' | translate }}</th>
                             <td mat-cell *matCellDef="let invoice; let i = index">
-
                                 <div *ngIf="i === invoices.length - 1 && !invoice.FilePath && (!isLoadingData || currentIndex !== i)" class="animated fadeIn">
                                     <button mat-flat-button cdkFocusInitial style="padding: 0; max-height: 36px;" class="btn btn-primary-main" [disabled]="isLoadingData || pendingSave" (click)="uploadError = null;">
                                             <label class="btn btn-primary" style="width:100%; height:100%;">
