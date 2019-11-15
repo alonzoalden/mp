@@ -82,7 +82,7 @@ export class ItemListComponent implements OnInit, OnChanges {
 
     openDialogPrintItemLabel(item: Item) {
         const dialogRef = this.itemPrintDialog.open(ItemListComponentItemPrintDialog, {
-          width: '350px',
+          width: '420px',
           data: item,
         });
 
