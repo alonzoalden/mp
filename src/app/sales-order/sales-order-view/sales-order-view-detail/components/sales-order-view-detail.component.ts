@@ -152,7 +152,9 @@ export class SalesOrderDetailComponent implements OnInit, OnChanges {
         });
 
         dialogRef.afterClosed().subscribe((invoices) => {
-            this.invoices = invoices;
+            if (invoices) {
+                this.invoices = invoices;
+            }
         });
     }
 

@@ -26,8 +26,8 @@ export class SalesOrderViewUploadInvoiceComponentDialog implements OnInit, OnDes
     pendingAdd: boolean;
     componentActive: boolean = true;
     BOLRequest: BOLRequest;
-    invoices: PurchaseOrderMerchantInvoice[] = [];
-    displayedColumns = ['Add', 'Invoice', 'InvoiceAmount', 'ShippingAmount', 'Remove'];
+    invoices: any = [];
+    displayedColumns = ['Add', 'Download', 'Invoice', 'InvoiceAmount', 'ShippingAmount', 'Remove'];
     filesToUpload: Array<File> = [];
     selectedFileNames: string[] = [];
     name: string;
@@ -51,11 +51,15 @@ export class SalesOrderViewUploadInvoiceComponentDialog implements OnInit, OnDes
         this.orderid = this.data.orderid;
         this.salesOrder = this.data.salesorder;
         this.currentIndex = this.invoices.length - 1;
-
+        
         if (this.data.invoices.length) {
-            this.invoices = [...this.data.invoices];
-            this.refreshDataSource(this.invoices);
-            this.addPendingLine();
+            
+            //this.invoices = [...this.data.invoices];
+            this.salesorderService.getMerchantInvoices(this.orderid).subscribe(invoices => {
+                this.invoices = invoices;
+                this.addPendingLine();
+                this.refreshDataSource(this.invoices);
+            });
         }
         // this.store.pipe(
         //     select(fromSalesOrder.getBOLRequest),
@@ -118,8 +122,6 @@ export class SalesOrderViewUploadInvoiceComponentDialog implements OnInit, OnDes
             this.isLoadingData = true;
             this.salesorderService.uploadMerchantInvoiceAttachment(this.orderid, formData).subscribe((filepath: string) => {
                 this.invoices[this.currentIndex].FilePath = filepath;
-                console.log(this.invoices[this.currentIndex]);
-                console.log(this.invoices);
                 this.salesorderService.sendNotification({ type: 'success', title: 'Upload Successful', content: `Invoice Attachment saved` });
                 this.isLoadingData = false;
                 this.filesToUpload = [];
@@ -148,7 +150,7 @@ export class SalesOrderViewUploadInvoiceComponentDialog implements OnInit, OnDes
         }
 
         this.pendingSave = true;
-        console.log(this.invoices);
+
         this.salesorderService.addMerchantInvoices(this.orderid, this.invoices)
                 .subscribe((invoices) => {
                     this.salesorderService.sendNotification({ type: 'success', title: 'Success', content: 'Merchant Invoices Saved' });
@@ -181,6 +183,7 @@ export class SalesOrderViewUploadInvoiceComponentDialog implements OnInit, OnDes
         this.selectedFileNames = [];
     }
     onCloseClick(): void {
+        this.invoices = [];
         this.dialogRef.close();
     }
     ngOnDestroy(): void {
@@ -204,4 +207,7 @@ export class SalesOrderViewUploadInvoiceComponentDialog implements OnInit, OnDes
             this.currentIndex = this.invoices.length - 1;
         }
     }
+    // viewFile(invoice: PurchaseOrderMerchantInvoice) {
+    //     window.location.href = this.invoiceURL + invoice.FilePath;
+    // }
 }
