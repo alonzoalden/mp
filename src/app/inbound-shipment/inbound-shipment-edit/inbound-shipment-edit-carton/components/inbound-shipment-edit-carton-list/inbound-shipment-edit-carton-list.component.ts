@@ -64,6 +64,10 @@ export class InboundShipmentEditCartonListComponent
 
     ngOnInit() {
         this.purchaseorderid = this.route.parent.snapshot.params['id'];
+        if (this.purchaseOrder && this.purchaseOrder.Cartons) {
+            this.refreshDataSource(this.purchaseOrder.Cartons);
+            this.currentIndex = this.purchaseOrder.Cartons.length - 1;
+        }
     }
 
     getTotalQuantity(cartonLines: CartonLine[]) {
