@@ -1,4 +1,4 @@
-<h3 mat-dialog-title >{{'Name: ' + member.FirstName + ' ' + member.LastName}}
+<h3 mat-dialog-title >{{'User: ' + member.FirstName + ' ' + member.LastName}}
     <span class="pull-right"><i (click)="onCloseClick()" class="fa fa-close" matTooltip="{{ 'Close' | translate }}"
                                 aria-label="Close Icon for Relation Vendor"></i></span>
 </h3>
@@ -7,7 +7,7 @@
         <h4>{{'Vendor List'|translate}}</h4>
         <div class="toolbar-search-1">
             <i class="fa fa-search" aria-label="Icon for Filter By Input Bar" style="position: relative;left: 30px"
-               [ngClass]="itemsMatTable?.filter ? 'selected' : ''" (click)="FilterBy.select()"></i>
+               [ngClass]="unRelatedVendorList?.filter ? 'selected' : ''" (click)="FilterBy.select()"></i>
             <input (keyup)="applyFilter($event.target.value)" placeholder="{{ 'Filter By' | translate }}"
                    class="form-control" #FilterBy>
         </div>

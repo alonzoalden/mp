@@ -168,12 +168,17 @@ export class UserManagementListDialogContentEditComponent implements OnInit, OnC
     }
 
     remove(vendor) {
-        console.log(vendor);
         const updateVendor: Vendor = JSON.parse(JSON.stringify(vendor));
         updateVendor.MemberID = null;
         this.store.dispatch(new UserManageActions.RemoveVendorRelationToMember({
             Vendor: updateVendor,
             MemberID: String(this.member.MemberID)
         }));
+    }
+    applyFilter(filterValue: string) {
+        this.unRelatedVendorList.filter = filterValue.trim().toLowerCase();
+        if (this.unRelatedVendorList.paginator) {
+            this.unRelatedVendorList.paginator.firstPage();
+        }
     }
 }
