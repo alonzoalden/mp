@@ -65,6 +65,9 @@
                 <li class="dropdown" *ngIf="isPM">
                     <a [routerLink]="['report']">{{ 'Report' | translate }}</a>
                 </li>
+                <li class="dropdown">
+                    <a [routerLink]="['user']">{{ 'User Management' | translate }}</a>
+                </li>
             </ul>
             <ul class="nav navbar-right navbar-top-links">
                 <li *ngIf="!isLoggedin">

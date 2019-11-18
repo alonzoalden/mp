@@ -31,6 +31,7 @@ export class Vendor {
         public UpdatedOn?: Date,
         public CreatedOn?: Date,
         public BindLabel?: string,
+        public MemberID?: Number
     ) {
     }
 }

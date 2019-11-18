@@ -45,6 +45,11 @@ const APP_ROUTES: Routes = [
                 canLoad: [PMAuthGuard]
             },
             {
+                path: 'user',
+                loadChildren: 'app/PM/user-management/user-management.module#UserManagementModule',
+                canLoad: [PMAuthGuard]
+            },
+            {
                 path: '**',
                 redirectTo: 'dashboard'
             }

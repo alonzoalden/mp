@@ -21,10 +21,8 @@ import {ReportVendorContainerComponent} from './components/report-vendor/contain
 import {FormsModule} from '@angular/forms';
 import {StoreModule} from '@ngrx/store';
 import {EffectsModule} from '@ngrx/effects';
-import {ItemEffects} from '../../original/item/state/item.effects';
 import {ReportEffects} from './state/report.effects';
 import {ReportPmService} from './report-pm.service';
-import {itemReducer} from '../../original/item/state/item.reducer';
 import {ReportReducer} from './state/report.reducer';
 import {CdkTableModule} from '@angular/cdk/table';
 
