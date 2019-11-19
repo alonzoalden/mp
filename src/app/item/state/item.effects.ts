@@ -792,7 +792,6 @@ export class ItemEffects {
         mergeMap((payload) =>
             this.itemService.downloadPrintItemLargeLabelsCustom(payload.options).pipe(
                 map((data: Blob) => {
-                    console.log('here');
                     const blob = new Blob([data], {type: 'application/pdf'});
                     if (window.navigator.msSaveOrOpenBlob) {
                         const fileName = String(Date.now());

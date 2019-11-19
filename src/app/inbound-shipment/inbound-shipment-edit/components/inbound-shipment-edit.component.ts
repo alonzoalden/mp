@@ -332,7 +332,6 @@ export class InboundShipmentEditComponent implements OnInit {
                             });
                         }
                     }
-                    console.log(result);
                     if (result.isCustom) {
                         this.editPurchaseOrderThenPrintItemLabelsCustom.emit({purchaseOrder: newPurchaseOrder, options: result.customOptions, size: result.size });
                     }
@@ -344,7 +343,6 @@ export class InboundShipmentEditComponent implements OnInit {
                         this.onPrintAllItemLabelsCustom(result.customOptions);
                     }
                     else {
-                        console.log(result.size);
                         this.onPrintAllItemLabels(result.customOptions.Border);
                     }
                 } else {

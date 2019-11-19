@@ -130,7 +130,6 @@ export class RegistrationComponent implements OnInit, OnDestroy {
         this.oauthService.initImplicitFlow();
     }
     doNotification(notification) {
-        console.log(this.notificationComponent);
         this.notificationComponent.notify(notification);
     }
 }

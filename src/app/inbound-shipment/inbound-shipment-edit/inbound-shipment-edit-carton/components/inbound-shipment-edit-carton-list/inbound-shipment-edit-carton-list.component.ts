@@ -236,7 +236,6 @@ export class InboundShipmentEditCartonListComponent
     }
 
     isRequirementValid(carton: Carton) {
-        console.log(carton);
         if (
             carton
             && (carton.LabelQty === 0 || carton.LabelQty > 0)
