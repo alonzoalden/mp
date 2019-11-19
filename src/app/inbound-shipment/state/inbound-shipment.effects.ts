@@ -157,7 +157,7 @@ export class InboundShipmentEffects {
         mergeMap(() =>
             this.inboundShipmentService.addPurchaseOrder().pipe(
                 map((purchaseOrder: PurchaseOrder) => {
-                    this.inboundShipmentService.sendNotification({ type: 'success', title: 'Successfully Added', content: `${purchaseOrder.PurchaseOrderID} was added` });
+                    this.inboundShipmentService.sendNotification({ type: 'success', title: 'Successfully Added', content: `${purchaseOrder.PackingSlipNumber} was added` });
                     this.router.navigate(['/inbound-shipment', purchaseOrder.PurchaseOrderID, 'edit']);
                     return (new inboundShipmentActions.AddNewPurchaseOrderSuccess(purchaseOrder));
                 }),
@@ -180,7 +180,7 @@ export class InboundShipmentEffects {
                     this.inboundShipmentService.replacePurchaseOrder(payload.purchaseOrder.PurchaseOrderID, payload.purchaseOrder);
                     this.inboundShipmentService.currentPurchaseOrderEdit = payload.purchaseOrder;
                     this.inboundShipmentService.currentPurchaseLineIsUpdated = false;
-                    this.inboundShipmentService.sendNotification({ type: 'success', title: 'Successfully Updated', content: `${purchaseOrder.PurchaseOrderID} was saved` });
+                    this.inboundShipmentService.sendNotification({ type: 'success', title: 'Successfully Updated', content: `${purchaseOrder.PackingSlipNumber} was saved` });
                     if (payload.printLabel) {
                         this.store.dispatch(new inboundShipmentActions.DownloadPurchaseOrderLabel(payload.purchaseOrder));
                     }
@@ -205,7 +205,7 @@ export class InboundShipmentEffects {
                     this.inboundShipmentService.replacePurchaseOrder(payload.purchaseOrder.PurchaseOrderID, payload.purchaseOrder);
                     this.inboundShipmentService.currentPurchaseOrderEdit = payload.purchaseOrder;
                     this.inboundShipmentService.currentPurchaseLineIsUpdated = false;
-                    this.inboundShipmentService.sendNotification({ type: 'success', title: 'Successfully Updated', content: `${purchaseOrder.PurchaseOrderID} was saved` });
+                    this.inboundShipmentService.sendNotification({ type: 'success', title: 'Successfully Updated', content: `${purchaseOrder.PackingSlipNumber} was saved` });
                     if (payload.size === 'small') {
                         this.store.dispatch(new inboundShipmentActions.DownloadAllItemLabel({purchaseOrder: purchaseOrder, border: payload.border}));
                     } else {
@@ -232,7 +232,7 @@ export class InboundShipmentEffects {
                     this.inboundShipmentService.replacePurchaseOrder(payload.purchaseOrder.PurchaseOrderID, payload.purchaseOrder);
                     this.inboundShipmentService.currentPurchaseOrderEdit = payload.purchaseOrder;
                     this.inboundShipmentService.currentPurchaseLineIsUpdated = false;
-                    this.inboundShipmentService.sendNotification({ type: 'success', title: 'Successfully Updated', content: `${purchaseOrder.PurchaseOrderID} was saved` });
+                    this.inboundShipmentService.sendNotification({ type: 'success', title: 'Successfully Updated', content: `${purchaseOrder.PackingSlipNumber} was saved` });
                     if (payload.size === 'small') {
                         this.store.dispatch(new inboundShipmentActions.DownloadAllItemLabelCustom({purchaseOrder: purchaseOrder, options: payload.options }));
                     } else {
