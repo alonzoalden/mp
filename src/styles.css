@@ -1628,6 +1628,10 @@ table {
     padding-top: 250px;
     margin-top: -250px;
 }
+.pm-t-none {
+    padding-top: 0px;
+    margin-top: 0px;
+}
 .opaque {
     opacity: 0.3;
 }

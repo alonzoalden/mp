@@ -1,6 +1,5 @@
 import { Component, OnInit } from '@angular/core';
 import { MatTableDataSource } from '@angular/material';
-
 import { Observable } from 'rxjs';
 import { Store, select } from '@ngrx/store';
 import * as itemActions from '../../state/item.actions';
@@ -8,7 +7,6 @@ import * as fromItem from '../../state';
 import * as fromUser from '../../../shared/state/user-state.reducer';
 import { ItemPrintLabel, ItemList } from 'app/shared/class/item';
 import { Member } from 'app/shared/class/member';
-
 
 @Component({
     templateUrl: './item-print-label-shell.component.html'
@@ -41,5 +39,11 @@ export class ItemPrintLabelShellComponent implements OnInit  {
     }
     downloadPrintItemLargeLabels(payload): void {
         this.store.dispatch(new itemActions.DownloadPrintItemLargeLabels(payload));
+    }
+    downloadPrintItemLabelsCustom(payload): void {
+        this.store.dispatch(new itemActions.DownloadItemPrintLabelCustom(payload));
+    }
+    downloadPrintItemLargeLabelsCustom(payload): void {
+        this.store.dispatch(new itemActions.DownloadPrintItemLargeLabelsCustom(payload));
     }
 }

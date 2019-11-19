@@ -4,6 +4,7 @@ import * as inboundShipmentActions from '../../../state/inbound-shipment.actions
 import * as fromInboundShipment from '../../../state';
 import { Observable } from 'rxjs';
 import { PurchaseOrder, Carton, PurchaseOrderLineList } from '../../../../shared/class/purchase-order';
+import { CustomPrintLabel } from 'app/shared/class/label';
 
 @Component({
     selector: 'o-inbound-shipment-edit-carton-shell',
@@ -41,5 +42,8 @@ export class InboundShipmentEditCartonShellComponent  implements OnInit {
     }
     downloadCartonLabelCount(payload: { carton: Carton, count: number, border: string}): void {
         this.store.dispatch(new inboundShipmentActions.DownloadCartonLabelCount(payload));
+    }
+    downloadCartonLabelCountCustom(payload: { carton: Carton, options: CustomPrintLabel}): void {
+        this.store.dispatch(new inboundShipmentActions.DownloadAllCartonLabelCustom(payload));
     }
 }

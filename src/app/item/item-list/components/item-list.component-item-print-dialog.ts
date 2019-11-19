@@ -3,14 +3,6 @@ import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material';
 import { Item } from '../../../shared/class/item';
 import { CustomPrintLabel } from '../../../shared/class/label';
 
-export class ItemLabelPrintDialog {
-    constructor(
-        public Size: string,
-        public Quantity: number,
-        public Border: string
-    ) {}
-}
-
 @Component({
     selector: 'item-list.component-item-print-dialog',
     templateUrl: 'item-list.component-item-print-dialog.html',
@@ -28,7 +20,7 @@ export class ItemListComponentItemPrintDialog implements OnInit {
 
         }
     ngOnInit() {
-        this.customOptions = new CustomPrintLabel(1, 'yes', 0, 0, 0, 0, 0, 0, 0, 0);
+        this.customOptions = new CustomPrintLabel(1, 'yes', 0, 0, 0, 0, 0, 0, 0, 0, []);
     }
 
     onCloseClick(): void {

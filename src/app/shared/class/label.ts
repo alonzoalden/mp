@@ -1,3 +1,4 @@
+import { ItemPrintLabel } from './item';
 export class CustomPrintLabel {
     constructor(
         public Quantity: number,
@@ -9,6 +10,7 @@ export class CustomPrintLabel {
         public PageTopMargin: number,
         public PageLeftMargin: number,
         public GapDistanceX: number,
-        public GapDistanceY: number
+        public GapDistanceY: number,
+        public ItemPrintLabels: Array<ItemPrintLabel>
     ) {}
 }

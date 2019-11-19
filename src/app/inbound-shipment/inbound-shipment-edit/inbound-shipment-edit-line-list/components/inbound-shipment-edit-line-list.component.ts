@@ -7,6 +7,7 @@ import { environment } from '../../../../../environments/environment';
 import { ItemList } from '../../../../shared/class/item';
 import { SimpleChanges } from '@angular/core';
 import { InboundShipmentEditLineItemPrintDialogComponent } from './inbound-shipment-edit-line-list.component-item-print-dialog';
+import { CustomPrintLabel } from 'app/shared/class/label';
 
 @Component({
 selector: 'o-inbound-shipment-edit-line-list',
@@ -24,6 +25,9 @@ export class InboundShipmentEditLineListComponent implements OnInit, OnChanges {
     @Output() downloadItemLabelCount = new EventEmitter<{purchaseorderline: PurchaseOrderLine, count: number, border: string}>();
     @Output() downloadItemLargeLabelCount = new EventEmitter<{purchaseorderline: PurchaseOrderLine, count: number, border: string}>();
     @Output() setSelectedPurchaseOrder = new EventEmitter<PurchaseOrder>();
+    @Output() downloadItemLabelCountCustom = new EventEmitter<{ purchaseorderline: PurchaseOrderLine, options: CustomPrintLabel }>();
+    @Output() downloadItemLargeLabelCountCustom = new EventEmitter<{ purchaseorderline: PurchaseOrderLine, options: CustomPrintLabel }>();
+
     purchaseorderid: number;
     linkURL = environment.linkURL;
     imageURL = environment.imageURL;
@@ -161,16 +165,24 @@ export class InboundShipmentEditLineListComponent implements OnInit, OnChanges {
 
     openDialogPrintItemLabel(purchaseorderline: PurchaseOrderLine) {
         const dialogRef = this.itemPrintDialog.open(InboundShipmentEditLineItemPrintDialogComponent, {
-          width: '250px',
+          width: '420px',
           data: purchaseorderline
         });
 
-        dialogRef.afterClosed().subscribe(result => {
-            if (result && result.Quantity > 0) {
-                if (result.Size === 'small') {
-                    this.onPrintLabel(purchaseorderline, result.Quantity, result.Border);
+        dialogRef.afterClosed().subscribe(data => {
+            if (data && data.customOptions && data.customOptions.Quantity > 0) {
+                if (data.size === 'small') {
+                    if (data.isCustom) {
+                        this.onPrintLabelCustom(purchaseorderline, data.customOptions);
+                    } else {
+                        this.onPrintLabel(purchaseorderline, data.customOptions.Quantity, data.customOptions.Border);
+                    }
                 } else {
-                    this.onPrintLargeLabel(purchaseorderline, result.Quantity, result.Border);
+                    if (data.isCustom) {
+                        this.onPrintLargeLabelCustom(purchaseorderline, data.customOptions);
+                    } else {
+                        this.onPrintLargeLabel(purchaseorderline, data.customOptions.Quantity, data.customOptions.Border);
+                    }
                 }
             }
         });
@@ -179,9 +191,21 @@ export class InboundShipmentEditLineListComponent implements OnInit, OnChanges {
     onPrintLabel(purchaseorderline: PurchaseOrderLine, count: number, border: string) {
         this.downloadItemLabelCount.emit({purchaseorderline, count, border});
     }
-
     onPrintLargeLabel(purchaseorderline: PurchaseOrderLine, count: number, border: string) {
         this.downloadItemLargeLabelCount.emit({purchaseorderline, count, border});
+    }
+    // onPrintLabel(item: Item, count: number, border: string) {
+    //     this.downloadItemLabelCount.emit({item: item, count: count, border: border});
+    // }
+    onPrintLabelCustom(purchaseorderline: PurchaseOrderLine, options: CustomPrintLabel) {
+        this.downloadItemLabelCountCustom.emit({ purchaseorderline, options: options });
+    }
+
+    // onPrintLargeLabel(item: Item, count: number, border: string) {
+    //     this.downloadItemLargeLabelCount.emit({item: item, count: count, border: border});
+    // }
+    onPrintLargeLabelCustom(purchaseorderline: PurchaseOrderLine, options: CustomPrintLabel) {
+        this.downloadItemLargeLabelCountCustom.emit({ purchaseorderline, options: options });
     }
     scrollToElement($element): void {
         $element.scrollIntoView({behavior: 'smooth', block: 'start', inline: 'nearest'});
