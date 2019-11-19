@@ -600,15 +600,15 @@ export class DownloadPrintItemLargeLabelsFail implements Action {
 }
 
 export class DownloadPrintItemLargeLabelsCustom implements Action {
-    readonly type = ItemActionTypes.DownloadPrintItemLargeLabels;
+    readonly type = ItemActionTypes.DownloadPrintItemLargeLabelsCustom;
     constructor(public payload: { options: CustomPrintLabel }) {}
 }
 export class DownloadPrintItemLargeLabelsCustomSuccess implements Action {
-    readonly type = ItemActionTypes.DownloadPrintItemLargeLabelsSuccess;
+    readonly type = ItemActionTypes.DownloadPrintItemLargeLabelsCustomSuccess;
     constructor(public payload: Blob) {}
 }
 export class DownloadPrintItemLargeLabelsCustomFail implements Action {
-    readonly type = ItemActionTypes.DownloadPrintItemLargeLabelsFail;
+    readonly type = ItemActionTypes.DownloadPrintItemLargeLabelsCustomFail;
     constructor(public payload: string) {}
 }
 
@@ -691,7 +691,6 @@ export type ItemActions =
     | DownloadItemPrintLabel
     | DownloadItemPrintLabelSuccess
     | DownloadItemPrintLabelFail
-
     | DownloadPrintItemLargeLabelsCustom
     | DownloadPrintItemLargeLabelsCustomSuccess
     | DownloadPrintItemLargeLabelsCustomFail

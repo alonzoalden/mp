@@ -17,7 +17,7 @@ export class ItemPrintLabelComponent implements OnInit, OnChanges {
     @Input() itemPrintLabelsMatTable: MatTableDataSource<ItemPrintLabel>;
     @Input() itemList: ItemList[];
     @Input() errorMessage: string;
-    @Input() isLoading: boolean;
+    @Input() isItemListLoading: boolean;
     @Output() getItemList = new EventEmitter<void>();
     @Output() downloadPrintItemLabels = new EventEmitter<{labels: ItemPrintLabel[], border: string}>();
     @Output() downloadPrintItemLargeLabels = new EventEmitter<{labels: ItemPrintLabel[], border: string}>();
@@ -41,9 +41,11 @@ export class ItemPrintLabelComponent implements OnInit, OnChanges {
     }
 
     ngOnInit(): void {
-        this.currentIndex = 0;
         this.getItemList.emit();
-
+        this.currentIndex = 0;
+        if (this.itemPrintLabelsMatTable.data.length) {
+            this.currentIndex = this.itemPrintLabelsMatTable.data.length - 1;
+        }
     }
 
     refreshDataSource(itemPrintLabels: ItemPrintLabel[]) {

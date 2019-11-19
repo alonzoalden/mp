@@ -17,7 +17,7 @@ export class ItemPrintLabelShellComponent implements OnInit  {
     itemList$: Observable<ItemList[]>;
     userInfo$: Observable<Member>;
     pendingAdd$: Observable<boolean>;
-    isLoading$: Observable<boolean>;
+    isItemListLoading$: Observable<boolean>;
     errorMessage$: Observable<string>;
 
     constructor(private store: Store<fromItem.State>) {}
@@ -28,7 +28,7 @@ export class ItemPrintLabelShellComponent implements OnInit  {
         this.itemPrintLabelsMatTable$ = this.store.pipe(select(fromItem.getItemPrintLabelsMatTable));
         this.errorMessage$ = this.store.pipe(select(fromItem.getError));
         setTimeout(() => {
-            this.isLoading$ = this.store.pipe(select(fromItem.getIsLoading));
+            this.isItemListLoading$ = this.store.pipe(select(fromItem.getIsItemListLoading));
         });
     }
     getItemList(): void {

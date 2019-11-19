@@ -74,13 +74,14 @@
                                                             placeholder="{{ 'Search Item' | translate }}"
                                                             [(ngModel)]="itemPrintLabel.ItemID"
                                                             [ngModelOptions]="{standalone: true}"
+                                                            dropdownPosition="bottom"
                                                             (change)="onItemChange(i)"
                                                             (focus)="formDirty = true;"
                                                             #itemPrintLabelItemIDRef
                                                             name="itemPrintLabelItemID"
                                                             required
                                                             dropdownPosition="auto"
-                                                            [loading]="!itemList"
+                                                            [loading]="isItemListLoading"
                                                             loadingText="Loading...">
                                                     <ng-template ng-option-tmp let-item="item">
                                                         <div matTooltip="{{item.Description}}" matTooltipPosition="right" matTooltipShowDelay="400">{{item.Description}}</div>

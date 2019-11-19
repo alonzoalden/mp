@@ -332,17 +332,19 @@ export class InboundShipmentEditComponent implements OnInit {
                             });
                         }
                     }
+                    console.log(result);
                     if (result.isCustom) {
                         this.editPurchaseOrderThenPrintItemLabelsCustom.emit({purchaseOrder: newPurchaseOrder, options: result.customOptions, size: result.size });
                     }
                     else {
-                        this.editPurchaseOrderThenPrintItemLabels.emit({purchaseOrder: newPurchaseOrder, size: result.customOptions.Size, border: result.customOptions.Border});
+                        this.editPurchaseOrderThenPrintItemLabels.emit({purchaseOrder: newPurchaseOrder, size: result.size, border: result.customOptions.Border});
                     }
                 } else if (result.size === 'small') {
                     if (result.isCustom) {
                         this.onPrintAllItemLabelsCustom(result.customOptions);
                     }
                     else {
+                        console.log(result.size);
                         this.onPrintAllItemLabels(result.customOptions.Border);
                     }
                 } else {
