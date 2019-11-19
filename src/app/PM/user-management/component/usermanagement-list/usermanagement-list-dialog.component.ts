@@ -38,7 +38,6 @@ export class UserManagementListDialogComponent implements OnInit {
     }
 
     ngOnInit() {
-        console.log(this.data);
         this.relatedVendorList$ = this.store.pipe(select(UserManageSelector.getRelatedVendorList));
         this.unRelatedVendorList$ = this.store.pipe(select(UserManageSelector.getUnRelatedVendorList));
 
@@ -96,7 +95,6 @@ export class UserManagementListDialogContentViewComponent implements OnInit, OnC
     }
 
     ngOnInit() {
-        console.log(this.member);
         this.getRelatedVendorList.emit(this.member);
     }
 
@@ -143,7 +141,6 @@ export class UserManagementListDialogContentEditComponent implements OnInit, OnC
     }
 
     ngOnInit() {
-        console.log(this.member);
         this.getRelatedVendorList.emit(this.member);
         this.getUnRelatedVendorList.emit(this.member);
     }

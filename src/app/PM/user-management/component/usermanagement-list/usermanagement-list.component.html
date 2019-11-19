@@ -80,9 +80,14 @@
                                 <td mat-cell *matCellDef="let item">
                                     <div class="text-center">
                                         <button mat-raised-button class="button-margin"
-                                                (click)="onButtonClick(item,'edit')">{{'Edit'|translate}}</button>
+                                                (click)="onButtonClick(item,'edit')">
+                                                <span class="glyphicon glyphicon-edit
+                                                glyphicon" aria-hidden="true"></span>
+                                               </button>
                                         <button mat-raised-button class="button-margin"
-                                                (click)="onButtonClick(item,'view')">{{'View'|translate}}</button>
+                                                (click)="onButtonClick(item,'view')">
+                                            <span class="glyphicon glyphicon-search" aria-hidden="true"></span>
+                                            </button>
                                     </div>
                                 </td>
                             </ng-container>

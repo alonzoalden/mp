@@ -77,7 +77,7 @@ export class ReportPmService {
             // The backend returned an unsuccessful response code.
             // The response body may contain clues as to what went wrong,
             // errorMessage = `Backend returned code ${err.status}, body was: ${err.error.Message}`;
-            errorMessage = `Response error: ${err.message}`;
+            errorMessage = `Response error: ${err.error.Message}`;
         }
         return throwError(errorMessage);
     }

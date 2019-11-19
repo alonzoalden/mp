@@ -65,7 +65,7 @@
                 <li class="dropdown" *ngIf="isPM">
                     <a [routerLink]="['report']">{{ 'Report' | translate }}</a>
                 </li>
-                <li class="dropdown">
+                <li class="dropdown" *ngIf="isSuperAdmin">
                     <a [routerLink]="['user']">{{ 'User Management' | translate }}</a>
                 </li>
             </ul>
