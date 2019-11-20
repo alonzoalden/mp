@@ -46,9 +46,9 @@ export enum InboundShipmentActionTypes {
     DownloadAllCartonLabel = '[InboundShipment] Download All Carton Label',
     DownloadAllCartonLabelSuccess = '[InboundShipment] Download All Carton Label Success',
     DownloadAllCartonLabelFail = '[InboundShipment] Download All Carton Label Fail',
-    DownloadAllCartonLabelCustom = '[InboundShipment] Download All Carton Label Custom',
-    DownloadAllCartonLabelCustomSuccess = '[InboundShipment] Download All Carton Label Custom Success',
-    DownloadAllCartonLabelCustomFail = '[InboundShipment] Download All Carton Label Custom Fail',
+    DownloadCartonLabelCountCustom = '[InboundShipment] Download All Carton Label Custom',
+    DownloadCartonLabelCountCustomSuccess = '[InboundShipment] Download All Carton Label Custom Success',
+    DownloadCartonLabelCountCustomFail = '[InboundShipment] Download All Carton Label Custom Fail',
     DownloadAllItemLabel = '[InboundShipment] Download All Item Label',
     DownloadAllItemLabelSuccess = '[InboundShipment] Download All Item Label Success',
     DownloadAllItemLabelFail = '[InboundShipment] Download All Item Label Fail',
@@ -231,16 +231,16 @@ export class DownloadAllCartonLabelFail implements Action {
     constructor(public payload: string) {}
 }
 
-export class DownloadAllCartonLabelCustom implements Action {
-    readonly type = InboundShipmentActionTypes.DownloadAllCartonLabelCustom;
+export class DownloadCartonLabelCountCustom implements Action {
+    readonly type = InboundShipmentActionTypes.DownloadCartonLabelCountCustom;
     constructor(public payload: { carton: Carton; options: CustomPrintLabel }) {}
 }
-export class DownloadAllCartonLabelCustomSuccess implements Action {
-    readonly type = InboundShipmentActionTypes.DownloadAllCartonLabelCustomSuccess;
+export class DownloadCartonLabelCountCustomSuccess implements Action {
+    readonly type = InboundShipmentActionTypes.DownloadCartonLabelCountCustomSuccess;
     constructor(public payload: Blob) {}
 }
-export class DownloadAllCartonLabelCustomFail implements Action {
-    readonly type = InboundShipmentActionTypes.DownloadAllCartonLabelCustomFail;
+export class DownloadCartonLabelCountCustomFail implements Action {
+    readonly type = InboundShipmentActionTypes.DownloadCartonLabelCountCustomFail;
     constructor(public payload: string) {}
 }
 
@@ -559,4 +559,7 @@ export type InboundShipmentActions =
     | DeletePurchaseOrderFail
     | LoadSimpleItemList
     | LoadSimpleItemListSuccess
-    | LoadSimpleItemListFail;
+    | LoadSimpleItemListFail
+    | DownloadCartonLabelCountCustom
+    | DownloadCartonLabelCountCustomSuccess
+    | DownloadCartonLabelCountCustomFail;

@@ -44,6 +44,6 @@ export class InboundShipmentEditCartonShellComponent  implements OnInit {
         this.store.dispatch(new inboundShipmentActions.DownloadCartonLabelCount(payload));
     }
     downloadCartonLabelCountCustom(payload: { carton: Carton, options: CustomPrintLabel}): void {
-        this.store.dispatch(new inboundShipmentActions.DownloadAllCartonLabelCustom(payload));
+        this.store.dispatch(new inboundShipmentActions.DownloadCartonLabelCountCustom(payload));
     }
 }

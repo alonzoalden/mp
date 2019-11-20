@@ -375,11 +375,11 @@ export class InboundShipmentEffects {
     );
 
     @Effect()
-    downloadAllCartonLabelCustom$: Observable<Action> = this.actions$.pipe(
-        ofType(inboundShipmentActions.InboundShipmentActionTypes.DownloadAllCartonLabelCustom),
-        map((action: inboundShipmentActions.DownloadAllCartonLabelCustom) => action.payload),
+    downloadCartonLabelCountCustom$: Observable<Action> = this.actions$.pipe(
+        ofType(inboundShipmentActions.InboundShipmentActionTypes.DownloadCartonLabelCountCustom),
+        map((action: inboundShipmentActions.DownloadCartonLabelCountCustom) => action.payload),
         mergeMap((payload: { carton: Carton, options: CustomPrintLabel } ) =>
-            this.inboundShipmentService.downloadAllCartonLabelCustom(payload.carton.PurchaseOrderID, payload.options).pipe(
+            this.inboundShipmentService.downloadCartonLabelCustom(payload.carton.CartonID, payload.options).pipe(
                 map((data: Blob) => {
                     const blob = new Blob([data], {type: 'application/pdf'});
                     if (window.navigator.msSaveOrOpenBlob) {
@@ -397,10 +397,10 @@ export class InboundShipmentEffects {
                         document.body.removeChild(a);
                         URL.revokeObjectURL(fileURL);
                     }
-                    return (new inboundShipmentActions.DownloadAllCartonLabelCustomSuccess(data));
+                    return (new inboundShipmentActions.DownloadCartonLabelCountCustomSuccess(data));
                 }),
                 catchError(err => {
-                    of(new inboundShipmentActions.DownloadAllCartonLabelCustomFail(err));
+                    of(new inboundShipmentActions.DownloadCartonLabelCountCustomFail(err));
                     return EMPTY;
                 })
             )

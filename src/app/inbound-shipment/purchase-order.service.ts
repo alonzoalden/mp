@@ -540,6 +540,12 @@ export class PurchaseOrderService {
         //return this.http.get(this.apiURL + '/carton/' + id + '/cartonlist', { responseType: 'blob' });
         return this.http.get(this.apiURL + '/carton/' + id + '/label', { responseType: 'blob' });
     }
+    // Custom
+    downloadCartonLabelCustom(id: number, options: CustomPrintLabel) {
+        //return this.http.get(this.apiURL + '/carton/' + id + '/cartonlist', { responseType: 'blob' });
+        return this.http.post(this.apiURL + '/carton/' + id + '/label/custom', options, { responseType: 'blob' });
+    }
+
     downloadCartonLabelCount(id: number, count: number, border: string) {
         //return this.http.get(this.apiURL + '/carton/' + id + '/cartonlist', { responseType: 'blob' });
         return this.http.get(this.apiURL + '/carton/' + id + '/label/' + count + '/' + border, { responseType: 'blob' });
@@ -567,7 +573,6 @@ export class PurchaseOrderService {
     downloadAllItemLargeLabelCustom(purchaseorderid: number, options: CustomPrintLabel) {
         return this.http.post(this.apiURL + '/purchaseorderline/purchaseorder/' + purchaseorderid + '/largelabel/custom', options, { responseType: 'blob' });
     }
-
 
     // Carton Lines
     getCartonLines(cartonid: number): Observable<CartonLine[]> {
