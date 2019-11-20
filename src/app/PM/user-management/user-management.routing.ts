@@ -1,5 +1,5 @@
 import {RouterModule, Routes} from '@angular/router';
-import {UsermanagementShellComponent} from './container/usermanagement-shell/usermanagement-shell.component';
+import {UsermanagementMemberShellComponent} from './container/usermanagement-member-shell/usermanagement-member-shell.component';
 import {UserManagementComponent} from './user-management.component';
 
 const USER_ROUTES: Routes = [
@@ -8,11 +8,7 @@ const USER_ROUTES: Routes = [
         component: UserManagementComponent,
         children: [
             {
-                path: 'list', component: UsermanagementShellComponent
-            },
-            {
-                path: '**',
-                redirectTo: 'list'
+                path: 'vendor', component: UsermanagementMemberShellComponent
             }
         ]
     }

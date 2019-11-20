@@ -1,6 +1,5 @@
 import {NgModule} from '@angular/core';
 import {CommonModule} from '@angular/common';
-import {UsermanagementShellComponent} from './container/usermanagement-shell/usermanagement-shell.component';
 import {ToolModule} from '../../shared/tool/tool.module';
 import {userManagementRouting} from './user-management.routing';
 import {TranslateModule} from '@ngx-translate/core';
@@ -10,33 +9,34 @@ import {UsermanagementReducer} from './state/usermanagement.reducer';
 import {UsermanagementEffects} from './state/usermanagement.effects';
 import {
     MatButtonModule,
-    MatDialogModule,
-    MatPaginatorModule,
+    MatDialogModule, MatListModule,
+    MatPaginatorModule, MatSidenavModule,
     MatTableModule,
     MatTooltipModule
 } from '@angular/material';
-import {UsermanagementListComponent} from './component/usermanagement-list/usermanagement-list.component';
+import {UsermanagementMemberShellComponent} from './container/usermanagement-member-shell/usermanagement-member-shell.component';
+import {UsermanagementMemberListComponent} from './component/usermanagement-member-list/usermanagement-member-list.component';
 import {UserManagementComponent} from './user-management.component';
 import {UserManagementService} from './user-management.service';
 import {SharePipeModule} from '../../shared/pipe/share.pipe';
 import {
-    UserManagementListDialogComponent,
-    UserManagementListDialogContentEditComponent,
-    UserManagementListDialogContentViewComponent
-} from './component/usermanagement-list/usermanagement-list-dialog.component';
+    UsermanagementMemberListDialogComponent,
+    UserManagementMemberListDialogContentEditComponent,
+    UserManagementMemberListDialogContentViewComponent
+} from './component/usermanagement-member-list/usermanagement-member-list-dialog.component';
 
 
 @NgModule({
     declarations: [
-        UsermanagementShellComponent,
-        UsermanagementListComponent,
+        UsermanagementMemberShellComponent,
+        UsermanagementMemberListComponent,
         UserManagementComponent,
-        UserManagementListDialogComponent,
-        UserManagementListDialogContentViewComponent,
-        UserManagementListDialogContentEditComponent
+        UsermanagementMemberListDialogComponent,
+        UserManagementMemberListDialogContentViewComponent,
+        UserManagementMemberListDialogContentEditComponent,
     ],
     entryComponents: [
-        UserManagementListDialogComponent
+        UsermanagementMemberListDialogComponent
     ],
     imports: [
         CommonModule,
@@ -50,7 +50,9 @@ import {
         MatButtonModule,
         SharePipeModule,
         MatDialogModule,
-        MatTooltipModule
+        MatTooltipModule,
+        MatSidenavModule,
+        MatListModule
     ],
     providers: [
         UserManagementService

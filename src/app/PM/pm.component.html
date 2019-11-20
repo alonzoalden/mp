@@ -63,10 +63,18 @@
                         <a [routerLink]="['setting']">{{ 'Change Merchant' | translate }}</a>
                 </li>
                 <li class="dropdown" *ngIf="isPM">
-                    <a [routerLink]="['report']">{{ 'Report' | translate }}</a>
+                    <a aria-expanded="false" role="button" href="#" class="dropdown-toggle" data-toggle="dropdown"> {{ 'Report' | translate }} <span class="caret"></span></a>
+                    <ul role="menu" class="dropdown-menu">
+                        <li><a [routerLink]="['report','item']">{{ 'Item Inventory' | translate }}</a></li>
+<!--                        <li><a [routerLink]="['report','vendor']">{{ 'Vendor Inventory' | translate }}</a></li>-->
+                    </ul>
                 </li>
-                <li class="dropdown" *ngIf="isSuperAdmin">
-                    <a [routerLink]="['user']">{{ 'User Management' | translate }}</a>
+                <li class="dropdown" *ngIf="isPM">
+                    <a aria-expanded="false" role="button" href="#" class="dropdown-toggle" data-toggle="dropdown"> {{ 'User Management' | translate }} <span class="caret"></span></a>
+                    <ul role="menu" class="dropdown-menu">
+                        <li *ngIf="isSuperAdmin"><a [routerLink]="['user','vendor']">{{ 'Manage VendorMember' | translate }}</a></li>
+<!--                        <li><a [routerLink]="['user','member']">{{ 'Manage Member' | translate }}</a></li>-->
+                    </ul>
                 </li>
             </ul>
             <ul class="nav navbar-right navbar-top-links">

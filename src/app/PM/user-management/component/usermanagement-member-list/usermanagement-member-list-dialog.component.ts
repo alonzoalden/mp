@@ -19,11 +19,11 @@ import * as UserManageSelector from '../../state/index';
 import * as UserManageActions from '../../state/usermanagement.actions';
 
 @Component({
-    selector: 'app-pm-usermanagement-list-dialog',
-    templateUrl: './usermanagement-list-dialog.component.html',
+    selector: 'app-pm-usermanagement-member-list-dialog',
+    templateUrl: './usermanagement-member-list-dialog.component.html',
 
 })
-export class UserManagementListDialogComponent implements OnInit {
+export class UsermanagementMemberListDialogComponent implements OnInit {
     relatedVendorList$: Observable<MatTableDataSource<Vendor>>;
     isRelationVendorListLoading$: Observable<boolean>;
     unRelatedVendorList$: Observable<MatTableDataSource<Vendor>>;
@@ -31,7 +31,7 @@ export class UserManagementListDialogComponent implements OnInit {
 
     constructor(
         @Inject(MAT_DIALOG_DATA) public data: DataType,
-        public dialogRef: MatDialogRef<UserManagementListDialogComponent>,
+        public dialogRef: MatDialogRef<UsermanagementMemberListDialogComponent>,
         private store: Store<UsermanagementState>
     ) {
 
@@ -69,10 +69,10 @@ interface DataType {
 }
 
 @Component({
-    selector: 'app-user-management-list-dialog-content-view',
-    templateUrl: './usermanagement-list-dialog-content-view.component.html'
+    selector: 'app-user-management-member-list-dialog-content-view',
+    templateUrl: './usermanagement-member-list-dialog-content-view.component.html'
 })
-export class UserManagementListDialogContentViewComponent implements OnInit, OnChanges {
+export class UserManagementMemberListDialogContentViewComponent implements OnInit, OnChanges {
     @Input() member: Member;
     @Output() closeEvent = new EventEmitter();
     @Input() relatedVendorList: MatTableDataSource<Vendor>;
@@ -104,10 +104,10 @@ export class UserManagementListDialogContentViewComponent implements OnInit, OnC
 }
 
 @Component({
-    selector: 'app-user-management-list-dialog-content-edit',
-    templateUrl: './usermanagement-list-dialog-content-edit.component.html'
+    selector: 'app-user-management-member-list-dialog-content-edit',
+    templateUrl: './usermanagement-member-list-dialog-content-edit.component.html'
 })
-export class UserManagementListDialogContentEditComponent implements OnInit, OnChanges {
+export class UserManagementMemberListDialogContentEditComponent implements OnInit, OnChanges {
     @Input() member: Member;
     @Output() closeEvent = new EventEmitter();
     @Input() relatedVendorList: MatTableDataSource<Vendor>;

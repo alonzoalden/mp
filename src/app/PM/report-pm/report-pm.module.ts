@@ -7,11 +7,10 @@ import {
     MatIconModule,
     MatTableModule,
     MatPaginatorModule,
-    MatTabsModule, MatSortModule
+    MatTabsModule, MatSortModule, MatToolbarModule
 } from '@angular/material';
 import {reportRouting} from './report-pm.routing';
 import {ToolModule} from '../../shared/tool/tool.module';
-import {ReportMenuComponent} from './components/report-menu/component/report-menu.component';
 import {ReportItemComponent} from './components/report-item/component/report-item.component';
 import {ReportVendorComponent} from './components/report-vendor/component/report-vendor.component';
 import {TranslateModule} from '@ngx-translate/core';
@@ -30,7 +29,6 @@ import {CdkTableModule} from '@angular/cdk/table';
 @NgModule({
     declarations: [
         ReportShellComponent,
-        ReportMenuComponent,
         ReportItemComponent,
         ReportVendorComponent,
         ReportItemContainerComponent,
@@ -50,6 +48,7 @@ import {CdkTableModule} from '@angular/cdk/table';
         MatPaginatorModule,
         MatSortModule,
         NgSelectModule,
+        MatToolbarModule,
         StoreModule.forFeature('report', ReportReducer),
         EffectsModule.forFeature([ReportEffects]),
     ],
