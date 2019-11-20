@@ -38,7 +38,6 @@ export class ItemAddRefurbishImageComponentUploadDialog implements OnInit {
 
     refreshDataSource(data: any[]) {
         this.dataSource = new MatTableDataSource<any>(data);
-        console.log(data);
     }
 
     onCancelClick(): void {
@@ -63,7 +62,6 @@ export class ItemAddRefurbishImageComponentUploadDialog implements OnInit {
                 this.itemRefurbishImages.unshift(item[0]);
             }
         });
-        console.log(this.itemRefurbishImages);
         this.dialogRef.close(this.itemRefurbishImages);
     }
 
@@ -137,6 +135,7 @@ export class ItemAddRefurbishImageComponentUploadDialog implements OnInit {
     }
     removeFile(index: number) {
         this.itemRefurbishImages.splice(index, 1);
+        this.refreshDataSource(this.itemRefurbishImages);
     }
 
     moveDownPosition(itemrefurbishimage: ItemRefurbishImageInsert) {

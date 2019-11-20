@@ -17,9 +17,8 @@ export class ItemPrintLabelComponentPrintDialog implements OnInit {
 
     constructor(
         public dialogRef: MatDialogRef<ItemPrintLabelComponentPrintDialog>,
-        @Inject(MAT_DIALOG_DATA) public data: Item) {
+        @Inject(MAT_DIALOG_DATA) public data: Item) { }
 
-        }
     ngOnInit() {
         this.customOptions = new CustomPrintLabel(1, 'yes', 0, 0, 0, 0, 0, 0, 0, 0, []);
     }

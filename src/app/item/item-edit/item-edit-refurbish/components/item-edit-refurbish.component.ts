@@ -1,7 +1,7 @@
 import { Component, OnInit, Input, SimpleChanges, OnChanges } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { MatTableDataSource, MatDialog } from '@angular/material';
-import { Item, ItemImage, ItemRefurbish, ItemRefurbishImage } from '../../../../shared/class/item';
+import { Item, ItemRefurbish, ItemRefurbishImage } from '../../../../shared/class/item';
 import { Member } from '../../../../shared/class/member';
 import { ItemService } from '../../../item.service';
 import { environment } from '../../../../../environments/environment';
@@ -18,8 +18,7 @@ export class ItemEditRefurbishComponent implements OnInit, OnChanges {
     @Input() item: Item;
     @Input() userInfo: Member;
     @Input() itemRefurbishesMatTable: MatTableDataSource<ItemRefurbish>;
-    dataSource: MatTableDataSource<any>;
-    displayedColumns = ['Add', 'Down', 'Position', 'Up', 'Images', 'SerialNumber', 'Condition', 'SellingPrice', 'PrintLabel', 'Remove'];
+    displayedColumns = ['Add', 'Down', 'Position', 'Up', 'Images', 'PrintLabel', 'SerialNumber', 'Condition', 'SellingPrice', 'Remove'];
     pendingAdd: boolean;
     currentIndex: number;
     formDirty = false;
@@ -65,8 +64,6 @@ export class ItemEditRefurbishComponent implements OnInit, OnChanges {
     ngOnChanges(changes: SimpleChanges): void {
         if (changes.item && changes.item.currentValue && !changes.item.currentValue.ItemRefurbishes) {
             this.item.ItemRefurbishes = [];
-            //this.removePendingLine();
-            
             this.addPendingLine();
         }
     }
@@ -75,9 +72,8 @@ export class ItemEditRefurbishComponent implements OnInit, OnChanges {
         this.currentIndex = this.item.ItemRefurbishes.length - 1;
         this.itemid = this.route.parent.snapshot.params['id'];
     }
-    
+
     addPendingLine() {
-        //this.item.ItemRefurbishes = [];
         const _temp = new ItemRefurbish(0, this.itemid, null, null, null, null, null, [], null);
         this.item.ItemRefurbishes.push(_temp);
         this.refreshDataSource(this.item.ItemRefurbishes);
@@ -97,9 +93,7 @@ export class ItemEditRefurbishComponent implements OnInit, OnChanges {
     onAddItemImage(itemrefurbish: ItemRefurbish) {
         if (this.isRequirementValid(itemrefurbish)) {
             this.pendingAdd = true;
-
             itemrefurbish.pendingAdd = false;
-
             this.addPendingLine();
             this.refreshDataSource(this.item.ItemRefurbishes);
         } else {
@@ -238,35 +232,6 @@ export class ItemEditRefurbishComponent implements OnInit, OnChanges {
             if (result && result.length > 0) {
                 this.item.ItemRefurbishes[index].Images = result;
                 this.formDirty = true;
-                //this.removePendingLine();
-                // const formData: FormData = new FormData();
-                // for (let i = 0; i < result.length; i++) {
-                //     formData.append('uploadedFiles', result[i], result[i].name);
-                // }
-
-                // this.itemService.uploadTempImages(this.newGuid(), formData).subscribe (
-                //     (data: string) => {
-                //         for (let i = 0; i < result.length; i++) {
-                //             const newItemImage = new ItemImage(0, this.itemid, null, null, null, this.item.ItemRefurbishes.length + 1, false, false, false, false, false, false, null, null, true, false);
-                //             if (this.item.ItemRefurbishes.length === 0) {
-                //                 newItemImage.IsBaseImage = true;
-                //                 newItemImage.IsSmallImage = true;
-                //                 newItemImage.IsThumbnail = true;
-                //                 newItemImage.IsRotatorImage = true;
-                //             }
-
-                //             newItemImage.Raw = this.imageURL + '/temp' + data + '_' + i + '.' + result[i].name.substr(result[i].name.lastIndexOf('.') + 1).toLowerCase();
-                //             this.item.ItemRefurbishes.push(newItemImage);
-
-                //             if (i === result.length - 1) {
-                //                 this.addPendingLine();
-                //                 this.currentIndex = this.item.ItemRefurbishes.length - 1;
-                //                 this.refreshDataSource(this.item.ItemRefurbishes);
-                //             }
-                //         }
-                //         //this.isLoadingMultipleData = false;
-                //     }
-                // );
             }
         },
         (error: any) => {

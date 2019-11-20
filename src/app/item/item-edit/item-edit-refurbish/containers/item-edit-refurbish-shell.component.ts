@@ -1,6 +1,7 @@
+import { ItemRefurbish } from './../../../../shared/class/item';
 import { Component, OnInit } from '@angular/core';
 import { MatTableDataSource } from '@angular/material';
-import { ItemInsert, ItemTierPriceInsert } from '../../../../shared/class/item';
+import { ItemInsert } from '../../../../shared/class/item';
 import { Member } from 'app/shared/class/member';
 import {  Observable } from 'rxjs';
 import { Store, select } from '@ngrx/store';
@@ -16,13 +17,13 @@ export class ItemEditRefurbishShellComponent implements OnInit {
     item$: Observable<ItemInsert>;
     errorMessage$: Observable<string>;
     userInfo$: Observable<Member>;
-    itemTierPricesMatTable$: Observable<MatTableDataSource<ItemTierPriceInsert>>;
+    itemRefurbishesMatTable$: Observable<MatTableDataSource<ItemRefurbish>>;
 
     constructor(private store: Store<fromItem.State>) { }
 
     ngOnInit(): void {
         this.item$ = this.store.pipe(select(fromItem.getItem));
-        this.itemTierPricesMatTable$ = this.store.pipe(select(fromItem.getItemTierPricesMatTable));
+        this.itemRefurbishesMatTable$ = this.store.pipe(select(fromItem.getItemRefurbishesMatTable));
         this.errorMessage$ = this.store.pipe(select(fromItem.getError));
         this.userInfo$ = this.store.pipe(select(fromUser.getCurrentUser));
     }

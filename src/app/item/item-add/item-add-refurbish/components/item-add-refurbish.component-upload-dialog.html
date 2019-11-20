@@ -81,7 +81,7 @@
                                 <td mat-cell *matCellDef="let image; let i = index">
                                     <div class="p-xs" matTooltipPosition="left" matTooltip="{{image.Label}}">
                                         <a href="{{image.Raw}}" target="_blank">
-                                            <img (error)="errorUploadingImage(image, i)" style="max-width: 100px; max-height: 70px;" src="{{image.Raw}}" [title]="image.Label">
+                                            <img (error)="errorUploadingImage(image, i)" style="max-width: 100px; max-height: 70px;" src="{{image.Raw}}" >
                                         </a>
                                     </div>
                                 </td>

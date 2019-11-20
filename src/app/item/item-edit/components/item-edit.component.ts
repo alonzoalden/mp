@@ -3,7 +3,6 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { Item, ItemSelection } from '../../../shared/class/item';
 import { VendorBrand } from '../../../shared/class/vendor-brand';
 import { ItemService } from '../../item.service';
-import { AppService } from '../../../app.service';
 import { Member } from '../../../shared/class/member';
 
 @Component({
@@ -17,8 +16,6 @@ export class ItemEditComponent implements OnInit, OnChanges {
     private currentItem: Item;
     itemName: string;
     isPM: boolean;
-
-
     @Input() vendorBrandList: VendorBrand[];
     @Input() isLoading: boolean;
     @Input() item: Item;
@@ -29,7 +26,6 @@ export class ItemEditComponent implements OnInit, OnChanges {
     @Output() editItem = new EventEmitter<{item: Item, displayPreview: boolean, printLabel: boolean}>();
     @Output() downloadItemLabel = new EventEmitter<Item>();
     @Output() getVendorBrands = new EventEmitter<void>();
-
     loading: boolean;
 
     private dataIsValid: { [key: string]: boolean } = {};
