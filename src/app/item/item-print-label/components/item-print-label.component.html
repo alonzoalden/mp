@@ -20,7 +20,7 @@
                 <div class="ibox-title">
                     <h5>{{ 'Print Labels' | translate }}</h5>
                 </div>
-                <div class="ibox-content" style="min-height: 30vh;">
+                <div class="ibox-content">
                     <div *ngIf="!itemPrintLabelsMatTable?.data.length" class="spinner-container">
                         <div class="sk-spinner sk-spinner-three-bounce big-spinner">
                             <div class="sk-bounce1"></div>
@@ -29,7 +29,7 @@
                         </div>
                     </div>
                     <div class="border-responsive">
-                        <div class="hide-scrollbar-x">
+                        <div>
                             <div class="table-responsive border-none view-dropdown-fix">
                                 <table mat-table #table [dataSource]="itemPrintLabelsMatTable">
                                     <!-- Add Button -->
@@ -74,13 +74,14 @@
                                                             placeholder="{{ 'Search Item' | translate }}"
                                                             [(ngModel)]="itemPrintLabel.ItemID"
                                                             [ngModelOptions]="{standalone: true}"
+                                                            dropdownPosition="bottom"
                                                             (change)="onItemChange(i)"
                                                             (focus)="formDirty = true;"
                                                             #itemPrintLabelItemIDRef
                                                             name="itemPrintLabelItemID"
                                                             required
                                                             dropdownPosition="auto"
-                                                            [loading]="!itemList"
+                                                            [loading]="isItemListLoading"
                                                             loadingText="Loading...">
                                                     <ng-template ng-option-tmp let-item="item">
                                                         <div matTooltip="{{item.Description}}" matTooltipPosition="right" matTooltipShowDelay="400">{{item.Description}}</div>

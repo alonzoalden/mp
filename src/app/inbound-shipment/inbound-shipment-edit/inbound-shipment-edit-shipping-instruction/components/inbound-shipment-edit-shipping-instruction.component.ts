@@ -4,6 +4,7 @@ import { MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material';
 import { PurchaseOrderService } from '../../../purchase-order.service';
 import { PurchaseOrder } from '../../../../shared/class/purchase-order';
 import { InboundShipmentEditShippingInstructionCartonPrintDialogComponent } from './inbound-shipment-edit-shipping-instruction.component-carton-print-dialog';
+import { CustomPrintLabel } from 'app/shared/class/label';
 
 @Component({
     selector: 'o-inbound-shipment-edit-shipping-instruction',
@@ -34,17 +35,45 @@ export class InboundShipmentEditShippingInstructionComponent implements OnInit {
 
     openDialogPrintCartonLabel() {
         const dialogRef = this.cartonPrintDialog.open(InboundShipmentEditShippingInstructionCartonPrintDialogComponent, {
-          width: '250px',
+          width: '420px',
           data: this.purchaseorder
         });
 
         dialogRef.afterClosed().subscribe(result => {
-            this.onPrintAllCartonLabels(result.Border);
+            if (result) {
+                if (result.isCustom) {
+                    this.onPrintAllCartonLabelsCustom(result.customOptions);
+                }
+                else {
+                    this.onPrintAllCartonLabels(result.customOptions.Border);
+                }
+            }
         });
     }
 
     onPrintAllCartonLabels(border: string) {
         this.purchaseOrderService.downloadAllCartonLabel(this.purchaseorderid, border).subscribe(
+            (data) => {
+                const blob = new Blob([data], {type: 'application/pdf'});
+                if (window.navigator.msSaveOrOpenBlob) {
+                    const fileName = 'Carton_' +  this.purchaseorder.PackingSlipNumber;
+                    window.navigator.msSaveOrOpenBlob(data, fileName + '.pdf');
+                } else {
+                    const fileURL = window.URL.createObjectURL(blob);
+                    const a: HTMLAnchorElement = document.createElement('a') as HTMLAnchorElement;
+                    a.href = fileURL;
+                    a.download = 'Carton_' +  this.purchaseorder.PackingSlipNumber;
+                    document.body.appendChild(a);
+                    a.target = '_blank';
+                    a.click();
+                    document.body.removeChild(a);
+                    URL.revokeObjectURL(fileURL);
+                }
+            }
+        );
+    }
+    onPrintAllCartonLabelsCustom(options: CustomPrintLabel) {
+        this.purchaseOrderService.downloadAllCartonLabelCustom(this.purchaseorderid, options).subscribe(
             (data) => {
                 const blob = new Blob([data], {type: 'application/pdf'});
                 if (window.navigator.msSaveOrOpenBlob) {

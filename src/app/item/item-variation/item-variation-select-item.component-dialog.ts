@@ -10,7 +10,7 @@ import { environment } from '../../../environments/environment';
 })
 export class ItemVariationSelectItemComponentDialog implements OnInit {
     itemLists: ItemList[];
-    itemList: ItemList;
+    itemList: any;
     imageURL = environment.imageURL;
     formInvalid: boolean = false;
 

@@ -126,7 +126,7 @@ export class AppService {
                             .pipe(
                                 //tap(data => console.log('Add Purchase Order: ' + JSON.stringify(data))),
                                 tap(data => {
-                                    console.log(data);
+                                    //console.log(data);
                                 }),
                                 catchError(this.handleError)
                             );

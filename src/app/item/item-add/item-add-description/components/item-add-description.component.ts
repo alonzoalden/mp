@@ -122,4 +122,11 @@ export class ItemAddDescriptionComponent implements AfterViewInit {
     onItemTypeChange() {
         this.item.Price = null;
     }
+    onFulfilledByChange() {
+        if (this.item.FulfilledBy === 'Toolots') {
+            this.item.IsFreeShipping = null;
+            this.item.ShippingFee = null;
+            this.item.ShipWithinDays = null;
+        }
+    }
 }

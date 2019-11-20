@@ -32,7 +32,6 @@ export class ItemListComponentImportDialog implements OnInit {
     fileChangeEvent(fileInput: any) {
         this.filesToUpload = [];
         this.selectedFileNames = [];
-
         this.selectedFiles = <Array<File>>fileInput.target.files;
         for (let i = 0; i < this.selectedFiles.length; i++) {
             this.filesToUpload.push(this.selectedFiles[i]);

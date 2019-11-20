@@ -1632,8 +1632,12 @@ table {
 .view-dropdown-fix {
     padding-bottom: 250px;
     margin-bottom: -250px;
-    padding-top: 250px;
-    margin-top: -250px;
+    padding-top: 50px;
+    margin-top: -50px;
+}
+.pm-t-none {
+    padding-top: 0px;
+    margin-top: 0px;
 }
 .opaque {
     opacity: 0.3;

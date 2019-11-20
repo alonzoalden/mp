@@ -10,6 +10,7 @@ import * as inboundShipmentActions from './inbound-shipment.actions';
 import * as fromInboundShipment from '.';
 import { PurchaseOrder, PurchaseOrderLine, InboundShippingMethod, PurchaseOrderLineList, Carton } from '../../shared/class/purchase-order';
 import { ItemService } from '../../item/item.service';
+import { CustomPrintLabel } from 'app/shared/class/label';
 
 @Injectable()
 export class InboundShipmentEffects {
@@ -156,7 +157,7 @@ export class InboundShipmentEffects {
         mergeMap(() =>
             this.inboundShipmentService.addPurchaseOrder().pipe(
                 map((purchaseOrder: PurchaseOrder) => {
-                    this.inboundShipmentService.sendNotification({ type: 'success', title: 'Successfully Added', content: `${purchaseOrder.PurchaseOrderID} was added` });
+                    this.inboundShipmentService.sendNotification({ type: 'success', title: 'Successfully Added', content: `${purchaseOrder.PackingSlipNumber} was added` });
                     this.router.navigate(['/inbound-shipment', purchaseOrder.PurchaseOrderID, 'edit']);
                     return (new inboundShipmentActions.AddNewPurchaseOrderSuccess(purchaseOrder));
                 }),
@@ -179,7 +180,7 @@ export class InboundShipmentEffects {
                     this.inboundShipmentService.replacePurchaseOrder(payload.purchaseOrder.PurchaseOrderID, payload.purchaseOrder);
                     this.inboundShipmentService.currentPurchaseOrderEdit = payload.purchaseOrder;
                     this.inboundShipmentService.currentPurchaseLineIsUpdated = false;
-                    this.inboundShipmentService.sendNotification({ type: 'success', title: 'Successfully Updated', content: `${purchaseOrder.PurchaseOrderID} was saved` });
+                    this.inboundShipmentService.sendNotification({ type: 'success', title: 'Successfully Updated', content: `${purchaseOrder.PackingSlipNumber} was saved` });
                     if (payload.printLabel) {
                         this.store.dispatch(new inboundShipmentActions.DownloadPurchaseOrderLabel(payload.purchaseOrder));
                     }
@@ -204,7 +205,7 @@ export class InboundShipmentEffects {
                     this.inboundShipmentService.replacePurchaseOrder(payload.purchaseOrder.PurchaseOrderID, payload.purchaseOrder);
                     this.inboundShipmentService.currentPurchaseOrderEdit = payload.purchaseOrder;
                     this.inboundShipmentService.currentPurchaseLineIsUpdated = false;
-                    this.inboundShipmentService.sendNotification({ type: 'success', title: 'Successfully Updated', content: `${purchaseOrder.PurchaseOrderID} was saved` });
+                    this.inboundShipmentService.sendNotification({ type: 'success', title: 'Successfully Updated', content: `${purchaseOrder.PackingSlipNumber} was saved` });
                     if (payload.size === 'small') {
                         this.store.dispatch(new inboundShipmentActions.DownloadAllItemLabel({purchaseOrder: purchaseOrder, border: payload.border}));
                     } else {
@@ -215,6 +216,33 @@ export class InboundShipmentEffects {
                 catchError(err => {
                     this.inboundShipmentService.sendNotification({ type: 'error', title: 'Error', content: err });
                     of(new inboundShipmentActions.EditPurchaseOrderThenPrintItemLabelsFail(err));
+                    return EMPTY;
+                })
+            )
+        )
+    );
+
+    @Effect()
+    editPurchaseOrderThenPrintItemLabelsCustom$: Observable<Action> = this.actions$.pipe(
+        ofType(inboundShipmentActions.InboundShipmentActionTypes.EditPurchaseOrderThenPrintItemLabelsCustom),
+        map((action: inboundShipmentActions.EditPurchaseOrderThenPrintItemLabelsCustom) => action.payload),
+        mergeMap((payload) =>
+            this.inboundShipmentService.editPurchaseOrder(payload.purchaseOrder).pipe(
+                map((purchaseOrder: PurchaseOrder) => {
+                    this.inboundShipmentService.replacePurchaseOrder(payload.purchaseOrder.PurchaseOrderID, payload.purchaseOrder);
+                    this.inboundShipmentService.currentPurchaseOrderEdit = payload.purchaseOrder;
+                    this.inboundShipmentService.currentPurchaseLineIsUpdated = false;
+                    this.inboundShipmentService.sendNotification({ type: 'success', title: 'Successfully Updated', content: `${purchaseOrder.PackingSlipNumber} was saved` });
+                    if (payload.size === 'small') {
+                        this.store.dispatch(new inboundShipmentActions.DownloadAllItemLabelCustom({purchaseOrder: purchaseOrder, options: payload.options }));
+                    } else {
+                        this.store.dispatch(new inboundShipmentActions.DownloadAllItemLargeLabelCustom({purchaseOrder: purchaseOrder, options: payload.options }));
+                    }
+                    return (new inboundShipmentActions.EditPurchaseOrderThenPrintItemLabelsCustomSuccess(purchaseOrder));
+                }),
+                catchError(err => {
+                    this.inboundShipmentService.sendNotification({ type: 'error', title: 'Error', content: err });
+                    of(new inboundShipmentActions.EditPurchaseOrderThenPrintItemLabelsCustomFail(err));
                     return EMPTY;
                 })
             )
@@ -288,7 +316,6 @@ export class InboundShipmentEffects {
             this.inboundShipmentService.downloadPurchaseOrderLabel(purchaseOrder.PurchaseOrderID).pipe(
                 map((data: Blob) => {
                     const blob = new Blob([data], {type: 'application/pdf'});
-                    const blobUrl = URL.createObjectURL(blob);
                     if (window.navigator.msSaveOrOpenBlob) {
                         const fileName = purchaseOrder.PackingSlipNumber;
                         window.navigator.msSaveOrOpenBlob(data, fileName + '.pdf');
@@ -322,22 +349,21 @@ export class InboundShipmentEffects {
             this.inboundShipmentService.downloadAllCartonLabel(purchaseOrder.PurchaseOrderID, 'yes').pipe(
                 map((data: Blob) => {
                     const blob = new Blob([data], {type: 'application/pdf'});
-                const blobUrl = URL.createObjectURL(blob);
-                if (window.navigator.msSaveOrOpenBlob) {
-                    const fileName = 'Carton_' +  purchaseOrder.PurchaseOrderID;
-                    window.navigator.msSaveOrOpenBlob(data, fileName + '.pdf');
-                } else {
-                    const fileURL = window.URL.createObjectURL(blob);
-                    const a: HTMLAnchorElement = document.createElement('a') as HTMLAnchorElement;
-                    a.href = fileURL;
-                    a.download = 'Carton_' +  purchaseOrder.PurchaseOrderID;
-                    document.body.appendChild(a);
-                    a.target = '_blank';
-                    a.click();
+                    if (window.navigator.msSaveOrOpenBlob) {
+                        const fileName = 'Carton_' +  purchaseOrder.PurchaseOrderID;
+                        window.navigator.msSaveOrOpenBlob(data, fileName + '.pdf');
+                    } else {
+                        const fileURL = window.URL.createObjectURL(blob);
+                        const a: HTMLAnchorElement = document.createElement('a') as HTMLAnchorElement;
+                        a.href = fileURL;
+                        a.download = 'Carton_' +  purchaseOrder.PurchaseOrderID;
+                        document.body.appendChild(a);
+                        a.target = '_blank';
+                        a.click();
 
-                    document.body.removeChild(a);
-                    URL.revokeObjectURL(fileURL);
-                }
+                        document.body.removeChild(a);
+                        URL.revokeObjectURL(fileURL);
+                    }
                     return (new inboundShipmentActions.DownloadPurchaseOrderLabelSuccess(data));
                 }),
                 catchError(err => {
@@ -349,6 +375,41 @@ export class InboundShipmentEffects {
     );
 
     @Effect()
+    downloadCartonLabelCountCustom$: Observable<Action> = this.actions$.pipe(
+        ofType(inboundShipmentActions.InboundShipmentActionTypes.DownloadCartonLabelCountCustom),
+        map((action: inboundShipmentActions.DownloadCartonLabelCountCustom) => action.payload),
+        mergeMap((payload: { carton: Carton, options: CustomPrintLabel } ) =>
+            this.inboundShipmentService.downloadCartonLabelCustom(payload.carton.CartonID, payload.options).pipe(
+                map((data: Blob) => {
+                    const blob = new Blob([data], {type: 'application/pdf'});
+                    if (window.navigator.msSaveOrOpenBlob) {
+                        const fileName = 'Carton_' +  payload.carton.PurchaseOrderID;
+                        window.navigator.msSaveOrOpenBlob(data, fileName + '.pdf');
+                    } else {
+                        const fileURL = window.URL.createObjectURL(blob);
+                        const a: HTMLAnchorElement = document.createElement('a') as HTMLAnchorElement;
+                        a.href = fileURL;
+                        a.download = 'Carton_' +  payload.carton.PurchaseOrderID;
+                        document.body.appendChild(a);
+                        a.target = '_blank';
+                        a.click();
+
+                        document.body.removeChild(a);
+                        URL.revokeObjectURL(fileURL);
+                    }
+                    return (new inboundShipmentActions.DownloadCartonLabelCountCustomSuccess(data));
+                }),
+                catchError(err => {
+                    of(new inboundShipmentActions.DownloadCartonLabelCountCustomFail(err));
+                    return EMPTY;
+                })
+            )
+        )
+    );
+
+
+
+    @Effect()
     downloadAllItemLabel$: Observable<Action> = this.actions$.pipe(
         ofType(inboundShipmentActions.InboundShipmentActionTypes.DownloadAllItemLabel),
         map((action: inboundShipmentActions.DownloadAllItemLabel) => action.payload),
@@ -356,7 +417,6 @@ export class InboundShipmentEffects {
             this.inboundShipmentService.downloadAllItemLabel(payload.purchaseOrder.PurchaseOrderID, payload.border).pipe(
                 map((data: Blob) => {
                     const blob = new Blob([data], {type: 'application/pdf'});
-                    const blobUrl = URL.createObjectURL(blob);
                     if (window.navigator.msSaveOrOpenBlob) {
                         const fileName = 'Item_' +  payload.purchaseOrder.PackingSlipNumber;
                         window.navigator.msSaveOrOpenBlob(data, fileName + '.pdf');
@@ -383,23 +443,56 @@ export class InboundShipmentEffects {
     );
 
     @Effect()
+    downloadAllItemLabelCustom$: Observable<Action> = this.actions$.pipe(
+        ofType(inboundShipmentActions.InboundShipmentActionTypes.DownloadAllItemLabelCustom),
+        map((action: inboundShipmentActions.DownloadAllItemLabelCustom) => action.payload),
+        mergeMap((payload: { purchaseOrder: PurchaseOrder, options: CustomPrintLabel }) =>
+            this.inboundShipmentService.downloadAllItemLabelCustom(payload.purchaseOrder.PurchaseOrderID, payload.options).pipe(
+                map((data: Blob) => {
+                    const blob = new Blob([data], {type: 'application/pdf'});
+                    if (window.navigator.msSaveOrOpenBlob) {
+                        const fileName = 'Item_' +  payload.purchaseOrder.PackingSlipNumber;
+                        window.navigator.msSaveOrOpenBlob(data, fileName + '.pdf');
+                    } else {
+                        const fileURL = window.URL.createObjectURL(blob);
+                        const a: HTMLAnchorElement = document.createElement('a') as HTMLAnchorElement;
+                        a.href = fileURL;
+                        a.download = 'Item_' + payload.purchaseOrder.PackingSlipNumber;
+                        document.body.appendChild(a);
+                        a.target = '_blank';
+                        a.click();
+
+                        document.body.removeChild(a);
+                        URL.revokeObjectURL(fileURL);
+                    }
+                    return (new inboundShipmentActions.DownloadAllItemLabelCustomSuccess(data));
+                }),
+                catchError(err => {
+                    of(new inboundShipmentActions.DownloadAllItemLabelCustomFail(err));
+                    return EMPTY;
+                })
+            )
+        )
+    );
+
+
+
+    @Effect()
     downloadAllItemLargeLabel$: Observable<Action> = this.actions$.pipe(
         ofType(inboundShipmentActions.InboundShipmentActionTypes.DownloadAllItemLargeLabel),
         map((action: inboundShipmentActions.DownloadAllItemLargeLabel) => action.payload),
         mergeMap((payload: { purchaseOrder: PurchaseOrder, border: string}) =>
             this.inboundShipmentService.downloadAllItemLargeLabel(payload.purchaseOrder.PurchaseOrderID, payload.border).pipe(
                 map((data: Blob) => {
-
                     const blob = new Blob([data], {type: 'application/pdf'});
-                    const blobUrl = URL.createObjectURL(blob);
                     if (window.navigator.msSaveOrOpenBlob) {
-                        const fileName = 'Item_' + payload.purchaseOrder.PackingSlipNumber + '_Large';
+                        const fileName = payload.purchaseOrder.PackingSlipNumber;
                         window.navigator.msSaveOrOpenBlob(data, fileName + '.pdf');
                     } else {
                         const fileURL = window.URL.createObjectURL(blob);
                         const a: HTMLAnchorElement = document.createElement('a') as HTMLAnchorElement;
                         a.href = fileURL;
-                        a.download = 'Item_' + payload.purchaseOrder.PackingSlipNumber + '_Large';
+                        a.download = payload.purchaseOrder.PackingSlipNumber;
                         document.body.appendChild(a);
                         a.target = '_blank';
                         a.click();
@@ -411,6 +504,39 @@ export class InboundShipmentEffects {
                 }),
                 catchError(err => {
                     of(new inboundShipmentActions.DownloadAllItemLargeLabelFail(err));
+                    return EMPTY;
+                })
+            )
+        )
+    );
+
+    @Effect()
+    downloadAllItemLargeLabelCustom$: Observable<Action> = this.actions$.pipe(
+        ofType(inboundShipmentActions.InboundShipmentActionTypes.DownloadAllItemLargeLabelCustom),
+        map((action: inboundShipmentActions.DownloadAllItemLargeLabelCustom) => action.payload),
+        mergeMap((payload: { purchaseOrder: PurchaseOrder, options: CustomPrintLabel }) =>
+            this.inboundShipmentService.downloadAllItemLargeLabelCustom(payload.purchaseOrder.PurchaseOrderID, payload.options).pipe(
+                map((data: Blob) => {
+                    const blob = new Blob([data], {type: 'application/pdf'});
+                    if (window.navigator.msSaveOrOpenBlob) {
+                        const fileName = 'Item_' +  payload.purchaseOrder.PackingSlipNumber;
+                        window.navigator.msSaveOrOpenBlob(data, fileName + '.pdf');
+                    } else {
+                        const fileURL = window.URL.createObjectURL(blob);
+                        const a: HTMLAnchorElement = document.createElement('a') as HTMLAnchorElement;
+                        a.href = fileURL;
+                        a.download = 'Item_' + payload.purchaseOrder.PackingSlipNumber;
+                        document.body.appendChild(a);
+                        a.target = '_blank';
+                        a.click();
+
+                        document.body.removeChild(a);
+                        URL.revokeObjectURL(fileURL);
+                    }
+                    return (new inboundShipmentActions.DownloadAllItemLabelCustomSuccess(data));
+                }),
+                catchError(err => {
+                    of(new inboundShipmentActions.DownloadAllItemLabelCustomFail(err));
                     return EMPTY;
                 })
             )
@@ -517,6 +643,73 @@ export class InboundShipmentEffects {
         )
     );
 
+
+
+    @Effect()
+    downloadItemLabelCountCustom$: Observable<Action> = this.actions$.pipe(
+        ofType(inboundShipmentActions.InboundShipmentActionTypes.DownloadItemLabelCountCustom),
+        map((action: inboundShipmentActions.DownloadItemLabelCountCustom) => action.payload),
+        mergeMap((payload: { purchaseorderline: PurchaseOrderLine, options: CustomPrintLabel}) =>
+            this.inboundShipmentService.downloadItemLabelCountCustom(payload.purchaseorderline.ItemID, payload.options).pipe(
+                map((data: Blob) => {
+                    const blob = new Blob([data], {type: 'application/pdf'});
+                    if (window.navigator.msSaveOrOpenBlob) {
+                        const fileName = payload.purchaseorderline.TPIN;
+                        window.navigator.msSaveOrOpenBlob(data, fileName + '.pdf');
+                    } else {
+                        const fileURL = window.URL.createObjectURL(blob);
+                        const a: HTMLAnchorElement = document.createElement('a') as HTMLAnchorElement;
+                        a.href = fileURL;
+                        a.download = payload.purchaseorderline.TPIN;
+                        document.body.appendChild(a);
+                        a.target = '_blank';
+                        a.click();
+
+                        document.body.removeChild(a);
+                        URL.revokeObjectURL(fileURL);
+                    }
+                    return (new inboundShipmentActions.DownloadItemLabelCountCustomSuccess(data));
+                }),
+                catchError(err => {
+                    of(new inboundShipmentActions.DownloadItemLabelCountCustomFail(err));
+                    return EMPTY;
+                })
+            )
+        )
+    );
+
+    @Effect()
+    downloadItemLargeLabelCountCustom$: Observable<Action> = this.actions$.pipe(
+        ofType(inboundShipmentActions.InboundShipmentActionTypes.DownloadItemLargeLabelCountCustom),
+        map((action: inboundShipmentActions.DownloadItemLargeLabelCountCustom) => action.payload),
+        mergeMap((payload: { purchaseorderline: PurchaseOrderLine, options: CustomPrintLabel}) =>
+            this.inboundShipmentService.downloadItemLargeLabelCountCustom(payload.purchaseorderline.ItemID, payload.options).pipe(
+                map((data: Blob) => {
+                    const blob = new Blob([data], {type: 'application/pdf'});
+                    if (window.navigator.msSaveOrOpenBlob) {
+                        const fileName = payload.purchaseorderline.TPIN;
+                        window.navigator.msSaveOrOpenBlob(data, fileName + '.pdf');
+                    } else {
+                        const fileURL = window.URL.createObjectURL(blob);
+                        const a: HTMLAnchorElement = document.createElement('a') as HTMLAnchorElement;
+                        a.href = fileURL;
+                        a.download = payload.purchaseorderline.TPIN;
+                        document.body.appendChild(a);
+                        a.target = '_blank';
+                        a.click();
+                        document.body.removeChild(a);
+                        URL.revokeObjectURL(fileURL);
+                    }
+                    return (new inboundShipmentActions.DownloadItemLargeLabelCountCustomSuccess(data));
+                }),
+                catchError(err => {
+                    of(new inboundShipmentActions.DownloadItemLargeLabelCountCustomFail(err));
+                    return EMPTY;
+                })
+            )
+        )
+    );
+
     @Effect()
     loadSimpleItemList$: Observable<Action> = this.actions$.pipe(
         ofType(inboundShipmentActions.InboundShipmentActionTypes.LoadSimpleItemList),
@@ -530,4 +723,22 @@ export class InboundShipmentEffects {
             )
         )
     );
+
+    downloadPDF(payload, data) {
+        const blob = new Blob([data], {type: 'application/pdf'});
+        if (window.navigator.msSaveOrOpenBlob) {
+            const fileName = payload.purchaseorderline.TPIN;
+            window.navigator.msSaveOrOpenBlob(data, fileName + '.pdf');
+        } else {
+            const fileURL = window.URL.createObjectURL(blob);
+            const a: HTMLAnchorElement = document.createElement('a') as HTMLAnchorElement;
+            a.href = fileURL;
+            a.download = payload.purchaseorderline.TPIN;
+            document.body.appendChild(a);
+            a.target = '_blank';
+            a.click();
+            document.body.removeChild(a);
+            URL.revokeObjectURL(fileURL);
+        }
+    }
 }

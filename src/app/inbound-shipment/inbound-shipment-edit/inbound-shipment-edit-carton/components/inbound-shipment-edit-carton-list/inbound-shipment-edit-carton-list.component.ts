@@ -4,6 +4,7 @@ import { MatSort, MatTableDataSource, MatDialog } from '@angular/material';
 import { PurchaseOrder, Carton, CartonLine } from '../../../../../shared/class/purchase-order';
 import { PurchaseOrderService } from '../../../../purchase-order.service';
 import { InboundShipmentEditCartonListCartonPrintDialogComponent } from './inbound-shipment-edit-carton-list.component-carton-print-dialog';
+import { CustomPrintLabel } from 'app/shared/class/label';
 
 @Component({
     selector: 'o-inbound-shipment-edit-carton-list',
@@ -17,6 +18,7 @@ export class InboundShipmentEditCartonListComponent
     @Output() setSelectedCarton = new EventEmitter<Carton>();
     @Output() downloadAllCartonLabel = new EventEmitter<PurchaseOrder>();
     @Output() downloadCartonLabelCount = new EventEmitter<{carton: Carton; count: number; border: string; }>();
+    @Output() downloadCartonLabelCountCustom = new EventEmitter<{ carton: Carton, options: CustomPrintLabel }>();
     purchaseorderid: number;
     pendingCopy: boolean;
     orderStatus: string;
@@ -64,6 +66,10 @@ export class InboundShipmentEditCartonListComponent
 
     ngOnInit() {
         this.purchaseorderid = this.route.parent.snapshot.params['id'];
+        if (this.purchaseOrder && this.purchaseOrder.Cartons) {
+            this.refreshDataSource(this.purchaseOrder.Cartons);
+            this.currentIndex = this.purchaseOrder.Cartons.length - 1;
+        }
     }
 
     getTotalQuantity(cartonLines: CartonLine[]) {
@@ -97,19 +103,19 @@ export class InboundShipmentEditCartonListComponent
         const dialogRef = this.cartonPrintDialog.open(
             InboundShipmentEditCartonListCartonPrintDialogComponent,
             {
-                width: '250px',
+                width: '420px',
                 data: carton
             }
         );
 
         dialogRef.afterClosed().subscribe(result => {
-            if (result && result.Quantity > 0) {
-                this.saveAndPrint(carton, result.Quantity, result.Border);
+            if (result && result.customOptions.Quantity > 0) {
+                this.saveAndPrint(carton, result);
             }
         });
     }
 
-    saveAndPrint(carton: Carton, quantity: number, border: string) {
+    saveAndPrint(carton: Carton, result: { customOptions: CustomPrintLabel, isCustom: boolean }) {
         const newPurchaseOrder = this.purchaseOrderService.copyPurchaseOrder(
             this.purchaseOrder
         );
@@ -156,7 +162,17 @@ export class InboundShipmentEditCartonListComponent
                 this.removePendingLine();
                 this.addPendingLine();
                 this.refreshDataSource(this.purchaseOrder.Cartons);
-                this.onPrintLabel(carton, quantity, border);
+
+
+                if (result.isCustom) {
+                    this.onPrintLabelCustom(carton, result.customOptions);
+                }
+                else {
+                    this.onPrintLabel(carton, result.customOptions.Quantity, result.customOptions.Border);
+                }
+
+
+
                 this.purchaseOrderService.sendNotification({
                     type: 'success',
                     title: 'Successfully Updated',
@@ -220,7 +236,6 @@ export class InboundShipmentEditCartonListComponent
     }
 
     isRequirementValid(carton: Carton) {
-        console.log(carton);
         if (
             carton
             && (carton.LabelQty === 0 || carton.LabelQty > 0)
@@ -247,6 +262,9 @@ export class InboundShipmentEditCartonListComponent
 
     onPrintLabel(carton: Carton, count: number, border: string) {
         this.downloadCartonLabelCount.emit({ carton, count, border });
+    }
+    onPrintLabelCustom(carton: Carton, options: CustomPrintLabel) {
+        this.downloadCartonLabelCountCustom.emit({ carton, options });
     }
 
     onRemoveCarton(carton: Carton, index: number) {
