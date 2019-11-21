@@ -4,7 +4,7 @@
     [errorMessage]="errorMessage$ | async"
     [isMainItemsListLoading]="isMainItemsListLoading$ | async"
     [pendingDelete]="pendingDelete$ | async"
-    (getItems)="getItems()"
+    (getItems)="getItems($event)"
     (downloadItemLabelCount)="downloadItemLabelCount($event)"
     (downloadItemLargeLabelCount)="downloadItemLargeLabelCount($event)"
     (downloadItemTemplate)="downloadItemTemplate()"

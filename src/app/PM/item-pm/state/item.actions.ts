@@ -77,6 +77,9 @@ export enum ItemActionTypes {
     LoadItemsSuccess = '[Item] Load Items Success',
     LoadItemsFail = '[Item] Load Items Fail',
     LoadAllVendorMainItems = '[Item Batch] Load All Vendor Main Items',
+    LoadMySubMainItems = '[Item Batch] Load My Sub Vendor Main Items',
+    LoadMySubMainItemsSuccess = '[Item Batch] Load My Sub Vendor Main Items Success',
+    LoadMySubMainItemsFail = '[Item Batch] Load My Sub Vendor Main Items Fail',
     LoadMainItemsSuccess = '[Item Batch] Load Main Items Success',
     LoadMainItemsFail = '[Item Batch] Load Main Items Fail',
     LoadRefreshItems = '[Item] Load Refresh Items',
@@ -171,6 +174,19 @@ export class LoadRefreshItemsFail implements Action {
 }
 export class LoadAllVendorMainItems implements Action {
     readonly type = ItemActionTypes.LoadAllVendorMainItems;
+}
+export class LoadMySubVendorMainItems implements Action {
+    readonly type = ItemActionTypes.LoadMySubMainItems;
+}
+export class LoadMySubVendorMainItemsSuccess implements Action {
+    readonly type = ItemActionTypes.LoadMySubMainItemsSuccess;
+    constructor(public payload: Item[]) {}
+
+}
+export class LoadMySubVendorMainItemsFail implements Action {
+    readonly type = ItemActionTypes.LoadMySubMainItemsFail;
+    constructor(public payload: string) {}
+
 }
 export class LoadMainItemsSuccess implements Action {
     readonly type = ItemActionTypes.LoadMainItemsSuccess;
@@ -667,4 +683,7 @@ export type ItemActions =
     | EditItemBatchUpdateFail
     | AddNewItemRelatedProductRow
     | ResetSelectedBundleOption
-    | ResetItem;
+    | ResetItem
+    | LoadMySubVendorMainItems
+    | LoadMySubVendorMainItemsSuccess
+    | LoadMySubVendorMainItemsFail;

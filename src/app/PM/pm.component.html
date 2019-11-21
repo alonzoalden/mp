@@ -84,7 +84,7 @@
                     </a>
                 </li>
                 <li class="hide-res" *ngIf="isLoggedin">
-                    {{givenName}} {{familyName}}
+                    {{email}}
                 </li>
                 <li class="dropdown" *ngIf="isLoggedin">
                     <a aria-expanded="false" role="button" href="#" class="hide-res dropdown-toggle" data-toggle="dropdown"><span class="flag-icon flag-icon-squared" [ngClass]="currentLanguage === 'en' ? 'flag-icon-us' : 'flag-icon-' + currentLanguage"></span> <span class="skinny-label"> {{ currentLanguage }} </span> <span class="caret"></span> </a>

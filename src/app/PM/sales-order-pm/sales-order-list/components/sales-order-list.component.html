@@ -47,7 +47,12 @@
                     <div class="tab-pane active">
                         <div class="panel-body p-w-none">
                             <div class="ibox float-e-margins">
-                                <div class="ibox-title"><h5>{{ 'View Sales Orders' | translate }}</h5></div>
+                                <div class="ibox-title">
+                                    <h5>{{ 'View Sales Orders' | translate }}</h5>
+                                    <div class="ibox-tools">
+                                        <mat-checkbox (change)="getSalesOrdersByVendor(fulfilledby,status)" [(ngModel)]="check">{{'Only My'|translate}}</mat-checkbox>
+                                    </div>
+                                </div>
                                 <div class="toolbar-search-1">
                                     <i class="fa fa-search search-icon-adjust" [ngClass]="this.salesOrdersMatTable?.filter ? 'selected' : ''" aria-label="Icon for Filter By Input Bar" (click)="FilterBy.select()"></i>
                                     <input (keyup)="applyFilter($event.target.value)" placeholder="{{ 'Filter By' | translate }}" class="form-control" #FilterBy>

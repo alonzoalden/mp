@@ -17,7 +17,7 @@ export class UsermanagementMemberListComponent implements OnInit, OnChanges {
     @ViewChild(MatPaginator, {static: true}) paginator: MatPaginator;
     @ViewChild(MatSort, {static: true}) sort: MatSort;
 
-    displayedColumns = ['Index', 'MemberID', 'FirstName', 'LastName', 'Email', 'CreatedOn', 'Edit'];
+    displayedColumns = ['Position', 'MemberID', 'FirstName', 'LastName', 'Email', 'CreatedOn', 'Edit'];
 
     constructor(
         public dialog: MatDialog,

@@ -78,7 +78,7 @@ export class UserManagementMemberListDialogContentViewComponent implements OnIni
     @Input() relatedVendorList: MatTableDataSource<Vendor>;
     @Input() isRelationVendorListLoading: Observable<boolean>;
     @Output() getRelatedVendorList = new EventEmitter<Member>();
-    displayedColumns = ['Index', 'VendorID', 'CompanyName', 'MerchantID', 'MerchantID'];
+    displayedColumns = ['Position', 'VendorID', 'CompanyName', 'MerchantID'];
     @ViewChild(MatPaginator, {static: true}) paginator: MatPaginator;
     @ViewChild(MatSort, {static: true}) sort: MatSort;
 

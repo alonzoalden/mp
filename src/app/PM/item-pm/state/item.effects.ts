@@ -383,7 +383,20 @@ export class ItemEffects {
             )
         )
     );
-
+    @Effect()
+    loadMySubVendorMainItems$: Observable<Action> = this.actions$.pipe(
+        ofType(itemActions.ItemActionTypes.LoadMySubMainItems),
+        mergeMap(() =>
+            this.itemService.getMySubVenderItems().pipe(
+                map((item: Item[]) => (new itemActions.LoadMySubVendorMainItemsSuccess(item))),
+                catchError(err => {
+                    this.itemService.sendNotification({type: 'error', title: 'Error', content: err});
+                    of(new itemActions.LoadMySubVendorMainItemsFail(err));
+                    return EMPTY;
+                })
+            )
+        )
+    );
     @Effect()
     loadItemBatchItems$: Observable<Action> = this.actions$.pipe(
         ofType(itemActions.ItemActionTypes.LoadItemBatchItems),

@@ -1,7 +1,19 @@
 import { NgModule } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
-import { MatPaginatorModule, MatTableModule, MatFormFieldModule, MatInputModule, MatSortModule, MatMenuModule, MatButtonModule, MatDatepickerModule, MatTooltipModule, MatDialogModule } from '@angular/material';
+import {
+    MatPaginatorModule,
+    MatTableModule,
+    MatFormFieldModule,
+    MatInputModule,
+    MatSortModule,
+    MatMenuModule,
+    MatButtonModule,
+    MatDatepickerModule,
+    MatTooltipModule,
+    MatDialogModule,
+    MatCheckboxModule
+} from '@angular/material';
 import { CdkTableModule } from '@angular/cdk/table';
 import { ToolModule } from '../../shared/tool/tool.module';
 import { NgSelectModule } from '@ng-select/ng-select';
@@ -86,7 +98,8 @@ import {SharePipeModule} from '../../shared/pipe/share.pipe';
         StoreModule.forFeature('CompanyInfo', companyInfoReducer),
         EffectsModule.forFeature([CompanyInfoEffects]),
         SimpleNotificationsModule,
-        SharePipeModule
+        SharePipeModule,
+        MatCheckboxModule
     ],
     providers: [
         SalesOrderService, CompanyService

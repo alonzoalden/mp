@@ -59,6 +59,13 @@ export class SalesOrderService {
                 catchError(this.handleError)
             );
     }
+    getMySalesOrderByVendors(fulfilledby: string, status: string): Observable<SalesOrder[]> {
+        return this.http.get<SalesOrder[]>(this.apiURL + '/salesorder/PMMyfulfilledby/' + fulfilledby + '/status/' + status)
+            .pipe(
+                tap(data => this.salesorders = data),
+                catchError(this.handleError)
+            );
+    }
     getSalesOrderByVendor(fulfilledby: string, status: string): Observable<SalesOrder[]> {
         return this.http.get<SalesOrder[]>(this.apiURL + '/salesorder/fulfilledby/' + fulfilledby + '/status/' + status)
                         .pipe(

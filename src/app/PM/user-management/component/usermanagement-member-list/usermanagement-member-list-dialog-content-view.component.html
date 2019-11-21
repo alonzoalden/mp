@@ -15,9 +15,9 @@
             </div>
             <div class="table-responsive" [hidden]="isRelationVendorListLoading">
                 <table mat-table #table [dataSource]="relatedVendorList" class="table" matSort>
-                    <ng-container matColumnDef="Index">
+                    <ng-container matColumnDef="Position">
                         <th mat-header-cell *matHeaderCellDef mat-sort-header
-                            width="60">{{ 'Index' | translate }}</th>
+                            width="60">{{ 'Position' | translate }}</th>
                         <td mat-cell *matCellDef="let item;let i = index">{{i + 1}}</td>
                     </ng-container>
                     <ng-container matColumnDef="VendorID">

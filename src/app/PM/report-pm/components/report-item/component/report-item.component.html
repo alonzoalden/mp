@@ -49,15 +49,15 @@
                     <div class="table-responsive" [hidden]="isItemReportLoading">
                         <table mat-table [dataSource]="reportMatTable" class="table" matSort>
                             <ng-container matColumnDef="Location">
-                                <th mat-header-cell *matHeaderCellDef> Location</th>
+                                <th mat-header-cell *matHeaderCellDef> {{'Location'|translate}}</th>
                                 <td mat-cell *matCellDef="let user"> {{user.LocationName}} </td>
                             </ng-container>
                             <ng-container matColumnDef="QuantityOnHand">
-                                <th mat-header-cell *matHeaderCellDef> QuantityOnHand</th>
+                                <th mat-header-cell *matHeaderCellDef> {{'QuantityOnHand'|translate}}</th>
                                 <td mat-cell *matCellDef="let user"> {{user.QtyOnHand}} </td>
                             </ng-container>
                             <ng-container matColumnDef="QuantityAvailable">
-                                <th mat-header-cell *matHeaderCellDef> QuantityAvailable</th>
+                                <th mat-header-cell *matHeaderCellDef> {{'QuantityAvailable'|translate}}</th>
                                 <td mat-cell *matCellDef="let user"> {{user.QtyAvailable}} </td>
                             </ng-container>
                             <tr mat-header-row *matHeaderRowDef="columnsToDisplay"></tr>

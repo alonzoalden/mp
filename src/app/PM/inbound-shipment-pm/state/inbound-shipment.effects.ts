@@ -1,15 +1,21 @@
-import { Injectable } from '@angular/core';
-import { Observable, of, EMPTY } from 'rxjs';
-import { mergeMap, map, catchError, take } from 'rxjs/operators';
-import { Action, Store } from '@ngrx/store';
-import { Actions, Effect, ofType } from '@ngrx/effects';
-import { PurchaseOrderService } from '../purchase-order.service';
-import { Router } from '@angular/router';
-import { ItemList } from '../../../shared/class/item';
+import {Injectable} from '@angular/core';
+import {EMPTY, Observable, of} from 'rxjs';
+import {catchError, map, mergeMap} from 'rxjs/operators';
+import {Action, Store} from '@ngrx/store';
+import {Actions, Effect, ofType} from '@ngrx/effects';
+import {PurchaseOrderService} from '../purchase-order.service';
+import {Router} from '@angular/router';
+import {ItemList} from '../../../shared/class/item';
 import * as inboundShipmentActions from './inbound-shipment.actions';
 import * as fromInboundShipment from '.';
-import { PurchaseOrder, PurchaseOrderLine, InboundShippingMethod, PurchaseOrderLineList, Carton } from '../../../shared/class/purchase-order';
-import { ItemService } from '../../../original/item/item.service';
+import {
+    Carton,
+    InboundShippingMethod,
+    PurchaseOrder,
+    PurchaseOrderLine,
+    PurchaseOrderLineList
+} from '../../../shared/class/purchase-order';
+import {ItemService} from '../../../original/item/item.service';
 
 @Injectable()
 export class InboundShipmentEffects {
@@ -18,7 +24,8 @@ export class InboundShipmentEffects {
         private store: Store<fromInboundShipment.State>,
         private inboundShipmentService: PurchaseOrderService,
         private itemService: ItemService,
-        private actions$: Actions) { }
+        private actions$: Actions) {
+    }
 
 
     @Effect()
@@ -42,6 +49,19 @@ export class InboundShipmentEffects {
                 map((purchaseOrders: PurchaseOrder[]) => (new inboundShipmentActions.LoadPurchaseOrderOverviewSuccess(purchaseOrders))),
                 catchError(err => {
                     of(new inboundShipmentActions.LoadPurchaseOrderOverviewFail(err));
+                    return EMPTY;
+                })
+            )
+        )
+    );
+    @Effect()
+    loadPurchaseOrderMyVendorOverview$: Observable<Action> = this.actions$.pipe(
+        ofType(inboundShipmentActions.InboundShipmentActionTypes.LoadPurchaseOrderMyVendorOverview),
+        mergeMap(() =>
+            this.inboundShipmentService.getPurchaseOrderMyVendorOverview().pipe(
+                map((purchaseOrders: PurchaseOrder[]) => (new inboundShipmentActions.LoadPurchaseOrderMyVendorOverviewSuccess(purchaseOrders))),
+                catchError(err => {
+                    of(new inboundShipmentActions.LoadPurchaseOrderMyVendorOverviewFail(err));
                     return EMPTY;
                 })
             )
@@ -94,7 +114,6 @@ export class InboundShipmentEffects {
     );
 
 
-
     @Effect()
     loadPurchaseOrderLines$: Observable<Action> = this.actions$.pipe(
         ofType(inboundShipmentActions.InboundShipmentActionTypes.LoadPurchaseOrderLines),
@@ -108,7 +127,7 @@ export class InboundShipmentEffects {
                     //this.inboundShipmentService.updatePurchaseLineCartonQuantity(this.purchaseOrder);
                     this.inboundShipmentService.currentPurchaseOrderLines = purchaseorderlines;
                     return (new inboundShipmentActions.LoadPurchaseOrderLinesSuccess(purchaseorderlines));
-            }),
+                }),
 
                 catchError(err => {
                     of(new inboundShipmentActions.LoadPurchaseOrderLinesFail(err));
@@ -174,21 +193,22 @@ export class InboundShipmentEffects {
     );
 
 
-
-
-
     @Effect()
     addNewPurchaseOrder$: Observable<Action> = this.actions$.pipe(
         ofType(inboundShipmentActions.InboundShipmentActionTypes.AddNewPurchaseOrder),
         mergeMap(() =>
             this.inboundShipmentService.addPurchaseOrder().pipe(
                 map((purchaseOrder: PurchaseOrder) => {
-                    this.inboundShipmentService.sendNotification({ type: 'success', title: 'Successfully Added', content: `${purchaseOrder.PurchaseOrderID} was added` });
+                    this.inboundShipmentService.sendNotification({
+                        type: 'success',
+                        title: 'Successfully Added',
+                        content: `${purchaseOrder.PurchaseOrderID} was added`
+                    });
                     this.router.navigate(['/PM/inbound-shipment', purchaseOrder.PurchaseOrderID, 'edit']);
                     return (new inboundShipmentActions.AddNewPurchaseOrderSuccess(purchaseOrder));
                 }),
                 catchError(err => {
-                    this.inboundShipmentService.sendNotification({ type: 'error', title: 'Error', content: err });
+                    this.inboundShipmentService.sendNotification({type: 'error', title: 'Error', content: err});
                     this.router.navigate(['/PM/inbound-shipment']);
                     return of(new inboundShipmentActions.AddNewPurchaseOrderFail(err));
                 })
@@ -206,14 +226,18 @@ export class InboundShipmentEffects {
                     this.inboundShipmentService.replacePurchaseOrder(payload.purchaseOrder.PurchaseOrderID, payload.purchaseOrder);
                     this.inboundShipmentService.currentPurchaseOrderEdit = payload.purchaseOrder;
                     this.inboundShipmentService.currentPurchaseLineIsUpdated = false;
-                    this.inboundShipmentService.sendNotification({ type: 'success', title: 'Successfully Updated', content: `${purchaseOrder.PurchaseOrderID} was saved` });
+                    this.inboundShipmentService.sendNotification({
+                        type: 'success',
+                        title: 'Successfully Updated',
+                        content: `${purchaseOrder.PurchaseOrderID} was saved`
+                    });
                     if (payload.printLabel) {
                         this.store.dispatch(new inboundShipmentActions.DownloadPurchaseOrderLabel(payload.purchaseOrder));
                     }
                     return (new inboundShipmentActions.EditPurchaseOrderSuccess(purchaseOrder));
                 }),
                 catchError(err => {
-                    this.inboundShipmentService.sendNotification({ type: 'error', title: 'Error', content: err });
+                    this.inboundShipmentService.sendNotification({type: 'error', title: 'Error', content: err});
                     this.router.navigate(['/PM/inbound-shipment', payload.purchaseOrder.PurchaseOrderID, 'edit']);
                     return of(new inboundShipmentActions.EditPurchaseOrderFail(err));
                 })
@@ -231,16 +255,26 @@ export class InboundShipmentEffects {
                     this.inboundShipmentService.replacePurchaseOrder(payload.purchaseOrder.PurchaseOrderID, payload.purchaseOrder);
                     this.inboundShipmentService.currentPurchaseOrderEdit = payload.purchaseOrder;
                     this.inboundShipmentService.currentPurchaseLineIsUpdated = false;
-                    this.inboundShipmentService.sendNotification({ type: 'success', title: 'Successfully Updated', content: `${purchaseOrder.PurchaseOrderID} was saved` });
+                    this.inboundShipmentService.sendNotification({
+                        type: 'success',
+                        title: 'Successfully Updated',
+                        content: `${purchaseOrder.PurchaseOrderID} was saved`
+                    });
                     if (payload.size === 'small') {
-                        this.store.dispatch(new inboundShipmentActions.DownloadAllItemLabel({purchaseOrder: purchaseOrder, border: payload.border}));
+                        this.store.dispatch(new inboundShipmentActions.DownloadAllItemLabel({
+                            purchaseOrder: purchaseOrder,
+                            border: payload.border
+                        }));
                     } else {
-                        this.store.dispatch(new inboundShipmentActions.DownloadAllItemLargeLabel({purchaseOrder: purchaseOrder, border: payload.border}));
+                        this.store.dispatch(new inboundShipmentActions.DownloadAllItemLargeLabel({
+                            purchaseOrder: purchaseOrder,
+                            border: payload.border
+                        }));
                     }
                     return (new inboundShipmentActions.EditPurchaseOrderThenPrintItemLabelsSuccess(purchaseOrder));
                 }),
                 catchError(err => {
-                    this.inboundShipmentService.sendNotification({ type: 'error', title: 'Error', content: err });
+                    this.inboundShipmentService.sendNotification({type: 'error', title: 'Error', content: err});
                     of(new inboundShipmentActions.EditPurchaseOrderThenPrintItemLabelsFail(err));
                     return EMPTY;
                 })
@@ -256,11 +290,15 @@ export class InboundShipmentEffects {
         mergeMap((inboundshippingmethod: InboundShippingMethod) =>
             this.inboundShipmentService.editInboundShippingMethod(inboundshippingmethod).pipe(
                 map((inboundshippingmethod: InboundShippingMethod) => {
-                    this.inboundShipmentService.sendNotification({ type: 'success', title: 'Successfully Added', content: `${inboundshippingmethod.PurchaseOrderID} was saved` });
+                    this.inboundShipmentService.sendNotification({
+                        type: 'success',
+                        title: 'Successfully Added',
+                        content: `${inboundshippingmethod.PurchaseOrderID} was saved`
+                    });
                     return (new inboundShipmentActions.AddInboundShippingMethodSuccess(inboundshippingmethod));
                 }),
                 catchError(err => {
-                    this.inboundShipmentService.sendNotification({ type: 'error', title: 'Error', content: err });
+                    this.inboundShipmentService.sendNotification({type: 'error', title: 'Error', content: err});
                     of(new inboundShipmentActions.AddInboundShippingMethodFail(err));
                     return EMPTY;
                 })
@@ -275,11 +313,15 @@ export class InboundShipmentEffects {
         mergeMap((inboundshippingmethod: InboundShippingMethod) =>
             this.inboundShipmentService.editInboundShippingMethod(inboundshippingmethod).pipe(
                 map((inboundshippingmethod: InboundShippingMethod) => {
-                    this.inboundShipmentService.sendNotification({ type: 'success', title: 'Successfully Updated', content: `${inboundshippingmethod.PurchaseOrderID} was saved` });
+                    this.inboundShipmentService.sendNotification({
+                        type: 'success',
+                        title: 'Successfully Updated',
+                        content: `${inboundshippingmethod.PurchaseOrderID} was saved`
+                    });
                     return (new inboundShipmentActions.EditInboundShippingMethodSuccess(inboundshippingmethod));
                 }),
                 catchError(err => {
-                    this.inboundShipmentService.sendNotification({ type: 'error', title: 'Error', content: err });
+                    this.inboundShipmentService.sendNotification({type: 'error', title: 'Error', content: err});
                     of(new inboundShipmentActions.EditInboundShippingMethodFail(err));
                     return EMPTY;
                 })
@@ -294,11 +336,15 @@ export class InboundShipmentEffects {
         mergeMap((purchaseOrder: PurchaseOrder) =>
             this.inboundShipmentService.deletePurchaseOrder(purchaseOrder.PurchaseOrderID).pipe(
                 map(() => {
-                    this.inboundShipmentService.sendNotification({ type: 'success', title: 'Successfully Deleted', content: `${purchaseOrder.PackingSlipNumber} was deleted` });
+                    this.inboundShipmentService.sendNotification({
+                        type: 'success',
+                        title: 'Successfully Deleted',
+                        content: `${purchaseOrder.PackingSlipNumber} was deleted`
+                    });
                     return (new inboundShipmentActions.DeletePurchaseOrderSuccess(purchaseOrder.PurchaseOrderID));
                 }),
                 catchError(err => {
-                    this.inboundShipmentService.sendNotification({ type: 'error', title: 'Error', content: err });
+                    this.inboundShipmentService.sendNotification({type: 'error', title: 'Error', content: err});
                     of(new inboundShipmentActions.DeletePurchaseOrderFail(err));
                     return EMPTY;
                 })
@@ -349,22 +395,22 @@ export class InboundShipmentEffects {
             this.inboundShipmentService.downloadAllCartonLabel(purchaseOrder.PurchaseOrderID, 'yes').pipe(
                 map((data: Blob) => {
                     const blob = new Blob([data], {type: 'application/pdf'});
-                const blobUrl = URL.createObjectURL(blob);
-                if (window.navigator.msSaveOrOpenBlob) {
-                    const fileName = 'Carton_' +  purchaseOrder.PurchaseOrderID;
-                    window.navigator.msSaveOrOpenBlob(data, fileName + '.pdf');
-                } else {
-                    const fileURL = window.URL.createObjectURL(blob);
-                    const a: HTMLAnchorElement = document.createElement('a') as HTMLAnchorElement;
-                    a.href = fileURL;
-                    a.download = 'Carton_' +  purchaseOrder.PurchaseOrderID;
-                    document.body.appendChild(a);
-                    a.target = '_blank';
-                    a.click();
+                    const blobUrl = URL.createObjectURL(blob);
+                    if (window.navigator.msSaveOrOpenBlob) {
+                        const fileName = 'Carton_' + purchaseOrder.PurchaseOrderID;
+                        window.navigator.msSaveOrOpenBlob(data, fileName + '.pdf');
+                    } else {
+                        const fileURL = window.URL.createObjectURL(blob);
+                        const a: HTMLAnchorElement = document.createElement('a') as HTMLAnchorElement;
+                        a.href = fileURL;
+                        a.download = 'Carton_' + purchaseOrder.PurchaseOrderID;
+                        document.body.appendChild(a);
+                        a.target = '_blank';
+                        a.click();
 
-                    document.body.removeChild(a);
-                    URL.revokeObjectURL(fileURL);
-                }
+                        document.body.removeChild(a);
+                        URL.revokeObjectURL(fileURL);
+                    }
                     return (new inboundShipmentActions.DownloadPurchaseOrderLabelSuccess(data));
                 }),
                 catchError(err => {
@@ -385,7 +431,7 @@ export class InboundShipmentEffects {
                     const blob = new Blob([data], {type: 'application/pdf'});
                     const blobUrl = URL.createObjectURL(blob);
                     if (window.navigator.msSaveOrOpenBlob) {
-                        const fileName = 'Item_' +  payload.purchaseOrder.PackingSlipNumber;
+                        const fileName = 'Item_' + payload.purchaseOrder.PackingSlipNumber;
                         window.navigator.msSaveOrOpenBlob(data, fileName + '.pdf');
                     } else {
                         const fileURL = window.URL.createObjectURL(blob);
@@ -413,7 +459,7 @@ export class InboundShipmentEffects {
     downloadAllItemLargeLabel$: Observable<Action> = this.actions$.pipe(
         ofType(inboundShipmentActions.InboundShipmentActionTypes.DownloadAllItemLargeLabel),
         map((action: inboundShipmentActions.DownloadAllItemLargeLabel) => action.payload),
-        mergeMap((payload: { purchaseOrder: PurchaseOrder, border: string}) =>
+        mergeMap((payload: { purchaseOrder: PurchaseOrder, border: string }) =>
             this.inboundShipmentService.downloadAllItemLargeLabel(payload.purchaseOrder.PurchaseOrderID, payload.border).pipe(
                 map((data: Blob) => {
 
@@ -448,7 +494,7 @@ export class InboundShipmentEffects {
     downloadCartonLabelCount$: Observable<Action> = this.actions$.pipe(
         ofType(inboundShipmentActions.InboundShipmentActionTypes.DownloadCartonLabelCount),
         map((action: inboundShipmentActions.DownloadCartonLabelCount) => action.payload),
-        mergeMap((payload: { carton: Carton, count: number, border: string}) =>
+        mergeMap((payload: { carton: Carton, count: number, border: string }) =>
             this.inboundShipmentService.downloadCartonLabelCount(payload.carton.CartonID, payload.count, payload.border).pipe(
                 map((data: Blob) => {
                     const blob = new Blob([data], {type: 'application/pdf'});
@@ -482,7 +528,7 @@ export class InboundShipmentEffects {
     downloadItemLabelCount$: Observable<Action> = this.actions$.pipe(
         ofType(inboundShipmentActions.InboundShipmentActionTypes.DownloadItemLabelCount),
         map((action: inboundShipmentActions.DownloadItemLabelCount) => action.payload),
-        mergeMap((payload: { purchaseorderline: PurchaseOrderLine, count: number, border: string}) =>
+        mergeMap((payload: { purchaseorderline: PurchaseOrderLine, count: number, border: string }) =>
             this.inboundShipmentService.downloadItemLabelCount(payload.purchaseorderline.ItemID, payload.count, payload.border).pipe(
                 map((data: Blob) => {
                     const blob = new Blob([data], {type: 'application/pdf'});
@@ -516,7 +562,7 @@ export class InboundShipmentEffects {
     downloadItemLargeLabelCount$: Observable<Action> = this.actions$.pipe(
         ofType(inboundShipmentActions.InboundShipmentActionTypes.DownloadItemLargeLabelCount),
         map((action: inboundShipmentActions.DownloadItemLargeLabelCount) => action.payload),
-        mergeMap((payload: { purchaseorderline: PurchaseOrderLine, count: number, border: string}) =>
+        mergeMap((payload: { purchaseorderline: PurchaseOrderLine, count: number, border: string }) =>
             this.inboundShipmentService.downloadItemLabelCount(payload.purchaseorderline.ItemID, payload.count, payload.border).pipe(
                 map((data: Blob) => {
                     const blob = new Blob([data], {type: 'application/pdf'});

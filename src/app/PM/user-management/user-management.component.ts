@@ -19,7 +19,6 @@ export class UserManagementComponent implements OnInit, OnDestroy {
     }
 
     ngOnInit() {
-
         this.subscription = this.userManagementService.subject.subscribe(
             notification => this.doNotification(notification)
         );
