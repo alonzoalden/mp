@@ -22,6 +22,7 @@ export class HomeComponent implements OnInit, OnDestroy {
     appLoading: boolean = true;
     loadAPI: Promise<any>;
     id: any;
+    member: any;
     constructor(activatedRoute: ActivatedRoute,
             private router: Router,
             private oauthService: OAuthService,
@@ -63,6 +64,7 @@ export class HomeComponent implements OnInit, OnDestroy {
             takeWhile(() => this.componentActive)
         ).subscribe(
             (member: Member) => {
+                this.member = member;
                 if (member && this.isLoggedin) {
                     if (member.IsPM) {
                         this.router.navigate(['/PM']);
@@ -87,7 +89,7 @@ export class HomeComponent implements OnInit, OnDestroy {
         this.oauthService.events.subscribe(e => {
             if (e.type === 'token_received') {
                 this.appService.setWasLoggedIn();
-                this.redirectToDashboard();
+                this.getCurrentMemberAndRedirectToDashboard();
             }
         });
     }
@@ -99,11 +101,17 @@ export class HomeComponent implements OnInit, OnDestroy {
     detectBrowser() {
         const isIEOrEdge = /msie\s|trident\/|edge\//i.test(window.navigator.userAgent);
     }
-
-    redirectToDashboard() {
-        // this.router.navigate(['/dashboard']);
-        window.location.href = window.location.href.replace('/home', '/dashboard');
-
+    getCurrentMemberAndRedirectToDashboard() {
+        this.appService.getCurrentMember().subscribe((member: Member) => {
+            if (member && this.isLoggedin) {
+                if (member.IsPM) {
+                    this.router.navigate(['/PM']);
+                }
+                else {
+                    this.router.navigate(['/dashboard']);
+                }
+            }
+        });
     }
 
     get isLoggedin() {
