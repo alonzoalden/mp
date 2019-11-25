@@ -21,6 +21,7 @@ import {
 } from 'app/shared/class/vendor-attachment';
 import { URLVideo, ItemVideo } from 'app/shared/class/item-video';
 import { BatchUpdate, BatchUpdateValue } from 'app/shared/class/batch-update';
+import { CustomPrintLabel } from 'app/shared/class/label';
 
 export enum ItemActionTypes {
     LoadVendorBrands = '[Item] Load Vendor Brands',
@@ -133,7 +134,19 @@ export enum ItemActionTypes {
     DownloadItemPrintLabelFail = '[Item Print Label] Download Item Print Label Fail',
     DownloadPrintItemLargeLabels = '[Item Print Label] Download Print Item Large Labels',
     DownloadPrintItemLargeLabelsSuccess = '[Item Print Label] Download Print Item Large Labels Success',
-    DownloadPrintItemLargeLabelsFail = '[Item Print Label] Download Print Item Large Labels Fail'
+    DownloadPrintItemLargeLabelsFail = '[Item Print Label] Download Print Item Large Labels Fail',
+    DownloadItemPrintLabelCustom = '[Item Print Label] Download Item Print Custom Label',
+    DownloadItemPrintLabelCustomSuccess = '[Item Print Label] Download Item Print Label Custom Success',
+    DownloadItemPrintLabelCustomFail = '[Item Print Label] Download Item Print Label Custom Fail',
+    DownloadPrintItemLargeLabelsCustom = '[Item Print Label] Download Print Item Large Labels Custom',
+    DownloadPrintItemLargeLabelsCustomSuccess = '[Item Print Label] Download Print Item Large Labels Custom Success',
+    DownloadPrintItemLargeLabelsCustomFail = '[Item Print Label] Download Print Item Large Labels Custom Fail',
+    DownloadItemLabelCountCustom = '[Item] Download Item Label Count Custom',
+    DownloadItemLabelCountCustomSuccess = '[Item] Download Item Label Count Custom Success',
+    DownloadItemLabelCountCustomFail = '[Item] Download Item Label Count Custom Fail',
+    DownloadItemLargeLabelCountCustom = '[Item] Download Item Large Label Count Custom',
+    DownloadItemLargeLabelCountCustomSuccess = '[Item] Download Item Large Label Count Custom Success',
+    DownloadItemLargeLabelCountCustomFail = '[Item] Download Item Large Label Count Custom Fail',
 }
 
 // Action Creators
@@ -576,6 +589,58 @@ export class DownloadPrintItemLargeLabelsFail implements Action {
     constructor(public payload: string) {}
 }
 
+export class DownloadItemLabelCountCustom implements Action {
+    readonly type = ItemActionTypes.DownloadItemLabelCountCustom;
+    constructor(
+        public payload: { item: Item; options: CustomPrintLabel }
+    ) {}
+}
+export class DownloadItemLabelCountCustomSuccess implements Action {
+    readonly type = ItemActionTypes.DownloadItemLabelCountCustomSuccess;
+    constructor(public payload: Blob) {}
+}
+export class DownloadItemLabelCountCustomFail implements Action {
+    readonly type = ItemActionTypes.DownloadItemLabelCountCustomFail;
+    constructor(public payload: string) {}
+}
+export class DownloadItemLargeLabelCountCustom implements Action {
+    readonly type = ItemActionTypes.DownloadItemLargeLabelCountCustom;
+    constructor(
+        public payload: { item: Item; options: CustomPrintLabel }
+    ) {}
+}
+export class DownloadItemLargeLabelCountCustomSuccess implements Action {
+    readonly type = ItemActionTypes.DownloadItemLargeLabelCountCustomSuccess;
+    constructor(public payload: Blob) {}
+}
+export class DownloadItemLargeLabelCountCustomFail implements Action {
+    readonly type = ItemActionTypes.DownloadItemLargeLabelCountCustomFail;
+    constructor(public payload: string) {}
+}
+export class DownloadPrintItemLargeLabelsCustom implements Action {
+    readonly type = ItemActionTypes.DownloadPrintItemLargeLabelsCustom;
+    constructor(public payload: { options: CustomPrintLabel }) {}
+}
+export class DownloadPrintItemLargeLabelsCustomSuccess implements Action {
+    readonly type = ItemActionTypes.DownloadPrintItemLargeLabelsCustomSuccess;
+    constructor(public payload: Blob) {}
+}
+export class DownloadPrintItemLargeLabelsCustomFail implements Action {
+    readonly type = ItemActionTypes.DownloadPrintItemLargeLabelsCustomFail;
+}
+export class DownloadItemPrintLabelCustom implements Action {
+    readonly type = ItemActionTypes.DownloadItemPrintLabelCustom;
+    constructor(public payload: { options: CustomPrintLabel }) {}
+}
+export class DownloadItemPrintLabelCustomSuccess implements Action {
+    readonly type = ItemActionTypes.DownloadItemPrintLabelCustomSuccess;
+    constructor(public payload: Blob) {}
+}
+export class DownloadItemPrintLabelCustomFail implements Action {
+    readonly type = ItemActionTypes.DownloadItemPrintLabelCustomFail;
+    constructor(public payload: string) {}
+}
+
 // Union the valid types
 export type ItemActions =
     | LoadVendorBrands
@@ -686,4 +751,13 @@ export type ItemActions =
     | ResetItem
     | LoadMySubVendorMainItems
     | LoadMySubVendorMainItemsSuccess
-    | LoadMySubVendorMainItemsFail;
+    | LoadMySubVendorMainItemsFail
+    | DownloadPrintItemLargeLabelsCustom
+    | DownloadPrintItemLargeLabelsCustomSuccess
+    | DownloadPrintItemLargeLabelsCustomFail
+    | DownloadItemLabelCountCustom
+    | DownloadItemLabelCountCustomSuccess
+    | DownloadItemLabelCountCustomFail
+    | DownloadItemLargeLabelCountCustom
+    | DownloadItemLargeLabelCountCustomSuccess
+    | DownloadItemLargeLabelCountCustomFail;

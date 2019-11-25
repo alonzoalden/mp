@@ -110,6 +110,7 @@
                         <span class="m-l-xs caret"></span>
                     </a>
                     <ul role="menu" class="dropdown-menu">
+                        <li *ngIf="appService.currentMember?.IsPM" ><a [routerLink]="['/PM']">{{ 'Go To PM Mode' | translate }}</a></li>
                         <li><a [routerLink]="['', 'setting']">{{ 'Change Merchant' | translate }}</a></li>
                         <li><a [routerLink]="['', 'setting','memberpreference']">{{ 'Member Preference' | translate }}</a></li>
                         <li><a *ngIf="appService.currentMember?.IsDropship" [routerLink]="['', 'setting','merchantagreement']">{{ 'Merchant Agreement' | translate }}</a></li>

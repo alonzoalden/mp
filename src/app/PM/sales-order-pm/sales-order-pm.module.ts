@@ -48,6 +48,8 @@ import { CompanyInfoEffects } from '../../original/company/company-info/state/co
 import { CompanyService } from '../../original/company/company.service';
 import { SimpleNotificationsModule } from 'angular2-notifications';
 import {SharePipeModule} from '../../shared/pipe/share.pipe';
+import { SalesOrderViewUploadInvoiceComponentDialog } from './sales-order-view/sales-order-view-upload-invoice/components/sales-order-view-upload-invoice.component.upload-dialog';
+import { SalesOrderViewBOLRequestViewComponentDialog } from './sales-order-view/sales-order-view-bol/sales-order-view-bol-request-view/components/sales-order-view-bol-request-view.component.request-dialog';
 
 
 @NgModule({
@@ -71,9 +73,12 @@ import {SharePipeModule} from '../../shared/pipe/share.pipe';
         SalesOrderFulfillmentEditComponent,
         SalesOrderCancelComponentPrintDialog,
         SalesOrderViewBOLRequestComponentDialog,
-        SalesOrderViewUploadBOLComponentDialog
+        SalesOrderViewUploadBOLComponentDialog,
+        SalesOrderViewUploadInvoiceComponentDialog,
+        SalesOrderViewUploadInvoiceComponentDialog,
+        SalesOrderViewBOLRequestViewComponentDialog,
     ],
-    entryComponents: [SalesOrderCancelComponentPrintDialog, SalesOrderViewBOLRequestComponentDialog, SalesOrderViewUploadBOLComponentDialog],
+    entryComponents: [SalesOrderCancelComponentPrintDialog, SalesOrderViewBOLRequestComponentDialog, SalesOrderViewUploadBOLComponentDialog, SalesOrderViewUploadInvoiceComponentDialog, SalesOrderViewUploadInvoiceComponentDialog, SalesOrderViewBOLRequestViewComponentDialog],
     imports: [
         TranslateModule,
         ReactiveFormsModule,
@@ -99,7 +104,8 @@ import {SharePipeModule} from '../../shared/pipe/share.pipe';
         EffectsModule.forFeature([CompanyInfoEffects]),
         SimpleNotificationsModule,
         SharePipeModule,
-        MatCheckboxModule
+        MatCheckboxModule,
+
     ],
     providers: [
         SalesOrderService, CompanyService

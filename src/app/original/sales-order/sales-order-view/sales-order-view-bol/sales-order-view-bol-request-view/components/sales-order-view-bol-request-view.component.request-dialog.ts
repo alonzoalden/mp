@@ -8,7 +8,7 @@ import { environment } from '../../../../../../../environments/environment';
 import * as fromSalesOrder from '../../../../state';
 import { Store, select } from '@ngrx/store';
 import { takeWhile } from 'rxjs/operators';
-import * as fromCompany from '../../../../../../original/company/company-info/state';
+import * as fromCompany from '../../../../../company/company-info/state/';
 import { CompanyInfo } from '../../../../../../shared/class/company-info';
 
 @Component({

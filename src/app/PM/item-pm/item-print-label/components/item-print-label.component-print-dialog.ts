@@ -1,7 +1,7 @@
 import { Component, OnInit, Inject } from '@angular/core';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material';
-import { Item } from '../../../shared/class/item';
-import { CustomPrintLabel } from '../../../shared/class/label';
+import { Item } from '../../../../shared/class/item';
+import { CustomPrintLabel } from '../../../../shared/class/label';
 
 
 @Component({

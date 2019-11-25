@@ -61,7 +61,9 @@ export enum SalesOrderActionTypes {
     UploadBOLAttachment = '[Sales Order] Upload BOL Attachment',
     UploadBOLAttachmentSuccess = '[Sales Order] Upload BOL Attachment Success',
     UploadBOLAttachmentFail = '[Sales Order] Upload BOL Attachment Fail',
-
+    LoadBOLRequestNotification = '[Sales Order] Load BOL Request Notification',
+    LoadBOLRequestNotificationSuccess = '[Sales Order] Load BOL Request Notification Success',
+    LoadBOLRequestNotificationFail = '[Sales Order] Load BOL Request Notification Fail',
 }
 
 // Action Creators
@@ -287,6 +289,18 @@ export class DownloadSalesOrderPackingSlipFail implements Action {
     constructor(public payload: string) { }
 }
 
+export class LoadBOLRequestNotification implements Action {
+    readonly type = SalesOrderActionTypes.LoadBOLRequestNotification;
+    constructor(public payload: number) { }
+}
+export class LoadBOLRequestNotificationSuccess implements Action {
+    readonly type = SalesOrderActionTypes.LoadBOLRequestNotificationSuccess;
+}
+export class LoadBOLRequestNotificationFail implements Action {
+    readonly type = SalesOrderActionTypes.LoadBOLRequestNotificationFail;
+    constructor(public payload: string) { }
+}
+
 // Union the valid types
 export type SalesOrderActions = LoadSalesOrders
     | LoadVendorsSalesOrders
@@ -339,5 +353,7 @@ export type SalesOrderActions = LoadSalesOrders
     | UploadBOLAttachmentFail
     | LoadMyVendorsSalesOrders
     | LoadMySalesOrdersSuccess
-    | LoadMySalesOrdersFail;
-
+    | LoadMySalesOrdersFail
+    | LoadBOLRequestNotification
+    | LoadBOLRequestNotificationSuccess
+    | LoadBOLRequestNotificationFail;
