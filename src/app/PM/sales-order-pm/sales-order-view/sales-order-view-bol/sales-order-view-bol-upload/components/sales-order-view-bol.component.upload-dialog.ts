@@ -15,7 +15,7 @@ import { takeWhile } from 'rxjs/operators';
 })
 
 export class SalesOrderViewUploadBOLComponentDialog implements OnInit, OnDestroy {
-    private bolURL = environment.bolURL;
+    bolURL = environment.bolURL;
     errorMessage: string;
     fulfilledby: string;
     orderid: number;

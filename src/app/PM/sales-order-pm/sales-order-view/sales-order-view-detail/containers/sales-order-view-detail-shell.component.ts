@@ -55,4 +55,7 @@ export class SalesOrderViewDetailShellComponent implements OnInit {
     getBOLRequest(payload: number) {
         this.store.dispatch(new salesOrderActions.LoadBOLRequest(payload));
     }
+    notifyBOLRequest(payload: number) {
+        this.store.dispatch(new salesOrderActions.LoadBOLRequestNotification(payload));
+    }
 }

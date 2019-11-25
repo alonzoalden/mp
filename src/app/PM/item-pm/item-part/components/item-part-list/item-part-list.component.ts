@@ -1,11 +1,12 @@
-import { ItemPartListComponentItemPrintDialog } from './item-part-list.component-item-print-dialog';
-import { Component, OnInit, ViewChild, Inject } from '@angular/core';
+import { Component, OnInit, ViewChild, Output, EventEmitter } from '@angular/core';
 import { Router } from '@angular/router';
-import { MatPaginator, MatSort, MatTableDataSource, MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material';
+import { MatPaginator, MatSort, MatTableDataSource, MatDialog } from '@angular/material';
 import { Item, ItemInsert, ItemCategoryAssignment, ItemOption, ItemSelection, ItemTierPrice, ItemRelatedProduct, ItemUpSell, ItemCrossSell, ItemAttachment, ItemVideo } from '../../../../../shared/class/item';
+import { ItemPartListComponentItemPrintDialog } from './item-part-list.component-item-print-dialog';
 import { ItemService } from '../../../item.service';
 import { AppService } from '../../../../../app.service';
 import { environment } from '../../../../../../environments/environment';
+import { CustomPrintLabel } from 'app/shared/class/label';
 
 @Component({
     selector: 'o-item-part-list',
@@ -13,12 +14,14 @@ import { environment } from '../../../../../../environments/environment';
 })
 
 export class ItemPartListComponent implements OnInit {
+    @Output() downloadItemLabelCount = new EventEmitter<{ item: Item, count: number, border: string }>();
+    @Output() downloadItemLargeLabelCount = new EventEmitter<{ item: Item, count: number, border: string }>();
+    @Output() downloadItemLabelCountCustom = new EventEmitter<{ item: Item, options: CustomPrintLabel }>();
+    @Output() downloadItemLargeLabelCountCustom = new EventEmitter<{ item: Item, options: CustomPrintLabel }>();
     errorMessage: string;
     items: Item[];
-
-    private imageURL = environment.imageURL;
-    private linkURL = environment.linkURL;
-
+    imageURL = environment.imageURL;
+    linkURL = environment.linkURL;
     duplicateItemInsert: ItemInsert;
     duplicateItemCategoryAssignments: ItemCategoryAssignment[];
     duplicateItemOptions: ItemOption[];
@@ -83,67 +86,41 @@ export class ItemPartListComponent implements OnInit {
 
     openDialogPrintItemLabel(item: Item) {
         const dialogRef = this.itemPrintDialog.open(ItemPartListComponentItemPrintDialog, {
-            width: '250px',
+            width: '420px',
             data: item,
         });
 
-        dialogRef.afterClosed().subscribe(result => {
-            if (result && result.Quantity > 0) {
-                if (result.Size === 'small') {
-                    this.onPrintLabel(item, result.Quantity, result.Border);
+        dialogRef.afterClosed().subscribe(data => {
+            if (data && data.customOptions && data.customOptions.Quantity > 0) {
+                if (data.size === 'small') {
+                    if (data.isCustom) {
+                        this.onPrintLabelCustom(item, data.customOptions);
+                    } else {
+                        this.onPrintLabel(item, data.customOptions.Quantity, data.customOptions.Border);
+                    }
                 } else {
-                    this.onPrintLargeLabel(item, result.Quantity, result.Border);
+                    if (data.isCustom) {
+                        this.onPrintLargeLabelCustom(item, data.customOptions);
+                    } else {
+                        this.onPrintLargeLabel(item, data.customOptions.Quantity, data.customOptions.Border);
+                    }
                 }
             }
         });
     }
 
     onPrintLabel(item: Item, count: number, border: string) {
-        this.itemService.downloadItemLabelCount(item.ItemID, count, border).subscribe(
-            (data) => {
-                const blob = new Blob([data], {type: 'application/pdf'});
-                const blobUrl = URL.createObjectURL(blob);
-                if (window.navigator.msSaveOrOpenBlob) {
-                    const fileName = item.TPIN;
-                    window.navigator.msSaveOrOpenBlob(data, fileName + '.pdf'); // IE is the worst!!!
-                } else {
-                    const fileURL = window.URL.createObjectURL(blob);
-                    const a: HTMLAnchorElement = document.createElement('a') as HTMLAnchorElement;
-                    a.href = fileURL;
-                    a.download = item.TPIN;
-                    document.body.appendChild(a);
-                    a.target = '_blank';
-                    a.click();
-
-                    document.body.removeChild(a);
-                    URL.revokeObjectURL(fileURL);
-                }
-            }
-        );
+        this.downloadItemLabelCount.emit({item: item, count: count, border: border});
+    }
+    onPrintLabelCustom(item: Item, options: CustomPrintLabel) {
+        this.downloadItemLabelCountCustom.emit({ item: item, options: options });
     }
 
     onPrintLargeLabel(item: Item, count: number, border: string) {
-        this.itemService.downloadItemLargeLabelCount(item.ItemID, count, border).subscribe(
-            (data) => {
-                const blob = new Blob([data], {type: 'application/pdf'});
-                const blobUrl = URL.createObjectURL(blob);
-                if (window.navigator.msSaveOrOpenBlob) {
-                    const fileName = item.TPIN + '_Large';
-                    window.navigator.msSaveOrOpenBlob(data, fileName + '.pdf'); // IE is the worst!!!
-                } else {
-                    const fileURL = window.URL.createObjectURL(blob);
-                    const a: HTMLAnchorElement = document.createElement('a') as HTMLAnchorElement;
-                    a.href = fileURL;
-                    a.download = item.TPIN + '_Large';
-                    document.body.appendChild(a);
-                    a.target = '_blank';
-                    a.click();
-
-                    document.body.removeChild(a);
-                    URL.revokeObjectURL(fileURL);
-                }
-            }
-        );
+        this.downloadItemLargeLabelCount.emit({item: item, count: count, border: border});
+    }
+    onPrintLargeLabelCustom(item: Item, options: CustomPrintLabel) {
+        this.downloadItemLargeLabelCountCustom.emit({ item: item, options: options });
     }
 
     onRemove(item: Item) {

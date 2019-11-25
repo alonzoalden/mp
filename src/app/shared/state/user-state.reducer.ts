@@ -40,11 +40,6 @@ export const getIsLoading = createSelector(
 
 export function userreducer(state = initialState, action: UserActions): UserState {
     switch (action.type) {
-        case UserActionTypes.LoadCurrentUser:
-            return {
-                ...state,
-                isLoading: true,
-            };
         case UserActionTypes.LoadCurrentUserSuccess:
             return {
                 ...state,

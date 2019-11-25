@@ -585,6 +585,74 @@ export class ItemEffects {
         )
     );
 
+
+    @Effect()
+    downloadItemLabelCountCustom$: Observable<Action> = this.actions$.pipe(
+        ofType(itemActions.ItemActionTypes.DownloadItemLabelCountCustom),
+        map((action: itemActions.DownloadItemLabelCountCustom) => action.payload),
+        mergeMap((payload) =>
+            this.itemService.downloadItemLabelCountCustom(payload.item.ItemID, payload.options).pipe(
+                map((data: Blob) => {
+                    const blob = new Blob([data], {type: 'application/pdf'});
+                    if (window.navigator.msSaveOrOpenBlob) {
+                        const fileName = payload.item.TPIN;
+                        window.navigator.msSaveOrOpenBlob(data, fileName + '.pdf');
+                    } else {
+                        const fileURL = window.URL.createObjectURL(blob);
+                        const a: HTMLAnchorElement = document.createElement('a') as HTMLAnchorElement;
+                        a.href = fileURL;
+                        a.download = payload.item.TPIN;
+                        document.body.appendChild(a);
+                        a.target = '_blank';
+                        a.click();
+                        document.body.removeChild(a);
+                        URL.revokeObjectURL(fileURL);
+                    }
+                    return (new itemActions.DownloadItemLabelCountCustomSuccess(data));
+                }),
+                catchError(err => {
+                    this.itemService.sendNotification({ type: 'error', title: 'Error', content: err.message });
+                    return of(new itemActions.DownloadItemLabelCountCustomFail(err));
+                })
+            )
+        )
+    );
+
+
+    @Effect()
+    downloadItemLargeLabelCountCustom$: Observable<Action> = this.actions$.pipe(
+        ofType(itemActions.ItemActionTypes.DownloadItemLargeLabelCountCustom),
+        map((action: itemActions.DownloadItemLargeLabelCountCustom) => action.payload),
+        mergeMap((payload) =>
+            this.itemService.downloadItemLargeLabelCountCustom(payload.item.ItemID, payload.options).pipe(
+                map((data: Blob) => {
+                    const blob = new Blob([data], {type: 'application/pdf'});
+                    if (window.navigator.msSaveOrOpenBlob) {
+                        const fileName = payload.item.TPIN;
+                        window.navigator.msSaveOrOpenBlob(data, fileName + '.pdf');
+                    } else {
+                        const fileURL = window.URL.createObjectURL(blob);
+                        const a: HTMLAnchorElement = document.createElement('a') as HTMLAnchorElement;
+                        a.href = fileURL;
+                        a.download = payload.item.TPIN;
+                        document.body.appendChild(a);
+                        a.target = '_blank';
+                        a.click();
+
+                        document.body.removeChild(a);
+                        URL.revokeObjectURL(fileURL);
+
+                    }
+                    return (new itemActions.DownloadItemLargeLabelCountSuccess(data));
+                }),
+                catchError(err => {
+                    this.itemService.sendNotification({ type: 'error', title: 'Error', content: err });
+                    return of(new itemActions.DownloadItemLargeLabelCountFail(err));
+                })
+            )
+        )
+    );
+
     @Effect()
     downloadItemTemplate$: Observable<Action> = this.actions$.pipe(
         ofType(itemActions.ItemActionTypes.DownloadItemTemplate),
@@ -626,7 +694,39 @@ export class ItemEffects {
             this.itemService.downloadPrintItemLabels(payload.labels, payload.border).pipe(
                 map((data: Blob) => {
                     const blob = new Blob([data], {type: 'application/pdf'});
-                    const blobUrl = URL.createObjectURL(blob);
+                    if (window.navigator.msSaveOrOpenBlob) {
+                        const fileName = String(Date.now());
+                        window.navigator.msSaveOrOpenBlob(data, fileName + '.pdf');
+                    } else {
+                        const fileURL = window.URL.createObjectURL(blob);
+                        const a: HTMLAnchorElement = document.createElement('a') as HTMLAnchorElement;
+                        a.href = fileURL;
+                        a.download = String(Date.now());
+                        document.body.appendChild(a);
+                        a.target = '_blank';
+                        a.click();
+
+                        document.body.removeChild(a);
+                        URL.revokeObjectURL(fileURL);
+                    }
+                    return (new itemActions.DownloadItemLargeLabelCountSuccess(data));
+                }),
+                catchError(err => {
+                    this.itemService.sendNotification({ type: 'error', title: 'Error', content: err });
+                    of(new itemActions.DownloadItemLargeLabelCountFail(err));
+                    return EMPTY;
+                })
+            )
+        )
+    );
+    @Effect()
+    downloadPrintItemLabelsCustom$: Observable<Action> = this.actions$.pipe(
+        ofType(itemActions.ItemActionTypes.DownloadItemPrintLabelCustom),
+        map((action: itemActions.DownloadItemPrintLabelCustom) => action.payload),
+        mergeMap((payload) =>
+            this.itemService.downloadPrintItemLabelsCustom(payload.options).pipe(
+                map((data: Blob) => {
+                    const blob = new Blob([data], {type: 'application/pdf'});
                     if (window.navigator.msSaveOrOpenBlob) {
                         const fileName = String(Date.now());
                         window.navigator.msSaveOrOpenBlob(data, fileName + '.pdf');
@@ -660,7 +760,6 @@ export class ItemEffects {
             this.itemService.downloadPrintItemLargeLabels(payload.labels, payload.border).pipe(
                 map((data: Blob) => {
                     const blob = new Blob([data], {type: 'application/pdf'});
-                    const blobUrl = URL.createObjectURL(blob);
                     if (window.navigator.msSaveOrOpenBlob) {
                         const fileName = String(Date.now());
                         window.navigator.msSaveOrOpenBlob(data, fileName + '.pdf');
@@ -686,4 +785,38 @@ export class ItemEffects {
             )
         )
     );
+    @Effect()
+    downloadPrintItemLargeLabelsCustom$: Observable<Action> = this.actions$.pipe(
+        ofType(itemActions.ItemActionTypes.DownloadPrintItemLargeLabelsCustom),
+        map((action: itemActions.DownloadPrintItemLargeLabelsCustom) => action.payload),
+        mergeMap((payload) =>
+            this.itemService.downloadPrintItemLargeLabelsCustom(payload.options).pipe(
+                map((data: Blob) => {
+                    const blob = new Blob([data], {type: 'application/pdf'});
+                    if (window.navigator.msSaveOrOpenBlob) {
+                        const fileName = String(Date.now());
+                        window.navigator.msSaveOrOpenBlob(data, fileName + '.pdf');
+                    } else {
+                        const fileURL = window.URL.createObjectURL(blob);
+                        const a: HTMLAnchorElement = document.createElement('a') as HTMLAnchorElement;
+                        a.href = fileURL;
+                        a.download = String(Date.now());
+                        document.body.appendChild(a);
+                        a.target = '_blank';
+                        a.click();
+
+                        document.body.removeChild(a);
+                        URL.revokeObjectURL(fileURL);
+                    }
+                    return (new itemActions.DownloadItemLargeLabelCountSuccess(data));
+                }),
+                catchError(err => {
+                    this.itemService.sendNotification({ type: 'error', title: 'Error', content: err });
+                    of(new itemActions.DownloadItemLargeLabelCountFail(err));
+                    return EMPTY;
+                })
+            )
+        )
+    );
+
 }

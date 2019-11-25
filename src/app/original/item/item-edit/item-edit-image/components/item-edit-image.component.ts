@@ -13,10 +13,10 @@ declare var $: any;
 })
 
 export class ItemEditImageComponent implements OnInit, OnChanges {
-    private imageURL = environment.imageURL;
     @Input() errorMessage: string;
     @Input() item: Item;
     @Input() itemImagesMatTable: MatTableDataSource<ItemImage>;
+    imageURL = environment.imageURL;
     displayedColumns = ['Add', 'Down', 'Position', 'Up', 'Thumbnail', 'Label', 'IsBaseImage', 'IsSmallImage', 'IsThumbnail', 'IsRotatorImage', 'Exclude', 'Remove'];
     pendingAdd: boolean;
     currentIndex: number;

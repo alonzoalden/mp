@@ -7,12 +7,14 @@ import { SalesOrderLine } from '../../shared/class/sales-order-line';
 import { Fulfillment, FulfillmentSalesOrderLine } from '../../shared/class/fulfillment';
 import { OAuthService } from 'angular-oauth2-oidc';
 import { environment } from '../../../environments/environment';
-import { BOLRequest } from '../../shared/class/bol-request';
+import { BOLRequest } from 'app/shared/class/bol-request';
 import { NotificationComponent } from '../../shared/tool/notification/notification.component';
+import { PurchaseOrderMerchantInvoice } from 'app/shared/class/purchase-order';
 
 @Injectable()
 export class SalesOrderService {
     private apiURL = environment.webapiURL;
+    private invoiceURL = environment.invoiceURL;
     private salesorders: SalesOrder[];
     private salesorderlines: SalesOrderLine[];
     currentSalesOrderLine: SalesOrderLine;
@@ -252,6 +254,40 @@ export class SalesOrderService {
 
     uploadBOLAttachment(salesorderid: number, formdata: FormData): Observable<BOLRequest> {
         return this.http.post<BOLRequest>(this.apiURL + '/bolrequest/purchaseorder/' + salesorderid + '/upload', formdata )
+                        .pipe(
+                            catchError(this.handleError)
+                        );
+    }
+
+    notifyBOLRequest(id: number): Observable<BOLRequest> {
+        const headers = new HttpHeaders({
+            'Content-Type': 'application/json'
+        });
+        return this.http.post<BOLRequest>(this.apiURL + '/bolrequest/purchaseorder/' + id + '/notify', {}, { headers: headers } )
+                            .pipe(
+                                catchError(this.handleError)
+                            );
+    }
+    addMerchantInvoices(salesorderid: number, invoices: PurchaseOrderMerchantInvoice[]): Observable<PurchaseOrderMerchantInvoice> {
+        const headers = new HttpHeaders({
+            'Content-Type': 'application/json'
+        });
+        return this.http.post<PurchaseOrderMerchantInvoice>(this.apiURL + '/merchantinvoice/' + salesorderid, invoices, { headers: headers } )
+                            .pipe(
+                                catchError(this.handleError)
+                            );
+    }
+    getMerchantInvoices(salesorderid: number): Observable<PurchaseOrderMerchantInvoice> {
+        const headers = new HttpHeaders({
+            'Content-Type': 'application/json'
+        });
+        return this.http.get<PurchaseOrderMerchantInvoice>(this.apiURL + '/merchantinvoice/purchaseorder/' + salesorderid, { headers: headers } )
+                            .pipe(
+                                catchError(this.handleError)
+                            );
+    }
+    uploadMerchantInvoiceAttachment(salesorderid: number, formdata: FormData): Observable<string> {
+        return this.http.post<string>(this.apiURL + '/merchantinvoice/purchaseorder/' + salesorderid + '/upload', formdata )
                         .pipe(
                             catchError(this.handleError)
                         );

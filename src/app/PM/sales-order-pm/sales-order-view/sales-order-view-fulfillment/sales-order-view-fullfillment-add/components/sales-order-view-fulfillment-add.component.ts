@@ -34,7 +34,7 @@ export class SalesOrderFulfillmentAddComponent implements OnInit, OnChanges {
     ) { }
 
     minDate = new Date(2000, 0, 1);
-    maxDate = new Date(2020, 0, 1);
+    maxDate = new Date(2040, 0, 1);
 
     ngOnChanges(changes: SimpleChanges): void {
         if (changes.fulfillmentSalesOrderLinesMatTable && changes.fulfillmentSalesOrderLinesMatTable.currentValue.data.length) {

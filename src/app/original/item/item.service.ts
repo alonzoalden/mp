@@ -11,6 +11,7 @@ import { URLVideo } from '../../shared/class/item-video';
 import { ItemList } from '../../shared/class/item';
 import { Category } from '../../shared/class/category';
 import { Member } from '../../shared/class/member';
+import { CustomPrintLabel } from '../../shared/class/label';
 import { VendorAttachmentList, VendorAttachment} from '../../shared/class/vendor-attachment';
 import { VendorBrand } from '../../shared/class/vendor-brand';
 import { BatchUpdate, BatchUpdateValue } from '../../shared/class/batch-update';
@@ -903,6 +904,14 @@ export class ItemService {
         return this.http.get(this.apiURL + '/item/' + id + '/largelabel/' + count + '/' + border, { responseType: 'blob' });
     }
 
+    // Custom
+    downloadItemLabelCountCustom(id: number, options: CustomPrintLabel) {
+        return this.http.post(this.apiURL + '/item/' + id + '/label/custom', options, { responseType: 'blob' });
+    }
+    downloadItemLargeLabelCountCustom(id: number, options: CustomPrintLabel) {
+        return this.http.post(this.apiURL + '/item/' + id + '/largelabel/custom', options, { responseType: 'blob' });
+    }
+
     downloadPrintItemLabels(itemPrintLabels: ItemPrintLabel[], border: string) {
         const headers = new HttpHeaders({
             'Content-Type': 'application/json'
@@ -916,7 +925,18 @@ export class ItemService {
                                 catchError(this.handleError)
                             );
     }
+    downloadPrintItemLabelsCustom(options: CustomPrintLabel) {
+        const headers = new HttpHeaders({
+            'Content-Type': 'application/json'
 
+        });
+        return this.http.post<Blob>(this.apiURL + '/item/printlabel/custom', options, {headers: headers, responseType: 'blob' as 'json' } )
+                            .pipe(
+                                tap(data => {
+                                }),
+                                catchError(this.handleError)
+                            );
+    }
     downloadPrintItemLargeLabels(itemPrintLabels: ItemPrintLabel[], border: string) {
         const headers = new HttpHeaders({
             'Content-Type': 'application/json'
@@ -924,6 +944,17 @@ export class ItemService {
         });
 
         return this.http.post<Blob>(this.apiURL + '/item/printlargelabel/' + border, itemPrintLabels, {headers: headers, responseType: 'blob' as 'json' } )
+                            .pipe(
+                                tap(data => {
+                                }),
+                                catchError(this.handleError)
+                            );
+    }
+    downloadPrintItemLargeLabelsCustom(options: CustomPrintLabel) {
+        const headers = new HttpHeaders({
+            'Content-Type': 'application/json'
+        });
+        return this.http.post<Blob>(this.apiURL + '/item/printlargelabel/custom', options, {headers: headers, responseType: 'blob' as 'json' } )
                             .pipe(
                                 tap(data => {
                                 }),

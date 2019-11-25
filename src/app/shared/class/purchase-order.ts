@@ -144,3 +144,16 @@ export class InboundShippingMethodInsert {
     ) {}
 }
 
+export class PurchaseOrderMerchantInvoice {
+    constructor(
+        public PurchaseOrderMerchantInvoiceID: number,
+        public PurchaseOrderID: number,
+        public ShippingAmount: number,
+        public InvoiceAmount: number,
+        public FilePath: string,
+        public UpdatedOn: Date,
+        public CreatedOn: Date,
+        public Position: number,
+        public pendingAdd: boolean
+    ) {}
+}

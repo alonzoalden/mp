@@ -14,7 +14,8 @@ import {
     ItemBatch,
     ItemPrintLabel
 } from '../../../shared/class/item';
-import { Category } from '../../../shared/class/category';
+import { Category } from 'app/shared/class/category';
+import { CustomPrintLabel } from 'app/shared/class/label';
 import {
     VendorAttachment,
     VendorAttachmentList
@@ -123,9 +124,23 @@ export enum ItemActionTypes {
     DownloadItemPrintLabel = '[Item Print Label] Download Item Print Label',
     DownloadItemPrintLabelSuccess = '[Item Print Label] Download Item Print Label Success',
     DownloadItemPrintLabelFail = '[Item Print Label] Download Item Print Label Fail',
+    DownloadItemPrintLabelCustom = '[Item Print Label] Download Item Print Custom Label',
+    DownloadItemPrintLabelCustomSuccess = '[Item Print Label] Download Item Print Label Custom Success',
+    DownloadItemPrintLabelCustomFail = '[Item Print Label] Download Item Print Label Custom Fail',
     DownloadPrintItemLargeLabels = '[Item Print Label] Download Print Item Large Labels',
     DownloadPrintItemLargeLabelsSuccess = '[Item Print Label] Download Print Item Large Labels Success',
-    DownloadPrintItemLargeLabelsFail = '[Item Print Label] Download Print Item Large Labels Fail'
+    DownloadPrintItemLargeLabelsFail = '[Item Print Label] Download Print Item Large Labels Fail',
+    DownloadPrintItemLargeLabelsCustom = '[Item Print Label] Download Print Item Large Labels Custom',
+    DownloadPrintItemLargeLabelsCustomSuccess = '[Item Print Label] Download Print Item Large Labels Custom Success',
+    DownloadPrintItemLargeLabelsCustomFail = '[Item Print Label] Download Print Item Large Labels Custom Fail',
+    DownloadItemLabelCountCustom = '[Item] Download Item Label Count Custom',
+    DownloadItemLabelCountCustomSuccess = '[Item] Download Item Label Count Custom Success',
+    DownloadItemLabelCountCustomFail = '[Item] Download Item Label Count Custom Fail',
+    DownloadItemLargeLabelCountCustom = '[Item] Download Item Large Label Count Custom',
+    DownloadItemLargeLabelCountCustomSuccess = '[Item] Download Item Large Label Count Custom Success',
+    DownloadItemLargeLabelCountCustomFail = '[Item] Download Item Large Label Count Custom Fail',
+
+
 }
 
 // Action Creators
@@ -504,6 +519,36 @@ export class DownloadItemLargeLabelCountFail implements Action {
     readonly type = ItemActionTypes.DownloadItemLargeLabelCountFail;
     constructor(public payload: string) {}
 }
+
+export class DownloadItemLabelCountCustom implements Action {
+    readonly type = ItemActionTypes.DownloadItemLabelCountCustom;
+    constructor(
+        public payload: { item: Item; options: CustomPrintLabel }
+    ) {}
+}
+export class DownloadItemLabelCountCustomSuccess implements Action {
+    readonly type = ItemActionTypes.DownloadItemLabelCountCustomSuccess;
+    constructor(public payload: Blob) {}
+}
+export class DownloadItemLabelCountCustomFail implements Action {
+    readonly type = ItemActionTypes.DownloadItemLabelCountCustomFail;
+    constructor(public payload: string) {}
+}
+export class DownloadItemLargeLabelCountCustom implements Action {
+    readonly type = ItemActionTypes.DownloadItemLargeLabelCountCustom;
+    constructor(
+        public payload: { item: Item; options: CustomPrintLabel }
+    ) {}
+}
+export class DownloadItemLargeLabelCountCustomSuccess implements Action {
+    readonly type = ItemActionTypes.DownloadItemLargeLabelCountCustomSuccess;
+    constructor(public payload: Blob) {}
+}
+export class DownloadItemLargeLabelCountCustomFail implements Action {
+    readonly type = ItemActionTypes.DownloadItemLargeLabelCountCustomFail;
+    constructor(public payload: string) {}
+}
+
 export class DownloadItemTemplate implements Action {
     readonly type = ItemActionTypes.DownloadItemTemplate;
 }
@@ -527,6 +572,20 @@ export class DownloadItemPrintLabelFail implements Action {
     readonly type = ItemActionTypes.DownloadItemPrintLabelFail;
     constructor(public payload: string) {}
 }
+
+export class DownloadItemPrintLabelCustom implements Action {
+    readonly type = ItemActionTypes.DownloadItemPrintLabelCustom;
+    constructor(public payload: { options: CustomPrintLabel }) {}
+}
+export class DownloadItemPrintLabelCustomSuccess implements Action {
+    readonly type = ItemActionTypes.DownloadItemPrintLabelCustomSuccess;
+    constructor(public payload: Blob) {}
+}
+export class DownloadItemPrintLabelCustomFail implements Action {
+    readonly type = ItemActionTypes.DownloadItemPrintLabelCustomFail;
+    constructor(public payload: string) {}
+}
+
 export class DownloadPrintItemLargeLabels implements Action {
     readonly type = ItemActionTypes.DownloadPrintItemLargeLabels;
     constructor(public payload: { labels: ItemPrintLabel[]; border: string }) {}
@@ -537,6 +596,19 @@ export class DownloadPrintItemLargeLabelsSuccess implements Action {
 }
 export class DownloadPrintItemLargeLabelsFail implements Action {
     readonly type = ItemActionTypes.DownloadPrintItemLargeLabelsFail;
+    constructor(public payload: string) {}
+}
+
+export class DownloadPrintItemLargeLabelsCustom implements Action {
+    readonly type = ItemActionTypes.DownloadPrintItemLargeLabelsCustom;
+    constructor(public payload: { options: CustomPrintLabel }) {}
+}
+export class DownloadPrintItemLargeLabelsCustomSuccess implements Action {
+    readonly type = ItemActionTypes.DownloadPrintItemLargeLabelsCustomSuccess;
+    constructor(public payload: Blob) {}
+}
+export class DownloadPrintItemLargeLabelsCustomFail implements Action {
+    readonly type = ItemActionTypes.DownloadPrintItemLargeLabelsCustomFail;
     constructor(public payload: string) {}
 }
 
@@ -619,6 +691,9 @@ export type ItemActions =
     | DownloadItemPrintLabel
     | DownloadItemPrintLabelSuccess
     | DownloadItemPrintLabelFail
+    | DownloadPrintItemLargeLabelsCustom
+    | DownloadPrintItemLargeLabelsCustomSuccess
+    | DownloadPrintItemLargeLabelsCustomFail
     | DownloadPrintItemLargeLabels
     | DownloadPrintItemLargeLabelsSuccess
     | DownloadPrintItemLargeLabelsFail
@@ -643,4 +718,13 @@ export type ItemActions =
     | EditItemBatchUpdate
     | EditItemBatchUpdateSuccess
     | EditItemBatchUpdateFail
-    | AddNewItemRelatedProductRow;
+    | AddNewItemRelatedProductRow
+    | DownloadItemLabelCountCustom
+    | DownloadItemLabelCountCustomSuccess
+    | DownloadItemLabelCountCustomFail
+    | DownloadItemLargeLabelCountCustom
+    | DownloadItemLargeLabelCountCustomSuccess
+    | DownloadItemLargeLabelCountCustomFail
+    | DownloadItemPrintLabelCustom
+    | DownloadItemPrintLabelCustomSuccess
+    | DownloadItemPrintLabelCustomFail;

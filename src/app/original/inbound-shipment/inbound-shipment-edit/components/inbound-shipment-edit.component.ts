@@ -5,6 +5,7 @@ import { PurchaseOrder, PurchaseOrderLine, Carton } from '../../../../shared/cla
 import { PurchaseOrderService } from '../../purchase-order.service';
 import { InboundShippingMethod } from '../../../../shared/class/inbound-shipping-method';
 import { InboundShipmentEditItemPrintDialogComponent } from './inbound-shipment-edit.component-item-print-dialog';
+import { CustomPrintLabel } from 'app/shared/class/label';
 
 @Component({
   selector: 'o-inbound-shipment-edit',
@@ -21,9 +22,12 @@ export class InboundShipmentEditComponent implements OnInit {
     @Output() addNewPurchaseOrder = new EventEmitter<void>();
     @Output() editPurchaseOrder = new EventEmitter<{ purchaseOrder: PurchaseOrder, printLabel: boolean }>();
     @Output() editPurchaseOrderThenPrintItemLabels = new EventEmitter<{ purchaseOrder: PurchaseOrder, size: string, border: string }>();
+    @Output() editPurchaseOrderThenPrintItemLabelsCustom = new EventEmitter<{ purchaseOrder: PurchaseOrder, options: CustomPrintLabel, size: string }>();
     @Output() downloadPurchaseOrderLabel = new EventEmitter<PurchaseOrder>();
     @Output() downloadAllItemLabel = new EventEmitter<{purchaseOrder: PurchaseOrder, border: string}>();
     @Output() downloadAllItemLargeLabel = new EventEmitter<{purchaseOrder: PurchaseOrder, border: string}>();
+    @Output() downloadAllItemLabelCustom = new EventEmitter<{purchaseOrder: PurchaseOrder, options: CustomPrintLabel}>();
+    @Output() downloadAllItemLargeLabelCustom = new EventEmitter<{purchaseOrder: PurchaseOrder, options: CustomPrintLabel}>();
     @Output() setSelectedPurchaseOrder = new EventEmitter<PurchaseOrder>();
     @Output() setSelectedCarton = new EventEmitter<Carton>();
     private originalPurchaseOrder: PurchaseOrder;
@@ -297,42 +301,58 @@ export class InboundShipmentEditComponent implements OnInit {
 
     openDialogPrintAllItemLabel() {
         const dialogRef = this.itemPrintDialog.open(InboundShipmentEditItemPrintDialogComponent, {
-            width: '250px',
+            width: '420px',
             data: this.purchaseOrder
         });
 
         dialogRef.afterClosed().subscribe(result => {
-            if (this.isInboundShipmentPending()) {
-                const newPurchaseOrder = this.purchaseOrderService.copyPurchaseOrder(this.purchaseOrder);
-                if (newPurchaseOrder.PurchaseOrderLines) {
-                    const pendingPurchaseOrderLineIndex = newPurchaseOrder.PurchaseOrderLines.findIndex(i => i.pendingAdd === true);
-                    if (pendingPurchaseOrderLineIndex > -1) {
-                        newPurchaseOrder.PurchaseOrderLines.splice(pendingPurchaseOrderLineIndex, 1);
+            if (result) {
+                if (this.isInboundShipmentPending()) {
+                    const newPurchaseOrder = this.purchaseOrderService.copyPurchaseOrder(this.purchaseOrder);
+                    if (newPurchaseOrder.PurchaseOrderLines) {
+                        const pendingPurchaseOrderLineIndex = newPurchaseOrder.PurchaseOrderLines.findIndex(i => i.pendingAdd === true);
+                        if (pendingPurchaseOrderLineIndex > -1) {
+                            newPurchaseOrder.PurchaseOrderLines.splice(pendingPurchaseOrderLineIndex, 1);
+                        }
                     }
-                }
-                if (newPurchaseOrder.Cartons) {
-                    const pendingCartonIndex = newPurchaseOrder.Cartons.findIndex(i => i.pendingAdd === true);
-                    if (pendingCartonIndex > -1) {
-                        newPurchaseOrder.Cartons.splice(pendingCartonIndex, 1);
+                    if (newPurchaseOrder.Cartons) {
+                        const pendingCartonIndex = newPurchaseOrder.Cartons.findIndex(i => i.pendingAdd === true);
+                        if (pendingCartonIndex > -1) {
+                            newPurchaseOrder.Cartons.splice(pendingCartonIndex, 1);
 
-                        newPurchaseOrder.Cartons.forEach((c, i) => {
-                            c.Position = i + 1;
+                            newPurchaseOrder.Cartons.forEach((c, i) => {
+                                c.Position = i + 1;
 
-                            if (c.CartonLines) {
-                                const pendingCartonLineIndex = c.CartonLines.findIndex(cartonline => cartonline.pendingAdd === true);
-                                if (pendingCartonLineIndex > -1) {
-                                    c.CartonLines.splice(pendingCartonLineIndex, 1);
+                                if (c.CartonLines) {
+                                    const pendingCartonLineIndex = c.CartonLines.findIndex(cartonline => cartonline.pendingAdd === true);
+                                    if (pendingCartonLineIndex > -1) {
+                                        c.CartonLines.splice(pendingCartonLineIndex, 1);
+                                    }
                                 }
-                            }
-                        });
+                            });
+                        }
+                    }
+                    if (result.isCustom) {
+                        this.editPurchaseOrderThenPrintItemLabelsCustom.emit({purchaseOrder: newPurchaseOrder, options: result.customOptions, size: result.size });
+                    }
+                    else {
+                        this.editPurchaseOrderThenPrintItemLabels.emit({purchaseOrder: newPurchaseOrder, size: result.size, border: result.customOptions.Border});
+                    }
+                } else if (result.size === 'small') {
+                    if (result.isCustom) {
+                        this.onPrintAllItemLabelsCustom(result.customOptions);
+                    }
+                    else {
+                        this.onPrintAllItemLabels(result.customOptions.Border);
+                    }
+                } else {
+                    if (result.isCustom) {
+                        this.onPrintAllItemLargeLabelsCustom(result.customOptions);
+                    }
+                    else {
+                        this.onPrintAllItemLargeLabels(result.customOptions.Border);
                     }
                 }
-
-                this.editPurchaseOrderThenPrintItemLabels.emit({purchaseOrder: newPurchaseOrder, size: result.Size, border: result.Border});
-            } else if (result.Size === 'small') {
-                this.onPrintAllItemLabels(result.Border);
-            } else {
-                this.onPrintAllItemLargeLabels(result.Border);
             }
         });
     }
@@ -343,6 +363,14 @@ export class InboundShipmentEditComponent implements OnInit {
 
     onPrintAllItemLargeLabels(border: string) {
         this.downloadAllItemLargeLabel.emit({purchaseOrder: this.purchaseOrder, border: border});
+    }
+
+    onPrintAllItemLabelsCustom(options: CustomPrintLabel) {
+        this.downloadAllItemLabelCustom.emit({purchaseOrder: this.purchaseOrder, options});
+    }
+
+    onPrintAllItemLargeLabelsCustom(options: CustomPrintLabel) {
+        this.downloadAllItemLargeLabelCustom.emit({purchaseOrder: this.purchaseOrder, options});
     }
 
     onPrintLabel() {

@@ -6,6 +6,7 @@ export const environment = {
     imageURL: keys.imageURL,
     fileURL: keys.fileURL,
     bolURL: keys.bolURL,
+    invoiceURL: keys.invoiceURL,
     linkURL: keys.linkURL,
     previewURL: keys.previewURL,
     siteURL: keys.siteURL,

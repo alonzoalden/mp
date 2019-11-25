@@ -2,7 +2,7 @@ import { NgModule } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { TranslateModule } from '@ngx-translate/core';
 import { CommonModule } from '@angular/common';
-import { MatButtonModule, MatDatepickerModule, MatFormFieldModule, MatInputModule, MatPaginatorModule, MatTableModule, MatTreeModule, MatSortModule, MatDialogModule, MatSelectModule, MatMenuModule, MatToolbar, MatToolbarModule, MatIconModule, MatListModule, MatCheckboxModule, MatTooltipModule, MatTabsModule } from '@angular/material';
+import { MatButtonModule, MatDatepickerModule, MatFormFieldModule, MatInputModule, MatPaginatorModule, MatTableModule, MatTreeModule, MatSortModule, MatDialogModule, MatSelectModule, MatMenuModule, MatToolbar, MatToolbarModule, MatIconModule, MatListModule, MatCheckboxModule, MatTooltipModule, MatTabsModule, MatRadioModule } from '@angular/material';
 import { MatMomentDateModule, MAT_MOMENT_DATE_ADAPTER_OPTIONS } from '@angular/material-moment-adapter';
 import { NgSelectModule } from '@ng-select/ng-select';
 import { CdkTableModule } from '@angular/cdk/table';
@@ -258,6 +258,7 @@ import { SharePipeModule } from '../../shared/pipe/share.pipe';
         MatListModule,
         MatTooltipModule,
         MatTabsModule,
+        MatRadioModule,
         ToolModule,
         itemRouting,
         NgSelectModule,

@@ -5,6 +5,7 @@ import * as inboundShipmentActions from '../../../state/inbound-shipment.actions
 import * as fromInboundShipment from '../../../state';
 import { Observable } from 'rxjs';
 import { PurchaseOrder, PurchaseOrderLine } from '../../../../../shared/class/purchase-order';
+import { CustomPrintLabel } from 'app/shared/class/label';
 
 @Component({
     templateUrl: './inbound-shipment-edit-line-list-shell.component.html',
@@ -39,6 +40,14 @@ export class InboundShipmentEditLineListShellComponent implements OnInit {
     downloadItemLargeLabelCount(payload: { purchaseorderline: PurchaseOrderLine, count: number, border: string }): void {
         this.store.dispatch(new inboundShipmentActions.DownloadItemLargeLabelCount(payload));
     }
+
+    downloadItemLabelCountCustom(payload: {purchaseorderline: PurchaseOrderLine, options: CustomPrintLabel }): void {
+        this.store.dispatch(new inboundShipmentActions.DownloadItemLabelCountCustom(payload));
+    }
+    downloadItemLargeLabelCountCustom(payload: {purchaseorderline: PurchaseOrderLine, options: CustomPrintLabel }): void {
+        this.store.dispatch(new inboundShipmentActions.DownloadItemLargeLabelCountCustom(payload));
+    }
+
     getSimpleItemList(): void {
         this.store.dispatch(new inboundShipmentActions.LoadSimpleItemList());
     }

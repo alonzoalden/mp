@@ -1,13 +1,13 @@
 <h3 class="ibox-title dialog-title">{{ 'Create Item Variations' | translate }}</h3>
 <div mat-dialog-content class="lightgray-bg">
-    <mat-tab-group class="item-variation" [@.disabled]="true" [disableRipple]="true" [dynamicHeight]="false" (selectedTabChange)="canShowDefaultOldSettings($event.tab.textLabel)">        
+    <mat-tab-group class="item-variation" [@.disabled]="true" [disableRipple]="true" [dynamicHeight]="false" (selectedTabChange)="canShowDefaultOldSettings($event.tab.textLabel)">
         <mat-tab *ngFor="let tab of selectedItemAttributes; let i = index" [label]="tab">
             <ng-container>
                 <ng-template mat-tab-label>
                     <span>{{ tab.Name | translate }}</span>
                 </ng-template>
                 <div class="item-variation-content">
-                    <h5 class="text-left m-t-sm">{{ 'Select' | translate }} {{tab.Name}} {{ 'Variations' | translate }}</h5> 
+                    <h5 class="text-left m-t-sm">{{ 'Select' | translate }} {{tab.Name}} {{ 'Variations' | translate }}</h5>
                     <h5 class="skinny1">{{ 'Options selected' | translate }}: {{properties?.selectedOptions.selected.length}}</h5>
                     <mat-selection-list #properties [(ngModel)]="tab.SelectedItemAttributeVariations" (ngModelChange)="onNgModelChange(tab)">
                         <mat-list-option *ngFor="let property of tab.ItemAttributeVariations" [value]="property"> {{property.Name}}</mat-list-option>
@@ -26,7 +26,7 @@
                                     class="inbound-line max-width">
                                     <ng-template ng-notfound-tmp let-searchTerm="searchTerm">
                                         <div class="ng-option disabled">
-                                            {{ 'Please select a ' | translate }} {{ tab.attributeName }} {{ ' Variation' | translate }}
+                                            <!-- {{ 'Please select a ' | translate }} {{ tab.attributeName }} {{ ' Variation' | translate }} -->
                                         </div>
                                     </ng-template>
                         </ng-select>
@@ -42,7 +42,7 @@
             </ng-template>
             <div class="item-variation-content">
                 <div class="m-b-md">
-                    <h5 class="m-t-sm">Select Item Attribute</h5> 
+                    <h5 class="m-t-sm">Select Item Attribute</h5>
                     <ng-select [items]="attributesVariationsListData"
                                 bindLabel="Name"
                                 placeholder="{{ 'Select Attribute' | translate }}"
@@ -63,7 +63,7 @@
             </div>
         </mat-tab>
     </mat-tab-group>
-    
+
 </div>
 <mat-dialog-actions>
     <button [disabled]="addItemVariationInvalid" (click)="onAddItemVariationClick()" mat-button class="btn btn-success-xs btn-main" cdkFocusInitial>{{ 'Update' | translate }}</button>
