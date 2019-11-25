@@ -1,5 +1,5 @@
 import { Component, OnInit, ViewChild, Input, SimpleChanges, OnChanges, Output, EventEmitter } from '@angular/core';
-import { MatPaginator, MatSort, MatTableDataSource } from '@angular/material';
+import {MatCheckboxChange, MatPaginator, MatSort, MatTableDataSource} from '@angular/material';
 import { PurchaseOrder } from '../../../../shared/class/purchase-order';
 import { Member } from 'app/shared/class/member';
 
@@ -17,7 +17,7 @@ export class InboundShipmentListComponent implements OnInit, OnChanges {
     @Output() addNewPurchaseOrder = new EventEmitter<void>();
     @Output() deletePurchaseOrder = new EventEmitter<PurchaseOrder>();
     @Output() downloadPurchaseOrderLabel = new EventEmitter<PurchaseOrder>();
-    @Output() getPurchaseOrderOverview = new EventEmitter<void>();
+    @Output() getPurchaseOrderOverview = new EventEmitter<boolean>();
     @Output() setSelectedPurchaseOrder = new EventEmitter<PurchaseOrder>();
 
 
@@ -35,7 +35,7 @@ export class InboundShipmentListComponent implements OnInit, OnChanges {
             this.purchaseOrdersMatTable.sort = this.sort;
         }
         if (changes.purchaseOrdersMatTable && changes.purchaseOrdersMatTable.firstChange) {
-            this.getPurchaseOrderOverview.emit();
+            this.getPurchaseOrderOverview.emit(true);
         }
         if (changes.userInfo && changes.userInfo.currentValue) {
             if (this.userInfo.DefaultPageSize) {
@@ -76,6 +76,13 @@ export class InboundShipmentListComponent implements OnInit, OnChanges {
         this.purchaseOrdersMatTable.filter = filterValue.trim().toLowerCase();
         if (this.purchaseOrdersMatTable.paginator) {
             this.purchaseOrdersMatTable.paginator.firstPage();
+        }
+    }
+    checkChange(event: MatCheckboxChange) {
+        if (event.checked === true ) {
+            this.getPurchaseOrderOverview.emit(true);
+        } else {
+            this.getPurchaseOrderOverview.emit(false);
         }
     }
 }

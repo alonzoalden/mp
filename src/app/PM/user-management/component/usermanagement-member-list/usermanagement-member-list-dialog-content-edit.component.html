@@ -1,0 +1,117 @@
+<h3 mat-dialog-title>{{'User'|translate}}:{{member.FirstName + ' ' + member.LastName}}
+    <span class="pull-right"><i (click)="onCloseClick()" class="fa fa-close" matTooltip="{{ 'Close' | translate }}"
+                                aria-label="Close Icon for Relation Vendor"></i></span>
+</h3>
+<div mat-dialog-content class="lightgray-bg">
+    <div class="ibox-content hide-y">
+        <h4>{{'Vendor List'|translate}}</h4>
+        <div class="toolbar-search-1">
+            <i class="fa fa-search" aria-label="Icon for Filter By Input Bar" style="position: relative;left: 30px"
+               [ngClass]="unRelatedVendorList?.filter ? 'selected' : ''" (click)="FilterBy.select()"></i>
+            <input (keyup)="applyFilter($event.target.value)" placeholder="{{ 'Filter By' | translate }}"
+                   class="form-control" #FilterBy>
+        </div>
+        <div class="ibox-content" style="min-height: 40vh;">
+            <div *ngIf="isUnRelationVendorListLoading" class="spinner-container" style="position: inherit">
+                <div class="sk-spinner sk-spinner-three-bounce big-spinner">
+                    <div class="sk-bounce1"></div>
+                    <div class="sk-bounce2"></div>
+                    <div class="sk-bounce3"></div>
+                </div>
+            </div>
+            <div class="table-responsive" [hidden]="isUnRelationVendorListLoading">
+                <table mat-table #table [dataSource]="unRelatedVendorList" class="table" matSort>
+                    <ng-container matColumnDef="VendorID">
+                        <th mat-header-cell *matHeaderCellDef mat-sort-header
+                            width="60px">{{ 'VendorID' | translate }}</th>
+                        <td mat-cell *matCellDef="let item">{{item.VendorID}}</td>
+                    </ng-container>
+                    <ng-container matColumnDef="CompanyName">
+                        <th mat-header-cell *matHeaderCellDef mat-sort-header
+                            width="120px">{{ 'CompanyName' | translate }}</th>
+                        <td mat-cell *matCellDef="let item">{{item.CompanyName}}</td>
+                    </ng-container>
+                    <ng-container matColumnDef="MerchantID">
+                        <th mat-header-cell *matHeaderCellDef mat-sort-header
+                            width="80px">{{ 'MerchantID' | translate }}</th>
+                        <td mat-cell *matCellDef="let item">{{item.MerchantID}}</td>
+                    </ng-container>
+                    <ng-container matColumnDef="MemberName">
+                        <th mat-header-cell *matHeaderCellDef mat-sort-header
+                            width="80px">{{ 'MemberName' | translate }}</th>
+                        <td mat-cell *matCellDef="let item">{{item.MemberName}}</td>
+                    </ng-container>
+                    <ng-container matColumnDef="Edit">
+                        <th mat-header-cell *matHeaderCellDef
+                            width="100px"></th>
+                        <td mat-cell *matCellDef="let item">
+                            <div class="text-center">
+                                <button mat-stroked-button matTooltip="{{'Add'|translate}}"
+                                        (click)="add(item)">
+                                    <span class="glyphicon glyphicon-plus-sign" aria-hidden="true"></span></button>
+                            </div>
+                        </td>
+                    </ng-container>
+                    <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+                    <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+                </table>
+                <mat-paginator #paginator1 [pageSizeOptions]="[10, 20, 50]"
+                               [showFirstLastButtons]="true"></mat-paginator>
+            </div>
+        </div>
+    </div>
+    <div class="ibox-content hide-y">
+        <h4>{{'My Vendors'|translate}}</h4>
+        <div class="ibox-content" style="min-height: 40vh;">
+            <div *ngIf="isRelationVendorListLoading" class="spinner-container" style="position: inherit">
+                <div class="sk-spinner sk-spinner-three-bounce big-spinner">
+                    <div class="sk-bounce1"></div>
+                    <div class="sk-bounce2"></div>
+                    <div class="sk-bounce3"></div>
+                </div>
+            </div>
+            <div class="table-responsive" [hidden]="isRelationVendorListLoading">
+                <table mat-table #table [dataSource]="relatedVendorList" class="table" matSort>
+                    <ng-container matColumnDef="Index">
+                        <th mat-header-cell *matHeaderCellDef mat-sort-header
+                            width="60px">{{ 'Index' | translate }}</th>
+                        <td mat-cell *matCellDef="let item;let i = index">{{i + 1}}</td>
+                    </ng-container>
+                    <ng-container matColumnDef="VendorID">
+                        <th mat-header-cell *matHeaderCellDef mat-sort-header
+                            width="60px">{{ 'VendorID' | translate }}</th>
+                        <td mat-cell *matCellDef="let item">{{item.VendorID}}</td>
+                    </ng-container>
+                    <ng-container matColumnDef="CompanyName">
+                        <th mat-header-cell *matHeaderCellDef mat-sort-header
+                            width="60px">{{ 'CompanyName' | translate }}</th>
+                        <td mat-cell *matCellDef="let item">{{item.CompanyName}}</td>
+                    </ng-container>
+                    <ng-container matColumnDef="MerchantID">
+                        <th mat-header-cell *matHeaderCellDef mat-sort-header
+                            width="60px">{{ 'MerchantID' | translate }}</th>
+                        <td mat-cell *matCellDef="let item">{{item.MerchantID}}</td>
+                    </ng-container>
+                    <ng-container matColumnDef="Edit">
+                        <th mat-header-cell *matHeaderCellDef
+                            width="100"></th>
+                        <td mat-cell *matCellDef="let item">
+                            <div class="text-center">
+                                <button mat-stroked-button class="button-margin" matTooltip="{{'Delete'|translate}}"
+                                        (click)="remove(item)">
+                                    <span class="glyphicon glyphicon-minus-sign" aria-hidden="true"></span></button>
+                            </div>
+                        </td>
+                    </ng-container>
+                    <tr mat-header-row *matHeaderRowDef="displayedColumns2"></tr>
+                    <tr mat-row *matRowDef="let row; columns: displayedColumns2;"></tr>
+                </table>
+                <mat-paginator #paginator2 [pageSizeOptions]="[10, 20, 50]"
+                               [showFirstLastButtons]="true"></mat-paginator>
+            </div>
+        </div>
+    </div>
+</div>
+<mat-dialog-actions align="end">
+    <button mat-button class="btn btn-remove-150" (click)="onCloseClick()">{{'Close'|translate}}</button>
+</mat-dialog-actions>

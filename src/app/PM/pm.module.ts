@@ -3,7 +3,7 @@ import {CommonModule} from '@angular/common';
 import {PmComponent} from './pm.component';
 import {routing} from './pm.routing';
 import {TranslateModule} from '@ngx-translate/core';
-import {PMAuthGuard} from './guard/pm.guard';
+import {PMAuthGuard, PMSuperAdminAuthGuard} from './guard/pm.guard';
 
 
 @NgModule({
@@ -16,7 +16,8 @@ import {PMAuthGuard} from './guard/pm.guard';
         TranslateModule
     ],
     providers: [
-        PMAuthGuard
+        PMAuthGuard,
+        PMSuperAdminAuthGuard
     ]
 })
 export class PMModule {

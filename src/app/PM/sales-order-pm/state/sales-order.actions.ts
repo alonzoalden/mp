@@ -10,6 +10,9 @@ export enum SalesOrderActionTypes {
     LoadVendorsSalesOrders = '[Sales Order] Load Vendors Sales Orders',
     LoadSalesOrdersSuccess = '[Sales Order] Load Sales Orders Success',
     LoadSalesOrdersFail = '[Sales Order] Load Sales Orders Fail',
+    LoadMyVendorsSalesOrders = '[Sales Order] Load My Vendors Sales Orders',
+    LoadMySalesOrdersSuccess = '[Sales Order] Load My Sales Orders Success',
+    LoadMySalesOrdersFail = '[Sales Order] Load My Sales Orders Fail',
     LoadSalesOrder = '[Sales Order] Load Sales Order',
     SetSalesOrder = '[Sales Order] Set Sales Order',
     SetSalesOrderID = '[Sales Order] Set Sales Order ID',
@@ -76,6 +79,18 @@ export class LoadSalesOrdersSuccess implements Action {
 }
 export class LoadSalesOrdersFail implements Action {
     readonly type = SalesOrderActionTypes.LoadSalesOrdersFail;
+    constructor(public payload: string) { }
+}
+export class LoadMyVendorsSalesOrders implements Action {
+    readonly type = SalesOrderActionTypes.LoadMyVendorsSalesOrders;
+    constructor(public payload: { fulfilledby: string, status: string }) { }
+}
+export class LoadMySalesOrdersSuccess implements Action {
+    readonly type = SalesOrderActionTypes.LoadMySalesOrdersSuccess;
+    constructor(public payload: SalesOrder[]) { }
+}
+export class LoadMySalesOrdersFail implements Action {
+    readonly type = SalesOrderActionTypes.LoadMySalesOrdersFail;
     constructor(public payload: string) { }
 }
 export class SetSalesOrder implements Action {
@@ -321,5 +336,8 @@ export type SalesOrderActions = LoadSalesOrders
     | LoadBOLRequestFail
     | UploadBOLAttachment
     | UploadBOLAttachmentSuccess
-    | UploadBOLAttachmentFail;
+    | UploadBOLAttachmentFail
+    | LoadMyVendorsSalesOrders
+    | LoadMySalesOrdersSuccess
+    | LoadMySalesOrdersFail;
 

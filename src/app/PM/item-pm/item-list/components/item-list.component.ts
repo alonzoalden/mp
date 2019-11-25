@@ -1,6 +1,6 @@
 import { Component, OnInit, ViewChild, Input, Output, EventEmitter, SimpleChanges, OnChanges } from '@angular/core';
 import { Router } from '@angular/router';
-import { MatPaginator, MatSort, MatTableDataSource, MatDialog } from '@angular/material';
+import {MatPaginator, MatSort, MatTableDataSource, MatDialog, MatCheckboxChange} from '@angular/material';
 import { Item, ItemInsert, ItemCategoryAssignment, ItemOption, ItemSelection, ItemTierPrice, ItemRelatedProduct, ItemUpSell, ItemCrossSell, ItemAttachment, ItemVideo } from '../../../../shared/class/item';
 import { ItemService } from '../../item.service';
 import { environment } from '../../../../../environments/environment';
@@ -19,7 +19,7 @@ export class ItemListComponent implements OnInit, OnChanges {
     @Input() errorMessage: string;
     @Input() isMainItemsListLoading: boolean;
     @Input() pendingDelete: boolean;
-    @Output() getItems = new EventEmitter<void>();
+    @Output() getItems = new EventEmitter<boolean>();
     @Output() refreshItems = new EventEmitter<void>();
     @Output() deleteItem = new EventEmitter<Item>();
     @Output() downloadItemLabelCount = new EventEmitter<{item: Item, count: number, border: string}>();
@@ -56,7 +56,7 @@ export class ItemListComponent implements OnInit, OnChanges {
             this.itemsMatTable.sort = this.sort;
         }
         if (changes.itemsMatTable && (!changes.itemsMatTable.currentValue.data.length || changes.itemsMatTable.currentValue.data.length === 1) && changes.itemsMatTable.firstChange) {
-            this.getItems.emit();
+            this.getItems.emit(true);
         }
         if (changes.userInfo && changes.userInfo.currentValue) {
             if (this.userInfo.DefaultPageSize) {
@@ -240,7 +240,13 @@ export class ItemListComponent implements OnInit, OnChanges {
     refresh() {
         this.refreshItems.emit();
     }
-
+    checkChange(event: MatCheckboxChange) {
+        if (event.checked === true ) {
+            this.getItems.emit(true);
+        } else {
+            this.getItems.emit(false);
+        }
+    }
     applyFilter(filterValue: string) {
         this.itemsMatTable.filter = filterValue.trim().toLowerCase();
         if (this.itemsMatTable.paginator) {

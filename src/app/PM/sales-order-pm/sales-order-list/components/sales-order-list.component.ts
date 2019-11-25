@@ -1,6 +1,6 @@
 import { Component, OnInit, OnChanges, ViewChild, ElementRef, Input, Output, EventEmitter, SimpleChanges } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { MatPaginator, MatSort, MatTableDataSource} from '@angular/material';
+import {MatCheckboxChange, MatPaginator, MatSort, MatTableDataSource} from '@angular/material';
 import { SalesOrder } from '../../../../shared/class/sales-order';
 import { environment } from '../../../../../environments/environment';
 import { Member } from '../../../../shared/class/member';
@@ -17,13 +17,13 @@ export class SalesOrderListComponent implements OnInit, OnChanges {
     @Input() userInfo: Member;
     @Input() isLoading: boolean = true;
     @Input() errorMessage: string;
-    @Output() getSalesOrderByVendor = new EventEmitter<{fulfilledby: string, status: string}>();
+    @Output() getSalesOrderByVendor = new EventEmitter<{fulfilledby: string, status: string, check: boolean}>();
     @Output() downloadSalesOrderPackingSlip = new EventEmitter<{salesorder: SalesOrder, orderid: number}>();
     @Output() setSalesOrder = new EventEmitter<SalesOrder>();
     displayedColumns = ['Menu', 'MerchantID', 'ProductInfo', 'ItemImage', 'ItemName', 'ShippingMethod', 'Status', 'VendorTotal'];
     fulfilledby: string;
     status: string;
-
+    check: boolean = true;
     @ViewChild(MatPaginator, { static: true }) paginator: MatPaginator;
     @ViewChild(MatSort, { static: true }) sort: MatSort;
     @ViewChild('FilterBy', { static: true }) FilterBy: ElementRef;
@@ -53,7 +53,7 @@ export class SalesOrderListComponent implements OnInit, OnChanges {
         }
     }
     getSalesOrdersByVendor(fulfilledby: string, status: string) {
-        this.getSalesOrderByVendor.emit({fulfilledby, status});
+        this.getSalesOrderByVendor.emit({fulfilledby, status, check: this.check});
     }
     applyFilter(filterValue: string) {
         this.salesOrdersMatTable.filter = filterValue.trim().toLowerCase();
@@ -62,7 +62,7 @@ export class SalesOrderListComponent implements OnInit, OnChanges {
         this.router.navigate(['PM/sales-order/' + fulfilledby + '/status/' + status]);
         this.fulfilledby = fulfilledby;
         this.status = status;
-        this.getSalesOrderByVendor.emit({fulfilledby: this.fulfilledby, status: this.status});
+        this.getSalesOrderByVendor.emit({fulfilledby: this.fulfilledby, status: this.status, check: this.check});
     }
 
     onPrintPackingSlip(salesorder: SalesOrder) {

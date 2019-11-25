@@ -37,6 +37,20 @@ export class SalesOrderEffects {
         )
     );
     @Effect()
+    loadMyVendorsSalesOrders$: Observable<Action> = this.actions$.pipe(
+        ofType(salesOrderActions.SalesOrderActionTypes.LoadMyVendorsSalesOrders),
+        map((action: salesOrderActions.LoadMyVendorsSalesOrders) => action.payload),
+        mergeMap((payload) =>
+            this.salesOrderService.getMySalesOrderByVendors(payload.fulfilledby, payload.status).pipe(
+                map((members: SalesOrder[]) => (new salesOrderActions.LoadMySalesOrdersSuccess(members))),
+                catchError(err => {
+                    of(new salesOrderActions.LoadMySalesOrdersFail(err));
+                    return EMPTY;
+                })
+            )
+        )
+    );
+    @Effect()
     loadSalesOrders$: Observable<Action> = this.actions$.pipe(
         ofType(salesOrderActions.SalesOrderActionTypes.LoadSalesOrders),
         map((action: salesOrderActions.LoadSalesOrders) => action.payload),

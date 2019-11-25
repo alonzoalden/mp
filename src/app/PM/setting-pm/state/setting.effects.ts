@@ -65,14 +65,15 @@ export class SettingEffects {
                     }
                     else {
                         this.settingService.sendNotification({ type: 'success', title: 'Successfully Updated', content: `Company switched to ${member.VendorName}` });
-                        window.location.replace('/');
+                        // this.router.navigate(['/PM/setting']);
+                        window.location.replace('/dashboard');
                         // window.location.reload();
                     }
                     return (new settingActions.EditCurrentMemberSuccess(member));
                 }),
                 catchError(err => {
                     this.settingService.sendNotification({ type: 'error', title: 'Error', content: err });
-                    this.router.navigate(['/setting']);
+                    this.router.navigate(['/PM/setting']);
                     return of(new settingActions.EditCurrentMemberFail(err));
                 })
             )

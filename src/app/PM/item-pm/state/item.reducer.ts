@@ -1,9 +1,18 @@
-import { ItemActionTypes, ItemActions } from './item.actions';
-import { ItemInsert, ItemList, ItemOptionInsert, ItemSelectionInsert, ItemCategoryAssignment, Item, ItemBatch, ItemPrintLabel } from '../../../shared/class/item';
-import { VendorBrand } from '../../../shared/class/vendor-brand';
-import { Category } from '../../../shared/class/category';
-import { VendorAttachmentList } from '../../../shared/class/vendor-attachment';
-import { BatchUpdate } from '../../../shared/class/batch-update';
+import {ItemActions, ItemActionTypes} from './item.actions';
+import {
+    Item,
+    ItemBatch,
+    ItemCategoryAssignment,
+    ItemInsert,
+    ItemList,
+    ItemOptionInsert,
+    ItemPrintLabel,
+    ItemSelectionInsert
+} from '../../../shared/class/item';
+import {VendorBrand} from '../../../shared/class/vendor-brand';
+import {Category} from '../../../shared/class/category';
+import {VendorAttachmentList} from '../../../shared/class/vendor-attachment';
+import {BatchUpdate} from '../../../shared/class/batch-update';
 
 // State for this feature (Item Variation)
 export interface ItemState {
@@ -65,7 +74,14 @@ const initialState: ItemState = {
 export function itemReducer(state = initialState, action: ItemActions): ItemState {
 
     switch (action.type) {
-
+        case ItemActionTypes.ResetItem:
+            return {
+                ...state,
+                item: null,
+                currentCategoryBreadCrumbs: [],
+                categoryAssignments: [],
+                selectedBundleOption: null
+            };
         case ItemActionTypes.SetItem:
             return {
                 ...state,
@@ -79,7 +95,11 @@ export function itemReducer(state = initialState, action: ItemActions): ItemStat
                 selectedBundleOption: state.item.ItemOptions[action.payload],
                 selectedBundleOptionSelectionList: state.item.ItemOptions[action.payload].ItemSelections
             };
-
+        case ItemActionTypes.ResetSelectedBundleOption:
+            return {
+                ...state,
+                selectedBundleOption: null,
+            };
         case ItemActionTypes.LoadVendorBrandsSuccess:
             return {
                 ...state,
@@ -275,7 +295,7 @@ export function itemReducer(state = initialState, action: ItemActions): ItemStat
                 pendingDelete: true,
             };
         case ItemActionTypes.DeleteItemSuccess:
-                const _updatedItems = state.items.filter(item => item.ItemID !== action.payload);
+            const _updatedItems = state.items.filter(item => item.ItemID !== action.payload);
             return {
                 ...state,
                 items: _updatedItems,
@@ -356,6 +376,27 @@ export function itemReducer(state = initialState, action: ItemActions): ItemStat
                 ...state,
                 isMainItemsListLoading: true,
             };
+        case ItemActionTypes.LoadMySubMainItems:
+            return {
+                ...state,
+                isMainItemsListLoading: true,
+            };
+        case ItemActionTypes.LoadMySubMainItemsSuccess:
+            return {
+                ...state,
+                items: action.payload,
+                itemBatchItems: action.payload,
+                isMainItemsListLoading: false,
+                error: '',
+            };
+        case ItemActionTypes.LoadMySubMainItemsFail:
+            return {
+                ...state,
+                items: [],
+                itemBatchItems: [],
+                isMainItemsListLoading: false,
+                error: action.payload,
+            };
         case ItemActionTypes.LoadMainItemsSuccess:
             return {
                 ...state,
@@ -403,7 +444,7 @@ export function itemReducer(state = initialState, action: ItemActions): ItemStat
                 error: action.payload,
             };
         case ItemActionTypes.EditItemBatchUpdateSuccess:
-            state.itemBatchItems.forEach( (item) => item.isSelected = false );
+            state.itemBatchItems.forEach((item) => item.isSelected = false);
             return {
                 ...state,
             };

@@ -133,7 +133,6 @@ export function inboundShipmentReducer(state = initialState, action: InboundShip
                 isLoading: false,
                 error: action.payload,
             };
-
         case InboundShipmentActionTypes.LoadPurchaseOrderOverview:
             return {
                 ...state,
@@ -149,6 +148,32 @@ export function inboundShipmentReducer(state = initialState, action: InboundShip
             };
 
         case InboundShipmentActionTypes.LoadPurchaseOrderOverviewFail:
+            return {
+                ...state,
+                purchaseOrders: [],
+                isLoading: false,
+                error: action.payload,
+            };
+            case InboundShipmentActionTypes.LoadPurchaseOrderMyVendorOverview:
+            return {
+                ...state,
+                isLoading: true,
+                error: '',
+            };
+        case InboundShipmentActionTypes.LoadPurchaseOrderMyVendorOverviewSuccess:
+            return {
+                ...state,
+                purchaseOrders: action.payload,
+                isLoading: false,
+                error: '',
+            };
+        case InboundShipmentActionTypes.LoadPurchaseOrderAllVendorOverview:
+            return {
+                ...state,
+                isLoading: true,
+                error: '',
+            }
+        case InboundShipmentActionTypes.LoadPurchaseOrderMyVendorOverviewFail:
             return {
                 ...state,
                 purchaseOrders: [],

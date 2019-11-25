@@ -1,9 +1,9 @@
-import { Component, OnInit } from '@angular/core';
-import { MatTableDataSource } from '@angular/material';
-import { PurchaseOrder, Carton } from '../../../../shared/class/purchase-order';
-import { Observable } from 'rxjs';
-import { Member } from '../../../../shared/class/member';
-import { Store, select } from '@ngrx/store';
+import {Component, OnInit} from '@angular/core';
+import {MatTableDataSource} from '@angular/material';
+import {PurchaseOrder} from '../../../../shared/class/purchase-order';
+import {Observable} from 'rxjs';
+import {Member} from '../../../../shared/class/member';
+import {select, Store} from '@ngrx/store';
 import * as inboundShipmentActions from '../../state/inbound-shipment.actions';
 import * as fromInboundShipment from '../../state';
 import * as fromUser from '../../../../shared/state/user-state.reducer';
@@ -19,7 +19,8 @@ export class InboundShipmentListShellComponent implements OnInit {
     errorMessage$: Observable<string>;
     userInfo$: Observable<Member>;
 
-    constructor(private store: Store<fromInboundShipment.State>) {}
+    constructor(private store: Store<fromInboundShipment.State>) {
+    }
 
     ngOnInit() {
         this.userInfo$ = this.store.pipe(select(fromUser.getCurrentUser));
@@ -30,18 +31,28 @@ export class InboundShipmentListShellComponent implements OnInit {
             this.isLoading$ = this.store.pipe(select(fromInboundShipment.getIsLoading));
         });
     }
+
     addNewPurchaseOrder(): void {
         this.store.dispatch(new inboundShipmentActions.AddNewPurchaseOrder());
     }
+
     setSelectedPurchaseOrder(purchaseorder: PurchaseOrder): void {
         this.store.dispatch(new inboundShipmentActions.SetSelectedPurchaseOrder(purchaseorder));
     }
-    getPurchaseOrderOverview(): void {
-        this.store.dispatch(new inboundShipmentActions.LoadPurchaseOrderAllVendorOverview());
+
+    getPurchaseOrderOverview(check: boolean): void {
+        console.log(check)
+        if (check === true) {
+            this.store.dispatch(new inboundShipmentActions.LoadPurchaseOrderMyVendorOverview());
+        } else {
+            this.store.dispatch(new inboundShipmentActions.LoadPurchaseOrderAllVendorOverview());
+        }
     }
+
     downloadPurchaseOrderLabel(purchaseorder: PurchaseOrder): void {
         this.store.dispatch(new inboundShipmentActions.DownloadPurchaseOrderLabel(purchaseorder));
     }
+
     deletePurchaseOrder(purchaseorder: PurchaseOrder): void {
         this.store.dispatch(new inboundShipmentActions.DeletePurchaseOrder(purchaseorder));
     }

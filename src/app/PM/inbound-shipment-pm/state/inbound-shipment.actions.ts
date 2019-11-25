@@ -15,6 +15,9 @@ export enum InboundShipmentActionTypes {
     LoadPurchaseOrderFail = '[InboundShipment] Load Purchase Order Fail',
     LoadPurchaseOrderOverview = '[InboundShipment] Load Purchase Order Overview',
     LoadPurchaseOrderAllVendorOverview = '[InboundShipment] Load Purchase Order All Vendor Overview',
+    LoadPurchaseOrderMyVendorOverview = '[InboundShipment] Load Purchase Order My Vendor Overview',
+    LoadPurchaseOrderMyVendorOverviewSuccess = '[InboundShipment] Load Purchase Order My Vendor Overview Success',
+    LoadPurchaseOrderMyVendorOverviewFail = '[InboundShipment] Load Purchase Order My Vendor Overview Fail',
     LoadPurchaseOrderOverviewSuccess = '[InboundShipment] Load Purchase Order Overview Success',
     LoadPurchaseOrderOverviewFail = '[InboundShipment] Load Purchase Order Overview Fail',
     AddNewPurchaseOrder = '[InboundShipment] Add New Purchase Order',
@@ -85,6 +88,17 @@ export class LoadPurchaseOrderOverview implements Action {
 }
 export class LoadPurchaseOrderAllVendorOverview implements Action {
     readonly type = InboundShipmentActionTypes.LoadPurchaseOrderAllVendorOverview;
+}
+export class LoadPurchaseOrderMyVendorOverview implements Action {
+    readonly type = InboundShipmentActionTypes.LoadPurchaseOrderMyVendorOverview;
+}
+export class LoadPurchaseOrderMyVendorOverviewSuccess implements Action {
+    readonly type = InboundShipmentActionTypes.LoadPurchaseOrderMyVendorOverviewSuccess;
+    constructor(public payload: PurchaseOrder[]) {}
+}
+export class LoadPurchaseOrderMyVendorOverviewFail implements Action {
+    readonly type = InboundShipmentActionTypes.LoadPurchaseOrderMyVendorOverviewFail;
+    constructor(public payload: string) {}
 }
 export class LoadPurchaseOrderOverviewSuccess implements Action {
     readonly type = InboundShipmentActionTypes.LoadPurchaseOrderOverviewSuccess;
@@ -449,4 +463,8 @@ export type InboundShipmentActions =
     | DeletePurchaseOrderFail
     | LoadSimpleItemList
     | LoadSimpleItemListSuccess
-    | LoadSimpleItemListFail;
+    | LoadSimpleItemListFail
+    | LoadPurchaseOrderMyVendorOverview
+    | LoadPurchaseOrderMyVendorOverviewSuccess
+    | LoadPurchaseOrderMyVendorOverviewFail
+    | LoadPurchaseOrderAllVendorOverview;

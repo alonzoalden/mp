@@ -1,0 +1,3 @@
+<app-report-vendor [vendorList]="vendorList$|async"
+                   [subVendorReportLoading]="subVendorReportLoading$|async" [reportMatTable]="reportMatTable$|async"
+                   (getVendorList)="getVendorList()" (getVendorReport)="getVendorReport($event)"></app-report-vendor>

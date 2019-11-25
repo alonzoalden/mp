@@ -1,8 +1,8 @@
-import { SalesOrderActionTypes, SalesOrderActions } from './sales-order.actions';
-import { SalesOrder } from 'app/shared/class/sales-order';
-import { SalesOrderLine } from 'app/shared/class/sales-order-line';
-import { Fulfillment, FulfillmentSalesOrderLine } from 'app/shared/class/fulfillment';
-import { BOLRequest } from 'app/shared/class/bol-request';
+import {SalesOrderActions, SalesOrderActionTypes} from './sales-order.actions';
+import {SalesOrder} from 'app/shared/class/sales-order';
+import {SalesOrderLine} from 'app/shared/class/sales-order-line';
+import {Fulfillment, FulfillmentSalesOrderLine} from 'app/shared/class/fulfillment';
+import {BOLRequest} from 'app/shared/class/bol-request';
 
 // State for this feature (Item Variation)
 export interface SalesOrderState {
@@ -66,6 +66,26 @@ export function salesOrderReducer(state = initialState, action: SalesOrderAction
                 error: '',
             };
         case SalesOrderActionTypes.LoadSalesOrdersFail:
+            return {
+                ...state,
+                salesOrders: [],
+                isLoading: false,
+                error: action.payload,
+            };
+        case SalesOrderActionTypes.LoadMyVendorsSalesOrders:
+            return {
+                ...state,
+                isLoading: true,
+                error: '',
+            };
+        case SalesOrderActionTypes.LoadMySalesOrdersSuccess:
+            return {
+                ...state,
+                salesOrders: action.payload,
+                isLoading: false,
+                error: '',
+            };
+        case SalesOrderActionTypes.LoadMySalesOrdersFail:
             return {
                 ...state,
                 salesOrders: [],

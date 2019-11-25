@@ -97,6 +97,17 @@ export class PurchaseOrderService {
                 catchError(this.handleError)
             );
     }
+    getPurchaseOrderMyVendorOverview(): Observable<PurchaseOrder[]> {
+        // if (this.purchaseorders) {
+        //     return of(this.purchaseorders);
+        // }
+        return this.http.get<PurchaseOrder[]>(this.apiURL + '/purchaseorder/myvendoroverview')
+            .pipe(
+                //tap(data => console.log(JSON.stringify(data))),
+                tap(data => this.purchaseorders = data),
+                catchError(this.handleError)
+            );
+    }
     refreshPurchaseOrders(): Observable<PurchaseOrder[]> {
         return this.http.get<PurchaseOrder[]>(this.apiURL + '/purchaseorder')
                         .pipe(

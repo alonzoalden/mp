@@ -19,11 +19,9 @@
             <div class="ibox float-e-margins">
                 <div class="ibox-title">
                     <h5>{{ 'Manage Items' | translate }}</h5>
-<!--                    <div class="ibox-tools">-->
-<!--                        <a><i (click)="openDialogImport()" class="fa fa-table fa-2x"-->
-<!--                              matTooltip="{{ 'Import' | translate }}" aria-label="Icon for Import"></i></a>-->
-<!--                                                <a [routerLink]="['add']"><i matTooltip="{{ 'Add New Item' | translate }}" aria-label="Icon for Add New Product" class="fa fa-plus fa-2x"></i></a>-->
-<!--                    </div>-->
+                    <div class="ibox-tools">
+                        <mat-checkbox (change)="checkChange($event)" [checked]="true">{{'Only My'|translate}}</mat-checkbox>
+                    </div>
                 </div>
                 <div class="toolbar-search-1">
                     <i class="fa fa-search" aria-label="Icon for Filter By Input Bar"
@@ -183,7 +181,7 @@
                             <ng-container matColumnDef="Quantity">
                                 <th mat-header-cell *matHeaderCellDef mat-sort-header
                                     width="74px">{{ 'Toolots Available' | translate }}</th>
-                                <td mat-cell *matCellDef="let item"><strong>{{item.QtyAvailable}}</strong></td>
+                                <td mat-cell *matCellDef="let item"><strong>{{item.BundleOrSimpleQtyAvailable}}</strong></td>
                             </ng-container>
                             <!-- Merchant Quantity Column -->
                             <ng-container matColumnDef="MerchantQuantity">

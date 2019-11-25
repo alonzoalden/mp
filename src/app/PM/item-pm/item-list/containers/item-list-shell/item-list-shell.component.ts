@@ -30,7 +30,12 @@ export class ItemListShellComponent implements OnInit {
             this.isMainItemsListLoading$ = this.store.pipe(select(fromItem.getIsMainItemsListLoading));
         });
     }
-    getItems(): void {
+    getItems(check: boolean): void {
+        console.log(check)
+        if (check === true) {
+            this.store.dispatch(new itemActions.LoadMySubVendorMainItems());
+            return;
+        }
         this.store.dispatch(new itemActions.LoadAllVendorMainItems());
     }
     downloadItemLabelCount(payload: {item: Item, count: number, border: string}): void {

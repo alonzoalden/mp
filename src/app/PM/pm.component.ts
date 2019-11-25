@@ -54,7 +54,6 @@ export class PmComponent implements OnInit, OnDestroy {
             takeWhile(() => this.componentActive)
         ).subscribe(
             data => {
-                console.log(this.router.url);
                 if (data) {
                     this.appService.currentMember = data;
 

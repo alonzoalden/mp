@@ -23,6 +23,7 @@ export class ItemService {
     private apiURL = environment.webapiURL;
     private items: Item[];
     private itemList: ItemList[];
+    private myItems: Item[];
     private simpleItemList: ItemList[];
     private allItemList: ItemList[];
     private allSimpleItemList: ItemList[];
@@ -103,8 +104,17 @@ export class ItemService {
         }
         return this.http.get<Item[]>(this.apiURL + '/item/allvendoroverview')
             .pipe(
-                //tap(data => console.log(JSON.stringify(data))),
                 tap(data => this.items = data),
+                catchError(this.handleError)
+            );
+    }
+    getMySubVenderItems(): Observable<Item[]> {
+        if (this.myItems) {
+            return of(this.myItems);
+        }
+        return this.http.get<Item[]>(this.apiURL + '/item/mysubvendoroverview')
+            .pipe(
+                tap(data => this.myItems = data),
                 catchError(this.handleError)
             );
     }

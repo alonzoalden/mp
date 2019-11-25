@@ -1,0 +1,15 @@
+<app-user-management-member-list-dialog-content-view *ngIf="data.type == 'view'" [member]="data.member"
+                                              (closeEvent)="onCancelClick()"
+                                              [relatedVendorList]="relatedVendorList$|async"
+                                              [isRelationVendorListLoading]="isRelationVendorListLoading$|async"
+                                              (getRelatedVendorList)="getRelatedVendorList($event)"
+></app-user-management-member-list-dialog-content-view>
+<app-user-management-member-list-dialog-content-edit *ngIf="data.type == 'edit'" [member]="data.member"
+                                              (closeEvent)="onCancelClick()"
+                                              [relatedVendorList]="relatedVendorList$|async"
+                                              [isRelationVendorListLoading]="isRelationVendorListLoading$|async"
+                                              (getRelatedVendorList)="getRelatedVendorList($event)"
+                                              (getUnRelatedVendorList)="getUnRelatedVendorList($event)"
+                                              [isUnRelationVendorListLoading]="isUnRelationVendorListLoading$|async"
+                                              [unRelatedVendorList]="unRelatedVendorList$|async"
+></app-user-management-member-list-dialog-content-edit>
