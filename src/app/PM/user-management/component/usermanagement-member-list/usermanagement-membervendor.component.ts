@@ -1,16 +1,16 @@
 import {Component, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChanges, ViewChild} from '@angular/core';
 import {MatDialog, MatPaginator, MatSort, MatTableDataSource} from '@angular/material';
 import {Member} from '../../../../shared/class/member';
-import {UsermanagementMemberListDialogComponent} from './usermanagement-member-list-dialog.component';
+import {UsermanagementMemberVendorDialogComponent} from './usermanagement-membervendor-dialog.component';
 import {Store} from '@ngrx/store';
 import {UsermanagementState} from '../../state/usermanagement.reducer';
 
 @Component({
-    selector: 'app-usermanagement-member-list',
-    templateUrl: './usermanagement-member-list.component.html',
-    styleUrls: ['./usermanagement-member-list.component.css']
+    selector: 'app-usermanagement-membervendor',
+    templateUrl: './usermanagement-membervendor.component.html',
+    styleUrls: ['./usermanagement-membervendor.component.css']
 })
-export class UsermanagementMemberListComponent implements OnInit, OnChanges {
+export class UsermanagementMemberVendorComponent implements OnInit, OnChanges {
     @Input() isMemberListLoading: boolean;
     @Input() memberListMatTable: MatTableDataSource<Member>;
     @Output() getMemberList = new EventEmitter();
@@ -37,9 +37,9 @@ export class UsermanagementMemberListComponent implements OnInit, OnChanges {
     }
 
     onButtonClick(member: Member, type: 'view' | 'edit') {
-        this.dialog.open(UsermanagementMemberListDialogComponent, {
-            height: '800px',
-            width: '1200px',
+        this.dialog.open(UsermanagementMemberVendorDialogComponent, {
+            // height: '800px',
+            // width: '1400px',
             data: {member, type: type}
         });
     }

@@ -19,11 +19,11 @@ import * as UserManageSelector from '../../state/index';
 import * as UserManageActions from '../../state/usermanagement.actions';
 
 @Component({
-    selector: 'app-pm-usermanagement-member-list-dialog',
-    templateUrl: './usermanagement-member-list-dialog.component.html',
+    selector: 'app-pm-usermanagement-membervendor-dialog',
+    templateUrl: './usermanagement-membervendor-dialog.component.html',
 
 })
-export class UsermanagementMemberListDialogComponent implements OnInit {
+export class UsermanagementMemberVendorDialogComponent implements OnInit {
     relatedVendorList$: Observable<MatTableDataSource<Vendor>>;
     isRelationVendorListLoading$: Observable<boolean>;
     unRelatedVendorList$: Observable<MatTableDataSource<Vendor>>;
@@ -31,7 +31,7 @@ export class UsermanagementMemberListDialogComponent implements OnInit {
 
     constructor(
         @Inject(MAT_DIALOG_DATA) public data: DataType,
-        public dialogRef: MatDialogRef<UsermanagementMemberListDialogComponent>,
+        public dialogRef: MatDialogRef<UsermanagementMemberVendorDialogComponent>,
         private store: Store<UsermanagementState>
     ) {
 
@@ -69,16 +69,16 @@ interface DataType {
 }
 
 @Component({
-    selector: 'app-user-management-member-list-dialog-content-view',
-    templateUrl: './usermanagement-member-list-dialog-content-view.component.html'
+    selector: 'app-user-management-membervendor-dialog-content-view',
+    templateUrl: './usermanagement-membervendor-dialog-content-view.component.html'
 })
-export class UserManagementMemberListDialogContentViewComponent implements OnInit, OnChanges {
+export class UserManagementMemberVendorDialogContentViewComponent implements OnInit, OnChanges {
     @Input() member: Member;
     @Output() closeEvent = new EventEmitter();
     @Input() relatedVendorList: MatTableDataSource<Vendor>;
     @Input() isRelationVendorListLoading: Observable<boolean>;
     @Output() getRelatedVendorList = new EventEmitter<Member>();
-    displayedColumns = ['Position', 'VendorID', 'CompanyName', 'MerchantID'];
+    displayedColumns = ['Position', 'MerchantID', 'CompanyName'];
     @ViewChild(MatPaginator, {static: true}) paginator: MatPaginator;
     @ViewChild(MatSort, {static: true}) sort: MatSort;
 
@@ -104,10 +104,10 @@ export class UserManagementMemberListDialogContentViewComponent implements OnIni
 }
 
 @Component({
-    selector: 'app-user-management-member-list-dialog-content-edit',
-    templateUrl: './usermanagement-member-list-dialog-content-edit.component.html'
+    selector: 'app-user-management-membervendor-dialog-content-edit',
+    templateUrl: './usermanagement-membervendor-dialog-content-edit.component.html'
 })
-export class UserManagementMemberListDialogContentEditComponent implements OnInit, OnChanges {
+export class UserManagementMemberVendorDialogContentEditComponent implements OnInit, OnChanges {
     @Input() member: Member;
     @Output() closeEvent = new EventEmitter();
     @Input() relatedVendorList: MatTableDataSource<Vendor>;
@@ -116,8 +116,8 @@ export class UserManagementMemberListDialogContentEditComponent implements OnIni
     @Input() isUnRelationVendorListLoading: Observable<boolean>;
     @Output() getRelatedVendorList = new EventEmitter<Member>();
     @Output() getUnRelatedVendorList = new EventEmitter<Member>();
-    displayedColumns = ['VendorID', 'CompanyName', 'MerchantID', 'MemberName', 'Edit'];
-    displayedColumns2 = ['Index', 'VendorID', 'CompanyName', 'MerchantID', 'Edit'];
+    displayedColumns = ['MerchantID', 'CompanyName', 'MemberName', 'Edit'];
+    displayedColumns2 = ['MerchantID', 'CompanyName', 'Edit'];
 
     @ViewChild('paginator1', {static: true}) paginator1: MatPaginator;
     // @ViewChild(MatSort, {static: true}) sort: MatSort;
@@ -172,10 +172,18 @@ export class UserManagementMemberListDialogContentEditComponent implements OnIni
             MemberID: String(this.member.MemberID)
         }));
     }
+
     applyFilter(filterValue: string) {
         this.unRelatedVendorList.filter = filterValue.trim().toLowerCase();
         if (this.unRelatedVendorList.paginator) {
             this.unRelatedVendorList.paginator.firstPage();
+        }
+    }
+
+    myVendorApplyFilter(filterValue: string) {
+        this.relatedVendorList.filter = filterValue.trim().toLowerCase();
+        if (this.relatedVendorList.paginator) {
+            this.relatedVendorList.paginator.firstPage();
         }
     }
 }

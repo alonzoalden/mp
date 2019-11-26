@@ -15,28 +15,28 @@ import {
     MatTooltipModule
 } from '@angular/material';
 import {UsermanagementMemberShellComponent} from './container/usermanagement-member-shell/usermanagement-member-shell.component';
-import {UsermanagementMemberListComponent} from './component/usermanagement-member-list/usermanagement-member-list.component';
+import {UsermanagementMemberVendorComponent} from './component/usermanagement-member-list/usermanagement-membervendor.component';
 import {UserManagementComponent} from './user-management.component';
 import {UserManagementService} from './user-management.service';
 import {SharePipeModule} from '../../shared/pipe/share.pipe';
 import {
-    UsermanagementMemberListDialogComponent,
-    UserManagementMemberListDialogContentEditComponent,
-    UserManagementMemberListDialogContentViewComponent
-} from './component/usermanagement-member-list/usermanagement-member-list-dialog.component';
+    UsermanagementMemberVendorDialogComponent,
+    UserManagementMemberVendorDialogContentEditComponent,
+    UserManagementMemberVendorDialogContentViewComponent
+} from './component/usermanagement-member-list/usermanagement-membervendor-dialog.component';
 
 
 @NgModule({
     declarations: [
         UsermanagementMemberShellComponent,
-        UsermanagementMemberListComponent,
+        UsermanagementMemberVendorComponent,
         UserManagementComponent,
-        UsermanagementMemberListDialogComponent,
-        UserManagementMemberListDialogContentViewComponent,
-        UserManagementMemberListDialogContentEditComponent,
+        UsermanagementMemberVendorDialogComponent,
+        UserManagementMemberVendorDialogContentEditComponent,
+        UserManagementMemberVendorDialogContentViewComponent,
     ],
     entryComponents: [
-        UsermanagementMemberListDialogComponent
+        UsermanagementMemberVendorDialogComponent
     ],
     imports: [
         CommonModule,
