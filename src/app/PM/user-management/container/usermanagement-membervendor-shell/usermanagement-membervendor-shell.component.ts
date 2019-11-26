@@ -8,11 +8,11 @@ import {Member} from '../../../../shared/class/member';
 import * as UserManageActions from '../../state/usermanagement.actions';
 
 @Component({
-    selector: 'app-usermanagement-member-shell',
-    templateUrl: './usermanagement-member-shell.component.html',
-    styleUrls: ['./usermanagement-member-shell.component.css']
+    selector: 'app-usermanagement-membervendor-shell',
+    templateUrl: './usermanagement-membervendor-shell.component.html',
+    styleUrls: ['./usermanagement-membervendor-shell.component.css']
 })
-export class UsermanagementMemberShellComponent implements OnInit {
+export class UsermanagementMemberVendorShellComponent implements OnInit {
     isMemberListLoading$: Observable<boolean>;
     memberListMatTable$: Observable<MatTableDataSource<Member>>;
 

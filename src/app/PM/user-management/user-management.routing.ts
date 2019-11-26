@@ -1,5 +1,5 @@
 import {RouterModule, Routes} from '@angular/router';
-import {UsermanagementMemberShellComponent} from './container/usermanagement-member-shell/usermanagement-member-shell.component';
+import {UsermanagementMemberVendorShellComponent} from './container/usermanagement-membervendor-shell/usermanagement-membervendor-shell.component';
 import {UserManagementComponent} from './user-management.component';
 import {PMSuperAdminAuthGuard} from '../guard/pm.guard';
 
@@ -9,9 +9,13 @@ const USER_ROUTES: Routes = [
         component: UserManagementComponent,
         children: [
             {
-                path: 'vendor', component: UsermanagementMemberShellComponent,
+                path: 'vendor', component: UsermanagementMemberVendorShellComponent,
                 canActivate: [PMSuperAdminAuthGuard]
-            }
+            },
+            // {
+            //     path: 'member', component: UsermanagementMemberVendorShellComponent,
+            //     canActivate: [PMSuperAdminAuthGuard]
+            // }
         ]
     }
 ];
