@@ -24,16 +24,20 @@ import {
     UserManagementMemberVendorDialogContentEditComponent,
     UserManagementMemberVendorDialogContentViewComponent
 } from './component/usermanagement-membervendor-list/usermanagement-membervendor-dialog.component';
+import {UsermanagementMembertreeShellComponent} from './container/usermanagement-membertree-shell/usermanagement-membertree-shell.component';
+import {UsermanagementMembertreeComponent} from './component/usermanagement-membertree/usermanagement-membertree.component';
 
 
 @NgModule({
     declarations: [
         UsermanagementMemberVendorShellComponent,
+        UsermanagementMembertreeShellComponent,
         UsermanagementMemberVendorComponent,
         UserManagementComponent,
         UsermanagementMemberVendorDialogComponent,
         UserManagementMemberVendorDialogContentEditComponent,
         UserManagementMemberVendorDialogContentViewComponent,
+        UsermanagementMembertreeComponent
     ],
     entryComponents: [
         UsermanagementMemberVendorDialogComponent
