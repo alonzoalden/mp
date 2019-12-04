@@ -1,4 +1,4 @@
-import { ItemRefurbish } from './../../../../shared/class/item';
+import { InventoryDetailSerialized } from './../../../../shared/class/item';
 import { Component, OnInit } from '@angular/core';
 import { MatTableDataSource } from '@angular/material';
 import { ItemInsert } from '../../../../shared/class/item';
@@ -17,7 +17,7 @@ export class ItemEditRefurbishShellComponent implements OnInit {
     item$: Observable<ItemInsert>;
     errorMessage$: Observable<string>;
     userInfo$: Observable<Member>;
-    itemRefurbishesMatTable$: Observable<MatTableDataSource<ItemRefurbish>>;
+    itemRefurbishesMatTable$: Observable<MatTableDataSource<InventoryDetailSerialized>>;
 
     constructor(private store: Store<fromItem.State>) { }
 

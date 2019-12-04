@@ -118,9 +118,9 @@ import { EffectsModule } from '@ngrx/effects';
 import { itemReducer } from './state/item.reducer';
 import { ItemEffects } from './state/item.effects';
 import { SharePipeModule } from '../shared/pipe/share.pipe';
-import { ItemAddRefurbishShellComponent } from './item-add/item-add-refurbish/containers/item-add-refurbish-shell.component';
-import { ItemAddRefurbishComponent } from './item-add/item-add-refurbish/components/item-add-refurbish.component';
-import { ItemAddRefurbishImageComponentUploadDialog } from './item-add/item-add-refurbish/components/item-add-refurbish.component-upload-dialog';
+// import { ItemAddRefurbishShellComponent } from './item-add/item-add-refurbish/containers/item-add-refurbish-shell.component';
+// import { ItemAddRefurbishComponent } from './item-add/item-add-refurbish/components/item-add-refurbish.component';
+// import { ItemAddRefurbishImageComponentUploadDialog } from './item-add/item-add-refurbish/components/item-add-refurbish.component-upload-dialog';
 import { ItemEditRefurbishShellComponent } from './item-edit/item-edit-refurbish/containers/item-edit-refurbish-shell.component';
 import { ItemEditRefurbishComponent } from './item-edit/item-edit-refurbish/components/item-edit-refurbish.component';
 import { ItemEditRefurbishImageComponentUploadDialog } from './item-edit/item-edit-refurbish/components/item-edit-refurbish.component-upload-dialog';
@@ -238,9 +238,9 @@ import { ItemEditRefurbishImageComponentUploadDialog } from './item-edit/item-ed
         ItemEditVariationComponent,
         ItemVariationComponentDialog,
         ItemVariationSelectItemComponentDialog,
-        ItemAddRefurbishComponent,
-        ItemAddRefurbishShellComponent,
-        ItemAddRefurbishImageComponentUploadDialog,
+        // ItemAddRefurbishComponent,
+        // ItemAddRefurbishShellComponent,
+        // ItemAddRefurbishImageComponentUploadDialog,
         ItemEditRefurbishComponent,
         ItemEditRefurbishImageComponentUploadDialog,
         ItemEditRefurbishShellComponent
@@ -255,7 +255,7 @@ import { ItemEditRefurbishImageComponentUploadDialog } from './item-edit/item-ed
         ItemVariationComponentDialog,
         ItemVariationSelectItemComponentDialog,
         ItemPartListComponentItemPrintDialog,
-        ItemAddRefurbishImageComponentUploadDialog,
+        // ItemAddRefurbishImageComponentUploadDialog,
         ItemEditRefurbishImageComponentUploadDialog
     ],
     imports: [

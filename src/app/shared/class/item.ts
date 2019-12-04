@@ -84,7 +84,7 @@ export class Item {
         public ItemImages: Array<ItemImage>,
         public ItemSections: Array<ItemSection>,
         public ItemVariations: Array<ItemVariation>,
-        public ItemRefurbishes: Array<ItemRefurbish>,
+        public InventoryDetailsSerialized: Array<InventoryDetailSerialized>,
         public QtyOnHand: number,
         public QtyAvailable: number,
         public QtyOnOrder: number,
@@ -167,7 +167,7 @@ export class ItemInsert {
         public ItemVideos: Array<ItemVideoInsert>,
         public ItemImages: Array<ItemImageInsert>,
         public ItemSections: Array<ItemSectionInsert>,
-        public ItemRefurbishes: Array<ItemRefurbish>,
+        public InventoryDetailsSerialized: Array<InventoryDetailSerialized>,
     ) {}
 }
 
@@ -775,38 +775,27 @@ export class ItemVariationLine {
     ) {}
 }
 
-export class ItemRefurbish {
+export class InventoryDetailSerialized {
     constructor(
-        public Position: number,
-        public ItemRefurbishID: number,
+        public InventoryDetailSerializedID: number,
         public ItemID: number,
+        public UnitPrice: number,
+        public Condition: number,
         public SerialNumber: number,
-        public Condition: string,
-        public SellingPrice: string,
+        public Comment: string,
+        public UpdatedOn: string,
         public CreatedOn: string,
-        public Images: Array<ItemRefurbishImage>,
-        public pendingAdd: boolean
+        public ItemImagesSerialized: Array<ItemImageSerialized>,
     ) {}
 }
-export class ItemRefurbishInsert {
+
+export class ItemImageSerialized {
     constructor(
-        public Position: number,
-        public ItemRefurbishID: number,
-        public ItemID: number,
-        public SerialNumber: number,
-        public Condition: string,
-        public SellingPrice: string,
-        public CreatedOn: string,
-        public Images: Array<ItemRefurbishImage>,
-    ) {}
-}
-export class ItemRefurbishImage {
-    constructor(
-        public ItemRefurbishImageID: number,
-        public ItemRefurbishID: number,
-        public Label: string,
+        public ItemImageSerializedID: number,
+        public InventoryDetailSerializedID: number,
         public Raw: string,
         public FilePath: string,
+        public Label: string,
         public Position: number,
         public IsBaseImage: boolean,
         public IsSmallImage: boolean,
@@ -814,28 +803,8 @@ export class ItemRefurbishImage {
         public IsRotatorImage: boolean,
         public Exclude: boolean,
         public Remove: boolean,
-        public UpdatedOn: string,
-        public CreatedOn: string,
-        public IsNewImage: boolean,
-        public pendingAdd: boolean
-    ) {}
-}
-export class ItemRefurbishImageInsert {
-    constructor(
-        public ItemRefurbishImageID: number,
-        public ItemRefurbishID: number,
-        public Label: string,
-        public Raw: string,
-        public FilePath: string,
-        public Position: number,
-        public IsBaseImage: boolean,
-        public IsSmallImage: boolean,
-        public IsThumbnail: boolean,
-        public IsRotatorImage: boolean,
-        public Exclude: boolean,
-        public Remove: boolean,
-        public UpdatedOn: string,
-        public CreatedOn: string,
+        public UpdatedOn: boolean,
+        public CreatedOn: boolean,
         public IsNewImage: boolean,
     ) {}
 }

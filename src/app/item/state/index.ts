@@ -1,4 +1,4 @@
-import { ItemRefurbish } from './../../shared/class/item';
+import { InventoryDetailSerialized } from './../../shared/class/item';
 import { createSelector, createFeatureSelector } from '@ngrx/store';
 import * as fromRoot from '../../state/app.state';
 import * as fromItem from './item.reducer';
@@ -157,7 +157,7 @@ export const getIsMainItemsListLoading = createSelector(
 );
 export const getItemRefurbishesMatTable = createSelector(
     getItemFeatureState,
-    state => new MatTableDataSource<ItemRefurbish>(state.item.ItemRefurbishes)
+    state => new MatTableDataSource<InventoryDetailSerialized>(state.item.InventoryDetailsSerialized)
 );
 export const getPendingDelete = createSelector(
     getItemFeatureState,

@@ -6,7 +6,7 @@ import { Item, ItemInsert, ItemOption, ItemOptionInsert, ItemSelection, ItemSele
     , ItemCategoryAssignment, ItemRelatedProduct, ItemRelatedProductInsert, ItemUpSell, ItemUpSellInsert, ItemCrossSell, ItemCrossSellInsert
     , ItemAttachment, ItemAttachmentInsert, ItemVideo, ItemVideoInsert, ItemImage, ItemImageInsert, ItemPrintLabel, ItemBatch, ItemPart
     , ItemPartInsert, ItemSectionInsert, ItemSection, ItemGlobalAttribute, ItemGlobalAttributeVariation, ItemAttribute
-    , ItemVariation, ItemVariationListing, ItemVariationLine } from '../shared/class/item';
+    , ItemVariation, ItemVariationListing, ItemVariationLine, InventoryDetailSerialized, ItemImageSerialized } from '../shared/class/item';
 import { URLVideo } from '../shared/class/item-video';
 import { ItemList } from '../shared/class/item';
 import { Category } from '../shared/class/category';
@@ -277,6 +277,26 @@ export class ItemService {
             });
 
             newItem.ItemSections.push(newItemSection);
+
+        });
+
+        item.InventoryDetailsSerialized.forEach((itemrefurbish) => {
+
+            const newItemRefurbish = new InventoryDetailSerialized(itemrefurbish.InventoryDetailSerializedID, itemrefurbish.ItemID, itemrefurbish.UnitPrice, itemrefurbish.Condition, itemrefurbish.SerialNumber, itemrefurbish.Comment
+                , itemrefurbish.UpdatedOn, itemrefurbish.CreatedOn, []);
+
+
+                itemrefurbish.ItemImagesSerialized.forEach((itemimage) => {
+
+                    const newItemImage = new ItemImageSerialized(itemimage.ItemImageSerializedID, itemimage.InventoryDetailSerializedID
+                        , itemimage.Raw, itemimage.FilePath, itemimage.Label, itemimage.Position
+                        , itemimage.IsBaseImage, itemimage.IsSmallImage, itemimage.IsThumbnail, itemimage.IsRotatorImage, itemimage.Exclude, itemimage.Remove, itemimage.UpdatedOn
+                        , itemimage.CreatedOn, itemimage.IsNewImage);
+
+                    newItemRefurbish.ItemImagesSerialized.push(newItemImage);
+                });
+
+            newItem.InventoryDetailsSerialized.push(newItemRefurbish);
 
         });
 

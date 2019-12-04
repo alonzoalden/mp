@@ -116,8 +116,7 @@
                                 {{ 'Part' | translate }}
                             </a>
                         </li>
-                        <!-- <li routerLinkActive="active" *ngIf="item?.ItemRefurbishes?.length > 0 || userInfo?.IsPM"> -->
-                        <li routerLinkActive="active">
+                        <li routerLinkActive="active" *ngIf="item?.InventoryDetailsSerialized?.length > 0">
                             <a [routerLink]="['refurbish']" routerLinkActive="active">
                                 {{ 'Refurbishes' | translate }}
                             </a>

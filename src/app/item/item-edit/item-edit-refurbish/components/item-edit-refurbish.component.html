@@ -23,119 +23,113 @@
                     <div class="ibox-content animated fadeIn" style="min-height: 300px;">
                         <div class="form-group row">
                             <div class="col-md-12">
-                                <div *ngIf="item.ItemRefurbishes && item.ItemRefurbishes.length && item.ItemRefurbishes.length > 0">
+                                <div *ngIf="item.InventoryDetailsSerialized && item.InventoryDetailsSerialized.length && item.InventoryDetailsSerialized.length > 0">
                                     <table class="animated fadeIn" mat-table #table [dataSource]="itemRefurbishesMatTable">
                                         <!-- Add Button -->
                                         <ng-container matColumnDef="Add">
                                             <th mat-header-cell *matHeaderCellDef width="45px"></th>
                                             <td mat-cell *matCellDef="let itemRefurbish; let i = index">
-                                                <div *ngIf="i === item.ItemRefurbishes.length-1 && i < 8">
+                                                <div *ngIf="i === item.InventoryDetailsSerialized.length-1 && i < 8">
                                                     <a (click)='onAddItemImage(itemRefurbish); formDirty = false;'><span [matTooltip]="isRequirementValid(itemRefurbish) ? ('Add' | translate) : ('Required fields must be complete' | translate)" class="glyphicon glyphicon-plus fs-20" [ngClass]="isRequirementValid(itemRefurbish) ? 'green' : 'gray'"></span></a>
                                                 </div>
-                                                <div *ngIf="i === item.ItemRefurbishes.length-1 && i >= 8">
+                                                <div *ngIf="i === item.InventoryDetailsSerialized.length-1 && i >= 8">
                                                     <span matTooltip="Maximum of 8 images" class="glyphicon glyphicon-exclamation-sign fs-20"></span>
                                                 </div>
                                             </td>
                                         </ng-container>
                                         <!-- Down Column -->
                                         <ng-container matColumnDef="Down">
-                                            <th mat-header-cell *matHeaderCellDef width="17px">{{ 'Position' | translate }}</th>
+                                            <th mat-header-cell *matHeaderCellDef width="40px">{{ 'Position' | translate }}</th>
                                             <td mat-cell *matCellDef="let itemRefurbish; let i = index">
-                                                <div *ngIf="i < item.ItemRefurbishes.length-2">
-                                                    <a (click)='moveDownPosition(itemRefurbish)' *ngIf='i !== item.ItemRefurbishes.length - 1'><span class="glyphicon glyphicon-arrow-down"></span></a>
+                                                <div *ngIf="i < item.InventoryDetailsSerialized.length-1">
+                                                    <a (click)='moveDownPosition(itemRefurbish)' *ngIf='i !== item.InventoryDetailsSerialized.length - 1'><span class="glyphicon glyphicon-arrow-down"></span></a>
                                                 </div>
                                             </td>
                                         </ng-container>
                                         <!-- Position Column -->
                                         <ng-container matColumnDef="Position">
-                                            <th mat-header-cell *matHeaderCellDef width="15px"></th>
+                                            <th mat-header-cell *matHeaderCellDef width="20px"></th>
                                             <td mat-cell *matCellDef="let itemRefurbish; let i = index">
-                                                <div *ngIf="i !== item.ItemRefurbishes.length-1">
-                                                    {{i + 1}}
-                                                </div>
+                                                <div>{{i + 1}}</div>
                                             </td>
                                         </ng-container>
                                         <!-- Up Column -->
                                         <ng-container matColumnDef="Up">
                                             <th mat-header-cell *matHeaderCellDef width="40px"></th>
                                             <td mat-cell *matCellDef="let itemRefurbish; let i = index">
-                                                <div *ngIf="i !== item.ItemRefurbishes.length-1">
+                                                <div>
                                                     <a (click)='moveUpPosition(itemRefurbish)' *ngIf='i !== 0'><span class="glyphicon glyphicon-arrow-up"></span></a>
                                                 </div>
                                             </td>
                                         </ng-container>
                                         <!-- Thumbnail Column -->
                                         <ng-container matColumnDef="Images">
-                                            <th mat-header-cell *matHeaderCellDef width="100px">{{ 'Upload Images' | translate }}</th>
-                                            <td mat-cell *matCellDef="let itemRefurbish; let i = index" width="100px" height="80px" class="thumbnail-col">
+                                            <th mat-header-cell *matHeaderCellDef width="100px">{{ 'View Images' | translate }}</th>
+                                            <td mat-cell *matCellDef="let itemRefurbish; let i = index" height="80px" class="thumbnail-col">
                                                 <input type="file" id="fileUpload" style="display: none;"
                                                     (change)="fileChangeEvent($event, itemRefurbish); formDirty = true;"
                                                     accept="image/gif,image/jpeg,image/png,.jpeg,.jpg,.png"
                                                     #fileUpload>
 
-                                                <div *ngIf="i === item.ItemRefurbishes.length-1 && !itemRefurbish.Images.length && !pendingUpload">
-                                                    <button type="button" class="btn btn-primary" (click)="uploadMultipleImages(i)"><i class="fa fa-file-image-o"></i> {{ 'Upload' | translate }}</button>
-                                                </div>
-
-                                                <div *ngIf="itemRefurbish.Images.length" class="p-xs" style="height: 100%; display: flex; flex-direction: column; justify-content: flex-end;">
-                                                    <a (click)="uploadMultipleImages(i);" style="height: inherit; display: flex; align-items: center;">
-                                                        <img [src]="itemRefurbish.Images[0].Raw" style="max-width: 70px; max-height: 70px;">
+                                                <div class="p-xs" style="height: 100%; display: flex; flex-direction: column; justify-content: flex-end;">
+                                                    <a *ngIf="itemRefurbish.ItemImagesSerialized[0]?.Raw" (click)="viewImages(i);" style="height: inherit; display: flex; align-items: center;">
+                                                        <img [src]="refurbishURL + itemRefurbish.ItemImagesSerialized[0]?.FilePath" style="max-width: 70px; max-height: 70px;">
                                                     </a>
-                                                    <div class="sm-strong"><a (click)="uploadMultipleImages(i);">View All ({{ itemRefurbish.Images.length }})</a></div>
+                                                    <div class="sm-strong"><a (click)="viewImages(i);">View All ({{ itemRefurbish.ItemImagesSerialized.length }})</a></div>
                                                 </div>
                                             </td>
                                         </ng-container>
                                         <!-- Print Label Column -->
                                         <ng-container matColumnDef="PrintLabel">
-                                            <th mat-header-cell *matHeaderCellDef  width="80px"><span *ngIf="item.ItemRefurbishes.length > 1">{{ 'Label' | translate }}</span></th>
+                                            <th mat-header-cell *matHeaderCellDef  width="80px"><span *ngIf="item.InventoryDetailsSerialized.length > 1">{{ 'Label' | translate }}</span></th>
                                             <td mat-cell *matCellDef="let itemRefurbish; let i = index">
-                                                <div *ngIf="i !== item.ItemRefurbishes.length-1">
+                                                <div *ngIf="i !== item.InventoryDetailsSerialized.length-1">
                                                     <button mat-icon-button color="info"><i class="fa fa-print fs-16"></i> </button>
                                                 </div>
                                             </td>
                                         </ng-container>
                                         <!-- Serial Number Column -->
                                         <ng-container matColumnDef="SerialNumber">
-                                            <th mat-header-cell *matHeaderCellDef  width="190px">{{ 'Serial Number' | translate }}</th>
+                                            <th mat-header-cell *matHeaderCellDef  width="120px">{{ 'Serial Number' | translate }}</th>
                                             <td mat-cell *matCellDef="let itemRefurbish; let i = index">
-                                                <div *ngIf="currentIndex !== i && i !== item.ItemRefurbishes.length-1">
-                                                    {{itemRefurbish.SerialNumber}}
-                                                </div>
-                                                <div *ngIf="currentIndex === i || i === item.ItemRefurbishes.length-1" >
-                                                    <input (click)="formDirty = true" class="form-control" id="SerialNumberID" placeholder="{{ 'Serial Number' | translate }} ({{ 'Required' | translate }})"
-                                                        required [(ngModel)]=itemRefurbish.SerialNumber name="itemSerialNumber" #itemSerialNumberVar="ngModel" />
-                                                </div>
+                                                <span class="sm-strong">{{ itemRefurbish.SerialNumber }}</span>
+                                                
                                             </td>
                                         </ng-container>
                                         <!-- Condition Column -->
                                         <ng-container matColumnDef="Condition">
-                                            <th mat-header-cell *matHeaderCellDef  width="180px">{{ 'Condition' | translate }}</th>
+                                            <th mat-header-cell *matHeaderCellDef  width="120px">{{ 'Condition' | translate }}</th>
                                             <td mat-cell *matCellDef="let itemRefurbish; let i = index">
                                                 <ng-container *ngIf="userInfo">
-                                                    <div *ngIf="(currentIndex !== i && i !== item.ItemRefurbishes.length-1) || !userInfo.IsPM">
-                                                        {{conditionTypes[itemRefurbish.Condition-1].Name}}
-                                                    </div>
-                                                    <div *ngIf="(currentIndex === i || i === item.ItemRefurbishes.length-1) && userInfo.IsPM">
-                                                        <select (click)="formDirty = true" class="form-control" id="conditionID" name="condition"
-                                                            [(ngModel)]=itemRefurbish.Condition #conditionVar="ngModel">
-                                                            <option [ngValue]="null">{{ 'Please select' | translate }} {{ '(Required)' | translate }}</option>
-                                                            <option [ngValue]="condition.Value" *ngFor="let condition of conditionTypes">{{condition.Name}}</option>
-                                                        </select>
+                                                    <span class="sm-strong">{{ itemRefurbish.Condition }}</span>
+                                                </ng-container>
+                                            </td>
+                                        </ng-container>
+
+                                        <!-- Comment Column -->
+                                        <ng-container matColumnDef="Comment">
+                                            <th mat-header-cell *matHeaderCellDef  width="180px">{{ 'Comment' | translate }}</th>
+                                            <td mat-cell *matCellDef="let itemRefurbish; let i = index">
+                                                <ng-container *ngIf="userInfo">
+                                                    <div class="p-sm p-l-none">
+                                                        <span>{{ itemRefurbish.Comment }}</span>
                                                     </div>
                                                 </ng-container>
                                             </td>
                                         </ng-container>
-                                       <!-- Selling Price Column -->
+
+
+                                       <!-- Unit Price Column -->
                                         <ng-container matColumnDef="SellingPrice">
-                                            <th mat-header-cell *matHeaderCellDef  width="180px">{{ 'Selling Price' | translate }}</th>
+                                            <th mat-header-cell *matHeaderCellDef  width="180px">{{ 'Unit Price' | translate }}</th>
                                             <td mat-cell *matCellDef="let itemRefurbish; let i = index">
-                                                <div *ngIf="currentIndex !== i && i !== item.ItemRefurbishes.length-1">
-                                                    {{ itemRefurbish.SellingPrice | currency }}
+                                                <div *ngIf="currentIndex !== i">
+                                                    {{ itemRefurbish.UnitPrice | currency }}
                                                 </div>
-                                                <div *ngIf="currentIndex === i || i === item.ItemRefurbishes.length-1" >
-                                                    <input (click)="formDirty = true" class="form-control" id="itemSellingPriceID" type="number" placeholder="{{ 'Selling Price' | translate }} ({{ 'Required' | translate }})"
+                                                <div *ngIf="currentIndex === i">
+                                                    <input (click)="formDirty = true" class="form-control" id="itemvID" type="number" placeholder="{{ 'Unit Price' | translate }} ({{ 'Required' | translate }})"
                                                         step="0.01" onchange="this.value = parseFloat(this.value).toFixed(2);" onkeydown="return event.keyCode == 69 || event.keyCode == 189 ? false : true" min="0"
-                                                        required [(ngModel)]=itemRefurbish.SellingPrice name="itemSellingPrice" #itemSellingPriceVar="ngModel" />
+                                                        required [(ngModel)]=itemRefurbish.UnitPrice name="itemUnitPrice" #itemUnitPriceVar="ngModel" />
                                                 </div>
                                             </td>
                                         </ng-container>
@@ -144,23 +138,22 @@
                                         <ng-container matColumnDef="Remove">
                                             <th mat-header-cell *matHeaderCellDef width="85px">{{ 'Remove' | translate }}</th>
                                             <td mat-cell *matCellDef="let itemRefurbish; let i = index;">
-                                                <div *ngIf="i !== item.ItemRefurbishes.length-1">
-                                                    <a (click)="onRemoveRefurbish(itemRefurbish); currentIndex = item.ItemRefurbishes.length-1;">
+                                                <div *ngIf="i !== item.InventoryDetailsSerialized.length-1">
+                                                    <a (click)="onRemoveRefurbish(itemRefurbish); currentIndex = item.InventoryDetailsSerialized.length-1;">
                                                         <span matTooltip="{{ 'Remove' | translate }}" attr.aria-label="{{ 'Remove' | translate}}" class="glyphicon glyphicon-trash"></span>
                                                     </a>
                                                 </div>
-                                                <div *ngIf="i === item.ItemRefurbishes.length-1 && containsAnyValues(itemRefurbish) && formDirty">
-                                                    <a matTooltip="{{ 'Clear' | translate }}" attr.aria-label="{{ 'Clear' | translate}}" (click)="clearFields(itemRefurbish);"><i *ngIf="i === item.ItemRefurbishes.length-1" class="fa fa-eraser"></i></a>
+                                                <div *ngIf="i === item.InventoryDetailsSerialized.length-1 && containsAnyValues(itemRefurbish) && formDirty">
+                                                    <a matTooltip="{{ 'Clear' | translate }}" attr.aria-label="{{ 'Clear' | translate}}" (click)="clearFields(itemRefurbish);"><i *ngIf="i === item.InventoryDetailsSerialized.length-1" class="fa fa-eraser"></i></a>
                                                 </div>
                                             </td>
                                         </ng-container>
 
                                         <tr mat-header-row *matHeaderRowDef="displayedColumns;"></tr>
                                         <tr style="height: 109px; max-height: 109px;" class="selected-row" mat-row *matRowDef="let itemRefurbish; let i = index; columns: displayedColumns;"
-                                            [ngStyle]="{'background-color': itemService.rowColorConditions(i, item.ItemRefurbishes, currentIndex, formDirty)}"
+                                            [ngStyle]="{'background-color': i === currentIndex ? '#F5F5F5' : '#FFFFFF'}"
                                             (click)="onEditItemImage(i);"></tr>
                                     </table>
-                                    <!-- <button type="button" class="m-t-md btn btn-primary" (click)="uploadMultipleImages()"> <i class="fa fa-files-o"></i> {{ 'Multiple Images' | translate }}</button> -->
                                 </div>
                             </div>
                         </div>

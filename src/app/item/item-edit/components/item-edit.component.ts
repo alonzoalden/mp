@@ -178,6 +178,26 @@ export class ItemEditComponent implements OnInit, OnChanges {
                     });
                 }
 
+                // if (newItem.InventoryDetailsSerialized) {
+                //     const pendingItemPartIndex = newItem.InventoryDetailsSerialized.findIndex(i => i.pendingAdd === true);
+                //     if (pendingItemPartIndex > -1) {
+                //         newItem.InventoryDetailsSerialized.splice(pendingItemPartIndex, 1);
+                //     }
+                //     newItem.InventoryDetailsSerialized.forEach((value, i) => {
+                //         value.Position = i + 1;
+
+                //         if (value.ItemImageSerialized) {
+                //             const pendingItemSelectionIndex = value.ItemImageSerialized.findIndex(i => i.pendingAdd === true);
+                //             if (pendingItemSelectionIndex > -1) {
+                //                 value.ItemImageSerialized.splice(pendingItemSelectionIndex, 1);
+                //             }
+                //             value.ItemImageSerialized.forEach((value2, i) => {
+                //                 value2.Position = i + 1;
+                //             });
+                //         }
+                //     });
+                // }
+
                 if (newItem.FulfilledBy === 'Toolots') {
                     newItem.MerchantQuantity = 0;
                 }
