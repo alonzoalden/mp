@@ -18,7 +18,7 @@ export class ItemEditRefurbishComponent implements OnInit, OnChanges {
     @Input() item: Item;
     @Input() userInfo: Member;
     @Input() itemRefurbishesMatTable: MatTableDataSource<InventoryDetailSerialized>;
-    displayedColumns = ['Down', 'Position', 'Up', 'Images', 'SerialNumber', 'Condition', 'Comment', 'SellingPrice'];
+    displayedColumns = ['Images', 'SerialNumber', 'Condition', 'Comment', 'SellingPrice'];
     pendingAdd: boolean;
     currentIndex: number;
     formDirty = false;
@@ -38,7 +38,7 @@ export class ItemEditRefurbishComponent implements OnInit, OnChanges {
     ) { }
 
     ngOnChanges(changes: SimpleChanges): void {
-       
+      
     }
     ngOnInit(): void {
         this.itemid = this.route.parent.snapshot.params['id'];
@@ -123,5 +123,4 @@ export class ItemEditRefurbishComponent implements OnInit, OnChanges {
             this.itemService.sendNotification({ type: 'error', title: 'Error', content: error });
         });
     }
-
 }

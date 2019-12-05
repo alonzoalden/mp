@@ -111,13 +111,12 @@
                                             <th mat-header-cell *matHeaderCellDef  width="180px">{{ 'Comment' | translate }}</th>
                                             <td mat-cell *matCellDef="let itemRefurbish; let i = index">
                                                 <ng-container *ngIf="userInfo">
-                                                    <div class="p-sm p-l-none">
-                                                        <span>{{ itemRefurbish.Comment }}</span>
+                                                    <div class="p-sm p-l-none" style="white-space: pre-wrap">
+                                                        {{ itemRefurbish.Comment }}
                                                     </div>
                                                 </ng-container>
                                             </td>
                                         </ng-container>
-
 
                                        <!-- Unit Price Column -->
                                         <ng-container matColumnDef="SellingPrice">

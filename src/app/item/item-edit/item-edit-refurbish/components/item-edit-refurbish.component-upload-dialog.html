@@ -6,9 +6,9 @@
         <h4>{{ 'Images' | translate }} ({{ 'Total' | translate }}: {{itemRefurbishImages?.length}})</h4>
     </div>
     <div class="ibox-content">
-        <div style="max-width: 360px;" [ngStyle]="{ 'opacity': itemRefurbishImages?.length ? '1' : '0.11' }">
-            <div style="display: inline-block;  width: 120px; height: 100px;" class="flex-va-center flex-center" *ngFor="let image of itemRefurbishImages; let i = index;">
-                <div style="display: flex; justify-content: center;" class="p-xs" matTooltipPosition="left" matTooltip="{{image.Label}}">
+        <div [ngStyle]="{ 'opacity': itemRefurbishImages?.length ? '1' : '0.11' }" style="max-width: 360px;">
+            <div class="flex-va-center flex-center inline" *ngFor="let image of itemRefurbishImages; let i = index;" style="width: 120px; height: 100px;">
+                <div class="flex-center p-xs" matTooltipPosition="left" matTooltip="{{image.Label}}">
                     <a href="{{refurbishURL + image.FilePath}}" target="_blank">
                         <img style="max-width: 100px; max-height: 80px;" src="{{refurbishURL + image.FilePath}}" [title]="image.Label">
                     </a>
@@ -16,7 +16,6 @@
             </div>
         </div>
     </div>
-
 </div>
 <mat-dialog-actions>
     <button mat-button class="btn btn-remove-sm" (click)="onCancelClick()"><i class="fa fa-remove"></i>  {{ 'Close' | translate }}</button>
