@@ -93,9 +93,8 @@ export class SalesOrderDetailComponent implements OnInit, OnChanges {
         });
         dialogRef.afterClosed().subscribe((data) => {
             if (data) {
-                this.salesOrder.MerchantStatus = 'Canceled';
-                this.salesOrderLinesMatTable.data.forEach( orderline => orderline.MerchantStatus = 'Canceled');
-
+                // this.getFulfilledBySalesOrder.emit({orderid: this.orderid, fulfilledby: this.fulfilledby});
+                // this.getSalesOrderLineByVendor.emit({orderid: this.orderid, fulfilledby: this.fulfilledby});
             }
         });
     }
