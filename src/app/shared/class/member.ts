@@ -20,7 +20,8 @@ export class Member {
         public UpdatedOn: string,
         public CreatedOn: string,
         public Password: string,
-        public ConfirmPassword: string
+        public ConfirmPassword: string,
+        public IsLeader: boolean
     ) {}
 }
 

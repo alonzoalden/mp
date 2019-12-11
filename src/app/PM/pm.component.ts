@@ -190,7 +190,9 @@ export class PmComponent implements OnInit, OnDestroy {
     get isSuperAdmin() {
         return (this.appService.currentMember && this.appService.currentMember.IsSuperAdmin);
     }
-
+    get isLeader() {
+        return (this.appService.currentMember && this.appService.currentMember.IsLeader);
+    }
     get isPM() {
         return (this.appService.currentMember && this.appService.currentMember.IsPM);
     }

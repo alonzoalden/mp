@@ -9,6 +9,8 @@ import {UserManagementService} from '../user-management.service';
 import {Member} from '../../../shared/class/member';
 import {MatDialog} from '@angular/material';
 import {Vendor} from '../../../shared/class/vendor';
+import {MemberRelationItemNode, MemberRelationNode} from 'app/shared/class/member-relation';
+import {Router} from '@angular/router';
 
 
 @Injectable()
@@ -18,6 +20,7 @@ export class UsermanagementEffects {
         private store: Store<UsermanagementState>,
         private userManageService: UserManagementService,
         public dialog: MatDialog,
+        private router: Router
     ) {
     }
 
@@ -83,12 +86,12 @@ export class UsermanagementEffects {
                             this.store.dispatch(new UserManageActions.LoadCurrentMemberRelatedVendors(vendor.MemberID));
                             this.store.dispatch(new UserManageActions.LoadCurrentMemberUnRelatedVendors(vendor.MemberID));
                             return new UserManageActions.AddVendorRelationToMemberSuccess();
-                        },
-                        catchError(err => {
-                                this.userManageService.sendNotification({type: 'error', title: 'Error', content: err});
-                                return of(new UserManageActions.AddVendorRelationToMemberFail(err));
-                            }
-                        )
+                        }
+                    ),
+                    catchError(err => {
+                            this.userManageService.sendNotification({type: 'error', title: 'Error', content: err});
+                            return of(new UserManageActions.AddVendorRelationToMemberFail(err));
+                        }
                     )
                 );
             } else {
@@ -112,15 +115,69 @@ export class UsermanagementEffects {
                             this.store.dispatch(new UserManageActions.LoadCurrentMemberRelatedVendors(String(vendor.MemberID)));
                             this.store.dispatch(new UserManageActions.LoadCurrentMemberUnRelatedVendors(String(vendor.MemberID)));
                             return new UserManageActions.RemoveVendorRelationToMemberSuccess();
-                        },
-                        catchError(err => {
-                                this.userManageService.sendNotification({type: 'error', title: 'Error', content: err});
-                                return of(new UserManageActions.RemoveVendorRelationToMemberFail(err));
-                            }
-                        )
+                        }
+                    ),
+                    catchError(err => {
+                            this.userManageService.sendNotification({type: 'error', title: 'Error', content: err});
+                            return of(new UserManageActions.RemoveVendorRelationToMemberFail(err));
+                        }
                     )
                 );
             }
+        })
+    );
+    @Effect() LoadMemberRelationTree$ = this.actions$.pipe(
+        ofType(UserManageActions.UserManangementActionTypes.LoadMemberRelationTree),
+        mergeMap(() => {
+            return this.userManageService.getMemberRelationTree().pipe(
+                map((tree: MemberRelationItemNode[]) => {
+                        return new UserManageActions.LoadMemberRelationTreeSuccess(tree);
+                    }
+                ),
+                catchError(err => {
+                    this.userManageService.sendNotification({type: 'error', title: 'Error', content: err});
+                    return of(new UserManageActions.LoadMemberRelationTreeFail(err));
+                })
+            );
+        })
+    );
+    @Effect() LoadUnRelatedMemberList$ = this.actions$.pipe(
+        ofType(UserManageActions.UserManangementActionTypes.LoadUnRelatedMemberRelationList),
+        mergeMap(() => {
+            return this.userManageService.getUnRelatedMemberRelationList().pipe(
+                map((list: MemberRelationNode[]) => {
+                        return new UserManageActions.LoadUnRelatedMemberRelationListSuccess(list);
+                    }
+                ),
+                catchError(err => {
+                    this.userManageService.sendNotification({type: 'error', title: 'Error', content: err});
+                    return of(new UserManageActions.LoadUnRelatedMemberRelationListFail(err));
+                })
+            );
+        })
+    );
+    @Effect() SaveRelatedMemberRelationList$ = this.actions$.pipe(
+        ofType(UserManageActions.UserManangementActionTypes.SaveRelatedMemberRelationList),
+        map((action: UserManageActions.SaveRelatedMemberRelationList) => action.payload),
+        mergeMap((memberList: MemberRelationItemNode[]) => {
+            console.log(memberList);
+            return this.userManageService.saveRelatedMemberRelationList(memberList).pipe(
+                map((list: MemberRelationItemNode[]) => {
+                        this.userManageService.sendNotification({
+                            type: 'success',
+                            title: 'Successfully Updated',
+                            content: ''
+                        });
+                        window.location.reload();
+                        // this.store.dispatch(new UserManageActions.LoadMemberRelationTree());
+                        return new UserManageActions.SaveRelatedMemberRelationListSuccess(list);
+                    }
+                ),
+                catchError(err => {
+                    this.userManageService.sendNotification({type: 'error', title: 'Error', content: err});
+                    return of(new UserManageActions.SaveRelatedMemberRelationListFail(err));
+                })
+            );
         })
     );
 }

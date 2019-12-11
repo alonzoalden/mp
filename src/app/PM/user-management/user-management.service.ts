@@ -7,6 +7,7 @@ import {environment} from '../../../environments/environment';
 import {NotificationComponent} from '../../shared/tool/notification/notification.component';
 import {Vendor} from '../../shared/class/vendor';
 import {Member} from '../../shared/class/member';
+import {MemberRelationItemNode, MemberRelationNode} from 'app/shared/class/member-relation';
 
 @Injectable()
 export class UserManagementService {
@@ -31,7 +32,7 @@ export class UserManagementService {
         if (this.memberList) {
             return of(this.memberList);
         }
-        return this.http.get<Member[]>(this.apiURL + '/member/submembers')
+        return this.http.get<Member[]>(this.apiURL + '/usermanage/submembers')
             .pipe(
                 tap(data => this.memberList = data),
                 catchError(this.handleError)
@@ -39,14 +40,14 @@ export class UserManagementService {
     }
 
     getRelatedVendors(memberID: string): Observable<Vendor[]> {
-        return this.http.get<Vendor[]>(this.apiURL + '/vendor/related/' + memberID)
+        return this.http.get<Vendor[]>(this.apiURL + '/usermanage/member/related/' + memberID)
             .pipe(
                 catchError(this.handleError)
             );
     }
 
     getUnRelatedVendors(memberID: string): Observable<Vendor[]> {
-        return this.http.get<Vendor[]>(this.apiURL + '/vendor/unrelated/' + memberID)
+        return this.http.get<Vendor[]>(this.apiURL + '/usermanage/member/unrelated/' + memberID)
             .pipe(
                 catchError(this.handleError)
             );
@@ -57,6 +58,30 @@ export class UserManagementService {
             'Content-Type': 'application/json'
         });
         return this.http.put<Vendor>(this.apiURL + '/vendor/' + vendor.VendorID, vendor, {headers: headers})
+            .pipe(
+                catchError(this.handleError)
+            );
+    }
+
+    getMemberRelationTree(): Observable<MemberRelationItemNode[]> {
+        return this.http.get<MemberRelationItemNode[]>(this.apiURL + '/usermanage/membertree')
+            .pipe(
+                catchError(this.handleError)
+            );
+    }
+
+    getUnRelatedMemberRelationList(): Observable<MemberRelationNode[]> {
+        return this.http.get<MemberRelationNode[]>(this.apiURL + '/usermanage/unrelatedmembers')
+            .pipe(
+                catchError(this.handleError)
+            );
+    }
+
+    saveRelatedMemberRelationList(memberList: MemberRelationItemNode[]): Observable<MemberRelationItemNode[]> {
+        const headers = new HttpHeaders({
+            'Content-Type': 'application/json'
+        });
+        return this.http.put<MemberRelationItemNode[]>(this.apiURL + '/usermanage/membertree', memberList, {headers: headers})
             .pipe(
                 catchError(this.handleError)
             );

@@ -1,20 +1,125 @@
 <div class="row wrapper border-bottom white-bg page-heading">
     <div class="col-lg-12">
         <h2>
-            {{ 'Manage Member' | translate }}
+            {{ "Manage Member" | translate }}
         </h2>
         <ol class="breadcrumb">
             <li>
-                <a [routerLink]="['/PM/dashboard']">{{ 'Home' | translate }}</a>
+                <a [routerLink]="['/PM/dashboard']">{{ "Home" | translate }}</a>
             </li>
             <li>
-                <strong>{{ 'User Management' | translate }}</strong>
+                <strong>{{ "User Management" | translate }}</strong>
             </li>
             <li class="active">
-                <strong>{{ 'Manage Member' | translate }}</strong>
+                <strong>{{ "Manage Member" | translate }}</strong>
             </li>
         </ol>
     </div>
 </div>
 <div class="wrapper wrapper-content animated fadeIn">
-</div>
+    <div class="row">
+        <div class="col-lg-12">
+            <div class="ibox float-e-margins">
+                <div class="ibox-title">
+                    <h5>{{ "Member Tree" | translate }}</h5>
+                </div>
+                <div class="ibox-content" style="min-height: 40vh;">
+                    <div *ngIf="isTreeDataLoading" class="spinner-container">
+                        <div class="sk-spinner sk-spinner-three-bounce big-spinner">
+                            <div class="sk-bounce1"></div>
+                            <div class="sk-bounce2"></div>
+                            <div class="sk-bounce3"></div>
+                        </div>
+                    </div>
+                    <div>
+                        <button mat-button
+                                type="button"
+                                class="btn button-add button-add-display"
+                                [disabled]="isTreeDataLoading"
+                                (click)="expandAll()">
+                                <span *ngIf="!isTreeDataLoading"><i
+                                    class="fa fa-expand"></i> {{ 'ExpandAll' | translate }}</span>
+                            <div *ngIf="isTreeDataLoading">
+                                <i class="fa fa-spinner fa-spin"></i>
+                            </div>
+                        </button>
+                        <button mat-button
+                                type="button"
+                                class="btn button-add button-add-display"
+                                [disabled]="isTreeDataLoading"
+                                (click)="collapseAll()">
+                                <span *ngIf="!isTreeDataLoading"><i
+                                    class="fa fa-compress"></i> {{ 'CollapseAll' | translate }}</span>
+                            <div *ngIf="isTreeDataLoading">
+                                <i class="fa fa-spinner fa-spin"></i>
+                            </div>
+                        </button>
+                        <button mat-button
+                                type="button"
+                                class="btn button-add button-add-display"
+                                [disabled]="isTreeDataLoading"
+                                (click)="saveMemberTreeBtn()">
+                                <span *ngIf="!isTreeDataLoading"><i
+                                    class="fa fa-check"></i> {{ 'Save' | translate }}</span>
+                            <div *ngIf="isTreeDataLoading">
+                                <i class="fa fa-spinner fa-spin"></i>
+                            </div>
+                        </button>
+                    </div>
+                    <div class="table-responsive" [hidden]="isTreeDataLoading">
+                        <mat-tree #tree [dataSource]="dataSource" [treeControl]="treeControl" [trackBy]="trackBy">
+                            <mat-tree-node *matTreeNodeDef="let node;when !hasChild"
+                                           matTreeNodeToggle
+                                           matTreeNodePadding>
+                                <button mat-icon-button disabled></button>
+                                <mat-checkbox class="checklist-leaf-node"
+                                              [ngClass]="{'drop-above': dragNodeExpandOverArea === 'above' && dragNodeExpandOverNode === node,
+                              'drop-below': dragNodeExpandOverArea === 'below' && dragNodeExpandOverNode === node,
+                              'drop-center': dragNodeExpandOverArea === 'center' && dragNodeExpandOverNode === node}"
+                                              [checked]="checklistSelection.isSelected(node)"
+                                              (change)="checklistSelection.toggle(node);"
+                                              draggable="true"
+                                              (dragstart)="handleDragStart($event, node);"
+                                              (dragover)="handleDragOver($event, node);"
+                                              (drop)="handleDrop($event, node);"
+                                              (dragend)="handleDragEnd($event);">{{node.Name}}</mat-checkbox>
+                                <button mat-icon-button (click)="addNewItem(node)">
+                                    <mat-icon>add_circle</mat-icon>
+                                </button>
+                                <button mat-icon-button (click)="deleteButtonItem(node)">
+                                    <mat-icon>remove_circle</mat-icon>
+                                </button>
+                            </mat-tree-node>
+                            <mat-tree-node *matTreeNodeDef="let node; when: hasChild"
+                                           matTreeNodePadding>
+                                <button mat-icon-button matTreeNodeToggle
+                                        [attr.aria-label]="'toggle ' + node.Name">
+                                    <mat-icon class="mat-icon-rtl-mirror">
+                                        {{treeControl.isExpanded(node) ? 'expand_more' : 'chevron_right'}}
+                                    </mat-icon>
+                                </button>
+                                <mat-checkbox [ngClass]="{'drop-above': dragNodeExpandOverArea === 'above' && dragNodeExpandOverNode === node,
+                              'drop-below': dragNodeExpandOverArea === 'below' && dragNodeExpandOverNode === node,
+                              'drop-center': dragNodeExpandOverArea === 'center' && dragNodeExpandOverNode === node}"
+                                              draggable="true"
+                                              (dragstart)="handleDragStart($event, node);"
+                                              (dragover)="handleDragOver($event, node);"
+                                              (drop)="handleDrop($event, node);"
+                                              (dragend)="handleDragEnd($event);"
+                                              [checked]="descendantsAllSelected(node)"
+                                              [indeterminate]="descendantsPartiallySelected(node)"
+                                              (change)="todoItemSelectionToggle(node)">{{node.Name}}</mat-checkbox>
+                                <button mat-icon-button (click)="addNewItem(node)">
+                                    <mat-icon>add_circle</mat-icon>
+                                </button>
+                                <button mat-icon-button (click)="deleteButtonItem(node)">
+                                    <mat-icon>remove_circle</mat-icon>
+                                </button>
+                            </mat-tree-node>
+                        </mat-tree>
+                        <span #emptyItem></span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>

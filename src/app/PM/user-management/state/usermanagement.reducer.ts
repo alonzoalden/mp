@@ -1,6 +1,7 @@
 import {UsermanagementActions, UserManangementActionTypes} from './usermanagement.actions';
 import {Member} from '../../../shared/class/member';
 import {Vendor} from '../../../shared/class/vendor';
+import {MemberRelationItemNode, MemberRelationNode} from 'app/shared/class/member-relation';
 
 
 export interface UsermanagementState {
@@ -12,6 +13,9 @@ export interface UsermanagementState {
     unRelatedVendorList: Vendor[];
     isRelatedVendorListLoading: boolean;
     isUnRelatedVendorListLoading: boolean;
+    memberRelationTree: MemberRelationItemNode[];
+    unUseMemberList: MemberRelationNode[];
+    isTreeDataLoading: boolean;
 }
 
 const initialState: UsermanagementState = {
@@ -22,7 +26,10 @@ const initialState: UsermanagementState = {
     relatedVendorList: [],
     unRelatedVendorList: [],
     isRelatedVendorListLoading: false,
-    isUnRelatedVendorListLoading: false
+    isUnRelatedVendorListLoading: false,
+    memberRelationTree: [],
+    unUseMemberList: [],
+    isTreeDataLoading: null
 };
 
 export function UsermanagementReducer(state = initialState, action: UsermanagementActions): UsermanagementState {
@@ -92,6 +99,68 @@ export function UsermanagementReducer(state = initialState, action: Usermanageme
         case UserManangementActionTypes.RemoveVendorRelationToMemberFail:
             return {
                 ...state, error: action.payload
+            };
+        case UserManangementActionTypes.LoadMemberRelationTreeSuccess:
+            return {
+                ...state, memberRelationTree: action.payload, isTreeDataLoading: false
+            };
+        case UserManangementActionTypes.UpdateMemberRelationTree:
+            return {
+                ...state, memberRelationTree: action.payload
+            };
+        case UserManangementActionTypes.LoadUnRelatedMemberRelationListSuccess:
+            return {
+                ...state, unUseMemberList: action.payload
+            };
+        case UserManangementActionTypes.DeleteFromUnRelatedMemberRelationList: {
+            let _unUseMemberList = [...state.unUseMemberList];
+            _unUseMemberList = _unUseMemberList.filter(x => x !== action.payload);
+            return {
+                ...state, unUseMemberList: [..._unUseMemberList]
+            };
+        }
+        case UserManangementActionTypes.AddToUnRelatedMemberRelationList: {
+            const _unUseMemberList = [...state.unUseMemberList];
+            const _payload = [...action.payload];
+            _payload.filter(x => {
+                const index = _unUseMemberList.findIndex(e => e.MemberID === x.MemberID);
+                if (index === -1) {
+                    _unUseMemberList.push(x);
+                }
+            });
+            return {
+                ...state, unUseMemberList: [..._unUseMemberList]
+            };
+        }
+        case UserManangementActionTypes.AddRelatedMemberRelationList:
+            return {
+                ...state, memberRelationTree: [...state.memberRelationTree, action.payload]
+            };
+        case UserManangementActionTypes.DeleteRelatedMemberRelationList: {
+            const _memberRelationTree = [...state.memberRelationTree].filter(x => x !== action.payload);
+            return {
+                ...state, memberRelationTree: [..._memberRelationTree]
+            };
+        }
+        case UserManangementActionTypes.SaveRelatedMemberRelationListSuccess:
+            return {
+                ...state, isTreeDataLoading: false, memberRelationTree: action.payload
+            };
+        case UserManangementActionTypes.SaveRelatedMemberRelationListFail:
+            return {
+                ...state, error: action.payload, isTreeDataLoading: false
+            };
+        case UserManangementActionTypes.LoadMemberRelationTree:
+            return {
+                ...state, isTreeDataLoading: true
+            };
+        case UserManangementActionTypes.LoadMemberRelationTreeFail:
+            return {
+                ...state, isTreeDataLoading: false
+            };
+        case UserManangementActionTypes.SaveRelatedMemberRelationList:
+            return {
+                ...state, isTreeDataLoading: true
             };
         default:
             return state;

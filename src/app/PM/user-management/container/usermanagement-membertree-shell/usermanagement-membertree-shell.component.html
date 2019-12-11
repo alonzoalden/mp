@@ -1,1 +1,10 @@
-<app-usermanagement-membertree></app-usermanagement-membertree>
+<app-usermanagement-membertree (updateTree)="updateMemberRelationTree($event)"
+                               (getUnRelatedMemberList)="getUnRelatedMemberList()"
+                               [unRelatedList]="unRelatedList$|async" [data]="data$|async"
+                               (getMemberRelationTree)="getMemberRelationTree()"
+                               (addToUnRelatedList)="AddtoUnRelatedMemberRelationList($event)"
+                               (addMemberTree)="addMemberTree($event)"
+                               (deleteMemberTree)="deleteMemberTree($event)"
+                               (saveMemberTree)="saveMemberTree($event)"
+                               [isTreeDataLoading]="isTreeDataLoading$|async"
+></app-usermanagement-membertree>

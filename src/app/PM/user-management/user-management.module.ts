@@ -8,11 +8,12 @@ import {EffectsModule} from '@ngrx/effects';
 import {UsermanagementReducer} from './state/usermanagement.reducer';
 import {UsermanagementEffects} from './state/usermanagement.effects';
 import {
-    MatButtonModule,
-    MatDialogModule, MatListModule,
+    MatBottomSheetModule,
+    MatButtonModule, MatCheckboxModule,
+    MatDialogModule, MatIconModule, MatListModule,
     MatPaginatorModule, MatSidenavModule,
     MatTableModule,
-    MatTooltipModule
+    MatTooltipModule, MatTreeModule
 } from '@angular/material';
 import {UsermanagementMemberVendorShellComponent} from './container/usermanagement-membervendor-shell/usermanagement-membervendor-shell.component';
 import {UsermanagementMemberVendorComponent} from './component/usermanagement-membervendor-list/usermanagement-membervendor.component';
@@ -26,6 +27,9 @@ import {
 } from './component/usermanagement-membervendor-list/usermanagement-membervendor-dialog.component';
 import {UsermanagementMembertreeShellComponent} from './container/usermanagement-membertree-shell/usermanagement-membertree-shell.component';
 import {UsermanagementMembertreeComponent} from './component/usermanagement-membertree/usermanagement-membertree.component';
+import { TreeModule } from 'angular-tree-component';
+import {DragDropModule} from '@angular/cdk/drag-drop';
+import { UsermanegementMembertreeBottomsheet } from './component/usermanagement-membertree/usermanegement-membertree-bottomsheet';
 
 
 @NgModule({
@@ -37,10 +41,12 @@ import {UsermanagementMembertreeComponent} from './component/usermanagement-memb
         UsermanagementMemberVendorDialogComponent,
         UserManagementMemberVendorDialogContentEditComponent,
         UserManagementMemberVendorDialogContentViewComponent,
-        UsermanagementMembertreeComponent
+        UsermanagementMembertreeComponent,
+        UsermanegementMembertreeBottomsheet
     ],
     entryComponents: [
-        UsermanagementMemberVendorDialogComponent
+        UsermanagementMemberVendorDialogComponent,
+        UsermanegementMembertreeBottomsheet
     ],
     imports: [
         CommonModule,
@@ -56,7 +62,13 @@ import {UsermanagementMembertreeComponent} from './component/usermanagement-memb
         MatDialogModule,
         MatTooltipModule,
         MatSidenavModule,
-        MatListModule
+        MatListModule,
+        TreeModule,
+        MatTreeModule,
+        MatIconModule,
+        DragDropModule,
+        MatBottomSheetModule,
+        MatCheckboxModule
     ],
     providers: [
         UserManagementService

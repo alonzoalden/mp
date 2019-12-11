@@ -1,6 +1,7 @@
 import {Action} from '@ngrx/store';
 import {Member} from '../../../shared/class/member';
 import {Vendor} from '../../../shared/class/vendor';
+import {MemberRelationItemNode, MemberRelationNode} from '../../../shared/class/member-relation';
 
 export enum UserManangementActionTypes {
     LoadMemberList = '[UserManagement] Load MemberList',
@@ -21,6 +22,20 @@ export enum UserManangementActionTypes {
     RemoveVendorRelationToMember = '[UserManagement] Remove Vendor Relation To Member',
     RemoveVendorRelationToMemberSuccess = '[UserManagement] Remove Vendor Relation To Member Success',
     RemoveVendorRelationToMemberFail = '[UserManagement] Remove Vendor Relation To Member Fail',
+    LoadMemberRelationTree = '[UserManagement] Load MemberRelation Tree',
+    LoadMemberRelationTreeSuccess = '[UserManagement] Load MemberRelation Tree Success',
+    LoadMemberRelationTreeFail = '[UserManagement] Load MemberRelation Tree Fail',
+    UpdateMemberRelationTree = '[UserManagement] Update MemberRelation Tree',
+    LoadUnRelatedMemberRelationList = '[UserManagement] Load UnRelated MemberRelationList',
+    LoadUnRelatedMemberRelationListSuccess = '[UserManagement] Load UnRelated MemberRelationList Success',
+    LoadUnRelatedMemberRelationListFail = '[UserManagement] Load UnRelated MemberRelationList Fail',
+    DeleteFromUnRelatedMemberRelationList = '[UserManagement] DeleteFrom UnRelated MemberRelationList',
+    AddToUnRelatedMemberRelationList = '[UserManagement] Add To UnRelated MemberRelationList',
+    AddRelatedMemberRelationList = '[UserManagement] Add Related MemberRelationList',
+    DeleteRelatedMemberRelationList = '[UserManagement] Delete Related MemberRelationList',
+    SaveRelatedMemberRelationList = '[UserManagement] Save Related MemberRelationList',
+    SaveRelatedMemberRelationListSuccess = '[UserManagement] Save Related MemberRelationList Success',
+    SaveRelatedMemberRelationListFail = '[UserManagement] Save Related MemberRelationList Fail',
 
 }
 
@@ -120,6 +135,104 @@ export class RemoveVendorRelationToMemberFail implements Action {
     }
 }
 
+export class LoadMemberRelationTree implements Action {
+    readonly type = UserManangementActionTypes.LoadMemberRelationTree;
+
+    constructor() {
+    }
+}
+
+export class LoadMemberRelationTreeSuccess implements Action {
+    readonly type = UserManangementActionTypes.LoadMemberRelationTreeSuccess;
+
+    constructor(public payload: MemberRelationItemNode[]) {
+    }
+}
+
+export class LoadMemberRelationTreeFail implements Action {
+    readonly type = UserManangementActionTypes.LoadMemberRelationTreeFail;
+
+    constructor(public payload: string) {
+    }
+}
+
+export class UpdateMemberRelationTree implements Action {
+    readonly type = UserManangementActionTypes.UpdateMemberRelationTree;
+
+    constructor(public payload: MemberRelationItemNode[]) {
+    }
+}
+
+export class LoadUnRelatedMemberRelationList implements Action {
+    readonly type = UserManangementActionTypes.LoadUnRelatedMemberRelationList;
+
+    constructor() {
+    }
+}
+
+export class LoadUnRelatedMemberRelationListSuccess implements Action {
+    readonly type = UserManangementActionTypes.LoadUnRelatedMemberRelationListSuccess;
+
+    constructor(public payload: MemberRelationNode[]) {
+    }
+}
+
+export class LoadUnRelatedMemberRelationListFail implements Action {
+    readonly type = UserManangementActionTypes.LoadUnRelatedMemberRelationListFail;
+
+    constructor(public payload: string) {
+    }
+}
+
+export class DeleteFromUnRelatedMemberRelationList implements Action {
+    readonly type = UserManangementActionTypes.DeleteFromUnRelatedMemberRelationList;
+
+    constructor(public payload: MemberRelationNode) {
+    }
+}
+
+export class AddtoUnRelatedMemberRelationList implements Action {
+    readonly type = UserManangementActionTypes.AddToUnRelatedMemberRelationList;
+
+    constructor(public payload: MemberRelationNode[]) {
+    }
+}
+
+export class AddRelatedMemberRelation implements Action {
+    readonly type = UserManangementActionTypes.AddRelatedMemberRelationList;
+
+    constructor(public payload: MemberRelationItemNode) {
+    }
+}
+
+export class DeleteRelatedMemberRelation implements Action {
+    readonly type = UserManangementActionTypes.DeleteRelatedMemberRelationList;
+
+    constructor(public payload: MemberRelationItemNode) {
+    }
+}
+
+export class SaveRelatedMemberRelationList implements Action {
+    readonly type = UserManangementActionTypes.SaveRelatedMemberRelationList;
+
+    constructor(public payload: MemberRelationItemNode[]) {
+    }
+}
+
+export class SaveRelatedMemberRelationListSuccess implements Action {
+    readonly type = UserManangementActionTypes.SaveRelatedMemberRelationListSuccess;
+
+    constructor(public payload: MemberRelationItemNode[]) {
+    }
+}
+
+export class SaveRelatedMemberRelationListFail implements Action {
+    readonly type = UserManangementActionTypes.SaveRelatedMemberRelationListFail;
+
+    constructor(public payload: string) {
+    }
+}
+
 export type UsermanagementActions =
     | LoadMemberList
     | LoadMemberListSuccess
@@ -136,4 +249,18 @@ export type UsermanagementActions =
     | RemoveVendorRelationToMember
     | RemoveVendorRelationToMemberSuccess
     | RemoveVendorRelationToMemberFail
+    | LoadMemberRelationTree
+    | LoadMemberRelationTreeSuccess
+    | LoadMemberRelationTreeFail
+    | UpdateMemberRelationTree
+    | LoadUnRelatedMemberRelationList
+    | LoadUnRelatedMemberRelationListSuccess
+    | LoadUnRelatedMemberRelationListFail
+    | DeleteFromUnRelatedMemberRelationList
+    | AddtoUnRelatedMemberRelationList
+    | AddRelatedMemberRelation
+    | DeleteRelatedMemberRelation
+    | SaveRelatedMemberRelationList
+    | SaveRelatedMemberRelationListSuccess
+    | SaveRelatedMemberRelationListFail
     ;

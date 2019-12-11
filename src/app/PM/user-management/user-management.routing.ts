@@ -15,10 +15,9 @@ const USER_ROUTES: Routes = [
             },
             {
                 path: 'member', component: UsermanagementMembertreeShellComponent,
-                canActivate: [PMSuperAdminAuthGuard]
+                canActivate: [PMSuperAdminAuthGuard],
             }
-        ]
+        ],
     }
 ];
-
 export const userManagementRouting = RouterModule.forChild(USER_ROUTES);

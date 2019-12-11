@@ -1,0 +1,5 @@
+<mat-nav-list>
+    <a mat-list-item (click)="memberClick($event,item)" *ngFor="let item of data.memberList">
+        <span mat-line>{{item.Name}}</span>
+    </a>
+</mat-nav-list>

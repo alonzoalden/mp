@@ -69,11 +69,12 @@
 <!--                        <li><a [routerLink]="['report','vendor']">{{ 'Vendor Inventory' | translate }}</a></li>-->
                     </ul>
                 </li>
+
                 <li class="dropdown" *ngIf="isPM">
                     <a aria-expanded="false" role="button" href="#" class="dropdown-toggle" data-toggle="dropdown"> {{ 'User Management' | translate }} <span class="caret"></span></a>
                     <ul role="menu" class="dropdown-menu">
                         <li *ngIf="isSuperAdmin"><a [routerLink]="['user','vendor']">{{ 'Manage VendorMember' | translate }}</a></li>
-<!--                        <li><a [routerLink]="['user','member']">{{ 'Manage Member' | translate }}</a></li>-->
+                        <li *ngIf="isLeader"><a [routerLink]="['user','member']">{{ 'Manage Member' | translate }}</a></li>
                     </ul>
                 </li>
             </ul>
