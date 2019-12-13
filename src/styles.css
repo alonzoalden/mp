@@ -1342,15 +1342,18 @@ table {
     width: 25% !important;
     display: inline-block;
 }
+
 .col-answer,
 .col-label {
     display: flex;
     justify-content: center;
     flex-direction: column;
     min-width: 50%;
+    font-size: 13px;
 }
 .col-label {
     min-width: 50%;
+    font-weight: 600;
 }
 .text-right {
     text-align: right !important;

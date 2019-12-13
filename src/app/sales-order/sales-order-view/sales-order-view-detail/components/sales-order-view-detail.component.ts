@@ -64,6 +64,7 @@ export class SalesOrderDetailComponent implements OnInit, OnChanges {
         }
     }
     ngOnInit() {
+
         this.orderid = this.route.parent.snapshot.params['id'];
         this.fulfilledby = this.route.parent.snapshot.params['fulfilledby'];
         if (this.fulfilledby === 'merchant') {
@@ -93,8 +94,8 @@ export class SalesOrderDetailComponent implements OnInit, OnChanges {
         });
         dialogRef.afterClosed().subscribe((data) => {
             if (data) {
-                // this.getFulfilledBySalesOrder.emit({orderid: this.orderid, fulfilledby: this.fulfilledby});
-                // this.getSalesOrderLineByVendor.emit({orderid: this.orderid, fulfilledby: this.fulfilledby});
+                this.getFulfilledBySalesOrder.emit({orderid: this.orderid, fulfilledby: this.fulfilledby});
+                this.getSalesOrderLineByVendor.emit({orderid: this.orderid, fulfilledby: this.fulfilledby});
             }
         });
     }

@@ -1,6 +1,7 @@
 export class SalesOrder {
     constructor(
         public OrderID: number,
+        public OrderReference: string,
         public IncrementID: string,
         public TransactionDate: Date,
         // public CustomerID: number,
