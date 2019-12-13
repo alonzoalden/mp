@@ -112,7 +112,7 @@
                                 <button mat-icon-button (click)="addNewItem(node)">
                                     <mat-icon>add_circle</mat-icon>
                                 </button>
-                                <button mat-icon-button (click)="deleteButtonItem(node)">
+                                <button mat-icon-button (click)="deleteButtonItem(node)" *ngIf="node?.Level>0">
                                     <mat-icon>remove_circle</mat-icon>
                                 </button>
                             </mat-tree-node>
