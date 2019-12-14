@@ -95,16 +95,15 @@
                                                         <div class="col-xs-12">
                                                             <div class="flex">
                                                                 <div class="col-label">
-
-                                                                    <span *ngIf="salesorder?.OrderReference">Order Reference</span>
                                                                     <span>Order #</span>
+                                                                    <span *ngIf="salesorder?.OrderReference">Order Reference</span>
                                                                     <span>Transaction Date</span>
                                                                     <span>Ship By</span>
                                                                     <span>Customer Name</span>
                                                                 </div>
                                                                 <div class="col-answer">
-                                                                    <span *ngIf="salesorder?.OrderReference">{{salesorder.OrderReference}}</span>
                                                                     <a class="sm-strong" [routerLink]="['/', 'sales-order', 'view', fulfilledby, salesorder.OrderID, 'detail']">{{salesorder.IncrementID}}</a>
+                                                                    <span *ngIf="salesorder?.OrderReference">{{salesorder.OrderReference}}</span>
                                                                     <span>{{salesorder.TransactionDate | date}}</span>
                                                                     <span>{{salesorder.ShipByDate | date}}</span>
                                                                     <span>{{salesorder.CustomerName}}</span>
