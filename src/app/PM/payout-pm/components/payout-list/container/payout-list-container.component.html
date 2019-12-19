@@ -1,0 +1,4 @@
+<app-payout-list [payoutMatTable]="payoutMatTable$|async" (getPayoutList)="getPayoutList($event)"
+                 [isPayoutListLoading]="isPayoutListLoading$|async" [userInfo]="userInfo$|async"
+                 (getVendorList)="getVendorList($event)" [vendorList]="vendorList$|async"
+></app-payout-list>

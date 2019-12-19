@@ -50,6 +50,11 @@ const APP_ROUTES: Routes = [
                 canLoad: [PMAuthGuard]
             },
             {
+                path: 'payout',
+                loadChildren: 'app/PM/payout-pm/payout-pm.module#PayoutPmModule',
+                canLoad: [PMAuthGuard]
+            },
+            {
                 path: '**',
                 redirectTo: 'dashboard'
             }

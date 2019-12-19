@@ -82,12 +82,14 @@
                                     width="150px"></th>
                                 <td mat-cell *matCellDef="let item">
                                     <div class="text-center">
-                                        <button mat-raised-button class="button-margin" matTooltip="{{'Edit'|translate}}" matTooltipPosition="left"
+                                        <button mat-raised-button class="button-margin"
+                                                matTooltip="{{'Edit'|translate}}" matTooltipPosition="left"
                                                 (click)="onButtonClick(item,'edit')">
                                                 <span class="glyphicon glyphicon-edit
                                                 glyphicon" aria-hidden="true"></span>
                                         </button>
-                                        <button mat-raised-button class="button-margin" matTooltip="{{'View Details'|translate}}" matTooltipPosition="right"
+                                        <button mat-raised-button class="button-margin"
+                                                matTooltip="{{'View Details'|translate}}" matTooltipPosition="right"
                                                 (click)="onButtonClick(item,'view')">
                                             <span class="glyphicon glyphicon-search" aria-hidden="true"></span>
                                         </button>

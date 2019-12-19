@@ -43,6 +43,7 @@ export class UsermanagementMemberVendorComponent implements OnInit, OnChanges {
             data: {member, type: type}
         });
     }
+
     applyFilter(filterValue: string) {
         this.memberListMatTable.filter = filterValue.trim().toLowerCase();
         if (this.memberListMatTable.paginator) {

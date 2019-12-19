@@ -31,7 +31,6 @@ export class ItemListShellComponent implements OnInit {
         });
     }
     getItems(check: boolean): void {
-        console.log(check)
         if (check === true) {
             this.store.dispatch(new itemActions.LoadMySubVendorMainItems());
             return;
