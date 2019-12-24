@@ -1,6 +1,8 @@
 import {Component, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChanges, ViewChild} from '@angular/core';
 import {Payout, PayoutLog} from '../../../../../shared/class/payout';
 import {MatPaginator, MatSort, MatTableDataSource} from '@angular/material';
+import {PayoutPmService} from '../../../payout-pm.service';
+import {DatePipe} from '@angular/common';
 
 
 @Component({
@@ -46,9 +48,13 @@ export class PayoutListDialogContentviewComponent implements OnInit, OnChanges {
         'Location',
         'Warranty',
         'WarrantyFee',
-        'ReturnShippingFee'];
+        'ReturnShippingFee',
+    ];
 
-    constructor() {
+    constructor(
+        private payoutService: PayoutPmService,
+        private dataPipe: DatePipe
+    ) {
 
     }
 
@@ -67,6 +73,32 @@ export class PayoutListDialogContentviewComponent implements OnInit, OnChanges {
         this.closeEvent.emit();
     }
 
+    onDownLoadClick() {
+        this.payoutService.downloadPayoutExcel(this.data.PayoutLogID).subscribe(
+            (data) => {
+                const blob = new Blob([data], {type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'});
+                const blobUrl = URL.createObjectURL(blob);
+                const startDate = this.dataPipe.transform(this.data.PayoutStartDate, 'yyyy-MM-dd');
+                const endDate = this.dataPipe.transform(this.data.PayoutEndDate, 'yyyy-MM-dd');
+                if (window.navigator.msSaveOrOpenBlob) {
+                    const fileName = this.data.vendor + '-' + startDate + '-' + endDate;
+                    window.navigator.msSaveOrOpenBlob(data, fileName + '.xlsx'); // IE is the worst!!!
+                } else {
+                    const fileURL = window.URL.createObjectURL(blob);
+                    const a: HTMLAnchorElement = document.createElement('a') as HTMLAnchorElement;
+                    a.href = fileURL;
+                    a.download = this.data.vendor + '-' + startDate + '-' + endDate;
+                    document.body.appendChild(a);
+                    a.target = '_blank';
+                    a.click();
+                    document.body.removeChild(a);
+                    URL.revokeObjectURL(fileURL);
+                }
+            }
+            , error => {
+                this.payoutService.sendNotification({type: 'error', title: 'Error', content: error});
+            });
+    }
 }
 
 

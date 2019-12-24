@@ -1,5 +1,5 @@
 import {NgModule} from '@angular/core';
-import {CommonModule} from '@angular/common';
+import {CommonModule, DatePipe} from '@angular/common';
 import {PayoutShellComponent} from './containers/payout-shell/payout-shell.component';
 import {
     MatCheckboxModule,
@@ -71,7 +71,8 @@ import {PayoutListDialogContainerComponent} from './components/payout-list/conta
         MatCheckboxModule
     ],
     providers: [
-        PayoutPmService
+        PayoutPmService,
+        DatePipe
     ]
 })
 export class PayoutPmModule {

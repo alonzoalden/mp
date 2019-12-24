@@ -25,7 +25,6 @@ export class PayoutListDialogContainerComponent implements OnInit {
     }
 
     ngOnInit() {
-        console.log(this.data);
         this.payloutDetailList$ = this.store.pipe(select(PayoutSelector.getPayloutDetailList));
         this.getPayoutLog(this.data.PayoutLogID);
         setTimeout(() => {

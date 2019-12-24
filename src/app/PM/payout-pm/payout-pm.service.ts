@@ -50,6 +50,10 @@ export class PayoutPmService {
             );
     }
 
+    downloadPayoutExcel(payoutlogID: string) {
+        return this.http.get(this.apiURL + '/payout/payoutexcel/' + payoutlogID, {responseType: 'blob'});
+    }
+
     getMySubMemberVendors(): Observable<Vendor[]> {
         if (this.myMemberVendors) {
             return of(this.myMemberVendors);

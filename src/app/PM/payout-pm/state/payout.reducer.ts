@@ -63,7 +63,7 @@ export function PayoutReducer(state = initialState, action: PayoutActions): Payo
             };
         case PayoutActionTypes.LoadVendorPayoutDetail:
             return {
-                ...state, error: '', isPayoutDetailLoading: true
+                ...state, error: '', isPayoutDetailLoading: true, payoutDetailList: []
             };
         case PayoutActionTypes.LoadVendorPayoutDetailFail:
             return {
