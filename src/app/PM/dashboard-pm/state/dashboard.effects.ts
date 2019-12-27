@@ -31,6 +31,7 @@ export class DashboardEffects {
             this.dashboardService.getDashboard().pipe(
                 map((dashboard: Dashboard) => (new dashboardActions.LoadDashboardSuccess(dashboard))),
                 catchError(err => {
+                    this.dashboardService.sendNotification({type: 'error', title: 'Error', content: err});
                     of(new dashboardActions.LoadDashboardFail(err));
                     return EMPTY;
                 })
@@ -44,6 +45,7 @@ export class DashboardEffects {
             this.dashboardService.getFulfilledBySalesOrderSummary('merchant').pipe(
                 map((members: DashboardSalesOrderSummary[]) => (new dashboardActions.LoadSalesOrderSummaryMerchantSuccess(members))),
                 catchError(err => {
+                    this.dashboardService.sendNotification({type: 'error', title: 'Error', content: err});
                     of(new dashboardActions.LoadSalesOrderSummaryMerchantFail(err));
                     return EMPTY;
                 })
@@ -57,6 +59,7 @@ export class DashboardEffects {
             this.dashboardService.getFulfilledBySalesOrderSummary('toolots').pipe(
                 map((members: DashboardSalesOrderSummary[]) => (new dashboardActions.LoadSalesOrderSummaryToolotsSuccess(members))),
                 catchError(err => {
+                    this.dashboardService.sendNotification({type: 'error', title: 'Error', content: err});
                     of(new dashboardActions.LoadSalesOrderSummaryToolotsFail(err));
                     return EMPTY;
                 })
@@ -70,6 +73,7 @@ export class DashboardEffects {
             this.dashboardService.getInboundShipmentStatusCounts().pipe(
                 map((inboundshipments: InboundShipmentStatusCount[]) => (new dashboardActions.LoadInboundShipmentStatusCountsSuccess(inboundshipments))),
                 catchError(err => {
+                    this.dashboardService.sendNotification({type: 'error', title: 'Error', content: err});
                     of(new dashboardActions.LoadInboundShipmentStatusCountsFail(err));
                     return EMPTY;
                 })
@@ -83,6 +87,7 @@ export class DashboardEffects {
             this.dashboardService.getItemSalesTotals().pipe(
                 map((itemsalestotals: ItemSalesTotal[]) => (new dashboardActions.LoadItemSalesTotalSuccess(itemsalestotals))),
                 catchError(err => {
+                    this.dashboardService.sendNotification({type: 'error', title: 'Error', content: err});
                     of(new dashboardActions.LoadItemSalesTotalFail(err));
                     return EMPTY;
                 })
@@ -96,6 +101,7 @@ export class DashboardEffects {
             this.dashboardService.getSalesOrderSummary().pipe(
                 map((salesordersummary: SalesOrderSummary[]) => (new dashboardActions.LoadSalesOrderSummarySuccess(salesordersummary))),
                 catchError(err => {
+                    this.dashboardService.sendNotification({type: 'error', title: 'Error', content: err});
                     of(new dashboardActions.LoadSalesOrderSummaryFail(err));
                     return EMPTY;
                 })
@@ -109,6 +115,7 @@ export class DashboardEffects {
             this.dashboardService.getSalesStatusTotals().pipe(
                 map((salesstatustotals: SalesStatusTotal[]) => (new dashboardActions.LoadSalesStatusTotalsSuccess(salesstatustotals))),
                 catchError(err => {
+                    this.dashboardService.sendNotification({type: 'error', title: 'Error', content: err});
                     of(new dashboardActions.LoadSalesStatusTotalsFail(err));
                     return EMPTY;
                 })
@@ -123,6 +130,7 @@ export class DashboardEffects {
             this.dashboardService.getDashboarVendorNotification().pipe(
                 map((dashboardvendornotification: DashboardVendorNotification) => (new dashboardActions.LoadDashboardVendorNotificationSuccess(dashboardvendornotification))),
                 catchError(err => {
+                    this.dashboardService.sendNotification({type: 'error', title: 'Error', content: err});
                     of(new dashboardActions.LoadDashboardVendorNotificationFail(err));
                     return EMPTY;
                 })
@@ -136,6 +144,7 @@ export class DashboardEffects {
             this.dashboardService.getItemSalesForecast().pipe(
                 map((itemSalesForecasts: ItemSalesForecast[]) => (new dashboardActions.LoadItemSalesForecastSuccess(itemSalesForecasts))),
                 catchError(err => {
+                    this.dashboardService.sendNotification({type: 'error', title: 'Error', content: err});
                     of(new dashboardActions.LoadItemSalesForecastFail(err));
                     return EMPTY;
                 })
