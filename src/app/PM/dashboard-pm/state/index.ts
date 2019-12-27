@@ -2,7 +2,14 @@ import { createSelector, createFeatureSelector } from '@ngrx/store';
 import * as fromRoot from '../../../state/app.state';
 import * as fromDashboard from './dashboard.reducer';
 import { MatTableDataSource } from '@angular/material';
-import { DashboardSalesOrderSummary, InboundShipmentStatusCount, ItemSalesTotal, SalesOrderSummary, SalesStatusTotal } from 'app/shared/class/dashboard';
+import {
+    DashboardSalesOrderSummary,
+    InboundShipmentStatusCount,
+    ItemSalesForecast,
+    ItemSalesTotal,
+    SalesOrderSummary,
+    SalesStatusTotal
+} from 'app/shared/class/dashboard';
 
 // Extends the app state to include the product feature.
 // This is required because products are lazy loaded.
@@ -77,4 +84,8 @@ export const getDashboardVendorNotification = createSelector(
 export const getError = createSelector(
     getDashboardFeatureState,
     state => state.error
+);
+export const getItemSalesForecastMatTable = createSelector(
+    getDashboardFeatureState,
+    state => new MatTableDataSource<ItemSalesForecast>(state.itemSalesForecast)
 );

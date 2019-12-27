@@ -2,13 +2,13 @@
     <mat-sidenav #sidenav mode="side" [(opened)]="opened">
         <ng-container *ngIf="opened">
             <i class="fa fa-angle-left animated fadeIn" (click)="sidenav.close()"></i>
-            <o-dashboard-main-vendor-notification 
+            <o-dashboard-main-vendor-notification
                 [dashboardVendorNotification]="dashboardVendorNotification$ | async"
                 [dashboard]="dashboard$ | async"
                 [userInfo]="userInfo$ | async"
                 (getDashboardVendorNotification)="getDashboardVendorNotification()"
             ></o-dashboard-main-vendor-notification>
-            <o-dashboard-main-current-sales-order-summary 
+            <o-dashboard-main-current-sales-order-summary
                 [salesOrderSummaryMerchantMatTable]="salesOrderSummaryMerchantMatTable$ | async"
                 [salesOrderSummaryToolotsMatTable]="salesOrderSummaryToolotsMatTable$ | async"
                 [errorMessage]="errorMessage$ | async"
@@ -61,23 +61,16 @@
                             <o-dashboard-main-news-feed
                                 [dashboardNews]="dashboardNews$ | async"
                             ></o-dashboard-main-news-feed>
-                            <o-dashboard-main-item-sales-total-list 
+                            <o-dashboard-main-item-sales-total-list
                                 [itemSalesTotalsMatTable]="itemSalesTotalsMatTable$ | async"
                                 [errorMessage]="errorMessage$ | async"
                                 (getItemSalesTotal)="getItemSalesTotal()"
                             ></o-dashboard-main-item-sales-total-list>
                             <div class="row">
-                                <div class="col-xs-12 col-lg-6">
-                                    <o-dashboard-main-sales-order-summary 
-                                        [salesOrderSummaryMatTable]="salesOrderSummaryMatTable$ | async"
-                                        (getSalesOrderSummary)="getSalesOrderSummary()"
-                                    ></o-dashboard-main-sales-order-summary>
-                                </div>
-                                <div class="col-xs-12 col-lg-6">
-                                    <o-dashboard-main-sales-status-total 
-                                        [salesStatusTotalsMatTable]="salesStatusTotalsMatTable$ | async"
-                                        (getSalesStatusTotals)="getSalesStatusTotals()"
-                                    ></o-dashboard-main-sales-status-total>
+                                <div class="col-xs-12 col-lg-12">
+                                    <o-dashboard-main-item-sales-forecast
+                                        [itemSalesForecaseMatTable]="itemSalesForecastMatTable$|async"
+                                        (getItemSalesForecast)="getItemSalesForecast()"></o-dashboard-main-item-sales-forecast>
                                 </div>
                             </div>
                         </div>

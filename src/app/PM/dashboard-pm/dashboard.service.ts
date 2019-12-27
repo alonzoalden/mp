@@ -1,15 +1,26 @@
-import { Injectable } from '@angular/core';
-import { HttpClient, HttpErrorResponse } from '@angular/common/http';
-import { Observable, Subject, of, throwError } from 'rxjs';
-import { catchError, tap } from 'rxjs/operators';
-import { Dashboard, ItemSalesTotal, InboundShipmentStatusCount, SalesStatusTotal, SalesOrderSummary, CurrentSalesOrderSummary, DashboardVendorNotification, DashboardSalesOrderSummary } from '../../shared/class/dashboard';
-import { environment } from '../../../environments/environment';
-import { NotificationComponent } from '../../shared/tool/notification/notification.component';
+import {Injectable} from '@angular/core';
+import {HttpClient, HttpErrorResponse} from '@angular/common/http';
+import {Observable, of, Subject, throwError} from 'rxjs';
+import {catchError, tap} from 'rxjs/operators';
+import {
+    CurrentSalesOrderSummary,
+    Dashboard,
+    DashboardSalesOrderSummary,
+    DashboardVendorNotification,
+    InboundShipmentStatusCount,
+    ItemSalesForecast,
+    ItemSalesTotal,
+    SalesOrderSummary,
+    SalesStatusTotal
+} from '../../shared/class/dashboard';
+import {environment} from '../../../environments/environment';
+import {NotificationComponent} from '../../shared/tool/notification/notification.component';
 
 @Injectable()
 export class DashboardService {
     private apiURL = environment.webapiURL;
     private itemSalesTotals: ItemSalesTotal[];
+    private itemSalesForecast: ItemSalesForecast[];
     private inboundShipmentStatusCounts: InboundShipmentStatusCount[];
     private salesStatusTotals: SalesStatusTotal[];
     private currentSalesOrderSummary: CurrentSalesOrderSummary[];
@@ -19,7 +30,8 @@ export class DashboardService {
     public subject = new Subject<string>();
 
     constructor(private http: HttpClient,
-                private notificationComponent: NotificationComponent) { }
+                private notificationComponent: NotificationComponent) {
+    }
 
     sendNotification(notification: any) {
         this.notificationComponent.notify(notification);
@@ -39,17 +51,17 @@ export class DashboardService {
             return of(this.dashboard);
         }
         return this.http.get<Dashboard>(this.apiURL + '/dashboard/dashboard')
-                        .pipe(
-                            tap(data => this.dashboard = data),
-                            catchError(this.handleError)
-                        );
+            .pipe(
+                tap(data => this.dashboard = data),
+                catchError(this.handleError)
+            );
     }
 
     getDashboarVendorNotification(): Observable<DashboardVendorNotification> {
         return this.http.get<DashboardVendorNotification>(this.apiURL + '/dashboard/dashboardvendornotification')
-                        .pipe(
-                            catchError(this.handleError)
-                        );
+            .pipe(
+                catchError(this.handleError)
+            );
     }
 
     getItemSalesTotals(): Observable<ItemSalesTotal[]> {
@@ -57,10 +69,21 @@ export class DashboardService {
             return of(this.itemSalesTotals);
         }
         return this.http.get<ItemSalesTotal[]>(this.apiURL + '/dashboard/itemsalestotal')
-                        .pipe(
-                            tap(data => this.itemSalesTotals = data),
-                            catchError(this.handleError)
-                        );
+            .pipe(
+                tap(data => this.itemSalesTotals = data),
+                catchError(this.handleError)
+            );
+    }
+
+    getItemSalesForecast(): Observable<ItemSalesForecast[]> {
+        if (this.itemSalesForecast) {
+            return of(this.itemSalesForecast);
+        }
+        return this.http.get<ItemSalesForecast[]>(this.apiURL + '/dashboard/itemsalesforecast')
+            .pipe(
+                tap(data => this.itemSalesForecast = data),
+                catchError(this.handleError)
+            );
     }
 
     getInboundShipmentStatusCounts(): Observable<InboundShipmentStatusCount[]> {
@@ -68,10 +91,10 @@ export class DashboardService {
             return of(this.inboundShipmentStatusCounts);
         }
         return this.http.get<InboundShipmentStatusCount[]>(this.apiURL + '/dashboard/inboundshipmentstatuscount')
-                        .pipe(
-                            tap(data => this.inboundShipmentStatusCounts = data),
-                            catchError(this.handleError)
-                        );
+            .pipe(
+                tap(data => this.inboundShipmentStatusCounts = data),
+                catchError(this.handleError)
+            );
     }
 
     getSalesStatusTotals(): Observable<SalesStatusTotal[]> {
@@ -79,10 +102,10 @@ export class DashboardService {
             return of(this.salesStatusTotals);
         }
         return this.http.get<SalesStatusTotal[]>(this.apiURL + '/dashboard/salesstatustotal')
-                        .pipe(
-                            tap(data => this.salesStatusTotals = data),
-                            catchError(this.handleError)
-                        );
+            .pipe(
+                tap(data => this.salesStatusTotals = data),
+                catchError(this.handleError)
+            );
     }
 
     getSalesOrderSummary(): Observable<SalesOrderSummary[]> {
@@ -90,10 +113,10 @@ export class DashboardService {
             return of(this.salesOrderSummary);
         }
         return this.http.get<SalesOrderSummary[]>(this.apiURL + '/dashboard/salesordersummary')
-                        .pipe(
-                            tap(data => this.salesOrderSummary = data),
-                            catchError(this.handleError)
-                        );
+            .pipe(
+                tap(data => this.salesOrderSummary = data),
+                catchError(this.handleError)
+            );
     }
 
     getCurrentSalesOrderSummary(): Observable<CurrentSalesOrderSummary[]> {
@@ -101,18 +124,18 @@ export class DashboardService {
             return of(this.currentSalesOrderSummary);
         }
         return this.http.get<CurrentSalesOrderSummary[]>(this.apiURL + '/dashboard/currentsalesordersummary')
-                        .pipe(
-                            tap(data => this.currentSalesOrderSummary = data),
-                            catchError(this.handleError)
-                        );
+            .pipe(
+                tap(data => this.currentSalesOrderSummary = data),
+                catchError(this.handleError)
+            );
     }
 
     getFulfilledBySalesOrderSummary(fulfilledby: string): Observable<DashboardSalesOrderSummary[]> {
 
         return this.http.get<DashboardSalesOrderSummary[]>(this.apiURL + '/dashboard/dashboardsalesordersummary/' + fulfilledby)
-                        .pipe(
-                            catchError(this.handleError)
-                        );
+            .pipe(
+                catchError(this.handleError)
+            );
     }
 
 

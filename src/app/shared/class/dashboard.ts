@@ -82,3 +82,15 @@ export class SalesOrderSummary {
         public SalesAmount: number
     ) {}
 }
+export class ItemSalesForecast {
+    constructor(
+        public ItemID: string,
+        public VendorSKU: string,
+        public VendorID: string,
+        public MerchantID: string,
+        public TPIN: string,
+        public InventoryQuantity: number,
+        public SaleQuantity: number,
+        public SaleForecastDays: number
+    ) {}
+}

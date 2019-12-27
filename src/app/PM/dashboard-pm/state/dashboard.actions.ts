@@ -1,5 +1,14 @@
 import { Action } from '@ngrx/store';
-import { DashboardSalesOrderSummary, InboundShipmentStatusCount, ItemSalesTotal, Dashboard, SalesOrderSummary, SalesStatusTotal, DashboardVendorNotification } from 'app/shared/class/dashboard';
+import {
+    DashboardSalesOrderSummary,
+    InboundShipmentStatusCount,
+    ItemSalesTotal,
+    Dashboard,
+    SalesOrderSummary,
+    SalesStatusTotal,
+    DashboardVendorNotification,
+    ItemSalesForecast
+} from 'app/shared/class/dashboard';
 
 export enum DashboardActionTypes {
     LoadSalesOrderSummaryMerchant = '[Dashboard] Load Sales Order Summary (Merchant) ',
@@ -8,6 +17,9 @@ export enum DashboardActionTypes {
     LoadSalesOrderSummaryToolots = '[Dashboard] Load Sales Order Summary (Toolots) ',
     LoadSalesOrderSummaryToolotsSuccess = '[Dashboard] Load Sales Order Summary (Toolots) Success',
     LoadSalesOrderSummaryToolotsFail = '[Dashboard] Load Sales Order Summary (Toolots) Fail',
+    LoadItemSalesForecast = '[Dashboard] Load Item Sale Forecast',
+    LoadItemSalesForecastSuccess = '[Dashboard] Load Item Sale Forecast Success',
+    LoadItemSalesForecastFail = '[Dashboard] Load Item Sale Forecast Fail',
     LoadInboundShipmentStatusCounts = '[Dashboard] Load Inbound Shipment Status Counts',
     LoadInboundShipmentStatusCountsSuccess = '[Dashboard] Load Inbound Shipment Status Counts Success',
     LoadInboundShipmentStatusCountsFail = '[Dashboard] Load Inbound Shipment Status Counts Fail',
@@ -60,6 +72,17 @@ export class LoadSalesOrderSummaryToolotsSuccess implements Action {
 }
 export class LoadSalesOrderSummaryToolotsFail implements Action {
     readonly type = DashboardActionTypes.LoadSalesOrderSummaryToolotsFail;
+    constructor(public payload: string) { }
+}
+export class LoadItemSalesForecast implements Action {
+    readonly type = DashboardActionTypes.LoadItemSalesForecast;
+}
+export class LoadItemSalesForecastSuccess implements Action {
+    readonly type = DashboardActionTypes.LoadItemSalesForecastSuccess;
+    constructor(public payload: ItemSalesForecast[]) { }
+}
+export class LoadItemSalesForecastFail implements Action {
+    readonly type = DashboardActionTypes.LoadItemSalesForecastFail;
     constructor(public payload: string) { }
 }
 export class LoadInboundShipmentStatusCounts implements Action {
@@ -141,4 +164,7 @@ export type DashboardActions = LoadDashboard
     | LoadSalesStatusTotalsFail
     | LoadDashboardVendorNotification
     | LoadDashboardVendorNotificationSuccess
-    | LoadDashboardVendorNotificationFail;
+    | LoadDashboardVendorNotificationFail
+    | LoadItemSalesForecast
+    | LoadItemSalesForecastSuccess
+    | LoadItemSalesForecastFail;

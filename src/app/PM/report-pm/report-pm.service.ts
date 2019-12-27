@@ -34,10 +34,9 @@ export class ReportPmService {
         const headers = new HttpHeaders({
             'Content-Type': 'application/json'
         });
-        return this.http.get<ItemList[]>(this.apiURL + '/item/allsimpleitemlist', {headers: headers})
-        // return this.http.get<ItemList[]>(this.apiURL + '/item/simpleitemlistwithvendors', {headers: headers})
+        // return this.http.get<ItemList[]>(this.apiURL + '/item/allsimpleitemlist', {headers: headers})
+        return this.http.get<ItemList[]>(this.apiURL + '/item/simpleitemlistwithvendors', {headers: headers})
             .pipe(
-                // tap(data => console.log(data)),
                 tap(data => this.simpleItemList = data),
                 catchError(this.handleError)
             );
@@ -49,8 +48,6 @@ export class ReportPmService {
         });
         return this.http.get<InventoryReport[]>(this.apiURL + '/report' + '/item/' + item.ItemID, {headers: headers})
             .pipe(
-                // tap(data => console.log(data)),
-                // tap(data => this.simpleItemList = data),
                 catchError(this.handleError)
             );
     }

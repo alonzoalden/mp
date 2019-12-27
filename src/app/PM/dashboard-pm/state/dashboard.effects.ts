@@ -5,7 +5,16 @@ import { Action } from '@ngrx/store';
 import { Actions, Effect, ofType } from '@ngrx/effects';
 import { DashboardService } from '../dashboard.service';
 import * as dashboardActions from './dashboard.actions';
-import { DashboardSalesOrderSummary, InboundShipmentStatusCount, ItemSalesTotal, Dashboard, SalesOrderSummary, SalesStatusTotal, DashboardVendorNotification } from 'app/shared/class/dashboard';
+import {
+    DashboardSalesOrderSummary,
+    InboundShipmentStatusCount,
+    ItemSalesTotal,
+    Dashboard,
+    SalesOrderSummary,
+    SalesStatusTotal,
+    DashboardVendorNotification,
+    ItemSalesForecast
+} from 'app/shared/class/dashboard';
 
 @Injectable()
 export class DashboardEffects {
@@ -115,6 +124,19 @@ export class DashboardEffects {
                 map((dashboardvendornotification: DashboardVendorNotification) => (new dashboardActions.LoadDashboardVendorNotificationSuccess(dashboardvendornotification))),
                 catchError(err => {
                     of(new dashboardActions.LoadDashboardVendorNotificationFail(err));
+                    return EMPTY;
+                })
+            )
+        )
+    );
+    @Effect()
+    loadItemSalesForecast$: Observable<Action> = this.actions$.pipe(
+        ofType(dashboardActions.DashboardActionTypes.LoadItemSalesForecast),
+        mergeMap(() =>
+            this.dashboardService.getItemSalesForecast().pipe(
+                map((itemSalesForecasts: ItemSalesForecast[]) => (new dashboardActions.LoadItemSalesForecastSuccess(itemSalesForecasts))),
+                catchError(err => {
+                    of(new dashboardActions.LoadItemSalesForecastFail(err));
                     return EMPTY;
                 })
             )

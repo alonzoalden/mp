@@ -105,7 +105,9 @@
 
     "Shipping/Return Address": "退货地址",
     "Billing Address": "账单地址",
-
+    "Recent Item Sales And Forecast": "近期产品销售和预测",
+    "Sale Quantity (In 30days)": "近30天销售数量",
+    "Sale Forecast Days (day)": "预计可销售天数",
     "Update Shipping Address": "更新退货地址",
     "Update Billing Address": "更新账单地址",
 

@@ -1,5 +1,14 @@
-import { DashboardActions, DashboardActionTypes } from './dashboard.actions';
-import { DashboardSalesOrderSummary, InboundShipmentStatusCount, ItemSalesTotal, Dashboard, SalesOrderSummary, SalesStatusTotal, DashboardVendorNotification } from 'app/shared/class/dashboard';
+import {DashboardActions, DashboardActionTypes} from './dashboard.actions';
+import {
+    Dashboard,
+    DashboardSalesOrderSummary,
+    DashboardVendorNotification,
+    InboundShipmentStatusCount,
+    ItemSalesForecast,
+    ItemSalesTotal,
+    SalesOrderSummary,
+    SalesStatusTotal
+} from 'app/shared/class/dashboard';
 
 // State for this feature (Dashboard)
 export interface DashboardState {
@@ -13,6 +22,7 @@ export interface DashboardState {
     dashboardVendorNotification: DashboardVendorNotification;
     isLoading: boolean;
     error: string;
+    itemSalesForecast: ItemSalesForecast[];
 }
 
 const initialState: DashboardState = {
@@ -25,7 +35,8 @@ const initialState: DashboardState = {
     salesStatusTotals: [],
     dashboardVendorNotification: null,
     isLoading: false,
-    error: ''
+    error: '',
+    itemSalesForecast: []
 };
 
 export function dashboardReducer(state = initialState, action: DashboardActions): DashboardState {
@@ -125,6 +136,18 @@ export function dashboardReducer(state = initialState, action: DashboardActions)
                 ...state,
                 dashboardVendorNotification: null,
                 error: action.payload,
+            };
+        case DashboardActionTypes.LoadItemSalesForecastFail:
+            return {
+                ...state,
+                itemSalesForecast: null,
+                error: action.payload
+            };
+        case DashboardActionTypes.LoadItemSalesForecastSuccess:
+            return {
+                ...state,
+                itemSalesForecast: action.payload,
+                error: ''
             };
         default:
             return state;

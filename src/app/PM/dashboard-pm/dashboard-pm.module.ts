@@ -20,6 +20,7 @@ import { StoreModule } from '@ngrx/store';
 import { EffectsModule } from '@ngrx/effects';
 import { dashboardReducer } from './state/dashboard.reducer';
 import { DashboardEffects } from './state/dashboard.effects';
+import {DashboardMainItemSalesForecastComponent} from './components/dashboard-main/dashboard-main-item-sale-forecast/dashboard-main-item-sales-forecast.component';
 
 @NgModule({
     declarations: [
@@ -30,7 +31,8 @@ import { DashboardEffects } from './state/dashboard.effects';
         DashboardMainCurrentSalesOrderSummaryComponent,
         DashboardMainSalesOrderSummaryComponent,
         DashboardMainNewsFeedComponent,
-        DashboardMainVendorNotificationComponent
+        DashboardMainVendorNotificationComponent,
+        DashboardMainItemSalesForecastComponent
     ],
     imports: [
         TranslateModule,

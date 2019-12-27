@@ -1,7 +1,17 @@
 import { Component, OnInit, ViewChild, HostListener } from '@angular/core';
 import { MatTableDataSource, MatSidenav } from '@angular/material';
 import { DashboardService } from '../../dashboard.service';
-import { Dashboard, DashboardNews, DashboardVendorNotification, DashboardSalesOrderSummary, InboundShipmentStatusCount, ItemSalesTotal, SalesOrderSummary, SalesStatusTotal } from '../../../../shared/class/dashboard';
+import {
+    Dashboard,
+    DashboardNews,
+    DashboardVendorNotification,
+    DashboardSalesOrderSummary,
+    InboundShipmentStatusCount,
+    ItemSalesTotal,
+    SalesOrderSummary,
+    SalesStatusTotal,
+    ItemSalesForecast
+} from '../../../../shared/class/dashboard';
 import { trigger, transition, useAnimation } from '@angular/animations';
 import { growContainerAnimation, shinkContainerAnimation } from '../../components/dashboard-main/smooth-open-animation.component';
 import { AppService } from '../../../../app.service';
@@ -42,6 +52,7 @@ export class DashboardMainShellComponent implements OnInit {
     salesOrderSummaryToolotsMatTable$: Observable<MatTableDataSource<DashboardSalesOrderSummary>>;
     inboundShipmentStatusCountsMatTable$: Observable<MatTableDataSource<InboundShipmentStatusCount>>;
     itemSalesTotalsMatTable$: Observable<MatTableDataSource<ItemSalesTotal>>;
+    itemSalesForecastMatTable$: Observable<MatTableDataSource<ItemSalesForecast>>;
     salesStatusTotalsMatTable$: Observable<MatTableDataSource<SalesStatusTotal>>;
     userInfo$: Observable<Member>;
     dashboardVendorNotification$: Observable<DashboardVendorNotification>;
@@ -83,7 +94,7 @@ export class DashboardMainShellComponent implements OnInit {
         this.salesOrderSummaryToolotsMatTable$ = this.store.pipe(select(fromDashboard.getSalesOrderSummaryToolotsMatTable));
         this.inboundShipmentStatusCountsMatTable$ = this.store.pipe(select(fromDashboard.getInboundShipmentStatusCountsMatTable));
         this.errorMessage$ = this.store.pipe(select(fromDashboard.getError));
-
+        this.itemSalesForecastMatTable$ = this.store.pipe(select(fromDashboard.getItemSalesForecastMatTable));
         this.oauthService.events.subscribe(e => {
             this.appService.setWasLoggedIn();
         });
@@ -113,5 +124,7 @@ export class DashboardMainShellComponent implements OnInit {
     getSalesOrderSummaryToolots() {
         this.store.dispatch(new dashboardActions.LoadSalesOrderSummaryToolots());
     }
-
+    getItemSalesForecast() {
+        this.store.dispatch(new dashboardActions.LoadItemSalesForecast());
+    }
 }
