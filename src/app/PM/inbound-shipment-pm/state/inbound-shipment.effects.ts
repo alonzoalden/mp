@@ -16,6 +16,7 @@ import {
     PurchaseOrderLineList
 } from '../../../shared/class/purchase-order';
 import {ItemService} from '../../../original/item/item.service';
+import {CustomPrintLabel} from '../../../shared/class/label';
 
 @Injectable()
 export class InboundShipmentEffects {
@@ -36,6 +37,102 @@ export class InboundShipmentEffects {
                 map((purchaseOrders: PurchaseOrder[]) => (new inboundShipmentActions.LoadPurchaseOrderOverviewSuccess(purchaseOrders))),
                 catchError(err => {
                     of(new inboundShipmentActions.LoadPurchaseOrderOverviewFail(err));
+                    return EMPTY;
+                })
+            )
+        )
+    );
+    @Effect()
+    downloadItemLabelCountCustom$: Observable<Action> = this.actions$.pipe(
+        ofType(inboundShipmentActions.InboundShipmentActionTypes.DownloadItemLabelCountCustom),
+        map((action: inboundShipmentActions.DownloadItemLabelCountCustom) => action.payload),
+        mergeMap((payload: { purchaseorderline: PurchaseOrderLine, options: CustomPrintLabel}) =>
+            this.inboundShipmentService.downloadItemLabelCountCustom(payload.purchaseorderline.ItemID, payload.options).pipe(
+                map((data: Blob) => {
+                    const blob = new Blob([data], {type: 'application/pdf'});
+                    if (window.navigator.msSaveOrOpenBlob) {
+                        const fileName = payload.purchaseorderline.TPIN;
+                        window.navigator.msSaveOrOpenBlob(data, fileName + '.pdf');
+                    } else {
+                        const fileURL = window.URL.createObjectURL(blob);
+                        const a: HTMLAnchorElement = document.createElement('a') as HTMLAnchorElement;
+                        a.href = fileURL;
+                        a.download = payload.purchaseorderline.TPIN;
+                        document.body.appendChild(a);
+                        a.target = '_blank';
+                        a.click();
+
+                        document.body.removeChild(a);
+                        URL.revokeObjectURL(fileURL);
+                    }
+                    return (new inboundShipmentActions.DownloadItemLabelCountCustomSuccess(data));
+                }),
+                catchError(err => {
+                    of(new inboundShipmentActions.DownloadItemLabelCountCustomFail(err));
+                    return EMPTY;
+                })
+            )
+        )
+    );
+    @Effect()
+    downloadCartonLabelCountCustom$: Observable<Action> = this.actions$.pipe(
+        ofType(inboundShipmentActions.InboundShipmentActionTypes.DownloadCartonLabelCountCustom),
+        map((action: inboundShipmentActions.DownloadCartonLabelCountCustom) => action.payload),
+        mergeMap((payload: { carton: Carton, options: CustomPrintLabel } ) =>
+            this.inboundShipmentService.downloadCartonLabelCustom(payload.carton.CartonID, payload.options).pipe(
+                map((data: Blob) => {
+                    const blob = new Blob([data], {type: 'application/pdf'});
+                    if (window.navigator.msSaveOrOpenBlob) {
+                        const fileName = 'Carton_' +  payload.carton.PurchaseOrderID;
+                        window.navigator.msSaveOrOpenBlob(data, fileName + '.pdf');
+                    } else {
+                        const fileURL = window.URL.createObjectURL(blob);
+                        const a: HTMLAnchorElement = document.createElement('a') as HTMLAnchorElement;
+                        a.href = fileURL;
+                        a.download = 'Carton_' +  payload.carton.PurchaseOrderID;
+                        document.body.appendChild(a);
+                        a.target = '_blank';
+                        a.click();
+
+                        document.body.removeChild(a);
+                        URL.revokeObjectURL(fileURL);
+                    }
+                    return (new inboundShipmentActions.DownloadCartonLabelCountCustomSuccess(data));
+                }),
+                catchError(err => {
+                    of(new inboundShipmentActions.DownloadCartonLabelCountCustomFail(err));
+                    return EMPTY;
+                })
+            )
+        )
+    );
+
+    @Effect()
+    downloadItemLargeLabelCountCustom$: Observable<Action> = this.actions$.pipe(
+        ofType(inboundShipmentActions.InboundShipmentActionTypes.DownloadItemLargeLabelCountCustom),
+        map((action: inboundShipmentActions.DownloadItemLargeLabelCountCustom) => action.payload),
+        mergeMap((payload: { purchaseorderline: PurchaseOrderLine, options: CustomPrintLabel}) =>
+            this.inboundShipmentService.downloadItemLargeLabelCountCustom(payload.purchaseorderline.ItemID, payload.options).pipe(
+                map((data: Blob) => {
+                    const blob = new Blob([data], {type: 'application/pdf'});
+                    if (window.navigator.msSaveOrOpenBlob) {
+                        const fileName = payload.purchaseorderline.TPIN;
+                        window.navigator.msSaveOrOpenBlob(data, fileName + '.pdf');
+                    } else {
+                        const fileURL = window.URL.createObjectURL(blob);
+                        const a: HTMLAnchorElement = document.createElement('a') as HTMLAnchorElement;
+                        a.href = fileURL;
+                        a.download = payload.purchaseorderline.TPIN;
+                        document.body.appendChild(a);
+                        a.target = '_blank';
+                        a.click();
+                        document.body.removeChild(a);
+                        URL.revokeObjectURL(fileURL);
+                    }
+                    return (new inboundShipmentActions.DownloadItemLargeLabelCountCustomSuccess(data));
+                }),
+                catchError(err => {
+                    of(new inboundShipmentActions.DownloadItemLargeLabelCountCustomFail(err));
                     return EMPTY;
                 })
             )

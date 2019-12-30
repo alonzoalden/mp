@@ -10,6 +10,7 @@ import { environment } from '../../../environments/environment';
 import { Store } from '@ngrx/store';
 import * as fromInboundShipment from './state';
 import { NotificationComponent } from '../../shared/tool/notification/notification.component';
+import {CustomPrintLabel} from '../../shared/class/label';
 
 
 @Injectable()
@@ -134,7 +135,16 @@ export class PurchaseOrderService {
                         catchError(this.handleError)
                     );
     }
-
+    downloadCartonLabelCustom(id: number, options: CustomPrintLabel) {
+        //return this.http.get(this.apiURL + '/carton/' + id + '/cartonlist', { responseType: 'blob' });
+        return this.http.post(this.apiURL + '/carton/' + id + '/label/custom', options, { responseType: 'blob' });
+    }
+    downloadItemLabelCountCustom(id: number, options: CustomPrintLabel) {
+        return this.http.post(this.apiURL + '/item/' + id + '/label/custom', options, { responseType: 'blob' });
+    }
+    downloadItemLargeLabelCountCustom(id: number, options: CustomPrintLabel) {
+        return this.http.post(this.apiURL + '/item/' + id + '/largelabel/custom', options, { responseType: 'blob' });
+    }
     copyPurchaseOrder(purchaseorder: PurchaseOrder) {
         const newPurchaseOrder = new PurchaseOrder(purchaseorder.PurchaseOrderID, purchaseorder.TransactionDate, purchaseorder.ShipmentDate,
             purchaseorder.PackingSlipNumber, purchaseorder.Status, purchaseorder.UpdatedOn, purchaseorder.CreatedOn, [], [], []);

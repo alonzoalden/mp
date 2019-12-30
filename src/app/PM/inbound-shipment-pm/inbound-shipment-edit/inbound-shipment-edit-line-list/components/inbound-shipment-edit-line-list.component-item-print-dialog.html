@@ -11,7 +11,7 @@
             </mat-form-field>
             <mat-form-field class="block">
                 <input matInput [(ngModel)]="customOptions.Quantity" type="number" placeholder="# of Labels" required
-                    onkeydown="return event.keyCode == 69 || event.keyCode == 189 || event.keyCode == 190 ? false : true" min="0">
+                       onkeydown="return event.keyCode == 69 || event.keyCode == 189 || event.keyCode == 190 ? false : true" min="0">
             </mat-form-field>
             <mat-form-field class="block">
                 <mat-select [(ngModel)]="customOptions.Border" placeholder="Border">
@@ -34,63 +34,63 @@
                     </mat-select>
                 </mat-form-field>
             </div>
-                <div>
-                    <h5>{{ 'Page Size' | translate }}</h5>
-                    <div class="flex">
-                        <mat-form-field style="padding-right: 5px;">
-                            <input required matInput cdkFocusInitial [(ngModel)]="customOptions.PageWidth" type="number" placeholder="Width {{ units ? '(' + units + ')' : ''}}"
-                                onkeydown="return event.keyCode == 69 || event.keyCode == 189 ? false : true" min="0">
-                        </mat-form-field>
-                        <mat-form-field style="padding-left: 5px;">
-                            <input required matInput [(ngModel)]="customOptions.PageHeight" type="number" placeholder="Height {{ units ? '(' + units + ')' : ''}}"
-                                onkeydown="return event.keyCode == 69 || event.keyCode == 189 ? false : true" min="0">
-                        </mat-form-field>
-                    </div>
+            <div>
+                <h5>{{ 'Page Size' | translate }}</h5>
+                <div class="flex">
+                    <mat-form-field style="padding-right: 5px;">
+                        <input required matInput cdkFocusInitial [(ngModel)]="customOptions.PageWidth" type="number" placeholder="Width {{ units ? '(' + units + ')' : ''}}"
+                               onkeydown="return event.keyCode == 69 || event.keyCode == 189 ? false : true" min="0">
+                    </mat-form-field>
+                    <mat-form-field style="padding-left: 5px;">
+                        <input required matInput [(ngModel)]="customOptions.PageHeight" type="number" placeholder="Height {{ units ? '(' + units + ')' : ''}}"
+                               onkeydown="return event.keyCode == 69 || event.keyCode == 189 ? false : true" min="0">
+                    </mat-form-field>
+                </div>
 
+            </div>
+            <div>
+                <h5>{{ 'Label Size' | translate }}</h5>
+                <div class="flex">
+                    <mat-form-field style="padding-right: 5px;">
+                        <input required matInput [(ngModel)]="customOptions.LabelWidth" type="number" placeholder="Width {{ units ? '(' + units + ')' : ''}}"
+                               onkeydown="return event.keyCode == 69 || event.keyCode == 189 ? false : true" min="0">
+                    </mat-form-field>
+                    <mat-form-field style="padding-left: 5px;">
+                        <input required matInput [(ngModel)]="customOptions.LabelHeight" type="number" placeholder="Height {{ units ? '(' + units + ')' : ''}}"
+                               onkeydown="return event.keyCode == 69 || event.keyCode == 189 ? false : true" min="0">
+                    </mat-form-field>
                 </div>
-                <div>
-                    <h5>{{ 'Label Size' | translate }}</h5>
-                    <div class="flex">
-                        <mat-form-field style="padding-right: 5px;">
-                            <input required matInput [(ngModel)]="customOptions.LabelWidth" type="number" placeholder="Width {{ units ? '(' + units + ')' : ''}}"
-                                onkeydown="return event.keyCode == 69 || event.keyCode == 189 ? false : true" min="0">
-                        </mat-form-field>
-                        <mat-form-field style="padding-left: 5px;">
-                            <input required matInput [(ngModel)]="customOptions.LabelHeight" type="number" placeholder="Height {{ units ? '(' + units + ')' : ''}}"
-                                onkeydown="return event.keyCode == 69 || event.keyCode == 189 ? false : true" min="0">
-                        </mat-form-field>
-                    </div>
+            </div>
+            <div>
+                <h5>{{ 'Page Margin' | translate }}</h5>
+                <div class="flex">
+                    <mat-form-field style="padding-right: 5px;">
+                        <input required matInput [(ngModel)]="customOptions.PageLeftMargin" type="number" placeholder="Left Margin {{ units ? '(' + units + ')' : ''}}"
+                               onkeydown="return event.keyCode == 69 || event.keyCode == 189 ? false : true" min="0">
+                    </mat-form-field>
+                    <mat-form-field style="padding-left: 5px;">
+                        <input required matInput [(ngModel)]="customOptions.PageTopMargin" type="number" placeholder="Top Margin {{ units ? '(' + units + ')' : ''}}"
+                               onkeydown="return event.keyCode == 69 || event.keyCode == 189 ? false : true" min="0">
+                    </mat-form-field>
                 </div>
-                <div>
-                    <h5>{{ 'Page Margin' | translate }}</h5>
-                    <div class="flex">
-                        <mat-form-field style="padding-right: 5px;">
-                            <input required matInput [(ngModel)]="customOptions.PageLeftMargin" type="number" placeholder="Left Margin {{ units ? '(' + units + ')' : ''}}"
-                                onkeydown="return event.keyCode == 69 || event.keyCode == 189 ? false : true" min="0">
-                        </mat-form-field>
-                        <mat-form-field style="padding-left: 5px;">
-                            <input required matInput [(ngModel)]="customOptions.PageTopMargin" type="number" placeholder="Top Margin {{ units ? '(' + units + ')' : ''}}"
-                                onkeydown="return event.keyCode == 69 || event.keyCode == 189 ? false : true" min="0">
-                        </mat-form-field>
-                    </div>
-                </div>
-                <div>
-                    <h5>{{ 'Gap Distance' | translate }}</h5>
-                    <div class="flex">
-                        <mat-form-field style="padding-right: 5px;">
-                            <input required matInput [(ngModel)]="customOptions.GapDistanceX" type="number" placeholder="Gap Distance X {{ units ? '(' + units + ')' : ''}}"
-                                onkeydown="return event.keyCode == 69 || event.keyCode == 189 ? false : true" min="0">
-                        </mat-form-field>
+            </div>
+            <div>
+                <h5>{{ 'Gap Distance' | translate }}</h5>
+                <div class="flex">
+                    <mat-form-field style="padding-right: 5px;">
+                        <input required matInput [(ngModel)]="customOptions.GapDistanceX" type="number" placeholder="Gap Distance X {{ units ? '(' + units + ')' : ''}}"
+                               onkeydown="return event.keyCode == 69 || event.keyCode == 189 ? false : true" min="0">
+                    </mat-form-field>
 
-                        <mat-form-field style="padding-left: 5px;">
-                            <input required matInput [(ngModel)]="customOptions.GapDistanceY" type="number" placeholder="Gap Distance Y {{ units ? '(' + units + ')' : ''}}"
-                                onkeydown="return event.keyCode == 69 || event.keyCode == 189 ? false : true" min="0">
-                        </mat-form-field>
-                    </div>
+                    <mat-form-field style="padding-left: 5px;">
+                        <input required matInput [(ngModel)]="customOptions.GapDistanceY" type="number" placeholder="Gap Distance Y {{ units ? '(' + units + ')' : ''}}"
+                               onkeydown="return event.keyCode == 69 || event.keyCode == 189 ? false : true" min="0">
+                    </mat-form-field>
                 </div>
             </div>
         </div>
     </div>
+</div>
 <mat-dialog-actions>
     <div class="m-r-sm" matTooltip="Please enter required information" [matTooltipDisabled]="customOptions.Quantity && (isCustom ? isOptionsValid(customOptions) : true)">
         <button mat-button class="btn btn-success-sm" (click)="onCloseClick()" [disabled]="!customOptions.Quantity || (isCustom && !isOptionsValid(customOptions))">Print</button>
