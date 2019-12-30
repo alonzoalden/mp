@@ -22,7 +22,7 @@ export class ItemEditBundleShellComponent implements OnInit {
 
     ngOnInit(): void {
         this.item$ = this.store.pipe(select(fromItem.getItem));
-        this.itemList$ = this.store.pipe(select(fromItem.getItemList));
+        this.itemList$ = this.store.pipe(select(fromItem.getSimpleItemList));
         this.selectedBundleOption$ = this.store.pipe(select(fromItem.getSelectedBundleOption));
         this.itemBundleOptionsMatTable$ = this.store.pipe(select(fromItem.getItemBundleOptionsMatTable));
         this.itemBundleOptionSelectionsMatTable$ = this.store.pipe(select(fromItem.getItemBundleOptionSelectionsMatTable));

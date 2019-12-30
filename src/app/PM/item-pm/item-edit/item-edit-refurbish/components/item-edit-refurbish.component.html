@@ -1,0 +1,164 @@
+<ng-container *ngIf="isLoadingMultipleData;">
+    <div class="spinner-full-page">
+        <div>
+            <div>
+                <div class="spinner-container">
+                    <div class="sk-spinner sk-spinner-three-bounce big-spinner">
+                        <div class="sk-bounce1"></div>
+                        <div class="sk-bounce2"></div>
+                        <div class="sk-bounce3"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="gray-cover-bg"></div>
+</ng-container>
+<div class="tab-content animated fadeIn">
+    <div class="tab-pane active">
+        <div class="panel-body p-w-none">
+            <form class="form-horizontal" #itemForm="ngForm">
+                <fieldset>
+                    <div class="ibox-title"><h5>{{ 'Item Refurbishes' | translate }}</h5></div>
+                    <div class="ibox-content animated fadeIn" style="min-height: 300px;">
+                        <div class="form-group row">
+                            <div class="col-md-12">
+                                <div *ngIf="item.InventoryDetailsSerialized && item.InventoryDetailsSerialized.length && item.InventoryDetailsSerialized.length > 0">
+                                    <table class="animated fadeIn" mat-table #table [dataSource]="itemRefurbishesMatTable">
+                                        <!-- Add Button -->
+                                        <ng-container matColumnDef="Add">
+                                            <th mat-header-cell *matHeaderCellDef width="45px"></th>
+                                            <td mat-cell *matCellDef="let itemRefurbish; let i = index">
+                                                <div *ngIf="i === item.InventoryDetailsSerialized.length-1 && i < 8">
+                                                    <a (click)='onAddItemImage(itemRefurbish); formDirty = false;'><span [matTooltip]="isRequirementValid(itemRefurbish) ? ('Add' | translate) : ('Required fields must be complete' | translate)" class="glyphicon glyphicon-plus fs-20" [ngClass]="isRequirementValid(itemRefurbish) ? 'green' : 'gray'"></span></a>
+                                                </div>
+                                                <div *ngIf="i === item.InventoryDetailsSerialized.length-1 && i >= 8">
+                                                    <span matTooltip="Maximum of 8 images" class="glyphicon glyphicon-exclamation-sign fs-20"></span>
+                                                </div>
+                                            </td>
+                                        </ng-container>
+                                        <!-- Down Column -->
+                                        <ng-container matColumnDef="Down">
+                                            <th mat-header-cell *matHeaderCellDef width="40px">{{ 'Position' | translate }}</th>
+                                            <td mat-cell *matCellDef="let itemRefurbish; let i = index">
+                                                <div *ngIf="i < item.InventoryDetailsSerialized.length-1">
+                                                    <a (click)='moveDownPosition(itemRefurbish)' *ngIf='i !== item.InventoryDetailsSerialized.length - 1'><span class="glyphicon glyphicon-arrow-down"></span></a>
+                                                </div>
+                                            </td>
+                                        </ng-container>
+                                        <!-- Position Column -->
+                                        <ng-container matColumnDef="Position">
+                                            <th mat-header-cell *matHeaderCellDef width="20px"></th>
+                                            <td mat-cell *matCellDef="let itemRefurbish; let i = index">
+                                                <div>{{i + 1}}</div>
+                                            </td>
+                                        </ng-container>
+                                        <!-- Up Column -->
+                                        <ng-container matColumnDef="Up">
+                                            <th mat-header-cell *matHeaderCellDef width="40px"></th>
+                                            <td mat-cell *matCellDef="let itemRefurbish; let i = index">
+                                                <div>
+                                                    <a (click)='moveUpPosition(itemRefurbish)' *ngIf='i !== 0'><span class="glyphicon glyphicon-arrow-up"></span></a>
+                                                </div>
+                                            </td>
+                                        </ng-container>
+                                        <!-- Thumbnail Column -->
+                                        <ng-container matColumnDef="Images">
+                                            <th mat-header-cell *matHeaderCellDef width="100px">{{ 'View Images' | translate }}</th>
+                                            <td mat-cell *matCellDef="let itemRefurbish; let i = index" height="80px" class="thumbnail-col">
+                                                <input type="file" id="fileUpload" style="display: none;"
+                                                    (change)="fileChangeEvent($event, itemRefurbish); formDirty = true;"
+                                                    accept="image/gif,image/jpeg,image/png,.jpeg,.jpg,.png"
+                                                    #fileUpload>
+
+                                                <div class="p-xs" style="height: 100%; display: flex; flex-direction: column; justify-content: flex-end;">
+                                                    <a *ngIf="itemRefurbish.ItemImagesSerialized[0]?.Raw" (click)="viewImages(i);" style="height: inherit; display: flex; align-items: center;">
+                                                        <img [src]="refurbishURL + itemRefurbish.ItemImagesSerialized[0]?.FilePath" style="max-width: 70px; max-height: 70px;">
+                                                    </a>
+                                                    <div class="sm-strong"><a (click)="viewImages(i);">View All ({{ itemRefurbish.ItemImagesSerialized.length }})</a></div>
+                                                </div>
+                                            </td>
+                                        </ng-container>
+                                        <!-- Print Label Column -->
+                                        <ng-container matColumnDef="PrintLabel">
+                                            <th mat-header-cell *matHeaderCellDef  width="80px"><span *ngIf="item.InventoryDetailsSerialized.length > 1">{{ 'Label' | translate }}</span></th>
+                                            <td mat-cell *matCellDef="let itemRefurbish; let i = index">
+                                                <div *ngIf="i !== item.InventoryDetailsSerialized.length-1">
+                                                    <button mat-icon-button color="info"><i class="fa fa-print fs-16"></i> </button>
+                                                </div>
+                                            </td>
+                                        </ng-container>
+                                        <!-- Serial Number Column -->
+                                        <ng-container matColumnDef="SerialNumber">
+                                            <th mat-header-cell *matHeaderCellDef  width="120px">{{ 'Serial Number' | translate }}</th>
+                                            <td mat-cell *matCellDef="let itemRefurbish; let i = index">
+                                                <span class="sm-strong">{{ itemRefurbish.SerialNumber }}</span>
+                                                
+                                            </td>
+                                        </ng-container>
+                                        <!-- Condition Column -->
+                                        <ng-container matColumnDef="Condition">
+                                            <th mat-header-cell *matHeaderCellDef  width="120px">{{ 'Condition' | translate }}</th>
+                                            <td mat-cell *matCellDef="let itemRefurbish; let i = index">
+                                                <ng-container *ngIf="userInfo">
+                                                    <span class="sm-strong">{{ itemRefurbish.Condition }}</span>
+                                                </ng-container>
+                                            </td>
+                                        </ng-container>
+
+                                        <!-- Comment Column -->
+                                        <ng-container matColumnDef="Comment">
+                                            <th mat-header-cell *matHeaderCellDef  width="180px">{{ 'Comment' | translate }}</th>
+                                            <td mat-cell *matCellDef="let itemRefurbish; let i = index">
+                                                <ng-container *ngIf="userInfo">
+                                                    <div class="p-sm p-l-none" style="white-space: pre-wrap">
+                                                        {{ itemRefurbish.Comment }}
+                                                    </div>
+                                                </ng-container>
+                                            </td>
+                                        </ng-container>
+
+                                       <!-- Unit Price Column -->
+                                        <ng-container matColumnDef="SellingPrice">
+                                            <th mat-header-cell *matHeaderCellDef  width="180px">{{ 'Unit Price' | translate }}</th>
+                                            <td mat-cell *matCellDef="let itemRefurbish; let i = index">
+                                                <div *ngIf="currentIndex !== i">
+                                                    {{ itemRefurbish.UnitPrice | currency }}
+                                                </div>
+                                                <div *ngIf="currentIndex === i">
+                                                    <input (click)="formDirty = true" class="form-control" id="itemvID" type="number" placeholder="{{ 'Unit Price' | translate }} ({{ 'Required' | translate }})"
+                                                        step="0.01" onchange="this.value = parseFloat(this.value).toFixed(2);" onkeydown="return event.keyCode == 69 || event.keyCode == 189 ? false : true" min="0"
+                                                        required [(ngModel)]=itemRefurbish.UnitPrice name="itemUnitPrice" #itemUnitPriceVar="ngModel" />
+                                                </div>
+                                            </td>
+                                        </ng-container>
+
+                                        <!-- Remove Column -->
+                                        <ng-container matColumnDef="Remove">
+                                            <th mat-header-cell *matHeaderCellDef width="85px">{{ 'Remove' | translate }}</th>
+                                            <td mat-cell *matCellDef="let itemRefurbish; let i = index;">
+                                                <div *ngIf="i !== item.InventoryDetailsSerialized.length-1">
+                                                    <a (click)="onRemoveRefurbish(itemRefurbish); currentIndex = item.InventoryDetailsSerialized.length-1;">
+                                                        <span matTooltip="{{ 'Remove' | translate }}" attr.aria-label="{{ 'Remove' | translate}}" class="glyphicon glyphicon-trash"></span>
+                                                    </a>
+                                                </div>
+                                                <div *ngIf="i === item.InventoryDetailsSerialized.length-1 && containsAnyValues(itemRefurbish) && formDirty">
+                                                    <a matTooltip="{{ 'Clear' | translate }}" attr.aria-label="{{ 'Clear' | translate}}" (click)="clearFields(itemRefurbish);"><i *ngIf="i === item.InventoryDetailsSerialized.length-1" class="fa fa-eraser"></i></a>
+                                                </div>
+                                            </td>
+                                        </ng-container>
+
+                                        <tr mat-header-row *matHeaderRowDef="displayedColumns;"></tr>
+                                        <tr style="height: 109px; max-height: 109px;" class="selected-row" mat-row *matRowDef="let itemRefurbish; let i = index; columns: displayedColumns;"
+                                            [ngStyle]="{'background-color': i === currentIndex ? '#F5F5F5' : '#FFFFFF'}"
+                                            (click)="onEditItemImage(i);"></tr>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </fieldset>
+            </form>
+        </div>
+    </div>
+</div>

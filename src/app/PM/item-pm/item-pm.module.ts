@@ -118,6 +118,9 @@ import { EffectsModule } from '@ngrx/effects';
 import { itemReducer } from './state/item.reducer';
 import { ItemEffects } from './state/item.effects';
 import {SharePipeModule} from '../../shared/pipe/share.pipe';
+import {ItemEditRefurbishComponent} from './item-edit/item-edit-refurbish/components/item-edit-refurbish.component';
+import {ItemEditRefurbishShellComponent} from './item-edit/item-edit-refurbish/containers/item-edit-refurbish-shell.component';
+import {ItemEditRefurbishImageComponentUploadDialog} from './item-edit/item-edit-refurbish/components/item-edit-refurbish.component-upload-dialog';
 
 @NgModule({
     declarations: [
@@ -226,8 +229,10 @@ import {SharePipeModule} from '../../shared/pipe/share.pipe';
         ItemVariationDetailComponent,
         ItemEditVariationComponent,
         ItemVariationComponentDialog,
-        ItemVariationSelectItemComponentDialog
-
+        ItemVariationSelectItemComponentDialog,
+        ItemEditRefurbishComponent,
+        ItemEditRefurbishImageComponentUploadDialog,
+        ItemEditRefurbishShellComponent
     ],
     entryComponents: [ItemListComponent, ItemListComponentItemPrintDialog, ItemPrintLabelComponentPrintDialog, ItemAddImageComponentUploadDialog, ItemEditImageComponentUploadDialog, ItemListComponentImportDialog, ItemVariationComponentDialog, ItemVariationSelectItemComponentDialog, ItemPartListComponentItemPrintDialog],
     imports: [

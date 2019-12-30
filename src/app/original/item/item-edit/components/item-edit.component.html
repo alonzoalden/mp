@@ -58,41 +58,41 @@
                     <ul class="nav nav-tabs">
                         <li routerLinkActive="active">
                             <a [routerLink]="['description']">
-                                {{ 'Product Description' | translate }}  
+                                {{ 'Product Description' | translate }}
                                 <span matTooltip="{{'Required fields must be complete' | translate}}" attr.aria-label="{{ 'Required fields must be complete' | translate}}" [ngClass]="{'glyphicon glyphicon-exclamation-sign': !isValid('description') }"></span>
                             </a>
-                        </li>                        
+                        </li>
                         <li routerLinkActive="active">
                             <a [routerLink]="['bundle']" routerLinkActive="active" *ngIf="item.ItemType === 'bundle'">
-                                {{ 'Bundle' | translate }} 
+                                {{ 'Bundle' | translate }}
                                 <span matTooltip="{{'Required fields must be complete' | translate}}" attr.aria-label="{{ 'Required fields must be complete' | translate}}" [ngClass]="{'glyphicon glyphicon-exclamation-sign': !isValid('bundle')}"></span>
                             </a>
                         </li>
                         <li routerLinkActive="active">
                             <a [routerLink]="['inventory']" routerLinkActive="active">
-                                {{ 'Inventory' | translate }} 
+                                {{ 'Inventory' | translate }}
                             </a>
                         </li>
                         <li routerLinkActive="active">
                             <a [routerLink]="['dimension']" routerLinkActive="active" *ngIf="item.ItemType === 'simple'">
-                                {{ 'Dimension' | translate }} 
+                                {{ 'Dimension' | translate }}
                                 <span matTooltip="{{'Required fields must be complete' | translate}}" attr.aria-label="{{ 'Required fields must be complete' | translate}}" [ngClass]="{'glyphicon glyphicon-exclamation-sign': !isValid('dimension')}"></span>
                             </a>
                         </li>
                         <li routerLinkActive="active">
                             <a [routerLink]="['price']" routerLinkActive="active">
-                                {{ 'Price' | translate }}  
+                                {{ 'Price' | translate }}
                                 <span matTooltip="{{'Required fields must be complete' | translate}}" attr.aria-label="{{ 'Required fields must be complete' | translate}}" [ngClass]="{'glyphicon glyphicon-exclamation-sign': !isValid('price')}"></span>
                             </a>
                         </li>
                         <li routerLinkActive="active">
                             <a [routerLink]="['productrelation']" routerLinkActive="active">
-                                {{ 'Product Relation' | translate }} 
+                                {{ 'Product Relation' | translate }}
                             </a>
                         </li>
                         <li routerLinkActive="active">
                             <a [routerLink]="['category']" routerLinkActive="active">
-                                {{ 'Category' | translate }} 
+                                {{ 'Category' | translate }}
                                 <span matTooltip="{{'Required fields must be complete' | translate}}" attr.aria-label="{{ 'Required fields must be complete' | translate}}" [ngClass]="{'glyphicon glyphicon-exclamation-sign': !isValid('category')}"></span>
                             </a>
                         </li>
@@ -103,20 +103,25 @@
                         </li>
                         <li routerLinkActive="active">
                             <a [routerLink]="['video']" routerLinkActive="active">
-                                {{ 'Video' | translate }} 
+                                {{ 'Video' | translate }}
                             </a>
                         </li>
                         <li routerLinkActive="active">
                             <a [routerLink]="['image']" routerLinkActive="active">
-                                {{ 'Image' | translate }} 
+                                {{ 'Image' | translate }}
                             </a>
-                        </li>    
+                        </li>
                         <li routerLinkActive="active">
                             <a [routerLink]="['part']" routerLinkActive="active">
-                                {{ 'Part' | translate }} 
+                                {{ 'Part' | translate }}
                             </a>
-                        </li>                       
-                    </ul>                
+                        </li>
+                        <li routerLinkActive="active" *ngIf="item?.InventoryDetailsSerialized?.length > 0">
+                            <a [routerLink]="['refurbish']" routerLinkActive="active">
+                                {{ 'Refurbish' | translate }}
+                            </a>
+                        </li>
+                    </ul>
                     <router-outlet></router-outlet>
                 </div>
             </div>
@@ -139,7 +144,7 @@
                         type="button"
                         class="btn button-add button-add-display"
                         [disabled]="pendingSave"
-                        (click)="saveItem()"> 
+                        (click)="saveItem()">
                         <span *ngIf="!pendingSave"><i class="fa fa-plus-circle"></i> {{ 'Save' | translate }}</span>
                         <div *ngIf="pendingSave">
                             <i class="fa fa-spinner fa-spin"></i>
@@ -150,7 +155,7 @@
                         class="btn button-add button-add-options"
                         [disabled]="pendingSave"
                         [matMenuTriggerFor]="saveMenu"> <span class="fs-16 caret"></span>
-                </button> 
+                </button>
             </div>
         </div>
     </div>

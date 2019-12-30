@@ -3,6 +3,7 @@ import { Router } from '@angular/router';
 import { ItemInsert } from '../../../../shared/class/item';
 import { VendorBrand } from '../../../../shared/class/vendor-brand';
 import { ItemService } from '../../item.service';
+import {Member} from '../../../../shared/class/member';
 
 @Component({
   selector: 'o-item-add',
@@ -15,6 +16,7 @@ export class ItemAddComponent implements OnInit {
     @Input() isLoading: boolean;
     @Input() item: ItemInsert;
     @Input() errorMessage: string;
+    @Input() userInfo: Member;
     @Input() pendingAdd: boolean;
     @Output() addItem = new EventEmitter<ItemInsert>();
     @Output() setItem = new EventEmitter<ItemInsert>();

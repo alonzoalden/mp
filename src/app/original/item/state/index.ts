@@ -2,7 +2,21 @@ import { createSelector, createFeatureSelector } from '@ngrx/store';
 import * as fromRoot from '../../../state/app.state';
 import * as fromItem from './item.reducer';
 import { MatTableDataSource } from '@angular/material';
-import { ItemOptionInsert, ItemSelectionInsert, ItemTierPriceInsert, ItemCrossSellInsert, ItemRelatedProductInsert, ItemUpSellInsert, ItemAttachmentInsert, ItemImageInsert, ItemVideoInsert, ItemBatch, Item, ItemPrintLabel } from '../../../shared/class/item';
+import {
+    ItemOptionInsert,
+    ItemSelectionInsert,
+    ItemTierPriceInsert,
+    ItemCrossSellInsert,
+    ItemRelatedProductInsert,
+    ItemUpSellInsert,
+    ItemAttachmentInsert,
+    ItemImageInsert,
+    ItemVideoInsert,
+    ItemBatch,
+    Item,
+    ItemPrintLabel,
+    InventoryDetailSerialized
+} from '../../../shared/class/item';
 
 // Extends the app state to include the product feature.
 // This is required because products are lazy loaded.
@@ -153,6 +167,10 @@ export const getIsLoading = createSelector(
 export const getIsMainItemsListLoading = createSelector(
     getItemFeatureState,
     state => state.isMainItemsListLoading
+);
+export const getItemRefurbishesMatTable = createSelector(
+    getItemFeatureState,
+    state => new MatTableDataSource<InventoryDetailSerialized>(state.item.InventoryDetailsSerialized)
 );
 export const getPendingDelete = createSelector(
     getItemFeatureState,

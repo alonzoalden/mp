@@ -1,0 +1,22 @@
+<h3 class="ibox-title dialog-title">{{ 'View Refurbish Images' | translate }}
+    <span class="pull-right"><i (click)="onCancelClick()" class="fa fa-close" matTooltip="{{ 'Close' | translate }}" aria-label="Close Icon for Cancel Order"></i></span>
+</h3>
+<div mat-dialog-content class="dialog-content" style="min-height: auto;">
+    <div class="ibox-title">
+        <h4>{{ 'Images' | translate }} ({{ 'Total' | translate }}: {{itemRefurbishImages?.length}})</h4>
+    </div>
+    <div class="ibox-content">
+        <div [ngStyle]="{ 'opacity': itemRefurbishImages?.length ? '1' : '0.11' }" style="max-width: 360px;">
+            <div class="flex-va-center flex-center inline" *ngFor="let image of itemRefurbishImages; let i = index;" style="width: 120px; height: 100px;">
+                <div class="flex-center p-xs" matTooltipPosition="left" matTooltip="{{image.Label}}">
+                    <a href="{{refurbishURL + image.FilePath}}" target="_blank">
+                        <img style="max-width: 100px; max-height: 80px;" src="{{refurbishURL + image.FilePath}}" [title]="image.Label">
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<mat-dialog-actions>
+    <button mat-button class="btn btn-remove-sm" (click)="onCancelClick()"><i class="fa fa-remove"></i>  {{ 'Close' | translate }}</button>
+</mat-dialog-actions>

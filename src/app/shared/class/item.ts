@@ -84,7 +84,7 @@ export class Item {
         public ItemImages: Array<ItemImage>,
         public ItemSections: Array<ItemSection>,
         public ItemVariations: Array<ItemVariation>,
-
+        public InventoryDetailsSerialized: Array<InventoryDetailSerialized>,
         public QtyOnHand: number,
         public QtyAvailable: number,
         public QtyOnOrder: number,
@@ -166,7 +166,8 @@ export class ItemInsert {
         public ItemAttachments: Array<ItemAttachmentInsert>,
         public ItemVideos: Array<ItemVideoInsert>,
         public ItemImages: Array<ItemImageInsert>,
-        public ItemSections: Array<ItemSectionInsert>
+        public ItemSections: Array<ItemSectionInsert>,
+        public InventoryDetailsSerialized: Array<InventoryDetailSerialized>,
     ) {}
 }
 
@@ -771,5 +772,39 @@ export class ItemVariationLine {
         public ItemAttributeVariationName: string,
         public UpdatedOn: string,
         public CreatedOn: string,
+    ) {}
+}
+
+export class InventoryDetailSerialized {
+    constructor(
+        public InventoryDetailSerializedID: number,
+        public ItemID: number,
+        public UnitPrice: number,
+        public Condition: number,
+        public SerialNumber: number,
+        public Comment: string,
+        public UpdatedOn: string,
+        public CreatedOn: string,
+        public ItemImagesSerialized: Array<ItemImageSerialized>,
+    ) {}
+}
+
+export class ItemImageSerialized {
+    constructor(
+        public ItemImageSerializedID: number,
+        public InventoryDetailSerializedID: number,
+        public Raw: string,
+        public FilePath: string,
+        public Label: string,
+        public Position: number,
+        public IsBaseImage: boolean,
+        public IsSmallImage: boolean,
+        public IsThumbnail: boolean,
+        public IsRotatorImage: boolean,
+        public Exclude: boolean,
+        public Remove: boolean,
+        public UpdatedOn: boolean,
+        public CreatedOn: boolean,
+        public IsNewImage: boolean,
     ) {}
 }

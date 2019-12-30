@@ -5,6 +5,8 @@ import { Observable } from 'rxjs';
 import { Store, select } from '@ngrx/store';
 import * as itemActions from '../../state/item.actions';
 import * as fromItem from '../../state';
+import * as fromUser from '../../../../shared/state/user-state.reducer';
+import { Member } from 'app/shared/class/member';
 
 @Component({
   templateUrl: './item-add-shell.component.html',
@@ -14,6 +16,7 @@ export class ItemAddShellComponent implements OnInit {
     vendorBrandList$: Observable<VendorBrand[]>;
     item$: Observable<ItemInsert>;
     pendingAdd$: Observable<boolean>;
+    userInfo$: Observable<Member>;
     isLoading$: Observable<boolean>;
     errorMessage$: Observable<string>;
 
@@ -23,6 +26,8 @@ export class ItemAddShellComponent implements OnInit {
         this.store.dispatch(new itemActions.LoadItemList());
         this.store.dispatch(new itemActions.LoadAllItemList());
         this.store.dispatch(new itemActions.LoadVendorBrands());
+
+        this.userInfo$ = this.store.pipe(select(fromUser.getCurrentUser));
         this.vendorBrandList$ = this.store.pipe(select(fromItem.getVendorBrandList));
         this.item$ = this.store.pipe(select(fromItem.getItem));
         this.pendingAdd$ = this.store.pipe(select(fromItem.getPendingAdd));

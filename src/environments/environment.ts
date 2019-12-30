@@ -6,6 +6,7 @@
 export const environment = {
   production: false,
   imageURL: 'https://s3-us-west-2.amazonaws.com/img.staging.toolots.com/catalog/product',
+  refurbishURL: 'https://s3-us-west-2.amazonaws.com/img.staging.toolots.com',
   bolURL: 'https://s3-us-west-2.amazonaws.com/img.staging.toolots.com/bol',
   fileURL: 'https://s3-us-west-2.amazonaws.com/img.staging.toolots.com/attachment/file',
   invoiceURL: 'https://s3-us-west-2.amazonaws.com/img.staging.toolots.com/merchantinvoice',

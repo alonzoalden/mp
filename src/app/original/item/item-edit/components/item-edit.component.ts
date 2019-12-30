@@ -3,7 +3,6 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { Item, ItemSelection } from '../../../../shared/class/item';
 import { VendorBrand } from '../../../../shared/class/vendor-brand';
 import { ItemService } from '../../item.service';
-import { AppService } from '../../../../app.service';
 import { Member } from '../../../../shared/class/member';
 
 @Component({
@@ -17,8 +16,6 @@ export class ItemEditComponent implements OnInit, OnChanges {
     private currentItem: Item;
     itemName: string;
     isPM: boolean;
-
-
     @Input() vendorBrandList: VendorBrand[];
     @Input() isLoading: boolean;
     @Input() item: Item;
@@ -29,7 +26,6 @@ export class ItemEditComponent implements OnInit, OnChanges {
     @Output() editItem = new EventEmitter<{item: Item, displayPreview: boolean, printLabel: boolean}>();
     @Output() downloadItemLabel = new EventEmitter<Item>();
     @Output() getVendorBrands = new EventEmitter<void>();
-
     loading: boolean;
 
     private dataIsValid: { [key: string]: boolean } = {};
@@ -181,6 +177,26 @@ export class ItemEditComponent implements OnInit, OnChanges {
                         }
                     });
                 }
+
+                // if (newItem.InventoryDetailsSerialized) {
+                //     const pendingItemPartIndex = newItem.InventoryDetailsSerialized.findIndex(i => i.pendingAdd === true);
+                //     if (pendingItemPartIndex > -1) {
+                //         newItem.InventoryDetailsSerialized.splice(pendingItemPartIndex, 1);
+                //     }
+                //     newItem.InventoryDetailsSerialized.forEach((value, i) => {
+                //         value.Position = i + 1;
+
+                //         if (value.ItemImageSerialized) {
+                //             const pendingItemSelectionIndex = value.ItemImageSerialized.findIndex(i => i.pendingAdd === true);
+                //             if (pendingItemSelectionIndex > -1) {
+                //                 value.ItemImageSerialized.splice(pendingItemSelectionIndex, 1);
+                //             }
+                //             value.ItemImageSerialized.forEach((value2, i) => {
+                //                 value2.Position = i + 1;
+                //             });
+                //         }
+                //     });
+                // }
 
                 if (newItem.FulfilledBy === 'Toolots') {
                     newItem.MerchantQuantity = 0;

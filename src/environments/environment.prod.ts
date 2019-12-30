@@ -4,6 +4,7 @@ export const environment = {
     // imageURL: keys.imageURL,
     // fileURL: keys.imageURL,
     imageURL: keys.imageURL,
+    refurbishURL: keys.refurbishURL,
     fileURL: keys.fileURL,
     bolURL: keys.bolURL,
     invoiceURL: keys.invoiceURL,
