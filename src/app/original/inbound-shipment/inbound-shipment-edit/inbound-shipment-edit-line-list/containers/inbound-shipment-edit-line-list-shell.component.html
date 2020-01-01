@@ -1,20 +1,20 @@
-
-
 <div class="tab-content border">
     <div class="tab-pane active">
         <div class="panel-body p-w-none">
-                <o-inbound-shipment-edit-line-list
-                    [purchaseOrder]="purchaseOrder$ | async"
-                    [errorMessage]="errorMessage$ | async"
-                    [itemList]="itemList$ | async"
-                    [isLoading]="isLoading$ | async"
-                    [isSimpleItemListLoading]="isSimpleItemListLoading$ | async"
-                    (getSimpleItemList)="getSimpleItemList()"
-                    (getPurchaseOrderLines)="getPurchaseOrderLines($event)"
-                    (downloadItemLabelCount)="downloadItemLabelCount($event)"
-                    (downloadItemLargeLabelCount)="downloadItemLargeLabelCount($event)"
-                    (setSelectedPurchaseOrder)="setSelectedPurchaseOrder($event)"
-                ></o-inbound-shipment-edit-line-list>
+            <o-inbound-shipment-edit-line-list
+                [purchaseOrder]="purchaseOrder$ | async"
+                [errorMessage]="errorMessage$ | async"
+                [itemList]="itemList$ | async"
+                [isLoading]="isLoading$ | async"
+                [isSimpleItemListLoading]="isSimpleItemListLoading$ | async"
+                (getSimpleItemList)="getSimpleItemList()"
+                (getPurchaseOrderLines)="getPurchaseOrderLines($event)"
+                (downloadItemLabelCount)="downloadItemLabelCount($event)"
+                (downloadItemLargeLabelCount)="downloadItemLargeLabelCount($event)"
+                (downloadItemLabelCountCustom)="downloadItemLabelCountCustom($event)"
+                (downloadItemLargeLabelCountCustom)="downloadItemLargeLabelCountCustom($event)"
+                (setSelectedPurchaseOrder)="setSelectedPurchaseOrder($event)"
+            ></o-inbound-shipment-edit-line-list>
         </div>
     </div>
 </div>

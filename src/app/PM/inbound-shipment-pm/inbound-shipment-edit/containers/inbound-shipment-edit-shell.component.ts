@@ -2,8 +2,9 @@ import { Component, OnInit } from '@angular/core';
 import { Observable } from 'rxjs';
 import { PurchaseOrder,  Carton } from '../../../../shared/class/purchase-order';
 import { Store, select } from '@ngrx/store';
-import * as inboundShipmentActions from '../../state/inbound-shipment.actions';
+import * as inboundShipmentActions from '../../../../original/inbound-shipment/state/inbound-shipment.actions';
 import * as fromInboundShipment from '../../state';
+import { CustomPrintLabel } from 'app/shared/class/label';
 
 @Component({
   templateUrl: './inbound-shipment-edit-shell.component.html',
@@ -30,13 +31,16 @@ export class InboundShipmentEditShellComponent implements OnInit {
         this.store.dispatch(new inboundShipmentActions.AddNewPurchaseOrder());
     }
     getPurchaseOrder(id: number) {
-        this.store.dispatch(new inboundShipmentActions.LoadPurchaseOrderAll(id));
+        this.store.dispatch(new inboundShipmentActions.LoadPurchaseOrder(id));
     }
     editPurchaseOrder(payload: { purchaseOrder: PurchaseOrder, printLabel: boolean }) {
         this.store.dispatch(new inboundShipmentActions.EditPurchaseOrder(payload));
     }
     editPurchaseOrderThenPrintItemLabels(payload: { purchaseOrder: PurchaseOrder, size: string, border: string }) {
         this.store.dispatch(new inboundShipmentActions.EditPurchaseOrderThenPrintItemLabels(payload));
+    }
+    editPurchaseOrderThenPrintItemLabelsCustom(payload: { purchaseOrder: PurchaseOrder, options: CustomPrintLabel, size: string }) {
+        this.store.dispatch(new inboundShipmentActions.EditPurchaseOrderThenPrintItemLabelsCustom(payload));
     }
     downloadPurchaseOrderLabel(purchaseorder: PurchaseOrder) {
         this.store.dispatch(new inboundShipmentActions.DownloadPurchaseOrderLabel(purchaseorder));
@@ -46,6 +50,12 @@ export class InboundShipmentEditShellComponent implements OnInit {
     }
     downloadAllItemLargeLabel(payload: { purchaseOrder: PurchaseOrder, border: string }) {
         this.store.dispatch(new inboundShipmentActions.DownloadAllItemLargeLabel(payload));
+    }
+    downloadAllItemLabelCustom(payload: { purchaseOrder: PurchaseOrder, options: CustomPrintLabel }) {
+        this.store.dispatch(new inboundShipmentActions.DownloadAllItemLabelCustom(payload));
+    }
+    downloadAllItemLargeLabelCustom(payload: { purchaseOrder: PurchaseOrder, options: CustomPrintLabel }) {
+        this.store.dispatch(new inboundShipmentActions.DownloadAllItemLargeLabelCustom(payload));
     }
     setSelectedPurchaseOrder(purchaseorder: PurchaseOrder) {
         this.store.dispatch(new inboundShipmentActions.SetSelectedPurchaseOrder(purchaseorder));

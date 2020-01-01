@@ -1,20 +1,95 @@
-<h1 mat-dialog-title>{{ 'Print Label' | translate }}</h1>
+<h1 mat-dialog-title>Print Label</h1>
 <div mat-dialog-content>
     <h3>{{ 'Inbound Shipment' | translate }}: {{data.PackingSlipNumber}}</h3>
-    <mat-form-field fxFlex>
-        <mat-select [(ngModel)]="lineItemLabelPrintDialog.Size" placeholder="{{ 'Size' | translate }}">
-            <mat-option value="small">{{ 'Small' | translate }}</mat-option>
-            <mat-option value="large">{{ 'Large' | translate }}</mat-option>
-        </mat-select>        
-    </mat-form-field>
-    <mat-form-field fxFlex>
-        <mat-select [(ngModel)]="lineItemLabelPrintDialog.Border" placeholder="{{ 'Border' | translate }}">
-            <mat-option value="yes">{{ 'Yes' | translate }}</mat-option>
-            <mat-option value="no">{{ 'No' | translate }}</mat-option>
-        </mat-select>        
-    </mat-form-field> 
-</div>
+    <div class="m-t-md">
+        <div class="flex-column">
+            <mat-form-field class="block">
+                <mat-select [(ngModel)]="size" placeholder="Label Size">
+                    <mat-option value="small">Small</mat-option>
+                    <mat-option value="large">Large</mat-option>
+                </mat-select>
+            </mat-form-field>
+            <mat-form-field class="block">
+                <mat-select [(ngModel)]="customOptions.Border" placeholder="Border">
+                    <mat-option value="yes">Yes</mat-option>
+                    <mat-option value="no">No</mat-option>
+                </mat-select>
+            </mat-form-field>
+        </div>
+        <div>
+            <mat-checkbox [(ngModel)]="isCustom" placeholder="Custom Options" name="vendorAttachmentExclude" [ngModelOptions]="{standalone: true}" (change)="dialogRef.updateSize()"></mat-checkbox>
+            <label class="m-l-sm font-normal" for="vendorAttachmentExclude">{{ 'Custom Options' | translate }}</label>
+        </div>
+        <div *ngIf="isCustom" class="animated fadeInUp" >
+            <div class="m-t-md">
+                <h5>Metric</h5>
+                <mat-form-field class="block">
+                    <mat-select required [(ngModel)]="units" placeholder="Unit">
+                        <mat-option value="in">Inches (in)</mat-option>
+                        <mat-option value="mm">Millimeters (mm)</mat-option>
+                    </mat-select>
+                </mat-form-field>
+            </div>
+                <div>
+                    <h5>{{ 'Page Size' | translate }}</h5>
+                    <div class="flex">
+                        <mat-form-field style="padding-right: 5px;">
+                            <input required matInput cdkFocusInitial [(ngModel)]="customOptions.PageWidth" type="number" placeholder="Width {{ units ? '(' + units + ')' : ''}}"
+                                onkeydown="return event.keyCode == 69 || event.keyCode == 189 ? false : true" min="0">
+                        </mat-form-field>
+                        <mat-form-field style="padding-left: 5px;">
+                            <input required matInput [(ngModel)]="customOptions.PageHeight" type="number" placeholder="Height {{ units ? '(' + units + ')' : ''}}"
+                                onkeydown="return event.keyCode == 69 || event.keyCode == 189 ? false : true" min="0">
+                        </mat-form-field>
+                    </div>
+
+                </div>
+                <div>
+                    <h5>{{ 'Label Size' | translate }}</h5>
+                    <div class="flex">
+                        <mat-form-field style="padding-right: 5px;">
+                            <input required matInput [(ngModel)]="customOptions.LabelWidth" type="number" placeholder="Width {{ units ? '(' + units + ')' : ''}}"
+                                onkeydown="return event.keyCode == 69 || event.keyCode == 189 ? false : true" min="0">
+                        </mat-form-field>
+                        <mat-form-field style="padding-left: 5px;">
+                            <input required matInput [(ngModel)]="customOptions.LabelHeight" type="number" placeholder="Height {{ units ? '(' + units + ')' : ''}}"
+                                onkeydown="return event.keyCode == 69 || event.keyCode == 189 ? false : true" min="0">
+                        </mat-form-field>
+                    </div>
+                </div>
+                <div>
+                    <h5>{{ 'Page Margin' | translate }}</h5>
+                    <div class="flex">
+                        <mat-form-field style="padding-right: 5px;">
+                            <input required matInput [(ngModel)]="customOptions.PageLeftMargin" type="number" placeholder="Left Margin {{ units ? '(' + units + ')' : ''}}"
+                                onkeydown="return event.keyCode == 69 || event.keyCode == 189 ? false : true" min="0">
+                        </mat-form-field>
+                        <mat-form-field style="padding-left: 5px;">
+                            <input required matInput [(ngModel)]="customOptions.PageTopMargin" type="number" placeholder="Top Margin {{ units ? '(' + units + ')' : ''}}"
+                                onkeydown="return event.keyCode == 69 || event.keyCode == 189 ? false : true" min="0">
+                        </mat-form-field>
+                    </div>
+                </div>
+                <div>
+                    <h5>{{ 'Gap Distance' | translate }}</h5>
+                    <div class="flex">
+                        <mat-form-field style="padding-right: 5px;">
+                            <input required matInput [(ngModel)]="customOptions.GapDistanceX" type="number" placeholder="Gap Distance X {{ units ? '(' + units + ')' : ''}}"
+                                onkeydown="return event.keyCode == 69 || event.keyCode == 189 ? false : true" min="0">
+                        </mat-form-field>
+
+                        <mat-form-field style="padding-left: 5px;">
+                            <input required matInput [(ngModel)]="customOptions.GapDistanceY" type="number" placeholder="Gap Distance Y {{ units ? '(' + units + ')' : ''}}"
+                                onkeydown="return event.keyCode == 69 || event.keyCode == 189 ? false : true" min="0">
+                        </mat-form-field>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 <mat-dialog-actions>
-    <button mat-button [mat-dialog-close]="lineItemLabelPrintDialog" cdkFocusInitial>{{ 'Print' | translate }}</button>
-    <button mat-button (click)="onCancelClick()">{{ 'Cancel' | translate }}</button>
+    <div class="m-r-sm" matTooltip="Please enter required information" [matTooltipDisabled]="customOptions.Quantity && (isCustom ? isOptionsValid(customOptions) : true)">
+        <button mat-button class="btn btn-success-sm" (click)="onCloseClick()" [disabled]="!customOptions.Quantity || (isCustom && !isOptionsValid(customOptions))">Print</button>
+    </div>
+    <button mat-button class="btn btn-remove-sm" (click)="onCancelClick()">Cancel</button>
 </mat-dialog-actions>

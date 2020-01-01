@@ -7,6 +7,7 @@ import * as fromUser from '../../../../../shared/state/user-state.reducer';
 import { Observable } from 'rxjs';
 import { Store, select } from '@ngrx/store';
 import { Member } from 'app/shared/class/member';
+import { CustomPrintLabel } from '../../../../../shared/class/label';
 
 @Component({
     templateUrl: './item-list-shell.component.html'
@@ -42,6 +43,12 @@ export class ItemListShellComponent implements OnInit {
     }
     downloadItemLargeLabelCount(payload: {item: Item, count: number, border: string}): void {
         this.store.dispatch(new itemActions.DownloadItemLargeLabelCount(payload));
+    }
+    downloadItemLabelCountCustom(payload: {item: Item, options: CustomPrintLabel }): void {
+        this.store.dispatch(new itemActions.DownloadItemLabelCountCustom(payload));
+    }
+    downloadItemLargeLabelCountCustom(payload: {item: Item, options: CustomPrintLabel }): void {
+        this.store.dispatch(new itemActions.DownloadItemLargeLabelCountCustom(payload));
     }
     downloadItemTemplate() {
         this.store.dispatch(new itemActions.DownloadItemTemplate());
