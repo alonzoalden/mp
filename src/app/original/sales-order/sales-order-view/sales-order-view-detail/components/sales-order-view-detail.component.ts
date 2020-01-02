@@ -65,6 +65,7 @@ export class SalesOrderDetailComponent implements OnInit, OnChanges {
         } else {
             this.isMerchant = false;
         }
+        this.getFulfilledBySalesOrder.emit({orderid: this.orderid, fulfilledby: this.fulfilledby});
         this.getSalesOrderLineByVendor.emit({orderid: this.orderid, fulfilledby: this.fulfilledby});
         this.getBOLRequest.emit(this.orderid);
         this.notificationComponent.subject.subscribe((val) => {
@@ -83,8 +84,8 @@ export class SalesOrderDetailComponent implements OnInit, OnChanges {
         });
         dialogRef.afterClosed().subscribe((data) => {
             if (data) {
-                this.getFulfilledBySalesOrder.emit({orderid: this.orderid, fulfilledby: this.fulfilledby});
-                this.getSalesOrderLineByVendor.emit({orderid: this.orderid, fulfilledby: this.fulfilledby});
+                // this.getFulfilledBySalesOrder.emit({orderid: this.orderid, fulfilledby: this.fulfilledby});
+                // this.getSalesOrderLineByVendor.emit({orderid: this.orderid, fulfilledby: this.fulfilledby});
             }
         });
     }

@@ -195,8 +195,8 @@ export function salesOrderReducer(state = initialState, action: SalesOrderAction
 
         case SalesOrderActionTypes.CancelSalesOrderLinesSuccess:
             return {
-                ...state,
-                salesOrderLines: [],
+                ...state, 
+                // salesOrderLines: [],
                 pendingDelete: false,
                 error: '',
             };
