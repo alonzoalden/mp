@@ -186,7 +186,7 @@ export class SalesOrderService {
     }
 
     getFulfilledByFulfillment(fulfillmentid: number, fulfilledby: string): Observable<Fulfillment> {
-        return this.http.get<Fulfillment>(this.apiURL + '/fulfillment/' + fulfillmentid + '/fulfilledby/' + fulfilledby)
+        return this.http.get<Fulfillment>(this.apiURL + '/fulfillment/' + fulfillmentid + '/fulfilledby/' + fulfilledby + '/PM')
                         .pipe(
                             catchError(this.handleError)
                         );
