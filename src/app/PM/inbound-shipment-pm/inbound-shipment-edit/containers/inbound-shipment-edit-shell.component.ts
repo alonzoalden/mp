@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { Observable } from 'rxjs';
 import { PurchaseOrder,  Carton } from '../../../../shared/class/purchase-order';
 import { Store, select } from '@ngrx/store';
-import * as inboundShipmentActions from '../../../../original/inbound-shipment/state/inbound-shipment.actions';
+import * as inboundShipmentActions from '../../state/inbound-shipment.actions';
 import * as fromInboundShipment from '../../state';
 import { CustomPrintLabel } from 'app/shared/class/label';
 
@@ -31,7 +31,7 @@ export class InboundShipmentEditShellComponent implements OnInit {
         this.store.dispatch(new inboundShipmentActions.AddNewPurchaseOrder());
     }
     getPurchaseOrder(id: number) {
-        this.store.dispatch(new inboundShipmentActions.LoadPurchaseOrder(id));
+        this.store.dispatch(new inboundShipmentActions.LoadPurchaseOrderAll(id));
     }
     editPurchaseOrder(payload: { purchaseOrder: PurchaseOrder, printLabel: boolean }) {
         this.store.dispatch(new inboundShipmentActions.EditPurchaseOrder(payload));

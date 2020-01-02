@@ -13,10 +13,10 @@ export enum SalesOrderActionTypes {
     LoadMyVendorsSalesOrders = '[Sales Order] Load My Vendors Sales Orders',
     LoadMySalesOrdersSuccess = '[Sales Order] Load My Sales Orders Success',
     LoadMySalesOrdersFail = '[Sales Order] Load My Sales Orders Fail',
-    LoadSalesOrder = '[Sales Order] Load Sales Order',
     SetSalesOrder = '[Sales Order] Set Sales Order',
     SetSalesOrderID = '[Sales Order] Set Sales Order ID',
     SetFulfillment = '[Sales Order] Set Fulfillment',
+    LoadSalesOrder = '[Sales Order] Load Sales Order',
     LoadSalesOrderSuccess = '[Sales Order] Load Sales Order Success',
     LoadSalesOrderFail = '[Sales Order] Load Sales Order Fail',
     LoadSalesOrderLines = '[Sales Order] Load Sales Order Lines',
@@ -228,6 +228,18 @@ export class LoadBOLRequestFail implements Action {
     readonly type = SalesOrderActionTypes.LoadBOLRequestFail;
     constructor(public payload: string) { }
 }
+
+export class LoadBOLRequestNotification implements Action {
+    readonly type = SalesOrderActionTypes.LoadBOLRequestNotification;
+    constructor(public payload: number) { }
+}
+export class LoadBOLRequestNotificationSuccess implements Action {
+    readonly type = SalesOrderActionTypes.LoadBOLRequestNotificationSuccess;
+}
+export class LoadBOLRequestNotificationFail implements Action {
+    readonly type = SalesOrderActionTypes.LoadBOLRequestNotificationFail;
+    constructor(public payload: string) { }
+}
 export class UploadBOLAttachment implements Action {
     readonly type = SalesOrderActionTypes.UploadBOLAttachment;
     constructor(public payload: {id: number, form: FormData, dialogRef: MatDialogRef<any>}) { }
@@ -286,18 +298,6 @@ export class DownloadSalesOrderPackingSlipSuccess implements Action {
 }
 export class DownloadSalesOrderPackingSlipFail implements Action {
     readonly type = SalesOrderActionTypes.DownloadSalesOrderPackingSlipFail;
-    constructor(public payload: string) { }
-}
-
-export class LoadBOLRequestNotification implements Action {
-    readonly type = SalesOrderActionTypes.LoadBOLRequestNotification;
-    constructor(public payload: number) { }
-}
-export class LoadBOLRequestNotificationSuccess implements Action {
-    readonly type = SalesOrderActionTypes.LoadBOLRequestNotificationSuccess;
-}
-export class LoadBOLRequestNotificationFail implements Action {
-    readonly type = SalesOrderActionTypes.LoadBOLRequestNotificationFail;
     constructor(public payload: string) { }
 }
 

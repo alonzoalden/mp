@@ -75,14 +75,14 @@
                                         <ng-container matColumnDef="Add">
                                             <th mat-header-cell *matHeaderCellDef width="45px"></th>
                                             <td mat-cell *matCellDef="let itemTierPrice; let i = index">
-                                                <div *ngIf="i === item.ItemTierPrices.length-1">
-                                                    <a (click)='itemTierPrice.Quantity > 0  && itemTierPrice.Price > 0 ? onAddItemTierPrice(itemTierPrice) : return; formDirty = false;'>
-                                                        <span [matTooltip]="itemTierPrice.Quantity > 0  && itemTierPrice.Price > 0 ? ( 'Add' | translate ) : ( 'Required fields must be complete' | translate )"
-                                                            class="glyphicon glyphicon-plus fs-20"
-                                                            [ngClass]="i === item.ItemTierPrices.length-1 && itemTierPrice.Quantity > 0  && itemTierPrice.Price > 0 ? 'green' : 'gray'">
-                                                        </span>
-                                                    </a>
-                                                </div>
+<!--                                                <div *ngIf="i === item.ItemTierPrices.length-1">-->
+<!--                                                    <a (click)='itemTierPrice.Quantity > 0  && itemTierPrice.Price > 0 ? onAddItemTierPrice(itemTierPrice) : return; formDirty = false;'>-->
+<!--                                                        <span [matTooltip]="itemTierPrice.Quantity > 0  && itemTierPrice.Price > 0 ? ( 'Add' | translate ) : ( 'Required fields must be complete' | translate )"-->
+<!--                                                            class="glyphicon glyphicon-plus fs-20"-->
+<!--                                                            [ngClass]="i === item.ItemTierPrices.length-1 && itemTierPrice.Quantity > 0  && itemTierPrice.Price > 0 ? 'green' : 'gray'">-->
+<!--                                                        </span>-->
+<!--                                                    </a>-->
+<!--                                                </div>-->
                                             </td>
                                         </ng-container>
                                         <!-- Quantity Column -->
@@ -119,12 +119,12 @@
                                         <ng-container matColumnDef="Remove">
                                             <th mat-header-cell *matHeaderCellDef width="200px">{{ 'Remove' | translate }}</th>
                                             <td mat-cell *matCellDef="let itemTierPrice; let i = index">
-                                                <div *ngIf="i !== item.ItemTierPrices.length-1">
-                                                    <a matTooltip="{{ 'Remove' | translate }}" attr.aria-label="{{ 'Remove' | translate }}" (click)='onRemoveItemTierPrice(i); currentItemTierPriceIndex = item.ItemTierPrices.length-1;'><span class="glyphicon glyphicon-trash"></span></a>
-                                                </div>
-                                                <div [hidden]="!formDirty && i === item.ItemTierPrices.length-1">
-                                                    <a matTooltip="{{ 'Clear' | translate }}" attr.aria-label="{{ 'Clear' | translate}}" (click)="clearFields(itemTierPrice);"><i *ngIf="i === item.ItemTierPrices.length-1" class="fa fa-eraser"></i></a>
-                                                </div>
+<!--                                                <div *ngIf="i !== item.ItemTierPrices.length-1">-->
+<!--                                                    <a matTooltip="{{ 'Remove' | translate }}" attr.aria-label="{{ 'Remove' | translate }}" (click)='onRemoveItemTierPrice(i); currentItemTierPriceIndex = item.ItemTierPrices.length-1;'><span class="glyphicon glyphicon-trash"></span></a>-->
+<!--                                                </div>-->
+<!--                                                <div [hidden]="!formDirty && i === item.ItemTierPrices.length-1">-->
+<!--                                                    <a matTooltip="{{ 'Clear' | translate }}" attr.aria-label="{{ 'Clear' | translate}}" (click)="clearFields(itemTierPrice);"><i *ngIf="i === item.ItemTierPrices.length-1" class="fa fa-eraser"></i></a>-->
+<!--                                                </div>-->
                                             </td>
                                         </ng-container>
 

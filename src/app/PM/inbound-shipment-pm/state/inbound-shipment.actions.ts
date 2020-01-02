@@ -7,7 +7,7 @@ import {
     Carton
 } from '../../../shared/class/purchase-order';
 import { ItemList } from '../../../shared/class/item';
-import {CustomPrintLabel} from '../../../shared/class/label';
+import { CustomPrintLabel } from 'app/shared/class/label';
 
 export enum InboundShipmentActionTypes {
     LoadPurchaseOrder = '[InboundShipment] Load Purchase Order',
@@ -33,6 +33,9 @@ export enum InboundShipmentActionTypes {
     EditPurchaseOrderThenPrintItemLabels = '[InboundShipment] Edit Purchase Order Then Print Item Labels',
     EditPurchaseOrderThenPrintItemLabelsSuccess = '[InboundShipment] Edit Purchase Order Then Print Item Labels Success',
     EditPurchaseOrderThenPrintItemLabelsFail = '[InboundShipment] Edit Purchase Order Then Print Item Labels Fail',
+    EditPurchaseOrderThenPrintItemLabelsCustom = '[InboundShipment] Edit Purchase Order Then Print Item Labels Custom',
+    EditPurchaseOrderThenPrintItemLabelsCustomSuccess = '[InboundShipment] Edit Purchase Order Then Print Item Labels Custom Success',
+    EditPurchaseOrderThenPrintItemLabelsCustomFail = '[InboundShipment] Edit Purchase Order Then Print Item Labels Custom Fail',
     AddInboundShippingMethod = '[InboundShipment] Add Inbound Shipping Method',
     AddInboundShippingMethodSuccess = '[InboundShipment] Add Inbound Shipping Method Success',
     AddInboundShippingMethodFail = '[InboundShipment] Add Inbound Shipping Method Fail',
@@ -48,24 +51,36 @@ export enum InboundShipmentActionTypes {
     DownloadAllCartonLabel = '[InboundShipment] Download All Carton Label',
     DownloadAllCartonLabelSuccess = '[InboundShipment] Download All Carton Label Success',
     DownloadAllCartonLabelFail = '[InboundShipment] Download All Carton Label Fail',
+    DownloadCartonLabelCountCustom = '[InboundShipment] Download All Carton Label Custom',
+    DownloadCartonLabelCountCustomSuccess = '[InboundShipment] Download All Carton Label Custom Success',
+    DownloadCartonLabelCountCustomFail = '[InboundShipment] Download All Carton Label Custom Fail',
     DownloadAllItemLabel = '[InboundShipment] Download All Item Label',
     DownloadAllItemLabelSuccess = '[InboundShipment] Download All Item Label Success',
     DownloadAllItemLabelFail = '[InboundShipment] Download All Item Label Fail',
+    DownloadAllItemLabelCustom = '[InboundShipment] Download All Item Label Custom',
+    DownloadAllItemLabelCustomSuccess = '[InboundShipment] Download All Item Label Custom Success',
+    DownloadAllItemLabelCustomFail = '[InboundShipment] Download All Item Label Custom Fail',
+    DownloadAllItemLargeLabelCustom = '[InboundShipment] Download All Item Large Label Custom',
+    DownloadAllItemLargeLabelCustomSuccess = '[InboundShipment] Download All Item Large Label Custom Success',
+    DownloadAllItemLargeLabelCustomFail = '[InboundShipment] Download All Item Large Label Custom Fail',
     DownloadAllItemLargeLabel = '[InboundShipment] Download All Item Large Label',
     DownloadAllItemLargeLabelSuccess = '[InboundShipment] Download All Item Large Label Success',
     DownloadAllItemLargeLabelFail = '[InboundShipment] Download All Item Large Label Fail',
     DownloadCartonLabelCount = '[InboundShipment] Download Carton Label Count',
     DownloadCartonLabelCountSuccess = '[InboundShipment] Download Carton Label Count Success',
     DownloadCartonLabelCountFail = '[InboundShipment] Download Carton Label Count Fail',
-    DownloadCartonLabelCountCustom = '[InboundShipment] Download All Carton Label Custom',
-    DownloadCartonLabelCountCustomSuccess = '[InboundShipment] Download All Carton Label Custom Success',
-    DownloadCartonLabelCountCustomFail = '[InboundShipment] Download All Carton Label Custom Fail',
     DownloadItemLabelCount = '[InboundShipment] Download Item Label Count',
     DownloadItemLabelCountSuccess = '[InboundShipment] Download Item Label Count Success',
     DownloadItemLabelCountFail = '[InboundShipment] Download Item Label Count Fail',
     DownloadItemLargeLabelCount = '[InboundShipment] Download Item Large Label Count',
     DownloadItemLargeLabelCountSuccess = '[InboundShipment] Download Item Large Label Count Success',
     DownloadItemLargeLabelCountFail = '[InboundShipment] Download Item Large Label Count Fail',
+    DownloadItemLabelCountCustom = '[InboundShipment] Download Item Label Count Custom',
+    DownloadItemLabelCountCustomSuccess = '[InboundShipment] Download Item Label Count Custom Success',
+    DownloadItemLabelCountCustomFail = '[InboundShipment] Download Item Label Count Custom Fail',
+    DownloadItemLargeLabelCountCustom = '[InboundShipment] Download Item Large Label Count Custom',
+    DownloadItemLargeLabelCountCustomSuccess = '[InboundShipment] Download Item Large Label Count Custom Success',
+    DownloadItemLargeLabelCountCustomFail = '[InboundShipment] Download Item Large Label Count Custom Fail',
     LoadPurchaseOrderLines = '[InboundShipment] Load Purchase Order Lines',
     LoadPurchaseOrderLinesSuccess = '[InboundShipment] Load Purchase Order Lines Success',
     LoadPurchaseOrderLinesFail = '[InboundShipment] Load Purchase Order Lines Fail',
@@ -82,13 +97,7 @@ export enum InboundShipmentActionTypes {
     LoadInboundShippingMethodsFail = '[InboundShipment] Load Inbound Shipping Methods Fail',
     LoadSimpleItemList = '[Item] Load Simple Item List',
     LoadSimpleItemListSuccess = '[Item] Load Simple Item List Success',
-    LoadSimpleItemListFail = '[Item] Load Simple Item List Fail',
-    DownloadItemLabelCountCustom = '[InboundShipment] Download Item Label Count Custom',
-    DownloadItemLabelCountCustomSuccess = '[InboundShipment] Download Item Label Count Custom Success',
-    DownloadItemLabelCountCustomFail = '[InboundShipment] Download Item Label Count Custom Fail',
-    DownloadItemLargeLabelCountCustom = '[InboundShipment] Download Item Large Label Count Custom',
-    DownloadItemLargeLabelCountCustomSuccess = '[InboundShipment] Download Item Large Label Count Custom Success',
-    DownloadItemLargeLabelCountCustomFail = '[InboundShipment] Download Item Large Label Count Custom Fail',
+    LoadSimpleItemListFail = '[Item] Load Simple Item List Fail'
 }
 
 // Action Creators
@@ -144,8 +153,7 @@ export class EditPurchaseOrderFail implements Action {
     constructor(public payload: string) {}
 }
 export class EditPurchaseOrderThenPrintItemLabels implements Action {
-    readonly type =
-        InboundShipmentActionTypes.EditPurchaseOrderThenPrintItemLabels;
+    readonly type = InboundShipmentActionTypes.EditPurchaseOrderThenPrintItemLabels;
     constructor(
         public payload: {
             purchaseOrder: PurchaseOrder;
@@ -162,6 +170,22 @@ export class EditPurchaseOrderThenPrintItemLabelsSuccess implements Action {
 export class EditPurchaseOrderThenPrintItemLabelsFail implements Action {
     readonly type =
         InboundShipmentActionTypes.EditPurchaseOrderThenPrintItemLabelsFail;
+    constructor(public payload: string) {}
+}
+export class EditPurchaseOrderThenPrintItemLabelsCustom implements Action {
+    readonly type = InboundShipmentActionTypes.EditPurchaseOrderThenPrintItemLabelsCustom;
+    constructor(
+        public payload: { purchaseOrder: PurchaseOrder, options: CustomPrintLabel, size: string }
+    ) {}
+}
+export class EditPurchaseOrderThenPrintItemLabelsCustomSuccess implements Action {
+    readonly type =
+        InboundShipmentActionTypes.EditPurchaseOrderThenPrintItemLabelsCustomSuccess;
+    constructor(public payload: PurchaseOrder) {}
+}
+export class EditPurchaseOrderThenPrintItemLabelsCustomFail implements Action {
+    readonly type =
+        InboundShipmentActionTypes.EditPurchaseOrderThenPrintItemLabelsCustomFail;
     constructor(public payload: string) {}
 }
 export class AddInboundShippingMethod implements Action {
@@ -225,6 +249,20 @@ export class DownloadAllCartonLabelFail implements Action {
     readonly type = InboundShipmentActionTypes.DownloadAllCartonLabelFail;
     constructor(public payload: string) {}
 }
+
+export class DownloadCartonLabelCountCustom implements Action {
+    readonly type = InboundShipmentActionTypes.DownloadCartonLabelCountCustom;
+    constructor(public payload: { carton: Carton; options: CustomPrintLabel }) {}
+}
+export class DownloadCartonLabelCountCustomSuccess implements Action {
+    readonly type = InboundShipmentActionTypes.DownloadCartonLabelCountCustomSuccess;
+    constructor(public payload: Blob) {}
+}
+export class DownloadCartonLabelCountCustomFail implements Action {
+    readonly type = InboundShipmentActionTypes.DownloadCartonLabelCountCustomFail;
+    constructor(public payload: string) {}
+}
+
 export class DownloadAllItemLabel implements Action {
     readonly type = InboundShipmentActionTypes.DownloadAllItemLabel;
     constructor(
@@ -239,6 +277,38 @@ export class DownloadAllItemLabelFail implements Action {
     readonly type = InboundShipmentActionTypes.DownloadAllItemLabelFail;
     constructor(public payload: string) {}
 }
+
+export class DownloadAllItemLabelCustom implements Action {
+    readonly type = InboundShipmentActionTypes.DownloadAllItemLabelCustom;
+    constructor(
+        public payload: { purchaseOrder: PurchaseOrder; options: CustomPrintLabel }
+    ) {}
+}
+export class DownloadAllItemLabelCustomSuccess implements Action {
+    readonly type = InboundShipmentActionTypes.DownloadAllItemLabelCustomSuccess;
+    constructor(public payload: Blob) {}
+}
+export class DownloadAllItemLabelCustomFail implements Action {
+    readonly type = InboundShipmentActionTypes.DownloadAllItemLabelCustomFail;
+    constructor(public payload: string) {}
+}
+
+
+export class DownloadAllItemLargeLabelCustom implements Action {
+    readonly type = InboundShipmentActionTypes.DownloadAllItemLargeLabelCustom;
+    constructor(
+        public payload: { purchaseOrder: PurchaseOrder; options: CustomPrintLabel }
+    ) {}
+}
+export class DownloadAllItemLargeLabelCustomSuccess implements Action {
+    readonly type = InboundShipmentActionTypes.DownloadAllItemLargeLabelCustomSuccess;
+    constructor(public payload: Blob) {}
+}
+export class DownloadAllItemLargeLabelCustomFail implements Action {
+    readonly type = InboundShipmentActionTypes.DownloadAllItemLargeLabelCustomFail;
+    constructor(public payload: string) {}
+}
+
 export class DownloadAllItemLargeLabel implements Action {
     readonly type = InboundShipmentActionTypes.DownloadAllItemLargeLabel;
     constructor(
@@ -259,18 +329,6 @@ export class DownloadCartonLabelCount implements Action {
     constructor(
         public payload: { carton: Carton; count: number; border: string }
     ) {}
-}
-export class DownloadCartonLabelCountCustom implements Action {
-    readonly type = InboundShipmentActionTypes.DownloadCartonLabelCountCustom;
-    constructor(public payload: { carton: Carton; options: CustomPrintLabel }) {}
-}
-export class DownloadCartonLabelCountCustomSuccess implements Action {
-    readonly type = InboundShipmentActionTypes.DownloadCartonLabelCountCustomSuccess;
-    constructor(public payload: Blob) {}
-}
-export class DownloadCartonLabelCountCustomFail implements Action {
-    readonly type = InboundShipmentActionTypes.DownloadCartonLabelCountCustomFail;
-    constructor(public payload: string) {}
 }
 export class DownloadCartonLabelCountSuccess implements Action {
     readonly type = InboundShipmentActionTypes.DownloadCartonLabelCountSuccess;
@@ -317,34 +375,9 @@ export class DownloadItemLargeLabelCountFail implements Action {
     readonly type = InboundShipmentActionTypes.DownloadItemLargeLabelCountFail;
     constructor(public payload: string) {}
 }
-export class LoadCurrentPurchaseOrderEdit implements Action {
-    readonly type = InboundShipmentActionTypes.LoadCurrentPurchaseOrderEdit;
-    constructor(public payload: number) {}
-}
-export class LoadCurrentPurchaseOrderEditSuccess implements Action {
-    readonly type =
-        InboundShipmentActionTypes.LoadCurrentPurchaseOrderEditSuccess;
-    constructor(public payload: PurchaseOrder) {}
-}
-export class LoadCurrentPurchaseOrderEditFail implements Action {
-    readonly type = InboundShipmentActionTypes.LoadCurrentPurchaseOrderEditFail;
-    constructor(public payload: string) {}
-}
-export class LoadPurchaseOrder implements Action {
-    readonly type = InboundShipmentActionTypes.LoadPurchaseOrder;
-    constructor(public payload: number) {}
-}
 export class LoadPurchaseOrderAll implements Action {
     readonly type = InboundShipmentActionTypes.LoadPurchaseOrderAll;
     constructor(public payload: number) {}
-}
-export class LoadPurchaseOrderSuccess implements Action {
-    readonly type = InboundShipmentActionTypes.LoadPurchaseOrderSuccess;
-    constructor(public payload: PurchaseOrder) {}
-}
-export class LoadPurchaseOrderFail implements Action {
-    readonly type = InboundShipmentActionTypes.LoadPurchaseOrderFail;
-    constructor(public payload: string) {}
 }
 
 export class DownloadItemLabelCountCustom implements Action {
@@ -374,6 +407,32 @@ export class DownloadItemLargeLabelCountCustomSuccess implements Action {
 }
 export class DownloadItemLargeLabelCountCustomFail implements Action {
     readonly type = InboundShipmentActionTypes.DownloadItemLargeLabelCountCustomFail;
+    constructor(public payload: string) {}
+}
+
+export class LoadCurrentPurchaseOrderEdit implements Action {
+    readonly type = InboundShipmentActionTypes.LoadCurrentPurchaseOrderEdit;
+    constructor(public payload: number) {}
+}
+export class LoadCurrentPurchaseOrderEditSuccess implements Action {
+    readonly type =
+        InboundShipmentActionTypes.LoadCurrentPurchaseOrderEditSuccess;
+    constructor(public payload: PurchaseOrder) {}
+}
+export class LoadCurrentPurchaseOrderEditFail implements Action {
+    readonly type = InboundShipmentActionTypes.LoadCurrentPurchaseOrderEditFail;
+    constructor(public payload: string) {}
+}
+export class LoadPurchaseOrder implements Action {
+    readonly type = InboundShipmentActionTypes.LoadPurchaseOrder;
+    constructor(public payload: number) {}
+}
+export class LoadPurchaseOrderSuccess implements Action {
+    readonly type = InboundShipmentActionTypes.LoadPurchaseOrderSuccess;
+    constructor(public payload: PurchaseOrder) {}
+}
+export class LoadPurchaseOrderFail implements Action {
+    readonly type = InboundShipmentActionTypes.LoadPurchaseOrderFail;
     constructor(public payload: string) {}
 }
 export class LoadPurchaseOrderLines implements Action {
@@ -482,6 +541,9 @@ export type InboundShipmentActions =
     | EditPurchaseOrderThenPrintItemLabels
     | EditPurchaseOrderThenPrintItemLabelsSuccess
     | EditPurchaseOrderThenPrintItemLabelsFail
+    | EditPurchaseOrderThenPrintItemLabelsCustom
+    | EditPurchaseOrderThenPrintItemLabelsCustomSuccess
+    | EditPurchaseOrderThenPrintItemLabelsCustomFail
     | AddInboundShippingMethod
     | AddInboundShippingMethodSuccess
     | AddInboundShippingMethodFail
@@ -497,6 +559,12 @@ export type InboundShipmentActions =
     | DownloadAllItemLabel
     | DownloadAllItemLabelSuccess
     | DownloadAllItemLabelFail
+    | DownloadAllItemLabelCustom
+    | DownloadAllItemLabelCustomSuccess
+    | DownloadAllItemLabelCustomFail
+    | DownloadAllItemLargeLabelCustom
+    | DownloadAllItemLargeLabelCustomSuccess
+    | DownloadAllItemLargeLabelCustomFail
     | DownloadAllItemLargeLabel
     | DownloadAllItemLargeLabelSuccess
     | DownloadAllItemLargeLabelFail
@@ -515,6 +583,9 @@ export type InboundShipmentActions =
     | LoadSimpleItemList
     | LoadSimpleItemListSuccess
     | LoadSimpleItemListFail
+    | DownloadCartonLabelCountCustom
+    | DownloadCartonLabelCountCustomSuccess
+    | DownloadCartonLabelCountCustomFail
     | LoadPurchaseOrderMyVendorOverview
     | LoadPurchaseOrderMyVendorOverviewSuccess
     | LoadPurchaseOrderMyVendorOverviewFail
