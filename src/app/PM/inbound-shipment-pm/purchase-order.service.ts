@@ -467,21 +467,21 @@ export class PurchaseOrderService {
     }
 
     downloadItemLabel(itemID: number) {
-        return this.http.get(this.apiURL + '/item/' + itemID + '/label', { responseType: 'blob' });
+        return this.http.get(this.apiURL + '/item/' + itemID + '/label/PM', { responseType: 'blob' });
     }
     downloadItemLabelCount(itemID: number, count: number, border: string) {
-        return this.http.get(this.apiURL + '/item/' + itemID + '/label/' + count + '/' + border, { responseType: 'blob' });
+        return this.http.get(this.apiURL + '/item/' + itemID + '/label/' + count + '/' + border + '/PM', { responseType: 'blob' });
     }
     downloadItemLargeLabelCount(itemID: number, count: number, border: string) {
-        return this.http.get(this.apiURL + '/item/' + itemID + '/largelabel/' + count + '/' + border, { responseType: 'blob' });
+        return this.http.get(this.apiURL + '/item/' + itemID + '/largelabel/' + count + '/' + border + '/PM', { responseType: 'blob' });
     }
 
     // Custom
     downloadItemLabelCountCustom(id: number, options: CustomPrintLabel) {
-        return this.http.post(this.apiURL + '/item/' + id + '/label/custom', options, { responseType: 'blob' });
+        return this.http.post(this.apiURL + '/item/' + id + '/label/custom/PM', options, { responseType: 'blob' });
     }
     downloadItemLargeLabelCountCustom(id: number, options: CustomPrintLabel) {
-        return this.http.post(this.apiURL + '/item/' + id + '/largelabel/custom', options, { responseType: 'blob' });
+        return this.http.post(this.apiURL + '/item/' + id + '/largelabel/custom/PM', options, { responseType: 'blob' });
     }
 
     // Carton
