@@ -78,6 +78,7 @@ export class SalesOrderEffects {
             )
         )
     );
+
     @Effect()
     loadSalesOrderLines$: Observable<Action> = this.actions$.pipe(
         ofType(salesOrderActions.SalesOrderActionTypes.LoadSalesOrderLines),

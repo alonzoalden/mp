@@ -48,7 +48,7 @@ import { StoreModule } from '@ngrx/store';
 import { EffectsModule } from '@ngrx/effects';
 import { inboundShipmentReducer } from './state/inbound-shipment.reducer';
 import { InboundShipmentEffects } from './state/inbound-shipment.effects';
-import { ItemService } from '../../original/item/item.service';
+import { ItemService } from '../item-pm/item.service';
 import {SharePipeModule} from '../../shared/pipe/share.pipe';
 
 @NgModule({

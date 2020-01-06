@@ -10,7 +10,7 @@ import { environment } from '../../../environments/environment';
 import { Store } from '@ngrx/store';
 import * as fromInboundShipment from './state';
 import { NotificationComponent } from '../../shared/tool/notification/notification.component';
-import {CustomPrintLabel} from '../../shared/class/label';
+import { CustomPrintLabel } from 'app/shared/class/label';
 
 
 @Injectable()
@@ -128,23 +128,7 @@ export class PurchaseOrderService {
                         catchError(this.handleError)
                     );
     }
-    getPurchaseOrderAll(id: number): Observable<PurchaseOrder> {
-        return this.http.get<PurchaseOrder>(this.apiURL + '/purchaseorder/' + id + '/all')
-                    .pipe(
-                        //tap(data => console.log(JSON.stringify(data))),
-                        catchError(this.handleError)
-                    );
-    }
-    downloadCartonLabelCustom(id: number, options: CustomPrintLabel) {
-        //return this.http.get(this.apiURL + '/carton/' + id + '/cartonlist', { responseType: 'blob' });
-        return this.http.post(this.apiURL + '/carton/' + id + '/label/custom', options, { responseType: 'blob' });
-    }
-    downloadItemLabelCountCustom(id: number, options: CustomPrintLabel) {
-        return this.http.post(this.apiURL + '/item/' + id + '/label/custom', options, { responseType: 'blob' });
-    }
-    downloadItemLargeLabelCountCustom(id: number, options: CustomPrintLabel) {
-        return this.http.post(this.apiURL + '/item/' + id + '/largelabel/custom', options, { responseType: 'blob' });
-    }
+
     copyPurchaseOrder(purchaseorder: PurchaseOrder) {
         const newPurchaseOrder = new PurchaseOrder(purchaseorder.PurchaseOrderID, purchaseorder.TransactionDate, purchaseorder.ShipmentDate,
             purchaseorder.PackingSlipNumber, purchaseorder.Status, purchaseorder.UpdatedOn, purchaseorder.CreatedOn, [], [], []);
@@ -440,7 +424,7 @@ export class PurchaseOrderService {
                     if (purchaseorderline) {
                         purchaseorderline.CartonQuantity += cartonline.Quantity;
                         this.replacePurchaseOrderLine(cartonline.PurchaseOrderLineID, purchaseorderline);
-
+                        this.updateCartonLineRemainingQuantity(cartonline, purchaseorder);
                         purchaseorder.PurchaseOrderLines[purchaseorder.PurchaseOrderLines.findIndex(i => i.PurchaseOrderLineID === cartonline.PurchaseOrderLineID)] = purchaseorderline;
                     }
                 }
@@ -483,13 +467,21 @@ export class PurchaseOrderService {
     }
 
     downloadItemLabel(itemID: number) {
-        return this.http.get(this.apiURL + '/item/' + itemID + '/label', { responseType: 'blob' });
+        return this.http.get(this.apiURL + '/item/' + itemID + '/label/PM', { responseType: 'blob' });
     }
     downloadItemLabelCount(itemID: number, count: number, border: string) {
-        return this.http.get(this.apiURL + '/item/' + itemID + '/label/' + count + '/' + border, { responseType: 'blob' });
+        return this.http.get(this.apiURL + '/item/' + itemID + '/label/' + count + '/' + border + '/PM', { responseType: 'blob' });
     }
     downloadItemLargeLabelCount(itemID: number, count: number, border: string) {
-        return this.http.get(this.apiURL + '/item/' + itemID + '/largelabel/' + count + '/' + border, { responseType: 'blob' });
+        return this.http.get(this.apiURL + '/item/' + itemID + '/largelabel/' + count + '/' + border + '/PM', { responseType: 'blob' });
+    }
+
+    // Custom
+    downloadItemLabelCountCustom(id: number, options: CustomPrintLabel) {
+        return this.http.post(this.apiURL + '/item/' + id + '/label/custom/PM', options, { responseType: 'blob' });
+    }
+    downloadItemLargeLabelCountCustom(id: number, options: CustomPrintLabel) {
+        return this.http.post(this.apiURL + '/item/' + id + '/largelabel/custom/PM', options, { responseType: 'blob' });
     }
 
     // Carton
@@ -570,6 +562,12 @@ export class PurchaseOrderService {
         //return this.http.get(this.apiURL + '/carton/' + id + '/cartonlist', { responseType: 'blob' });
         return this.http.get(this.apiURL + '/carton/' + id + '/label', { responseType: 'blob' });
     }
+    // Custom
+    downloadCartonLabelCustom(id: number, options: CustomPrintLabel) {
+        //return this.http.get(this.apiURL + '/carton/' + id + '/cartonlist', { responseType: 'blob' });
+        return this.http.post(this.apiURL + '/carton/' + id + '/label/custom', options, { responseType: 'blob' });
+    }
+
     downloadCartonLabelCount(id: number, count: number, border: string) {
         //return this.http.get(this.apiURL + '/carton/' + id + '/cartonlist', { responseType: 'blob' });
         return this.http.get(this.apiURL + '/carton/' + id + '/label/' + count + '/' + border, { responseType: 'blob' });
@@ -585,6 +583,17 @@ export class PurchaseOrderService {
     downloadAllItemLargeLabel(purchaseorderid: number, border: string) {
         //return this.http.get(this.apiURL + '/carton/' + id + '/cartonlist', { responseType: 'blob' });
         return this.http.get(this.apiURL + '/purchaseorderline/purchaseorder/' + purchaseorderid + '/largelabel/' + border, { responseType: 'blob' });
+    }
+
+    // Custom Print Label
+    downloadAllCartonLabelCustom(purchaseorderid: number, options: CustomPrintLabel) {
+        return this.http.post(this.apiURL + '/carton/purchaseorder/' + purchaseorderid + '/label/custom', options, { responseType: 'blob' });
+    }
+    downloadAllItemLabelCustom(purchaseorderid: number, options: CustomPrintLabel) {
+        return this.http.post(this.apiURL + '/purchaseorderline/purchaseorder/' + purchaseorderid + '/label/custom', options, { responseType: 'blob' });
+    }
+    downloadAllItemLargeLabelCustom(purchaseorderid: number, options: CustomPrintLabel) {
+        return this.http.post(this.apiURL + '/purchaseorderline/purchaseorder/' + purchaseorderid + '/largelabel/custom', options, { responseType: 'blob' });
     }
 
     // Carton Lines
@@ -730,5 +739,12 @@ export class PurchaseOrderService {
         const inputRow = i === collection.length - 1 && currentItemIndex === i;
         const selectedInputRow = inputRow && formDirty;
         if (selectedInputRow) { return '#F5F5F5'; } else if (inputRow) { return '#E8E8E8'; } else if (currentItemIndex === i) { return '#F5F5F5'; } else { return '#FFFFFF'; }
+    }
+    getPurchaseOrderAll(id: number): Observable<PurchaseOrder> {
+        return this.http.get<PurchaseOrder>(this.apiURL + '/purchaseorder/' + id + '/all')
+                    .pipe(
+                        //tap(data => console.log(JSON.stringify(data))),
+                        catchError(this.handleError)
+                    );
     }
 }

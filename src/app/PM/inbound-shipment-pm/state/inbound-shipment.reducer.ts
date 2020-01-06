@@ -133,6 +133,7 @@ export function inboundShipmentReducer(state = initialState, action: InboundShip
                 isLoading: false,
                 error: action.payload,
             };
+
         case InboundShipmentActionTypes.LoadPurchaseOrderOverview:
             return {
                 ...state,

@@ -115,7 +115,14 @@ export class SalesOrderService {
     }
 
     getFulfilledBySalesOrder(salesorderid: number, fulfilledby: string): Observable<SalesOrder> {
-        return this.http.get<SalesOrder>(this.apiURL + '/salesorder/' + salesorderid + '/fulfilledby/' + fulfilledby)
+        return this.http.get<SalesOrder>(this.apiURL + '/salesorder/' + salesorderid + '/fulfilledby/' + fulfilledby + '/PM')
+                        .pipe(
+                            tap(data => this.currentSalesOrder = data),
+                            catchError(this.handleError)
+                        );
+    }
+    getFulfilledBySalesOrderPM(salesorderid: number, fulfilledby: string): Observable<SalesOrder> {
+        return this.http.get<SalesOrder>(this.apiURL + '/salesorder/' + salesorderid + '/fulfilledby/' + fulfilledby + '/PM')
                         .pipe(
                             tap(data => this.currentSalesOrder = data),
                             catchError(this.handleError)
@@ -142,7 +149,7 @@ export class SalesOrderService {
     }
 
     getSalesOrderLineByVendor(salesorderid: number, fulfilledby: string): Observable<SalesOrderLine[]> {
-        return this.http.get<SalesOrderLine[]>(this.apiURL + '/salesorderline/salesorder/' + salesorderid + '/fulfilledby/' + fulfilledby)
+        return this.http.get<SalesOrderLine[]>(this.apiURL + '/salesorderline/PMsalesorder/' + salesorderid + '/fulfilledby/' + fulfilledby)
                         .pipe(
                             tap(data => this.salesorderlines = data),
                             catchError(this.handleError)
@@ -179,7 +186,7 @@ export class SalesOrderService {
     }
 
     getFulfilledByFulfillment(fulfillmentid: number, fulfilledby: string): Observable<Fulfillment> {
-        return this.http.get<Fulfillment>(this.apiURL + '/fulfillment/' + fulfillmentid + '/fulfilledby/' + fulfilledby)
+        return this.http.get<Fulfillment>(this.apiURL + '/fulfillment/' + fulfillmentid + '/fulfilledby/' + fulfilledby + '/PM')
                         .pipe(
                             catchError(this.handleError)
                         );

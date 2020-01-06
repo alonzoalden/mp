@@ -9,11 +9,16 @@ import {UsermanagementReducer} from './state/usermanagement.reducer';
 import {UsermanagementEffects} from './state/usermanagement.effects';
 import {
     MatBottomSheetModule,
-    MatButtonModule, MatCheckboxModule,
-    MatDialogModule, MatIconModule, MatListModule,
-    MatPaginatorModule, MatSidenavModule,
+    MatButtonModule,
+    MatCheckboxModule,
+    MatDialogModule,
+    MatIconModule,
+    MatListModule,
+    MatPaginatorModule,
+    MatSidenavModule,
     MatTableModule,
-    MatTooltipModule, MatTreeModule
+    MatTooltipModule,
+    MatTreeModule
 } from '@angular/material';
 import {UsermanagementMemberVendorShellComponent} from './container/usermanagement-membervendor-shell/usermanagement-membervendor-shell.component';
 import {UsermanagementMemberVendorComponent} from './component/usermanagement-membervendor-list/usermanagement-membervendor.component';
@@ -27,9 +32,8 @@ import {
 } from './component/usermanagement-membervendor-list/usermanagement-membervendor-dialog.component';
 import {UsermanagementMembertreeShellComponent} from './container/usermanagement-membertree-shell/usermanagement-membertree-shell.component';
 import {UsermanagementMembertreeComponent} from './component/usermanagement-membertree/usermanagement-membertree.component';
-import { TreeModule } from 'angular-tree-component';
 import {DragDropModule} from '@angular/cdk/drag-drop';
-import { UsermanegementMembertreeBottomsheet } from './component/usermanagement-membertree/usermanegement-membertree-bottomsheet';
+import {UsermanegementMembertreeBottomsheet} from './component/usermanagement-membertree/usermanegement-membertree-bottomsheet';
 
 
 @NgModule({
@@ -63,7 +67,6 @@ import { UsermanegementMembertreeBottomsheet } from './component/usermanagement-
         MatTooltipModule,
         MatSidenavModule,
         MatListModule,
-        TreeModule,
         MatTreeModule,
         MatIconModule,
         DragDropModule,

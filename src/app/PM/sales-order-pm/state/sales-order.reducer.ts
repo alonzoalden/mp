@@ -46,12 +46,6 @@ const initialState: SalesOrderState = {
 export function salesOrderReducer(state = initialState, action: SalesOrderActions): SalesOrderState {
 
     switch (action.type) {
-        case SalesOrderActionTypes.LoadSalesOrders:
-            return {
-                ...state,
-                isLoading: true,
-                error: '',
-            };
         case SalesOrderActionTypes.LoadVendorsSalesOrders:
             return {
                 ...state,
@@ -63,6 +57,12 @@ export function salesOrderReducer(state = initialState, action: SalesOrderAction
                 ...state,
                 salesOrders: action.payload,
                 isLoading: false,
+                error: '',
+            };
+        case SalesOrderActionTypes.LoadSalesOrders:
+            return {
+                ...state,
+                isLoading: true,
                 error: '',
             };
         case SalesOrderActionTypes.LoadSalesOrdersFail:

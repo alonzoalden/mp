@@ -914,13 +914,13 @@ export class ItemService {
     }
 
     downloadItemLabel(id: number) {
-        return this.http.get(this.apiURL + '/item/' + id + '/label', { responseType: 'blob' });
+        return this.http.get(this.apiURL + '/item/' + id + '/label/PM', { responseType: 'blob' });
     }
     downloadItemLabelCount(id: number, count: number, border: string) {
-        return this.http.get(this.apiURL + '/item/' + id + '/label/' + count + '/' + border, { responseType: 'blob' });
+        return this.http.get(this.apiURL + '/item/' + id + '/label/' + count + '/' + border + '/PM', { responseType: 'blob' });
     }
     downloadItemLargeLabelCount(id: number, count: number, border: string) {
-        return this.http.get(this.apiURL + '/item/' + id + '/largelabel/' + count + '/' + border, { responseType: 'blob' });
+        return this.http.get(this.apiURL + '/item/' + id + '/largelabel/' + count + '/' + border + '/PM', { responseType: 'blob' });
     }
 
     downloadPrintItemLabels(itemPrintLabels: ItemPrintLabel[], border: string) {
