@@ -529,7 +529,21 @@ export class ItemService {
         const headers = new HttpHeaders({
             'Content-Type': 'application/json'
         });
-        return this.http.get<ItemList[]>(this.apiURL + '/item/partitemlist', { headers: headers} )
+        return this.http.get<ItemList[]>(this.apiURL + '/item/partitemlist/', { headers: headers} )
+                            .pipe(
+                                //tap(data => console.log(JSON.stringify(data))),
+                                tap(data => this.partItemList = data),
+                                catchError(this.handleError)
+                            );
+    }
+    getPartItemListWithItemID(ItemID: string)  {
+        // if (this.partItemList && this.partItemList.length > 0) {
+        //     return of(this.partItemList);
+        // }
+        const headers = new HttpHeaders({
+            'Content-Type': 'application/json'
+        });
+        return this.http.get<ItemList[]>(this.apiURL + '/item/partitemlist/' + ItemID, { headers: headers} )
                             .pipe(
                                 //tap(data => console.log(JSON.stringify(data))),
                                 tap(data => this.partItemList = data),

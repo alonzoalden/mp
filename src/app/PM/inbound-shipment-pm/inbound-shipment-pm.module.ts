@@ -50,6 +50,7 @@ import { inboundShipmentReducer } from './state/inbound-shipment.reducer';
 import { InboundShipmentEffects } from './state/inbound-shipment.effects';
 import { ItemService } from '../item-pm/item.service';
 import {SharePipeModule} from '../../shared/pipe/share.pipe';
+import {InboundShipmentPreviewDialogComponent} from './inbound-shipment-preview/inbound-shipment-preview-dialog.component';
 
 @NgModule({
     declarations: [
@@ -72,13 +73,16 @@ import {SharePipeModule} from '../../shared/pipe/share.pipe';
         InboundShipmentEditCartonShellComponent,
         InboundShipmentEditShippingInstructionShellComponent,
         InboundShipmentEditShippingShellComponent,
+        InboundShipmentPreviewDialogComponent
     ],
     entryComponents: [InboundShipmentEditCartonListComponent
         , InboundShipmentEditLineListComponent
         , InboundShipmentEditItemPrintDialogComponent
         , InboundShipmentEditCartonListCartonPrintDialogComponent
         , InboundShipmentEditLineItemPrintDialogComponent
-        , InboundShipmentEditShippingInstructionCartonPrintDialogComponent],
+        , InboundShipmentEditShippingInstructionCartonPrintDialogComponent
+        , InboundShipmentPreviewDialogComponent
+    ],
     imports: [
         TranslateModule,
         ReactiveFormsModule,

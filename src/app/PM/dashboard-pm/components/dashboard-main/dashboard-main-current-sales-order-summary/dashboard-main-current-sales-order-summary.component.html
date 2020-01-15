@@ -10,7 +10,7 @@
                     <ng-container matColumnDef="Status">
                         <th mat-header-cell *matHeaderCellDef>{{ 'Status' | translate }}</th>
                         <td mat-cell *matCellDef="let currentSalesOrderSummary" width="60%" height="20px" class="no-border">
-                            <div class="p-xxs"><a class="label-link" [routerLink]="['/sales-order','merchant','status', currentSalesOrderSummary.Status === 'Shipped' ? 'shipped' : 'unshipped']">{{ currentSalesOrderSummary.Status | translate }}</a></div>
+                            <div class="p-xxs"><a class="label-link" [routerLink]="['/PM/sales-order','merchant','status', currentSalesOrderSummary.Status === 'Shipped' ? 'shipped' : 'unshipped']">{{ currentSalesOrderSummary.Status | translate }}</a></div>
                         </td>
                     </ng-container>
                     <ng-container matColumnDef="Count">
@@ -29,7 +29,7 @@
                     <ng-container matColumnDef="Status">
                         <th mat-header-cell *matHeaderCellDef>{{ 'Status' | translate }}</th>
                         <td mat-cell *matCellDef="let toolotsSalesOrderSummary" width="60%" class="no-border">
-                            <div class="p-xxs"><a class="label-link" [routerLink]="['/sales-order','toolots','status', toolotsSalesOrderSummary.Status === 'Shipped' ? 'shipped' : 'unshipped']">{{ toolotsSalesOrderSummary.Status | translate }}</a></div>
+                            <div class="p-xxs"><a class="label-link" [routerLink]="['/PM/sales-order','toolots','status', toolotsSalesOrderSummary.Status === 'Shipped' ? 'shipped' : 'unshipped']">{{ toolotsSalesOrderSummary.Status | translate }}</a></div>
                         </td>
                     </ng-container>
                     <ng-container matColumnDef="Count">

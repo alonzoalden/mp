@@ -62,7 +62,7 @@ export class ItemEditPartSectionComponent implements OnInit {
             this.refreshDataSource(this.item.ItemSections);
         }
 
-        this.itemService.getPartItemList().subscribe(
+        this.itemService.getPartItemListWithItemID(String(this.itemid)).subscribe(
             (itemlist: ItemList[]) => {
                 this.itemlist = itemlist;
                 const _temp = new ItemList(null, 'New Item', null, null, null, null, null);
