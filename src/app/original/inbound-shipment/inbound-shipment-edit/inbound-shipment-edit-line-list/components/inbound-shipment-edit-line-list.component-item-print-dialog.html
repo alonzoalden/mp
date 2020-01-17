@@ -96,4 +96,7 @@
         <button mat-button class="btn btn-success-sm" (click)="onCloseClick()" [disabled]="!customOptions.Quantity || (isCustom && !isOptionsValid(customOptions))">Print</button>
     </div>
     <button mat-button class="btn btn-remove-sm" (click)="onCancelClick()">Cancel</button>
+    <div class="m-l-sm" *ngIf="isCustom">
+        <button mat-button class="btn btn-success-sm" (click)="openPreviewDialog()" [disabled]="!customOptions.Quantity || (isCustom && !isOptionsValid(customOptions))">{{'Preview'|translate}}</button>
+    </div>
 </mat-dialog-actions>

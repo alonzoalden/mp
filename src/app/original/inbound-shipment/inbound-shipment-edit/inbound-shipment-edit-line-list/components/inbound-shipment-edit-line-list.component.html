@@ -196,11 +196,11 @@
                             <ng-container matColumnDef="Label">
                                 <th mat-header-cell *matHeaderCellDef width="80px">{{ 'Label' | translate }}</th>
                                 <td mat-cell *matCellDef="let purchaseorderline; let i = index">
-                                    <div *ngIf="i !== purchaseOrder.PurchaseOrderLines.length-1">
+                                    <!-- <div *ngIf="i !== purchaseOrder.PurchaseOrderLines.length-1"> -->
                                         <a (click)="openDialogPrintItemLabel(purchaseorderline)">
                                             <span class="glyphicon glyphicon-print"></span>
                                         </a>
-                                    </div>
+                                    <!-- </div> -->
                                 </td>
                             </ng-container>
                             <!-- Remove Button -->
