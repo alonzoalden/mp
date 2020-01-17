@@ -565,7 +565,7 @@ export class PurchaseOrderService {
     // Custom
     downloadCartonLabelCustom(id: number, options: CustomPrintLabel) {
         //return this.http.get(this.apiURL + '/carton/' + id + '/cartonlist', { responseType: 'blob' });
-        return this.http.post(this.apiURL + '/carton/' + id + '/label/custom', options, { responseType: 'blob' });
+        return this.http.post(this.apiURL + '/carton/' + id + '/label/custom/PM', options, { responseType: 'blob' });
     }
 
     downloadCartonLabelCount(id: number, count: number, border: string) {

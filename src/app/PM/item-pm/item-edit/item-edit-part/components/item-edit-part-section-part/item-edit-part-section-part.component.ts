@@ -4,6 +4,7 @@ import { Item, ItemInsert, ItemList, ItemPartInsert, ItemPart, ItemSection } fro
 import { ItemService } from '../../../../item.service';
 import { AppService } from '../../../../../../app.service';
 import { environment } from '../../../../../../../environments/environment';
+import {ActivatedRoute} from '@angular/router';
 
 @Component({
     selector: 'o-item-edit-part-section-part',
@@ -32,15 +33,19 @@ export class ItemEditPartSectionPartComponent implements OnInit {
     partSelectedFileNames: string[] = [];
     partPendingUpload: boolean;
     public isLoadingData: Boolean = false;
+    itemid: number;
 
     @ViewChildren('selectionCategoriesRef') selectionCategoriesRef: any;
 
     constructor(
         private itemService: ItemService,
-        private appService: AppService
+        private appService: AppService,
+        private route: ActivatedRoute,
+
     ) { }
 
     ngOnInit() {
+        this.itemid = this.route.parent.snapshot.params['id'];
         this.appService.getCurrentMember()
             .subscribe(
                 (data) => {
@@ -63,7 +68,7 @@ export class ItemEditPartSectionPartComponent implements OnInit {
             }
         });
         //make this based off group
-        this.itemService.getPartItemList().subscribe(
+        this.itemService.getPartItemListWithItemID(String(this.itemid)).subscribe(
             (itemlist: ItemList[]) => {
                 this.itemlist = itemlist;
                 const _temp = new ItemList(null, 'New Item', null, null, null, null, null);

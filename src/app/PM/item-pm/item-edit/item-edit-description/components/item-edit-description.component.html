@@ -100,7 +100,7 @@
                                 </select>
                             </div>
                         </div>
-                        <div class="form-group" [ngClass]="{'has-error': !itemOriginVar.valid }">
+                        <div class="form-group">
                             <label class="col-md-2 control-label" for="itemOriginId">{{ 'Origin' | translate }}</label>
                             <div class="col-md-8">
                                 <select id="itemOriginId" name="itemOrigin" class="form-control" disabled [(ngModel)]=item.Origin required #itemOriginVar="ngModel">
