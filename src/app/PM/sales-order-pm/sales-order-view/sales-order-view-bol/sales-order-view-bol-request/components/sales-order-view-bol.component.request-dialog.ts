@@ -48,6 +48,9 @@ export class SalesOrderViewBOLRequestComponentDialog implements OnInit, OnDestro
         },
         {
             Value: 'Pallet'
+        },
+        {
+            Value: 'Parcel'
         }
     ];
 

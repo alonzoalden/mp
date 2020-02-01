@@ -49,6 +49,7 @@ import { PageNotFoundComponent } from './page-not-found.component';
 import { ItemVariationListComponent } from './item-variation/item-variation-list.component';
 import { ItemVariationDetailComponent } from './item-variation/item-variation-detail.component';
 import { ItemEditVariationComponent } from './item-edit/item-edit-variation.component';
+import { ItemEditRefurbishShellComponent } from 'app/original/item/item-edit/item-edit-refurbish/containers/item-edit-refurbish-shell.component';
 
 const ITEM_ROUTES: Routes = [
     {
@@ -172,7 +173,11 @@ const ITEM_ROUTES: Routes = [
                     {
                         path: 'variation',
                         component: ItemEditVariationComponent
-                    }
+                    },
+                    {
+                        path: 'refurbish',
+                        component: ItemEditRefurbishShellComponent
+                    },
                 ]
             },
             {

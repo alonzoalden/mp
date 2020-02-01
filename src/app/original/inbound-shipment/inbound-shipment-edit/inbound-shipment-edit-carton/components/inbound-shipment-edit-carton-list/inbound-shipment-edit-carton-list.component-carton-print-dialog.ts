@@ -1,7 +1,8 @@
 import { Component, OnInit, Inject } from '@angular/core';
-import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material';
+import { MatDialogRef, MAT_DIALOG_DATA, MatDialog } from '@angular/material';
 import { CustomPrintLabel } from '../../../../../../shared/class/label';
 import { Carton } from '../../../../../../shared/class/purchase-order';
+import { InboundShipmentPreviewDialogComponent } from '../../../../inbound-shipment-preview/inbound-shipment-preview-dialog.component';
 
 @Component({
     selector: 'inbound-shipment-edit-carton-list.component-carton-print-dialog',
@@ -16,6 +17,7 @@ export class InboundShipmentEditCartonListCartonPrintDialogComponent implements 
 
     constructor(
         public dialogRef: MatDialogRef<InboundShipmentEditCartonListCartonPrintDialogComponent>,
+        public itemPrintDialog: MatDialog,
         @Inject(MAT_DIALOG_DATA) public data: Carton) { }
     ngOnInit() {
         this.customOptions = new CustomPrintLabel(1, 'yes', 0, 0, 0, 0, 0, 0, 0, 0, []);
@@ -67,5 +69,14 @@ export class InboundShipmentEditCartonListCartonPrintDialogComponent implements 
 
     onCancelClick(): void {
         this.dialogRef.close();
+ 
+    }
+    
+    openPreviewDialog() {
+        const dialogRef = this.itemPrintDialog.open(InboundShipmentPreviewDialogComponent, {
+            width: '1000px',
+            height: '1000px',
+            data: {...this.customOptions, units: this.units}
+        });
     }
 }
