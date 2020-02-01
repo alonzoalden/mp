@@ -18,6 +18,7 @@ export class InboundShipmentPreviewDialogComponent implements OnInit, OnChanges 
     oneRowNum: number;
     onePageNum: number;
     pageCount: number;
+
     constructor(
         public dialogRef: MatDialogRef<InboundShipmentPreviewDialogComponent>,
         @Inject(MAT_DIALOG_DATA) public data: ItemPrintPreview,
@@ -41,7 +42,7 @@ export class InboundShipmentPreviewDialogComponent implements OnInit, OnChanges 
         do {
             wY = Number((this.generalData.fPageWidth - 2 - this.generalData.fPageLeftMargin - this.generalData.fLabelWidth - this.generalData.fGapDistanceX - (wX - 1) * (this.generalData.fLabelWidth + this.generalData.fGapDistanceX)).toFixed(2));
             wX++;
-        } while (wY >= this.generalData.fLabelWidth);
+        } while (wY + 0.1 >= this.generalData.fLabelWidth);
         //One Row count
         this.oneRowNum = wX - 1;
         //total row count
@@ -50,7 +51,7 @@ export class InboundShipmentPreviewDialogComponent implements OnInit, OnChanges 
         do {
             hY = Number((this.generalData.fPageHeight - 2 - this.generalData.fPageTopMargin - this.generalData.fLabelHeight - this.generalData.fGapDistanceY - (hX - 1) * (this.generalData.fLabelHeight + this.generalData.fGapDistanceY)).toFixed(2));
             hX++;
-        } while (hY >= this.generalData.fLabelHeight);
+        } while (hY + 0.1 >= this.generalData.fLabelHeight);
         //one page row count
         const rowNum = hX - 1;
         //one page item count
