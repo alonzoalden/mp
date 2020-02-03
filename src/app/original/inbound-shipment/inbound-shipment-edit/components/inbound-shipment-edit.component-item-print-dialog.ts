@@ -1,7 +1,8 @@
 import { Component, OnInit, Inject } from '@angular/core';
-import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material';
+import { MatDialogRef, MAT_DIALOG_DATA, MatDialog } from '@angular/material';
 import { CustomPrintLabel } from '../../../../shared/class/label';
 import { PurchaseOrder } from 'app/shared/class/purchase-order';
+import { InboundShipmentPreviewDialogComponent } from '../../inbound-shipment-preview/inbound-shipment-preview-dialog.component';
 
 @Component({
     selector: 'inbound-shipment-edit.component-item-print-dialog',
@@ -15,6 +16,7 @@ export class InboundShipmentEditItemPrintDialogComponent implements OnInit {
     units: string = 'mm';
 
     constructor(
+        public itemPrintDialog: MatDialog,
         public dialogRef: MatDialogRef<InboundShipmentEditItemPrintDialogComponent>,
         @Inject(MAT_DIALOG_DATA) public data: PurchaseOrder) { }
     ngOnInit() {
@@ -67,5 +69,12 @@ export class InboundShipmentEditItemPrintDialogComponent implements OnInit {
 
     onCancelClick(): void {
         this.dialogRef.close();
+    }
+    openPreviewDialog() {
+        const dialogRef = this.itemPrintDialog.open(InboundShipmentPreviewDialogComponent, {
+            width: '1000px',
+            height: '1000px',
+            data: {...this.customOptions, units: this.units}
+        });
     }
 }

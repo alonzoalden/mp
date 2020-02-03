@@ -40,14 +40,7 @@ export class InboundShipmentEditShippingInstructionComponent implements OnInit {
         });
 
         dialogRef.afterClosed().subscribe(result => {
-            if (result) {
-                if (result.isCustom) {
-                    this.onPrintAllCartonLabelsCustom(result.customOptions);
-                }
-                else {
-                    this.onPrintAllCartonLabels(result.customOptions.Border);
-                }
-            }
+            this.onPrintAllCartonLabels(result.Border);
         });
     }
 
