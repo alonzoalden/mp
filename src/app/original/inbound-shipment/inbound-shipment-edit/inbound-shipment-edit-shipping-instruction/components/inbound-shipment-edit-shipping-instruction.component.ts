@@ -39,8 +39,15 @@ export class InboundShipmentEditShippingInstructionComponent implements OnInit {
           data: this.purchaseorder
         });
 
-        dialogRef.afterClosed().subscribe(result => {
-            this.onPrintAllCartonLabels(result.Border);
+        dialogRef.afterClosed().subscribe((data: { isCustom: boolean, customOptions: CustomPrintLabel, size: string }) => {
+            if (data && data.customOptions && data.customOptions.Quantity > 0) {
+                if (!data.isCustom) {
+                    this.onPrintAllCartonLabels(data.customOptions.Border);
+                }
+                if (data.isCustom) {
+                    this.onPrintAllCartonLabelsCustom(data.customOptions);
+                }
+            }
         });
     }
 

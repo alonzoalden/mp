@@ -124,7 +124,6 @@ import { SharePipeModule } from '../../shared/pipe/share.pipe';
 import { ItemEditRefurbishShellComponent } from './item-edit/item-edit-refurbish/containers/item-edit-refurbish-shell.component';
 import { ItemEditRefurbishComponent } from './item-edit/item-edit-refurbish/components/item-edit-refurbish.component';
 import { ItemEditRefurbishImageComponentUploadDialog } from './item-edit/item-edit-refurbish/components/item-edit-refurbish.component-upload-dialog';
-
 // import { ItemVariationEffects } from './item-variation/state/item-variation.effects';
 // import { itemreducer } from './item-variation/state/item-variation.reducer';
 
@@ -256,7 +255,8 @@ import { ItemEditRefurbishImageComponentUploadDialog } from './item-edit/item-ed
         ItemVariationSelectItemComponentDialog,
         ItemPartListComponentItemPrintDialog,
         // ItemAddRefurbishImageComponentUploadDialog,
-        ItemEditRefurbishImageComponentUploadDialog
+        ItemEditRefurbishImageComponentUploadDialog,
+        //InboundShipmentPreviewDialogComponent
     ],
     imports: [
         TranslateModule,

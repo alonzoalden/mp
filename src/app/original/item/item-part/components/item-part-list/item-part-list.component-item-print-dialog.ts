@@ -1,7 +1,8 @@
 import { Component, OnInit, Inject } from '@angular/core';
-import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material';
+import { MatDialogRef, MAT_DIALOG_DATA, MatDialog } from '@angular/material';
 import { Item } from '../../../../../shared/class/item';
 import { CustomPrintLabel } from '../../../../../shared/class/label';
+import { InboundShipmentPreviewDialogComponent } from '../../../../inbound-shipment/inbound-shipment-preview/inbound-shipment-preview-dialog.component';
 
 @Component({
     selector: 'item-part-list.component-item-print-dialog',
@@ -15,6 +16,7 @@ export class ItemPartListComponentItemPrintDialog implements OnInit {
     units: string = 'mm';
 
     constructor(
+        public itemPrintDialog: MatDialog,
         public dialogRef: MatDialogRef<ItemPartListComponentItemPrintDialog>,
         @Inject(MAT_DIALOG_DATA) public data: Item) {}
 
@@ -68,5 +70,13 @@ export class ItemPartListComponentItemPrintDialog implements OnInit {
 
     onCancelClick(): void {
         this.dialogRef.close();
+    }
+
+    openPreviewDialog() {
+        const dialogRef = this.itemPrintDialog.open(InboundShipmentPreviewDialogComponent, {
+            width: '1000px',
+            height: '1000px',
+            data: {...this.customOptions, units: this.units}
+        });
     }
 }

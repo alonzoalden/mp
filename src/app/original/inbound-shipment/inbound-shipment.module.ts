@@ -33,7 +33,6 @@ import { EffectsModule } from '@ngrx/effects';
 import { inboundShipmentReducer } from './state/inbound-shipment.reducer';
 import { InboundShipmentEffects } from './state/inbound-shipment.effects';
 import { ItemService } from '../item/item.service';
-import {InboundShipmentPreviewDialogComponent} from './inbound-shipment-preview/inbound-shipment-preview-dialog.component';
 
 @NgModule({
     declarations: [
@@ -56,15 +55,15 @@ import {InboundShipmentPreviewDialogComponent} from './inbound-shipment-preview/
         InboundShipmentEditCartonShellComponent,
         InboundShipmentEditShippingInstructionShellComponent,
         InboundShipmentEditShippingShellComponent,
-        InboundShipmentPreviewDialogComponent,
     ],
-    entryComponents: [InboundShipmentEditCartonListComponent
+    entryComponents: [
+        InboundShipmentEditCartonListComponent
         , InboundShipmentEditLineListComponent
         , InboundShipmentEditItemPrintDialogComponent
         , InboundShipmentEditCartonListCartonPrintDialogComponent
         , InboundShipmentEditLineItemPrintDialogComponent
         , InboundShipmentEditShippingInstructionCartonPrintDialogComponent
-        , InboundShipmentPreviewDialogComponent],
+    ],
     imports: [
         TranslateModule,
         ReactiveFormsModule,
