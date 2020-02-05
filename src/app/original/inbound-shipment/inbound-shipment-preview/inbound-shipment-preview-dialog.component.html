@@ -1,39 +1,51 @@
 <div *ngIf="!error" class="preview-container">
-    <div class="page-board" *ngFor="let page of pageData"
-         [ngStyle]="{'width' : generalData.fPageWidth + 'px','height' : generalData.fPageHeight + 'px'}">
-        <div class="white-board"
-             [ngStyle]="{'padding-top': generalData.fPageTopMargin + 'px', 'padding-left': generalData.fPageLeftMargin + 'px'}">
-            <div class="content-table">
-                <div *ngFor="let a of page;let i = index">
-                    <div [ngClass]="data?.Border == 'yes' ? 'small-item-border' : 'small-item'"
-                         *ngIf="(i + 1) % oneRowNum == 1  && (((onePageNum - (i + 1)) / oneRowNum) >= 1)"
-                         [ngStyle]="{'width': generalData?.fLabelWidth + 'px', 'height': generalData?.fLabelHeight + 'px', 'margin-right': generalData.fGapDistanceX + 'px', 'margin-bottom': generalData.fGapDistanceY + 'px'}">
-                    </div>
-                    <div [ngClass]="data?.Border == 'yes' ? 'small-item-border' : 'small-item'"
-                         *ngIf="(i + 1) % oneRowNum != 1 && (i + 1) % oneRowNum != 0  && (((onePageNum - (i + 1)) / oneRowNum) >= 1)"
-                         [ngStyle]="{'width': generalData?.fLabelWidth + 'px', 'height': generalData?.fLabelHeight + 'px', 'margin-bottom': generalData.fGapDistanceY + 'px', 'margin-right': generalData.fGapDistanceX + 'px'}">
-                    </div>
-                    <div [ngClass]="data?.Border == 'yes' ? 'small-item-border' : 'small-item'"
-                         *ngIf="(i + 1) % oneRowNum == 0  && (((onePageNum - (i + 1)) / oneRowNum) >= 1)"
-                         [ngStyle]="{'width': generalData?.fLabelWidth + 'px', 'height': generalData?.fLabelHeight + 'px', 'margin-bottom': generalData.fGapDistanceY + 'px'}">
-                    </div>
-                    <div [ngClass]="data?.Border == 'yes' ? 'small-item-border' : 'small-item'"
-                         *ngIf="(i + 1) % oneRowNum == 1 && (((onePageNum - (i + 1)) / oneRowNum) < 1)"
-                         [ngStyle]="{'width': generalData?.fLabelWidth + 'px', 'height': generalData?.fLabelHeight + 'px', 'margin-right': generalData.fGapDistanceX + 'px'}">
-                    </div>
-                    <div [ngClass]="data?.Border == 'yes' ? 'small-item-border' : 'small-item'"
-                         *ngIf="(i + 1) % oneRowNum != 1 && (i + 1) % oneRowNum != 0 && (((onePageNum - (i + 1)) / oneRowNum) < 1)"
-                         [ngStyle]="{'width': generalData?.fLabelWidth + 'px', 'height': generalData?.fLabelHeight + 'px', 'margin-right': generalData.fGapDistanceX + 'px'}">
-                    </div>
-                    <div [ngClass]="data?.Border == 'yes' ? 'small-item-border' : 'small-item'"
-                         *ngIf="(i + 1) % oneRowNum == 0 && (((onePageNum - (i + 1)) / oneRowNum) < 1)"
-                         [ngStyle]="{'width': generalData?.fLabelWidth + 'px', 'height': generalData?.fLabelHeight + 'px'}">
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
-<div class="error-msg" *ngIf="error">
-    <span>{{error|translate}}</span>
-</div>
+     <div class="page-board" *ngFor="let page of pageData"
+          [ngStyle]="{'width' : generalData.fPageWidth + 'px','height' : generalData.fPageHeight + 'px'}">
+         <div class="white-board"
+              [ngStyle]="{'padding-top': generalData.fPageTopMargin + 'px', 'padding-left': generalData.fPageLeftMargin + 'px'}">
+             <div class="content-table">
+                 <div *ngFor="let a of page;let i = index">
+ <!--                    1、4-->
+                     <div [ngClass]="data?.Border == 'yes' ? 'small-item-border' : 'small-item'"
+                          *ngIf="(i + 1) % oneRowNum == 1  && (((onePageNum - (i + 1)) / oneRowNum) >= 1)"
+                          [ngStyle]="{'width': generalData?.fLabelWidth + 'px', 'height': generalData?.fLabelHeight + 'px', 'margin-right': generalData.fGapDistanceX + 'px', 'margin-bottom': generalData.fGapDistanceY + 'px'}">
+                     </div>
+ <!--                    2、5-->
+                     <div [ngClass]="data?.Border == 'yes' ? 'small-item-border' : 'small-item'"
+                          *ngIf="(i + 1) % oneRowNum != 1 && (i + 1) % oneRowNum != 0  && (((onePageNum - (i + 1)) / oneRowNum) >= 1)"
+                          [ngStyle]="{'width': generalData?.fLabelWidth + 'px', 'height': generalData?.fLabelHeight + 'px', 'margin-bottom': generalData.fGapDistanceY + 'px', 'margin-right': generalData.fGapDistanceX + 'px'}">
+                     </div>
+ <!--                    3、6-->
+                     <div [ngClass]="data?.Border == 'yes' ? 'small-item-border' : 'small-item'"
+                          *ngIf="(i + 1) % oneRowNum == 0  && (((onePageNum - (i + 1)) / oneRowNum) >= 1) && oneRowNum != 1"
+                          [ngStyle]="{'width': generalData?.fLabelWidth + 'px', 'height': generalData?.fLabelHeight + 'px', 'margin-bottom': generalData.fGapDistanceY + 'px'}">
+                     </div>
+ <!--                    oneRow oneNum-->
+                     <div [ngClass]="data?.Border == 'yes' ? 'small-item-border' : 'small-item'"
+                          *ngIf="(i + 1) % oneRowNum == 0  && (((onePageNum - (i + 1)) / oneRowNum) == 1) && oneRowNum == 1"
+                          [ngStyle]="{'width': generalData?.fLabelWidth + 'px', 'height': generalData?.fLabelHeight + 'px', 'margin-bottom': generalData.fGapDistanceY + 'px', 'margin-right': generalData.fGapDistanceX + 'px'}">
+                     </div>
+ <!--                    9、-->
+                     <div [ngClass]="data?.Border == 'yes' ? 'small-item-border' : 'small-item'"
+                          *ngIf="(i + 1) % oneRowNum == 0 && (((onePageNum - (i + 1)) / oneRowNum) < 1)"
+                          [ngStyle]="{'width': generalData?.fLabelWidth + 'px', 'height': generalData?.fLabelHeight + 'px'}">
+                     </div>
+ <!--                    7-->
+                     <div [ngClass]="data?.Border == 'yes' ? 'small-item-border' : 'small-item'"
+                          *ngIf="(i + 1) % oneRowNum == 1 && (((onePageNum - (i + 1)) / oneRowNum) < 1)"
+                          [ngStyle]="{'width': generalData?.fLabelWidth + 'px', 'height': generalData?.fLabelHeight + 'px', 'margin-right': generalData.fGapDistanceX + 'px'}">
+                     </div>
+ <!--                    8-->
+                     <div [ngClass]="data?.Border == 'yes' ? 'small-item-border' : 'small-item'"
+                          *ngIf="(i + 1) % oneRowNum != 1 && (i + 1) % oneRowNum != 0 && (((onePageNum - (i + 1)) / oneRowNum) < 1)"
+                          [ngStyle]="{'width': generalData?.fLabelWidth + 'px', 'height': generalData?.fLabelHeight + 'px', 'margin-right': generalData.fGapDistanceX + 'px'}">
+                     </div>
+                 </div>
+             </div>
+         </div>
+     </div>
+ </div>
+ <div class="error-msg" *ngIf="error">
+     <span>{{error|translate}}</span>
+ </div>
+ 
