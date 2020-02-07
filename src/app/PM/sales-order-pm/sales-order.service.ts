@@ -271,7 +271,7 @@ export class SalesOrderService {
     }
 
     downloadSalesOrderPackingSlip(id: number) {
-        return this.http.get(this.apiURL + '/salesorder/' + id + '/packingslip', { responseType: 'blob' });
+        return this.http.get(this.apiURL + '/salesorder/' + id + '/packingslip/PM', { responseType: 'blob' });
     }
 
     getBOLRequest(salesorderid: number): Observable<BOLRequest> {

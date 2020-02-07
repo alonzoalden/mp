@@ -226,7 +226,7 @@ export class PurchaseOrderService {
         return orderStatus;
     }
     downloadPurchaseOrderLabel(id: number) {
-        return this.http.get(this.apiURL + '/purchaseorder/' + id + '/packingslip', { responseType: 'blob' });
+        return this.http.get(this.apiURL + '/purchaseorder/' + id + '/packingslip/PM', { responseType: 'blob' });
     }
 
     // Inbound Shipping Method
