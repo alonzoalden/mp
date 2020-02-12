@@ -18,6 +18,7 @@ export class ItemBatchUpdateUpdateComponent implements OnInit, OnChanges {
     @Input() batchUpdates: BatchUpdate[];
     @Input() errorMessage: string;
     @Input() isLoading: boolean;
+    @Input() isEditItemBatchUpdateLoading: boolean;
     @Output() getItemBatchUpdates = new EventEmitter<void>();
     @Output() editItemBatchUpdate = new EventEmitter<BatchUpdateValue[]>();
     batchUpdateValues: BatchUpdateValue[];

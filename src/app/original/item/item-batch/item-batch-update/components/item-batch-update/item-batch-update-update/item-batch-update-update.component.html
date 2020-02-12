@@ -35,8 +35,12 @@
                             <div class="col-md-8 m-l-sm">
                                 <button class="btn btn-success col-md-3"
                                     type="button"
-                                    (click)="updateBatch()">
-                                    Update
+                                    (click)="updateBatch()"
+                                    [disabled]=isEditItemBatchUpdateLoading>
+                                    
+                                    <span *ngIf="!isEditItemBatchUpdateLoading">{{ 'Update' | translate }}</span>
+                                    <span *ngIf="isEditItemBatchUpdateLoading"><i class="fa fa-spinner fa-spin"></i></span>
+                                    
                             </button>
                             </div>
                         </div>

@@ -35,9 +35,6 @@ export class ItemBatchUpdateSelectComponent implements OnInit, OnChanges {
             this.itemBatchItemsMatTable.paginator = this.paginator;
             this.itemBatchItemsMatTable.sort = this.sort;
         }
-        if (changes.itemBatchItemsMatTable && !changes.itemBatchItemsMatTable.currentValue.data.length && changes.itemBatchItemsMatTable.firstChange) {
-            this.getItems.emit();
-        }
         if (changes.userInfo && changes.userInfo.currentValue) {
             if (this.userInfo.DefaultPageSize) {
                 this.paginator.pageSize = this.userInfo.DefaultPageSize;
@@ -49,6 +46,12 @@ export class ItemBatchUpdateSelectComponent implements OnInit, OnChanges {
 
     ngOnInit() {
         this.applyFilter('');
+        if (this.itemBatchItemsMatTable.data.length) {
+            this.isLoading = false;
+        }
+        else {
+            this.getItems.emit();
+        }
     }
 
     refreshDataSource(items: Item[]) {

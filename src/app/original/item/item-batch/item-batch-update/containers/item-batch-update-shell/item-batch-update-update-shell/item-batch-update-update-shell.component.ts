@@ -18,21 +18,23 @@ export class ItemBatchUpdateUpdateShellComponent implements OnInit {
     batchUpdates$: Observable<BatchUpdate[]>;
     userInfo$: Observable<Member>;
     isLoading$: Observable<Boolean>;
+    isEditItemBatchUpdateLoading$: Observable<Boolean>;
     errorMessage$: Observable<string>;
 
     constructor(private store: Store<fromItem.State>) {}
 
     ngOnInit() {
         this.userInfo$ = this.store.pipe(select(fromUser.getCurrentUser));
-        this.itemBatchItemsMatTable$ = this.store.pipe(select(fromItem.getItemBatchItemsMatTable));
+        this.itemBatchItemsMatTable$ = this.store.pipe(select(fromItem.getItemsMatTable));
         this.batchUpdates$ = this.store.pipe(select(fromItem.getItemBatchUpdates));
         this.errorMessage$ = this.store.pipe(select(fromItem.getError));
         setTimeout(() => {
             this.isLoading$ = this.store.pipe(select(fromItem.getIsLoading));
+            this.isEditItemBatchUpdateLoading$ = this.store.pipe(select(fromItem.getIsEditItemBatchUpdateLoading));
         });
     }
     getItems(): void {
-        this.store.dispatch(new itemActions.LoadItemBatchItems());
+        this.store.dispatch(new itemActions.LoadMainItems());
     }
     getItemBatchUpdates(): void {
         this.store.dispatch(new itemActions.LoadItemBatchUpdate());

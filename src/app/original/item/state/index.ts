@@ -148,10 +148,6 @@ export const getItemBatchItems = createSelector(
     getItemFeatureState,
     state => state.itemBatchItems
 );
-export const getItemBatchItemsMatTable = createSelector(
-    getItemFeatureState,
-    state => new MatTableDataSource<Item>(state.itemBatchItems)
-);
 export const getItemBatchUpdates = createSelector(
     getItemFeatureState,
     state => state.itemBatchUpdates
@@ -192,7 +188,10 @@ export const getIsItemListLoading = createSelector(
     getItemFeatureState,
     state => state.isItemListLoading
 );
-
+export const getIsEditItemBatchUpdateLoading = createSelector(
+    getItemFeatureState,
+    state => state.isEditItemBatchUpdateLoading
+);
 export const getError = createSelector(
     getItemFeatureState,
     state => state.error

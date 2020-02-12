@@ -404,7 +404,7 @@ export class ItemEffects {
                     this.itemService.sendNotification({ type: 'success', title: 'Successfully Updated', content: '' });
                     this.router.navigate(['item', 'batchupdate', 'select']);
                     this.itemService.resetItems();
-                    this.store.dispatch(new itemActions.LoadItemBatchItems());
+                    this.store.dispatch(new itemActions.LoadMainItems());
                     return (new itemActions.EditItemBatchUpdateSuccess(item));
                 }),
                 catchError(err => {

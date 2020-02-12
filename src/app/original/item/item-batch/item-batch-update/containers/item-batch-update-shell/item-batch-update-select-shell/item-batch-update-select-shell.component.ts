@@ -22,13 +22,13 @@ export class ItemBatchUpdateSelectShellComponent implements OnInit {
 
     ngOnInit() {
         this.userInfo$ = this.store.pipe(select(fromUser.getCurrentUser));
-        this.itemBatchItemsMatTable$ = this.store.pipe(select(fromItem.getItemBatchItemsMatTable));
+        this.itemBatchItemsMatTable$ = this.store.pipe(select(fromItem.getItemsMatTable));
         this.errorMessage$ = this.store.pipe(select(fromItem.getError));
         setTimeout(() => {
-            this.isLoading$ = this.store.pipe(select(fromItem.getIsLoading));
+            this.isLoading$ = this.store.pipe(select(fromItem.getIsMainItemsListLoading));
         });
     }
     getItems(): void {
-        this.store.dispatch(new itemActions.LoadItemBatchItems());
+        this.store.dispatch(new itemActions.LoadMainItems());
     }
 }

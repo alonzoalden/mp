@@ -28,6 +28,7 @@ export interface ItemState {
     isMainItemsListLoading: boolean;
     isVendorAttachmentsListLoading: boolean;
     isItemListLoading: boolean;
+    isEditItemBatchUpdateLoading: boolean;
     pendingDelete: boolean;
     pendingSave: boolean;
     pendingAdd: boolean;
@@ -56,6 +57,7 @@ const initialState: ItemState = {
     isMainItemsListLoading: false,
     isVendorAttachmentsListLoading: false,
     isItemListLoading: false,
+    isEditItemBatchUpdateLoading: false,
     pendingDelete: false,
     pendingSave: false,
     pendingAdd: false,
@@ -310,6 +312,7 @@ export function itemReducer(state = initialState, action: ItemActions): ItemStat
                 isLoading: false,
                 error: action.payload,
             };
+
         case ItemActionTypes.EditItemBatchSuccess:
             action.payload.updateditems.forEach(updateditem => {
                 const _item = state.items.find(item => item.ItemID === updateditem.ItemID);
@@ -328,27 +331,6 @@ export function itemReducer(state = initialState, action: ItemActions): ItemStat
                 ...state,
                 itemBatch: null,
                 pendingSave: false,
-                error: action.payload,
-            };
-        case ItemActionTypes.LoadItemBatchItems:
-            return {
-                ...state,
-                isLoading: true,
-            };
-        case ItemActionTypes.LoadItemBatchItemsSuccess:
-            return {
-                ...state,
-                items: action.payload,
-                itemBatchItems: action.payload,
-                isLoading: false,
-                error: '',
-            };
-        case ItemActionTypes.LoadItemBatchItemsFail:
-            return {
-                ...state,
-                items: [],
-                itemBatchItems: [],
-                isLoading: false,
                 error: action.payload,
             };
         case ItemActionTypes.LoadMainItems:
@@ -402,15 +384,22 @@ export function itemReducer(state = initialState, action: ItemActions): ItemStat
                 isLoading: false,
                 error: action.payload,
             };
+        case ItemActionTypes.EditItemBatchUpdate:
+            return {
+                ...state,
+                isEditItemBatchUpdateLoading: true
+            };
         case ItemActionTypes.EditItemBatchUpdateSuccess:
             state.itemBatchItems.forEach( (item) => item.isSelected = false );
             return {
                 ...state,
+                isEditItemBatchUpdateLoading: false
             };
         case ItemActionTypes.EditItemBatchUpdateFail:
             return {
                 ...state,
                 error: action.payload,
+                isEditItemBatchUpdateLoading: false
             };
 
         case ItemActionTypes.LoadVideoURLDetailSuccess:

@@ -3,6 +3,7 @@
     [batchUpdates]="batchUpdates$ | async"
     [userInfo]="userInfo$ | async"
     [isLoading]="isLoading$ | async"
+    [isEditItemBatchUpdateLoading]="isEditItemBatchUpdateLoading$ | async"
     [errorMessage]="errorMessage$ | async"
     (getItemBatchUpdates)="getItemBatchUpdates()"
     (editItemBatchUpdate)="editItemBatchUpdate($event)"
