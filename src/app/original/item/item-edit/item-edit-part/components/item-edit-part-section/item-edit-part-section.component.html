@@ -62,10 +62,10 @@
                                                 </div>
                                                 <div *ngIf="(i != item.ItemSections.length-1 || itemPart.ImageRaw) && ( !pendingUpload || i != currentIndex )" class="thumbnail-container flex-va-center">
                                                     <a (click)="fileUpload.click()">
-                                                        <img src="{{imageURL + itemPart.ImageFilePath}}" [title]='itemPart.PartItemName' *ngIf="!itemPart.IsNewImage && itemPart.ImageFilePath">
+                                                        <img src="{{imageURL + itemPart.ImageFilePath}}" *ngIf="!itemPart.IsNewImage && itemPart.ImageFilePath">
                                                         <img src='https://content-merchantportal.toolots.net/assets/images/no-image-icon.png' title='Product has no image' class="opaque"
                                                             *ngIf='(!itemPart.IsNewImage && !itemPart.ImageFilePath) || (itemPart.IsNewImage && !itemPart.ImageRaw )' >
-                                                        <img src="{{itemPart.ImageRaw}}" [title]='itemPart.PartItemName' *ngIf="itemPart.IsNewImage && itemPart.ImageRaw">
+                                                        <img src="{{itemPart.ImageRaw}}" *ngIf="itemPart.IsNewImage && itemPart.ImageRaw">
                                                     </a>
                                                 </div>
                                                 <div *ngIf="pendingUpload && i == currentIndex" class="loading-container">

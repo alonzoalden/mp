@@ -4,8 +4,6 @@ import { Item } from '../../../../shared/class/item';
 import { CustomPrintLabel } from '../../../../shared/class/label';
 import { InboundShipmentPreviewDialogComponent } from '../../../inbound-shipment/inbound-shipment-preview/inbound-shipment-preview-dialog.component';
 
-'inbound-shipment-preview/inbound-shipment-preview-dialog.component';
-
 @Component({
     selector: 'item-list.component-item-print-dialog',
     templateUrl: 'item-list.component-item-print-dialog.html',

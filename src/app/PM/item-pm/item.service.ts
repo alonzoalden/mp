@@ -281,7 +281,7 @@ export class ItemService {
         item.ItemSections.forEach((itemsection) => {
 
             const newItemSection = new ItemSection(itemsection.ItemSectionID, itemsection.ItemID, itemsection.Name, itemsection.ImageRaw, itemsection.ImageFilePath, itemsection.Position
-                , itemsection.UpdatedOn, itemsection.CreatedOn, [], itemsection.pendingAdd, itemsection.isNew);
+                , itemsection.UpdatedOn, itemsection.CreatedOn, [], itemsection.pendingAdd, itemsection.isNew, itemsection.isNewImage);
 
 
             itemsection.ItemParts.forEach((itemPart) => {

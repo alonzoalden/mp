@@ -608,7 +608,8 @@ export class ItemSection {
         public ItemParts: Array<ItemPart>,
 
         public pendingAdd: boolean,
-        public isNew: boolean
+        public isNew: boolean,
+        public isNewImage: boolean
     ) {}
 }
 
