@@ -259,7 +259,7 @@ export function itemReducer(state = initialState, action: ItemActions): ItemStat
         case ItemActionTypes.EditItemSuccess:
             return {
                 ...state,
-                item: action.payload,
+                // item: action.payload,
                 pendingSave: false,
                 error: '',
             };

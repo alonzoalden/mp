@@ -601,6 +601,7 @@ export class ItemSection {
         public Name: string,
         public ImageRaw: string,
         public ImageFilePath: string,
+        public IsNewImage: boolean,
         public Position: number,
         public UpdatedOn: string,
         public CreatedOn: string,
@@ -608,8 +609,7 @@ export class ItemSection {
         public ItemParts: Array<ItemPart>,
 
         public pendingAdd: boolean,
-        public isNew: boolean,
-        public isNewImage: boolean
+        public isNew: boolean
     ) {}
 }
 

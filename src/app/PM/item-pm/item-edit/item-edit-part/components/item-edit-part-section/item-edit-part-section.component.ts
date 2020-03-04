@@ -74,7 +74,7 @@ export class ItemEditPartSectionComponent implements OnInit {
     }
 
     addPendingLine() {
-        const _temp = new ItemSection(0, this.item.ItemID, null, null, null, this.item.ItemSections.length + 1,  null,  null, [],  true, true, null);
+        const _temp = new ItemSection(0, this.item.ItemID, null, null, null, null, this.item.ItemSections.length + 1,  null,  null, [],  true, true);
         this.item.ItemSections.push(_temp);
     }
 
@@ -96,7 +96,7 @@ export class ItemEditPartSectionComponent implements OnInit {
         if (this.isRequirementValid(itemPart)) {
                 this.pendingAdd = true;
                 itemPart.pendingAdd = false;
-                const _temp = new ItemSection(0, this.item.ItemID, null, null,  null, this.item.ItemSections.length + 1, null, null, [], true, true, false);
+                const _temp = new ItemSection(0, this.item.ItemID, null, null, null, null, this.item.ItemSections.length + 1, null, null, [], true, true);
                 this.item.ItemSections.push(_temp);
                 this.refreshDataSource(this.item.ItemSections);
                 this.pendingChange = false;

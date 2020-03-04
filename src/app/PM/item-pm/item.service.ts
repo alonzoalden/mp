@@ -280,8 +280,8 @@ export class ItemService {
 
         item.ItemSections.forEach((itemsection) => {
 
-            const newItemSection = new ItemSection(itemsection.ItemSectionID, itemsection.ItemID, itemsection.Name, itemsection.ImageRaw, itemsection.ImageFilePath, itemsection.Position
-                , itemsection.UpdatedOn, itemsection.CreatedOn, [], itemsection.pendingAdd, itemsection.isNew, itemsection.isNewImage);
+            const newItemSection = new ItemSection(itemsection.ItemSectionID, itemsection.ItemID, itemsection.Name, itemsection.ImageRaw, itemsection.ImageFilePath, itemsection.IsNewImage, itemsection.Position
+                , itemsection.UpdatedOn, itemsection.CreatedOn, [], itemsection.pendingAdd, itemsection.isNew);
 
 
             itemsection.ItemParts.forEach((itemPart) => {
