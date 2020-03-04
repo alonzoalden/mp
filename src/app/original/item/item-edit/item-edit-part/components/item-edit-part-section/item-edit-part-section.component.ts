@@ -216,8 +216,8 @@ export class ItemEditPartSectionComponent implements OnInit {
         array.splice(indexes[0], 2, array[indexes[1]], array[indexes[0]]); // Replace from lowest index, two elements, reverting the order
     }
 
-    onRemove(itemPart: ItemPart) {
-        const confirmation = confirm(`Remove ${itemPart.PartItemName}?`);
+    onRemove(itemPart: ItemSection) {
+        const confirmation = confirm(`Remove ${itemPart.Name}?`);
         if (confirmation) {
             const foundIndex = this.item.ItemSections.findIndex(i => i.ItemSectionID === itemPart.ItemSectionID);
             if (foundIndex > -1) {
