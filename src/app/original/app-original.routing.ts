@@ -15,7 +15,7 @@ const APP_ROUTES: Routes = [
     {
         path: '',
         component: AppOriginalComponent,
-        canLoad: [ AuthGuard ],
+        // canLoad: [ AuthGuard ],
         children: [
             {
                 path: 'company', loadChildren: 'app/original/company/company.module#CompanyModule', canLoad: [ AuthGuard ]

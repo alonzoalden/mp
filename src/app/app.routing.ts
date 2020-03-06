@@ -19,11 +19,15 @@ const APP_ROUTES: Routes = [
     },
     {
         // Original App
-        path: '', loadChildren: 'app/original/app-original.module#AppOriginalModule', canLoad: [ AuthGuard ]
+        path: '', loadChildren: 'app/original/app-original.module#AppOriginalModule'
     },
     {
         // PM App
         path: 'PM', loadChildren: 'app/PM/pm.module#PMModule', canLoad: [ AuthGuard ]
+    },
+    {
+        path: '**',
+        redirectTo: 'home'
     }
 ];
 
