@@ -15,7 +15,7 @@ export class ItemPartAddPriceComponent implements OnInit {
     item: ItemInsert;
     isDropship: boolean;
     minDate = new Date(2000, 0, 1);
-    maxDate = new Date(2020, 0, 1);
+    maxDate = new Date(2040, 0, 1);
     PendingAdd: boolean;
     currentItemTierPriceIndex: number;
     displayedColumns = ['Add', 'Quantity', 'Price',  'Remove'];
