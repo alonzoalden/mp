@@ -177,8 +177,7 @@ export class ItemService {
             , item.MerchantWarranty, item.AddProtectionPlan, item.URLKey, item.Visibility, item.Description, item.ShortDescription, item.TechnicalDetail, item.AdditionalInformation
             , item.VendorBrandID, item.RequestApproval, item.RejectionReason, item.Status, item.Approval, item.ImagePath, item.IsPartItem, item.PartImageRaw, item.PartImageFilePath, item.PartIsNewImage, item.ExcludeGoogleShopping, item.UpdatedOn, item.CreatedOn
             , [], [], [], [], [], [], [], [], [], [], [], []
-            , item.QtyOnHand, item.QtyAvailable, item.QtyOnOrder, item.QtyBackOrdered, item.MerchantQtyOnHand, item.MerchantQtyAvailable, item.MerchantQtyOnOrder, false);
-
+            , item.QtyOnHand, item.QtyAvailable, item.QtyOnOrder, item.QtyBackOrdered, item.QtyReturned, item.QtyUnavailable, item.MerchantQtyOnHand, item.MerchantQtyAvailable, item.MerchantQtyOnOrder, false);
         item.ItemCategoryAssignments.forEach((itemCategoryAssignment) => {
             const newItemCategoryAssignment = new ItemCategoryAssignment(itemCategoryAssignment.ItemCategoryID);
             newItem.ItemCategoryAssignments.push(newItemCategoryAssignment);

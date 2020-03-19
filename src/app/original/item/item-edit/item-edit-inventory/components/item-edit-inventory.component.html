@@ -23,6 +23,18 @@
                                     {{item.QtyOnOrder}}
                                 </div>
                             </div>
+                            <div class="form-group">
+                                <label class="col-md-2 control-label">{{ 'Returned' | translate }}</label>
+                                <div class="col-md-8 m-l-sm grey-highlight">
+                                    {{item.QtyReturned}}
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-md-2 control-label">{{ 'Unavailable' | translate }}</label>
+                                <div class="col-md-8 m-l-sm grey-highlight">
+                                    {{item.QtyUnavailable}}
+                                </div>
+                            </div>
                         </div>
                         <div class="ibox-title"><h5>{{ 'Inventory - Merchant' | translate }}</h5></div>
                         <div class="ibox-content">
@@ -39,7 +51,7 @@
                                 </div>
                             </div>
                             <div class="form-group">
-                                <label class="col-md-2 control-label">{{ 'On Order' | translate }}</label>
+                                <label class="col-md-2 control-label">{{ 'Ordered' | translate }}</label>
                                 <div class="col-md-8 m-l-sm grey-highlight">
                                     {{item.MerchantQtyOnOrder}}
                                 </div>

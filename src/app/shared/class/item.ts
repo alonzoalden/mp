@@ -89,7 +89,8 @@ export class Item {
         public QtyAvailable: number,
         public QtyOnOrder: number,
         public QtyBackOrdered: number,
-
+        public QtyReturned: number,
+        public QtyUnavailable: number,
         public MerchantQtyOnHand: number,
         public MerchantQtyAvailable: number,
         public MerchantQtyOnOrder: number,
