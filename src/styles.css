@@ -2248,3 +2248,12 @@ td.mat-cell > div.overflowhidden {
 .testtt th {
     top: -20px !important;
 }
+.item-print-label.wrapper {
+    position: absolute !important;
+    bottom: 0 !important;
+    top: 145px !important;
+    overflow: scroll !important;
+}
+.item-print-label .ibox-content {
+    min-height: 50vh !important;
+}

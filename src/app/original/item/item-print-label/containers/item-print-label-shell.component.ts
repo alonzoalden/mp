@@ -8,6 +8,7 @@ import * as fromItem from '../../state';
 import * as fromUser from '../../../../shared/state/user-state.reducer';
 import { ItemPrintLabel, ItemList } from '../../../../shared/class/item';
 import { Member } from '../../../../shared/class/member';
+import { CustomPrintLabel } from 'app/shared/class/label';
 
 
 @Component({
@@ -41,5 +42,12 @@ export class ItemPrintLabelShellComponent implements OnInit  {
     }
     downloadPrintItemLargeLabels(payload): void {
         this.store.dispatch(new itemActions.DownloadPrintItemLargeLabels(payload));
+    }
+
+    downloadItemPrintLabelCustom(payload: {options: CustomPrintLabel }): void {
+        this.store.dispatch(new itemActions.DownloadItemPrintLabelCustom(payload));
+    }
+    downloadPrintItemLargeLabelsCustom(payload: {options: CustomPrintLabel }): void {
+        this.store.dispatch(new itemActions.DownloadPrintItemLargeLabelsCustom(payload));
     }
 }

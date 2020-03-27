@@ -49,10 +49,11 @@ export class ItemListComponentImportDialog implements OnInit {
         const formData: FormData = new FormData();
         this.loading = true;
         formData.append('uploadedFiles', this.filesToUpload[0], this.filesToUpload[0].name);
-        this.itemService.importItemFile(formData).subscribe (
+        this.itemService.importItemFile(formData).subscribe(
             (data: string) => {
                 this.loading = false;
                 this.updated = true;
+                this.itemService.sendNotification({ type: 'success', title: 'Import Success', content: 'Items have been added.' });
                 this.dialogRef.close(this.updated);
             },
             (error: any) => {

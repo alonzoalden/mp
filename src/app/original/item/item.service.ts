@@ -934,9 +934,7 @@ export class ItemService {
     downloadPrintItemLabels(itemPrintLabels: ItemPrintLabel[], border: string) {
         const headers = new HttpHeaders({
             'Content-Type': 'application/json'
-
         });
-
         return this.http.post<Blob>(this.apiURL + '/item/printlabel/' + border, itemPrintLabels, {headers: headers, responseType: 'blob' as 'json' } )
                             .pipe(
                                 tap(data => {
@@ -947,7 +945,6 @@ export class ItemService {
     downloadPrintItemLabelsCustom(options: CustomPrintLabel) {
         const headers = new HttpHeaders({
             'Content-Type': 'application/json'
-
         });
         return this.http.post<Blob>(this.apiURL + '/item/printlabel/custom', options, {headers: headers, responseType: 'blob' as 'json' } )
                             .pipe(

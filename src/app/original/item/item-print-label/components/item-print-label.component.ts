@@ -5,6 +5,7 @@ import { ItemService } from '../../item.service';
 import { environment } from '../../../../../environments/environment';
 import { Member } from '../../../../shared/class/member';
 import { ItemPrintLabelComponentPrintDialog } from './item-print-label.component-print-dialog';
+import { CustomPrintLabel } from 'app/shared/class/label';
 
 @Component({
     selector: 'o-item-print-label',
@@ -20,6 +21,8 @@ export class ItemPrintLabelComponent implements OnInit, OnChanges {
     @Output() getItemList = new EventEmitter<void>();
     @Output() downloadPrintItemLabels = new EventEmitter<{labels: ItemPrintLabel[], border: string}>();
     @Output() downloadPrintItemLargeLabels = new EventEmitter<{labels: ItemPrintLabel[], border: string}>();
+    @Output() downloadItemPrintLabelCustom = new EventEmitter<{options: CustomPrintLabel}>();
+    @Output() downloadPrintItemLargeLabelsCustom = new EventEmitter<{options: CustomPrintLabel}>();
     imageURL = environment.imageURL;
     linkURL = environment.linkURL;
     PendingAdd: boolean;
@@ -105,16 +108,33 @@ export class ItemPrintLabelComponent implements OnInit, OnChanges {
     }
 
     openDialogPrintLabel() {
+        const quantity = this.itemPrintLabelsMatTable.data.reduce((total, item) => {
+            if (item.ItemID) {
+                total += item.Qty;
+            }
+            return total;
+        }, 0);
         const dialogRef = this.printDialog.open(ItemPrintLabelComponentPrintDialog, {
-          width: '250px'
+          width: '400px',
+          data: { Quantity: quantity }
         });
 
-        dialogRef.afterClosed().subscribe(result => {
-            if (result) {
-                if (result.Size === 'small') {
-                    this.onPrintLabels(result.Border);
+        dialogRef.afterClosed().subscribe(data => {
+            if (data && data.customOptions && data.customOptions.Quantity > 0) {
+                if (data.size === 'small') {
+                    if (data.isCustom) {
+                        data.customOptions.ItemPrintLabels = this.itemPrintLabelsMatTable.data;
+                        this.onPrintLabelCustom(data.customOptions);
+                    } else {
+                        this.onPrintLabels(data.Border);
+                    }
                 } else {
-                    this.onPrintLargeLabels(result.Border);
+                    if (data.isCustom) {
+                        data.customOptions.ItemPrintLabels = this.itemPrintLabelsMatTable.data;
+                        this.onPrintLargeLabelsCustom(data.customOptions);
+                    } else {
+                        this.onPrintLargeLabels(data.Border);
+                    }
                 }
             }
         });
@@ -126,5 +146,13 @@ export class ItemPrintLabelComponent implements OnInit, OnChanges {
 
     onPrintLargeLabels(border: string) {
         this.downloadPrintItemLargeLabels.emit({labels: this.itemPrintLabelsMatTable.data, border: border});
+    }
+
+    onPrintLabelCustom(options: CustomPrintLabel) {
+        this.downloadItemPrintLabelCustom.emit({options: options});
+    }
+
+    onPrintLargeLabelsCustom(options: CustomPrintLabel) {
+        this.downloadPrintItemLargeLabelsCustom.emit({options: options });
     }
 }

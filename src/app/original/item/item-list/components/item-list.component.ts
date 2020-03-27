@@ -59,7 +59,7 @@ export class ItemListComponent implements OnInit, OnChanges {
             this.itemsMatTable.sort = this.sort;
         }
         if (changes.itemsMatTable && (!changes.itemsMatTable.currentValue.data.length || changes.itemsMatTable.currentValue.data.length === 1) && changes.itemsMatTable.firstChange) {
-            this.getItems.emit();
+            this.refresh();
         }
         if (changes.userInfo && changes.userInfo.currentValue) {
             if (this.userInfo.DefaultPageSize) {
@@ -114,7 +114,7 @@ export class ItemListComponent implements OnInit, OnChanges {
         dialogRef.afterClosed().subscribe(result => {
             if (result) {
                 this.loading = true;
-                this.refreshItems.emit();
+                this.refresh();
             }
 
         });
@@ -254,7 +254,7 @@ export class ItemListComponent implements OnInit, OnChanges {
 
 
     refresh() {
-        this.refreshItems.emit();
+        this.getItems.emit();
     }
 
     applyFilter(filterValue: string) {

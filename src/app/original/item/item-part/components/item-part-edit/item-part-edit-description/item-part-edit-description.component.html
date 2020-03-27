@@ -29,27 +29,12 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="form-group" [ngClass]="{'has-error': (itemVendorSKUVar.errors && !itemVendorSKUVar.errors.required)
-                                                                            || ( (itemVendorSKUVar.touched ||
-                                                                            itemVendorSKUVar.dirty) &&
-                                                                            !itemVendorSKUVar.valid) }">
+                        <div class="form-group">
                             <label class="col-md-2 control-label" for="itemVendorSKUId">{{ 'SKU' | translate }}</label>
                             <div class="col-md-8">
-                                <input class="form-control" id="itemVendorSKUId" type="text"
-                                    pattern="^[\w\-]*$" ng-pattern-restrict placeholder="{{ 'SKU' | translate }} ({{ 'Required' | translate }})" required
-                                    [(ngModel)]=item.VendorSKU name="itemVendorSKU" #itemVendorSKUVar="ngModel" maxlength="30"/>
-                                <span class="help-block" *ngIf="(itemVendorSKUVar.touched ||
-                                                                        itemVendorSKUVar.dirty) &&
-                                                                        itemVendorSKUVar.errors && itemVendorSKUVar.errors.required">
-                                    <span>
-                                        SKU {{ 'is required' | translate }}
-                                    </span>
-                                </span>
-                                <span class="help-block" *ngIf="itemVendorSKUVar.errors && !itemVendorSKUVar.errors.required">
-                                    <span>
-                                        {{ 'Invalid SKU' | translate }}
-                                    </span>
-                                </span>
+                                <div class="form-control grey-highlight">
+                                    {{ item.VendorSKU }}
+                                </div>
                             </div>
                         </div>
                         <!-- <div class="form-group" [ngClass]="{'has-error': (itemItemTypeVar.touched ||
