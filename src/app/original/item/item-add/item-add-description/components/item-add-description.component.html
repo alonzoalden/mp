@@ -72,7 +72,9 @@
                             <label class="col-md-2 control-label" for="itemFulfilledById">{{ 'Fulfilled By' | translate }}</label>
                             <div class="col-md-8 p-w-none m-t-responsive">
                                 <div class="col-md-8 min-height z-fix">
-                                    <select id="itemFulfilledById" name="itemFulfilledBy" class="form-control" required [(ngModel)]=item.FulfilledBy #itemFulfilledByVar="ngModel">
+                                    <select id="itemFulfilledById" name="itemFulfilledBy" class="form-control"
+                                        required [(ngModel)]=item.FulfilledBy #itemFulfilledByVar="ngModel"
+                                        (click)="onFulfilledByChange()">
                                         <option value="Toolots">{{ 'Toolots' | translate }}</option>
                                         <option value="Merchant">{{ 'Merchant' | translate }}</option>
                                     </select>
