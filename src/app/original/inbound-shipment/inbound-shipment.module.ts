@@ -33,6 +33,7 @@ import { EffectsModule } from '@ngrx/effects';
 import { inboundShipmentReducer } from './state/inbound-shipment.reducer';
 import { InboundShipmentEffects } from './state/inbound-shipment.effects';
 import { ItemService } from '../item/item.service';
+import { InboundShipmentEditCartonListCartonQuantityDialogComponent } from './inbound-shipment-edit/inbound-shipment-edit-carton/components/inbound-shipment-edit-carton-list/inbound-shipment-edit-carton-list.component-carton-quantity-dialog';
 
 @NgModule({
     declarations: [
@@ -55,6 +56,7 @@ import { ItemService } from '../item/item.service';
         InboundShipmentEditCartonShellComponent,
         InboundShipmentEditShippingInstructionShellComponent,
         InboundShipmentEditShippingShellComponent,
+        InboundShipmentEditCartonListCartonQuantityDialogComponent
     ],
     entryComponents: [
         InboundShipmentEditCartonListComponent
@@ -63,6 +65,7 @@ import { ItemService } from '../item/item.service';
         , InboundShipmentEditCartonListCartonPrintDialogComponent
         , InboundShipmentEditLineItemPrintDialogComponent
         , InboundShipmentEditShippingInstructionCartonPrintDialogComponent
+        , InboundShipmentEditCartonListCartonQuantityDialogComponent
     ],
     imports: [
         TranslateModule,

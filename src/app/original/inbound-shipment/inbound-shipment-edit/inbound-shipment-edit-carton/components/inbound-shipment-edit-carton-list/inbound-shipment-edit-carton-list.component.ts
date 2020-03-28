@@ -5,6 +5,7 @@ import { PurchaseOrder, Carton, CartonLine } from '../../../../../../shared/clas
 import { PurchaseOrderService } from '../../../../purchase-order.service';
 import { InboundShipmentEditCartonListCartonPrintDialogComponent } from './inbound-shipment-edit-carton-list.component-carton-print-dialog';
 import { CustomPrintLabel } from 'app/shared/class/label';
+import { InboundShipmentEditCartonListCartonQuantityDialogComponent } from './inbound-shipment-edit-carton-list.component-carton-quantity-dialog';
 
 @Component({
     selector: 'o-inbound-shipment-edit-carton-list',
@@ -163,15 +164,12 @@ export class InboundShipmentEditCartonListComponent
                 this.addPendingLine();
                 this.refreshDataSource(this.purchaseOrder.Cartons);
 
-
                 if (result.isCustom) {
                     this.onPrintLabelCustom(carton, result.customOptions);
                 }
                 else {
                     this.onPrintLabel(carton, result.customOptions.Quantity, result.customOptions.Border);
                 }
-
-
 
                 this.purchaseOrderService.sendNotification({
                     type: 'success',
@@ -347,6 +345,71 @@ export class InboundShipmentEditCartonListComponent
         });
         this.purchaseOrderService.updatePurchaseLineCartonQuantity(this.purchaseOrder);
         this.pendingCopy = false;
+    }
+    onCopyCartonMultiple(carton: Carton, index: number, qty: number) {
+        const dialogRef = this.cartonPrintDialog.open(
+            InboundShipmentEditCartonListCartonQuantityDialogComponent, {}
+        );
+
+        dialogRef.afterClosed().subscribe(quantity => {
+            if (quantity) {
+                this.pendingCopy = true;
+
+                for (let ii = 0; ii < quantity; ii++) {
+                    const newCarton = new Carton(
+                        null,
+                        carton.PurchaseOrderID,
+                        carton.PackingSlipNumber,
+                        null,
+                        this.purchaseOrder.Cartons.length,
+                        carton.Length,
+                        carton.Width,
+                        carton.Height,
+                        carton.Weight,
+                        carton.LabelQty,
+                        null,
+                        null,
+                        [],
+                        carton.pendingAdd
+                    );
+
+                    carton.CartonLines.forEach(cartonline => {
+                        const newCartonLine = new CartonLine(
+                            null,
+                            null,
+                            carton.PurchaseOrderID,
+                            cartonline.PurchaseOrderLineID,
+                            cartonline.ItemName,
+                            cartonline.ItemVendorSKU,
+                            cartonline.TPIN,
+                            cartonline.URLKey,
+                            cartonline.Quantity,
+                            cartonline.RemainingQuantity,
+                            null,
+                            null,
+                            cartonline.PrevPurchaseOrderLineID,
+                            cartonline.pendingAdd
+                        );
+                        newCarton.CartonLines.push(newCartonLine);
+                    });
+
+                    var isValid: boolean = true;
+
+                    newCarton.CartonLines.forEach((cartonline, i) => {
+                        if (isValid && !this.isValidQuantity(cartonline)) {
+                            isValid = false;
+                        }
+
+                        if (i === newCarton.CartonLines.length - 1 && isValid) {
+                            this.purchaseOrder.Cartons.splice(this.purchaseOrder.Cartons.length - 1, 0, newCarton);
+                            this.refreshDataSource(this.purchaseOrder.Cartons);
+                        }
+                    });
+                }
+                this.purchaseOrderService.updatePurchaseLineCartonQuantity(this.purchaseOrder);
+                this.pendingCopy = false;
+            }
+        });
     }
 
     isValidQuantity(cartonline: CartonLine) {

@@ -163,6 +163,14 @@
                                         <span class="glyphicon glyphicon-copy"></span>
                                     </a>
                                 </span>
+                                <span *ngIf="orderStatus === 'Pending' && i !== purchaseOrder.Cartons.length-1 && !pendingCopy">
+                                    <a (click)="onCopyCartonMultiple(carton, i)"
+                                        matTooltip="{{ 'Copy Multiple' | translate }}"
+                                        attr.aria-label="{{ 'Copy Multiple' | translate}}">
+                                        <span class="glyphicon glyphicon-duplicate"></span>
+                                    </a>
+                                </span>
+                                
                                 <span *ngIf="i !== purchaseOrder.Cartons.length-1">
                                     <a (click)="onRemoveCarton(carton, i)"
                                         matTooltip="{{ 'Remove' | translate }}"
