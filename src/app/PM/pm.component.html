@@ -4,6 +4,7 @@
             <a class="hide-large" aria-expanded="false" role="menu" href="#" data-toggle="dropdown"><i
                 class="fa fa-cog m-r-none fs-16"></i> <span class="m-l-xs caret"></span></a>
             <ul role="menu" class="dropdown-menu menu-fix" aria-labelledby="dropdownMenu">
+                <li><a [routerLink]="['/dashboard']">{{ 'Go To Original Mode' | translate }}</a></li>
                 <li><a [routerLink]="['setting']">{{ 'Change Merchant' | translate }}</a></li>
                 <li><a [routerLink]="['setting','memberpreference']">{{ 'Member Preference' | translate }}</a></li>
                 <li><a *ngIf="appService?.currentMember?.IsDropship"

@@ -30,6 +30,7 @@ export class SalesOrderCancelComponentPrintDialog implements OnInit, OnDestroy {
     hasCancellationQty: boolean = false;
     salesOrderLinesMatTable: MatTableDataSource<SalesOrderLine>;
     deliveryDetail: string;
+    pendingCancel: boolean;
     private imageURL = environment.imageURL;
     private linkURL = environment.linkURL;
 
@@ -72,7 +73,19 @@ export class SalesOrderCancelComponentPrintDialog implements OnInit, OnDestroy {
         if (this.isValid()) {
             const confirmation = confirm(`Are you sure you want to cancel this order?`);
             if (confirmation) {
-                this.store.dispatch(new salesOrderActions.CancelSalesOrderLines(this.salesOrderLinesMatTable.data));
+                this.pendingCancel = true;
+                this.salesorderService.cancelSalesOrderLines(this.salesOrderLinesMatTable.data)
+                    .pipe(takeWhile(() => this.componentActive))
+                    .subscribe(
+                        (data) => {
+                            this.pendingCancel = false;
+                            this.dialogRef.close(data);
+                        },
+                        (error) => {
+                            this.pendingCancel = false;
+                            this.salesorderService.sendNotification({ type: 'error', title: 'Error', content: 'Error cancelling.' });
+                        },
+                    );
             }
         }
     }

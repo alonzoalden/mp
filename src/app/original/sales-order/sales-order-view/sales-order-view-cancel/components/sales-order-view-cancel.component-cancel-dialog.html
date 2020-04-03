@@ -80,7 +80,10 @@
 
 </div>
 <mat-dialog-actions>
-    <button mat-button class="btn btn-danger-150" (click)="onCancel()" [mat-dialog-close]="salesOrder">Cancel Order</button>
+    <button mat-button class="btn btn-danger-150" (click)="onCancel()">
+        <ng-container *ngIf="!pendingCancel">Cancel Order</ng-container>
+        <ng-container *ngIf="pendingCancel"><i class="fa fa-spinner fa-spin"></i></ng-container>
+    </button>
     <button mat-button class="btn btn-remove-150" (click)="onCloseClick()">Back</button>
 </mat-dialog-actions>
     
