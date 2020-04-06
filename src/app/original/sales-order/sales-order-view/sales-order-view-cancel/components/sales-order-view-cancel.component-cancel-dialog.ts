@@ -79,6 +79,7 @@ export class SalesOrderCancelComponentPrintDialog implements OnInit, OnDestroy {
                     .subscribe(
                         (data) => {
                             this.pendingCancel = false;
+                            this.salesorderService.sendNotification({ type: 'success', title: 'Successfully Canceled', content: '' });
                             this.dialogRef.close(data);
                         },
                         (error) => {
