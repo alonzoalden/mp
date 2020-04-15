@@ -139,6 +139,10 @@ export class HeaderOriginalComponent implements OnInit, OnDestroy {
         return (this.appService.currentMember && this.appService.currentMember.IsPM);
     }
 
+    get isB2B() {
+        return (this.appService.currentMember && this.appService.currentMember.IsB2B);
+    }
+
     get VendorID() {
         if (this.appService.currentMember) {
             return this.appService.currentMember.VendorID;

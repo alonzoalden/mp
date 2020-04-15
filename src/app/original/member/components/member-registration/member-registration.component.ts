@@ -43,7 +43,7 @@ export class MemberRegistrationComponent implements OnInit {
     }
 
     ngOnInit(): void {
-        this.member = new Member(null, '', '', '', '', true, '', '', true, true, true, true, '', 1, true, '', '', '', '', false);
+        this.member = new Member(null, '', '', '', '', true, '', '', true, true, true, true, '', 1, true, '', '', '', '', false, false);
         this.route.queryParams
             .filter(params => params.inviteGUID)
             .subscribe(params => {

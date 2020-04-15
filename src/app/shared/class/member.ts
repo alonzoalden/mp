@@ -21,7 +21,8 @@ export class Member {
         public CreatedOn: string,
         public Password: string,
         public ConfirmPassword: string,
-        public IsLeader: boolean
+        public IsLeader: boolean,
+        public IsB2B: boolean,
     ) {}
 }
 
