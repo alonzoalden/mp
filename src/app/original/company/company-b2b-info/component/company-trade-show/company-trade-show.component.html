@@ -1,0 +1,92 @@
+<div class="tab-content">
+    <div class="ibox-content" style="min-height: 40vh" *ngIf="isTradeShowLoading">
+        <div class="spinner-container">
+            <div class="animated fadeIn sk-spinner sk-spinner-three-bounce big-spinner">
+                <div class="sk-bounce1"></div>
+                <div class="sk-bounce2"></div>
+                <div class="sk-bounce3"></div>
+            </div>
+        </div>
+    </div>
+    <div class="tab-pane active">
+        <div class="panel-body p-w-none">
+            <fieldset class="animated fadeIn form-horizontal" [hidden]="isTradeShowLoading">
+                <div class="ibox-title">
+                    <h5>{{ 'Trade Show List' | translate }}</h5>
+                    <div class="ibox-tools">
+                        <a href="javascript:void(0)" (click)="add()"><i matTooltip="{{ 'Add New Trade Show' | translate }}"
+                                                                           aria-label="Icon for Add New Trade Show"
+                                                                           class="fa fa-plus fa-2x"></i></a>
+                    </div>
+                </div>
+                <div class="ibox-content" style="min-height: 20vh;">
+                    <div class="table-responsive">
+                        <table mat-table #table [dataSource]="tradeShowList" class="table">
+                            <ng-container matColumnDef="Menu">
+                                <th mat-header-cell *matHeaderCellDef width="100px"></th>
+                                <td mat-cell *matCellDef="let item; let i = index">
+                                    <ng-container>
+                                        <button mat-button [matMenuTriggerFor]="menu"><i
+                                            class="fa fa-bars fa-2x"></i></button>
+                                        <mat-menu #menu="matMenu">
+                                            <button mat-menu-item
+                                                    (click)="edit(item)">{{ 'Edit' | translate }}</button>
+                                        </mat-menu>
+                                    </ng-container>
+                                </td>
+                            </ng-container>
+                            <ng-container matColumnDef="ImagePath">
+                                <th mat-header-cell *matHeaderCellDef width="100px"></th>
+                                <td mat-cell *matCellDef="let item">
+                                    <div class="flex-details">
+                                        <div class="img-detail">
+                                            <img *ngIf='!item.ImagePath' class="opaque"
+                                                 src='https://staging-merchantportal.toolots.com.cn/assets/images/no-image-icon.png'
+                                                 matTooltip='no image' matTooltipShowDelay="500">
+                                            <a href="{{item.ImagePath}}" target="_blank">
+                                                <img class="row-image" *ngIf='item.ImagePath' [src]='item.ImagePath'
+                                                     [alt]='item.Title'>
+                                            </a>
+                                        </div>
+                                    </div>
+                                </td>
+                            </ng-container>
+                            <ng-container matColumnDef="Name">
+                                <th mat-header-cell *matHeaderCellDef width="50px">{{'Name'|translate}}</th>
+                                <td mat-cell *matCellDef="let item">{{item.Name}}</td>
+                            </ng-container>
+                            <ng-container matColumnDef="Location">
+                                <th mat-header-cell *matHeaderCellDef
+                                    width="200px">{{ 'Location' | translate }}</th>
+                                <td mat-cell *matCellDef="let item">{{item.Location}}</td>
+                            </ng-container>
+                            <ng-container matColumnDef="ShowDate">
+                                <th mat-header-cell *matHeaderCellDef
+                                    width="200px">{{ 'Show Date' | translate }}</th>
+                                <td mat-cell *matCellDef="let item">{{item.ShowDate|localizedDate}}</td>
+                            </ng-container>
+                            <ng-container matColumnDef="Booth">
+                                <th mat-header-cell *matHeaderCellDef
+                                    width="200px">{{ 'Booth' | translate }}</th>
+                                <td mat-cell *matCellDef="let item">{{item.Booth}}</td>
+                            </ng-container>
+                            <ng-container matColumnDef="ShowSamples">
+                                <th mat-header-cell *matHeaderCellDef
+                                    width="200px">{{ 'Show Samples' | translate }}</th>
+                                <td mat-cell *matCellDef="let item">{{item.ShowSamples}}</td>
+                            </ng-container>
+                            <ng-container matColumnDef="Contact">
+                                <th mat-header-cell *matHeaderCellDef
+                                    width="200px">{{ 'Contact' | translate }}</th>
+                                <td mat-cell *matCellDef="let item">{{item.Contact}}</td>
+                            </ng-container>
+                            <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+                            <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+                        </table>
+                        <mat-paginator [pageSizeOptions]="[10, 20]" [showFirstLastButtons]="true"></mat-paginator>
+                    </div>
+                </div>
+            </fieldset>
+        </div>
+    </div>
+</div>

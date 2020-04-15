@@ -13,7 +13,7 @@ import {
     MatCheckboxModule,
     MatDialogModule,
     MatIconModule,
-    MatListModule,
+    MatListModule, MatMenuModule,
     MatPaginatorModule,
     MatSidenavModule,
     MatTableModule,
@@ -34,6 +34,12 @@ import {UsermanagementMembertreeShellComponent} from './container/usermanagement
 import {UsermanagementMembertreeComponent} from './component/usermanagement-membertree/usermanagement-membertree.component';
 import {DragDropModule} from '@angular/cdk/drag-drop';
 import {UsermanegementMembertreeBottomsheet} from './component/usermanagement-membertree/usermanegement-membertree-bottomsheet';
+import {UsermanagementCheckVendorListComponent} from './component/usermanagement-check-vendor-list/usermanagement-check-vendor-list.component';
+import {UsermanagementCheckVendorListShellComponent} from './container/usermanagement-check-vendor-list-shell/usermanagement-check-vendor-list-shell.component';
+import {FormsModule} from '@angular/forms';
+import {UsermangementCheckVendorDetailComponent} from './component/usermangement-check-vendor-detail/usermangement-check-vendor-detail.component';
+import {UsermanagementCheckVendorDetailShellComponent} from './container/usermanagement-check-vendor-detail-shell/usermanagement-check-vendor-detail-shell.component';
+import {NgSelectModule} from '@ng-select/ng-select';
 
 
 @NgModule({
@@ -46,16 +52,21 @@ import {UsermanegementMembertreeBottomsheet} from './component/usermanagement-me
         UserManagementMemberVendorDialogContentEditComponent,
         UserManagementMemberVendorDialogContentViewComponent,
         UsermanagementMembertreeComponent,
-        UsermanegementMembertreeBottomsheet
+        UsermanegementMembertreeBottomsheet,
+        UsermanagementCheckVendorListComponent,
+        UsermanagementCheckVendorListShellComponent,
+        UsermangementCheckVendorDetailComponent,
+        UsermanagementCheckVendorDetailShellComponent
     ],
     entryComponents: [
         UsermanagementMemberVendorDialogComponent,
-        UsermanegementMembertreeBottomsheet
+        UsermanegementMembertreeBottomsheet,
     ],
     imports: [
         CommonModule,
         ToolModule,
         userManagementRouting,
+        FormsModule,
         TranslateModule,
         StoreModule.forFeature('user-management', UsermanagementReducer),
         EffectsModule.forFeature([UsermanagementEffects]),
@@ -71,7 +82,9 @@ import {UsermanegementMembertreeBottomsheet} from './component/usermanagement-me
         MatIconModule,
         DragDropModule,
         MatBottomSheetModule,
-        MatCheckboxModule
+        MatCheckboxModule,
+        MatMenuModule,
+        NgSelectModule
     ],
     providers: [
         UserManagementService

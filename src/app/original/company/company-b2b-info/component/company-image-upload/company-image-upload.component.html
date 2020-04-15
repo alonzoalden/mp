@@ -1,0 +1,70 @@
+<div class="ibox-title">
+    <h5>{{ 'Upload New Image' | translate }}</h5>
+</div>
+<div class="ibox-content">
+    <div class="form-group" *ngIf="titleRequired" [ngClass]="{'has-error': (imageTitle.touched ||
+                                                imageTitle.dirty) &&
+                                                !imageTitle.valid }">
+        <label class="col-md-2 control-label"
+               for="imageTitleId">{{ 'Title' | translate }}</label>
+        <div class="col-md-8">
+            <input class="form-control" id="imageTitleId" type="text"
+                   placeholder="{{ 'Title' | translate }} ({{ 'Required' | translate }})"
+                   required
+                   [(ngModel)]=image.Title name="imageTitle" #imageTitle="ngModel"/>
+            <span class="help-block" *ngIf="(imageTitle.touched ||
+                                                imageTitle.dirty) &&
+                                                imageTitle.errors">
+                                        <span *ngIf="imageTitle?.errors.required">
+                                            {{ 'Title' | translate }} {{ 'is required' | translate }}
+                                        </span>
+                                    </span>
+        </div>
+    </div>
+    <div *ngIf="filesToUpload.length === 0">
+        <label class="col-md-2 control-label"
+               for="UploadFileId">{{ 'Upload Image' | translate }}</label>
+        <div class="col-md-2">
+            <label class="btn btn-primary" style="width:100%; height:100%;">
+                {{ 'Choose File…' | translate }} <input type="file" style="display: none;"
+                                                        id="UploadFileId"
+                                                        (change)="fileChangeEvent($event)"
+                                                        accept="image/jpeg,image/png,.jpeg,.jpg,.png"
+                                                        #fileUpload>
+            </label>
+        </div>
+    </div>
+    <div class="row" *ngIf="filesToUpload?.length > 0">
+        <div class="col-md-2">
+        </div>
+        <div class="col-md-10">
+            <ul>
+                <li *ngFor="let fileName of selectedFileNames; let i = index">{{ 'File Selected' | translate }}
+                    : {{fileName}}</li>
+            </ul>
+        </div>
+
+    </div>
+    <div class="row" *ngIf="filesToUpload?.length > 0">
+        <div class="col-md-2"></div>
+        <div class="col-md-2">
+            <button class="btn btn-danger btn-sm" type="button"
+                    (click)="cancelUpload()">{{ 'Remove' | translate }}</button>
+        </div>
+    </div>
+    <br>
+    <div class="row" *ngIf="filesToUpload.length !== 0">
+        <div class="col-md-2">
+        </div>
+        <div class="col-md-2">
+            <button class="btn btn-primary"
+                    style="width:100%; height:100%;"
+                    type="button"
+                    [disabled]="pendingUpload"
+                    (click)="upload()">
+                <span *ngIf="!pendingUpload">{{ 'Add' | translate }}</span>
+                <span *ngIf="pendingUpload"><i class="fa fa-spinner fa-spin"></i></span>
+            </button>
+        </div>
+    </div>
+</div>

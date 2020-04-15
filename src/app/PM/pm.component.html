@@ -98,6 +98,7 @@
                         <li *ngIf="isSuperAdmin"><a
                             [routerLink]="['user','vendor']">{{ 'Manage VendorMember' | translate }}</a></li>
                         <li *ngIf="isLeader"><a [routerLink]="['user','member']">{{ 'Manage Member' | translate }}</a>
+                        <li *ngIf="isSuperAdmin"><a [routerLink]="['user','check']">{{ 'B2B Vendor' | translate }}</a>
                         </li>
                     </ul>
                 </li>

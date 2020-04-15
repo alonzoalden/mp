@@ -1,0 +1,254 @@
+<div class="row wrapper border-bottom white-bg page-heading">
+    <div class="col-lg-12">
+        <h2>
+            {{ 'Manage VendorMember' | translate }}
+        </h2>
+        <ol class="breadcrumb">
+            <li>
+                <a [routerLink]="['/PM/dashboard']">{{ 'Home' | translate }}</a>
+            </li>
+            <li>
+                <strong>{{ 'User Management' | translate }}</strong>
+            </li>
+            <li>
+                <strong>{{ 'B2B Vendor' | translate }}</strong>
+            </li>
+            <li class="active">
+                <strong>{{ 'B2B Vendor Detail' | translate }}</strong>
+            </li>
+        </ol>
+    </div>
+</div>
+<div class="wrapper wrapper-content animated fadeIn">
+    <div class="row">
+        <div class="col-lg-12">
+            <div class="ibox float-e-margins">
+                <div class="ibox-title">
+                    <h5>{{ 'B2B Vendor Registration' | translate }}</h5>
+                </div>
+                <div class="ibox-content" style="min-height: 40vh;">
+                    <form class="animated fadeIn form-horizontal" #vendorRegistrationForm="ngForm">
+                        <fieldset>
+                            <div class="m-t-md">
+                                <div class="form-group" [ngClass]="{'has-error': (CompanyName.touched ||
+                                                                        CompanyName.dirty) &&
+                                                                        !CompanyName.valid }">
+                                    <label class="col-md-2 control-label"
+                                           for="CompanyNameId">{{ 'Company Name' | translate }}</label>
+                                    <div class="col-md-8 ">
+                                        <input class="form-control" id="CompanyNameId" type="text"
+                                               placeholder="{{ 'Company Name' | translate }} ({{ 'Required' | translate }})"
+                                               required
+                                               [(ngModel)]=vendorRegistration.CompanyName name="CompanyName"
+                                               #CompanyName="ngModel"/>
+                                    </div>
+                                </div>
+                                <div class="form-group" [ngClass]="{'has-error': (MerchantID.touched ||
+                                                                        MerchantID.dirty) &&
+                                                                        !MerchantID.valid }">
+                                    <label class="col-md-2 control-label">{{ 'MerchantID' | translate }}</label>
+                                    <div class="col-md-8 ">
+                                        <input class="form-control" id="MerchantID" type="text"
+                                               placeholder="{{ 'MerchantID' | translate }} ({{ 'Required' | translate }})"
+                                               required pattern="[A-Za-z]{1,40}"
+                                               [(ngModel)]=vendorRegistration.MerchantID
+                                               name="MerchantID"
+                                               #MerchantID="ngModel"/>
+                                        <span class="help-block" *ngIf="(MerchantID.touched ||
+                                                                MerchantID.dirty) &&
+                                                                MerchantID.errors">
+                                    <span *ngIf="MerchantID?.errors.pattern">
+                                       Invalid MerchantID
+                                    </span>
+                                </span>
+                                    </div>
+                                </div>
+
+                                <div class="form-group" [ngClass]="{'has-error': (Region.touched ||
+                                                                        Region.dirty) &&
+                                                                        !Region.valid }">
+                                    <label class="col-md-2 control-label">{{ 'Region' | translate }}</label>
+                                    <div class="col-md-8 ">
+                                        <input class="form-control" id="RegionId" type="text"
+                                               placeholder="{{ 'Region' | translate }} ({{ 'Required' | translate }})"
+                                               required
+                                               [(ngModel)]=vendorRegistration.Region
+                                               name="Region"
+                                               #Region="ngModel"/>
+                                    </div>
+                                </div>
+                                <div class="form-group" [ngClass]="{'has-error': (State.touched ||
+                                                                        State.dirty) &&
+                                                                        !State.valid }">
+                                    <label class="col-md-2 control-label">{{ 'State' | translate }}</label>
+                                    <div class="col-md-8 ">
+                                        <input class="form-control" id="StateId" type="text"
+                                               placeholder="{{ 'State' | translate }} ({{ 'Required' | translate }})"
+                                               required
+                                               [(ngModel)]=vendorRegistration.State
+                                               name="State"
+                                               #State="ngModel"/>
+                                    </div>
+                                </div>
+                                <div class="form-group" [ngClass]="{'has-error': (City.touched ||
+                                                                        City.dirty) &&
+                                                                        !City.valid }">
+                                    <label class="col-md-2 control-label">{{ 'City' | translate }}</label>
+                                    <div class="col-md-8 ">
+                                        <input class="form-control" id="CityId" type="text"
+                                               placeholder="{{ 'City' | translate }} ({{ 'Required' | translate }})"
+                                               required
+                                               [(ngModel)]=vendorRegistration.City name="City"
+                                               #City="ngModel"/>
+                                    </div>
+                                </div>
+
+                                <div class="form-group" [ngClass]="{'has-error': (PostalCode.touched ||
+                                                                        PostalCode.dirty) &&
+                                                                        !PostalCode.valid }">
+                                    <label class="col-md-2 control-label">{{ 'Postal Code' | translate }}</label>
+                                    <div class="col-md-8 ">
+                                        <input class="form-control" id="PostalCodeId" type="text"
+                                               placeholder="{{ 'Postal Code' | translate }} ({{ 'Required' | translate }})"
+                                               required
+                                               [(ngModel)]=vendorRegistration.PostalCode
+                                               name="PostalCode"
+                                               #PostalCode="ngModel"/>
+                                    </div>
+                                </div>
+                                <div class="form-group" [ngClass]="{'has-error': (Address.touched ||
+                                                                        Address.dirty) &&
+                                                                        !Address.valid }">
+                                    <label class="col-md-2 control-label">{{ 'Address' | translate }}</label>
+                                    <div class="col-md-8 ">
+                                        <input class="form-control" id="AddressId" type="text"
+                                               placeholder="{{ 'Address' | translate }} ({{ 'Required' | translate }})"
+                                               required
+                                               [(ngModel)]=vendorRegistration.Address name="Address"
+                                               #Address="ngModel"/>
+                                    </div>
+                                </div>
+                                <div class="form-group" [ngClass]="{'has-error': (FirstName.touched ||
+                                                                        FirstName.dirty) &&
+                                                                        !FirstName.valid }">
+                                    <label class="col-md-2 control-label">{{ 'FirstName' | translate }}</label>
+                                    <div class="col-md-8 ">
+                                        <input class="form-control" id="FirstNameId" type="text"
+                                               placeholder="{{ 'FirstName' | translate }} ({{ 'Required' | translate }})"
+                                               required
+                                               [(ngModel)]=vendorRegistration.FirstName
+                                               name="FirstName"
+                                               #FirstName="ngModel"/>
+                                    </div>
+                                </div>
+                                <div class="form-group" [ngClass]="{'has-error': (LastName.touched ||
+                                                                        LastName.dirty) &&
+                                                                        !LastName.valid }">
+                                    <label class="col-md-2 control-label">{{ 'LastName' | translate }}</label>
+                                    <div class="col-md-8 ">
+                                        <input class="form-control" id="LastNameId" type="text"
+                                               placeholder="{{ 'LastName' | translate }} ({{ 'Required' | translate }})"
+                                               required
+                                               [(ngModel)]=vendorRegistration.LastName
+                                               name="LastName"
+                                               #LastName="ngModel"/>
+                                    </div>
+                                </div>
+                                <div class="form-group" [ngClass]="{'has-error': (PhoneNumber.touched ||
+                                                                        PhoneNumber.dirty) &&
+                                                                        !PhoneNumber.valid }">
+                                    <label class="col-md-2 control-label">{{ 'PhoneNumber' | translate }}</label>
+                                    <div class="col-md-8 ">
+                                        <input class="form-control" id="PhoneNumberId" type="text"
+                                               placeholder="{{ 'PhoneNumber' | translate }} ({{ 'Required' | translate }})"
+                                               required
+                                               [(ngModel)]=vendorRegistration.PhoneNumber
+                                               name="PhoneNumber"
+                                               #PhoneNumber="ngModel"/>
+                                    </div>
+                                </div>
+                                <div class="form-group" [ngClass]="{'has-error': (Email.touched ||
+                                                                        Email.dirty) &&
+                                                                        !Email.valid }">
+                                    <label class="col-md-2 control-label">{{ 'Email' | translate }}</label>
+                                    <div class="col-md-8 ">
+                                        <input class="form-control" id="EmailId" type="text"
+                                               placeholder="{{ 'Email' | translate }} ({{ 'Required' | translate }})"
+                                               required
+                                               [(ngModel)]=vendorRegistration.Email
+                                               name="Email"
+                                               #Email="ngModel"/>
+                                    </div>
+                                </div>
+                                <div class="form-group" [ngClass]="{'has-error': (StoreName.touched ||
+                                                                        StoreName.dirty) &&
+                                                                        !StoreName.valid }">
+                                    <label class="col-md-2 control-label">{{ 'Store Name' | translate }}</label>
+                                    <div class="col-md-8 ">
+                                        <input class="form-control" id="StoreNameId" type="text"
+                                               placeholder="{{ 'Store Name' | translate }}"
+                                               [(ngModel)]=vendorRegistration.ShopTitle
+                                               name="StoreName"
+                                               #StoreName="ngModel"/>
+                                    </div>
+                                </div>
+                                <div class="form-group" [ngClass]="{'has-error': (MemberID.touched ||
+                                                                        MemberID.dirty) &&
+                                                                        !MemberID.valid }">
+                                    <label class="col-md-2 control-label">{{ 'PM' | translate }}</label>
+                                    <div class="col-md-8 ">
+                                        <ng-select [items]="memberList$|async"
+                                                   [virtualScroll]="true"
+                                                   bindLabel="Name"
+                                                   bindValue="MemberID"
+                                                   placeholder="{{ 'Search PM' | translate }}"
+                                                   [(ngModel)]="vendorRegistration.MemberID"
+                                                   dropdownPosition="top"
+                                                   #MemberID="ngModel"
+                                                   name="MemberID"
+                                                   required
+                                                   [loading]="!(memberList$|async)"
+                                                   loadingText="Loading...">
+                                            <ng-template ng-option-tmp let-item="item">
+                                                <div matTooltip="{{item.Email}}" matTooltipPosition="right"
+                                                     matTooltipShowDelay="400">{{item.Name}}--{{item.Email}}</div>
+                                            </ng-template>
+                                        </ng-select>
+                                    </div>
+                                </div>
+                            </div>
+                        </fieldset>
+                        <div class="animated fadeIn form-horizontal">
+                            <fieldset>
+                                <div class="ibox-title">
+                                    <h5>{{ 'Create' | translate }}</h5>
+                                </div>
+                                <div class="ibox-content">
+                                    <div class="form-group">
+                                        <div class="col-md-2">
+                                        </div>
+                                        <div class="button-bottom-row">
+                                            <button mat-button
+                                                    type="button"
+                                                    class="btn button-cancel"
+                                                    [routerLink]="['/PM/user/check/']"><i
+                                                class="fa fa-remove"></i> {{ 'Cancel' | translate }}
+                                            </button>
+                                            <button mat-button
+                                                    type="button"
+                                                    class="btn button-add"
+                                                    (click)="create(vendorRegistrationForm)">
+                                                <span><i
+                                                    class="fa fa-plus-circle"></i> {{ 'Create' | translate }}</span>
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </fieldset>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

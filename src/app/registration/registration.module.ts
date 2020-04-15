@@ -8,10 +8,12 @@ import { RegistrationComponent } from './registration.component';
 import { registrationRouting } from './registration.routing';
 import { RegistrationService } from './registration.service';
 import { TranslateModule } from '@ngx-translate/core';
+import { RegistrationB2bComponent } from './registration-b2b.component';
 
 @NgModule({
     declarations: [
-        RegistrationComponent
+        RegistrationComponent,
+        RegistrationB2bComponent
     ],
     imports: [
         TranslateModule,

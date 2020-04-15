@@ -1,0 +1,518 @@
+<div class="tab-content">
+    <div class="ibox-content" style="min-height: 40vh" *ngIf="isFactoryTourLoading">
+        <div class="spinner-container">
+            <div class="sk-spinner sk-spinner-three-bounce big-spinner">
+                <div class="sk-bounce1"></div>
+                <div class="sk-bounce2"></div>
+                <div class="sk-bounce3"></div>
+            </div>
+        </div>
+    </div>
+    <div class="tab-pane active">
+        <div class="panel-body p-w-none">
+            <form class="animated fadeIn form-horizontal" #vendorFactoryTourForm="ngForm"
+                  [hidden]="isFactoryTourLoading">
+                <fieldset>
+                    <div class="ibox-title"><h5>{{ 'General' | translate }}</h5></div>
+                    <div class="ibox-content">
+                        <div class="form-group" [ngClass]="{'has-error': (CompanyName.touched ||
+                                                                        CompanyName.dirty) &&
+                                                                        !CompanyName.valid }">
+                            <label class="col-md-2 control-label">{{ 'Company Name' | translate }}</label>
+                            <div class="col-md-8 ">
+                                <input class="form-control" id="CompanyNameId" type="text"
+                                       placeholder="{{ 'Company Name' | translate }} ({{ 'Required' | translate }})"
+                                       required
+                                       [(ngModel)]=vendorFactoryTour.CompanyName name="CompanyName"
+                                       #CompanyName="ngModel"/>
+                                <span class="help-block" *ngIf="(CompanyName.touched ||
+                                                                CompanyName.dirty) &&
+                                                                CompanyName.errors">
+                                    <span *ngIf="CompanyName?.errors.required">
+                                        {{ 'CompanyName' | translate }} {{ 'is required' | translate }}
+                                    </span>
+                                </span>
+                            </div>
+                        </div>
+                        <div class="form-group" [ngClass]="{'has-error': (Description.touched ||
+                                                                        Description.dirty) &&
+                                                                        !Description.valid }">
+                            <label class="col-md-2 control-label">{{ 'Description' | translate }}</label>
+                            <div class="col-md-8 ">
+                                <textarea cols="30" rows="10" class="form-control" id="DescriptionId"
+                                          placeholder="{{ 'Description' | translate }} ({{ 'Required' | translate }})"
+                                          required
+                                          [(ngModel)]=vendorFactoryTour.Description name="Description"
+                                          #Description="ngModel"></textarea>
+                                <span class="help-block" *ngIf="(Description.touched ||
+                                                                Description.dirty) &&
+                                                                Description.errors">
+                                    <span *ngIf="Description?.errors.required">
+                                        {{ 'Description' | translate }} {{ 'is required' | translate }}
+                                    </span>
+                                </span>
+                            </div>
+                        </div>
+                        <div class="form-group" [ngClass]="{'has-error': (Country.touched ||
+                                                                        Country.dirty) &&
+                                                                        !Country.valid }">
+                            <label class="col-md-2 control-label">{{ 'Country' | translate }}</label>
+                            <div class="col-md-8 ">
+                                <input class="form-control" id="CountryId" type="text"
+                                       placeholder="{{ 'Country' | translate }} ({{ 'Required' | translate }})"
+                                       required
+                                       [(ngModel)]=vendorFactoryTour.Country name="Country"
+                                       #Country="ngModel"/>
+                                <span class="help-block" *ngIf="(Country.touched ||
+                                                                Country.dirty) &&
+                                                                Country.errors">
+                                    <span *ngIf="Country?.errors.required">
+                                        {{ 'Country' | translate }} {{ 'is required' | translate }}
+                                    </span>
+                                </span>
+                            </div>
+                        </div>
+                        <div class="form-group" [ngClass]="{'has-error': (YearEstablished.touched ||
+                                                                        YearEstablished.dirty) &&
+                                                                        !YearEstablished.valid }">
+                            <label class="col-md-2 control-label">{{ 'Year Established' | translate }}</label>
+                            <div class="col-md-8 ">
+                                <mat-form-field class="example-full-width">
+                                    <input matInput [min]="minDate" [max]="maxDate" [matDatepicker]="picker"
+                                           placeholder="{{ 'Choose a date' | translate }}"
+                                           class="form-control" required
+                                           id="YearEstablishedId"
+                                           [(ngModel)]="vendorFactoryTour.YearEstablished"
+                                           name="YearEstablished"
+                                           #YearEstablished="ngModel"/>
+                                    <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+                                    <mat-datepicker #picker></mat-datepicker>
+                                </mat-form-field>
+                                <span class="help-block" *ngIf="(YearEstablished.touched ||
+                                                                YearEstablished.dirty) &&
+                                                                YearEstablished.errors">
+                                    <span *ngIf="YearEstablished?.errors.required">
+                                        {{ 'Year Established' | translate }} {{ 'is required' | translate }}
+                                    </span>
+                                </span>
+                            </div>
+                        </div>
+                        <div class="form-group" [ngClass]="{'has-error': (RecentTransaction.touched ||
+                                                                        RecentTransaction.dirty) &&
+                                                                        !RecentTransaction.valid }">
+                            <label class="col-md-2 control-label">{{ 'Recent Transactions' | translate }}</label>
+                            <div class="col-md-8 ">
+                                <input class="form-control" id="RecentTransactionId" type="text"
+                                       placeholder="{{ 'Recent Transactions' | translate }} ({{ 'Required' | translate }})"
+                                       required
+                                       [(ngModel)]=vendorFactoryTour.RecentTransaction name="RecentTransaction"
+                                       #RecentTransaction="ngModel"/>
+                                <span class="help-block" *ngIf="(RecentTransaction.touched ||
+                                                                RecentTransaction.dirty) &&
+                                                                RecentTransaction.errors">
+                                    <span *ngIf="RecentTransaction?.errors.required">
+                                        {{ 'RecentTransaction' | translate }} {{ 'is required' | translate }}
+                                    </span>
+                                </span>
+                            </div>
+                        </div>
+                        <div class="form-group" [ngClass]="{'has-error': (BusinessType.touched ||
+                                                                        BusinessType.dirty) &&
+                                                                        !BusinessType.valid }">
+                            <label class="col-md-2 control-label">{{ 'Business Type' | translate }}</label>
+                            <div class="col-md-8 ">
+                                <input class="form-control" id="BusinessTypeId" type="text"
+                                       placeholder="{{ 'Business Type' | translate }} ({{ 'Required' | translate }})"
+                                       required
+                                       [(ngModel)]=vendorFactoryTour.BusinessType name="BusinessType"
+                                       #BusinessType="ngModel"/>
+                                <span class="help-block" *ngIf="(BusinessType.touched ||
+                                                                BusinessType.dirty) &&
+                                                                BusinessType.errors">
+                                    <span *ngIf="BusinessType?.errors.required">
+                                        {{ 'BusinessType' | translate }} {{ 'is required' | translate }}
+                                    </span>
+                                </span>
+                            </div>
+                        </div>
+                        <div class="form-group" [ngClass]="{'has-error': (TotalAnnualRevenue.touched ||
+                                                                        TotalAnnualRevenue.dirty) &&
+                                                                        !TotalAnnualRevenue.valid }">
+                            <label class="col-md-2 control-label">{{ 'Total Annual Revenue' | translate }}</label>
+                            <div class="col-md-8 ">
+                                <input class="form-control" id="TotalAnnualRevenueId" type="text"
+                                       placeholder="{{ 'Total Annual Revenue' | translate }}" required
+                                       [(ngModel)]=vendorFactoryTour.TotalAnnualRevenue name="TotalAnnualRevenue"
+                                       #TotalAnnualRevenue="ngModel"/>
+                                <span class="help-block" *ngIf="(TotalAnnualRevenue.touched ||
+                                                                TotalAnnualRevenue.dirty) &&
+                                                                TotalAnnualRevenue.errors">
+                                    <span *ngIf="TotalAnnualRevenue?.errors.required">
+                                        {{ 'Total Annual Revenue' | translate }} {{ 'is required' | translate }}
+                                    </span>
+                                </span>
+                            </div>
+                        </div>
+                        <div class="form-group" [ngClass]="{'has-error': (RegisteredAddress.touched ||
+                                                                        RegisteredAddress.dirty) &&
+                                                                        !RegisteredAddress.valid }">
+                            <label class="col-md-2 control-label">{{ 'Registered Address' | translate }}</label>
+                            <div class="col-md-8 ">
+                                <input class="form-control" id="RegisteredAddressId" type="text"
+                                       placeholder="{{ 'Registered Address' | translate }} ({{ 'Required' | translate }})"
+                                       required
+                                       [(ngModel)]=vendorFactoryTour.RegisteredAddress name="RegisteredAddress"
+                                       #RegisteredAddress="ngModel"/>
+                                <span class="help-block" *ngIf="(RegisteredAddress.touched ||
+                                                                RegisteredAddress.dirty) &&
+                                                                RegisteredAddress.errors">
+                                    <span *ngIf="RegisteredAddress?.errors.required">
+                                        {{ 'Registered Address' | translate }} {{ 'is required' | translate }}
+                                    </span>
+                                </span>
+                            </div>
+                        </div>
+                        <div class="form-group"
+                             [ngClass]="{'has-error': (MainProduct.touched ||
+                                                                MainProduct.dirty) &&
+                                                                !MainProduct.valid }">
+                            <label class="col-md-2 control-label">{{ 'Main Products' | translate }}</label>
+                            <div class="col-md-8 ">
+                                <input class="form-control" id="MainProductId" type="text"
+                                       placeholder="{{ 'Main Products' | translate }} ({{ 'Required' | translate }})"
+                                       required
+                                       [(ngModel)]=vendorFactoryTour.MainProduct name="MainProduct"
+                                       #MainProduct="ngModel"/>
+                                <span class="help-block" *ngIf="(MainProduct.touched ||
+                                                                MainProduct.dirty) &&
+                                                                MainProduct.errors">
+                                    <span *ngIf="MainProduct?.errors.required">
+                                        {{ 'MainProduct' | translate }} {{ 'is required' | translate }}
+                                    </span>
+                                </span>
+                            </div>
+                        </div>
+                        <div class="form-group" [ngClass]="{'has-error': (IncorporationDate.touched ||
+                                                                IncorporationDate.dirty) &&
+                                                                !IncorporationDate.valid }">
+                            <label class="col-md-2 control-label">{{ 'Incorporation Date' | translate }}</label>
+                            <div class="col-md-8 ">
+                                <mat-form-field class="example-full-width">
+                                    <input matInput [min]="minDate" [max]="maxDate" [matDatepicker]="picker1"
+                                           placeholder="{{ 'Choose a date' | translate }}"
+                                           class="form-control" required
+                                           id="IncorporationDateId"
+                                           [(ngModel)]="vendorFactoryTour.IncorporationDate"
+                                           name="IncorporationDate"
+                                           #IncorporationDate="ngModel"/>
+                                    <mat-datepicker-toggle matSuffix [for]="picker1"></mat-datepicker-toggle>
+                                    <mat-datepicker #picker1></mat-datepicker>
+                                </mat-form-field>
+                                <span class="help-block" *ngIf="(IncorporationDate.touched ||
+                                                                IncorporationDate.dirty) &&
+                                                                IncorporationDate.errors">
+                                    <span *ngIf="IncorporationDate?.errors.required">
+                                        {{ 'Incorporation Date' | translate }} {{ 'is required' | translate }}
+                                    </span>
+                                </span>
+                            </div>
+                        </div>
+                        <div class="form-group" [ngClass]="{'has-error': (LegalForm.touched ||
+                                                                        LegalForm.dirty) &&
+                                                                        !LegalForm.valid }">
+                            <label class="col-md-2 control-label">{{ 'Legal Form' | translate }}</label>
+                            <div class="col-md-8 ">
+                                <input class="form-control" id="LegalFormId" type="text"
+                                       placeholder="{{ 'Legal Form' | translate }} ({{ 'Required' | translate }})"
+                                       required
+                                       [(ngModel)]=vendorFactoryTour.LegalForm name="LegalForm" #LegalForm="ngModel"/>
+                                <span class="help-block" *ngIf="(LegalForm.touched ||
+                                                                LegalForm.dirty) &&
+                                                                LegalForm.errors">
+                                    <span *ngIf="LegalForm?.errors.required">
+                                        {{ 'Legal Form' | translate }} {{ 'is required' | translate }}
+                                    </span>
+                                </span>
+                            </div>
+                        </div>
+                        <div class="form-group" [ngClass]="{'has-error': (CompanyStatus.touched ||
+                                                                        CompanyStatus.dirty) &&
+                                                                        !CompanyStatus.valid }">
+                            <label class="col-md-2 control-label">{{ 'Company Status' | translate }}</label>
+                            <div class="col-md-8">
+                                <input class="form-control" id="CompanyStatusId" type="text"
+                                       placeholder="{{ 'Company Status' | translate }} ({{ 'Required' | translate }})"
+                                       required
+                                       [(ngModel)]=vendorFactoryTour.CompanyStatus name="CompanyStatus"
+                                       #CompanyStatus="ngModel"/>
+                                <span class="help-block" *ngIf="(CompanyStatus.touched ||
+                                                                CompanyStatus.dirty) &&
+                                                                CompanyStatus.errors">
+                                    <span *ngIf="CompanyStatus?.errors.required">
+                                        {{ 'Company Status' | translate }} {{ 'is required' | translate }}
+                                    </span>
+                                </span>
+                            </div>
+                        </div>
+                        <div class="form-group" [ngClass]="{'has-error': (RegistrationNumber.touched ||
+                                                                        RegistrationNumber.dirty) &&
+                                                                        !RegistrationNumber.valid }">
+                            <label class="col-md-2 control-label">{{ 'Registration Number' | translate }}</label>
+                            <div class="col-md-8">
+                                <input class="form-control" id="RegistrationNumberId" type="text"
+                                       placeholder="{{ 'Registration Number' | translate }} ({{ 'Required' | translate }})"
+                                       required
+                                       [(ngModel)]=vendorFactoryTour.RegistrationNumber name="RegistrationNumber"
+                                       #RegistrationNumber="ngModel"/>
+                                <span class="help-block" *ngIf="(RegistrationNumber.touched ||
+                                                                RegistrationNumber.dirty) &&
+                                                                RegistrationNumber.errors">
+                                    <span *ngIf="RegistrationNumber?.errors.required">
+                                        {{ 'Registration Number' | translate }} {{ 'is required' | translate }}
+                                    </span>
+                                </span>
+                            </div>
+                        </div>
+                        <div class="form-group" [ngClass]="{'has-error': (AuthorizedCapital.touched ||
+                                                                        AuthorizedCapital.dirty) &&
+                                                                        !AuthorizedCapital.valid }">
+                            <label class="col-md-2 control-label">{{ 'Authorized Capital' | translate }}</label>
+                            <div class="col-md-8">
+                                <input class="form-control" id="AuthorizedCapitalId" type="text"
+                                       placeholder="{{ 'Authorized Capital' | translate }} ({{ 'Required' | translate }})"
+                                       required
+                                       [(ngModel)]=vendorFactoryTour.AuthorizedCapital name="AuthorizedCapital"
+                                       #AuthorizedCapital="ngModel"/>
+                                <span class="help-block" *ngIf="(AuthorizedCapital.touched ||
+                                                                AuthorizedCapital.dirty) &&
+                                                                AuthorizedCapital.errors">
+                                    <span *ngIf="AuthorizedCapital?.errors.required">
+                                        {{ 'Authorized Capital' | translate }} {{ 'is required' | translate }}
+                                    </span>
+                                </span>
+                            </div>
+                        </div>
+                        <div class="form-group" [ngClass]="{'has-error': (LegalRepresentatives.touched ||
+                                                                        LegalRepresentatives.dirty) &&
+                                                                        !LegalRepresentatives.valid }">
+                            <label class="col-md-2 control-label">{{ 'Legal Representatives' | translate }}</label>
+                            <div class="col-md-8"
+                            >
+                                <input class="form-control" id="LegalRepresentativesId" type="text"
+                                       placeholder="{{ 'Legal Representatives' | translate }} ({{ 'Required' | translate }})"
+                                       required
+                                       [(ngModel)]=vendorFactoryTour.LegalRepresentatives name="LegalRepresentatives"
+                                       #LegalRepresentatives="ngModel"/>
+                                <span class="help-block" *ngIf="(LegalRepresentatives.touched ||
+                                                                LegalRepresentatives.dirty) &&
+                                                                LegalRepresentatives.errors">
+                                    <span *ngIf="LegalRepresentatives?.errors.required">
+                                        {{ 'Legal Representatives' | translate }} {{ 'is required' | translate }}
+                                    </span>
+                                </span>
+                            </div>
+                        </div>
+                        <div class="form-group" [ngClass]="{'has-error': (ImportExportLicencesObtained.touched ||
+                                                                        ImportExportLicencesObtained.dirty) &&
+                                                                        !ImportExportLicencesObtained.valid }">
+                            <label
+                                class="col-md-2 control-label">{{ 'Import & Export Licences Obtained' | translate }}</label>
+                            <div class="col-md-8">
+                                <select id="ImportExportLicencesObtainedId" name="ImportExportLicencesObtained"
+                                        class="form-control"
+                                        required [(ngModel)]=vendorFactoryTour.ImportExportLicencesObtained
+                                        #ImportExportLicencesObtained="ngModel">
+                                    <option value=''>{{ 'Please select value' | translate }}</option>
+                                    <option value="1">{{ 'Yes' | translate }}</option>
+                                    <option value="0">{{ 'No' | translate }}</option>
+                                </select>
+                                <span class="help-block" *ngIf="(ImportExportLicencesObtained.touched ||
+                                                                ImportExportLicencesObtained.dirty) &&
+                                                                ImportExportLicencesObtained.errors">
+                                    <span *ngIf="ImportExportLicencesObtained?.errors.required">
+                                        {{ 'Import & Export Licences Obtained' | translate }} {{ 'is required' | translate }}
+                                    </span>
+                                </span>
+                            </div>
+                        </div>
+                        <div class="form-group" [ngClass]="{'has-error': (BusinessPermitExpiry.touched ||
+                                                                        BusinessPermitExpiry.dirty) &&
+                                                                        !BusinessPermitExpiry.valid }">
+                            <label class="col-md-2 control-label">{{ 'Business Permit Expiry' | translate }}</label>
+                            <div class="col-md-8">
+                                <mat-form-field class="example-full-width">
+                                    <input matInput [min]="minDate" [max]="maxDate" [matDatepicker]="picker2"
+                                           placeholder="{{ 'Choose a date' | translate }}"
+                                           class="form-control" required
+                                           id="BusinessPermitExpiryId"
+                                           [(ngModel)]="vendorFactoryTour.BusinessPermitExpiry"
+                                           name="BusinessPermitExpiry"
+                                           #BusinessPermitExpiry="ngModel"/>
+                                    <mat-datepicker-toggle matSuffix [for]="picker2"></mat-datepicker-toggle>
+                                    <mat-datepicker #picker2></mat-datepicker>
+                                </mat-form-field>
+                                <span class="help-block" *ngIf="(BusinessPermitExpiry.touched ||
+                                                                BusinessPermitExpiry.dirty) &&
+                                                                BusinessPermitExpiry.errors">
+                                    <span *ngIf="BusinessPermitExpiry?.errors.required">
+                                        {{ 'Business Permit Expiry' | translate }} {{ 'is required' | translate }}
+                                    </span>
+                                </span>
+                            </div>
+                        </div>
+                        <div class="form-group" [ngClass]="{'has-error': (BusinessScope.touched ||
+                                                                        BusinessScope.dirty) &&
+                                                                        !BusinessScope.valid }">
+                            <label class="col-md-2 control-label">{{ 'Business Scope' | translate }}</label>
+                            <div class="col-md-8">
+                                <input class="form-control" id="BusinessScopeId" type="text"
+                                       placeholder="{{ 'Business Scope' | translate }} ({{ 'Required' | translate }})"
+                                       required
+                                       [(ngModel)]=vendorFactoryTour.BusinessScope name="BusinessScope"
+                                       #BusinessScope="ngModel"/>
+                                <span class="help-block" *ngIf="(BusinessScope.touched ||
+                                                                BusinessScope.dirty) &&
+                                                                BusinessScope.errors">
+                                    <span *ngIf="BusinessScope?.errors.required">
+                                        {{ 'Business Scope' | translate }} {{ 'is required' | translate }}
+                                    </span>
+                                </span>
+                            </div>
+                        </div>
+                        <div class="form-group" [ngClass]="{'has-error': (RegistrationAgency.touched ||
+                                                                        RegistrationAgency.dirty) &&
+                                                                        !RegistrationAgency.valid }">
+                            <label class="col-md-2 control-label">{{ 'Registration Agency' | translate }}</label>
+                            <div class="col-md-8">
+                                <input class="form-control" id="RegistrationAgencyId" type="text"
+                                       placeholder="{{ 'Registration Agency' | translate }} ({{ 'Required' | translate }})"
+                                       required
+                                       [(ngModel)]=vendorFactoryTour.RegistrationAgency name="RegistrationAgency"
+                                       #RegistrationAgency="ngModel"/>
+                                <span class="help-block" *ngIf="(RegistrationAgency.touched ||
+                                                                RegistrationAgency.dirty) &&
+                                                                RegistrationAgency.errors">
+                                    <span *ngIf="RegistrationAgency?.errors.required">
+                                        {{ 'Registration Agency' | translate }} {{ 'is required' | translate }}
+                                    </span>
+                                </span>
+                            </div>
+                        </div>
+                        <div class="form-group" [ngClass]="{'has-error': (Banner.touched ||
+                                                                        Banner.dirty) &&
+                                                                        !Banner.valid }">
+                            <label class="col-md-2 control-label">{{ 'Banner' | translate }}</label>
+                            <div class="col-md-8">
+                                <div>
+                                    <a href="javascript:void(0)" *ngIf='!vendorFactoryTour.Banner'
+                                       (click)="fileUpload.click()">
+                                        <span *ngIf="pendingUpload"><i class="fa fa-spinner fa-spin"></i></span>
+                                        <img *ngIf="!pendingUpload" class="opaque"
+                                             src='https://merchantportal.toolots.com.cn/assets/images/no-image-icon.png'
+                                             title='no image'>
+                                    </a>
+                                    <a [href]=vendorFactoryTour.Banner target="_blank"><img
+                                        *ngIf='vendorFactoryTour.Banner'
+                                        width="100%"
+                                        [src]='vendorFactoryTour.Banner'></a>
+                                    <input class="form-control" style="display: none" id="BannerId" type="text"
+                                           required
+                                           [(ngModel)]=vendorFactoryTour.Banner
+                                           name="Banner"
+                                           #Banner="ngModel"/>
+                                    <input type="file" style="display: none;"
+                                           id="UploadFileId"
+                                           (change)="fileChangeEvent($event)"
+                                           accept="image/jpeg,image/png,.jpeg,.jpg,.png"
+                                           #fileUpload>
+                                </div>
+                                <div *ngIf='vendorFactoryTour.Banner'>
+                                    <button mat-button
+                                            (click)="deleteBanner()">{{ 'Delete Banner' | translate }}</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </fieldset>
+            </form>
+            <fieldset class="animated fadeIn form-horizontal" [hidden]="isFactoryTourLoading">
+                <div class="ibox-title">
+                    <h5>{{ 'Manage Images' | translate }}</h5>
+                </div>
+                <div class="ibox-content" style="min-height: 20vh;">
+                    <div class="table-responsive">
+                        <table mat-table #table [dataSource]="factoryTourImageList" class="table">
+                            <ng-container matColumnDef="Menu">
+                                <th mat-header-cell *matHeaderCellDef width="100px"></th>
+                                <td mat-cell *matCellDef="let item; let i = index">
+                                    <ng-container>
+                                        <button mat-button [matMenuTriggerFor]="menu"><i
+                                            class="fa fa-bars fa-2x"></i></button>
+                                        <mat-menu #menu="matMenu">
+                                            <button mat-menu-item
+                                                    (click)="onDelete(item)">{{ 'Delete' | translate }}</button>
+                                        </mat-menu>
+                                    </ng-container>
+                                </td>
+                            </ng-container>
+                            <ng-container matColumnDef="View">
+                                <th mat-header-cell *matHeaderCellDef width="100px">View</th>
+                                <td mat-cell *matCellDef="let item">
+                                    <div class="flex-details">
+                                        <div class="img-detail">
+                                            <img *ngIf='!item.Path' class="opaque"
+                                                 src='https://staging-merchantportal.toolots.com.cn/assets/images/no-image-icon.png'
+                                                 matTooltip='no image' matTooltipShowDelay="500">
+                                            <a href="{{item.Path}}" target="_blank">
+                                                <img class="row-image" *ngIf='item.Path' [src]='item.Path'
+                                                     [alt]='item.Title'>
+                                            </a>
+                                        </div>
+                                    </div>
+                                </td>
+                            </ng-container>
+                            <ng-container matColumnDef="ID">
+                                <th mat-header-cell *matHeaderCellDef width="50px">ID</th>
+                                <td mat-cell *matCellDef="let item">{{item.VendorImageID}}</td>
+                            </ng-container>
+                            <ng-container matColumnDef="Title">
+                                <th mat-header-cell *matHeaderCellDef
+                                    width="200px">{{ 'Title' | translate }}</th>
+                                <td mat-cell *matCellDef="let item">{{item.Title}}</td>
+                            </ng-container>
+                            <!--                                <ng-container matColumnDef="CreatedOn">-->
+                            <!--                                    <th mat-header-cell *matHeaderCellDef mat-sort-header-->
+                            <!--                                        width="100px">{{ 'Created On' | translate }}</th>-->
+                            <!--                                    <td mat-cell *matCellDef="let item">{{item.CreatedOn | date}}</td>-->
+                            <!--                                </ng-container>-->
+                            <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+                            <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+                        </table>
+                        <mat-paginator [pageSizeOptions]="[10, 20]" [showFirstLastButtons]="true"></mat-paginator>
+                    </div>
+                </div>
+                <app-company-image-upload-shell></app-company-image-upload-shell>
+
+            </fieldset>
+            <div class="animated fadeIn form-horizontal">
+                <fieldset>
+                    <div class="ibox-title">
+                        <h5>{{ 'Save' | translate }}</h5>
+                    </div>
+                    <div class="ibox-content">
+                        <div class="form-group">
+                            <div class="col-md-2">
+                            </div>
+                            <div class="col-md-2">
+                                <button type="button" class="btn btn-primary" style="width:100%; height:100%"
+                                        (click)="update(vendorFactoryTourForm)">
+                                    <span>{{ 'Save' | translate }}</span>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </fieldset>
+            </div>
+        </div>
+    </div>
+</div>

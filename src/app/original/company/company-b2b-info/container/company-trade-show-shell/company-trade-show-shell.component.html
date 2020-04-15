@@ -1,0 +1,6 @@
+<app-company-b2b-info-trade-show
+    [tradeShowList]="tradeShowList$|async"
+    [isTradeShowLoading]="isTradeShowLoading$|async"
+    (loadVendorInfo)="loadVendorInfo()"
+    (updateVendorTradeShow)="updateVendorTradeShow($event)"
+></app-company-b2b-info-trade-show>

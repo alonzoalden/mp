@@ -45,6 +45,7 @@
                         <li><a [routerLink]="['', 'company','info','description']">{{ 'Company Info' | translate }}</a></li>
                         <li><a [routerLink]="['', 'company','attachment','add']" [queryParams]="{init: true}">{{ 'New Attachment' | translate }}</a></li>
                         <li><a [routerLink]="['', 'company','attachment']" [queryParams]="{init: true}">{{ 'Manage Attachments' | translate }}</a></li>
+                        <li *ngIf="isPM"><a [routerLink]="['', 'company','b2b','tour']" >{{ 'Company B2B Info' | translate }}</a></li>
                     </ul>
                 </li>
                 <li class="dropdown">

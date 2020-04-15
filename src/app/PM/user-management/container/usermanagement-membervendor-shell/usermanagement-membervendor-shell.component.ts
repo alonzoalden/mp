@@ -22,7 +22,9 @@ export class UsermanagementMemberVendorShellComponent implements OnInit {
     }
 
     ngOnInit() {
-        this.isMemberListLoading$ = this.store.pipe(select(UserManageSelector.getMemberListLoading));
+        setTimeout(() => {
+            this.isMemberListLoading$ = this.store.pipe(select(UserManageSelector.getMemberListLoading));
+        });
         this.memberListMatTable$ = this.store.pipe(select(UserManageSelector.getMemeberList));
     }
 

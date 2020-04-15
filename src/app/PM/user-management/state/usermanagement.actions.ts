@@ -2,6 +2,7 @@ import {Action} from '@ngrx/store';
 import {Member} from '../../../shared/class/member';
 import {Vendor} from '../../../shared/class/vendor';
 import {MemberRelationItemNode, MemberRelationNode} from '../../../shared/class/member-relation';
+import {VendorRegistrationB2B} from '../../../shared/class/vendor-registration';
 
 export enum UserManangementActionTypes {
     LoadMemberList = '[UserManagement] Load MemberList',
@@ -36,7 +37,16 @@ export enum UserManangementActionTypes {
     SaveRelatedMemberRelationList = '[UserManagement] Save Related MemberRelationList',
     SaveRelatedMemberRelationListSuccess = '[UserManagement] Save Related MemberRelationList Success',
     SaveRelatedMemberRelationListFail = '[UserManagement] Save Related MemberRelationList Fail',
-
+    LoadCheckVendorList = '[UserManagement] Load CheckVendorList',
+    LoadCheckVendorListSuccess = '[UserManagement] Load CheckVendorList Success',
+    LoadCheckVendorListFail = '[UserManagement] Load CheckVendorList Fail',
+    CreateVendorB2b = '[UserManagement] Load CreateVendorB2b',
+    CreateVendorB2bSuccess = '[UserManagement] Load CreateVendorB2b Success',
+    CreateVendorB2bFail = '[UserManagement] Load CreateVendorB2b Fail',
+    EditCurrentVendorRegistration = '[UserManagement] Edit Current Vendor Registration',
+    LoadMemberPMList = '[UserManagement] Load MemberPMList',
+    LoadMemberPMListSuccess = '[UserManagement] Load MemberPMList Success',
+    LoadMemberPMListFail = '[UserManagement] Load MemberPMList Fail',
 }
 
 export class LoadMemberList implements Action {
@@ -233,6 +243,70 @@ export class SaveRelatedMemberRelationListFail implements Action {
     }
 }
 
+export class LoadCheckVendorList implements Action {
+    readonly type = UserManangementActionTypes.LoadCheckVendorList;
+}
+
+export class LoadCheckVendorListSuccess implements Action {
+    readonly type = UserManangementActionTypes.LoadCheckVendorListSuccess;
+
+    constructor(public payload: VendorRegistrationB2B[]) {
+    }
+}
+
+export class LoadCheckVendorListFail implements Action {
+    readonly type = UserManangementActionTypes.LoadCheckVendorListFail;
+
+    constructor(public payload: string) {
+    }
+}
+
+export class CreateVendorB2b implements Action {
+    readonly type = UserManangementActionTypes.CreateVendorB2b;
+
+    constructor(public payload: VendorRegistrationB2B) {
+    }
+}
+
+export class CreateVendorB2bSuccess implements Action {
+    readonly type = UserManangementActionTypes.CreateVendorB2bSuccess;
+
+    constructor(public payload: VendorRegistrationB2B) {
+    }
+}
+
+export class CreateVendorB2bFail implements Action {
+    readonly type = UserManangementActionTypes.CreateVendorB2bFail;
+
+    constructor(public payload: string) {
+    }
+}
+
+export class EditCurrentVendorRegistration implements Action {
+    readonly type = UserManangementActionTypes.EditCurrentVendorRegistration;
+
+    constructor(public payload: VendorRegistrationB2B) {
+    }
+}
+
+export class LoadMemberPMList implements Action {
+    readonly type = UserManangementActionTypes.LoadMemberPMList;
+}
+
+export class LoadMemberPMListSuccess implements Action {
+    readonly type = UserManangementActionTypes.LoadMemberPMListSuccess;
+
+    constructor(public payload: Member[]) {
+    }
+}
+
+export class LoadMemberPMListFail implements Action {
+    readonly type = UserManangementActionTypes.LoadMemberPMListFail;
+
+    constructor(public payload: string) {
+    }
+}
+
 export type UsermanagementActions =
     | LoadMemberList
     | LoadMemberListSuccess
@@ -263,4 +337,14 @@ export type UsermanagementActions =
     | SaveRelatedMemberRelationList
     | SaveRelatedMemberRelationListSuccess
     | SaveRelatedMemberRelationListFail
+    | LoadCheckVendorList
+    | LoadCheckVendorListFail
+    | LoadCheckVendorListSuccess
+    | CreateVendorB2b
+    | CreateVendorB2bFail
+    | CreateVendorB2bSuccess
+    | EditCurrentVendorRegistration
+    | LoadMemberPMList
+    | LoadMemberPMListFail
+    | LoadMemberPMListSuccess
     ;

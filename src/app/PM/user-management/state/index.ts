@@ -5,6 +5,7 @@ import {MatTableDataSource, MatTreeNestedDataSource} from '@angular/material';
 import {Member} from '../../../shared/class/member';
 import {Vendor} from '../../../shared/class/vendor';
 import {MemberRelationItemNode} from '../../../shared/class/member-relation';
+import {VendorRegistrationB2B} from '../../../shared/class/vendor-registration';
 
 export interface State extends fromRoot.State {
     management: fromUserManagement.UsermanagementState;
@@ -52,4 +53,20 @@ export const getMemberRelationUnUseList = createSelector(
 export const getMemberRelationTreeLoading = createSelector(
     getUserManageFeatureState,
     state => state.isTreeDataLoading
+);
+export const getCheckVendorListLoading = createSelector(
+    getUserManageFeatureState,
+    state => state.isCheckVendorListLoading
+);
+export const getCheckVendorList = createSelector(
+    getUserManageFeatureState,
+    state => new MatTableDataSource<VendorRegistrationB2B>(state.checkVendorList)
+);
+export const getCurrentVendorRegistration = createSelector(
+    getUserManageFeatureState,
+    state => state.currentVendorRegistration
+);
+export const getPMList = createSelector(
+    getUserManageFeatureState,
+    state => state.memberPMList
 );

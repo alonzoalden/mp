@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient, HttpErrorResponse, HttpHeaders } from '@angular/common/http';
 import { Observable, Subject, of, throwError } from 'rxjs';
 import { catchError, tap } from 'rxjs/operators';
-import { VendorRegistration } from '../shared/class/vendor-registration';
+import {VendorRegistration, VendorRegistrationB2B} from '../shared/class/vendor-registration';
 import { OAuthService } from 'angular-oauth2-oidc';
 import { environment } from '../../environments/environment';
 
@@ -28,6 +28,17 @@ export class RegistrationService {
                                 tap(data => console.log('Add Registration: ' + JSON.stringify(data))),
                                 catchError(this.handleError)
                             );
+    }
+
+    addVendorRegistrationB2B(registration: VendorRegistrationB2B): Observable<VendorRegistration> {
+        const headers = new HttpHeaders({
+            'Content-Type': 'application/json'
+        });
+        return this.http.post<VendorRegistration>(this.apiURL + '/vendorregistration/b2b', registration, { headers: headers } )
+            .pipe(
+                tap(data => console.log('Add Registration: ' + JSON.stringify(data))),
+                catchError(this.handleError)
+            );
     }
 
     private handleError(err: HttpErrorResponse) {

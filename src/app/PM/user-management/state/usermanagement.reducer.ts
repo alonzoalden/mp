@@ -2,24 +2,30 @@ import {UsermanagementActions, UserManangementActionTypes} from './usermanagemen
 import {Member} from '../../../shared/class/member';
 import {Vendor} from '../../../shared/class/vendor';
 import {MemberRelationItemNode, MemberRelationNode} from 'app/shared/class/member-relation';
+import {VendorRegistrationB2B} from '../../../shared/class/vendor-registration';
 
 
 export interface UsermanagementState {
     isMemberListLoading: boolean;
+    isRelatedVendorListLoading: boolean;
+    isUnRelatedVendorListLoading: boolean;
+    isTreeDataLoading: boolean;
+    isCheckVendorListLoading: boolean;
     memberList: Member[];
     error: string;
     currentMember: Member;
     relatedVendorList: Vendor[];
     unRelatedVendorList: Vendor[];
-    isRelatedVendorListLoading: boolean;
-    isUnRelatedVendorListLoading: boolean;
     memberRelationTree: MemberRelationItemNode[];
     unUseMemberList: MemberRelationNode[];
-    isTreeDataLoading: boolean;
+    checkVendorList: VendorRegistrationB2B[];
+    currentVendorRegistration: VendorRegistrationB2B;
+    memberPMList: Member[];
 }
 
 const initialState: UsermanagementState = {
     isMemberListLoading: false,
+    isCheckVendorListLoading: false,
     memberList: [],
     error: '',
     currentMember: null,
@@ -29,7 +35,10 @@ const initialState: UsermanagementState = {
     isUnRelatedVendorListLoading: false,
     memberRelationTree: [],
     unUseMemberList: [],
-    isTreeDataLoading: null
+    isTreeDataLoading: null,
+    checkVendorList: [],
+    currentVendorRegistration: null,
+    memberPMList: []
 };
 
 export function UsermanagementReducer(state = initialState, action: UsermanagementActions): UsermanagementState {
@@ -161,6 +170,38 @@ export function UsermanagementReducer(state = initialState, action: Usermanageme
         case UserManangementActionTypes.SaveRelatedMemberRelationList:
             return {
                 ...state, isTreeDataLoading: true
+            };
+        case UserManangementActionTypes.LoadCheckVendorList:
+            return {
+                ...state, isCheckVendorListLoading: true
+            };
+        case UserManangementActionTypes.LoadCheckVendorListFail:
+            return {
+                ...state, isCheckVendorListLoading: false, checkVendorList: [], error: action.payload
+            };
+        case UserManangementActionTypes.LoadCheckVendorListSuccess:
+            return {
+                ...state, isCheckVendorListLoading: false, checkVendorList: action.payload
+            };
+        case UserManangementActionTypes.EditCurrentVendorRegistration:
+            return {
+                ...state, currentVendorRegistration: action.payload
+            };
+        case UserManangementActionTypes.CreateVendorB2bSuccess:
+            return {
+                ...state, currentVendorRegistration: null
+            };
+        case UserManangementActionTypes.LoadMemberPMList:
+            return {
+                ...state, memberPMList: []
+            };
+        case UserManangementActionTypes.LoadMemberPMListFail:
+            return {
+                ...state, error: action.payload, memberPMList: []
+            };
+        case UserManangementActionTypes.LoadMemberPMListSuccess:
+            return {
+                ...state, memberPMList: action.payload
             };
         default:
             return state;

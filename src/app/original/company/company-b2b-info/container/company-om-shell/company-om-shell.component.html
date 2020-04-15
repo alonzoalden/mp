@@ -1,0 +1,8 @@
+<app-company-b2b-info-om [isOMLoading]="isOMLoading$|async"
+                         [OMImageList]="OMImageList$|async"
+                         (deleteImage)="deleteImage($event)"
+                         (updateVendorOM)="updateVendorOM($event)"
+                         (loadVendorInfo)="loadVendorInfo()"
+                         (updateImage)="updateImage($event)"
+                        [vendorOM]="vendorOM$|async"
+></app-company-b2b-info-om>

@@ -1,0 +1,8 @@
+<app-company-b2b-info-certificate
+    (updateVendorCertificate)="updateVendorCertificate($event)"
+    (getVendorCertificate)="getVendorCertificate()"
+    [isCertificateLoading]="isCertificateLoading$|async"
+    (updateImage)="updateImage($event)"
+    [certificateImageList]="vendorCertificateImageList$|async"
+    (deleteImage)="deleteImage($event)"
+></app-company-b2b-info-certificate>

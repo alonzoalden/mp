@@ -1,0 +1,9 @@
+<app-company-b2b-info-service
+    [isServiceLoading]="isServiceLoading$|async"
+    [serviceImageList]="ServiceImageList$|async"
+    (deleteImage)="deleteImage($event)"
+    (updateVendorService)="updateVendorService($event)"
+    (loadVendorInfo)="loadVendorInfo()"
+    (updateImage)="updateImage($event)"
+    [vendorService]="vendorService$|async"
+></app-company-b2b-info-service>

@@ -1,0 +1,7 @@
+<app-company-image-upload [filesToUpload]="filesToUpload$|async"
+                          [selectedFileNames]="selectedFileNames$|async"
+                          [pendingUpload]="pendingUpload$|async"
+                          (uploadImage)="uploadImage($event)"
+                          [titleRequired]="titleRequired"
+                          (clearUploadList)="clearUploadList()"
+></app-company-image-upload>

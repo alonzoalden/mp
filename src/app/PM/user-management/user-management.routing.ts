@@ -3,6 +3,8 @@ import {UsermanagementMemberVendorShellComponent} from './container/usermanageme
 import {UserManagementComponent} from './user-management.component';
 import {PMSuperAdminAuthGuard} from '../guard/pm.guard';
 import {UsermanagementMembertreeShellComponent} from './container/usermanagement-membertree-shell/usermanagement-membertree-shell.component';
+import {UsermanagementCheckVendorListShellComponent} from './container/usermanagement-check-vendor-list-shell/usermanagement-check-vendor-list-shell.component';
+import {UsermanagementCheckVendorDetailShellComponent} from './container/usermanagement-check-vendor-detail-shell/usermanagement-check-vendor-detail-shell.component';
 
 const USER_ROUTES: Routes = [
     {
@@ -15,6 +17,14 @@ const USER_ROUTES: Routes = [
             },
             {
                 path: 'member', component: UsermanagementMembertreeShellComponent,
+                canActivate: [PMSuperAdminAuthGuard],
+            },
+            {
+                path: 'check', component: UsermanagementCheckVendorListShellComponent,
+                canActivate: [PMSuperAdminAuthGuard],
+            },
+            {
+                path: 'check/:id', component: UsermanagementCheckVendorDetailShellComponent,
                 canActivate: [PMSuperAdminAuthGuard],
             }
         ],

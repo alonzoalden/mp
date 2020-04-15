@@ -1,0 +1,7 @@
+<app-company-b2b-info-qc [isQCLoading]="isQCLoading$|async"
+                         [QCImageList]="QCImageList$|async"
+                         (deleteImage)="deleteImage($event)"
+                         (updateVendorQC)="updateVendorQC($event)"
+                         (loadVendorInfo)="loadVendorInfo()"
+                         (updateImage)="updateImage($event)"
+                         [vendorQC]="vendorQC$|async"></app-company-b2b-info-qc>

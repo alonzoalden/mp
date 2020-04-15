@@ -8,6 +8,7 @@ import {NotificationComponent} from '../../shared/tool/notification/notification
 import {Vendor} from '../../shared/class/vendor';
 import {Member} from '../../shared/class/member';
 import {MemberRelationItemNode, MemberRelationNode} from 'app/shared/class/member-relation';
+import {VendorRegistrationB2B} from '../../shared/class/vendor-registration';
 
 @Injectable()
 export class UserManagementService {
@@ -86,6 +87,31 @@ export class UserManagementService {
                 catchError(this.handleError)
             );
     }
+
+    getCheckVendorList(): Observable<VendorRegistrationB2B[]> {
+        return this.http.get<VendorRegistrationB2B[]>(this.apiURL + '/usermanage/vendor/list')
+            .pipe(
+                catchError(this.handleError)
+            );
+    }
+
+    createVendorB2b(vendorRegistrationB2B: VendorRegistrationB2B): Observable<VendorRegistrationB2B> {
+        const headers = new HttpHeaders({
+            'Content-Type': 'application/json'
+        });
+        return this.http.post<VendorRegistrationB2B>(this.apiURL + '/usermanage/vendor/create', vendorRegistrationB2B, {headers: headers})
+            .pipe(
+                catchError(this.handleError)
+            );
+    }
+
+    getMemberPMList(): Observable<Member[]> {
+        return this.http.get<Member[]>(this.apiURL + '/usermanage/pm/list')
+            .pipe(
+                catchError(this.handleError)
+            );
+    }
+
 
     private handleError(err: HttpErrorResponse) {
         // in a real world app, we may send the server to some remote logging infrastructure

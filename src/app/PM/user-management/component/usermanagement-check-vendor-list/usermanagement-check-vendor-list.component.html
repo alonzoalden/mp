@@ -1,0 +1,149 @@
+<div class="row wrapper border-bottom white-bg page-heading">
+    <div class="col-lg-12">
+        <h2>
+            {{ 'Manage VendorMember' | translate }}
+        </h2>
+        <ol class="breadcrumb">
+            <li>
+                <a [routerLink]="['/PM/dashboard']">{{ 'Home' | translate }}</a>
+            </li>
+            <li>
+                <strong>{{ 'User Management' | translate }}</strong>
+            </li>
+            <li class="active">
+                <strong>{{ 'B2B Vendor' | translate }}</strong>
+            </li>
+        </ol>
+    </div>
+</div>
+<div class="wrapper wrapper-content animated fadeIn">
+    <div class="row">
+        <div class="col-lg-12">
+            <div class="ibox float-e-margins">
+                <div class="ibox-title">
+                    <h5>{{ 'Vendor' | translate }}</h5>
+                </div>
+                <div class="toolbar-search-1">
+                    <i class="fa fa-search" aria-label="Icon for Filter By Input Bar"
+                       [ngClass]="vendorList?.filter ? 'selected' : ''" (click)="FilterBy.select()"></i>
+                    <input (keyup)="applyFilter($event.target.value)" placeholder="{{ 'Filter By' | translate }}"
+                           class="form-control" #FilterBy>
+                </div>
+                <div class="ibox-content" style="min-height: 40vh;">
+                    <div *ngIf="isCheckVendorListLoading" class="spinner-container">
+                        <div class="sk-spinner sk-spinner-three-bounce big-spinner">
+                            <div class="sk-bounce1"></div>
+                            <div class="sk-bounce2"></div>
+                            <div class="sk-bounce3"></div>
+                        </div>
+                    </div>
+                    <div class="table-responsive" [hidden]="isCheckVendorListLoading">
+                        <table mat-table #table [dataSource]="vendorList" class="table">
+                            <ng-container matColumnDef="Menu">
+                                <th mat-header-cell *matHeaderCellDef width="100px"></th>
+                                <td mat-cell *matCellDef="let item; let i = index;">
+                                    <ng-container>
+                                        <button mat-button [matMenuTriggerFor]="menu"><i
+                                            class="fa fa-bars fa-2x"></i></button>
+                                        <mat-menu #menu="matMenu">
+                                            <button mat-menu-item type="button" (click)="edit(item)">{{ 'Edit and Create' | translate }}</button>
+                                        </mat-menu>
+                                    </ng-container>
+                                </td>
+                            </ng-container>
+                            <ng-container matColumnDef="CompanyName">
+                                <th mat-header-cell *matHeaderCellDef mat-sort-header
+                                    width="100">{{ 'Company Name' | translate }}</th>
+                                <td mat-cell *matCellDef="let item;let i = index">
+                                    <span class="sm-text2">{{item.CompanyName}}</span>
+                                </td>
+                            </ng-container>
+                            <ng-container matColumnDef="MerchantID">
+                                <th mat-header-cell *matHeaderCellDef mat-sort-header
+                                    width="60">{{ 'MerchantID' | translate }}</th>
+                                <td mat-cell *matCellDef="let item;let i = index">
+                                    <span class="sm-text2">{{item.MerchantID}}</span>
+                                </td>
+                            </ng-container>
+                            <ng-container matColumnDef="Address">
+                                <th mat-header-cell *matHeaderCellDef
+                                    width="120">{{ 'Address' | translate }}</th>
+                                <td mat-cell *matCellDef="let item">
+                                    <span class="sm-text2">{{item.Address}}</span>
+                                </td>
+                            </ng-container>
+                            <ng-container matColumnDef="FirstName">
+                                <th mat-header-cell *matHeaderCellDef mat-sort-header
+                                    width="80">{{ 'FirstName' | translate }}</th>
+                                <td mat-cell *matCellDef="let item">
+                                    <span class="sm-text2">{{item.FirstName}}</span>
+                                </td>
+                            </ng-container>
+                            <ng-container matColumnDef="LastName">
+                                <th mat-header-cell *matHeaderCellDef mat-sort-header
+                                    width="80">{{ 'LastName' | translate }}</th>
+                                <td mat-cell *matCellDef="let item">
+                                    <span class="sm-text2">{{item.LastName}}</span>
+                                </td>
+                            </ng-container>
+                            <ng-container matColumnDef="Email">
+                                <th mat-header-cell *matHeaderCellDef mat-sort-header
+                                    width="100px">{{ 'Email' | translate }}</th>
+                                <td mat-cell *matCellDef="let item">
+                                    <span class="sm-text2">{{item.Email}}</span>
+                                </td>
+                            </ng-container>
+                            <ng-container matColumnDef="City">
+                                <th mat-header-cell *matHeaderCellDef mat-sort-header
+                                    width="80px">{{ 'City' | translate }}</th>
+                                <td mat-cell *matCellDef="let item">
+                                    <span class="sm-text2">{{item.City}}</span>
+                                </td>
+                            </ng-container>
+                            <ng-container matColumnDef="State">
+                                <th mat-header-cell *matHeaderCellDef mat-sort-header
+                                    width="80px">{{ 'State' | translate }}</th>
+                                <td mat-cell *matCellDef="let item">
+                                    <span class="sm-text2">{{item.State}}</span>
+                                </td>
+                            </ng-container>
+                            <ng-container matColumnDef="PostalCode">
+                                <th mat-header-cell *matHeaderCellDef
+                                    width="80px">{{ 'PostalCode' | translate }}</th>
+                                <td mat-cell *matCellDef="let item">
+                                    <span class="sm-text2">{{item.PostalCode}}</span>
+                                </td>
+                            </ng-container>
+                            <ng-container matColumnDef="Region">
+                                <th mat-header-cell *matHeaderCellDef
+                                    width="80px">{{ 'Region' | translate }}</th>
+                                <td mat-cell *matCellDef="let item">
+                                    <span class="sm-text2">{{item.Region}}</span>
+                                </td>
+                            </ng-container>
+                            <ng-container matColumnDef="PhoneNumber">
+                                <th mat-header-cell *matHeaderCellDef
+                                    width="100px">{{ 'PhoneNumber' | translate }}</th>
+                                <td mat-cell *matCellDef="let item">
+                                    <span class="sm-text2">{{item.PhoneNumber}}</span>
+                                </td>
+                            </ng-container>
+                            <ng-container matColumnDef="CreatedOn">
+                                <th mat-header-cell *matHeaderCellDef
+                                    width="100px">{{ 'Created On' | translate }}</th>
+                                <td mat-cell *matCellDef="let item">
+                                    <span class="sm-text2">{{item.CreatedOn|localizedDate}}</span>
+                                </td>
+                            </ng-container>
+
+                            <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+                            <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+                        </table>
+                        <mat-paginator #paginator [pageSizeOptions]="[10, 20, 50, 100, 200]"
+                                       [showFirstLastButtons]="true"></mat-paginator>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

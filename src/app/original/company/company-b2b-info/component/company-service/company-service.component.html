@@ -1,0 +1,196 @@
+<div class="tab-content">
+    <div class="ibox-content" style="min-height: 40vh" *ngIf="isServiceLoading">
+        <div class="spinner-container">
+            <div class="animated fadeIn sk-spinner sk-spinner-three-bounce big-spinner">
+                <div class="sk-bounce1"></div>
+                <div class="sk-bounce2"></div>
+                <div class="sk-bounce3"></div>
+            </div>
+        </div>
+    </div>
+    <div class="tab-pane active">
+        <div class="panel-body p-w-none">
+            <form class="animated fadeIn form-horizontal" #vendorServiceForm="ngForm" [hidden]="isServiceLoading">
+                <fieldset>
+                    <div class="ibox-title"><h5>{{ 'General' | translate }}</h5></div>
+                    <div class="ibox-content">
+                        <div class="form-group" [ngClass]="{'has-error': (Description.touched ||
+                                                                        Description.dirty) &&
+                                                                        !Description.valid }">
+                            <label class="col-md-2 control-label">{{ 'Description' | translate }}</label>
+                            <div class="col-md-8 ">
+                                <textarea cols="30" rows="10" class="form-control" id="DescriptionId"
+                                          placeholder="{{ 'Description' | translate }} ({{ 'Required' | translate }})"
+                                          required
+                                          [(ngModel)]=vendorService.Description name="Description"
+                                          #Description="ngModel"></textarea>
+                                <span class="help-block" *ngIf="(Description.touched ||
+                                                                Description.dirty) &&
+                                                                Description.errors">
+                                    <span *ngIf="Description?.errors.required">
+                                        {{ 'Description' | translate }} {{ 'is required' | translate }}
+                                    </span>
+                                </span>
+                            </div>
+                        </div>
+                        <div class="form-group" [ngClass]="{'has-error': (Policy.touched ||
+                                                                        Policy.dirty) &&
+                                                                        !Policy.valid }">
+                            <label class="col-md-2 control-label">{{ 'Sample Availability & Policy' | translate }}</label>
+                            <div class="col-md-8 ">
+                                <input class="form-control" id="PolicyId" type="text"
+                                       placeholder="{{ 'Sample Availability & Policy' | translate }} ({{ 'Required' | translate }})"
+                                       required
+                                       [(ngModel)]=vendorService.Policy name="Policy"
+                                       #Policy="ngModel"/>
+                                <span class="help-block" *ngIf="(Policy.touched ||
+                                                                Policy.dirty) &&
+                                                                Policy.errors">
+                                    <span *ngIf="Policy?.errors.required">
+                                        {{ 'Sample Availability & Policy' | translate }} {{ 'is required' | translate }}
+                                    </span>
+                                </span>
+                            </div>
+                        </div>
+                        <div class="form-group" [ngClass]="{'has-error': (Guarantees.touched ||
+                                                                        Guarantees.dirty) &&
+                                                                        !Guarantees.valid }">
+                            <label class="col-md-2 control-label">{{ 'Guarantees/Warranties/Terms and Conditions' | translate }}</label>
+                            <div class="col-md-8 ">
+                                <input class="form-control" id="GuaranteesId" type="text"
+                                       placeholder="{{ 'Guarantees/Warranties/Terms and Conditions' | translate }} ({{ 'Required' | translate }})"
+                                       required
+                                       [(ngModel)]=vendorService.Guarantees name="Guarantees"
+                                       #Guarantees="ngModel"/>
+                                <span class="help-block" *ngIf="(Guarantees.touched ||
+                                                                Guarantees.dirty) &&
+                                                                Guarantees.errors">
+                                    <span *ngIf="Guarantees?.errors.required">
+                                        {{ 'Guarantees/Warranties/Terms and Conditions' | translate }} {{ 'is required' | translate }}
+                                    </span>
+                                </span>
+                            </div>
+                        </div>
+                        <div class="form-group" [ngClass]="{'has-error': (Support.touched ||
+                                                                        Support.dirty) &&
+                                                                        !Support.valid }">
+                            <label class="col-md-2 control-label">{{ 'Export/Import Processing Support' | translate }}</label>
+                            <div class="col-md-8 ">
+                                <input class="form-control" id="SupportId" type="text"
+                                       placeholder="{{ 'Export/Import Processing Support' | translate }} ({{ 'Required' | translate }})"
+                                       required
+                                       [(ngModel)]=vendorService.Support name="Support"
+                                       #Support="ngModel"/>
+                                <span class="help-block" *ngIf="(Support.touched ||
+                                                                Support.dirty) &&
+                                                                Support.errors">
+                                    <span *ngIf="Support?.errors.required">
+                                        {{ 'Export/Import Processing Support' | translate }} {{ 'is required' | translate }}
+                                    </span>
+                                </span>
+                            </div>
+                        </div>
+                        <div class="form-group" [ngClass]="{'has-error': (AfterSalesService.touched ||
+                                                                        AfterSalesService.dirty) &&
+                                                                        !AfterSalesService.valid }">
+                            <label class="col-md-2 control-label">{{ 'After Sales Service' | translate }}</label>
+                            <div class="col-md-8 ">
+                                <input class="form-control" id="AfterSalesServiceId" type="text"
+                                       placeholder="{{ 'After Sales Service' | translate }} ({{ 'Required' | translate }})"
+                                       required
+                                       [(ngModel)]=vendorService.AfterSalesService
+                                       name="AfterSalesService"
+                                       #AfterSalesService="ngModel"/>
+                                <span class="help-block" *ngIf="(AfterSalesService.touched ||
+                                                                AfterSalesService.dirty) &&
+                                                                AfterSalesService.errors">
+                                    <span *ngIf="AfterSalesService?.errors.required">
+                                        {{ 'After Sales Service' | translate }} {{ 'is required' | translate }}
+                                    </span>
+                                </span>
+                            </div>
+                        </div>
+
+                    </div>
+                </fieldset>
+            </form>
+            <fieldset class="animated fadeIn form-horizontal" [hidden]="isServiceLoading">
+                <div class="ibox-title">
+                    <h5>{{ 'Manage Images' | translate }}</h5>
+                </div>
+                <div class="ibox-content" style="min-height: 20vh;">
+                    <div class="table-responsive">
+                        <table mat-table #table [dataSource]="serviceImageList" class="table">
+                            <ng-container matColumnDef="Menu">
+                                <th mat-header-cell *matHeaderCellDef width="100px"></th>
+                                <td mat-cell *matCellDef="let item; let i = index">
+                                    <ng-container>
+                                        <button mat-button [matMenuTriggerFor]="menu"><i
+                                            class="fa fa-bars fa-2x"></i></button>
+                                        <mat-menu #menu="matMenu">
+                                            <button mat-menu-item
+                                                    (click)="onDelete(item)">{{ 'Delete' | translate }}</button>
+                                        </mat-menu>
+                                    </ng-container>
+                                </td>
+                            </ng-container>
+                            <ng-container matColumnDef="View">
+                                <th mat-header-cell *matHeaderCellDef width="100px"></th>
+                                <td mat-cell *matCellDef="let item">
+                                    <div class="flex-details">
+                                        <div class="img-detail">
+                                            <img *ngIf='!item.Path' class="opaque"
+                                                 src='https://staging-merchantportal.toolots.com.cn/assets/images/no-image-icon.png'
+                                                 matTooltip='no image' matTooltipShowDelay="500">
+                                            <a href="{{item.Path}}" target="_blank">
+                                                <img class="row-image" *ngIf='item.Path' [src]='item.Path'
+                                                     [alt]='item.Title'>
+                                            </a>
+                                        </div>
+                                    </div>
+                                </td>
+                            </ng-container>
+                            <ng-container matColumnDef="ID">
+                                <th mat-header-cell *matHeaderCellDef width="50px">ID</th>
+                                <td mat-cell *matCellDef="let item">{{item.VendorImageID}}</td>
+                            </ng-container>
+                            <ng-container matColumnDef="Title">
+                                <th mat-header-cell *matHeaderCellDef
+                                    width="200px">{{ 'Title' | translate }}</th>
+                                <td mat-cell *matCellDef="let item">{{item.Title}}</td>
+                            </ng-container>
+                            <!--                                <ng-container matColumnDef="CreatedOn">-->
+                            <!--                                    <th mat-header-cell *matHeaderCellDef mat-sort-header-->
+                            <!--                                        width="100px">{{ 'Created On' | translate }}</th>-->
+                            <!--                                    <td mat-cell *matCellDef="let item">{{item.CreatedOn | date}}</td>-->
+                            <!--                                </ng-container>-->
+                            <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+                            <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+                        </table>
+                        <mat-paginator [pageSizeOptions]="[10, 20]" [showFirstLastButtons]="true"></mat-paginator>
+                    </div>
+                </div>
+                <app-company-image-upload-shell></app-company-image-upload-shell>
+            </fieldset>
+            <div class="animated fadeIn form-horizontal">
+                <fieldset>
+                    <div class="ibox-title">
+                        <h5>{{ 'Save' | translate }}</h5>
+                    </div>
+                    <div class="ibox-content">
+                        <div class="form-group">
+                            <div class="col-md-2">
+                            </div>
+                            <div class="col-md-2">
+                                <button type="button" class="btn btn-primary" style="width:100%; height:100%"
+                                        (click)="update(vendorServiceForm)">
+                                    <span>{{ 'Save' | translate }}</span>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </fieldset>
+            </div>
+        </div>
+    </div>
+</div>

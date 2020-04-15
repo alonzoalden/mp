@@ -1,0 +1,114 @@
+<h3 class="ibox-title dialog-title">{{ 'Trade Show' | translate }}</h3>
+<div mat-dialog-content>
+    <form class="animated fadeIn form-horizontal" #vendorTradeShowForm="ngForm">
+        <fieldset>
+            <div class="m-t-md">
+                <div class="form-group" [ngClass]="{'has-error': (Name.touched ||
+                                                                        Name.dirty) &&
+                                                                        !Name.valid }">
+                    <label class="col-md-2 control-label">{{ 'Name' | translate }}</label>
+                    <div class="col-md-8 ">
+                        <input class="form-control" id="NameId" type="text"
+                               placeholder="{{ 'Name' | translate }} ({{ 'Required' | translate }})"
+                               required
+                               [(ngModel)]=vendorTradeShow.Name name="Name"
+                               #Name="ngModel"/>
+                    </div>
+                </div>
+                <div class="form-group" [ngClass]="{'has-error': (Location.touched ||
+                                                                        Location.dirty) &&
+                                                                        !Location.valid }">
+                    <label class="col-md-2 control-label">{{ 'Location' | translate }}</label>
+                    <div class="col-md-8 ">
+                        <input class="form-control" id="LocationId" type="text"
+                               placeholder="{{ 'Location' | translate }} ({{ 'Required' | translate }})"
+                               required
+                               [(ngModel)]=vendorTradeShow.Location name="Location"
+                               #Location="ngModel"/>
+                    </div>
+                </div>
+                <div class="form-group" [ngClass]="{'has-error': (ShowDate.touched ||
+                                                                        ShowDate.dirty) &&
+                                                                        !ShowDate.valid }">
+                    <label class="col-md-2 control-label">{{ 'Show Date' | translate }}</label>
+                    <div class="col-md-8 ">
+                        <mat-form-field class="example-full-width">
+                            <input matInput [min]="minDate" [max]="maxDate" [matDatepicker]="picker"
+                                   placeholder="{{ 'Choose a date' | translate }}"
+                                   class="form-control" required
+                                   id="ShowDateId"
+                                   [(ngModel)]="vendorTradeShow.ShowDate"
+                                   name="ShowDate"
+                                   #ShowDate="ngModel"/>
+                            <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+                            <mat-datepicker #picker></mat-datepicker>
+                        </mat-form-field>
+                    </div>
+                </div>
+                <div class="form-group" [ngClass]="{'has-error': (Booth.touched ||
+                                                                        Booth.dirty) &&
+                                                                        !Booth.valid }">
+                    <label class="col-md-2 control-label">{{ 'Booth' | translate }}</label>
+                    <div class="col-md-8 ">
+                        <input class="form-control" id="BoothId" type="text"
+                               placeholder="{{ 'Booth' | translate }} ({{ 'Required' | translate }})"
+                               required
+                               [(ngModel)]=vendorTradeShow.Booth name="Booth"
+                               #Booth="ngModel"/>
+                    </div>
+                </div>
+                <div class="form-group" [ngClass]="{'has-error': (ShowSamples.touched ||
+                                                                        ShowSamples.dirty) &&
+                                                                        !ShowSamples.valid }">
+                    <label class="col-md-2 control-label">{{ 'Show Samples' | translate }}</label>
+                    <div class="col-md-8 ">
+                        <input class="form-control" id="ShowSamplesId" type="text"
+                               placeholder="{{ 'Show Samples' | translate }} ({{ 'Required' | translate }})"
+                               required
+                               [(ngModel)]=vendorTradeShow.ShowSamples
+                               name="ShowSamples"
+                               #ShowSamples="ngModel"/>
+                    </div>
+                </div>
+                <div class="form-group" [ngClass]="{'has-error': (Contact.touched ||
+                                                                        Contact.dirty) &&
+                                                                        !Contact.valid }">
+                    <label class="col-md-2 control-label">{{ 'Contact' | translate }}</label>
+                    <div class="col-md-8 ">
+                        <input class="form-control" id="ContactId" type="text"
+                               placeholder="{{ 'Contact' | translate }} ({{ 'Required' | translate }})"
+                               required
+                               [(ngModel)]=vendorTradeShow.Contact
+                               name="Contact"
+                               #Contact="ngModel"/>
+                    </div>
+                </div>
+                <div class="form-group" [ngClass]="{'has-error': (ImagePath.touched ||
+                                                                        ImagePath.dirty) &&
+                                                                        !ImagePath.valid }">
+                    <label class="col-md-2 control-label">{{ 'Image' | translate }}</label>
+                    <div class="col-md-8 ">
+                        <img *ngIf='!vendorTradeShow.ImagePath' class="opaque"
+                             src='https://merchantportal.toolots.com.cn/assets/images/no-image-icon.png'
+                             title='no image'>
+                        <a [href]=vendorTradeShow.ImagePath target="_blank"><img *ngIf='vendorTradeShow.ImagePath' width="100%"
+                                                                                 [src]='vendorTradeShow.ImagePath'></a>
+                        <input class="form-control" style="display: none" id="ImagePathId" type="text"
+                               required
+                               [(ngModel)]=vendorTradeShow.ImagePath
+                               name="ImagePath"
+                               #ImagePath="ngModel"/>
+                    </div>
+                </div>
+
+            </div>
+        </fieldset>
+        <app-company-image-upload-shell [titleRequired]="false"></app-company-image-upload-shell>
+    </form>
+</div>
+<mat-dialog-actions>
+    <button mat-button class="btn btn-success-sm" (click)="save(vendorTradeShowForm)"><i
+        class="fa fa-upload"></i>  {{ 'Save' | translate }}</button>
+    <button mat-button class="btn btn-remove-sm" (click)="onCancelClick()"><i
+        class="fa fa-remove"></i>  {{ 'Cancel' | translate }}</button>
+</mat-dialog-actions>
