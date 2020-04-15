@@ -661,7 +661,8 @@ export class ItemService {
 
     //Video
     getVideoURLDetail(id: string): Observable<URLVideo> {
-        return this.http.get<URLVideo>('https://www.googleapis.com/youtube/v3/videos?id=' + id + '&part=snippet&key=AIzaSyDtJ4ncN9PcYj5oAsQTp4oT-djGj2MUItU')
+        //return this.http.get<URLVideo>('https://www.googleapis.com/youtube/v3/videos?id=' + id + '&part=snippet&key=AIzaSyDtJ4ncN9PcYj5oAsQTp4oT-djGj2MUItU')
+        return this.http.get<URLVideo>('https://www.googleapis.com/youtube/v3/videos?id=' + id + '&part=snippet&key=AIzaSyAxKEo2kvvnn4Jl1Qu1xWaKJ4zlYKEAkws')
                         .pipe(
                             //tap(data => console.log(JSON.stringify(data))),
                             catchError(this.handleError)
