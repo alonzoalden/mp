@@ -152,25 +152,15 @@
                                 </span>
                             </div>
                         </div>
-                        <div class="form-group" [ngClass]="{'has-error': (DetailDesignServicesOffered.touched ||
-                                                                        DetailDesignServicesOffered.dirty) &&
-                                                                        !DetailDesignServicesOffered.valid }">
+                        <div class="form-group">
                             <label
                                 class="col-md-2 control-label">{{ 'Details of Design Services Offered' | translate }}</label>
                             <div class="col-md-8 ">
                                 <input class="form-control" id="DetailDesignServicesOfferedId" type="text"
-                                       placeholder="{{ 'Details of Design Services Offered' | translate }} ({{ 'Required' | translate }})"
-                                       required
+                                       placeholder="{{ 'Details of Design Services Offered' | translate }}"
                                        [(ngModel)]=vendorOM.DetailDesignServicesOffered
                                        name="DetailDesignServicesOffered"
                                        #DetailDesignServicesOffered="ngModel"/>
-                                <span class="help-block" *ngIf="(DetailDesignServicesOffered.touched ||
-                                                                DetailDesignServicesOffered.dirty) &&
-                                                                DetailDesignServicesOffered.errors">
-                                    <span *ngIf="DetailDesignServicesOffered?.errors.required">
-                                        {{ 'Details of Design Services Offered' | translate }} {{ 'is required' | translate }}
-                                    </span>
-                                </span>
                             </div>
                         </div>
                         <div class="form-group" [ngClass]="{'has-error': (BuyerLabelOffered.touched ||
@@ -194,24 +184,14 @@
                                 </span>
                             </div>
                         </div>
-                        <div class="form-group" [ngClass]="{'has-error': (DetailBuyerLabelOffered.touched ||
-                                                                        DetailBuyerLabelOffered.dirty) &&
-                                                                        !DetailBuyerLabelOffered.valid }">
+                        <div class="form-group">
                             <label
                                 class="col-md-2 control-label">{{ 'Details of Buyer Label Offered' | translate }}</label>
                             <div class="col-md-8 ">
                                 <input class="form-control" id="DetailBuyerLabelOfferedId" type="text"
-                                       placeholder="{{ 'Details of Buyer Label Offered' | translate }} ({{ 'Required' | translate }})"
-                                       required
+                                       placeholder="{{ 'Details of Buyer Label Offered' | translate }}"
                                        [(ngModel)]=vendorOM.DetailBuyerLabelOffered name="DetailBuyerLabelOffered"
                                        #DetailBuyerLabelOffered="ngModel"/>
-                                <span class="help-block" *ngIf="(DetailBuyerLabelOffered.touched ||
-                                                                DetailBuyerLabelOffered.dirty) &&
-                                                                DetailBuyerLabelOffered.errors">
-                                    <span *ngIf="DetailBuyerLabelOffered?.errors.required">
-                                        {{ 'Details of Buyer Label Offered' | translate }} {{ 'is required' | translate }}
-                                    </span>
-                                </span>
                             </div>
                         </div>
                         <div class="form-group" [ngClass]="{'has-error': (MaterialsComponents.touched ||
@@ -358,7 +338,7 @@
                                 </td>
                             </ng-container>
                             <ng-container matColumnDef="View">
-                                <th mat-header-cell *matHeaderCellDef width="100px"></th>
+                                <th mat-header-cell *matHeaderCellDef width="100px">Image</th>
                                 <td mat-cell *matCellDef="let item">
                                     <div class="flex-details">
                                         <div class="img-detail">

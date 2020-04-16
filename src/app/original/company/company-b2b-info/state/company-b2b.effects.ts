@@ -48,7 +48,10 @@ export class CompanyB2bEffects {
         map((action: companyActions.UpdateVendorFactoryTour) => action.payload),
         mergeMap((matvendorInfo: VendorFactoryTour) =>
             this.companyService.updateVendorFactoryTour(matvendorInfo).pipe(
-                map(vendorInfo => (new companyActions.UpdateVendorFactoryTourSuccess(vendorInfo))),
+                map(vendorInfo => {
+                    this.companyService.sendNotification({ type: 'success', title: 'Successfully Updated', content: 'Factory Tour has been updated' });
+                    return (new companyActions.UpdateVendorFactoryTourSuccess(vendorInfo));
+                }),
                 catchError(err => {
                     this.companyService.sendNotification({ type: 'error', title: 'Error', content: err });
                     return of(new companyActions.UpdateVendorFactoryTourFail(err));
@@ -74,6 +77,7 @@ export class CompanyB2bEffects {
                 map((path: string) => {
                     const image = new VendorImage(null, payload.title, path);
                     this.companyService.sendUploadMessage(image);
+                    this.companyService.sendNotification({ type: 'success', title: 'Successfully Uploaded', content: '' });
                     return (new companyActions.UploadVendorImageSuccess(image));
                 }),
                 catchError(err => {
@@ -105,6 +109,7 @@ export class CompanyB2bEffects {
         mergeMap((vendorDevelopment: VendorDevelopment) =>
             this.companyService.updateVendorDevelopment(vendorDevelopment).pipe(
                 map(vendorDevelopment => {
+                    this.companyService.sendNotification({ type: 'success', title: 'Successfully Updated', content: 'Development has been updated' });
                     this.store.dispatch(new companyActions.LoadVendorDevelopment());
                     return (new companyActions.UpdateVendorDevelopmentSuccess(vendorDevelopment));
                 }),
@@ -137,6 +142,7 @@ export class CompanyB2bEffects {
         mergeMap((vendorOM: VendorOM) =>
             this.companyService.updateVendorOM(vendorOM).pipe(
                 map(vendorOM => {
+                    this.companyService.sendNotification({ type: 'success', title: 'Successfully Updated', content: 'OEM/ODM has been updated' });
                     this.store.dispatch(new companyActions.LoadVendorOM());
                     return (new companyActions.UpdateVendorOMSuccess(vendorOM));
                 }),
@@ -169,6 +175,7 @@ export class CompanyB2bEffects {
         mergeMap((vendorQC: VendorQC) =>
             this.companyService.updateVendorQC(vendorQC).pipe(
                 map(vendorQC => {
+                    this.companyService.sendNotification({ type: 'success', title: 'Successfully Updated', content: 'Quality Control has been updated' });
                     this.store.dispatch(new companyActions.LoadVendorQC());
                     return (new companyActions.UpdateVendorQCSuccess(vendorQC));
                 }),
@@ -201,6 +208,7 @@ export class CompanyB2bEffects {
         mergeMap((vendorService: VendorService) =>
             this.companyService.updateVendorService(vendorService).pipe(
                 map(vendorService => {
+                    this.companyService.sendNotification({ type: 'success', title: 'Successfully Updated', content: 'Service has been updated' });
                     this.store.dispatch(new companyActions.LoadVendorService());
                     return (new companyActions.UpdateVendorServiceSuccess(vendorService));
                 }),
@@ -233,6 +241,7 @@ export class CompanyB2bEffects {
         mergeMap((vendorCertificate: VendorCertificate) =>
             this.companyService.updateVendorCertificate(vendorCertificate).pipe(
                 map(vendorCertificate => {
+                    this.companyService.sendNotification({ type: 'success', title: 'Successfully Updated', content: 'Certification has been updated' });
                     this.store.dispatch(new companyActions.LoadVendorCertificate());
                     return (new companyActions.UpdateVendorCertificateSuccess(vendorCertificate));
                 }),
@@ -265,6 +274,7 @@ export class CompanyB2bEffects {
         mergeMap((vendorTradeShow: VendorTradeShow) =>
             this.companyService.updateVendorTradeShow(vendorTradeShow).pipe(
                 map(vendorTradeShow => {
+                    this.companyService.sendNotification({ type: 'success', title: 'Successfully Updated', content: 'Trade Show has been updated' });
                     this.store.dispatch(new companyActions.LoadVendorTradeShow());
                     return (new companyActions.UpdateVendorTradeShowSuccess(vendorTradeShow));
                 }),

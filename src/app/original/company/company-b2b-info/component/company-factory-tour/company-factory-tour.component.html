@@ -401,9 +401,15 @@
                         <div class="form-group" [ngClass]="{'has-error': (Banner.touched ||
                                                                         Banner.dirty) &&
                                                                         !Banner.valid }">
-                            <label class="col-md-2 control-label">{{ 'Banner' | translate }}</label>
+                            <label class="col-md-2 control-label">{{ 'Banner' | translate }}
+                                <span class="text-warning">({{'Recommended Size'|translate}}:1600*600)</span>
+                            </label>
                             <div class="col-md-8">
                                 <div>
+                                    <div *ngIf='vendorFactoryTour.Banner'>
+                                        <button mat-raised-button
+                                                (click)="deleteBanner()">{{ 'Delete Banner' | translate }}</button>
+                                    </div>
                                     <a href="javascript:void(0)" *ngIf='!vendorFactoryTour.Banner'
                                        (click)="fileUpload.click()">
                                         <span *ngIf="pendingUpload"><i class="fa fa-spinner fa-spin"></i></span>
@@ -425,10 +431,6 @@
                                            (change)="fileChangeEvent($event)"
                                            accept="image/jpeg,image/png,.jpeg,.jpg,.png"
                                            #fileUpload>
-                                </div>
-                                <div *ngIf='vendorFactoryTour.Banner'>
-                                    <button mat-button
-                                            (click)="deleteBanner()">{{ 'Delete Banner' | translate }}</button>
                                 </div>
                             </div>
                         </div>
@@ -456,7 +458,7 @@
                                 </td>
                             </ng-container>
                             <ng-container matColumnDef="View">
-                                <th mat-header-cell *matHeaderCellDef width="100px">View</th>
+                                <th mat-header-cell *matHeaderCellDef width="100px">Image</th>
                                 <td mat-cell *matCellDef="let item">
                                     <div class="flex-details">
                                         <div class="img-detail">

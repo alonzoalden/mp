@@ -18,10 +18,10 @@
                 <div class="form-group" [ngClass]="{'has-error': (Location.touched ||
                                                                         Location.dirty) &&
                                                                         !Location.valid }">
-                    <label class="col-md-2 control-label">{{ 'Location' | translate }}</label>
+                    <label class="col-md-2 control-label">{{ 'Trade Location' | translate }}</label>
                     <div class="col-md-8 ">
                         <input class="form-control" id="LocationId" type="text"
-                               placeholder="{{ 'Location' | translate }} ({{ 'Required' | translate }})"
+                               placeholder="{{ 'Trade Location' | translate }} ({{ 'Required' | translate }})"
                                required
                                [(ngModel)]=vendorTradeShow.Location name="Location"
                                #Location="ngModel"/>
@@ -91,7 +91,8 @@
                         <img *ngIf='!vendorTradeShow.ImagePath' class="opaque"
                              src='https://merchantportal.toolots.com.cn/assets/images/no-image-icon.png'
                              title='no image'>
-                        <a [href]=vendorTradeShow.ImagePath target="_blank"><img *ngIf='vendorTradeShow.ImagePath' width="100%"
+                        <a [href]=vendorTradeShow.ImagePath target="_blank"><img *ngIf='vendorTradeShow.ImagePath'
+                                                                                 width="100%"
                                                                                  [src]='vendorTradeShow.ImagePath'></a>
                         <input class="form-control" style="display: none" id="ImagePathId" type="text"
                                required

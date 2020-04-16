@@ -36,7 +36,7 @@
                                 </td>
                             </ng-container>
                             <ng-container matColumnDef="ImagePath">
-                                <th mat-header-cell *matHeaderCellDef width="100px"></th>
+                                <th mat-header-cell *matHeaderCellDef width="100px">Image</th>
                                 <td mat-cell *matCellDef="let item">
                                     <div class="flex-details">
                                         <div class="img-detail">
@@ -57,7 +57,7 @@
                             </ng-container>
                             <ng-container matColumnDef="Location">
                                 <th mat-header-cell *matHeaderCellDef
-                                    width="200px">{{ 'Location' | translate }}</th>
+                                    width="200px">{{ 'Trade Location' | translate }}</th>
                                 <td mat-cell *matCellDef="let item">{{item.Location}}</td>
                             </ng-container>
                             <ng-container matColumnDef="ShowDate">
