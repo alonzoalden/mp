@@ -31,7 +31,7 @@ export class ItemPrintLabelShellComponent implements OnInit  {
         this.itemPrintLabelsMatTable$ = this.store.pipe(select(fromItem.getItemPrintLabelsMatTable));
         this.errorMessage$ = this.store.pipe(select(fromItem.getError));
         setTimeout(() => {
-            this.isLoading$ = this.store.pipe(select(fromItem.getIsLoading));
+            this.isLoading$ = this.store.pipe(select(fromItem.getIsItemListLoading));
         });
     }
     getItemList(): void {

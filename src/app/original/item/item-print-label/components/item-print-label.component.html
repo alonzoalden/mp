@@ -80,7 +80,7 @@
                                                             name="itemPrintLabelItemID"
                                                             required
                                                             dropdownPosition="auto"
-                                                            [loading]="!itemList"
+                                                            [loading]="isLoading"
                                                             loadingText="Loading...">
                                                     <ng-template ng-option-tmp let-item="item">
                                                         <div matTooltip="{{item.Description}}" matTooltipPosition="right" matTooltipShowDelay="400">{{item.Description}}</div>

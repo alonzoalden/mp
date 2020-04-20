@@ -17,7 +17,7 @@ export class ItemPrintLabelComponent implements OnInit, OnChanges {
     @Input() itemPrintLabelsMatTable: MatTableDataSource<ItemPrintLabel>;
     @Input() itemList: ItemList[];
     @Input() errorMessage: string;
-    @Input() isLoading: boolean;
+    @Input() isItemListLoading: boolean;
     @Output() getItemList = new EventEmitter<void>();
     @Output() downloadPrintItemLabels = new EventEmitter<{labels: ItemPrintLabel[], border: string}>();
     @Output() downloadPrintItemLargeLabels = new EventEmitter<{labels: ItemPrintLabel[], border: string}>();
