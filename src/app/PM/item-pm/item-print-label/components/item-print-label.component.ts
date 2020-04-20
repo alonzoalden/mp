@@ -3,7 +3,7 @@ import { MatTableDataSource, MatDialog } from '@angular/material';
 import { Item, ItemPrintLabel, ItemList } from '../../../../shared/class/item';
 import { ItemService } from '../../item.service';
 import { environment } from '../../../../../environments/environment';
-import { Member } from 'app/shared/class/member';
+import { Member } from '../../../../shared/class/member';
 import { ItemPrintLabelComponentPrintDialog } from './item-print-label.component-print-dialog';
 import { CustomPrintLabel } from 'app/shared/class/label';
 
@@ -17,11 +17,11 @@ export class ItemPrintLabelComponent implements OnInit, OnChanges {
     @Input() itemPrintLabelsMatTable: MatTableDataSource<ItemPrintLabel>;
     @Input() itemList: ItemList[];
     @Input() errorMessage: string;
-    @Input() isItemListLoading: boolean;
+    @Input() isLoading: boolean;
     @Output() getItemList = new EventEmitter<void>();
     @Output() downloadPrintItemLabels = new EventEmitter<{labels: ItemPrintLabel[], border: string}>();
     @Output() downloadPrintItemLargeLabels = new EventEmitter<{labels: ItemPrintLabel[], border: string}>();
-    @Output() downloadPrintItemLabelsCustom = new EventEmitter<{options: CustomPrintLabel}>();
+    @Output() downloadItemPrintLabelCustom = new EventEmitter<{options: CustomPrintLabel}>();
     @Output() downloadPrintItemLargeLabelsCustom = new EventEmitter<{options: CustomPrintLabel}>();
     imageURL = environment.imageURL;
     linkURL = environment.linkURL;
@@ -41,11 +41,9 @@ export class ItemPrintLabelComponent implements OnInit, OnChanges {
     }
 
     ngOnInit(): void {
-        this.getItemList.emit();
         this.currentIndex = 0;
-        if (this.itemPrintLabelsMatTable.data.length) {
-            this.currentIndex = this.itemPrintLabelsMatTable.data.length - 1;
-        }
+        this.getItemList.emit();
+
     }
 
     refreshDataSource(itemPrintLabels: ItemPrintLabel[]) {
@@ -110,26 +108,33 @@ export class ItemPrintLabelComponent implements OnInit, OnChanges {
     }
 
     openDialogPrintLabel() {
+        const quantity = this.itemPrintLabelsMatTable.data.reduce((total, item) => {
+            if (item.ItemID) {
+                total += item.Qty;
+            }
+            return total;
+        }, 0);
         const dialogRef = this.printDialog.open(ItemPrintLabelComponentPrintDialog, {
-          width: '420px'
+          width: '400px',
+          data: { Quantity: quantity }
         });
 
-        dialogRef.afterClosed().subscribe(result => {
-            if (result) {
-                if (result.size === 'small') {
-                    if (result.isCustom) {
-                        this.onPrintLabelsCustom(result.customOptions);
-                    }
-                    else {
-
-                        this.onPrintLabels(result.customOptions.Border);
+        dialogRef.afterClosed().subscribe(data => {
+            // if (data && data.customOptions && data.customOptions.Quantity > 0) {
+            if (data && data.customOptions) {
+                if (data.size === 'small') {
+                    if (data.isCustom) {
+                        data.customOptions.ItemPrintLabels = this.itemPrintLabelsMatTable.data;
+                        this.onPrintLabelCustom(data.customOptions);
+                    } else {
+                        this.onPrintLabels(data.Border);
                     }
                 } else {
-                    if (result.isCustom) {
-                        this.onPrintLargeLabelsCustom(result.customOptions);
-                    }
-                    else {
-                        this.onPrintLargeLabels(result.customOptions.Border);
+                    if (data.isCustom) {
+                        data.customOptions.ItemPrintLabels = this.itemPrintLabelsMatTable.data;
+                        this.onPrintLargeLabelsCustom(data.customOptions);
+                    } else {
+                        this.onPrintLargeLabels(data.Border);
                     }
                 }
             }
@@ -144,13 +149,11 @@ export class ItemPrintLabelComponent implements OnInit, OnChanges {
         this.downloadPrintItemLargeLabels.emit({labels: this.itemPrintLabelsMatTable.data, border: border});
     }
 
-    onPrintLabelsCustom(options: CustomPrintLabel) {
-        options.ItemPrintLabels = this.itemPrintLabelsMatTable.data;
-        this.downloadPrintItemLabelsCustom.emit({options});
+    onPrintLabelCustom(options: CustomPrintLabel) {
+        this.downloadItemPrintLabelCustom.emit({options: options});
     }
 
     onPrintLargeLabelsCustom(options: CustomPrintLabel) {
-        options.ItemPrintLabels = this.itemPrintLabelsMatTable.data;
-        this.downloadPrintItemLargeLabelsCustom.emit({options});
+        this.downloadPrintItemLargeLabelsCustom.emit({options: options });
     }
 }

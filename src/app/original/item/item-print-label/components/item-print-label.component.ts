@@ -120,7 +120,8 @@ export class ItemPrintLabelComponent implements OnInit, OnChanges {
         });
 
         dialogRef.afterClosed().subscribe(data => {
-            if (data && data.customOptions && data.customOptions.Quantity > 0) {
+            // if (data && data.customOptions && data.customOptions.Quantity > 0) {
+            if (data && data.customOptions) {
                 if (data.size === 'small') {
                     if (data.isCustom) {
                         data.customOptions.ItemPrintLabels = this.itemPrintLabelsMatTable.data;

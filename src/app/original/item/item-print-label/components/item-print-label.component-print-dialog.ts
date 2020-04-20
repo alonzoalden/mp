@@ -29,10 +29,11 @@ export class ItemPrintLabelComponentPrintDialog implements OnInit {
     ) { }
     ngOnInit() {
         this.itemLabelPrintDialog = new ItemLabelPrintDialog('small', 'yes');
-        this.customOptions = new CustomPrintLabel(0, 'yes', 0, 0, 0, 0, 0, 0, 0, 0, []);
+        this.customOptions = new CustomPrintLabel(0, null, 0, 0, 0, 0, 0, 0, 0, 0, []);
     }
     onCloseClick(): void {
         if (this.isCustom) {
+            this.customOptions.Border = this.itemLabelPrintDialog.Border;
             if (!this.isOptionsValid(this.customOptions)) {
                 return;
             }
@@ -40,7 +41,8 @@ export class ItemPrintLabelComponentPrintDialog implements OnInit {
         const updatedData = this.millimeterToInches(this.customOptions);
         const data = {
             customOptions: updatedData,
-            size: this.size,
+            size: this.itemLabelPrintDialog.Size,
+            Border: this.itemLabelPrintDialog.Border,
             isCustom: this.isCustom
         };
         this.dialogRef.close(data);
