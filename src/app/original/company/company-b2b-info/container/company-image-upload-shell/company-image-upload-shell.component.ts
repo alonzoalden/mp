@@ -13,7 +13,7 @@ export class CompanyImageUploadShellComponent implements OnInit {
     selectedFileNames$: Observable<string[]>;
     pendingUpload$: Observable<boolean>;
     @Input() titleRequired: boolean = true;
-
+    @Input() recommendedSize = '768*512';
     constructor(
         private store: Store<fromCompany.State>
     ) {

@@ -14,6 +14,7 @@ import {NgForm} from '@angular/forms';
 import {CompanyService} from '../../../company.service';
 import {MatPaginator, MatTableDataSource} from '@angular/material';
 import {Subject, Subscription} from 'rxjs';
+import {AppService} from '../../../../../app.service';
 
 @Component({
     selector: 'app-company-b2b-info-factory-tour',
@@ -31,13 +32,14 @@ export class CompanyFactoryTourComponent implements OnInit, OnChanges, OnDestroy
     subject: Subscription;
     displayedColumns = ['Menu', 'ID', 'View', 'Title'];
 
-    minDate = new Date(2000, 0, 1);
+    minDate = new Date(1950, 0, 1);
     maxDate = new Date(2040, 0, 1);
     @ViewChild('fileUpload', {static: true}) fileUpload: ElementRef;
     pendingUpload = false;
 
     constructor(
-        private companyService: CompanyService
+        private companyService: CompanyService,
+        private appService: AppService
     ) {
 
     }
@@ -77,7 +79,7 @@ export class CompanyFactoryTourComponent implements OnInit, OnChanges, OnDestroy
         this.vendorFactoryTour = new VendorFactoryTour(null, null, null, null, null, null, null,
             null, null, null, null, null, null,
             null, null, null, null, null,
-            null, null, null, [], null);
+            null, null, null, [], null, 'NotSubmitted');
         this.loadVendorInfo.emit();
         this.subject = this.companyService.getUploadMessage().subscribe(data => {
             if (data) {
@@ -94,13 +96,50 @@ export class CompanyFactoryTourComponent implements OnInit, OnChanges, OnDestroy
         this.subject.unsubscribe();
     }
 
+    get isPM() {
+        return (this.appService.currentMember && this.appService.currentMember.IsPM);
+    }
+
     update(vendorFactoryTourForm: NgForm) {
         vendorFactoryTourForm.form.markAllAsTouched();
         vendorFactoryTourForm.form.markAsDirty();
         if (vendorFactoryTourForm.form.invalid) {
+            this.companyService.sendNotification({
+                type: 'error',
+                title: 'Error',
+                content: 'Please enter all required fields'
+            });
             return;
         }
         this.vendorFactoryTour.VendorImages = this.factoryTourImageList.data;
+        this.updateVendorFactoryTour.emit(this.vendorFactoryTour);
+    }
+
+    submitApproval(vendorFactoryTourForm: NgForm) {
+        vendorFactoryTourForm.form.markAllAsTouched();
+        vendorFactoryTourForm.form.markAsDirty();
+        if (vendorFactoryTourForm.form.invalid) {
+            this.companyService.sendNotification({
+                type: 'error',
+                title: 'Error',
+                content: 'Please enter all required fields'
+            });
+            return;
+        }
+        this.vendorFactoryTour.VendorImages = this.factoryTourImageList.data;
+        this.vendorFactoryTour.Approval = 'Pending';
+        this.updateVendorFactoryTour.emit(this.vendorFactoryTour);
+    }
+
+    approve() {
+        this.vendorFactoryTour.VendorImages = this.factoryTourImageList.data;
+        this.vendorFactoryTour.Approval = 'Approved';
+        this.updateVendorFactoryTour.emit(this.vendorFactoryTour);
+    }
+
+    notApprove() {
+        this.vendorFactoryTour.VendorImages = this.factoryTourImageList.data;
+        this.vendorFactoryTour.Approval = 'NotApproved';
         this.updateVendorFactoryTour.emit(this.vendorFactoryTour);
     }
 }

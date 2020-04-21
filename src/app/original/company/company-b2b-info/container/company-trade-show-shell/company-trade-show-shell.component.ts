@@ -33,4 +33,8 @@ export class CompanyTradeShowShellComponent implements OnInit {
     updateVendorTradeShow(vendorTradeShow: VendorTradeShow) {
         this.store.dispatch(new companyActions.UpdateVendorTradeShow(vendorTradeShow));
     }
+
+    deleteVendorTradeShow(vendorTradeShow: VendorTradeShow) {
+        this.store.dispatch(new companyActions.DeleteVendorTradeShow(vendorTradeShow));
+    }
 }

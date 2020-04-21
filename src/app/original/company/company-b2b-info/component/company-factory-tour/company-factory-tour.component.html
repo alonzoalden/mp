@@ -8,6 +8,26 @@
             </div>
         </div>
     </div>
+    <div class="alert-container animated fadeIn" *ngIf="!isFactoryTourLoading && vendorFactoryTour">
+        <div class="alert alert-danger" *ngIf="vendorFactoryTour.Approval == 'NotSubmitted'">
+            <span>{{ 'This Factory Tour info has not been submitted' | translate }}</span>
+            <button type="button" class="btn btn-sm btn-warning m-l-md"
+                    (click)="submitApproval(vendorFactoryTourForm)">{{ 'Submit for Approval' | translate }}</button>
+        </div>
+        <div class="alert alert-warning" *ngIf="vendorFactoryTour.Approval == 'Pending'">
+            <span> {{ 'This Factory Tour info is pending approval' | translate }} </span>
+            <button type="button" class="btn btn-sm btn-success m-l-md" (click)="approve()"
+                    *ngIf="isPM">{{ 'Approve' | translate }}</button>
+            <button type="button" class="btn btn-sm btn-danger m-l-md" (click)="notApprove()"
+                    *ngIf="isPM">{{ 'Not Approve' | translate }}</button>
+        </div>
+        <div class="alert alert-danger" *ngIf="vendorFactoryTour.Approval == 'NotApproved'">
+            <span> {{ 'This Factory Tour info has not been approved' | translate }} </span>
+        </div>
+        <div class="alert alert-success" *ngIf="vendorFactoryTour.Approval == 'Approved'">
+            <span> {{ 'This Factory Tour info is approved' | translate }} </span>
+        </div>
+    </div>
     <div class="tab-pane active">
         <div class="panel-body p-w-none">
             <form class="animated fadeIn form-horizontal" #vendorFactoryTourForm="ngForm"
@@ -407,20 +427,22 @@
                             <div class="col-md-8">
                                 <div>
                                     <div *ngIf='vendorFactoryTour.Banner'>
-                                        <button mat-raised-button
-                                                (click)="deleteBanner()">{{ 'Delete Banner' | translate }}</button>
+                                        <button mat-button class="btn btn-remove-sm float-right"
+                                                (click)="deleteBanner()"><i
+                                            class="fa fa-remove"></i></button>
                                     </div>
                                     <a href="javascript:void(0)" *ngIf='!vendorFactoryTour.Banner'
                                        (click)="fileUpload.click()">
                                         <span *ngIf="pendingUpload"><i class="fa fa-spinner fa-spin"></i></span>
-                                        <img *ngIf="!pendingUpload" class="opaque"
+                                        <img *ngIf="!pendingUpload" class="opaque m-t-md"
                                              src='https://merchantportal.toolots.com.cn/assets/images/no-image-icon.png'
                                              title='no image'>
                                     </a>
-                                    <a [href]=vendorFactoryTour.Banner target="_blank"><img
-                                        *ngIf='vendorFactoryTour.Banner'
-                                        width="100%"
-                                        [src]='vendorFactoryTour.Banner'></a>
+                                    <a [href]=vendorFactoryTour.Banner target="_blank">
+                                        <img class="m-t-md"
+                                            *ngIf='vendorFactoryTour.Banner'
+                                            width="100%"
+                                            [src]='vendorFactoryTour.Banner'></a>
                                     <input class="form-control" style="display: none" id="BannerId" type="text"
                                            required
                                            [(ngModel)]=vendorFactoryTour.Banner
@@ -482,11 +504,6 @@
                                     width="200px">{{ 'Title' | translate }}</th>
                                 <td mat-cell *matCellDef="let item">{{item.Title}}</td>
                             </ng-container>
-                            <!--                                <ng-container matColumnDef="CreatedOn">-->
-                            <!--                                    <th mat-header-cell *matHeaderCellDef mat-sort-header-->
-                            <!--                                        width="100px">{{ 'Created On' | translate }}</th>-->
-                            <!--                                    <td mat-cell *matCellDef="let item">{{item.CreatedOn | date}}</td>-->
-                            <!--                                </ng-container>-->
                             <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
                             <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
                         </table>
@@ -505,10 +522,16 @@
                         <div class="form-group">
                             <div class="col-md-2">
                             </div>
-                            <div class="col-md-2">
+                            <div class="col-md-2 m-t-md">
                                 <button type="button" class="btn btn-primary" style="width:100%; height:100%"
                                         (click)="update(vendorFactoryTourForm)">
                                     <span>{{ 'Save' | translate }}</span>
+                                </button>
+                            </div>
+                            <div class="col-md-2 m-t-md">
+                                <button type="button" class="btn btn-primary" style="width:100%; height:100%"
+                                        (click)="submitApproval(vendorFactoryTourForm)">
+                                    <span>{{ 'Save & Submit' | translate }}</span>
                                 </button>
                             </div>
                         </div>

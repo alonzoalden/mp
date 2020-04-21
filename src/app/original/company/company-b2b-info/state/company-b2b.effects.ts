@@ -35,7 +35,7 @@ export class CompanyB2bEffects {
             this.companyService.getVendorFactoryTour().pipe(
                 map(vendorInfo => (new companyActions.LoadVendorFactoryTourSuccess(vendorInfo))),
                 catchError(err => {
-                    this.companyService.sendNotification({ type: 'error', title: 'Error', content: err });
+                    this.companyService.sendNotification({type: 'error', title: 'Error', content: err});
                     return of(new companyActions.LoadVendorFactoryTourFail(err));
                 })
             )
@@ -49,11 +49,15 @@ export class CompanyB2bEffects {
         mergeMap((matvendorInfo: VendorFactoryTour) =>
             this.companyService.updateVendorFactoryTour(matvendorInfo).pipe(
                 map(vendorInfo => {
-                    this.companyService.sendNotification({ type: 'success', title: 'Successfully Updated', content: 'Factory Tour has been updated' });
+                    this.companyService.sendNotification({
+                        type: 'success',
+                        title: 'Successfully Updated',
+                        content: 'Factory Tour has been updated'
+                    });
                     return (new companyActions.UpdateVendorFactoryTourSuccess(vendorInfo));
                 }),
                 catchError(err => {
-                    this.companyService.sendNotification({ type: 'error', title: 'Error', content: err });
+                    this.companyService.sendNotification({type: 'error', title: 'Error', content: err});
                     return of(new companyActions.UpdateVendorFactoryTourFail(err));
                 })
             )
@@ -77,7 +81,11 @@ export class CompanyB2bEffects {
                 map((path: string) => {
                     const image = new VendorImage(null, payload.title, path);
                     this.companyService.sendUploadMessage(image);
-                    this.companyService.sendNotification({ type: 'success', title: 'Successfully Uploaded', content: '' });
+                    this.companyService.sendNotification({
+                        type: 'success',
+                        title: 'Successfully Uploaded',
+                        content: ''
+                    });
                     return (new companyActions.UploadVendorImageSuccess(image));
                 }),
                 catchError(err => {
@@ -95,7 +103,7 @@ export class CompanyB2bEffects {
             this.companyService.getVendorDevelopment().pipe(
                 map(vendorInfo => (new companyActions.LoadVendorDevelopmentSuccess(vendorInfo))),
                 catchError(err => {
-                    this.companyService.sendNotification({ type: 'error', title: 'Error', content: err });
+                    this.companyService.sendNotification({type: 'error', title: 'Error', content: err});
                     return of(new companyActions.LoadVendorDevelopmentFail(err));
                 })
             )
@@ -109,12 +117,16 @@ export class CompanyB2bEffects {
         mergeMap((vendorDevelopment: VendorDevelopment) =>
             this.companyService.updateVendorDevelopment(vendorDevelopment).pipe(
                 map(vendorDevelopment => {
-                    this.companyService.sendNotification({ type: 'success', title: 'Successfully Updated', content: 'Development has been updated' });
+                    this.companyService.sendNotification({
+                        type: 'success',
+                        title: 'Successfully Updated',
+                        content: 'Development has been updated'
+                    });
                     this.store.dispatch(new companyActions.LoadVendorDevelopment());
                     return (new companyActions.UpdateVendorDevelopmentSuccess(vendorDevelopment));
                 }),
                 catchError(err => {
-                    this.companyService.sendNotification({ type: 'error', title: 'Error', content: err });
+                    this.companyService.sendNotification({type: 'error', title: 'Error', content: err});
                     return of(new companyActions.UpdateVendorDevelopmentFail(err));
                 })
             )
@@ -128,7 +140,7 @@ export class CompanyB2bEffects {
             this.companyService.getVendorOM().pipe(
                 map(vendorInfo => (new companyActions.LoadVendorOMSuccess(vendorInfo))),
                 catchError(err => {
-                    this.companyService.sendNotification({ type: 'error', title: 'Error', content: err });
+                    this.companyService.sendNotification({type: 'error', title: 'Error', content: err});
                     return of(new companyActions.LoadVendorOMFail(err));
                 })
             )
@@ -142,12 +154,16 @@ export class CompanyB2bEffects {
         mergeMap((vendorOM: VendorOM) =>
             this.companyService.updateVendorOM(vendorOM).pipe(
                 map(vendorOM => {
-                    this.companyService.sendNotification({ type: 'success', title: 'Successfully Updated', content: 'OEM/ODM has been updated' });
+                    this.companyService.sendNotification({
+                        type: 'success',
+                        title: 'Successfully Updated',
+                        content: 'OEM/ODM has been updated'
+                    });
                     this.store.dispatch(new companyActions.LoadVendorOM());
                     return (new companyActions.UpdateVendorOMSuccess(vendorOM));
                 }),
                 catchError(err => {
-                    this.companyService.sendNotification({ type: 'error', title: 'Error', content: err });
+                    this.companyService.sendNotification({type: 'error', title: 'Error', content: err});
                     return of(new companyActions.UpdateVendorOMFail(err));
                 })
             )
@@ -161,7 +177,7 @@ export class CompanyB2bEffects {
             this.companyService.getVendorQC().pipe(
                 map(vendorInfo => (new companyActions.LoadVendorQCSuccess(vendorInfo))),
                 catchError(err => {
-                    this.companyService.sendNotification({ type: 'error', title: 'Error', content: err });
+                    this.companyService.sendNotification({type: 'error', title: 'Error', content: err});
                     return of(new companyActions.LoadVendorQCFail(err));
                 })
             )
@@ -175,12 +191,16 @@ export class CompanyB2bEffects {
         mergeMap((vendorQC: VendorQC) =>
             this.companyService.updateVendorQC(vendorQC).pipe(
                 map(vendorQC => {
-                    this.companyService.sendNotification({ type: 'success', title: 'Successfully Updated', content: 'Quality Control has been updated' });
+                    this.companyService.sendNotification({
+                        type: 'success',
+                        title: 'Successfully Updated',
+                        content: 'Quality Control has been updated'
+                    });
                     this.store.dispatch(new companyActions.LoadVendorQC());
                     return (new companyActions.UpdateVendorQCSuccess(vendorQC));
                 }),
                 catchError(err => {
-                    this.companyService.sendNotification({ type: 'error', title: 'Error', content: err });
+                    this.companyService.sendNotification({type: 'error', title: 'Error', content: err});
                     return of(new companyActions.UpdateVendorQCFail(err));
                 })
             )
@@ -194,7 +214,7 @@ export class CompanyB2bEffects {
             this.companyService.getVendorService().pipe(
                 map(vendorInfo => (new companyActions.LoadVendorServiceSuccess(vendorInfo))),
                 catchError(err => {
-                    this.companyService.sendNotification({ type: 'error', title: 'Error', content: err });
+                    this.companyService.sendNotification({type: 'error', title: 'Error', content: err});
                     return of(new companyActions.LoadVendorServiceFail(err));
                 })
             )
@@ -208,12 +228,16 @@ export class CompanyB2bEffects {
         mergeMap((vendorService: VendorService) =>
             this.companyService.updateVendorService(vendorService).pipe(
                 map(vendorService => {
-                    this.companyService.sendNotification({ type: 'success', title: 'Successfully Updated', content: 'Service has been updated' });
+                    this.companyService.sendNotification({
+                        type: 'success',
+                        title: 'Successfully Updated',
+                        content: 'Service has been updated'
+                    });
                     this.store.dispatch(new companyActions.LoadVendorService());
                     return (new companyActions.UpdateVendorServiceSuccess(vendorService));
                 }),
                 catchError(err => {
-                    this.companyService.sendNotification({ type: 'error', title: 'Error', content: err });
+                    this.companyService.sendNotification({type: 'error', title: 'Error', content: err});
                     return of(new companyActions.UpdateVendorServiceFail(err));
                 })
             )
@@ -227,7 +251,7 @@ export class CompanyB2bEffects {
             this.companyService.getVendorCertificate().pipe(
                 map(vendorInfo => (new companyActions.LoadVendorCertificateSuccess(vendorInfo))),
                 catchError(err => {
-                    this.companyService.sendNotification({ type: 'error', title: 'Error', content: err });
+                    this.companyService.sendNotification({type: 'error', title: 'Error', content: err});
                     return of(new companyActions.LoadVendorCertificateFail(err));
                 })
             )
@@ -241,12 +265,16 @@ export class CompanyB2bEffects {
         mergeMap((vendorCertificate: VendorCertificate) =>
             this.companyService.updateVendorCertificate(vendorCertificate).pipe(
                 map(vendorCertificate => {
-                    this.companyService.sendNotification({ type: 'success', title: 'Successfully Updated', content: 'Certification has been updated' });
+                    this.companyService.sendNotification({
+                        type: 'success',
+                        title: 'Successfully Updated',
+                        content: 'Certification has been updated'
+                    });
                     this.store.dispatch(new companyActions.LoadVendorCertificate());
                     return (new companyActions.UpdateVendorCertificateSuccess(vendorCertificate));
                 }),
                 catchError(err => {
-                    this.companyService.sendNotification({ type: 'error', title: 'Error', content: err });
+                    this.companyService.sendNotification({type: 'error', title: 'Error', content: err});
                     return of(new companyActions.UpdateVendorCertificateFail(err));
                 })
             )
@@ -260,7 +288,7 @@ export class CompanyB2bEffects {
             this.companyService.getVendorTradeShow().pipe(
                 map(vendorInfo => (new companyActions.LoadVendorTradeShowSuccess(vendorInfo))),
                 catchError(err => {
-                    this.companyService.sendNotification({ type: 'error', title: 'Error', content: err });
+                    this.companyService.sendNotification({type: 'error', title: 'Error', content: err});
                     return of(new companyActions.LoadVendorTradeShowFail(err));
                 })
             )
@@ -274,13 +302,39 @@ export class CompanyB2bEffects {
         mergeMap((vendorTradeShow: VendorTradeShow) =>
             this.companyService.updateVendorTradeShow(vendorTradeShow).pipe(
                 map(vendorTradeShow => {
-                    this.companyService.sendNotification({ type: 'success', title: 'Successfully Updated', content: 'Trade Show has been updated' });
+                    this.companyService.sendNotification({
+                        type: 'success',
+                        title: 'Successfully Updated',
+                        content: 'Trade Show has been updated'
+                    });
                     this.store.dispatch(new companyActions.LoadVendorTradeShow());
                     return (new companyActions.UpdateVendorTradeShowSuccess(vendorTradeShow));
                 }),
                 catchError(err => {
-                    this.companyService.sendNotification({ type: 'error', title: 'Error', content: err });
+                    this.companyService.sendNotification({type: 'error', title: 'Error', content: err});
                     return of(new companyActions.UpdateVendorTradeShowFail(err));
+                })
+            )
+        )
+    );
+    @Effect()
+    deleteVendorTradeShow$: Observable<Action> = this.actions$.pipe(
+        ofType(companyActions.CompanyB2BActionTypes.DeleteVendorTradeShow),
+        map((action: companyActions.DeleteVendorTradeShow) => action.payload),
+        mergeMap((vendorTradeShow: VendorTradeShow) =>
+            this.companyService.deleteVendorTradeShow(vendorTradeShow).pipe(
+                map(() => {
+                    this.companyService.sendNotification({
+                        type: 'success',
+                        title: 'Successfully Deleted',
+                        content: 'Trade Show has been Deleted'
+                    });
+                    this.store.dispatch(new companyActions.LoadVendorTradeShow());
+                    return (new companyActions.DeleteVendorTradeShowSuccess());
+                }),
+                catchError(err => {
+                    this.companyService.sendNotification({type: 'error', title: 'Error', content: err});
+                    return of(new companyActions.DeleteVendorTradeShowFail(err));
                 })
             )
         )

@@ -14,6 +14,7 @@ import {NgForm} from '@angular/forms';
 import {Subscription} from 'rxjs';
 import {CompanyService} from '../../../company.service';
 import {MatPaginator, MatTableDataSource} from '@angular/material';
+import {AppService} from '../../../../../app.service';
 
 @Component({
     selector: 'app-company-b2b-info-development',
@@ -32,13 +33,18 @@ export class CompanyDevelopmentComponent implements OnInit, OnDestroy, OnChanges
     displayedColumns = ['Menu', 'ID', 'View', 'Title'];
 
     constructor(
-        private companyService: CompanyService
+        private companyService: CompanyService,
+        private appService: AppService
     ) {
+    }
+
+    get isPM() {
+        return (this.appService.currentMember && this.appService.currentMember.IsPM);
     }
 
     ngOnInit() {
         this.vendorDevelopment = new VendorDevelopment(null, null, null, null, null,
-            null, null, null, null, []);
+            null, null, null, null, [], 'NotSubmitted');
         this.getVendorDevelopment.emit();
         this.subject = this.companyService.getUploadMessage().subscribe(data => {
             if (data) {
@@ -72,9 +78,42 @@ export class CompanyDevelopmentComponent implements OnInit, OnDestroy, OnChanges
         vendorDevelopmentForm.form.markAllAsTouched();
         vendorDevelopmentForm.form.markAsDirty();
         if (vendorDevelopmentForm.form.invalid) {
+            this.companyService.sendNotification({
+                type: 'error',
+                title: 'Error',
+                content: 'Please enter all required fields'
+            });
             return;
         }
         this.vendorDevelopment.VendorImages = this.developmentImageList.data;
+        this.updateVendorDevelopment.emit(this.vendorDevelopment);
+    }
+
+    submitApproval(vendorDevelopmentForm: NgForm) {
+        vendorDevelopmentForm.form.markAllAsTouched();
+        vendorDevelopmentForm.form.markAsDirty();
+        if (vendorDevelopmentForm.form.invalid) {
+            this.companyService.sendNotification({
+                type: 'error',
+                title: 'Error',
+                content: 'Please enter all required fields'
+            });
+            return;
+        }
+        this.vendorDevelopment.VendorImages = this.developmentImageList.data;
+        this.vendorDevelopment.Approval = 'Pending';
+        this.updateVendorDevelopment.emit(this.vendorDevelopment);
+    }
+
+    approve() {
+        this.vendorDevelopment.VendorImages = this.developmentImageList.data;
+        this.vendorDevelopment.Approval = 'Approved';
+        this.updateVendorDevelopment.emit(this.vendorDevelopment);
+    }
+
+    notApprove() {
+        this.vendorDevelopment.VendorImages = this.developmentImageList.data;
+        this.vendorDevelopment.Approval = 'NotApproved';
         this.updateVendorDevelopment.emit(this.vendorDevelopment);
     }
 }

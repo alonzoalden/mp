@@ -330,6 +330,16 @@ export class CompanyService {
             );
     }
 
+    deleteVendorTradeShow(vendorInfo: VendorTradeShow) {
+        const headers = new HttpHeaders({
+            'Content-Type': 'application/json'
+        });
+        return this.http.delete(this.apiURL + '/company/tradeshow/' + vendorInfo.VendorTradeShowID, {headers: headers})
+            .pipe(
+                catchError(this.handleError)
+            );
+    }
+
     newGuid() {
         return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function (c) {
             const r = Math.random() * 16 | 0, v = c === 'x' ? r : (r & 0x3 | 0x8);

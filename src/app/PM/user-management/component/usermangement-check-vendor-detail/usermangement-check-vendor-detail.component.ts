@@ -4,6 +4,7 @@ import {NgForm} from '@angular/forms';
 import {Router} from '@angular/router';
 import {Member} from '../../../../shared/class/member';
 import {Observable} from 'rxjs';
+import {UserManagementService} from '../../user-management.service';
 
 @Component({
     selector: 'app-usermangement-check-vendor-detail',
@@ -17,7 +18,8 @@ export class UsermangementCheckVendorDetailComponent implements OnInit, OnChange
     @Output() getMemberPMList = new EventEmitter();
 
     constructor(
-        private router: Router
+        private router: Router,
+        private userManagementService: UserManagementService
     ) {
         this.vendorRegistration = new VendorRegistrationB2B(null, null, null, null, null, null,
             null, null, null, null, null, null, null, null, null, null, null);
@@ -37,6 +39,11 @@ export class UsermangementCheckVendorDetailComponent implements OnInit, OnChange
         form.form.markAllAsTouched();
         form.form.markAsDirty();
         if (form.form.invalid) {
+            this.userManagementService.sendNotification({
+                type: 'error',
+                title: 'Error',
+                content: 'Please enter all required fields'
+            });
             return;
         }
         this.createVendor.emit(this.vendorRegistration);

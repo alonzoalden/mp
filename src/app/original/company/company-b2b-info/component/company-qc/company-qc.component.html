@@ -8,6 +8,26 @@
             </div>
         </div>
     </div>
+    <div class="alert-container animated fadeIn" *ngIf="!isQCLoading && vendorQC">
+        <div class="alert alert-danger" *ngIf="vendorQC.Approval == 'NotSubmitted'">
+            <span>{{ 'This Quality Control info has not been submitted' | translate }}</span>
+            <button type="button" class="btn btn-sm btn-warning m-l-md"
+                    (click)="submitApproval(vendorQCForm)">{{ 'Submit for Approval' | translate }}</button>
+        </div>
+        <div class="alert alert-warning" *ngIf="vendorQC.Approval == 'Pending'">
+            <span> {{ 'This Quality Control info is pending approval' | translate }} </span>
+            <button type="button" class="btn btn-sm btn-success m-l-md" (click)="approve()"
+                    *ngIf="isPM">{{ 'Approve' | translate }}</button>
+            <button type="button" class="btn btn-sm btn-danger m-l-md" (click)="notApprove()"
+                    *ngIf="isPM">{{ 'Not Approve' | translate }}</button>
+        </div>
+        <div class="alert alert-danger" *ngIf="vendorQC.Approval == 'NotApproved'">
+            <span> {{ 'This Quality Control info has not been approved' | translate }} </span>
+        </div>
+        <div class="alert alert-success" *ngIf="vendorQC.Approval == 'Approved'">
+            <span> {{ 'This Quality Control info is approved' | translate }} </span>
+        </div>
+    </div>
     <div class="tab-pane active">
         <div class="panel-body p-w-none">
             <form class="animated fadeIn form-horizontal" #vendorQCForm="ngForm" [hidden]="isQCLoading">
@@ -220,10 +240,16 @@
                         <div class="form-group">
                             <div class="col-md-2">
                             </div>
-                            <div class="col-md-2">
+                            <div class="col-md-2 m-t-md">
                                 <button type="button" class="btn btn-primary" style="width:100%; height:100%"
                                         (click)="update(vendorQCForm)">
                                     <span>{{ 'Save' | translate }}</span>
+                                </button>
+                            </div>
+                            <div class="col-md-2 m-t-md">
+                                <button type="button" class="btn btn-primary" style="width:100%; height:100%"
+                                        (click)="submitApproval(vendorQCForm)">
+                                    <span>{{ 'Save & Submit' | translate }}</span>
                                 </button>
                             </div>
                         </div>

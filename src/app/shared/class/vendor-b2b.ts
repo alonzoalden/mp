@@ -22,7 +22,8 @@ export class VendorFactoryTour {
         public BusinessScope: string,
         public RegistrationAgency: string,
         public VendorImages: VendorImage[],
-        public Banner: string
+        public Banner: string,
+        public Approval: string
     ) {
     }
 }
@@ -47,7 +48,8 @@ export class VendorDevelopment {
         public AdwardsOtherRecognitions: string,
         public Locations: string,
         public Profile: string,
-        public VendorImages: VendorImage[]
+        public VendorImages: VendorImage[],
+        public Approval: string
     ) {
     }
 }
@@ -72,7 +74,8 @@ export class VendorOM {
         public MonthlyOutput: string,
         public MinimunOrder: string,
         public MajorMarketsServed: string,
-        public VendorImages: VendorImage[]
+        public VendorImages: VendorImage[],
+        public Approval: string
     ) {
     }
 }
@@ -88,7 +91,8 @@ export class VendorQC {
         public Materials: string,
         public Procedures: string,
         public OtherInformation: string,
-        public VendorImages: VendorImage[]
+        public VendorImages: VendorImage[],
+        public Approval: string
     ) {
     }
 }
@@ -102,7 +106,8 @@ export class VendorService {
         public Guarantees: string,
         public Support: string,
         public AfterSalesService: string,
-        public VendorImages: VendorImage[]
+        public VendorImages: VendorImage[],
+        public Approval: string
     ) {
     }
 }
@@ -124,7 +129,8 @@ export class VendorTradeShow {
         public Booth: string,
         public ShowSamples: string,
         public Contact: string,
-        public ImagePath: string
+        public ImagePath: string,
+        public Approval: string
     ) {
     }
 }

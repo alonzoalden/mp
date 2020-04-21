@@ -15,6 +15,7 @@ export class CompanyImageUploadComponent implements OnInit, OnDestroy {
     @Input() titleRequired: boolean;
     @Output() uploadImage = new EventEmitter<{ form: FormData, title: string }>();
     @Output() clearUploadList = new EventEmitter();
+    @Input() recommendedSize: string;
 
     constructor(
         private companyService: CompanyService

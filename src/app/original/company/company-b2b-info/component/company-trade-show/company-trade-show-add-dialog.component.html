@@ -1,5 +1,25 @@
 <h3 class="ibox-title dialog-title">{{ 'Trade Show' | translate }}</h3>
 <div mat-dialog-content>
+    <div class="alert-container animated fadeIn" *ngIf="vendorTradeShow">
+        <div class="alert alert-danger" *ngIf="vendorTradeShow.Approval == 'NotSubmitted'">
+            <span>{{ 'This Trade Show info has not been submitted' | translate }}</span>
+            <button type="button" class="btn btn-sm btn-warning m-l-md"
+                    (click)="submitApproval(vendorTradeShowForm)">{{ 'Submit for Approval' | translate }}</button>
+        </div>
+        <div class="alert alert-warning" *ngIf="vendorTradeShow.Approval == 'Pending'">
+            <span> {{ 'This Trade Show info is pending approval' | translate }} </span>
+            <button type="button" class="btn btn-sm btn-success m-l-md" (click)="approve()"
+                    *ngIf="isPM">{{ 'Approve' | translate }}</button>
+            <button type="button" class="btn btn-sm btn-danger m-l-md" (click)="notApprove()"
+                    *ngIf="isPM">{{ 'Not Approve' | translate }}</button>
+        </div>
+        <div class="alert alert-danger" *ngIf="vendorTradeShow.Approval == 'NotApproved'">
+            <span> {{ 'This Trade Show info has not been approved' | translate }} </span>
+        </div>
+        <div class="alert alert-success" *ngIf="vendorTradeShow.Approval == 'Approved'">
+            <span> {{ 'This Trade Show info is approved' | translate }} </span>
+        </div>
+    </div>
     <form class="animated fadeIn form-horizontal" #vendorTradeShowForm="ngForm">
         <fieldset>
             <div class="m-t-md">
@@ -32,26 +52,20 @@
                                                                         !ShowDate.valid }">
                     <label class="col-md-2 control-label">{{ 'Show Date' | translate }}</label>
                     <div class="col-md-8 ">
-                        <mat-form-field class="example-full-width">
-                            <input matInput [min]="minDate" [max]="maxDate" [matDatepicker]="picker"
-                                   placeholder="{{ 'Choose a date' | translate }}"
-                                   class="form-control" required
-                                   id="ShowDateId"
-                                   [(ngModel)]="vendorTradeShow.ShowDate"
-                                   name="ShowDate"
-                                   #ShowDate="ngModel"/>
-                            <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
-                            <mat-datepicker #picker></mat-datepicker>
-                        </mat-form-field>
+                        <input class="form-control" id="ShowDateId" type="text"
+                               placeholder="{{ 'ShowDate' | translate }} ({{ 'Required' | translate }})"
+                               required
+                               [(ngModel)]=vendorTradeShow.ShowDate name="ShowDate"
+                               #ShowDate="ngModel"/>
                     </div>
                 </div>
                 <div class="form-group" [ngClass]="{'has-error': (Booth.touched ||
                                                                         Booth.dirty) &&
                                                                         !Booth.valid }">
-                    <label class="col-md-2 control-label">{{ 'Booth' | translate }}</label>
+                    <label class="col-md-2 control-label">{{ 'Booth Number' | translate }}</label>
                     <div class="col-md-8 ">
                         <input class="form-control" id="BoothId" type="text"
-                               placeholder="{{ 'Booth' | translate }} ({{ 'Required' | translate }})"
+                               placeholder="{{ 'Booth Number' | translate }} ({{ 'Required' | translate }})"
                                required
                                [(ngModel)]=vendorTradeShow.Booth name="Booth"
                                #Booth="ngModel"/>
@@ -73,43 +87,64 @@
                 <div class="form-group" [ngClass]="{'has-error': (Contact.touched ||
                                                                         Contact.dirty) &&
                                                                         !Contact.valid }">
-                    <label class="col-md-2 control-label">{{ 'Contact' | translate }}</label>
+                    <label class="col-md-2 control-label">{{ 'Contact Person' | translate }}</label>
                     <div class="col-md-8 ">
                         <input class="form-control" id="ContactId" type="text"
-                               placeholder="{{ 'Contact' | translate }} ({{ 'Required' | translate }})"
+                               placeholder="{{ 'Contact Person' | translate }} ({{ 'Required' | translate }})"
                                required
                                [(ngModel)]=vendorTradeShow.Contact
                                name="Contact"
                                #Contact="ngModel"/>
                     </div>
                 </div>
-                <div class="form-group" [ngClass]="{'has-error': (ImagePath.touched ||
-                                                                        ImagePath.dirty) &&
-                                                                        !ImagePath.valid }">
-                    <label class="col-md-2 control-label">{{ 'Image' | translate }}</label>
-                    <div class="col-md-8 ">
-                        <img *ngIf='!vendorTradeShow.ImagePath' class="opaque"
-                             src='https://merchantportal.toolots.com.cn/assets/images/no-image-icon.png'
-                             title='no image'>
-                        <a [href]=vendorTradeShow.ImagePath target="_blank"><img *ngIf='vendorTradeShow.ImagePath'
-                                                                                 width="100%"
-                                                                                 [src]='vendorTradeShow.ImagePath'></a>
-                        <input class="form-control" style="display: none" id="ImagePathId" type="text"
-                               required
-                               [(ngModel)]=vendorTradeShow.ImagePath
-                               name="ImagePath"
-                               #ImagePath="ngModel"/>
+                <div class="form-group">
+                    <label class="col-md-2 control-label">{{ 'Logo' | translate }}</label>
+                    <div class="col-md-8">
+                        <div>
+                            <div *ngIf='vendorTradeShow.ImagePath'>
+                                <button mat-button class="btn btn-remove-sm float-right"
+                                        (click)="deleteImage()"><i
+                                    class="fa fa-remove"></i></button>
+                            </div>
+                            <a href="javascript:void(0)" *ngIf='!vendorTradeShow.ImagePath'
+                               (click)="fileUpload.click()">
+                                <span *ngIf="pendingUpload"><i class="fa fa-spinner fa-spin"></i></span>
+                                <img *ngIf="!pendingUpload" class="opaque m-t-md"
+                                     src='https://merchantportal.toolots.com.cn/assets/images/no-image-icon.png'
+                                     title='no image'>
+                            </a>
+                            <a [href]=vendorTradeShow.ImagePath target="_blank">
+                                <img class="m-t-md"
+                                     *ngIf='vendorTradeShow.ImagePath'
+                                     width="100%"
+                                     [src]='vendorTradeShow.ImagePath'>
+                            </a>
+                            <input class="form-control" style="display: none" id="ImagePathId" type="text"
+                                   [(ngModel)]=vendorTradeShow.ImagePath
+                                   name="ImagePath"
+                                   #ImagePath="ngModel"/>
+                            <input type="file" style="display: none;"
+                                   id="UploadFileId"
+                                   (change)="fileChangeEvent($event)"
+                                   accept="image/jpeg,image/png,.jpeg,.jpg,.png"
+                                   #fileUpload>
+                        </div>
                     </div>
                 </div>
 
             </div>
         </fieldset>
-        <app-company-image-upload-shell [titleRequired]="false"></app-company-image-upload-shell>
     </form>
 </div>
 <mat-dialog-actions>
-    <button mat-button class="btn btn-success-sm" (click)="save(vendorTradeShowForm)"><i
-        class="fa fa-upload"></i>  {{ 'Save' | translate }}</button>
-    <button mat-button class="btn btn-remove-sm" (click)="onCancelClick()"><i
-        class="fa fa-remove"></i>  {{ 'Cancel' | translate }}</button>
+    <span *ngIf="pendingUpload"><i class="fa fa-spinner fa-spin"></i></span>
+    <div *ngIf="!pendingUpload">
+        <button mat-button class="btn btn-success-sm m-t-md" (click)="save(vendorTradeShowForm)"><i
+            class="fa fa-upload"></i>  {{ 'Save' | translate }}</button>
+        <button mat-button class="btn btn-success-sm m-t-md" style="min-width: 150px"
+                (click)="submitApproval(vendorTradeShowForm)"><i
+            class="fa fa-upload"></i>  {{ 'Save & Submit' | translate }}</button>
+        <button mat-button class="btn btn-remove-sm m-t-md" (click)="onCancelClick()"><i
+            class="fa fa-remove"></i>  {{ 'Cancel' | translate }}</button>
+    </div>
 </mat-dialog-actions>

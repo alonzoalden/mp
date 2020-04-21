@@ -14,6 +14,7 @@ import {MatPaginator, MatTableDataSource} from '@angular/material';
 import {Subscription} from 'rxjs';
 import {CompanyService} from '../../../company.service';
 import {NgForm} from '@angular/forms';
+import {AppService} from '../../../../../app.service';
 
 @Component({
     selector: 'app-company-b2b-info-service',
@@ -33,7 +34,8 @@ export class CompanyServiceComponent implements OnInit, OnChanges, OnDestroy {
     @ViewChild(MatPaginator, {static: true}) paginator: MatPaginator;
 
     constructor(
-        private companyService: CompanyService
+        private companyService: CompanyService,
+        private appService: AppService
     ) {
     }
 
@@ -56,7 +58,7 @@ export class CompanyServiceComponent implements OnInit, OnChanges, OnDestroy {
 
     ngOnInit() {
         this.vendorService = new VendorService(null, null, null, null, null, null, null,
-            []);
+            [], 'NotSubmitted');
         this.loadVendorInfo.emit();
         this.subject = this.companyService.getUploadMessage().subscribe(data => {
             if (data) {
@@ -73,10 +75,46 @@ export class CompanyServiceComponent implements OnInit, OnChanges, OnDestroy {
         vendorServiceForm.form.markAllAsTouched();
         vendorServiceForm.form.markAsDirty();
         if (vendorServiceForm.form.invalid) {
+            this.companyService.sendNotification({
+                type: 'error',
+                title: 'Error',
+                content: 'Please enter all required fields'
+            });
             return;
         }
         this.vendorService.VendorImages = this.serviceImageList.data;
         this.updateVendorService.emit(this.vendorService);
     }
 
+    get isPM() {
+        return (this.appService.currentMember && this.appService.currentMember.IsPM);
+    }
+
+    submitApproval(vendorServiceForm: NgForm) {
+        vendorServiceForm.form.markAllAsTouched();
+        vendorServiceForm.form.markAsDirty();
+        if (vendorServiceForm.form.invalid) {
+            this.companyService.sendNotification({
+                type: 'error',
+                title: 'Error',
+                content: 'Please enter all required fields'
+            });
+            return;
+        }
+        this.vendorService.VendorImages = this.serviceImageList.data;
+        this.vendorService.Approval = 'Pending';
+        this.updateVendorService.emit(this.vendorService);
+    }
+
+    approve() {
+        this.vendorService.VendorImages = this.serviceImageList.data;
+        this.vendorService.Approval = 'Approved';
+        this.updateVendorService.emit(this.vendorService);
+    }
+
+    notApprove() {
+        this.vendorService.VendorImages = this.serviceImageList.data;
+        this.vendorService.Approval = 'NotApproved';
+        this.updateVendorService.emit(this.vendorService);
+    }
 }

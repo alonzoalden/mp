@@ -14,6 +14,7 @@ import {NgForm} from '@angular/forms';
 import {MatPaginator, MatTableDataSource} from '@angular/material';
 import {Subscription} from 'rxjs';
 import {CompanyService} from '../../../company.service';
+import {AppService} from '../../../../../app.service';
 
 @Component({
     selector: 'app-company-b2b-info-qc',
@@ -33,7 +34,8 @@ export class CompanyQCComponent implements OnInit, OnChanges, OnDestroy {
     @ViewChild(MatPaginator, {static: true}) paginator: MatPaginator;
 
     constructor(
-        private companyService: CompanyService
+        private companyService: CompanyService,
+        private appService: AppService
     ) {
     }
 
@@ -56,7 +58,7 @@ export class CompanyQCComponent implements OnInit, OnChanges, OnDestroy {
 
     ngOnInit() {
         this.vendorQC = new VendorQC(null, null, null, null, null, null, null,
-            null, null, []);
+            null, null, [], 'NotSubmitted');
         this.loadVendorInfo.emit();
         this.subject = this.companyService.getUploadMessage().subscribe(data => {
             if (data) {
@@ -73,9 +75,46 @@ export class CompanyQCComponent implements OnInit, OnChanges, OnDestroy {
         vendorQCForm.form.markAllAsTouched();
         vendorQCForm.form.markAsDirty();
         if (vendorQCForm.form.invalid) {
+            this.companyService.sendNotification({
+                type: 'error',
+                title: 'Error',
+                content: 'Please enter all required fields'
+            });
             return;
         }
         this.vendorQC.VendorImages = this.QCImageList.data;
+        this.updateVendorQC.emit(this.vendorQC);
+    }
+
+    get isPM() {
+        return (this.appService.currentMember && this.appService.currentMember.IsPM);
+    }
+
+    submitApproval(vendorOMForm: NgForm) {
+        vendorOMForm.form.markAllAsTouched();
+        vendorOMForm.form.markAsDirty();
+        if (vendorOMForm.form.invalid) {
+            this.companyService.sendNotification({
+                type: 'error',
+                title: 'Error',
+                content: 'Please enter all required fields'
+            });
+            return;
+        }
+        this.vendorQC.VendorImages = this.QCImageList.data;
+        this.vendorQC.Approval = 'Pending';
+        this.updateVendorQC.emit(this.vendorQC);
+    }
+
+    approve() {
+        this.vendorQC.VendorImages = this.QCImageList.data;
+        this.vendorQC.Approval = 'Approved';
+        this.updateVendorQC.emit(this.vendorQC);
+    }
+
+    notApprove() {
+        this.vendorQC.VendorImages = this.QCImageList.data;
+        this.vendorQC.Approval = 'NotApproved';
         this.updateVendorQC.emit(this.vendorQC);
     }
 }

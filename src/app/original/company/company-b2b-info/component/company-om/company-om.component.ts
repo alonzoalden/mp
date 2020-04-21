@@ -14,6 +14,7 @@ import {MatPaginator, MatTableDataSource} from '@angular/material';
 import {Subscription} from 'rxjs';
 import {NgForm} from '@angular/forms';
 import {VendorImage, VendorOM} from '../../../../../shared/class/vendor-b2b';
+import {AppService} from '../../../../../app.service';
 
 @Component({
     selector: 'app-company-b2b-info-om',
@@ -33,7 +34,8 @@ export class CompanyOMComponent implements OnInit, OnChanges, OnDestroy {
     @ViewChild(MatPaginator, {static: true}) paginator: MatPaginator;
 
     constructor(
-        private companyService: CompanyService
+        private companyService: CompanyService,
+        private appService: AppService
     ) {
     }
 
@@ -58,7 +60,7 @@ export class CompanyOMComponent implements OnInit, OnChanges, OnDestroy {
         this.vendorOM = new VendorOM(null, null, null, null, null, null, null,
             null, null, null, null, null, null,
             null, null, null, null, null,
-            []);
+            [], 'NotSubmitted');
         this.loadVendorInfo.emit();
         this.subject = this.companyService.getUploadMessage().subscribe(data => {
             if (data) {
@@ -75,9 +77,46 @@ export class CompanyOMComponent implements OnInit, OnChanges, OnDestroy {
         vendorOMForm.form.markAllAsTouched();
         vendorOMForm.form.markAsDirty();
         if (vendorOMForm.form.invalid) {
+            this.companyService.sendNotification({
+                type: 'error',
+                title: 'Error',
+                content: 'Please enter all required fields'
+            });
             return;
         }
         this.vendorOM.VendorImages = this.OMImageList.data;
+        this.updateVendorOM.emit(this.vendorOM);
+    }
+
+    get isPM() {
+        return (this.appService.currentMember && this.appService.currentMember.IsPM);
+    }
+
+    submitApproval(vendorOMForm: NgForm) {
+        vendorOMForm.form.markAllAsTouched();
+        vendorOMForm.form.markAsDirty();
+        if (vendorOMForm.form.invalid) {
+            this.companyService.sendNotification({
+                type: 'error',
+                title: 'Error',
+                content: 'Please enter all required fields'
+            });
+            return;
+        }
+        this.vendorOM.VendorImages = this.OMImageList.data;
+        this.vendorOM.Approval = 'Pending';
+        this.updateVendorOM.emit(this.vendorOM);
+    }
+
+    approve() {
+        this.vendorOM.VendorImages = this.OMImageList.data;
+        this.vendorOM.Approval = 'Approved';
+        this.updateVendorOM.emit(this.vendorOM);
+    }
+
+    notApprove() {
+        this.vendorOM.VendorImages = this.OMImageList.data;
+        this.vendorOM.Approval = 'NotApproved';
         this.updateVendorOM.emit(this.vendorOM);
     }
 }

@@ -67,6 +67,9 @@ export enum CompanyB2BActionTypes {
     UpdateVendorTradeShow = '[Company] Update Vendor TradeShow',
     UpdateVendorTradeShowSuccess = '[Company] Update Vendor TradeShow Success',
     UpdateVendorTradeShowFail = '[Company] Update Vendor TradeShow Fail',
+    DeleteVendorTradeShow = '[Company] Delete Vendor TradeShow',
+    DeleteVendorTradeShowSuccess = '[Company] Delete Vendor TradeShow Success',
+    DeleteVendorTradeShowFail = '[Company] Delete Vendor TradeShow Fail',
 }
 
 // Action Creators
@@ -477,6 +480,24 @@ export class UpdateVendorTradeShowFail implements Action {
     }
 }
 
+export class DeleteVendorTradeShow implements Action {
+    readonly type = CompanyB2BActionTypes.DeleteVendorTradeShow;
+
+    constructor(public payload: VendorTradeShow) {
+    }
+}
+
+export class DeleteVendorTradeShowSuccess implements Action {
+    readonly type = CompanyB2BActionTypes.DeleteVendorTradeShowSuccess;
+}
+
+export class DeleteVendorTradeShowFail implements Action {
+    readonly type = CompanyB2BActionTypes.DeleteVendorTradeShowFail;
+
+    constructor(public payload: string) {
+    }
+}
+
 // Union the valid types
 export type CompanyB2bActions =
     | LoadVendorFactoryTour
@@ -537,4 +558,7 @@ export type CompanyB2bActions =
     | UpdateVendorTradeShow
     | UpdateVendorTradeShowFail
     | UpdateVendorTradeShowSuccess
+    | DeleteVendorTradeShow
+    | DeleteVendorTradeShowFail
+    | DeleteVendorTradeShowSuccess
     ;
