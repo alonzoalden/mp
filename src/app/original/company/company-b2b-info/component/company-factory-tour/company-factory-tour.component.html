@@ -141,11 +141,21 @@
                                                                         !BusinessType.valid }">
                             <label class="col-md-2 control-label">{{ 'Business Type' | translate }}</label>
                             <div class="col-md-8 ">
-                                <input class="form-control" id="BusinessTypeId" type="text"
-                                       placeholder="{{ 'Business Type' | translate }} ({{ 'Required' | translate }})"
-                                       required
-                                       [(ngModel)]=vendorFactoryTour.BusinessType name="BusinessType"
-                                       #BusinessType="ngModel"/>
+                                <select id="BusinessTypeId" name="BusinessType"
+                                        class="form-control"
+                                        required [(ngModel)]=vendorFactoryTour.BusinessType
+                                        #BusinessType="ngModel">
+                                    <option [ngValue]="null" style="font-style: italic" disabled selected>
+                                        --{{ 'Please select value' | translate }}--
+                                    </option>
+                                    <option value="Foreign Trade Corp.">{{ 'Foreign Trade Corp.' | translate }}</option>
+                                    <option
+                                        value="Industry and Trade Corp.">{{ 'Industry and Trade Corp.' | translate }}</option>
+                                    <option value="Manufacturer">{{ 'Manufacturer' | translate }}</option>
+                                    <option value="Other">{{ 'Other' | translate }}</option>
+                                    <option
+                                        value="Scientific Research Institution">{{ 'Scientific Research Institution' | translate }}</option>
+                                </select>
                                 <span class="help-block" *ngIf="(BusinessType.touched ||
                                                                 BusinessType.dirty) &&
                                                                 BusinessType.errors">
@@ -242,10 +252,22 @@
                                                                         !LegalForm.valid }">
                             <label class="col-md-2 control-label">{{ 'Legal Form' | translate }}</label>
                             <div class="col-md-8 ">
-                                <input class="form-control" id="LegalFormId" type="text"
-                                       placeholder="{{ 'Legal Form' | translate }} ({{ 'Required' | translate }})"
-                                       required
-                                       [(ngModel)]=vendorFactoryTour.LegalForm name="LegalForm" #LegalForm="ngModel"/>
+                                <select id="LegalFormId" name="LegalForm"
+                                        class="form-control"
+                                        required [(ngModel)]=vendorFactoryTour.LegalForm
+                                        #LegalForm="ngModel">
+                                    <option [ngValue]="null" style="font-style: italic" disabled selected>
+                                        --{{ 'Please select value' | translate }}--
+                                    </option>
+                                    <option
+                                        value="Limited liability company">{{ 'Limited liability company' | translate }}</option>
+                                    <option
+                                        value="State-owned enterprise">{{ 'State-owned enterprise' | translate }}</option>
+                                    <option value="Private enterprise">{{ 'Private enterprise' | translate }}</option>
+                                    <option value="Limited Partnership">{{ 'Limited Partnership' | translate }}</option>
+                                    <option
+                                        value="Associated Enterprises">{{ 'Associated Enterprises' | translate }}</option>
+                                </select>
                                 <span class="help-block" *ngIf="(LegalForm.touched ||
                                                                 LegalForm.dirty) &&
                                                                 LegalForm.errors">
@@ -440,9 +462,9 @@
                                     </a>
                                     <a [href]=vendorFactoryTour.Banner target="_blank">
                                         <img class="m-t-md"
-                                            *ngIf='vendorFactoryTour.Banner'
-                                            width="100%"
-                                            [src]='vendorFactoryTour.Banner'></a>
+                                             *ngIf='vendorFactoryTour.Banner'
+                                             width="100%"
+                                             [src]='vendorFactoryTour.Banner'></a>
                                     <input class="form-control" style="display: none" id="BannerId" type="text"
                                            required
                                            [(ngModel)]=vendorFactoryTour.Banner
@@ -532,6 +554,12 @@
                                 <button type="button" class="btn btn-primary" style="width:100%; height:100%"
                                         (click)="submitApproval(vendorFactoryTourForm)">
                                     <span>{{ 'Save & Submit' | translate }}</span>
+                                </button>
+                            </div>
+                            <div class="col-md-2 m-t-md" *ngIf="isPM">
+                                <button type="button" class="btn btn-danger" style="width:100%; height:100%"
+                                        (click)="notApprove()">
+                                    <span>{{ 'Not Approve' | translate }}</span>
                                 </button>
                             </div>
                         </div>

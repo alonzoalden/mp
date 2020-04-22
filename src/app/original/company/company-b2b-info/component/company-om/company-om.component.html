@@ -159,7 +159,7 @@
                                 <select id="DesignServicesOfferedId" name="DesignServicesOffered" class="form-control"
                                         required [(ngModel)]=vendorOM.DesignServicesOffered
                                         #DesignServicesOffered="ngModel">
-                                    <option value=''>{{ 'Please select value' | translate }}</option>
+                                    <option [ngValue]="null" style="font-style: italic" disabled selected>--{{ 'Please select value' | translate }}--</option>
                                     <option value="1">{{ 'Yes' | translate }}</option>
                                     <option value="0">{{ 'No' | translate }}</option>
                                 </select>
@@ -191,7 +191,7 @@
                                 <select id="BuyerLabelOfferedId" name="BuyerLabelOffered" class="form-control"
                                         required [(ngModel)]=vendorOM.BuyerLabelOffered
                                         #BuyerLabelOffered="ngModel">
-                                    <option Value="">{{ 'Please select value' | translate }}</option>
+                                    <option [ngValue]="null" style="font-style: italic" disabled selected>--{{ 'Please select value' | translate }}--</option>
                                     <option value="1">{{ 'Yes' | translate }}</option>
                                     <option value="0">{{ 'No' | translate }}</option>
                                 </select>
@@ -414,6 +414,12 @@
                                 <button type="button" class="btn btn-primary" style="width:100%; height:100%"
                                         (click)="submitApproval(vendorOMForm)">
                                     <span>{{ 'Save & Submit' | translate }}</span>
+                                </button>
+                            </div>
+                            <div class="col-md-2 m-t-md" *ngIf="isPM">
+                                <button type="button" class="btn btn-danger" style="width:100%; height:100%"
+                                        (click)="notApprove()">
+                                    <span>{{ 'Not Approve' | translate }}</span>
                                 </button>
                             </div>
                         </div>

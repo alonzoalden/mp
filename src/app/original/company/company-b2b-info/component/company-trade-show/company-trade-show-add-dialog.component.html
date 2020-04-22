@@ -144,6 +144,10 @@
         <button mat-button class="btn btn-success-sm m-t-md" style="min-width: 150px"
                 (click)="submitApproval(vendorTradeShowForm)"><i
             class="fa fa-upload"></i>  {{ 'Save & Submit' | translate }}</button>
+        <button mat-button type="button" class="btn btn-danger-150 m-t-md" *ngIf="isPM"
+                (click)="notApprove()">
+            <span>{{ 'Not Approve' | translate }}</span>
+        </button>
         <button mat-button class="btn btn-remove-sm m-t-md" (click)="onCancelClick()"><i
             class="fa fa-remove"></i>  {{ 'Cancel' | translate }}</button>
     </div>

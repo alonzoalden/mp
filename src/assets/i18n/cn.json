@@ -465,5 +465,16 @@
     "Not Submitted": "未提交审核",
 
     "Vendor": "供应商",
-    "ItemType": "产品类型"
+    "ItemType": "产品类型",
+    "Foreign Trade Corp.": "外贸公司",
+    "Industry and Trade Corp.": "工贸企业",
+    "Manufacturer": "生产企业",
+    "Other": "其它企业",
+    "Scientific Research Institution": "科研院所",
+    "Limited liability company": "有限责任公司",
+    "State-owned enterprise": "国有企业",
+    "Private enterprise": "私营企业",
+    "Limited Partnership": "有限合伙企业",
+    "Associated Enterprises": "联营企业"
+
 }

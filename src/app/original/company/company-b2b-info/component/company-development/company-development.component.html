@@ -107,21 +107,21 @@
                                 </span>
                             </div>
                         </div>
-                        <div class="form-group" [ngClass]="{'has-error': (AdwardsOtherRecognitions.touched ||
-                                                                        AdwardsOtherRecognitions.dirty) &&
-                                                                        !AdwardsOtherRecognitions.valid }">
+                        <div class="form-group" [ngClass]="{'has-error': (AwardsOtherRecognitions.touched ||
+                                                                        AwardsOtherRecognitions.dirty) &&
+                                                                        !AwardsOtherRecognitions.valid }">
                             <label class="col-md-2 control-label">{{ 'Awards & Other Recognitions' | translate }}</label>
                             <div class="col-md-8 ">
-                                <input class="form-control" id="AdwardsOtherRecognitionsId" type="text"
+                                <input class="form-control" id="AwardsOtherRecognitionsId" type="text"
                                        placeholder="{{ 'Awards & Other Recognitions' | translate }} ({{ 'Required' | translate }})"
                                        required
-                                       [(ngModel)]=vendorDevelopment.AdwardsOtherRecognitions
-                                       name="AdwardsOtherRecognitions"
-                                       #AdwardsOtherRecognitions="ngModel"/>
-                                <span class="help-block" *ngIf="(AdwardsOtherRecognitions.touched ||
-                                                                AdwardsOtherRecognitions.dirty) &&
-                                                                AdwardsOtherRecognitions.errors">
-                                    <span *ngIf="AdwardsOtherRecognitions?.errors.required">
+                                       [(ngModel)]=vendorDevelopment.AwardsOtherRecognitions
+                                       name="AwardsOtherRecognitions"
+                                       #AwardsOtherRecognitions="ngModel"/>
+                                <span class="help-block" *ngIf="(AwardsOtherRecognitions.touched ||
+                                                                AwardsOtherRecognitions.dirty) &&
+                                                                AwardsOtherRecognitions.errors">
+                                    <span *ngIf="AwardsOtherRecognitions?.errors.required">
                                         {{ 'Awards & Other Recognitions' | translate }} {{ 'is required' | translate }}
                                     </span>
                                 </span>
@@ -242,6 +242,12 @@
                             <div class="col-md-2 m-t-md">
                                 <button type="button" class="btn btn-primary" style="width:100%; height:100%" (click)="submitApproval(vendorDevelopmentForm)">
                                     <span>{{ 'Save & Submit' | translate }}</span>
+                                </button>
+                            </div>
+                            <div class="col-md-2 m-t-md" *ngIf="isPM">
+                                <button type="button" class="btn btn-danger" style="width:100%; height:100%"
+                                        (click)="notApprove()">
+                                    <span>{{ 'Not Approve' | translate }}</span>
                                 </button>
                             </div>
                         </div>

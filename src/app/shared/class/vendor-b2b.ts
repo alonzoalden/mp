@@ -45,7 +45,7 @@ export class VendorDevelopment {
         public RDStaff: string,
         public MachineryEquipmentRD: string,
         public PatentsCopyrights: string,
-        public AdwardsOtherRecognitions: string,
+        public AwardsOtherRecognitions: string,
         public Locations: string,
         public Profile: string,
         public VendorImages: VendorImage[],
