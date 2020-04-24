@@ -37,10 +37,19 @@ export class PurchaseOrderLine {
         public CreatedOn: string,
 
         public PrevItemID: number,
-        public pendingAdd: boolean
+        public pendingAdd: boolean,
+        public PurchaseOrderLineConfirms: Array<PurchaseOrderLineConfirm>,
     ) {}
 }
 
+export class PurchaseOrderLineConfirm {
+    constructor(
+        public PurchaseOrderLineID: number,
+        public CartonNumber: string,
+        public ShippedQuantity: number,
+        public ConfirmedQuantity: number
+    ) {}
+}
 export class Carton {
     constructor(
         public CartonID: number,

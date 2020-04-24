@@ -34,6 +34,7 @@ import { inboundShipmentReducer } from './state/inbound-shipment.reducer';
 import { InboundShipmentEffects } from './state/inbound-shipment.effects';
 import { ItemService } from '../item/item.service';
 import { InboundShipmentEditCartonListCartonQuantityDialogComponent } from './inbound-shipment-edit/inbound-shipment-edit-carton/components/inbound-shipment-edit-carton-list/inbound-shipment-edit-carton-list.component-carton-quantity-dialog';
+import { InboundShipmentEditLineViewConfirmsDialogComponent } from './inbound-shipment-edit/inbound-shipment-edit-line-list/components/inbound-shipment-edit-line-list.component-view-confirms-dialog';
 
 @NgModule({
     declarations: [
@@ -56,7 +57,8 @@ import { InboundShipmentEditCartonListCartonQuantityDialogComponent } from './in
         InboundShipmentEditCartonShellComponent,
         InboundShipmentEditShippingInstructionShellComponent,
         InboundShipmentEditShippingShellComponent,
-        InboundShipmentEditCartonListCartonQuantityDialogComponent
+        InboundShipmentEditCartonListCartonQuantityDialogComponent,
+        InboundShipmentEditLineViewConfirmsDialogComponent
     ],
     entryComponents: [
         InboundShipmentEditCartonListComponent
@@ -66,6 +68,7 @@ import { InboundShipmentEditCartonListCartonQuantityDialogComponent } from './in
         , InboundShipmentEditLineItemPrintDialogComponent
         , InboundShipmentEditShippingInstructionCartonPrintDialogComponent
         , InboundShipmentEditCartonListCartonQuantityDialogComponent
+        , InboundShipmentEditLineViewConfirmsDialogComponent
     ],
     imports: [
         TranslateModule,

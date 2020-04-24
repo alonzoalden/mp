@@ -68,7 +68,7 @@ export class InboundShipmentEditLineListComponent implements OnInit, OnChanges {
         this.purchaseorderid = this.route.parent.snapshot.params['id'];
     }
     addPendingLine() {
-        const _temp = new PurchaseOrderLine(null, this.purchaseorderid, null, null, null, null, null, null, 1, 0, null, null, null, null, true);
+        const _temp = new PurchaseOrderLine(null, this.purchaseorderid, null, null, null, null, null, null, 1, 0, null, null, null, null, true, []);
         this.purchaseOrder.PurchaseOrderLines.push(_temp);
         this.refreshDataSource(this.purchaseOrder.PurchaseOrderLines);
     }

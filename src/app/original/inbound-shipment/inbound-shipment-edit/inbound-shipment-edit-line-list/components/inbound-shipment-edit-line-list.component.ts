@@ -8,6 +8,7 @@ import { ItemList } from '../../../../../shared/class/item';
 import { SimpleChanges } from '@angular/core';
 import { InboundShipmentEditLineItemPrintDialogComponent } from './inbound-shipment-edit-line-list.component-item-print-dialog';
 import { CustomPrintLabel } from 'app/shared/class/label';
+import { InboundShipmentEditLineViewConfirmsDialogComponent } from './inbound-shipment-edit-line-list.component-view-confirms-dialog';
 
 @Component({
 selector: 'o-inbound-shipment-edit-line-list',
@@ -71,7 +72,7 @@ export class InboundShipmentEditLineListComponent implements OnInit, OnChanges {
         }
     }
     addPendingLine() {
-        const _temp = new PurchaseOrderLine(null, this.purchaseorderid, null, null, null, null, null, null, 1, 0, null, null, null, null, true);
+        const _temp = new PurchaseOrderLine(null, this.purchaseorderid, null, null, null, null, null, null, 1, 0, null, null, null, null, true, []);
         this.purchaseOrder.PurchaseOrderLines.push(_temp);
         this.refreshDataSource(this.purchaseOrder.PurchaseOrderLines);
     }
@@ -161,6 +162,14 @@ export class InboundShipmentEditLineListComponent implements OnInit, OnChanges {
             }
         );
         if (counter > 1) { return true; } else { return false; }
+    }
+
+    openDialogViewPurchaseOrderLineConfirms(purchaseorderline: PurchaseOrderLine): void {
+        const dialogRef = this.itemPrintDialog.open(InboundShipmentEditLineViewConfirmsDialogComponent, {
+            data: purchaseorderline.PurchaseOrderLineConfirms
+          });
+          dialogRef.afterClosed().subscribe(data => {
+          });
     }
 
     openDialogPrintItemLabel(purchaseorderline: PurchaseOrderLine) {

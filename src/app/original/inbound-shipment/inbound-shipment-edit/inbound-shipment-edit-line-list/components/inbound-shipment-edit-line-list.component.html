@@ -164,7 +164,18 @@
                             <!-- Received Quantity Column -->
                             <ng-container matColumnDef="ReceivedQty">
                                 <th mat-header-cell *matHeaderCellDef width="80px">{{ 'Received Quantity' | translate }}</th>
-                                <td mat-cell *matCellDef="let purchaseorderline" >{{purchaseorderline.ReceivedQty}}</td>
+                                <td mat-cell *matCellDef="let purchaseorderline" >
+                                    <ng-container *ngIf="!purchaseorderline.PurchaseOrderLineConfirms?.length">
+                                        {{purchaseorderline.ReceivedQty}}
+                                    </ng-container>
+                                    <ng-container *ngIf="purchaseorderline.PurchaseOrderLineConfirms?.length">
+                                        <a (click)="openDialogViewPurchaseOrderLineConfirms(purchaseorderline)"
+                                            matTooltip="{{ 'View Confirms' | translate }}"
+                                            attr.aria-label="{{ 'View Confirms' | translate}}">
+                                            {{purchaseorderline.ReceivedQty}}
+                                        </a>
+                                    </ng-container>
+                                </td>
                             </ng-container>
 
                             <!-- Actions Column -->

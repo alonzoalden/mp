@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient, HttpErrorResponse, HttpHeaders } from '@angular/common/http';
 import { Observable, Subject, of, throwError } from 'rxjs';
 import { catchError, tap } from 'rxjs/operators';
-import { PurchaseOrder, PurchaseOrderLine, PurchaseOrderLineInsert, PurchaseOrderLineList, Carton, CartonInsert, CartonLine, CartonLineInsert } from '../../shared/class/purchase-order';
+import { PurchaseOrder, PurchaseOrderLine, PurchaseOrderLineInsert, PurchaseOrderLineList, Carton, CartonInsert, CartonLine, CartonLineInsert, PurchaseOrderLineConfirm } from '../../shared/class/purchase-order';
 import { ItemList } from '../../shared/class/item';
 import { OAuthService } from 'angular-oauth2-oidc';
 import { InboundShippingMethod, InboundShippingMethodInsert } from '../../shared/class/inbound-shipping-method';
@@ -136,8 +136,16 @@ export class PurchaseOrderService {
         purchaseorder.PurchaseOrderLines.forEach((purchaseorderline) => {
             const newPurchaseorderline = new PurchaseOrderLine(purchaseorderline.PurchaseOrderLineID, purchaseorderline.PurchaseOrderID, purchaseorderline.ItemID,
                 purchaseorderline.ItemName, purchaseorderline.ItemVendorSKU, purchaseorderline.TPIN, purchaseorderline.URLKey, purchaseorderline.FOBPrice, purchaseorderline.Quantity,
-                purchaseorderline.CartonQuantity, purchaseorderline.ReceivedQty, purchaseorderline.UpdatedOn, purchaseorderline.CreatedOn, purchaseorderline.PrevItemID, purchaseorderline.pendingAdd);
+                purchaseorderline.CartonQuantity, purchaseorderline.ReceivedQty, purchaseorderline.UpdatedOn, purchaseorderline.CreatedOn, purchaseorderline.PrevItemID, purchaseorderline.pendingAdd, []);
 
+                if (purchaseorderline.PurchaseOrderLineConfirms) {
+                purchaseorderline.PurchaseOrderLineConfirms.forEach((confirm) => {
+                    const newPurchaseOrderLineConfirm = new PurchaseOrderLineConfirm(
+                        confirm.PurchaseOrderLineID, confirm.CartonNumber, confirm.ShippedQuantity, confirm.ConfirmedQuantity
+                    );
+                    newPurchaseorderline.PurchaseOrderLineConfirms.push(newPurchaseOrderLineConfirm);
+                });
+            }
             newPurchaseOrder.PurchaseOrderLines.push(newPurchaseorderline);
         });
 
