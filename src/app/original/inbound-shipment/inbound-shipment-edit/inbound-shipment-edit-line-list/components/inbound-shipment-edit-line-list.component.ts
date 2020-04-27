@@ -166,7 +166,10 @@ export class InboundShipmentEditLineListComponent implements OnInit, OnChanges {
 
     openDialogViewPurchaseOrderLineConfirms(purchaseorderline: PurchaseOrderLine): void {
         const dialogRef = this.itemPrintDialog.open(InboundShipmentEditLineViewConfirmsDialogComponent, {
-            data: purchaseorderline.PurchaseOrderLineConfirms
+            data: {
+                itemName: purchaseorderline.ItemName,
+                confirms: purchaseorderline.PurchaseOrderLineConfirms
+            }
           });
           dialogRef.afterClosed().subscribe(data => {
           });

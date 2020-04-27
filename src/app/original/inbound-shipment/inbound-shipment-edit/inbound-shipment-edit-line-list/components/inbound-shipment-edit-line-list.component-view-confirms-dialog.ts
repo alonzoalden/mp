@@ -13,11 +13,11 @@ export class InboundShipmentEditLineViewConfirmsDialogComponent implements OnIni
     @ViewChild(MatPaginator, { static: true }) paginator: MatPaginator;
     constructor(
         public dialogRef: MatDialogRef<InboundShipmentEditLineViewConfirmsDialogComponent>,
-        @Inject(MAT_DIALOG_DATA) public data: PurchaseOrderLineConfirm[]) {}
+        @Inject(MAT_DIALOG_DATA) public data: { itemName: string, confirms: PurchaseOrderLineConfirm[] }) {}
 
     ngOnInit() {
-        if (this.data.length) {
-            this.dataSource = new MatTableDataSource<PurchaseOrderLineConfirm>(this.data);
+        if (this.data.confirms.length) {
+            this.dataSource = new MatTableDataSource<PurchaseOrderLineConfirm>(this.data.confirms);
             this.dataSource.paginator = this.paginator;
         }
     }
