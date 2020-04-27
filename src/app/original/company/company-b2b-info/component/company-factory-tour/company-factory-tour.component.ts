@@ -100,17 +100,7 @@ export class CompanyFactoryTourComponent implements OnInit, OnChanges, OnDestroy
         return (this.appService.currentMember && this.appService.currentMember.IsPM);
     }
 
-    update(vendorFactoryTourForm: NgForm) {
-        vendorFactoryTourForm.form.markAllAsTouched();
-        vendorFactoryTourForm.form.markAsDirty();
-        if (vendorFactoryTourForm.form.invalid) {
-            this.companyService.sendNotification({
-                type: 'error',
-                title: 'Error',
-                content: 'Please enter all required fields'
-            });
-            return;
-        }
+    update() {
         this.vendorFactoryTour.VendorImages = this.factoryTourImageList.data;
         this.updateVendorFactoryTour.emit(this.vendorFactoryTour);
     }
@@ -132,12 +122,18 @@ export class CompanyFactoryTourComponent implements OnInit, OnChanges, OnDestroy
     }
 
     approve() {
+        if (!this.vendorFactoryTour.VendorFactoryTourID) {
+            return;
+        }
         this.vendorFactoryTour.VendorImages = this.factoryTourImageList.data;
         this.vendorFactoryTour.Approval = 'Approved';
         this.updateVendorFactoryTour.emit(this.vendorFactoryTour);
     }
 
     notApprove() {
+        if (!this.vendorFactoryTour.VendorFactoryTourID) {
+            return;
+        }
         this.vendorFactoryTour.VendorImages = this.factoryTourImageList.data;
         this.vendorFactoryTour.Approval = 'NotApproved';
         this.updateVendorFactoryTour.emit(this.vendorFactoryTour);

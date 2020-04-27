@@ -159,7 +159,7 @@
                                 <select id="DesignServicesOfferedId" name="DesignServicesOffered" class="form-control"
                                         required [(ngModel)]=vendorOM.DesignServicesOffered
                                         #DesignServicesOffered="ngModel">
-                                    <option [ngValue]="null" style="font-style: italic" disabled selected>--{{ 'Please select value' | translate }}--</option>
+                                    <option style="font-style: italic" disabled selected>--{{ 'Please select value' | translate }}--</option>
                                     <option value="1">{{ 'Yes' | translate }}</option>
                                     <option value="0">{{ 'No' | translate }}</option>
                                 </select>
@@ -191,7 +191,7 @@
                                 <select id="BuyerLabelOfferedId" name="BuyerLabelOffered" class="form-control"
                                         required [(ngModel)]=vendorOM.BuyerLabelOffered
                                         #BuyerLabelOffered="ngModel">
-                                    <option [ngValue]="null" style="font-style: italic" disabled selected>--{{ 'Please select value' | translate }}--</option>
+                                    <option style="font-style: italic" disabled selected>--{{ 'Please select value' | translate }}--</option>
                                     <option value="1">{{ 'Yes' | translate }}</option>
                                     <option value="0">{{ 'No' | translate }}</option>
                                 </select>
@@ -214,24 +214,14 @@
                                        #DetailBuyerLabelOffered="ngModel"/>
                             </div>
                         </div>
-                        <div class="form-group" [ngClass]="{'has-error': (MaterialsComponents.touched ||
-                                                                        MaterialsComponents.dirty) &&
-                                                                        !MaterialsComponents.valid }">
+                        <div class="form-group">
                             <label
                                 class="col-md-2 control-label">{{ 'Materials/Components' | translate }}</label>
                             <div class="col-md-8 ">
                                 <input class="form-control" id="MaterialsComponentsId" type="text"
-                                       placeholder="{{ 'Materials/Components' | translate }} ({{ 'Required' | translate }})"
-                                       required
+                                       placeholder="{{ 'Materials/Components' | translate }}"
                                        [(ngModel)]=vendorOM.MaterialsComponents name="MaterialsComponents"
                                        #MaterialsComponents="ngModel"/>
-                                <span class="help-block" *ngIf="(MaterialsComponents.touched ||
-                                                                MaterialsComponents.dirty) &&
-                                                                MaterialsComponents.errors">
-                                    <span *ngIf="MaterialsComponents?.errors.required">
-                                        {{ 'Materials/Components' | translate }} {{ 'is required' | translate }}
-                                    </span>
-                                </span>
                             </div>
                         </div>
                         <div class="form-group" [ngClass]="{'has-error': (MachineryEquipment.touched ||
@@ -406,7 +396,7 @@
                             </div>
                             <div class="col-md-2 m-t-md">
                                 <button type="button" class="btn btn-primary" style="width:100%; height:100%"
-                                        (click)="update(vendorOMForm)">
+                                        (click)="update()">
                                     <span>{{ 'Save' | translate }}</span>
                                 </button>
                             </div>

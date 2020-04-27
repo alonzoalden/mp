@@ -69,62 +69,32 @@
                                 </span>
                             </div>
                         </div>
-                        <div class="form-group" [ngClass]="{'has-error': (MachineryEquipmentRD.touched ||
-                                                                        MachineryEquipmentRD.dirty) &&
-                                                                        !MachineryEquipmentRD.valid }">
+                        <div class="form-group">
                             <label class="col-md-2 control-label">{{ 'Machinery/Equipment for R&D' | translate }}</label>
                             <div class="col-md-8 ">
                                 <input class="form-control" id="MachineryEquipmentRDId" type="text"
-                                       placeholder="{{ 'Machinery/Equipment for R&D' | translate }} ({{ 'Required' | translate }})"
-                                       required
+                                       placeholder="{{ 'Machinery/Equipment for R&D' | translate }}"
                                        [(ngModel)]=vendorDevelopment.MachineryEquipmentRD name="MachineryEquipmentRD"
                                        #MachineryEquipmentRD="ngModel"/>
-                                <span class="help-block" *ngIf="(MachineryEquipmentRD.touched ||
-                                                                MachineryEquipmentRD.dirty) &&
-                                                                MachineryEquipmentRD.errors">
-                                    <span *ngIf="MachineryEquipmentRD?.errors.required">
-                                        {{ 'Machinery/Equipment for R&D' | translate }} {{ 'is required' | translate }}
-                                    </span>
-                                </span>
                             </div>
                         </div>
-                        <div class="form-group" [ngClass]="{'has-error': (PatentsCopyrights.touched ||
-                                                                        PatentsCopyrights.dirty) &&
-                                                                        !PatentsCopyrights.valid }">
+                        <div class="form-group">
                             <label class="col-md-2 control-label">{{ 'Patents & Copyrights' | translate }}</label>
                             <div class="col-md-8 ">
                                 <input class="form-control" id="PatentsCopyrightsId" type="text"
-                                       placeholder="{{ 'Patents & Copyrights' | translate }} ({{ 'Required' | translate }})"
-                                       required
+                                       placeholder="{{ 'Patents & Copyrights' | translate }}"
                                        [(ngModel)]=vendorDevelopment.PatentsCopyrights name="PatentsCopyrights"
                                        #PatentsCopyrights="ngModel"/>
-                                <span class="help-block" *ngIf="(PatentsCopyrights.touched ||
-                                                                PatentsCopyrights.dirty) &&
-                                                                PatentsCopyrights.errors">
-                                    <span *ngIf="PatentsCopyrights?.errors.required">
-                                        {{ 'Patents & Copyrights' | translate }} {{ 'is required' | translate }}
-                                    </span>
-                                </span>
                             </div>
                         </div>
-                        <div class="form-group" [ngClass]="{'has-error': (AwardsOtherRecognitions.touched ||
-                                                                        AwardsOtherRecognitions.dirty) &&
-                                                                        !AwardsOtherRecognitions.valid }">
+                        <div class="form-group">
                             <label class="col-md-2 control-label">{{ 'Awards & Other Recognitions' | translate }}</label>
                             <div class="col-md-8 ">
                                 <input class="form-control" id="AwardsOtherRecognitionsId" type="text"
-                                       placeholder="{{ 'Awards & Other Recognitions' | translate }} ({{ 'Required' | translate }})"
-                                       required
+                                       placeholder="{{ 'Awards & Other Recognitions' | translate }}"
                                        [(ngModel)]=vendorDevelopment.AwardsOtherRecognitions
                                        name="AwardsOtherRecognitions"
                                        #AwardsOtherRecognitions="ngModel"/>
-                                <span class="help-block" *ngIf="(AwardsOtherRecognitions.touched ||
-                                                                AwardsOtherRecognitions.dirty) &&
-                                                                AwardsOtherRecognitions.errors">
-                                    <span *ngIf="AwardsOtherRecognitions?.errors.required">
-                                        {{ 'Awards & Other Recognitions' | translate }} {{ 'is required' | translate }}
-                                    </span>
-                                </span>
                             </div>
                         </div>
                         <div class="form-group" [ngClass]="{'has-error': (Locations.touched ||
@@ -145,23 +115,13 @@
                                 </span>
                             </div>
                         </div>
-                        <div class="form-group" [ngClass]="{'has-error': (Profile.touched ||
-                                                                        Profile.dirty) &&
-                                                                        !Profile.valid }">
+                        <div class="form-group">
                             <label class="col-md-2 control-label">{{ 'Profile' | translate }}</label>
                             <div class="col-md-8 ">
                                 <input class="form-control" id="ProfileId" type="text"
-                                       placeholder="{{ 'Profile' | translate }} ({{ 'Required' | translate }})"
-                                       required
+                                       placeholder="{{ 'Profile' | translate }}"
                                        [(ngModel)]=vendorDevelopment.Profile name="Profile"
                                        #Profile="ngModel"/>
-                                <span class="help-block" *ngIf="(Profile.touched ||
-                                                                Profile.dirty) &&
-                                                                Profile.errors">
-                                    <span *ngIf="Profile?.errors.required">
-                                        {{ 'Profile' | translate }} {{ 'is required' | translate }}
-                                    </span>
-                                </span>
                             </div>
                         </div>
                     </div>
@@ -235,7 +195,7 @@
                             <div class="col-md-2">
                             </div>
                             <div class="col-md-2 m-t-md">
-                                <button type="button" class="btn btn-primary" style="width:100%; height:100%" (click)="update(vendorDevelopmentForm)">
+                                <button type="button" class="btn btn-primary" style="width:100%; height:100%" (click)="update()">
                                     <span>{{ 'Save' | translate }}</span>
                                 </button>
                             </div>

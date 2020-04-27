@@ -73,17 +73,7 @@ export class CompanyOMComponent implements OnInit, OnChanges, OnDestroy {
         });
     }
 
-    update(vendorOMForm: NgForm) {
-        vendorOMForm.form.markAllAsTouched();
-        vendorOMForm.form.markAsDirty();
-        if (vendorOMForm.form.invalid) {
-            this.companyService.sendNotification({
-                type: 'error',
-                title: 'Error',
-                content: 'Please enter all required fields'
-            });
-            return;
-        }
+    update() {
         this.vendorOM.VendorImages = this.OMImageList.data;
         this.updateVendorOM.emit(this.vendorOM);
     }
@@ -109,12 +99,18 @@ export class CompanyOMComponent implements OnInit, OnChanges, OnDestroy {
     }
 
     approve() {
+        if (!this.vendorOM.VendorOMID) {
+            return;
+        }
         this.vendorOM.VendorImages = this.OMImageList.data;
         this.vendorOM.Approval = 'Approved';
         this.updateVendorOM.emit(this.vendorOM);
     }
 
     notApprove() {
+        if (!this.vendorOM.VendorOMID) {
+            return;
+        }
         this.vendorOM.VendorImages = this.OMImageList.data;
         this.vendorOM.Approval = 'NotApproved';
         this.updateVendorOM.emit(this.vendorOM);

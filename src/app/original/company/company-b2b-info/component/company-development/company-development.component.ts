@@ -74,17 +74,7 @@ export class CompanyDevelopmentComponent implements OnInit, OnDestroy, OnChanges
         }
     }
 
-    update(vendorDevelopmentForm: NgForm) {
-        vendorDevelopmentForm.form.markAllAsTouched();
-        vendorDevelopmentForm.form.markAsDirty();
-        if (vendorDevelopmentForm.form.invalid) {
-            this.companyService.sendNotification({
-                type: 'error',
-                title: 'Error',
-                content: 'Please enter all required fields'
-            });
-            return;
-        }
+    update() {
         this.vendorDevelopment.VendorImages = this.developmentImageList.data;
         this.updateVendorDevelopment.emit(this.vendorDevelopment);
     }
@@ -106,12 +96,18 @@ export class CompanyDevelopmentComponent implements OnInit, OnDestroy, OnChanges
     }
 
     approve() {
+        if (!this.vendorDevelopment.VendorDevelopmentID) {
+            return;
+        }
         this.vendorDevelopment.VendorImages = this.developmentImageList.data;
         this.vendorDevelopment.Approval = 'Approved';
         this.updateVendorDevelopment.emit(this.vendorDevelopment);
     }
 
     notApprove() {
+        if (!this.vendorDevelopment.VendorDevelopmentID) {
+            return;
+        }
         this.vendorDevelopment.VendorImages = this.developmentImageList.data;
         this.vendorDevelopment.Approval = 'NotApproved';
         this.updateVendorDevelopment.emit(this.vendorDevelopment);

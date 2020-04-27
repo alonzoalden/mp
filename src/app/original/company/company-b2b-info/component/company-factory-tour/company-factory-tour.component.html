@@ -145,7 +145,7 @@
                                         class="form-control"
                                         required [(ngModel)]=vendorFactoryTour.BusinessType
                                         #BusinessType="ngModel">
-                                    <option [ngValue]="null" style="font-style: italic" disabled selected>
+                                    <option style="font-style: italic" disabled selected>
                                         --{{ 'Please select value' | translate }}--
                                     </option>
                                     <option value="Foreign Trade Corp.">{{ 'Foreign Trade Corp.' | translate }}</option>
@@ -256,7 +256,7 @@
                                         class="form-control"
                                         required [(ngModel)]=vendorFactoryTour.LegalForm
                                         #LegalForm="ngModel">
-                                    <option [ngValue]="null" style="font-style: italic" disabled selected>
+                                    <option style="font-style: italic" disabled selected>
                                         --{{ 'Please select value' | translate }}--
                                     </option>
                                     <option
@@ -282,11 +282,16 @@
                                                                         !CompanyStatus.valid }">
                             <label class="col-md-2 control-label">{{ 'Company Status' | translate }}</label>
                             <div class="col-md-8">
-                                <input class="form-control" id="CompanyStatusId" type="text"
-                                       placeholder="{{ 'Company Status' | translate }} ({{ 'Required' | translate }})"
-                                       required
-                                       [(ngModel)]=vendorFactoryTour.CompanyStatus name="CompanyStatus"
-                                       #CompanyStatus="ngModel"/>
+                                <select id="CompanyStatusId" name="CompanyStatus"
+                                        class="form-control"
+                                        required [(ngModel)]=vendorFactoryTour.CompanyStatus
+                                        #CompanyStatus="ngModel">
+                                    <option style="font-style: italic" disabled selected>
+                                        --{{ 'Please select value' | translate }}--
+                                    </option>
+                                    <option value="Valid">{{ 'Valid' | translate }}</option>
+                                    <option value="Invalid">{{'Invalid' | translate }}</option>
+                                </select>
                                 <span class="help-block" *ngIf="(CompanyStatus.touched ||
                                                                 CompanyStatus.dirty) &&
                                                                 CompanyStatus.errors">
@@ -364,7 +369,9 @@
                                         class="form-control"
                                         required [(ngModel)]=vendorFactoryTour.ImportExportLicencesObtained
                                         #ImportExportLicencesObtained="ngModel">
-                                    <option value=''>{{ 'Please select value' | translate }}</option>
+                                    <option style="font-style: italic" disabled selected>
+                                        --{{ 'Please select value' | translate }}--
+                                    </option>
                                     <option value="1">{{ 'Yes' | translate }}</option>
                                     <option value="0">{{ 'No' | translate }}</option>
                                 </select>
@@ -421,23 +428,13 @@
                                 </span>
                             </div>
                         </div>
-                        <div class="form-group" [ngClass]="{'has-error': (RegistrationAgency.touched ||
-                                                                        RegistrationAgency.dirty) &&
-                                                                        !RegistrationAgency.valid }">
+                        <div class="form-group">
                             <label class="col-md-2 control-label">{{ 'Registration Agency' | translate }}</label>
                             <div class="col-md-8">
                                 <input class="form-control" id="RegistrationAgencyId" type="text"
-                                       placeholder="{{ 'Registration Agency' | translate }} ({{ 'Required' | translate }})"
-                                       required
+                                       placeholder="{{ 'Registration Agency' | translate }}"
                                        [(ngModel)]=vendorFactoryTour.RegistrationAgency name="RegistrationAgency"
                                        #RegistrationAgency="ngModel"/>
-                                <span class="help-block" *ngIf="(RegistrationAgency.touched ||
-                                                                RegistrationAgency.dirty) &&
-                                                                RegistrationAgency.errors">
-                                    <span *ngIf="RegistrationAgency?.errors.required">
-                                        {{ 'Registration Agency' | translate }} {{ 'is required' | translate }}
-                                    </span>
-                                </span>
                             </div>
                         </div>
                         <div class="form-group" [ngClass]="{'has-error': (Banner.touched ||
@@ -546,7 +543,7 @@
                             </div>
                             <div class="col-md-2 m-t-md">
                                 <button type="button" class="btn btn-primary" style="width:100%; height:100%"
-                                        (click)="update(vendorFactoryTourForm)">
+                                        (click)="update()">
                                     <span>{{ 'Save' | translate }}</span>
                                 </button>
                             </div>

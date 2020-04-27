@@ -139,7 +139,7 @@
 <mat-dialog-actions>
     <span *ngIf="pendingUpload"><i class="fa fa-spinner fa-spin"></i></span>
     <div *ngIf="!pendingUpload">
-        <button mat-button class="btn btn-success-sm m-t-md" (click)="save(vendorTradeShowForm)"><i
+        <button mat-button class="btn btn-success-sm m-t-md" (click)="save()"><i
             class="fa fa-upload"></i>  {{ 'Save' | translate }}</button>
         <button mat-button class="btn btn-success-sm m-t-md" style="min-width: 150px"
                 (click)="submitApproval(vendorTradeShowForm)"><i

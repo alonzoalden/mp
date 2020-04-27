@@ -57,14 +57,12 @@ export class CompanyTradeShowAddDialogComponent implements OnInit, OnDestroy {
         this.dialogRef.close();
     }
 
-    save(vendorTradeShowForm: NgForm) {
-        vendorTradeShowForm.form.markAllAsTouched();
-        vendorTradeShowForm.form.markAsDirty();
-        if (vendorTradeShowForm.form.invalid) {
+    save() {
+        if (!this.vendorTradeShow.Name) {
             this.companyService.sendNotification({
                 type: 'error',
                 title: 'Error',
-                content: 'Please enter all required fields'
+                content: 'Please enter the Name'
             });
             return;
         }
@@ -109,11 +107,17 @@ export class CompanyTradeShowAddDialogComponent implements OnInit, OnDestroy {
     }
 
     approve() {
+        if (!this.vendorTradeShow.VendorTradeShowID) {
+            return;
+        }
         this.vendorTradeShow.Approval = 'Approved';
         this.dialogRef.close(this.vendorTradeShow);
     }
 
     notApprove() {
+        if (!this.vendorTradeShow.VendorTradeShowID) {
+            return;
+        }
         this.vendorTradeShow.Approval = 'NotApproved';
         this.dialogRef.close(this.vendorTradeShow);
     }

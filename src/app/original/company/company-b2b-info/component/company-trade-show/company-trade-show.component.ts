@@ -4,6 +4,7 @@ import {MatDialog, MatPaginator, MatTableDataSource} from '@angular/material';
 import {CompanyTradeShowAddDialogComponent} from './company-trade-show-add-dialog.component';
 import {AppService} from '../../../../../app.service';
 import {NgForm} from '@angular/forms';
+import {CompanyService} from '../../../company.service';
 
 @Component({
     selector: 'app-company-b2b-info-trade-show',
@@ -20,7 +21,8 @@ export class CompanyTradeShowComponent implements OnInit, OnChanges {
 
     constructor(
         public dialog: MatDialog,
-        private appService: AppService
+        private appService: AppService,
+        private companyService: CompanyService,
     ) {
     }
 
@@ -62,21 +64,38 @@ export class CompanyTradeShowComponent implements OnInit, OnChanges {
     }
 
     submitApproval(vendorTradeShow: VendorTradeShow) {
+        if (!vendorTradeShow.VendorTradeShowID || !vendorTradeShow.Name || !vendorTradeShow.Location || !vendorTradeShow.ShowDate || !vendorTradeShow.Booth || !vendorTradeShow.ShowSamples || !vendorTradeShow.Contact) {
+            this.companyService.sendNotification({
+                type: 'error',
+                title: 'Error',
+                content: 'Please enter all required fields'
+            });
+            return;
+        }
         vendorTradeShow.Approval = 'Pending';
         this.updateVendorTradeShow.emit(vendorTradeShow);
     }
 
     approve(vendorTradeShow: VendorTradeShow) {
+        if (!vendorTradeShow.VendorTradeShowID) {
+            return;
+        }
         vendorTradeShow.Approval = 'Approved';
         this.updateVendorTradeShow.emit(vendorTradeShow);
     }
 
     notApprove(vendorTradeShow: VendorTradeShow) {
+        if (!vendorTradeShow.VendorTradeShowID) {
+            return;
+        }
         vendorTradeShow.Approval = 'NotApproved';
         this.updateVendorTradeShow.emit(vendorTradeShow);
     }
 
     delete(vendorTradeShow: VendorTradeShow) {
+        if (!vendorTradeShow.VendorTradeShowID) {
+            return;
+        }
         const confirmation = confirm(`Remove ${vendorTradeShow.Name}?`);
         if (confirmation) {
             this.deleteTradeShow.emit(vendorTradeShow);

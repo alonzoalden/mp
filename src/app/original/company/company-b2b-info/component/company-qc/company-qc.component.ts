@@ -71,17 +71,7 @@ export class CompanyQCComponent implements OnInit, OnChanges, OnDestroy {
         });
     }
 
-    update(vendorQCForm: NgForm) {
-        vendorQCForm.form.markAllAsTouched();
-        vendorQCForm.form.markAsDirty();
-        if (vendorQCForm.form.invalid) {
-            this.companyService.sendNotification({
-                type: 'error',
-                title: 'Error',
-                content: 'Please enter all required fields'
-            });
-            return;
-        }
+    update() {
         this.vendorQC.VendorImages = this.QCImageList.data;
         this.updateVendorQC.emit(this.vendorQC);
     }
@@ -107,12 +97,18 @@ export class CompanyQCComponent implements OnInit, OnChanges, OnDestroy {
     }
 
     approve() {
+        if (!this.vendorQC.VendorQCID) {
+            return;
+        }
         this.vendorQC.VendorImages = this.QCImageList.data;
         this.vendorQC.Approval = 'Approved';
         this.updateVendorQC.emit(this.vendorQC);
     }
 
     notApprove() {
+        if (!this.vendorQC.VendorQCID) {
+            return;
+        }
         this.vendorQC.VendorImages = this.QCImageList.data;
         this.vendorQC.Approval = 'NotApproved';
         this.updateVendorQC.emit(this.vendorQC);

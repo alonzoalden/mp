@@ -53,23 +53,13 @@
                                 </span>
                             </div>
                         </div>
-                        <div class="form-group" [ngClass]="{'has-error': (TechnicalSupport.touched ||
-                                                                        TechnicalSupport.dirty) &&
-                                                                        !TechnicalSupport.valid }">
+                        <div class="form-group" >
                             <label class="col-md-2 control-label">{{ 'QC/Technical Support' | translate }}</label>
                             <div class="col-md-8 ">
                                 <input class="form-control" id="TechnicalSupportId" type="text"
-                                       placeholder="{{ 'QC/Technical Support' | translate }} ({{ 'Required' | translate }})"
-                                       required
-                                       [(ngModel)]=vendorQC.TechnicalSupport name="RDStaff"
+                                       placeholder="{{ 'QC/Technical Support' | translate }}"
+                                       [(ngModel)]=vendorQC.TechnicalSupport name="TechnicalSupport"
                                        #TechnicalSupport="ngModel"/>
-                                <span class="help-block" *ngIf="(TechnicalSupport.touched ||
-                                                                TechnicalSupport.dirty) &&
-                                                                TechnicalSupport.errors">
-                                    <span *ngIf="TechnicalSupport?.errors.required">
-                                        {{ 'QC/Technical Support' | translate }} {{ 'is required' | translate }}
-                                    </span>
-                                </span>
                             </div>
                         </div>
                         <div class="form-group" [ngClass]="{'has-error': (QCStaff.touched ||
@@ -110,64 +100,35 @@
                                 </span>
                             </div>
                         </div>
-                        <div class="form-group" [ngClass]="{'has-error': (Materials.touched ||
-                                                                        Materials.dirty) &&
-                                                                        !Materials.valid }">
+                        <div class="form-group">
                             <label class="col-md-2 control-label">{{ 'Materials/Components' | translate }}</label>
                             <div class="col-md-8 ">
                                 <input class="form-control" id="MaterialsId" type="text"
-                                       placeholder="{{ 'Materials/Components' | translate }} ({{ 'Required' | translate }})"
-                                       required
+                                       placeholder="{{ 'Materials/Components' | translate }}"
                                        [(ngModel)]=vendorQC.Materials
                                        name="Materials"
                                        #Materials="ngModel"/>
-                                <span class="help-block" *ngIf="(Materials.touched ||
-                                                                Materials.dirty) &&
-                                                                Materials.errors">
-                                    <span *ngIf="Materials?.errors.required">
-                                        {{ 'Materials/Components' | translate }} {{ 'is required' | translate }}
-                                    </span>
-                                </span>
                             </div>
                         </div>
-                        <div class="form-group" [ngClass]="{'has-error': (Procedures.touched ||
-                                                                        Procedures.dirty) &&
-                                                                        !Procedures.valid }">
+                        <div class="form-group">
                             <label class="col-md-2 control-label">{{ 'Procedures/testing Details' | translate }}</label>
                             <div class="col-md-8 ">
                                 <input class="form-control" id="ProceduresId" type="text"
-                                       placeholder="{{ 'Procedures/testing Details' | translate }}" required
+                                       placeholder="{{ 'Procedures/testing Details' | translate }}"
                                        [(ngModel)]=vendorQC.Procedures name="Procedures"
                                        #Procedures="ngModel"/>
-                                <span class="help-block" *ngIf="(Procedures.touched ||
-                                                                Procedures.dirty) &&
-                                                                Procedures.errors">
-                                    <span *ngIf="Procedures?.errors.required">
-                                        {{ 'Procedures/testing Details' | translate }} {{ 'is required' | translate }}
-                                    </span>
-                                </span>
                             </div>
                         </div>
 
-                        <div class="form-group" [ngClass]="{'has-error': (OtherInformation.touched ||
-                                                                        OtherInformation.dirty) &&
-                                                                        !OtherInformation.valid }">
+                        <div class="form-group" >
                             <label
                                 class="col-md-2 control-label">{{ 'Other Information' | translate }}</label>
                             <div class="col-md-8 ">
                                 <input class="form-control" id="OtherInformationId" type="text"
-                                       placeholder="{{ 'Other Information' | translate }} ({{ 'Required' | translate }})"
-                                       required
+                                       placeholder="{{ 'Other Information' | translate }}"
                                        [(ngModel)]=vendorQC.OtherInformation
                                        name="OtherInformation"
                                        #OtherInformation="ngModel"/>
-                                <span class="help-block" *ngIf="(OtherInformation.touched ||
-                                                                OtherInformation.dirty) &&
-                                                                OtherInformation.errors">
-                                    <span *ngIf="OtherInformation?.errors.required">
-                                        {{ 'Other Information' | translate }} {{ 'is required' | translate }}
-                                    </span>
-                                </span>
                             </div>
                         </div>
                     </div>
@@ -242,7 +203,7 @@
                             </div>
                             <div class="col-md-2 m-t-md">
                                 <button type="button" class="btn btn-primary" style="width:100%; height:100%"
-                                        (click)="update(vendorQCForm)">
+                                        (click)="update()">
                                     <span>{{ 'Save' | translate }}</span>
                                 </button>
                             </div>

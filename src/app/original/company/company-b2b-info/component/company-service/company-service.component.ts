@@ -71,17 +71,7 @@ export class CompanyServiceComponent implements OnInit, OnChanges, OnDestroy {
         });
     }
 
-    update(vendorServiceForm: NgForm) {
-        vendorServiceForm.form.markAllAsTouched();
-        vendorServiceForm.form.markAsDirty();
-        if (vendorServiceForm.form.invalid) {
-            this.companyService.sendNotification({
-                type: 'error',
-                title: 'Error',
-                content: 'Please enter all required fields'
-            });
-            return;
-        }
+    update() {
         this.vendorService.VendorImages = this.serviceImageList.data;
         this.updateVendorService.emit(this.vendorService);
     }
@@ -107,12 +97,18 @@ export class CompanyServiceComponent implements OnInit, OnChanges, OnDestroy {
     }
 
     approve() {
+        if (!this.vendorService.VendorServiceID) {
+            return;
+        }
         this.vendorService.VendorImages = this.serviceImageList.data;
         this.vendorService.Approval = 'Approved';
         this.updateVendorService.emit(this.vendorService);
     }
 
     notApprove() {
+        if (!this.vendorService.VendorServiceID) {
+            return;
+        }
         this.vendorService.VendorImages = this.serviceImageList.data;
         this.vendorService.Approval = 'NotApproved';
         this.updateVendorService.emit(this.vendorService);
