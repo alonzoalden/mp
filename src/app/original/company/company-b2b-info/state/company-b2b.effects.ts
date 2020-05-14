@@ -339,4 +339,18 @@ export class CompanyB2bEffects {
             )
         )
     );
+
+    @Effect()
+    loadVendorContact$: Observable<Action> = this.actions$.pipe(
+        ofType(companyActions.CompanyB2BActionTypes.LoadVendorContact),
+        mergeMap(() =>
+            this.companyService.getVendorContact().pipe(
+                map(vendorInfo => (new companyActions.LoadVendorContactSuccess(vendorInfo))),
+                catchError(err => {
+                    this.companyService.sendNotification({type: 'error', title: 'Error', content: err});
+                    return of(new companyActions.LoadVendorContactFail(err));
+                })
+            )
+        )
+    );
 }

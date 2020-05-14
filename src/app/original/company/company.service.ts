@@ -20,6 +20,7 @@ import {
     VendorQC,
     VendorService, VendorTradeShow
 } from '../../shared/class/vendor-b2b';
+import {Contact} from '../../shared/class/contact';
 
 @Injectable()
 export class CompanyService {
@@ -335,6 +336,13 @@ export class CompanyService {
             'Content-Type': 'application/json'
         });
         return this.http.delete(this.apiURL + '/company/tradeshow/' + vendorInfo.VendorTradeShowID, {headers: headers})
+            .pipe(
+                catchError(this.handleError)
+            );
+    }
+
+    getVendorContact(): Observable<Contact[]> {
+        return this.http.get<Contact[]>(this.apiURL + '/company/contact/list')
             .pipe(
                 catchError(this.handleError)
             );

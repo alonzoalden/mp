@@ -5,8 +5,11 @@ import {
     VendorFactoryTour,
     VendorImage,
     VendorOM,
-    VendorQC, VendorService, VendorTradeShow
+    VendorQC,
+    VendorService,
+    VendorTradeShow
 } from '../../../../shared/class/vendor-b2b';
+import {Contact} from '../../../../shared/class/contact';
 
 export enum CompanyB2BActionTypes {
     LoadVendorFactoryTour = '[Company] Load Vendor Factory Tour',
@@ -70,6 +73,9 @@ export enum CompanyB2BActionTypes {
     DeleteVendorTradeShow = '[Company] Delete Vendor TradeShow',
     DeleteVendorTradeShowSuccess = '[Company] Delete Vendor TradeShow Success',
     DeleteVendorTradeShowFail = '[Company] Delete Vendor TradeShow Fail',
+    LoadVendorContact = '[Company] Load Vendor Contact',
+    LoadVendorContactSuccess = '[Company] Load Vendor Contact Success',
+    LoadVendorContactFail = '[Company] Load Vendor Contact Fail',
 }
 
 // Action Creators
@@ -497,7 +503,26 @@ export class DeleteVendorTradeShowFail implements Action {
     constructor(public payload: string) {
     }
 }
+export class LoadVendorContact implements Action {
+    readonly type = CompanyB2BActionTypes.LoadVendorContact;
 
+    constructor() {
+    }
+}
+
+export class LoadVendorContactSuccess implements Action {
+    readonly type = CompanyB2BActionTypes.LoadVendorContactSuccess;
+
+    constructor(public payload: Contact[]) {
+    }
+}
+
+export class LoadVendorContactFail implements Action {
+    readonly type = CompanyB2BActionTypes.LoadVendorContactFail;
+
+    constructor(public payload: string) {
+    }
+}
 // Union the valid types
 export type CompanyB2bActions =
     | LoadVendorFactoryTour
@@ -561,4 +586,7 @@ export type CompanyB2bActions =
     | DeleteVendorTradeShow
     | DeleteVendorTradeShowFail
     | DeleteVendorTradeShowSuccess
+    | LoadVendorContact
+    | LoadVendorContactFail
+    | LoadVendorContactSuccess
     ;

@@ -103,7 +103,7 @@
                             <label class="col-md-2 control-label">{{ 'Locations' | translate }}</label>
                             <div class="col-md-8 ">
                                 <input class="form-control" id="LocationsId" type="text"
-                                       placeholder="{{ 'Locations' | translate }}" required
+                                       placeholder="{{ 'Locations' | translate }} ({{ 'Required' | translate }})" required
                                        [(ngModel)]=vendorDevelopment.Locations name="Locations"
                                        #Locations="ngModel"/>
                                 <span class="help-block" *ngIf="(Locations.touched ||

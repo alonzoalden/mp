@@ -1,9 +1,9 @@
-import {createSelector, createFeatureSelector} from '@ngrx/store';
+import {createFeatureSelector, createSelector} from '@ngrx/store';
 import * as fromRoot from '../../../../state/app.state';
 import * as fromCompany from './company-b2b.reducer';
 import {MatTableDataSource} from '@angular/material';
-import {VendorAttachment} from 'app/shared/class/vendor-attachment';
 import {VendorImage, VendorTradeShow} from '../../../../shared/class/vendor-b2b';
+import {Contact} from '../../../../shared/class/contact';
 
 // Extends the app state to include the product feature.
 // This is required because products are lazy loaded.
@@ -107,4 +107,12 @@ export const getTradeShowList = createSelector(
 export const getTradeShowLoading = createSelector(
     getCompanyFeatureState,
     state => state.isTradeShowLoading
+);
+export const getContactList = createSelector(
+    getCompanyFeatureState,
+    state => new MatTableDataSource<Contact>(state.contact)
+);
+export const getContactLoading = createSelector(
+    getCompanyFeatureState,
+    state => state.isContactLoading
 );

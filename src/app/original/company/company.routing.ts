@@ -16,6 +16,7 @@ import {CompanyServiceShellComponent} from './company-b2b-info/container/company
 import {CompanyCertificateShellComponent} from './company-b2b-info/container/company-certificate-shell/company-certificate-shell.component';
 import {CompanyTradeShowShellComponent} from './company-b2b-info/container/company-trade-show-shell/company-trade-show-shell.component';
 import {CompanyInfoShellComponent} from './company-info/containers/company-info-shell/company-info-shell.component';
+import {CompanyContactShellComponent} from './company-b2b-info/container/company-contact-shell/company-contact-shell.component';
 
 const COMPANY_ROUTES: Routes = [
     {
@@ -87,6 +88,10 @@ const COMPANY_ROUTES: Routes = [
                     {
                         path: 'trade',
                         component: CompanyTradeShowShellComponent
+                    },
+                    {
+                        path: 'contact',
+                        component: CompanyContactShellComponent
                     }
                 ]
             }

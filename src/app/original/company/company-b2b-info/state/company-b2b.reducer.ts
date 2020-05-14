@@ -1,11 +1,14 @@
-import {CompanyB2bActions, CompanyB2BActionTypes, DeleteDevelopmentImage} from './company-b2b.actions';
+import {CompanyB2bActions, CompanyB2BActionTypes} from './company-b2b.actions';
 import {
     VendorDevelopment,
     VendorFactoryTour,
     VendorImage,
     VendorOM,
-    VendorQC, VendorService, VendorTradeShow
+    VendorQC,
+    VendorService,
+    VendorTradeShow
 } from '../../../../shared/class/vendor-b2b';
+import {Contact} from '../../../../shared/class/contact';
 
 // State for this feature (Item Variation)
 export interface CompanyB2BState {
@@ -35,6 +38,8 @@ export interface CompanyB2BState {
     isTradeShowLoading: boolean;
     tradeShowList: VendorTradeShow[];
 
+    isContactLoading: boolean;
+    contact: Contact[];
 }
 
 const initialState: CompanyB2BState = {
@@ -60,7 +65,9 @@ const initialState: CompanyB2BState = {
     isCertificateLoading: false,
     certificateImageList: [],
     isTradeShowLoading: false,
-    tradeShowList: []
+    tradeShowList: [],
+    isContactLoading: false,
+    contact: []
 };
 
 export function companyB2bReducer(state = initialState, action: CompanyB2bActions): CompanyB2BState {
@@ -302,6 +309,18 @@ export function companyB2bReducer(state = initialState, action: CompanyB2bAction
         case CompanyB2BActionTypes.UpdateVendorCertificateFail:
             return {
                 ...state, isTradeShowLoading: false, error: action.payload
+            };
+        case CompanyB2BActionTypes.LoadVendorContact:
+            return {
+                ...state, isContactLoading: true
+            };
+        case CompanyB2BActionTypes.LoadVendorContactSuccess:
+            return {
+                ...state, isContactLoading: false, contact: action.payload
+            };
+        case CompanyB2BActionTypes.LoadVendorContactFail:
+            return {
+                ...state, isContactLoading: false, contact: []
             };
         default:
             return state;

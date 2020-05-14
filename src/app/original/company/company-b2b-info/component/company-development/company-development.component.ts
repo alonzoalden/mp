@@ -21,16 +21,18 @@ import {AppService} from '../../../../../app.service';
     templateUrl: './company-development.component.html',
 })
 export class CompanyDevelopmentComponent implements OnInit, OnDestroy, OnChanges {
+    @ViewChild(MatPaginator, {static: true}) paginator: MatPaginator;
+
     @Input() developmentLoading: boolean = true;
     @Input() vendorDevelopment: VendorDevelopment;
+    @Input() developmentImageList: MatTableDataSource<VendorImage>;
     @Output() getVendorDevelopment = new EventEmitter();
     @Output() updateVendorDevelopment = new EventEmitter<VendorDevelopment>();
-    subject: Subscription;
     @Output() updateImage = new EventEmitter<VendorImage>();
-    @Input() developmentImageList: MatTableDataSource<VendorImage>;
-    @ViewChild(MatPaginator, {static: true}) paginator: MatPaginator;
     @Output() deleteImage = new EventEmitter<string>();
+
     displayedColumns = ['Menu', 'ID', 'View', 'Title'];
+    subject: Subscription;
 
     constructor(
         private companyService: CompanyService,

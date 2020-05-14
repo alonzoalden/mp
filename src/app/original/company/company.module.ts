@@ -65,6 +65,8 @@ import { companyAttachmentReducer } from './company-attachment/state/company-att
 import { companyB2bReducer } from './company-b2b-info/state/company-b2b.reducer';
 import { CompanyB2bEffects } from './company-b2b-info/state/company-b2b.effects';
 import {SharePipeModule} from '../../shared/pipe/share.pipe';
+import { CompanyContactComponent } from './company-b2b-info/component/company-contact/company-contact.component';
+import { CompanyContactShellComponent } from './company-b2b-info/container/company-contact-shell/company-contact-shell.component';
 
 
 @NgModule({
@@ -101,7 +103,9 @@ import {SharePipeModule} from '../../shared/pipe/share.pipe';
         CompanyCertificateShellComponent,
         CompanyTradeShowShellComponent,
         CompanyTradeShowComponent,
-        CompanyTradeShowAddDialogComponent
+        CompanyTradeShowAddDialogComponent,
+        CompanyContactComponent,
+        CompanyContactShellComponent
     ],
     imports: [
         TranslateModule,
