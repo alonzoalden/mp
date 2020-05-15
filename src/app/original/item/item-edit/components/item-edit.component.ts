@@ -64,7 +64,7 @@ export class ItemEditComponent implements OnInit, OnChanges {
     }
 
     saveItem(displayPreview: boolean = false, printLabel: boolean = false): void {
-        if (this.isItemNameValid() && this.isSKUValid() && this.isSubmitValid()) {
+        if (this.isItemNameValid() && this.isSKUValid() && this.isSubmitValid() && this.isPriceValid()) {
             //if (this.isValid(null) && this.isShippingFeeValid() && this.isBundleValid()) {
             if (this.isValid(null) && this.isBundleValid()) {
                 //this.pendingSave = true;
@@ -344,6 +344,26 @@ export class ItemEditComponent implements OnInit, OnChanges {
         } else {
             return true;
         }
+    }
+    isPriceValid(): boolean {
+        if (this.item.InventoryDetailsSerialized.length) {
+            const date = new Date();
+            const from = new Date(this.item.SpecialFrom);
+            const to = new Date(this.item.SpecialTo);
+            const overPricedRefurbItem = this.item.InventoryDetailsSerialized.find(refurb => {
+                if (date > from && date < to) {
+                    return refurb.UnitPrice > this.item.SpecialPrice
+                        || refurb.UnitPrice > this.item.Price;
+                } else {
+                    return refurb.UnitPrice > this.item.Price;
+                }
+            });
+            if (overPricedRefurbItem) {
+                this.itemService.sendNotification({ type: 'error', title: 'Invalid Price', content: 'Price must be greater than refurbished price.' });
+                return false;
+            }
+        }
+        return true;
     }
 
     validate(): void {
